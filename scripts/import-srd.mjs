@@ -341,7 +341,14 @@ function subclasses() {
 
 /* ---- Monster für den Kampf-Tracker ---- */
 function monsters() {
-  const part = (title, list) => (list?.length ? [`${title}`, ...list.map(x => `${x.name}. ${x.desc || ''}`.trim())] : []);
+  const usage = u => {
+    if (!u) return '';
+    if (u.type === 'recharge on roll') return ` (Recharge ${u.min_value}${u.min_value < 6 ? '-6' : ''})`;
+    if (u.type === 'per day') return ` (${u.times}/Day)`;
+    if (u.type === 'recharge after rest') return ` (Recharges after a ${(u.rest_types || []).join(' or ')} rest)`;
+    return '';
+  };
+  const part = (title, list) => (list?.length ? [`${title}`, ...list.map(x => `${x.name}${/\(/.test(x.name) ? '' : usage(x.usage)}. ${x.desc || ''}`.trim())] : []);
   const out = srd('Monsters').map(m => ({
     id: m.index, n: m.name, size: m.size, type: m.type, cr: m.challenge_rating, ac: m.armor_class?.[0]?.value ?? 10, hp: m.hit_points, hd: m.hit_points_roll || m.hit_dice, speed: Object.entries(m.speed || {}).map(([k, v]) => `${k} ${v}`).join(', '),
     abil: { str: m.strength, dex: m.dexterity, con: m.constitution, int: m.intelligence, wis: m.wisdom, cha: m.charisma },

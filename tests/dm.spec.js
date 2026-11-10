@@ -81,6 +81,14 @@ test.describe('DM-Bereich @new', () => {
     expect((await read(page)).hp).toBe(12);
   });
 
+  test('Monsterdaten nennen Aufladung und Tageslimits', async () => {
+    const fs = await import('node:fs');
+    const list = JSON.parse(fs.readFileSync('data/monsters.json', 'utf8'));
+    const dragon = list.find(x => x.id === 'adult-red-dragon').text;
+    expect(dragon).toContain('Fire Breath (Recharge 5-6)');
+    expect(dragon).toContain('Legendary Resistance (3/Day)');
+  });
+
   test('Kampf beenden braucht Bestätigung', async ({ page }) => {
     await dm(page);
     await addMonster(page, 'goblin', 'goblin');
