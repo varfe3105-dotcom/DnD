@@ -1,0 +1,16 @@
+[
+  {"n":"Blinded","de":"Blind","ic":"eye","p":"Kann nicht sehen und scheitert bei Würfen, die Sicht brauchen. Angriffe gegen dich haben Vorteil, deine Angriffe Nachteil.","source":"summary","verified":false},
+  {"n":"Charmed","de":"Bezaubert","ic":"heart","p":"Du kannst den Verursacher nicht angreifen oder mit Schädlichem anvisieren. Er hat Vorteil bei sozialen Interaktionen mit dir.","source":"summary","verified":false},
+  {"n":"Deafened","de":"Taub","ic":"music","p":"Kann nicht hören und scheitert bei Würfen, die Gehör brauchen.","source":"summary","verified":false},
+  {"n":"Frightened","de":"Verängstigt","ic":"skull","p":"Nachteil auf Attributswürfe und Angriffe, solange du die Furchtquelle sehen kannst. Du darfst dich nicht freiwillig näher an sie heranbewegen.","source":"summary","verified":false},
+  {"n":"Grappled","de":"Gepackt","ic":"gloves","p":"Tempo 0, ohne Bonus darauf. Endet, wenn der Greifer kampfunfähig wird oder du aus seiner Reichweite gerätst.","source":"summary","verified":false},
+  {"n":"Incapacitated","de":"Kampfunfähig","ic":"star","p":"Keine Aktionen und keine Reaktionen.","source":"summary","verified":false},
+  {"n":"Invisible","de":"Unsichtbar","ic":"mask","p":"Ohne Magie oder Spezialsinn nicht zu sehen (stark verdeckt). Angriffe gegen dich haben Nachteil, deine Angriffe Vorteil.","source":"summary","verified":false},
+  {"n":"Paralyzed","de":"Gelähmt","ic":"snow","p":"Kampfunfähig, kein Bewegen oder Sprechen. STR- und GES-Rettungswürfe scheitern automatisch. Angriffe gegen dich haben Vorteil; Treffer aus 1,5 m sind kritisch.","source":"summary","verified":false},
+  {"n":"Petrified","de":"Versteinert","ic":"gem","p":"In Stein verwandelt (Gewicht ×10, kein Altern). Kampfunfähig, kein Bewegen oder Sprechen, ohne Wahrnehmung. Angriffe gegen dich haben Vorteil; STR/GES-Rettungswürfe scheitern; Resistenz gegen allen Schaden; immun gegen Gift und Krankheit.","source":"summary","verified":false},
+  {"n":"Poisoned","de":"Vergiftet","ic":"potion","p":"Nachteil auf Angriffe und Attributswürfe.","source":"summary","verified":false},
+  {"n":"Prone","de":"Liegend","ic":"boots","p":"Nur Kriechen möglich, oder Aufstehen für die Hälfte des Tempos. Nachteil auf deine Angriffe. Angriffe gegen dich haben Vorteil aus 1,5 m, sonst Nachteil.","source":"summary","verified":false},
+  {"n":"Restrained","de":"Festgesetzt","ic":"box","p":"Tempo 0. Angriffe gegen dich haben Vorteil, deine Angriffe Nachteil, Nachteil auf GES-Rettungswürfe.","source":"summary","verified":false},
+  {"n":"Stunned","de":"Betäubt","ic":"star","p":"Kampfunfähig, kein Bewegen, Sprechen nur stockend. STR/GES-Rettungswürfe scheitern automatisch. Angriffe gegen dich haben Vorteil.","source":"summary","verified":false},
+  {"n":"Unconscious","de":"Bewusstlos","ic":"skull","p":"Kampfunfähig, kein Bewegen oder Sprechen, ohne Wahrnehmung; du lässt fallen, was du hältst, und fällst um. STR/GES-Rettungswürfe scheitern. Angriffe gegen dich haben Vorteil; Treffer aus 1,5 m sind kritisch.","source":"summary","verified":false}
+]

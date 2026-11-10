@@ -1,0 +1,20 @@
+[
+  {"n":"Ring of Protection","ic":"ring","slot":"ring","att":true,"cons":false,"p":"+1 auf RK und auf alle Rettungswürfe.","source":"summary","verified":false},
+  {"n":"Cloak of Protection","ic":"cloak","slot":"cloak","att":true,"cons":false,"p":"+1 auf RK und auf alle Rettungswürfe.","source":"summary","verified":false},
+  {"n":"Bracers of Defense","ic":"gloves","slot":"hands","att":true,"cons":false,"p":"+2 RK, solange du weder Rüstung noch Schild trägst.","source":"summary","verified":false},
+  {"n":"Gauntlets of Ogre Power","ic":"gloves","slot":"hands","att":true,"cons":false,"p":"Deine Stärke wird 19 (keine Wirkung, wenn sie schon höher ist).","source":"summary","verified":false},
+  {"n":"Belt of Hill Giant Strength","ic":"belt","slot":"waist","att":true,"cons":false,"p":"Deine Stärke wird 21 (keine Wirkung, wenn sie schon höher ist).","source":"summary","verified":false},
+  {"n":"Amulet of Health","ic":"amulet","slot":"neck","att":true,"cons":false,"p":"Deine Konstitution wird 19 (keine Wirkung, wenn sie schon höher ist).","source":"summary","verified":false},
+  {"n":"Periapt of Wound Closure","ic":"amulet","slot":"neck","att":true,"cons":false,"p":"Bei 0 TP wirst du zu Beginn deines Zuges automatisch stabil. Würfelst du Trefferwürfel zum Heilen, verdoppelt sich die Heilung.","source":"summary","verified":false},
+  {"n":"Boots of Elvenkind","ic":"boots","slot":"feet","att":false,"cons":false,"p":"Deine Schritte sind lautlos; Vorteil auf Stealth-Würfe, bei denen es ums leise Bewegen geht.","source":"summary","verified":false},
+  {"n":"Boots of Speed","ic":"boots","slot":"feet","att":true,"cons":false,"p":"Bonusaktion: Tempo verdoppelt, Gelegenheitsangriffe gegen dich mit Nachteil. Zusammen höchstens 10 Min, danach erst nach langer Rast wieder.","source":"summary","verified":false},
+  {"n":"Goggles of Night","ic":"helm","slot":"head","att":false,"cons":false,"p":"Dunkelsicht 18 m; hast du schon Dunkelsicht, wird sie um 18 m größer.","source":"summary","verified":false},
+  {"n":"Helm of Comprehending Languages","ic":"helm","slot":"head","att":false,"cons":false,"p":"Aktion: Comprehend Languages nach Belieben wirken.","source":"summary","verified":false},
+  {"n":"Shield +1","ic":"shield","slot":"off","att":false,"cons":false,"p":"Magischer Schild: +1 RK zusätzlich zum normalen Schildbonus (+2).","source":"summary","verified":false},
+  {"n":"Wand of Magic Missiles","ic":"wand","slot":"hand","att":false,"cons":false,"p":"7 Ladungen. Aktion: Magic Missile; 1 Ladung für Grad 1, jede weitere Ladung +1 Grad. Lädt 1W6+1 bei Morgengrauen. Letzte Ladung verbraucht: W20, bei 1 zerfällt der Stab.","source":"summary","verified":false},
+  {"n":"Pearl of Power","ic":"gem","slot":"","att":true,"cons":false,"p":"Einmal pro Tag (Aktion): einen verbrauchten Zauberplatz bis Grad 3 zurückholen. Lädt bei Morgengrauen.","source":"summary","verified":false},
+  {"n":"Stone of Good Luck (Luckstone)","ic":"gem","slot":"","att":true,"cons":false,"p":"+1 auf Attributswürfe und Rettungswürfe.","source":"summary","verified":false},
+  {"n":"Bag of Holding","ic":"bag","slot":"","att":false,"cons":false,"p":"Fasst bis 500 Pfund (64 Kubikfuß), wiegt immer 15 Pfund. Etwas herausholen kostet eine Aktion. Zerreißt er, ist der Inhalt verloren; in einen anderen Extradimensionsraum gesteckt öffnet er ein Tor zur Astralebene.","source":"summary","verified":false},
+  {"n":"Immovable Rod","ic":"wand","slot":"","att":false,"cons":false,"p":"Aktion: Knopf drücken, der Stab bleibt fest in der Luft und hält bis 8.000 Pfund. Erneut drücken löst ihn.","source":"summary","verified":false},
+  {"n":"Spell Scroll","ic":"scroll","slot":"","att":false,"cons":true,"p":"Zauber daraus wirken, wenn er auf deiner Klassenliste steht. Ist er höher, als du wirken kannst: Attributswurf SG 10 + Grad. Die Rolle zerfällt danach.","source":"summary","verified":false}
+]

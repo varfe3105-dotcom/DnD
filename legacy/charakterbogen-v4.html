@@ -1,0 +1,1166 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>D&amp;D Charakterbogen</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Alegreya:ital,wght@0,400;0,500;0,700;1,400&family=Alegreya+Sans+SC:wght@500;700&family=Grenze+Gotisch:wght@500;700&display=swap">
+<style>
+/* Layout: Lederband-Kopf mit Porträtmedaillon, darunter Pergament. Attribute als Wappenschilde links, Spielinhalt rechts; Wiki zweispaltig (Liste | Eintrag); am Handy alles einspaltig. */
+:root{
+  --bg:#ecdfc2;--panel:#f7efd9;--sunk:#e2d1ab;--ink:#2a1e14;--mute:#66563f;--line:#bfa577;--acc:#8b1f1f;--accink:#fff6e3;--good:#3d6a35;--shade:rgba(60,40,10,.18);
+  --band:#2b1c12;--bandink:#f3e6c4;--gilt:#d4ab55;--giltdk:#8a6420;
+  --steel1:#c9d1da;--steel2:#3c4652;--crim1:#f0786a;--crim2:#5e1212;--arc1:#a99bff;--arc2:#26195f;--gold1:#ffe08a;--gold2:#6e4a0c;--lea1:#c48a5a;--lea2:#3e2312;--ver1:#9ad27f;--ver2:#1d4318;--sha1:#9a96a8;--sha2:#1b1922;
+  --grain:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.75' numOctaves='3' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .3  0 0 0 0 .2  0 0 0 0 .08  0 0 0 .11 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+  --f-disp:"Grenze Gotisch","UnifrakturMaguntia","Iowan Old Style",Palatino,Georgia,serif;
+  --f-body:"Alegreya","Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif;
+  --f-ui:"Alegreya Sans SC","Gill Sans","Trebuchet MS",sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#16110c;--panel:#221a12;--sunk:#19130d;--ink:#ecdfc4;--mute:#a8977a;--line:#4f3f2b;--acc:#e0ae4a;--accink:#16110c;--good:#8fbf7a;--shade:rgba(0,0,0,.5);--band:#0d0906;--bandink:#f0e2bd;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#16110c;--panel:#221a12;--sunk:#19130d;--ink:#ecdfc4;--mute:#a8977a;--line:#4f3f2b;--acc:#e0ae4a;--accink:#16110c;--good:#8fbf7a;--shade:rgba(0,0,0,.5);--band:#0d0906;--bandink:#f0e2bd;color-scheme:dark}
+*{box-sizing:border-box}
+html{background:var(--bg)}
+body{margin:0;color:var(--ink);font:17px/1.45 var(--f-body);background:var(--grain),radial-gradient(ellipse 120% 90% at 50% 30%,transparent 55%,var(--shade)),var(--bg);background-attachment:fixed}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
+.wrap{max-width:1120px;margin:0 auto;padding-block:16px 72px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+button{font:inherit;color:inherit;cursor:pointer}
+input,select,textarea{font:inherit;font-size:1rem;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:4px;padding:7px 9px;min-width:0}
+:is(input,select,textarea,button,summary,label,[tabindex]):focus-visible{outline:2px solid var(--acc);outline-offset:2px}
+.i{width:1.4em;height:1.4em;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;flex:none}
+
+/* Spiel-Icons: Seltenheitsrahmen mit Licht und Schatten */
+.tok{display:inline-grid;place-items:center;width:38px;height:38px;flex:none;border-radius:8px;position:relative;
+  background:radial-gradient(circle at 32% 26%,var(--t1) 0%,var(--t2) 78%);border:1px solid rgba(0,0,0,.55);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.45),inset 0 -4px 7px rgba(0,0,0,.4),0 2px 3px rgba(0,0,0,.28)}
+.tok::after{content:"";position:absolute;inset:3px 3px 50% 3px;border-radius:6px 6px 40% 40%;background:linear-gradient(rgba(255,255,255,.28),rgba(255,255,255,0));pointer-events:none}
+.tok .i{width:66%;height:66%;stroke:url(#gl);stroke-width:1.9;filter:drop-shadow(0 1.5px 0 rgba(0,0,0,.6))}
+.t-steel{--t1:var(--steel1);--t2:var(--steel2)}.t-crimson{--t1:var(--crim1);--t2:var(--crim2)}.t-arcane{--t1:var(--arc1);--t2:var(--arc2)}.t-gold{--t1:var(--gold1);--t2:var(--gold2)}.t-leather{--t1:var(--lea1);--t2:var(--lea2)}.t-verdant{--t1:var(--ver1);--t2:var(--ver2)}.t-shadow{--t1:var(--sha1);--t2:var(--sha2)}
+.tok.t-arcane{box-shadow:inset 0 1px 0 rgba(255,255,255,.45),inset 0 -4px 7px rgba(0,0,0,.4),0 0 0 1px rgba(150,130,255,.5),0 0 8px rgba(130,110,255,.45)}
+
+/* Kopf als Lederband */
+.hd{position:relative;display:flex;flex-wrap:wrap;align-items:center;gap:14px 20px;padding:16px 18px;background:var(--grain),linear-gradient(160deg,#3d2a1a,var(--band) 60%);color:var(--bandink);border:2px solid var(--gilt);outline:1px solid var(--giltdk);outline-offset:-6px;border-radius:6px;box-shadow:0 6px 18px var(--shade)}
+.por{width:92px;height:92px;flex:none;border-radius:50%;overflow:hidden;display:grid;place-items:center;cursor:pointer;background:radial-gradient(circle at 35% 30%,#5a3d26,#1a110a);border:3px solid var(--gilt);box-shadow:0 0 0 2px var(--giltdk),0 0 0 5px rgba(212,171,85,.25),0 4px 10px rgba(0,0,0,.5)}
+.por img{width:100%;height:100%;object-fit:cover}
+.por span{font:700 2.8rem var(--f-disp);color:var(--gilt)}
+.por:hover{filter:brightness(1.1)}
+.who{flex:1 1 220px;min-width:0}
+h1{font:700 clamp(2.1rem,5.5vw,3.2rem)/1 var(--f-disp);margin:0;color:var(--bandink);text-wrap:balance;text-shadow:0 2px 0 rgba(0,0,0,.45);letter-spacing:.01em}
+.who p{margin:6px 0 0;color:var(--gilt);font:700 1rem var(--f-ui);letter-spacing:.05em}
+.who .sub2{color:rgba(243,230,196,.7);font:italic 400 .95rem var(--f-body);letter-spacing:0;margin-top:2px}
+.seal{width:64px;height:64px;flex:none;border-radius:50%;display:grid;place-content:center;text-align:center;background:radial-gradient(circle at 35% 30%,#c4372f,#6b0f0f 70%);color:#ffe9c9;box-shadow:inset 0 2px 3px rgba(255,255,255,.3),inset 0 -3px 6px rgba(0,0,0,.45),0 3px 6px rgba(0,0,0,.5);transform:rotate(-6deg)}
+.seal small{font:700 .62rem var(--f-ui);letter-spacing:.08em;line-height:1}
+.seal b{font:700 1.7rem/1 var(--f-disp)}
+.hacts{display:flex;flex-direction:column;gap:8px;align-items:stretch}
+.rests{display:flex;gap:8px}
+.btn{font:700 .92rem var(--f-ui);letter-spacing:.04em;background:transparent;color:var(--ink);border:1.5px solid var(--ink);border-radius:4px;padding:8px 14px;white-space:nowrap}
+.btn:hover{background:var(--sunk)}
+.btn.solid{background:var(--acc);border-color:var(--acc);color:var(--accink)}
+.btn.solid:hover{filter:brightness(1.08)}
+.btn.gilt{background:linear-gradient(#ecc66e,#b88a2e);border:1px solid #6e4a0c;color:#2b1a06;box-shadow:inset 0 1px 0 rgba(255,255,255,.5),0 2px 4px rgba(0,0,0,.4)}
+.btn.gilt:hover{filter:brightness(1.07)}
+.btn.ghost{color:var(--bandink);border-color:rgba(243,230,196,.55)}
+.btn.ghost:hover{background:rgba(243,230,196,.12)}
+.btn.sm{padding:5px 10px;font-size:.85rem}
+.btn.good{color:var(--good);border-color:var(--good)}
+.btn.bad{color:var(--acc);border-color:var(--acc)}
+.btn.warn{background:var(--acc);border-color:var(--acc);color:var(--accink)}
+.btn[disabled]{opacity:.45;cursor:default}
+.tabs{position:sticky;top:env(safe-area-inset-top,0px);z-index:6;background:var(--bg);display:flex;align-items:flex-end;gap:10px;border-bottom:2px solid var(--ink);margin-top:14px;padding-top:6px}
+.tabs nav{display:flex;gap:4px;flex:1;min-width:0;overflow-x:auto;scrollbar-width:none}
+.tabs nav button{background:var(--sunk);border:1.5px solid var(--line);border-bottom:0;border-radius:6px 6px 0 0;padding:9px 14px 7px;font:700 1rem var(--f-ui);letter-spacing:.03em;color:var(--mute);white-space:nowrap}
+.tabs nav button[aria-selected="true"]{background:var(--panel);color:var(--acc);border-color:var(--ink);position:relative;top:2px;padding-bottom:9px}
+.mini{font:700 .9rem var(--f-ui);white-space:nowrap;color:var(--mute);font-variant-numeric:tabular-nums;padding-bottom:8px}
+.mini b{color:var(--ink);font-size:1.15rem}
+.mini.down b{color:var(--acc)}
+
+h2{font:700 1.45rem/1.1 var(--f-disp);color:var(--acc);display:flex;align-items:center;gap:12px;margin:28px 0 10px}
+h2::before{content:"";width:8px;height:8px;background:var(--acc);transform:rotate(45deg);flex:none}
+h2::after{content:"";flex:1;height:6px;border-block:1px solid var(--line);order:3}
+h2 em{font:500 .85rem var(--f-ui);color:var(--mute);font-style:normal;letter-spacing:.02em;order:2}
+.card{position:relative;background:var(--panel);border:2px solid var(--ink);border-radius:3px;box-shadow:inset 0 0 0 4px var(--panel),inset 0 0 0 5px var(--line),0 3px 0 var(--shade);padding:14px 18px}
+.card::before,.card::after{content:"";position:absolute;width:12px;height:12px;border:2px solid var(--acc);pointer-events:none}
+.card::before{top:7px;left:7px;border-right:0;border-bottom:0}
+.card::after{bottom:7px;right:7px;border-left:0;border-top:0}
+.empty,.hint,.note{color:var(--mute);font-style:italic}
+.empty{padding:6px 0}
+.hint{font-size:.92rem;margin:6px 0 0;min-height:1.2em}
+.note{font-size:.9rem;margin:8px 0 0}
+.lbl{font:500 .82rem var(--f-ui);color:var(--mute);letter-spacing:.03em}
+
+/* Werte */
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(112px,1fr));gap:10px;margin-top:16px}
+.st{background:var(--panel);border:2px solid var(--ink);box-shadow:inset 0 0 0 3px var(--panel),inset 0 0 0 4px var(--line);border-radius:3px;padding:9px 6px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:2px}
+.st small{font:500 .8rem var(--f-ui);color:var(--mute)}
+.st b{font:700 1.6rem/1.15 var(--f-body);font-variant-numeric:tabular-nums}
+.sheet{display:grid;gap:4px 26px;grid-template-columns:minmax(0,1fr);margin-top:4px}
+.col{min-width:0}
+.abs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px 8px;margin-top:24px}
+.abw{display:flex;flex-direction:column;align-items:center;gap:6px}
+.ab{width:100%;max-width:130px;padding:2px;background:var(--ink);clip-path:polygon(0 0,100% 0,100% 64%,50% 100%,0 64%)}
+.abi{background:linear-gradient(var(--panel),var(--sunk));clip-path:polygon(0 0,100% 0,100% 64%,50% 100%,0 64%);padding:8px 4px 30px;text-align:center;display:flex;flex-direction:column;align-items:center}
+.abi small{font:700 .78rem var(--f-ui);color:var(--mute);letter-spacing:.04em}
+.abi b{font:700 2.2rem/1.05 var(--f-body);color:var(--acc);font-variant-numeric:tabular-nums}
+.abv{margin-top:-14px;position:relative;min-width:46px;text-align:center;border:2px solid var(--ink);border-radius:999px;background:var(--bg);line-height:1.55;padding:0 8px;font-variant-numeric:tabular-nums;font-weight:700}
+.abv .n{width:56px;text-align:center;padding:2px;border:0;background:transparent}
+.sv{font:500 .85rem var(--f-ui);color:var(--mute);display:flex;align-items:center;gap:6px}
+.sv i{width:10px;height:10px;border:1.5px solid var(--ink);border-radius:50%}
+.sv.p{color:var(--ink)}.sv.p i{background:var(--acc);border-color:var(--acc)}
+@media (min-width:780px){.sheet{grid-template-columns:176px minmax(0,1fr)}.abs{grid-template-columns:1fr}}
+
+/* Lebenspunkte */
+.hpt{display:flex;align-items:center;gap:12px}
+.hpn{flex:1;text-align:center;font-variant-numeric:tabular-nums}
+.hpn b{font-size:3.4rem;line-height:1;font-weight:700}
+.hpn small{font-size:1.2rem;color:var(--mute);margin-left:4px}
+.hpn.down b{color:var(--acc)}
+.tmp{display:block;font:700 .9rem var(--f-ui);color:var(--good)}
+.sq{width:52px;height:52px;border-radius:4px;border:1.5px solid var(--ink);background:var(--bg);font-size:1.7rem;font-weight:700;flex:none}
+.bar{display:flex;height:12px;border-radius:6px;background:var(--sunk);margin:12px 0;overflow:hidden;border:1.5px solid var(--ink);box-shadow:inset 0 2px 3px var(--shade)}
+.bar i{background:linear-gradient(#c8423a,#7a1414)}.bar u{background:linear-gradient(#8fc178,#3d6a35)}
+.hpin{display:flex;flex-wrap:wrap;gap:6px}
+.hpin input{width:96px;flex:none}
+.hpin .btn{flex:1}
+.death{margin-top:12px;padding:10px 12px;border:1.5px dashed var(--acc);border-radius:4px;display:grid;gap:8px}
+.death span{font-size:.9rem;color:var(--mute)}
+.dsr{display:flex;align-items:center;gap:8px;font:700 .9rem var(--f-ui)}
+.dsr span{width:96px;color:var(--ink);font-size:.9rem}
+.dot{width:26px;height:26px;border-radius:50%;border:2px solid var(--ink);background:var(--bg);padding:0}
+.dot.on{background:var(--good);border-color:var(--good)}
+.dsr.f .dot.on{background:var(--acc);border-color:var(--acc)}
+
+/* Zeilen und Kästchen */
+.row{display:flex;align-items:center;gap:12px;padding:10px 0;border-top:1px solid var(--line)}
+.row:first-child{border-top:0}
+.ic{display:grid;place-items:center;flex:none}
+.nm{flex:1;min-width:0;overflow-wrap:anywhere;font-weight:700}
+.nm small{display:block;color:var(--mute);font-size:.9rem;font-weight:400;line-height:1.35}
+.pips{display:flex;flex-wrap:wrap;gap:6px;justify-content:flex-end}
+.pip{width:26px;height:26px;border:2px solid var(--ink);border-radius:4px;background:var(--bg);padding:0;position:relative}
+.pip:not(.on){background:var(--sunk)}
+.pip:not(.on)::after{content:"✕";position:absolute;inset:0;display:grid;place-items:center;color:var(--acc);font-weight:700;line-height:1}
+.qty{display:flex;align-items:center;gap:8px;font-variant-numeric:tabular-nums}
+.qty button{width:34px;height:34px;border-radius:4px;border:1.5px solid var(--ink);background:var(--bg);font-weight:700}
+.qty .n{width:76px;text-align:center}
+.qty span{min-width:58px;text-align:center;font-weight:700}
+.row>.btn,.sp>.btn{flex:none;width:max-content;justify-self:end}
+.atk{text-align:center;min-width:58px}
+.atk b{display:block;font-size:1.2rem;line-height:1.1;font-variant-numeric:tabular-nums}
+.atk small{font:500 .75rem var(--f-ui);color:var(--mute)}
+.conc{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:14px;padding:10px 14px;border:2px solid var(--acc);border-radius:4px;background:var(--panel)}
+.conc small{display:block;font:700 .8rem var(--f-ui);color:var(--acc)}
+.conc b{font-size:1.15rem}
+.conc span{display:block;font-size:.88rem;color:var(--mute)}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{background:var(--bg);border:1.5px solid var(--line);border-radius:999px;padding:4px 11px;font:500 .9rem var(--f-ui)}
+.chip.on{background:var(--acc);color:var(--accink);border-color:var(--acc);font-weight:700}
+.chips+.row{margin-top:8px;border-top:1px solid var(--line)}
+.feat{border-top:1px solid var(--line)}
+.feat:first-child{border-top:0}
+.feat summary{display:flex;align-items:center;gap:12px;padding:9px 0;color:var(--ink);font:700 1rem var(--f-body);margin:0;list-style:none}
+.feat summary::-webkit-details-marker{display:none}
+.feat summary .lbl{margin-left:auto}
+.feat p{margin:0 0 10px 50px;font-size:.95rem}
+
+/* Zauber */
+.lvh{display:flex;align-items:center;gap:12px;padding:12px 0 6px;border-top:1px solid var(--line)}
+.lvh:first-child{border-top:0;padding-top:4px}
+.lvh b{font:700 1.25rem var(--f-disp);color:var(--acc)}
+.lvh small{font:500 .85rem var(--f-ui);color:var(--mute);flex:1}
+.sp{display:grid;grid-template-columns:minmax(0,1fr) max-content;align-items:center;gap:4px 10px;padding:5px 0 5px 6px;border-left:3px solid transparent}
+.sp.cc{border-left-color:var(--acc)}
+.sph{display:flex;align-items:center;gap:12px;background:none;border:0;padding:3px 0;text-align:left;min-width:0}
+.sph .nm small{font-size:.86rem}
+.spb{grid-column:1/-1;padding:4px 0 10px 52px;font-size:.96rem}
+.spb p{margin:0 0 6px}
+.src{font-size:.82rem;color:var(--mute);font-style:italic}
+.cls{font:500 .82rem var(--f-ui);color:var(--mute)}
+.skl{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,230px),1fr));gap:0 20px}
+.sk{display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px dotted var(--line)}
+.sk span{flex:1;min-width:0;font-weight:500}
+.sk span small{color:var(--mute);font-weight:400;font-size:.82rem;margin-left:6px}
+.sk b{font-variant-numeric:tabular-nums}
+.m{width:10px;height:10px;border:1.5px solid var(--ink);border-radius:50%;flex:none}
+.m.m1{background:var(--acc);border-color:var(--acc)}
+.m.m2{background:var(--acc);border-color:var(--acc);box-shadow:0 0 0 2px var(--panel),0 0 0 3.5px var(--acc)}
+
+/* Inventar */
+.coins{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px 16px}
+.coin{display:flex;flex-direction:column;gap:3px}
+.invg{display:grid;gap:0 28px;grid-template-columns:minmax(0,1fr)}
+@media (min-width:860px){.invg{grid-template-columns:auto minmax(0,1fr)}}
+.doll,.bag{background:var(--grain),linear-gradient(160deg,#3a2818,#1d130b);border:2px solid var(--gilt);outline:1px solid var(--giltdk);outline-offset:-6px;border-radius:6px;padding:18px}
+.doll{display:grid;grid-template-columns:repeat(3,76px);grid-template-areas:"ring1 head neck" "main body off" "ring2 cloak hands" ". waist ." ". feet .";gap:8px;justify-content:center}
+.bag{display:grid;grid-template-columns:repeat(6,minmax(0,76px));gap:8px;justify-content:center}
+.cell{aspect-ratio:1;max-width:100%;position:relative;background:linear-gradient(#17100a,#2a1c11);border:1px solid #5a4126;border-radius:5px;box-shadow:inset 0 3px 6px rgba(0,0,0,.7),0 1px 0 rgba(255,220,150,.08);display:grid;place-items:center;min-width:0}
+.cell>small{position:absolute;top:3px;left:0;right:0;text-align:center;font:500 .66rem var(--f-ui);color:#a88c5e;pointer-events:none}
+.ph{opacity:.28;display:grid;place-items:center;color:#d8c094}
+.ph .i{width:30px;height:30px}
+.cell.sel{outline:2px solid var(--gilt);outline-offset:1px}
+.cell.over{background:#4a3520}
+.cell.no{outline:2px dashed #c4372f;outline-offset:-3px}
+.it{position:absolute;inset:3px;width:auto;height:auto;cursor:grab;touch-action:none;user-select:none;-webkit-user-select:none}
+.eqc .it{top:16px}
+.it .i{max-width:34px;max-height:34px}
+.it .q{position:absolute;right:4px;bottom:1px;font:700 .82rem var(--f-ui);color:#fff;text-shadow:0 1px 2px #000;font-variant-numeric:tabular-nums;z-index:1}
+.it .t{position:absolute;left:4px;top:4px;width:7px;height:7px;border-radius:50%;background:var(--gilt);box-shadow:0 0 4px var(--gilt);z-index:1}
+.it.lift{opacity:.3}
+.dragghost{position:fixed;z-index:50;pointer-events:none;width:58px;height:58px;transform:translate(-50%,-55%);box-shadow:0 8px 20px rgba(0,0,0,.5)}
+.dragghost .q,.dragghost .t{display:none}
+#tip{position:fixed;z-index:70;max-width:300px;pointer-events:none;background:linear-gradient(#2c1e12,#1a110a);color:#f0e2bd;border:1.5px solid var(--gilt);outline:1px solid #000;border-radius:5px;padding:10px 12px;box-shadow:0 8px 24px rgba(0,0,0,.55);font-size:.92rem;line-height:1.4}
+#tip b{display:block;font:700 1.05rem var(--f-body);color:#fff3d6}
+#tip .ttag{display:block;font:500 .8rem var(--f-ui);color:var(--gilt);margin:1px 0 6px}
+#tip .ta{display:block;margin-top:6px;font:700 .85rem var(--f-ui);color:#ffd27a}
+#tip .tq{display:block;margin-top:6px;color:#bfae8a;font-size:.82rem}
+.selp{display:grid;grid-template-columns:auto minmax(0,1fr);gap:4px 14px;align-items:start}
+.selp .tok{width:52px;height:52px}
+.selp p{margin:4px 0 8px}
+.acts{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:4px}
+
+/* Formulare */
+.add{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px;align-items:center}
+.add>input,.add>select{flex:1 1 140px}
+.add .n{flex:0 0 90px}
+.add .wide{flex-basis:100%}
+.add .btn{white-space:normal}
+.ck{display:flex;flex-wrap:wrap;align-items:center;gap:6px;font:500 .95rem var(--f-ui);min-width:0;max-width:100%}
+.ck input[type=file]{max-width:100%;min-width:0}
+summary{cursor:pointer;color:var(--acc);font:700 .95rem var(--f-ui);margin-top:12px}
+.form{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,190px),1fr));gap:10px 14px}
+.form label{display:flex;flex-direction:column;gap:3px;min-width:0}
+.edrow{display:flex;flex-wrap:wrap;align-items:center;gap:6px;padding:8px 0;border-top:1px solid var(--line)}
+.edrow:first-child{border-top:0}
+.edrow input[type=text]{flex:1 1 150px}
+.edrow .wide{flex-basis:100%}
+.edrow select{flex:0 1 150px}
+.n{width:70px}
+.del{background:none;border:0;color:var(--acc);font-size:1.2rem;padding:4px 8px}
+.tg{background:var(--bg);border:1.5px solid var(--line);border-radius:999px;padding:3px 10px;font:500 .8rem var(--f-ui)}
+.tg.on{background:var(--acc);border-color:var(--acc);color:var(--accink)}
+.slotg{display:grid;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:8px}
+.slotg label{display:flex;flex-direction:column;gap:3px}
+.porsetup{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.porsetup .por{width:72px;height:72px}
+textarea{width:100%;resize:vertical;line-height:1.55}
+#notes{min-height:55vh}
+#exp,#imp{min-height:120px;font:.82rem/1.4 ui-monospace,Menlo,Consolas,monospace}
+
+/* Wiki */
+.wtools{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px}
+#wq{flex:1 1 260px}
+.wiki{display:grid;grid-template-columns:minmax(0,1fr);gap:18px;margin-top:14px}
+.wl{display:flex;flex-direction:column;min-width:0}
+.wli{display:flex;align-items:center;gap:12px;width:100%;text-align:left;background:none;border:0;border-bottom:1px solid var(--line);padding:8px 8px}
+.wli:hover{background:var(--sunk)}
+.wli[aria-current="true"]{background:var(--panel);box-shadow:inset 3px 0 0 var(--acc)}
+.wli>span:not(.tok){min-width:0;flex:1}
+.wli b{display:block;font-weight:700;overflow-wrap:anywhere}
+.wli small{display:block;font:500 .8rem var(--f-ui);color:var(--mute)}
+.wd{min-width:0}
+.wd h3{margin:0;font:700 2rem/1.05 var(--f-disp);color:var(--acc)}
+.wdh{display:flex;align-items:center;gap:14px;margin-bottom:10px}
+.wdh .tok{width:56px;height:56px}
+.wdh small{font:500 .9rem var(--f-ui);color:var(--mute)}
+.wd p{margin:8px 0 0;max-width:68ch}
+.sm{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;margin:12px 0 0;padding:10px 0;border-block:1px solid var(--line)}
+.sm div{min-width:0}
+.sm dt{font:500 .75rem var(--f-ui);color:var(--mute)}
+.sm dd{margin:0;font-size:.95rem;overflow-wrap:anywhere}
+.lvl{margin-top:14px}
+.lvl h4{margin:12px 0 4px;font:700 1.15rem var(--f-disp);color:var(--acc)}
+.lvl p{margin:2px 0}
+.inl{display:block;padding:4px 10px 14px 58px;border-bottom:1px solid var(--line)}
+.inl h3{display:none}
+.more{color:var(--mute);font-style:italic;margin-top:12px}
+@media (min-width:900px){
+  .wiki{grid-template-columns:340px minmax(0,1fr);align-items:start}
+  .wl{position:sticky;top:calc(env(safe-area-inset-top,0px) + 70px);max-height:calc(100vh - 100px);overflow:auto;border:2px solid var(--ink);background:var(--panel);border-radius:3px}
+  .inl{display:none}
+}
+@media (max-width:899px){.wd.pane{display:none}}
+
+/* Stufenaufstieg */
+.ovl{position:fixed;inset:0;z-index:80;background:rgba(15,9,4,.7);display:grid;place-items:center;padding:max(16px,env(safe-area-inset-top,0px)) max(12px,env(safe-area-inset-right,0px)) max(16px,env(safe-area-inset-bottom,0px)) max(12px,env(safe-area-inset-left,0px))}
+.dlg{width:min(760px,100%);max-height:100%;overflow:auto;background:var(--grain),var(--panel);border:2px solid var(--gilt);outline:1px solid var(--giltdk);outline-offset:-7px;border-radius:6px;padding:22px 24px;box-shadow:0 18px 50px rgba(0,0,0,.6)}
+.dlg h3{margin:0;font:700 2.2rem/1.05 var(--f-disp);color:var(--acc)}
+.dlg h4{margin:18px 0 6px;font:700 1.25rem var(--f-disp);color:var(--ink)}
+.dlg .row{padding:7px 0}
+.dlgf{display:flex;flex-wrap:wrap;gap:10px;justify-content:flex-end;margin-top:20px;padding-top:14px;border-top:1px solid var(--line)}
+.big{font:700 1.4rem var(--f-body);color:var(--good)}
+.chg{display:flex;flex-wrap:wrap;gap:6px}
+.chg span{border:1px solid var(--line);border-radius:4px;padding:2px 8px;font:500 .9rem var(--f-ui);background:var(--bg)}
+.chg span.up{border-color:var(--good);color:var(--good);font-weight:700}
+
+footer{margin-top:40px;padding-top:12px;border-top:3px double var(--line);color:var(--mute);font-size:.88rem}
+#toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:90;max-width:min(560px,calc(100% - 32px));background:var(--band);color:var(--bandink);border:1px solid var(--gilt);padding:10px 16px;border-radius:4px;box-shadow:0 6px 20px var(--shade);font-size:.95rem}
+.svs{display:none}
+@media (max-width:520px){.svl{display:none}.svs{display:inline}.seal{position:absolute;top:12px;right:12px}.who{padding-right:58px}.hd{padding:14px}.por{width:72px;height:72px}.seal{width:54px;height:54px}.seal b{font-size:1.4rem}.hacts{flex-basis:100%}.rests .btn{flex:1}}
+@media (max-width:420px){.sq{width:46px;height:46px}.hpn b{font-size:2.8rem}.doll{grid-template-columns:repeat(3,68px)}.tabs nav button{padding-inline:10px}.dlg{padding:18px 16px}}
+@media (prefers-reduced-motion:no-preference){.chip,.pip,.btn,.cell,.wli{transition:background-color .12s,color .12s}}
+</style>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><linearGradient id="gl" gradientUnits="userSpaceOnUse" x1="0" y1="3" x2="0" y2="21"><stop offset="0" stop-color="#fffbef"/><stop offset=".55" stop-color="#fbe7b6"/><stop offset="1" stop-color="#e2b45a"/></linearGradient></defs></svg>
+<div class="wrap"><main id="app"></main></div>
+<div id="tip" hidden></div>
+<div id="toast" role="status" aria-live="polite" hidden></div>
+<script>
+
+const KEY='charbogen-v4',OLD='charbogen-v2';
+const $=id=>document.getElementById(id);
+const esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+const mod=v=>Math.floor((v-10)/2),sg=n=>(n<0?'−':'+')+Math.abs(n);
+const uid=()=>Math.random().toString(36).slice(2,9);
+const fmtM=v=>String(v).replace('.',',');
+
+const IC={
+sword:'<path d="M19 3h2v2L10 16l-2-2z"/><path d="M6 13l5 5M8 16l-4 4"/>',
+axe:'<path d="M5 21 16 8"/><path d="M13 5c2.5-2 6-1.5 7.5 1.5-1.5 1.5-3.5 2-4.5 4.5L12 8z"/>',
+hammer:'<path d="M5 20l8.5-8.5"/><path d="M11.5 6.5 15 3l6 6-3.5 3.5z"/>',
+spear:'<path d="M4 20 16 8"/><path d="M14 5l7-2-2 7-3-2z"/>',
+bow:'<path d="M5 3c9 1 15 7 16 16"/><path d="M5 3l16 16" stroke-dasharray="1.5 2.5"/><path d="M3 12h9M10 10l2 2-2 2"/>',
+shield:'<path d="M12 3l7.5 3v5.5c0 4.5-3.2 7.8-7.5 9.5-4.3-1.7-7.5-5-7.5-9.5V6z"/>',
+armor:'<path d="M8 3h8l4 3-2.5 4V21h-11V10L4 6z"/><path d="M9 3c0 2 1.3 3 3 3s3-1 3-3M12 6v15"/>',
+helm:'<path d="M4.5 15a7.5 7.5 0 0 1 15 0v5h-15z"/><path d="M12 7.5V20M8 15h8"/>',
+cloak:'<path d="M9 3h6l1.5 3L20 21H4L7.5 6z"/><path d="M7.5 6h9M12 6v15"/>',
+gloves:'<path d="M7 21v-6L4.5 10.5l1.8-1 2.2 2.5V5a1.2 1.2 0 0 1 2.5 0v5V3.8a1.2 1.2 0 0 1 2.5 0V10V5a1.2 1.2 0 0 1 2.5 0v5.5V7.5a1.2 1.2 0 0 1 2.5 0V15l-2 6z"/>',
+belt:'<rect x="2.5" y="9" width="19" height="6" rx="1"/><rect x="9.5" y="7.5" width="5.5" height="9" rx="1"/><path d="M12 12h3"/>',
+boots:'<path d="M7 3h6.5v9l5.5 2.5c1.5.7 2 1.5 2 3V20H7z"/><path d="M7 17h14"/>',
+ring:'<circle cx="12" cy="14.5" r="6"/><path d="M9.5 8.5 12 4.5l2.5 4z"/>',
+amulet:'<path d="M5 3c.5 5.5 3.5 8.5 7 8.5S18.5 8.5 19 3"/><path d="M12 11.5l3.5 4.5L12 20.5 8.5 16z"/>',
+potion:'<path d="M9.5 3h5M10.5 3v5.5L5.8 15.6A3.6 3.6 0 0 0 8.9 21h6.2a3.6 3.6 0 0 0 3.1-5.4L13.5 8.5V3"/><path d="M7.2 14h9.6"/>',
+flame:'<path d="M12 21a6 6 0 0 0 6-6c0-4.5-3.5-7-5-12-1 3-2 4.5-3.5 6C8 10.5 6 12 6 15a6 6 0 0 0 6 6z"/><path d="M12 21a2.5 2.5 0 0 0 2.5-2.5c0-2-2.5-3.5-2.5-5.5-.5 2-2.5 3.5-2.5 5.5A2.5 2.5 0 0 0 12 21z"/>',
+skull:'<path d="M6 16.5V11a6 6 0 0 1 12 0v5.5l-2 1V21H8v-3.5z"/><circle cx="9.5" cy="12.5" r="1.4"/><circle cx="14.5" cy="12.5" r="1.4"/><path d="M11 21v-2M13 21v-2"/>',
+heart:'<path d="M12 20.5S4 15.8 4 9.8A4.3 4.3 0 0 1 12 7.6a4.3 4.3 0 0 1 8 2.2c0 6-8 10.7-8 10.7z"/>',
+scroll:'<path d="M8.5 4h10a2 2 0 0 1 0 4H17v10a2.5 2.5 0 0 1-2.5 2.5h-9a2 2 0 0 1 0-4H7V5.5A1.5 1.5 0 0 1 8.5 4"/><path d="M10 9h4.5M10 12.5h4.5M7 16.5h7.5"/>',
+book:'<path d="M5 5a2 2 0 0 1 2-2h12v15H7a2 2 0 0 0-2 2z"/><path d="M5 20a1.5 1.5 0 0 0 1.5 1.5H19V18M9 7h6"/>',
+wand:'<path d="M4 20 15 9"/><path d="M17 3v3M17 9v1M14 6h-1M21 6h-3M19.2 3.8l-1 1M15.8 7.2l-1 1"/>',
+gem:'<path d="M7 4h10l4 5-9 11.5L3 9z"/><path d="M3 9h18M9.5 9 12 4l2.5 5L12 20.5z"/>',
+bag:'<path d="M9 6.5V5a3 3 0 0 1 6 0v1.5"/><path d="M5.5 8h13l-1 12.5h-11z"/><path d="M9 12.5h6"/>',
+tool:'<path d="M14.5 4.5a4 4 0 0 0 5 5L10 19a2.1 2.1 0 0 1-3-3z"/>',
+key:'<circle cx="8" cy="8" r="4.5"/><path d="M11.2 11.2 20 20M16.5 16.5l2-2M18.5 18.5l1.5-1.5"/>',
+torch:'<path d="M10 11h4l-1.2 10h-1.6z"/><path d="M12 3c2.2 2.2 3.2 3.8 3.2 5.3a3.2 3.2 0 0 1-6.4 0C8.8 6.8 9.8 5.2 12 3z"/>',
+food:'<path d="M4 12.5h16a8 8 0 0 1-16 0z"/><path d="M9 9c0-1.5 1.5-1.5 1.5-3S9 4.5 9 3M14 9c0-1.5 1.5-1.5 1.5-3S14 4.5 14 3"/>',
+music:'<path d="M9 18V5.5l11-2.5v13"/><circle cx="6.5" cy="18" r="2.5"/><circle cx="17.5" cy="16" r="2.5"/>',
+coin:'<circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="5"/>',
+dice:'<path d="M12 2.8l8 4.6v9.2l-8 4.6-8-4.6V7.4z"/><path d="M4 7.4l8 4.6 8-4.6M12 12v9.2"/>',
+leaf:'<path d="M5 19C5 9.5 10.5 4 20 4c0 9.5-5.5 15-15 15z"/><path d="M5 19 14 10"/>',
+mask:'<path d="M4 5h16v6.5a8 8 0 0 1-16 0z"/><path d="M7.5 10h3M13.5 10h3M9 15c2 1.4 4 1.4 6 0"/>',
+star:'<path d="M12 3l2 6.5L20.5 12 14 14.5 12 21l-2-6.5L3.5 12 10 9.5z"/>',
+eye:'<path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12z"/><circle cx="12" cy="12" r="3"/>',
+swirl:'<path d="M12 12a1.8 1.8 0 1 1 1.8-1.8 4 4 0 1 1-4-4 6.5 6.5 0 1 1-6.3 8"/>',
+bolt:'<path d="M13.5 2.5 5 13.5h6l-1 8 8.5-11h-6z"/>',
+snow:'<path d="M12 3v18M4.2 7.5l15.6 9M19.8 7.5l-15.6 9"/><path d="M9.5 4.5 12 6l2.5-1.5M9.5 19.5 12 18l2.5 1.5"/>',
+wing:'<path d="M3 19c6 0 11-3 14-8l4-7c-6 1-10 4-12 9"/><path d="M6 15c3 0 6-1 8-3M3 19l5-5"/>',
+box:'<path d="M4 8l8-4 8 4v8.5L12 20.5 4 16.5z"/><path d="M4 8l8 4 8-4M12 12v8.5"/>'};
+const ICN={sword:'Schwert',axe:'Axt',hammer:'Hammer',spear:'Speer',bow:'Bogen',shield:'Schild',armor:'Rüstung',helm:'Helm',cloak:'Umhang',gloves:'Handschuhe',belt:'Gürtel',boots:'Stiefel',ring:'Ring',amulet:'Amulett',potion:'Trank',flame:'Feuer',skull:'Totenkopf',heart:'Herz',scroll:'Schriftrolle',book:'Buch',wand:'Stab',gem:'Edelstein',bag:'Beutel',tool:'Werkzeug',key:'Schlüssel',torch:'Licht',food:'Essen',music:'Instrument',coin:'Münze',dice:'Würfel',leaf:'Pflanze',mask:'Maske',star:'Stern',eye:'Auge',swirl:'Wirbel',bolt:'Blitz',snow:'Frost',wing:'Flügel',box:'Kiste'};
+const icon=k=>`<svg class="i" viewBox="0 0 24 24" aria-hidden="true">${IC[k]||IC.box}</svg>`;
+const EM={'🧪':'potion','💉':'potion','🔥':'flame','⚗️':'potion','💧':'potion','☠️':'skull','🔨':'hammer','🗡️':'sword','🪓':'axe','🔱':'spear','🪄':'wand','🏹':'bow','🎯':'spear','🪨':'coin','⛏️':'hammer','🪢':'box','🛡️':'shield','🔦':'torch','🍖':'food','🩹':'heart','🔑':'key','🎒':'bag','🏕️':'box','🔧':'tool','🏮':'torch','🧗':'box','🎭':'mask','🖋️':'scroll','🌿':'leaf','🧭':'eye','🍺':'potion','🍳':'food','🗺️':'scroll','🎲':'dice','🃏':'scroll','🎻':'music','🎵':'music','🥁':'music','🪕':'music','🛢️':'potion','⚪':'coin','🕯️':'torch','📌':'box','🔒':'key','⛓️':'box','🔭':'eye','💡':'torch','🪤':'box','👝':'bag','🔮':'gem','✝️':'amulet','📕':'book','👢':'boots','🛏️':'box','💚':'heart','✨':'star','❄️':'snow','⚡':'bolt','🌠':'star','🚫':'shield','✋':'swirl','🟣':'star','😴':'star','🪽':'wing','☀️':'star','📦':'box','💀':'skull','🌀':'swirl','💫':'star','🦋':'wing'};
+const icFrom=x=>IC[x]?x:(EM[x]||'box');
+const iconOpts=sel=>Object.keys(ICN).map(k=>`<option value="${k}"${k===sel?' selected':''}>${ICN[k]}</option>`).join('');
+
+const L={
+res:[['🧪','Trank der Heilung','Heilt 2W4+2 TP · Aktion · 50 GM'],['🧪','Trank der großen Heilung','Heilt 4W4+4 TP · Aktion'],['🧪','Trank der überlegenen Heilung','Heilt 8W4+8 TP · Aktion'],['🧪','Trank der höchsten Heilung','Heilt 10W4+20 TP · Aktion'],['🧪','Trank der Kletterkunst','1 Std: Klettergeschw. = Laufgeschw., Vorteil auf Athletik beim Klettern'],['🧪','Trank der Resistenz','1 Std: Resistenz gegen eine Schadensart'],['💉','Gegengift','1 Std Vorteil auf Rettungswürfe gegen Gift · 50 GM'],['🔥','Alchemistenfeuer','Wurf 6 m · 1W4 Feuer pro Zug, bis gelöscht (SG 10 GES) · 50 GM'],['⚗️','Säure (Phiole)','Wurf 6 m · 2W6 Säure · 25 GM'],['💧','Weihwasser','Wurf 6 m · 2W6 gleißend gegen Unholde und Untote · 25 GM'],['☠️','Gift, einfach','Auf Waffe, 1 Min · SG 10 KON-RW oder 1W4 Gift · 100 GM'],['🧪','Trank der Tierfreundschaft','1 Std: Tierfreundschaft (SG 13)'],['🧪','Trank des Feuerodems','1 Std: Bonusaktion, 4,5-m-Kegel, 4W6 Feuer (GES-RW halbiert), bis zu 3-mal'],['🧪','Trank des Wachstums','1W4 Std: Vergrößern-Effekt, ohne Konzentration'],['🧪','Trank des Verkleinerns','1W4 Std: Verkleinern-Effekt, ohne Konzentration'],['🧪','Trank der Wasseratmung','1 Std: unter Wasser atmen'],['🧪','Trank der Unsichtbarkeit','1 Std unsichtbar; endet bei Angriff oder Zauber'],['🧪','Trank der Schnelligkeit','1 Min: Hast-Effekt, ohne Konzentration'],['🧪','Trank des Fliegens','1 Std: Fluggeschw. = Laufgeschw., Schweben'],['🧪','Trank des Heldenmuts','1 Std: 10 temp. TP, immun gegen Furcht, Segen-Effekt'],['🧪','Trank der Unverwundbarkeit','1 Min: Resistenz gegen allen Schaden'],['🧪','Trank der Hügelriesenstärke','1 Std: Stärke 21']],
+it:[['🔨','Knüppel','Einfach · 1W4 Wucht · Leicht · 1 SM'],['🗡️','Dolch','Einfach · 1W4 Stich · Finesse, Leicht, Wurf 6/18 m · 2 GM'],['🔨','Großknüppel','Einfach · 1W8 Wucht · Zweihändig · 2 SM'],['🪓','Handaxt','Einfach · 1W6 Hieb · Leicht, Wurf 6/18 m · 5 GM'],['🔱','Wurfspeer','Einfach · 1W6 Stich · Wurf 9/36 m · 5 SM'],['🔨','Leichter Hammer','Einfach · 1W4 Wucht · Leicht, Wurf 6/18 m · 2 GM'],['🔨','Streitkolben','Einfach · 1W6 Wucht · 5 GM'],['🪄','Kampfstab','Einfach · 1W6 Wucht · Vielseitig (1W8) · 2 SM'],['🗡️','Sichel','Einfach · 1W4 Hieb · Leicht · 1 GM'],['🔱','Speer','Einfach · 1W6 Stich · Wurf 6/18 m, Vielseitig (1W8) · 1 GM'],['🏹','Leichte Armbrust','Einfach · 1W8 Stich · Munition 24/96 m, Laden, Zweihändig · 25 GM'],['🎯','Wurfpfeil','Einfach · 1W4 Stich · Finesse, Wurf 6/18 m · 5 KM'],['🏹','Kurzbogen','Einfach · 1W6 Stich · Munition 24/96 m, Zweihändig · 25 GM'],['🪨','Schleuder','Einfach · 1W4 Wucht · Munition 9/36 m · 1 SM'],['🪓','Streitaxt','Krieg · 1W8 Hieb · Vielseitig (1W10) · 10 GM'],['🔨','Flegel','Krieg · 1W8 Wucht · 10 GM'],['🔱','Glefe','Krieg · 1W10 Hieb · Schwer, Reichweite, Zweihändig · 20 GM'],['🪓','Zweihandaxt','Krieg · 1W12 Hieb · Schwer, Zweihändig · 30 GM'],['🗡️','Zweihandschwert','Krieg · 2W6 Hieb · Schwer, Zweihändig · 50 GM'],['🔱','Hellebarde','Krieg · 1W10 Hieb · Schwer, Reichweite, Zweihändig · 20 GM'],['🔱','Lanze','Krieg · 1W12 Stich · Reichweite, Sonderregel (Reittier) · 10 GM'],['🗡️','Langschwert','Krieg · 1W8 Hieb · Vielseitig (1W10) · 15 GM'],['🔨','Maul','Krieg · 2W6 Wucht · Schwer, Zweihändig · 10 GM'],['🔨','Morgenstern','Krieg · 1W8 Stich · 15 GM'],['🔱','Pike','Krieg · 1W10 Stich · Schwer, Reichweite, Zweihändig · 5 GM'],['🗡️','Rapier','Krieg · 1W8 Stich · Finesse · 25 GM'],['🗡️','Krummsäbel','Krieg · 1W6 Hieb · Finesse, Leicht · 25 GM'],['🗡️','Kurzschwert','Krieg · 1W6 Stich · Finesse, Leicht · 10 GM'],['🔱','Dreizack','Krieg · 1W6 Stich · Wurf 6/18 m, Vielseitig (1W8) · 5 GM'],['⛏️','Kriegspicke','Krieg · 1W8 Stich · 5 GM'],['🔨','Kriegshammer','Krieg · 1W8 Wucht · Vielseitig (1W10) · 15 GM'],['🪢','Peitsche','Krieg · 1W4 Hieb · Finesse, Reichweite · 2 GM'],['🏹','Blasrohr','Krieg · 1 Stich · Munition 7,5/30 m, Laden · 10 GM'],['🏹','Handarmbrust','Krieg · 1W6 Stich · Munition 9/36 m, Leicht, Laden · 75 GM'],['🏹','Schwere Armbrust','Krieg · 1W10 Stich · Munition 30/120 m, Schwer, Laden, Zweihändig · 50 GM'],['🏹','Langbogen','Krieg · 1W8 Stich · Munition 45/180 m, Schwer, Zweihändig · 50 GM'],['🛡️','Schild','+2 RK · 10 GM'],['🛡️','Gepolsterte Rüstung','Leicht · RK 11 + GES · Nachteil Heimlichkeit · 5 GM'],['🛡️','Lederrüstung','Leicht · RK 11 + GES · 10 GM'],['🛡️','Beschlagene Lederrüstung','Leicht · RK 12 + GES · 45 GM'],['🛡️','Fellrüstung','Mittel · RK 12 + GES (max. +2) · 10 GM'],['🛡️','Kettenhemd','Mittel · RK 13 + GES (max. +2) · 50 GM'],['🛡️','Schuppenpanzer','Mittel · RK 14 + GES (max. +2) · Nachteil Heimlichkeit · 50 GM'],['🛡️','Brustplatte','Mittel · RK 14 + GES (max. +2) · 400 GM'],['🛡️','Halbplatte','Mittel · RK 15 + GES (max. +2) · Nachteil Heimlichkeit · 750 GM'],['🛡️','Ringpanzer','Schwer · RK 14 · Nachteil Heimlichkeit · 30 GM'],['🛡️','Kettenpanzer','Schwer · RK 16 · ST 13 · Nachteil Heimlichkeit · 75 GM'],['🛡️','Schienenpanzer','Schwer · RK 17 · ST 15 · Nachteil Heimlichkeit · 200 GM'],['🛡️','Plattenpanzer','Schwer · RK 18 · ST 15 · Nachteil Heimlichkeit · 1500 GM'],['🔦','Fackel','6 m hell, 6 m dämmrig · 1 Std · 1 KM'],['🪢','Hanfseil (15 m)','2 TP · SG 17 Stärke zum Zerreißen · 1 GM'],['🍖','Tagesration','Verpflegung für 1 Tag · 5 SM'],['🩹','Heilerausrüstung','10 Anwendungen · stabilisiert Sterbende ohne Wurf · 5 GM'],['🔑','Diebeswerkzeug','Für Schlösser und Fallen · 25 GM'],['🎒','Rucksack','Fasst 30 Pfund · 2 GM'],['🏕️','Schlafsack','1 GM'],['🔥','Zunderkästchen','Feuer entfachen · 5 SM'],['🔧','Brecheisen','Vorteil auf Stärkewürfe mit Hebelwirkung · 2 GM'],['🏮','Kapuzenlaterne','9 m hell, 9 m dämmrig · 6 Std pro Öl · 5 GM'],['🧗','Kletterausrüstung','Haken, Seil und Gurt zum Verankern · 25 GM'],['🎒','Einbrecher-Paket','16 GM · Rucksack, 1.000 Kugellager, 3 m Schnur, Glocke, 5 Kerzen, Brecheisen, Hammer, 10 Kletterhaken, Kapuzenlaterne, 2 Ölflaschen, 5 Tagesrationen, Zunderkästchen, Wasserschlauch, 15 m Hanfseil'],['🎒','Diplomaten-Paket','39 GM · Truhe, 2 Kartenrollen, feine Kleidung, Tinte, Feder, Lampe, 2 Ölflaschen, 5 Blatt Papier, Parfüm, Siegelwachs, Seife'],['🎒','Dungeon-Paket','12 GM · Rucksack, Brecheisen, Hammer, 10 Kletterhaken, 10 Fackeln, Zunderkästchen, 10 Tagesrationen, Wasserschlauch, 15 m Hanfseil'],['🎒','Entertainer-Paket','40 GM · Rucksack, Schlafrolle, 2 Kostüme, 5 Kerzen, 5 Tagesrationen, Wasserschlauch, Verkleidungsset'],['🎒','Forscher-Paket','10 GM · Rucksack, Schlafrolle, Essgeschirr, Zunderkästchen, 10 Fackeln, 10 Tagesrationen, Wasserschlauch, 15 m Hanfseil'],['🎒','Priester-Paket','19 GM · Rucksack, Decke, 10 Kerzen, Zunderkästchen, Almosenbox, 2 Weihrauchblöcke, Räuchergefäß, Gewänder, 2 Tagesrationen, Wasserschlauch'],['🎒','Gelehrten-Paket','40 GM · Rucksack, Wissensbuch, Tinte, Feder, 10 Blatt Pergament, Sandbeutel, kleines Messer'],['🎭','Verkleidungsset','Werkzeugübung · 25 GM'],['🖋️','Fälscherset','Werkzeugübung · 15 GM'],['🌿','Kräuterkundeset','Werkzeugübung · 5 GM'],['☠️','Giftmischerset','Werkzeugübung · 50 GM'],['🧭','Navigationswerkzeug','Werkzeugübung · 25 GM'],['⚗️','Alchemistenvorräte','Werkzeugübung · 50 GM'],['🍺','Brauerwerkzeug','Werkzeugübung · 20 GM'],['🔨','Schmiedewerkzeug','Werkzeugübung · 20 GM'],['🔧','Tüftlerwerkzeug','Werkzeugübung · 50 GM'],['🍳','Kochutensilien','Werkzeugübung · 1 GM'],['🗺️','Kartographenwerkzeug','Werkzeugübung · 15 GM'],['🎲','Spielset (Würfel)','Spielset · 1 SM'],['🃏','Spielkartenset','Spielset · 5 SM'],['🎻','Laute','Instrument · 35 GM'],['🎵','Flöte','Instrument · 2 GM'],['🥁','Trommel','Instrument · 6 GM'],['🪕','Dudelsack','Instrument · 30 GM'],['🛢️','Ölflasche','Wurf 6 m: 5 Feuerschaden, wenn entzündet · 1 SM'],['⚪','Kugellager (1.000)','Verschüttet: SG 10 GES oder Umfallen · 1 GM'],['🕯️','Kerze','1,5 m hell, 1,5 m dämmrig · 1 Std · 1 KM'],['💧','Wasserschlauch','4 Pint (ca. 2 l) · 2 SM'],['📌','Kletterhaken','5 KM'],['🔒','Schloss','SG 15 mit Diebeswerkzeug · 10 GM'],['⛓️','Handschellen','SG 20 zum Befreien · 2 GM'],['🔭','Fernrohr','Objekte doppelt so groß · 1000 GM'],['💡','Lampe','4,5 m hell, 9 m dämmrig · 6 Std pro Öl · 5 SM'],['🪤','Fangeisen','SG 13 GES-RW oder 1W4 Stich, Bewegung 0 · 5 GM'],['🏹','Pfeile (20)','Munition · 1 GM'],['🏹','Bolzen (20)','Munition · 1 GM'],['🪨','Schleudergeschosse (20)','Munition · 4 KM'],['🏹','Blasrohrnadeln (50)','Munition · 1 GM'],['👝','Zauberkomponentenbeutel','Ersetzt Materialkomponenten ohne Goldwert · 25 GM'],['🔮','Arkaner Fokus: Kristall','Zauberfokus · 10 GM'],['🔮','Arkaner Fokus: Kugel','Zauberfokus · 20 GM'],['🪄','Arkaner Fokus: Zauberstab','Zauberfokus · 10 GM'],['🪄','Arkaner Fokus: Stab','Zauberfokus · 5 GM'],['✝️','Heiliges Symbol: Amulett','Zauberfokus · 5 GM'],['✝️','Heiliges Symbol: Emblem','Zauberfokus · 5 GM'],['✝️','Heiliges Symbol: Reliquiar','Zauberfokus · 5 GM'],['🌿','Druidischer Fokus: Mistelzweig','Zauberfokus · 1 GM'],['🌿','Druidischer Fokus: Holzstab','Zauberfokus · 5 GM'],['📕','Zauberbuch','100 Seiten · 50 GM'],['👢','Reisekleidung','2 GM'],['🛏️','Decke','5 SM'],['⛏️','Spitzhacke','2 GM'],['🔨','Hammer','1 GM'],['🪢','Seidenseil (15 m)','2 TP · SG 17 Stärke zum Zerreißen · 10 GM']]};
+const MAGIC=[
+['Ring of Protection','ring','ring',1,'+1 auf RK und auf alle Rettungswürfe.'],
+['Cloak of Protection','cloak','cloak',1,'+1 auf RK und auf alle Rettungswürfe.'],
+['Bracers of Defense','gloves','hands',1,'+2 RK, solange du weder Rüstung noch Schild trägst.'],
+['Gauntlets of Ogre Power','gloves','hands',1,'Deine Stärke wird 19 (keine Wirkung, wenn sie schon höher ist).'],
+['Belt of Hill Giant Strength','belt','waist',1,'Deine Stärke wird 21 (keine Wirkung, wenn sie schon höher ist).'],
+['Amulet of Health','amulet','neck',1,'Deine Konstitution wird 19 (keine Wirkung, wenn sie schon höher ist).'],
+['Periapt of Wound Closure','amulet','neck',1,'Bei 0 TP wirst du zu Beginn deines Zuges automatisch stabil. Würfelst du Trefferwürfel zum Heilen, verdoppelt sich die Heilung.'],
+['Boots of Elvenkind','boots','feet',0,'Deine Schritte sind lautlos; Vorteil auf Stealth-Würfe, bei denen es ums leise Bewegen geht.'],
+['Boots of Speed','boots','feet',1,'Bonusaktion: Tempo verdoppelt, Gelegenheitsangriffe gegen dich mit Nachteil. Zusammen höchstens 10 Min, danach erst nach langer Rast wieder.'],
+['Goggles of Night','helm','head',0,'Dunkelsicht 18 m; hast du schon Dunkelsicht, wird sie um 18 m größer.'],
+['Helm of Comprehending Languages','helm','head',0,'Aktion: Comprehend Languages nach Belieben wirken.'],
+['Shield +1','shield','off',0,'Magischer Schild: +1 RK zusätzlich zum normalen Schildbonus (+2).'],
+['Wand of Magic Missiles','wand','hand',0,'7 Ladungen. Aktion: Magic Missile; 1 Ladung für Grad 1, jede weitere Ladung +1 Grad. Lädt 1W6+1 bei Morgengrauen. Letzte Ladung verbraucht: W20, bei 1 zerfällt der Stab.'],
+['Pearl of Power','gem','',1,'Einmal pro Tag (Aktion): einen verbrauchten Zauberplatz bis Grad 3 zurückholen. Lädt bei Morgengrauen.'],
+['Stone of Good Luck (Luckstone)','gem','',1,'+1 auf Attributswürfe und Rettungswürfe.'],
+['Bag of Holding','bag','',0,'Fasst bis 500 Pfund (64 Kubikfuß), wiegt immer 15 Pfund. Etwas herausholen kostet eine Aktion. Zerreißt er, ist der Inhalt verloren; in einen anderen Extradimensionsraum gesteckt öffnet er ein Tor zur Astralebene.'],
+['Immovable Rod','wand','',0,'Aktion: Knopf drücken, der Stab bleibt fest in der Luft und hält bis 8.000 Pfund. Erneut drücken löst ihn.'],
+['Spell Scroll','scroll','',0,'Zauber daraus wirken, wenn er auf deiner Klassenliste steht. Ist er höher, als du wirken kannst: Attributswurf SG 10 + Grad. Die Rolle zerfällt danach.',1]];
+const SPELLS=[
+[0,'Hervorrufung','Fire Bolt','1 Aktion · 36 m · Sofort — Fernkampf-Zauberangriff, 1W10 Feuer. Mehr Schaden ab Stufe 5/11/17'],
+[0,'Hervorrufung','Ray of Frost','1 Aktion · 18 m · Sofort — Fernkampf-Zauberangriff, 1W8 Kälte, Ziel verliert 3 m Tempo bis zu deinem nächsten Zug. Mehr Schaden ab Stufe 5/11/17'],
+[0,'Hervorrufung','Shocking Grasp','1 Aktion · Berührung · Sofort — Nahkampf-Zauberangriff, 1W8 Blitz, Vorteil gegen Metallrüstung; Ziel kann bis zu seinem Zug keine Reaktion nutzen. Mehr Schaden ab Stufe 5/11/17'],
+[0,'Hervorrufung','Eldritch Blast','1 Aktion · 36 m · Sofort — Fernkampf-Zauberangriff, 1W10 Kraft; zusätzliche Strahlen ab Stufe 5/11/17'],
+[0,'Hervorrufung','Sacred Flame','1 Aktion · 18 m · Sofort — GES-Rettungswurf, bei Misserfolg 1W8 gleißend; Deckung hilft nicht. Mehr Schaden ab Stufe 5/11/17'],
+[0,'Hervorrufung','Light','1 Aktion · Berührung · 1 Std — Gegenstand leuchtet 6 m hell und 6 m dämmrig'],
+[0,'Beschwörung','Mage Hand','1 Aktion · 9 m · 1 Min — Geisterhand bewegt Gegenstände bis 10 Pfund, öffnet Türen; kein Angriff'],
+[0,'Verwandlung','Prestidigitation','1 Aktion · 3 m · bis 1 Std — kleine Tricks: Funken, Gerüche, Flecken, Zeichen, Wärme oder Kälte'],
+[0,'Verzauberung','Vicious Mockery','1 Aktion · 18 m · Sofort — WEI-Rettungswurf, bei Misserfolg 1W4 psychisch und Nachteil auf den nächsten Angriff. Mehr Schaden ab Stufe 5/11/17'],
+[0,'Wahrsagung','Guidance','1 Aktion · Berührung · Konz. 1 Min — Ziel addiert einmal 1W4 auf einen Attributswurf'],
+[0,'Bannmagie','Resistance','1 Aktion · Berührung · Konz. 1 Min — Ziel addiert einmal 1W4 auf einen Rettungswurf'],
+[0,'Beschwörung','Poison Spray','1 Aktion · 3 m · Sofort — KON-Rettungswurf, bei Misserfolg 1W12 Gift. Mehr Schaden ab Stufe 5/11/17'],
+[1,'Hervorrufung','Magic Missile','1 Aktion · 36 m · Sofort — 3 Geschosse, je 1W4+1 Kraft, treffen automatisch; +1 Geschoss pro höherem Platz'],
+[1,'Bannmagie','Shield','1 Reaktion · Selbst · 1 Runde — +5 RK bis zu deinem nächsten Zug, blockt Magic Missile'],
+[1,'Hervorrufung','Burning Hands','1 Aktion · Selbst (4,5-m-Kegel) · Sofort — GES-Rettungswurf, 3W6 Feuer (halb bei Erfolg); +1W6 pro höherem Platz'],
+[1,'Hervorrufung','Cure Wounds','1 Aktion · Berührung · Sofort — Ziel heilt 1W8 + Zauberattribut; +1W8 pro höherem Platz'],
+[1,'Hervorrufung','Healing Word','1 Bonusaktion · 18 m · Sofort — Ziel heilt 1W4 + Zauberattribut; +1W4 pro höherem Platz'],
+[1,'Verzauberung','Bless','1 Aktion · 9 m · Konz. 1 Min — bis zu 3 Ziele addieren 1W4 auf Angriffe und Rettungswürfe; +1 Ziel pro höherem Platz'],
+[1,'Verzauberung','Sleep','1 Aktion · 27 m · 1 Min — 5W8 TP an Kreaturen in 6 m Radius schlafen, niedrigste TP zuerst; +2W8 pro höherem Platz'],
+[1,'Hervorrufung','Thunderwave','1 Aktion · Selbst (4,5-m-Würfel) · Sofort — KON-Rettungswurf, 2W8 Schall und 3 m weggestoßen (halb, kein Stoß bei Erfolg); +1W8 pro höherem Platz'],
+[1,'Beschwörung','Fog Cloud','1 Aktion · 36 m · Konz. 1 Std — Nebel in 6 m Radius, stark verdeckt; Radius wächst mit höherem Platz'],
+[1,'Wahrsagung','Hunter\'s Mark','1 Bonusaktion · 27 m · Konz. 1 Std — +1W6 Waffenschaden gegen das markierte Ziel, Vorteil beim Aufspüren'],
+[1,'Verzauberung','Hex','1 Bonusaktion · 27 m · Konz. 1 Std — +1W6 nekrotisch bei deinen Treffern; Nachteil auf Attributswürfe eines gewählten Attributs'],
+[1,'Wahrsagung','Detect Magic','1 Aktion (Ritual) · Selbst · Konz. 10 Min — spürst Magie im Umkreis von 9 m und erkennst ihre Schule'],
+[1,'Wahrsagung','Identify','1 Minute (Ritual) · Berührung · Sofort — erfährst Eigenschaften eines magischen Gegenstands oder Zaubers'],
+[1,'Bannmagie','Mage Armor','1 Aktion · Berührung · 8 Std — Ziel ohne Rüstung hat RK 13 + GES'],
+[1,'Verzauberung','Charm Person','1 Aktion · 9 m · 1 Std — WEI-Rettungswurf; Humanoide hält dich für einen Freund, merkt es danach'],
+[1,'Hervorrufung','Divine Favor','1 Bonusaktion · Selbst · Konz. 1 Min — deine Waffentreffer verursachen +1W4 gleißend'],
+[1,'Hervorrufung','Guiding Bolt','1 Aktion · 36 m · 1 Runde — Fernkampf-Zauberangriff, 4W6 gleißend; nächster Angriff auf das Ziel hat Vorteil; +1W6 pro höherem Platz'],
+[2,'Illusion','Invisibility','1 Aktion · Berührung · Konz. 1 Std — Ziel unsichtbar, bis es angreift oder zaubert; +1 Ziel pro höherem Platz'],
+[2,'Beschwörung','Web','1 Aktion · 18 m · Konz. 1 Std — 6-m-Würfel Spinnweben, schwieriges Gelände; GES-Rettungswurf oder festgehalten'],
+[2,'Hervorrufung','Shatter','1 Aktion · 18 m · Sofort — 3 m Radius, KON-Rettungswurf, 3W8 Schall (halb bei Erfolg); +1W8 pro höherem Platz'],
+[2,'Illusion','Mirror Image','1 Aktion · Selbst · 1 Min — 3 Trugbilder lenken Angriffe ab, jedes verschwindet bei einem Treffer'],
+[2,'Beschwörung','Misty Step','1 Bonusaktion · Selbst · Sofort — teleportierst dich bis zu 9 m an einen sichtbaren freien Ort'],
+[2,'Bannmagie','Lesser Restoration','1 Aktion · Berührung · Sofort — beendet eine Krankheit oder einen Zustand (blind, taub, gelähmt, vergiftet)'],
+[1,'Bannmagie','Sanctuary','1 Bonusaktion · 9 m · 1 Min — Angreifer braucht WEI-Rettungswurf, sonst neues Ziel; endet bei deinem Angriff oder Zauber'],
+[2,'Hervorrufung','Spiritual Weapon','1 Bonusaktion · 18 m · 1 Min — schwebende Waffe, Bonusaktion-Nahkampfangriff 1W8 + Zauberattribut Kraft; +1W8 pro zwei höhere Plätze'],
+[2,'Verzauberung','Hold Person','1 Aktion · 18 m · Konz. 1 Min — Humanoide: WEI-Rettungswurf oder gelähmt, Wiederholung am Zugende; +1 Ziel pro höherem Platz'],
+[2,'Bannmagie','Pass without Trace','1 Aktion · Selbst (9 m) · Konz. 1 Std — +10 auf Heimlichkeit für dich und Gruppe'],
+[2,'Hervorrufung','Scorching Ray','1 Aktion · 36 m · Sofort — 3 Strahlen, je Fernkampf-Zauberangriff 2W6 Feuer; +1 Strahl pro höherem Platz'],
+[2,'Bannmagie','Aid','1 Aktion · 9 m · 8 Std — bis zu 3 Ziele: max. TP und aktuelle TP +5; +5 pro höherem Platz'],
+[3,'Hervorrufung','Fireball','1 Aktion · 45 m · Sofort — 6 m Radius, GES-Rettungswurf, 8W6 Feuer (halb bei Erfolg); +1W6 pro höherem Platz'],
+[3,'Hervorrufung','Lightning Bolt','1 Aktion · Selbst (30-m-Linie) · Sofort — GES-Rettungswurf, 8W6 Blitz (halb bei Erfolg); +1W6 pro höherem Platz'],
+[3,'Bannmagie','Counterspell','1 Reaktion · 18 m · Sofort — unterbricht einen Zauber; Grad 3 oder niedriger gelingt automatisch, höhere brauchen Attributswurf (SG 10 + Grad)'],
+[3,'Verwandlung','Fly','1 Aktion · Berührung · Konz. 10 Min — Ziel erhält Flugtempo 18 m; +1 Ziel pro höherem Platz'],
+[3,'Verwandlung','Haste','1 Aktion · 9 m · Konz. 1 Min — doppeltes Tempo, +2 RK, Vorteil auf GES-Rettungswürfe, zusätzliche Aktion; danach 1 Runde bewegungsunfähig'],
+[3,'Bannmagie','Dispel Magic','1 Aktion · 36 m · Sofort — beendet Zauber auf dem Ziel; Grad 3 oder niedriger automatisch, höhere mit Attributswurf'],
+[3,'Nekromantie','Revivify','1 Aktion · Berührung · Sofort — Kreatur, die vor höchstens 1 Min starb, lebt mit 1 TP; Diamanten für 300 GM nötig'],
+[3,'Beschwörung','Spirit Guardians','1 Aktion · Selbst (4,5 m) · Konz. 10 Min — Feinde im Bereich: Tempo halbiert, WEI-Rettungswurf, 3W8 gleißend oder nekrotisch; +1W8 pro höherem Platz'],
+[3,'Illusion','Hypnotic Pattern','1 Aktion · 36 m · Konz. 1 Min — 9-m-Würfel, WEI-Rettungswurf, Ziele bezaubert und kampfunfähig, bis sie Schaden nehmen'],
+[3,'Hervorrufung','Mass Healing Word','1 Bonusaktion · 18 m · Sofort — bis zu 6 Kreaturen heilen 1W4 + Zauberattribut; +1W4 pro höherem Platz'],
+[4,'Beschwörung','Dimension Door','1 Aktion · 150 m · Sofort — teleportierst dich und optional eine Kreatur bis zu 150 m weit'],
+[4,'Bannmagie','Banishment','1 Aktion · 18 m · Konz. 1 Min — CHA-Rettungswurf oder Ziel wird in eine andere Ebene verbannt; +1 Ziel pro höherem Platz'],
+[4,'Verwandlung','Polymorph','1 Aktion · 18 m · Konz. 1 Std — WEI-Rettungswurf, Ziel wird zu einem Tier (Herausforderungsgrad höchstens seine Stufe)'],
+[5,'Hervorrufung','Flame Strike','1 Aktion · 18 m · Sofort — 3-m-Säule, GES-Rettungswurf, 4W6 Feuer plus 4W6 gleißend (halb bei Erfolg); +1W6 pro höherem Platz'],
+[5,'Hervorrufung','Mass Cure Wounds','1 Aktion · 18 m · Sofort — bis zu 6 Kreaturen im 9-m-Radius heilen 3W8 + Zauberattribut; +1W8 pro höherem Platz']];
+const CLN={B:'Bard',C:'Cleric',D:'Druid',P:'Paladin',R:'Ranger',S:'Sorcerer',K:'Warlock',W:'Wizard'};
+const CL={'Fire Bolt':'SW','Ray of Frost':'SW','Shocking Grasp':'SW','Eldritch Blast':'K','Sacred Flame':'C','Light':'BCSW','Mage Hand':'BSKW','Prestidigitation':'BSKW','Vicious Mockery':'B','Guidance':'CD','Resistance':'CD','Poison Spray':'DSKW','Magic Missile':'SW','Shield':'SW','Burning Hands':'SW','Cure Wounds':'BCDPR','Healing Word':'BCD','Bless':'CP','Sleep':'BSW','Thunderwave':'BDSW','Fog Cloud':'DRSW','Hunter\'s Mark':'R','Hex':'K','Detect Magic':'BCDPRSW','Identify':'BW','Mage Armor':'SW','Charm Person':'BDSKW','Divine Favor':'P','Guiding Bolt':'C','Invisibility':'BSKW','Web':'SW','Shatter':'BSKW','Mirror Image':'SKW','Misty Step':'SKW','Lesser Restoration':'BCDPR','Sanctuary':'C','Spiritual Weapon':'C','Hold Person':'BCDSKW','Pass without Trace':'DR','Scorching Ray':'SW','Aid':'CP','Fireball':'SW','Lightning Bolt':'SW','Counterspell':'SKW','Fly':'SKW','Haste':'SW','Dispel Magic':'BCDPSKW','Revivify':'CP','Spirit Guardians':'C','Hypnotic Pattern':'BSKW','Mass Healing Word':'C','Dimension Door':'BSKW','Banishment':'CPSKW','Polymorph':'BDSW','Flame Strike':'C','Mass Cure Wounds':'BCD'};
+const SCHI={Hervorrufung:'flame',Bannmagie:'shield',Beschwörung:'swirl',Wahrsagung:'eye',Verzauberung:'star',Illusion:'mask',Nekromantie:'skull',Verwandlung:'wing'};
+const SPIC={'Cure Wounds':'heart','Healing Word':'heart','Mass Healing Word':'heart','Mass Cure Wounds':'heart','Revivify':'heart','Aid':'heart','Lesser Restoration':'heart','Ray of Frost':'snow','Shocking Grasp':'bolt','Lightning Bolt':'bolt','Eldritch Blast':'bolt','Magic Missile':'star','Light':'torch','Fly':'wing','Hunter\'s Mark':'bow','Spiritual Weapon':'sword','Sleep':'star','Sacred Flame':'torch','Guiding Bolt':'star'};
+const COND=[['Blinded','Blind','eye','Kann nicht sehen und scheitert bei Würfen, die Sicht brauchen. Angriffe gegen dich haben Vorteil, deine Angriffe Nachteil.'],['Charmed','Bezaubert','heart','Du kannst den Verursacher nicht angreifen oder mit Schädlichem anvisieren. Er hat Vorteil bei sozialen Interaktionen mit dir.'],['Deafened','Taub','music','Kann nicht hören und scheitert bei Würfen, die Gehör brauchen.'],['Frightened','Verängstigt','skull','Nachteil auf Attributswürfe und Angriffe, solange du die Furchtquelle sehen kannst. Du darfst dich nicht freiwillig näher an sie heranbewegen.'],['Grappled','Gepackt','gloves','Tempo 0, ohne Bonus darauf. Endet, wenn der Greifer kampfunfähig wird oder du aus seiner Reichweite gerätst.'],['Incapacitated','Kampfunfähig','star','Keine Aktionen und keine Reaktionen.'],['Invisible','Unsichtbar','mask','Ohne Magie oder Spezialsinn nicht zu sehen (stark verdeckt). Angriffe gegen dich haben Nachteil, deine Angriffe Vorteil.'],['Paralyzed','Gelähmt','snow','Kampfunfähig, kein Bewegen oder Sprechen. STR- und GES-Rettungswürfe scheitern automatisch. Angriffe gegen dich haben Vorteil; Treffer aus 1,5 m sind kritisch.'],['Petrified','Versteinert','gem','In Stein verwandelt (Gewicht ×10, kein Altern). Kampfunfähig, kein Bewegen oder Sprechen, ohne Wahrnehmung. Angriffe gegen dich haben Vorteil; STR/GES-Rettungswürfe scheitern; Resistenz gegen allen Schaden; immun gegen Gift und Krankheit.'],['Poisoned','Vergiftet','potion','Nachteil auf Angriffe und Attributswürfe.'],['Prone','Liegend','boots','Nur Kriechen möglich, oder Aufstehen für die Hälfte des Tempos. Nachteil auf deine Angriffe. Angriffe gegen dich haben Vorteil aus 1,5 m, sonst Nachteil.'],['Restrained','Festgesetzt','box','Tempo 0. Angriffe gegen dich haben Vorteil, deine Angriffe Nachteil, Nachteil auf GES-Rettungswürfe.'],['Stunned','Betäubt','star','Kampfunfähig, kein Bewegen, Sprechen nur stockend. STR/GES-Rettungswürfe scheitern automatisch. Angriffe gegen dich haben Vorteil.'],['Unconscious','Bewusstlos','skull','Kampfunfähig, kein Bewegen oder Sprechen, ohne Wahrnehmung; du lässt fallen, was du hältst, und fällst um. STR/GES-Rettungswürfe scheitern. Angriffe gegen dich haben Vorteil; Treffer aus 1,5 m sind kritisch.']];
+const EXH=['1: Nachteil auf Attributswürfe','2: Tempo halbiert','3: Nachteil auf Angriffe und Rettungswürfe','4: Max-TP halbiert','5: Tempo 0','6: Tod'];
+const RULES=[
+['Kurze Rast','dice','Mindestens 1 Stunde Pause. Du kannst beliebig viele Trefferwürfel ausgeben: je Würfel würfeln + KON-Modifikator heilen. Manche Fähigkeiten und Paktmagie kommen zurück.'],
+['Lange Rast','book','Mindestens 8 Stunden, höchstens 2 davon leichte Tätigkeit. Danach alle TP zurück und bis zur Hälfte deiner Trefferwürfel (mindestens 1). Nur eine pro 24 Stunden, und du brauchst zu Beginn mindestens 1 TP. Mit Essen und Trinken sinkt Exhaustion um 1.'],
+['Todesrettungswürfe','skull','Bei 0 TP würfelst du zu Beginn deines Zuges einen W20 ohne Modifikator: 10 oder mehr ist ein Erfolg, sonst ein Fehlschlag. 3 Erfolge: stabil. 3 Fehlschläge: tot. Eine 1 zählt als zwei Fehlschläge, eine 20 bringt 1 TP zurück. Schaden bei 0 TP ist ein Fehlschlag (kritischer Treffer: zwei). Restschaden mindestens so hoch wie deine Max-TP tötet sofort.'],
+['Konzentration','eye','Du hältst immer nur einen Konzentrationszauber. Nimmst du Schaden: KON-Rettungswurf, SG 10 oder halber Schaden, je nachdem was höher ist. Kampfunfähig werden oder sterben beendet die Konzentration.'],
+['Vorteil und Nachteil','dice','Zwei W20 würfeln: bei Vorteil den höheren, bei Nachteil den niedrigeren nehmen. Hast du beides, heben sie sich auf, egal wie viele Quellen.'],
+['Aktionen im Kampf','sword','Attack, Cast a Spell, Dash (Tempo doppelt), Disengage (keine Gelegenheitsangriffe), Dodge (Angriffe gegen dich mit Nachteil, Vorteil auf GES-RW), Help (Verbündeter erhält Vorteil), Hide, Ready (Aktion auf Auslöser vorbereiten, kostet die Reaktion), Search, Use an Object.'],
+['Bonusaktion und Reaktion','bolt','Eine Bonusaktion nur, wenn eine Fähigkeit oder ein Zauber sie dir gibt. Eine Reaktion pro Runde, zum Beispiel ein Gelegenheitsangriff, wenn ein Feind deine Reichweite verlässt.'],
+['Mit zwei Waffen kämpfen','sword','Greifst du mit einer leichten Nahkampfwaffe an, kannst du als Bonusaktion mit einer anderen leichten Waffe in der anderen Hand angreifen. Den Attributsmodifikator addierst du dabei nicht zum Schaden, außer er ist negativ.'],
+['Greifen (Grapple)','gloves','Statt eines Angriffs: Athletics gegen Athletics oder Acrobatics des Ziels (höchstens eine Größenkategorie größer). Gelingt es, ist das Ziel Grappled. Du kannst es mit halbem Tempo mitziehen.'],
+['Deckung','shield','Halbe Deckung: +2 auf RK und GES-Rettungswürfe. Dreiviertel-Deckung: +5. Volle Deckung: Du kannst nicht direkt anvisiert werden.'],
+['Kritischer Treffer','star','Eine natürliche 20 beim Angriff trifft immer. Bei einem kritischen Treffer würfelst du alle Schadenswürfel doppelt, Modifikatoren zählen einmal.'],
+['Einstimmung','ring','Manche magischen Gegenstände wirken nur mit Einstimmung: eine kurze Rast lang damit beschäftigen. Höchstens drei Gegenstände gleichzeitig.']];
+const AB=[['str','Stärke'],['dex','Geschick'],['con','Konstitution'],['int','Intelligenz'],['wis','Weisheit'],['cha','Charisma']];
+const ABS={str:'ST',dex:'GE',con:'KO',int:'IN',wis:'WE',cha:'CH'};
+const SK=[['Acrobatics','dex','Akrobatik'],['Animal Handling','wis','Mit Tieren umgehen'],['Arcana','int','Arkane Kunde'],['Athletics','str','Athletik'],['Deception','cha','Täuschen'],['History','int','Geschichte'],['Insight','wis','Motiv erkennen'],['Intimidation','cha','Einschüchtern'],['Investigation','int','Nachforschungen'],['Medicine','wis','Heilkunde'],['Nature','int','Naturkunde'],['Perception','wis','Wahrnehmung'],['Performance','cha','Auftreten'],['Persuasion','cha','Überzeugen'],['Religion','int','Religion'],['Sleight of Hand','dex','Fingerfertigkeit'],['Stealth','dex','Heimlichkeit'],['Survival','wis','Überlebenskunst']];
+const COINS=[['pp','Platin'],['gp','Gold'],['ep','Elektrum'],['sp','Silber'],['cp','Kupfer']];
+const REST={short:'Kurze Rast',long:'Lange Rast',none:'Ohne Erholung'};
+const EQ=[['head','Kopf','helm'],['neck','Hals','amulet'],['cloak','Umhang','cloak'],['body','Rüstung','armor'],['main','Haupthand','sword'],['off','Nebenhand','shield'],['hands','Hände','gloves'],['waist','Gürtel','belt'],['feet','Füße','boots'],['ring1','Ring','ring'],['ring2','Ring','ring']];
+const SLOTS=[['','Kein Ausrüstungsplatz'],['hand','Hand (Waffe, Fokus)'],['off','Nebenhand (Schild)'],['body','Rüstung'],['head','Kopf'],['neck','Hals'],['cloak','Umhang'],['hands','Hände'],['waist','Gürtel'],['feet','Füße'],['ring','Ring']];
+
+/* ---------- Klassen und Völker (PHB 2014, Zusammenfassungen in eigenen Worten) ---------- */
+const EA=['Extra Attack','Zwei Angriffe, wenn du die Angriffsaktion nutzt.'];
+const EV=['Evasion','Bei GES-Rettungswürfen für halben Schaden: Erfolg = kein Schaden, Misserfolg = halber Schaden.'];
+const DV=['Darkvision','Im Dunkeln bis 18 m wie im Dämmerlicht sehen, nur in Graustufen.'];
+const FA=['Fey Ancestry','Vorteil auf Rettungswürfe gegen Bezauberung; Magie kann dich nicht einschläfern.'];
+const CLASSES={
+Barbarian:{l:'',hd:12,sv:['str','con'],cast:'',subL:3,subN:'Primal Path',subs:['Path of the Berserker','Path of the Totem Warrior'],sl:[3,6,10,14],asi:[4,8,12,16,19],f:{
+1:[['Rage','Bonusaktion, 1 Min: Vorteil auf STR-Würfe und STR-Rettungswürfe, Bonusschaden auf STR-Nahkampfangriffe, Resistenz gegen Hieb, Stich und Wucht. Keine Zauber, keine Konzentration. Endet früher, wenn du in einer Runde weder angreifst noch Schaden nimmst.'],['Unarmored Defense','Ohne Rüstung: RK = 10 + GES + KON. Schild erlaubt.']],
+2:[['Reckless Attack','Ersten Angriff im Zug mit Vorteil (STR-Nahkampf). Dafür haben Angriffe gegen dich Vorteil bis zu deinem nächsten Zug.'],['Danger Sense','Vorteil auf GES-Rettungswürfe gegen Effekte, die du sehen kannst (nicht blind, taub oder kampfunfähig).']],
+5:[EA,['Fast Movement','+3 m Tempo, solange du keine schwere Rüstung trägst.']],
+7:[['Feral Instinct','Vorteil auf Initiative. Bist du überrascht, kannst du trotzdem handeln, wenn du sofort in Kampfrausch gehst.']],
+9:[['Brutal Critical','Bei einem kritischen Nahkampftreffer einen zusätzlichen Waffenschadenswürfel.']],
+11:[['Relentless Rage','Fällst du im Kampfrausch auf 0 TP: KON-Rettungswurf SG 10 (+5 bei jeder weiteren Nutzung bis zur Rast). Bei Erfolg bleibst du bei 1 TP.']],
+13:[['Brutal Critical','Jetzt zwei zusätzliche Würfel.']],
+15:[['Persistent Rage','Der Kampfrausch endet nur, wenn du bewusstlos wirst oder ihn selbst beendest.']],
+17:[['Brutal Critical','Jetzt drei zusätzliche Würfel.']],
+18:[['Indomitable Might','Ist dein STR-Wurf niedriger als dein Stärkewert, zählt stattdessen der Wert.']],
+20:[['Primal Champion','STR und KON steigen um 4, Maximum 24 (wird automatisch eingetragen).']]}},
+Bard:{l:'B',hd:8,sv:['dex','cha'],cast:'full',sa:'cha',subL:3,subN:'Bard College',subs:['College of Lore','College of Valor'],sl:[3,6,14],asi:[4,8,12,16,19],f:{
+1:[['Spellcasting','Zaubern mit CHA. Zauber-SG = 8 + Übung + CHA, Zauberangriff = Übung + CHA. Instrument als Fokus.'],['Bardic Inspiration','Bonusaktion: Eine Kreatur in 18 m erhält einen Inspirationswürfel (W6), den sie binnen 10 Min auf einen Angriff, Attributs- oder Rettungswurf addiert. Anwendungen = CHA-Mod (mind. 1).']],
+2:[['Jack of All Trades','Halber Übungsbonus (abgerundet) auf Attributswürfe ohne Übung.'],['Song of Rest','Bei einer kurzen Rast heilen Verbündete, die Trefferwürfel ausgeben, zusätzlich 1W6.']],
+3:[['Expertise','Doppelter Übungsbonus für zwei geübte Fertigkeiten.']],
+5:[['Bardic Inspiration','Würfel wird zum W8.'],['Font of Inspiration','Bardic Inspiration kommt schon nach kurzer Rast zurück.']],
+6:[['Countercharm','Aktion: Bis Ende deines nächsten Zuges haben du und Verbündete in 9 m Vorteil auf Rettungswürfe gegen Furcht und Bezauberung.']],
+9:[['Song of Rest','Jetzt 1W8.']],
+10:[['Bardic Inspiration','Würfel wird zum W10.'],['Expertise','Zwei weitere Fertigkeiten mit doppeltem Übungsbonus.'],['Magical Secrets','Zwei Zauber aus beliebigen Klassenlisten lernen; sie zählen als Bardenzauber.']],
+13:[['Song of Rest','Jetzt 1W10.']],
+14:[['Magical Secrets','Zwei weitere Zauber aus beliebigen Listen.']],
+15:[['Bardic Inspiration','Würfel wird zum W12.']],
+17:[['Song of Rest','Jetzt 1W12.']],
+18:[['Magical Secrets','Zwei weitere Zauber aus beliebigen Listen.']],
+20:[['Superior Inspiration','Hast du beim Initiativewurf keine Inspiration übrig, erhältst du eine zurück.']]}},
+Cleric:{l:'C',hd:8,sv:['wis','cha'],cast:'full',sa:'wis',subL:1,subN:'Divine Domain',subs:['Knowledge Domain','Life Domain','Light Domain','Nature Domain','Tempest Domain','Trickery Domain','War Domain'],sl:[1,2,6,8,17],asi:[4,8,12,16,19],f:{
+1:[['Spellcasting','Zaubern mit WEI. Vorbereitet: WEI-Mod + Klerikerstufe (mind. 1) aus der ganzen Klerikerliste, Wechsel nach langer Rast.']],
+2:[['Channel Divinity','Göttliche Energie für Turn Undead oder einen Effekt deiner Domäne, einmal pro kurzer oder langer Rast.'],['Turn Undead','Aktion: Untote in 9 m, die dich sehen oder hören, machen einen WEI-Rettungswurf. Bei Misserfolg fliehen sie 1 Min lang (bis sie Schaden nehmen).']],
+5:[['Destroy Undead','Untote bis HG 1/2, die bei Turn Undead scheitern, werden sofort zerstört.']],
+6:[['Channel Divinity','Jetzt zweimal pro Rast.']],
+8:[['Destroy Undead','Jetzt bis HG 1.']],
+10:[['Divine Intervention','Aktion: Würfelst du mit W100 höchstens deine Klerikerstufe, greift deine Gottheit ein. Danach 7 Tage warten, bei Misserfolg nur bis zur langen Rast.']],
+11:[['Destroy Undead','Jetzt bis HG 2.']],
+14:[['Destroy Undead','Jetzt bis HG 3.']],
+17:[['Destroy Undead','Jetzt bis HG 4.']],
+18:[['Channel Divinity','Jetzt dreimal pro Rast.']],
+20:[['Divine Intervention','Gelingt jetzt automatisch.']]}},
+Druid:{l:'D',hd:8,sv:['int','wis'],cast:'full',sa:'wis',subL:2,subN:'Druid Circle',subs:['Circle of the Land','Circle of the Moon'],sl:[2,6,10,14],asi:[4,8,12,16,19],f:{
+1:[['Druidic','Du sprichst die Geheimsprache der Druiden.'],['Spellcasting','Zaubern mit WEI. Vorbereitet: WEI-Mod + Druidenstufe (mind. 1), Wechsel nach langer Rast.']],
+2:[['Wild Shape','Aktion: in ein gesehenes Tier verwandeln, zweimal pro kurzer Rast. Bis HG 1/4, ohne Flug- oder Schwimmtempo. Dauer: halbe Druidenstufe in Stunden.']],
+4:[['Wild Shape','Jetzt bis HG 1/2, ohne Flugtempo.']],
+8:[['Wild Shape','Jetzt bis HG 1, auch mit Flugtempo.']],
+18:[['Timeless Body','Du alterst nur noch ein Jahr pro zehn Jahre.'],['Beast Spells','Du kannst in Tiergestalt viele deiner Zauber wirken.']],
+20:[['Archdruid','Wild Shape beliebig oft; Verbal- und Gestenkomponenten deiner Druidenzauber entfallen.']]}},
+Fighter:{l:'',hd:10,sv:['str','con'],cast:'',subL:3,subN:'Martial Archetype',subs:['Champion','Battle Master','Eldritch Knight'],sl:[3,7,10,15,18],asi:[4,6,8,12,14,16,19],f:{
+1:[['Fighting Style','Wähle einen Kampfstil: Archery, Defense, Dueling, Great Weapon Fighting, Protection oder Two-Weapon Fighting.'],['Second Wind','Bonusaktion: 1W10 + Kämpferstufe TP heilen, einmal pro kurzer Rast.']],
+2:[['Action Surge','Eine zusätzliche Aktion in deinem Zug, einmal pro kurzer Rast.']],
+5:[EA],
+9:[['Indomitable','Einen misslungenen Rettungswurf wiederholen, einmal pro langer Rast.']],
+11:[['Extra Attack','Jetzt drei Angriffe pro Angriffsaktion.']],
+13:[['Indomitable','Jetzt zweimal pro langer Rast.']],
+17:[['Action Surge','Jetzt zweimal pro Rast, aber nur einmal pro Zug.'],['Indomitable','Jetzt dreimal pro langer Rast.']],
+20:[['Extra Attack','Jetzt vier Angriffe pro Angriffsaktion.']]}},
+Monk:{l:'',hd:8,sv:['str','dex'],cast:'',subL:3,subN:'Monastic Tradition',subs:['Way of the Open Hand','Way of Shadow','Way of the Four Elements'],sl:[3,6,11,17],asi:[4,8,12,16,19],f:{
+1:[['Unarmored Defense','Ohne Rüstung und Schild: RK = 10 + GES + WEI.'],['Martial Arts','Waffenlos und mit Mönchswaffen: GES statt STR, Kampfwürfel W4 statt Waffenschaden, nach der Angriffsaktion ein waffenloser Schlag als Bonusaktion.']],
+2:[['Ki','Ki-Punkte = Mönchsstufe, zurück nach kurzer Rast. Flurry of Blows, Patient Defense und Step of the Wind kosten je 1 Ki.'],['Unarmored Movement','+3 m Tempo ohne Rüstung und Schild.']],
+3:[['Deflect Missiles','Reaktion: Fernkampfschaden um 1W10 + GES + Mönchsstufe senken. Bei 0 Schaden fangen und für 1 Ki zurückwerfen.']],
+4:[['Slow Fall','Reaktion: Fallschaden um 5 × Mönchsstufe senken.']],
+5:[EA,['Stunning Strike','Nach einem Nahkampftreffer 1 Ki: Ziel macht KON-Rettungswurf oder ist bis Ende deines nächsten Zuges betäubt.'],['Martial Arts','Kampfwürfel wird zum W6.']],
+6:[['Ki-Empowered Strikes','Waffenlose Schläge gelten als magisch.'],['Unarmored Movement','Jetzt +4,5 m.']],
+7:[EV,['Stillness of Mind','Aktion: Bezauberung oder Furcht bei dir beenden.']],
+9:[['Unarmored Movement','Senkrechte Flächen und Wasser in deinem Zug überqueren.']],
+10:[['Purity of Body','Immun gegen Krankheiten und Gift.'],['Unarmored Movement','Jetzt +6 m.']],
+11:[['Martial Arts','Kampfwürfel wird zum W8.']],
+13:[['Tongue of the Sun and Moon','Du verstehst alle gesprochenen Sprachen, und jeder mit einer Sprache versteht dich.']],
+14:[['Diamond Soul','Übung in allen Rettungswürfen; 1 Ki für die Wiederholung eines misslungenen Rettungswurfs.'],['Unarmored Movement','Jetzt +7,5 m.']],
+15:[['Timeless Body','Keine Altersschwäche, kein Essen und Trinken nötig.']],
+17:[['Martial Arts','Kampfwürfel wird zum W10.']],
+18:[['Empty Body','4 Ki: 1 Min unsichtbar und resistent gegen allen Schaden außer Kraftschaden. 8 Ki: Astral Projection ohne Material.'],['Unarmored Movement','Jetzt +9 m.']],
+20:[['Perfect Self','Hast du beim Initiativewurf kein Ki mehr, erhältst du 4 Ki zurück.']]}},
+Paladin:{l:'P',hd:10,sv:['wis','cha'],cast:'half',sa:'cha',subL:3,subN:'Sacred Oath',subs:['Oath of Devotion','Oath of the Ancients','Oath of Vengeance'],sl:[3,7,15,20],asi:[4,8,12,16,19],f:{
+1:[['Divine Sense','Aktion: Bis Ende deines nächsten Zuges Himmlische, Unholde und Untote in 18 m spüren. 1 + CHA-Mod pro langer Rast.'],['Lay on Hands','Heilpool von 5 × Paladinstufe TP pro langer Rast. 5 Punkte heilen alternativ eine Krankheit oder ein Gift.']],
+2:[['Fighting Style','Wähle Defense, Dueling, Great Weapon Fighting oder Protection.'],['Spellcasting','Zaubern mit CHA. Vorbereitet: CHA-Mod + halbe Paladinstufe (mind. 1).'],['Divine Smite','Nach einem Nahkampftreffer einen Zauberplatz verbrauchen: +2W8 gleißend, +1W8 pro Grad über 1 (max. 5W8), +1W8 gegen Untote und Unholde.']],
+3:[['Divine Health','Immun gegen Krankheiten.'],['Channel Divinity','Effekt deines Eides, einmal pro kurzer oder langer Rast.']],
+5:[EA],
+6:[['Aura of Protection','Du und Verbündete in 3 m addieren deinen CHA-Mod (mind. +1) auf Rettungswürfe, solange du bei Bewusstsein bist.']],
+10:[['Aura of Courage','Du und Verbündete in 3 m können nicht verängstigt werden.']],
+11:[['Improved Divine Smite','Jeder Nahkampftreffer mit einer Waffe verursacht +1W8 gleißend.']],
+14:[['Cleansing Touch','Aktion: Einen Zauber auf dir oder einer berührten bereiten Kreatur beenden, CHA-Mod-mal (mind. 1) pro langer Rast.']],
+18:[['Aura improvements','Deine Auren reichen jetzt 9 m weit.']]}},
+Ranger:{l:'R',hd:10,sv:['str','dex'],cast:'half',sa:'wis',subL:3,subN:'Ranger Archetype',subs:['Hunter','Beast Master'],sl:[3,7,11,15],asi:[4,8,12,16,19],f:{
+1:[['Favored Enemy','Wähle eine Feindart: Vorteil beim Aufspüren und bei INT-Würfen über sie, dazu eine ihrer Sprachen.'],['Natural Explorer','Ein bevorzugtes Gelände: doppelter Übungsbonus bei INT- und WEI-Würfen dazu und Vorteile beim Reisen.']],
+2:[['Fighting Style','Wähle Archery, Defense, Dueling oder Two-Weapon Fighting.'],['Spellcasting','Zaubern mit WEI.']],
+3:[['Primeval Awareness','Einen Zauberplatz verbrauchen: 1 Min pro Grad spüren, ob bestimmte Kreaturenarten in 1,5 km sind (9 km im bevorzugten Gelände).']],
+5:[EA],
+6:[['Favored Enemy','Eine weitere Feindart.'],['Natural Explorer','Ein weiteres Gelände.']],
+8:[["Land's Stride",'Nichtmagisches schwieriges Gelände kostet kein zusätzliches Tempo; Vorteil gegen magisch beeinflusste Pflanzen.']],
+10:[['Natural Explorer','Ein weiteres Gelände.'],['Hide in Plain Sight','1 Min Tarnung vorbereiten: +10 auf Stealth, solange du dich nicht bewegst.']],
+14:[['Favored Enemy','Eine weitere Feindart.'],['Vanish','Hide als Bonusaktion; nichtmagisch kann dich niemand aufspüren.']],
+18:[['Feral Senses','Keine Nachteile beim Angriff auf Kreaturen, die du nicht siehst; unsichtbare Kreaturen in 9 m kennst du.']],
+20:[['Foe Slayer','Einmal pro Zug WEI-Mod auf Angriff oder Schaden gegen einen bevorzugten Feind.']]}},
+Rogue:{l:'',hd:8,sv:['dex','int'],cast:'',subL:3,subN:'Roguish Archetype',subs:['Thief','Assassin','Arcane Trickster'],sl:[3,9,13,17],asi:[4,8,10,12,16,19],f:{
+1:[['Expertise','Doppelter Übungsbonus für zwei Fertigkeiten (oder eine plus Diebeswerkzeug).'],['Sneak Attack','Einmal pro Zug Zusatzschaden mit Finesse- oder Fernkampfwaffe, wenn du Vorteil hast oder ein Verbündeter neben dem Ziel steht (und du keinen Nachteil hast).'],["Thieves' Cant",'Geheimsprache und Zeichen der Diebe.']],
+2:[['Cunning Action','Bonusaktion: Dash, Disengage oder Hide.']],
+5:[['Uncanny Dodge','Reaktion: Schaden eines Angreifers, den du siehst, halbieren.']],
+6:[['Expertise','Zwei weitere Fertigkeiten mit doppeltem Übungsbonus.']],
+7:[EV],
+11:[['Reliable Talent','Bei geübten Attributswürfen zählt eine 9 oder weniger auf dem W20 als 10.']],
+14:[['Blindsense','Versteckte und unsichtbare Kreaturen in 3 m kennst du, solange du hören kannst.']],
+15:[['Slippery Mind','Übung in WEI-Rettungswürfen.']],
+18:[['Elusive','Angriffe gegen dich haben keinen Vorteil, solange du nicht kampfunfähig bist.']],
+20:[['Stroke of Luck','Aus einem Fehlschlag einen Treffer machen oder einen Attributswurf als 20 werten, einmal pro kurzer Rast.']]}},
+Sorcerer:{l:'S',hd:6,sv:['con','cha'],cast:'full',sa:'cha',subL:1,subN:'Sorcerous Origin',subs:['Draconic Bloodline','Wild Magic'],sl:[1,6,14,18],asi:[4,8,12,16,19],f:{
+1:[['Spellcasting','Zaubern mit CHA. Bekannte Zauber wechselst du beim Stufenaufstieg.']],
+2:[['Font of Magic','Zauberpunkte = Zaubererstufe pro langer Rast. Bonusaktion: Punkte in Zauberplätze umwandeln und umgekehrt.']],
+3:[['Metamagic','Zwei Metamagie-Optionen, z. B. Quickened, Twinned oder Subtle Spell.']],
+10:[['Metamagic','Eine weitere Option.']],
+17:[['Metamagic','Eine weitere Option.']],
+20:[['Sorcerous Restoration','Bei einer kurzen Rast 4 Zauberpunkte zurück.']]}},
+Warlock:{l:'K',hd:8,sv:['wis','cha'],cast:'pact',sa:'cha',subL:1,subN:'Otherworldly Patron',subs:['The Archfey','The Fiend','The Great Old One'],sl:[1,6,10,14],asi:[4,8,12,16,19],f:{
+1:[['Pact Magic','Zaubern mit CHA. Alle Plätze haben denselben Grad und kommen nach kurzer Rast zurück.']],
+2:[['Eldritch Invocations','Zwei Anrufungen, z. B. Agonizing Blast oder Devil\'s Sight.']],
+3:[['Pact Boon','Wähle Pact of the Chain, Pact of the Blade oder Pact of the Tome.']],
+5:[['Eldritch Invocations','Jetzt drei Anrufungen.']],7:[['Eldritch Invocations','Jetzt vier Anrufungen.']],9:[['Eldritch Invocations','Jetzt fünf Anrufungen.']],
+11:[['Mystic Arcanum (6. Grad)','Ein Zauber 6. Grades einmal pro langer Rast ohne Platz.']],
+12:[['Eldritch Invocations','Jetzt sechs Anrufungen.']],
+13:[['Mystic Arcanum (7. Grad)','Ein Zauber 7. Grades einmal pro langer Rast.']],
+15:[['Mystic Arcanum (8. Grad)','Ein Zauber 8. Grades einmal pro langer Rast.'],['Eldritch Invocations','Jetzt sieben Anrufungen.']],
+17:[['Mystic Arcanum (9. Grad)','Ein Zauber 9. Grades einmal pro langer Rast.']],
+18:[['Eldritch Invocations','Jetzt acht Anrufungen.']],
+20:[['Eldritch Master','1 Min konzentrieren: alle Paktplätze zurück, einmal pro langer Rast.']]}},
+Wizard:{l:'W',hd:6,sv:['int','wis'],cast:'full',sa:'int',subL:2,subN:'Arcane Tradition',subs:['School of Abjuration','School of Conjuration','School of Divination','School of Enchantment','School of Evocation','School of Illusion','School of Necromancy','School of Transmutation'],sl:[2,6,10,14],asi:[4,8,12,16,19],f:{
+1:[['Spellcasting','Zaubern mit INT aus dem Zauberbuch (startet mit 6 Zaubern 1. Grades). Vorbereitet: INT-Mod + Magierstufe.'],['Arcane Recovery','Einmal pro Tag bei einer kurzen Rast verbrauchte Plätze zurückholen: Gesamtgrad bis zur halben Magierstufe (aufgerundet), keiner höher als Grad 5.']],
+18:[['Spell Mastery','Je einen Zauber 1. und 2. Grades auf niedrigstem Grad ohne Platz wirken.']],
+20:[['Signature Spells','Zwei Zauber 3. Grades je einmal pro kurzer Rast ohne Platz.']]}}};
+const RACES={
+Dwarf:{sp:7.5,asi:'KON +2',tr:[DV,['Dwarven Resilience','Vorteil auf Rettungswürfe gegen Gift, Resistenz gegen Giftschaden.'],['Dwarven Combat Training','Übung mit Streitaxt, Handaxt, leichtem Hammer und Kriegshammer.'],['Stonecunning','Bei Geschichtswürfen zu Steinarbeiten doppelter Übungsbonus.']],subs:{
+ 'Hill Dwarf':{asi:'WEI +1',tr:[['Dwarven Toughness','+1 Max-TP pro Stufe (beim Stufenaufstieg eingerechnet).']]},
+ 'Mountain Dwarf':{asi:'STR +2',tr:[['Dwarven Armor Training','Übung mit leichter und mittlerer Rüstung.']]}}},
+Elf:{sp:9,asi:'GES +2',tr:[DV,['Keen Senses','Übung in Perception.'],FA,['Trance','4 Std Meditation statt 8 Std Schlaf.']],subs:{
+ 'High Elf':{asi:'INT +1',tr:[['Elf Weapon Training','Übung mit Lang- und Kurzschwert, Kurz- und Langbogen.'],['Cantrip','Ein Cantrip der Magierliste, Zauberattribut INT.'],['Extra Language','Eine weitere Sprache.']]},
+ 'Wood Elf':{asi:'WEI +1',sp:10.5,tr:[['Elf Weapon Training','Übung mit Lang- und Kurzschwert, Kurz- und Langbogen.'],['Fleet of Foot','Grundtempo 10,5 m.'],['Mask of the Wild','Verstecken schon bei leichter Verdeckung durch Natur wie Laub, Regen oder Nebel.']]},
+ 'Drow':{asi:'CHA +1',tr:[['Superior Darkvision','Dunkelsicht 36 m.'],['Sunlight Sensitivity','Nachteil auf Angriffe und auf Wahrnehmung per Sicht im direkten Sonnenlicht.'],['Drow Magic','Dancing Lights; ab Stufe 3 Faerie Fire, ab Stufe 5 Darkness, je einmal pro langer Rast (CHA).'],['Drow Weapon Training','Übung mit Rapier, Kurzschwert und Handarmbrust.']]}}},
+Halfling:{sp:7.5,asi:'GES +2',tr:[['Lucky','Bei einer 1 auf Angriff, Attributs- oder Rettungswurf neu würfeln; das neue Ergebnis gilt.'],['Brave','Vorteil auf Rettungswürfe gegen Furcht.'],['Halfling Nimbleness','Du kannst dich durch den Platz größerer Kreaturen bewegen.']],subs:{
+ 'Lightfoot':{asi:'CHA +1',tr:[['Naturally Stealthy','Verstecken auch hinter einer Kreatur, die mindestens eine Größe größer ist.']]},
+ 'Stout':{asi:'KON +1',tr:[['Stout Resilience','Vorteil auf Rettungswürfe gegen Gift, Resistenz gegen Giftschaden.']]}}},
+Human:{sp:9,asi:'alle Attribute +1',tr:[['Extra Language','Eine weitere Sprache.']],subs:{
+ 'Variant Human':{asi:'zwei Attribute +1 (statt alle)',tr:[['Skills','Übung in einer Fertigkeit nach Wahl.'],['Feat','Ein Talent nach Wahl.']]}}},
+Dragonborn:{sp:9,asi:'STR +2, CHA +1',tr:[['Draconic Ancestry','Deine Drachenart bestimmt Schadensart und Form der Odemwaffe.'],['Breath Weapon','Aktion: 2W6 (ab Stufe 6 3W6, 11 4W6, 16 5W6), Rettungswurf SG 8 + KON + Übung, halber Schaden bei Erfolg. Einmal pro kurzer Rast.'],['Damage Resistance','Resistenz gegen die Schadensart deiner Abstammung.']],subs:{}},
+Gnome:{sp:7.5,asi:'INT +2',tr:[DV,['Gnome Cunning','Vorteil auf INT-, WEI- und CHA-Rettungswürfe gegen Magie.']],subs:{
+ 'Forest Gnome':{asi:'GES +1',tr:[['Natural Illusionist','Cantrip Minor Illusion (INT).'],['Speak with Small Beasts','Einfache Verständigung mit kleinen Tieren.']]},
+ 'Rock Gnome':{asi:'KON +1',tr:[["Artificer's Lore",'Doppelter Übungsbonus bei Geschichtswürfen zu magischen und technischen Gegenständen.'],['Tinker','Kleine Uhrwerk-Geräte bauen.']]}}},
+'Half-Elf':{sp:9,asi:'CHA +2, zwei andere Attribute +1',tr:[DV,FA,['Skill Versatility','Übung in zwei Fertigkeiten nach Wahl.']],subs:{}},
+'Half-Orc':{sp:9,asi:'STR +2, KON +1',tr:[DV,['Menacing','Übung in Intimidation.'],['Relentless Endurance','Fällst du auf 0 TP, ohne zu sterben, bleibst du bei 1 TP. Einmal pro langer Rast.'],['Savage Attacks','Bei einem kritischen Nahkampftreffer einen Waffenschadenswürfel zusätzlich.']],subs:{}},
+Tiefling:{sp:9,asi:'CHA +2, INT +1',tr:[DV,['Hellish Resistance','Resistenz gegen Feuerschaden.'],['Infernal Legacy','Thaumaturgy; ab Stufe 3 Hellish Rebuke (Grad 2), ab Stufe 5 Darkness, je einmal pro langer Rast (CHA).']],subs:{}}};
+const FULL=[[],[2],[3],[4,2],[4,3],[4,3,2],[4,3,3],[4,3,3,1],[4,3,3,2],[4,3,3,3,1],[4,3,3,3,2],[4,3,3,3,2,1],[4,3,3,3,2,1],[4,3,3,3,2,1,1],[4,3,3,3,2,1,1],[4,3,3,3,2,1,1,1],[4,3,3,3,2,1,1,1],[4,3,3,3,2,1,1,1,1],[4,3,3,3,3,1,1,1,1],[4,3,3,3,3,2,1,1,1],[4,3,3,3,3,2,2,1,1]];
+const CANT={Bard:2,Cleric:3,Druid:2,Sorcerer:4,Warlock:2,Wizard:3};
+const KNOWN={Bard:[4,5,6,7,8,9,10,11,12,14,15,15,16,18,19,19,20,22,22,22],Sorcerer:[2,3,4,5,6,7,8,9,10,11,12,12,13,13,14,14,15,15,15,15],Warlock:[2,3,4,5,6,7,8,9,10,10,11,11,12,12,13,13,14,14,15,15],Ranger:[0,2,3,3,4,4,5,5,6,6,7,7,8,8,9,9,10,10,11,11]};
+const pb=l=>l<1?2:2+Math.floor((l-1)/4);
+function slotsFor(k,l){const C=CLASSES[k];let a=[];if(C&&l>0){if(C.cast==='full')a=FULL[l];else if(C.cast==='half')a=FULL[l<2?0:Math.ceil(l/2)]}return Array.from({length:9},(_,i)=>a[i]||0)}
+function pactFor(l){if(l<1)return [0,1];return [l>=17?4:l>=11?3:l>=2?2:1,Math.min(5,Math.ceil(l/2))]}
+const cantripsFor=(k,l)=>CANT[k]!=null&&l>0?CANT[k]+(l>=4)+(l>=10):0;
+const knownFor=(k,l)=>KNOWN[k]&&l>0?KNOWN[k][l-1]:null;
+/* ---------- Spiel-Icons ---------- */
+const TONE={sword:'steel',axe:'steel',hammer:'steel',spear:'steel',shield:'steel',armor:'steel',helm:'steel',tool:'steel',gloves:'leather',boots:'leather',belt:'leather',cloak:'leather',bag:'leather',scroll:'leather',book:'leather',music:'leather',box:'leather',dice:'leather',food:'leather',bow:'leather',key:'gold',coin:'gold',torch:'gold',ring:'gold',amulet:'gold',potion:'crimson',heart:'crimson',flame:'crimson',leaf:'verdant',gem:'arcane',wand:'arcane',star:'arcane',eye:'arcane',swirl:'arcane',mask:'arcane',wing:'arcane',bolt:'arcane',snow:'arcane',skull:'shadow'};
+const tok=(k,tone)=>`<span class="tok t-${tone||TONE[k]||'leather'}">${icon(k)}</span>`;
+const itTone=it=>(it.att||it.magic)?'arcane':(TONE[it.ic]||'leather');
+
+/* ---------- Katalog aufbauen ---------- */
+const catOf=(n,p)=>/^Einfach/.test(p)?'Einfache Waffen':/^Krieg/.test(p)?'Kriegswaffen':/RK /.test(p)?'Rüstungen und Schilde':/Paket/.test(n)?'Ausrüstungspakete':/^(Werkzeug|Instrument|Spielset)/.test(p)?'Werkzeuge und Instrumente':/Fokus|Symbol|Zauberbuch|Komponenten/.test(n)?'Zauberfokusse':'Ausrüstung';
+const slotOf=(n,c)=>/Waffen$/.test(c)?'hand':n==='Schild'?'off':c==='Rüstungen und Schilde'?'body':(c==='Zauberfokusse'&&!/Zauberbuch|beutel/.test(n))?'hand':'';
+const parseSp=p=>{const [m,eff]=p.split(' — ');const [time,range,dur]=m.split(' · ');return {time,range,dur,eff:eff||'',conc:/Konz\./.test(dur||''),ritual:/Ritual/.test(time||'')}};
+const CAT=[],BYN={};
+const addCat=e=>{e.key=e.k+':'+e.n;CAT.push(e);BYN[e.key]=e};
+L.res.forEach(([i,n,p])=>addCat({k:'potion',n,ic:icFrom(i),p,c:'Tränke und Verbrauchsgüter',cons:true,slot:''}));
+L.it.forEach(([i,n,p])=>{const c=catOf(n,p);const qm=n.match(/\((\d+)\)$/);addCat({k:'item',n,ic:(c==='Rüstungen und Schilde'&&n!=='Schild')?'armor':icFrom(i),p,c,slot:slotOf(n,c),cons:/^(Tagesration|Fackel|Kerze|Ölflasche)$/.test(n)||/^Munition/.test(p),q:qm?+qm[1]:1})});
+MAGIC.forEach(([n,ic,slot,att,p,cons])=>addCat({k:'magic',n,ic,p,c:'Magische Gegenstände',slot,att:!!att,cons:!!cons,magic:true}));
+SPELLS.forEach(([l,s,n,p])=>addCat(Object.assign({k:'spell',n,lvl:l,school:s,ic:SPIC[n]||SCHI[s]||'star',cls:CL[n]||'',c:l?'Grad '+l:'Cantrips'},parseSp(p))));
+COND.forEach(([n,de,ic,p])=>addCat({k:'cond',n,de,ic,p,c:'Zustand'}));
+RULES.forEach(([n,ic,p])=>addCat({k:'rule',n,ic,p,c:'Regel'}));
+const CLIC={Barbarian:'axe',Bard:'music',Cleric:'heart',Druid:'leaf',Fighter:'sword',Monk:'swirl',Paladin:'shield',Ranger:'bow',Rogue:'key',Sorcerer:'flame',Warlock:'eye',Wizard:'book'};
+Object.entries(CLASSES).forEach(([n,C])=>addCat({k:'class',n,ic:CLIC[n],c:'Klasse',p:`Trefferwürfel W${C.hd} · Unterklasse ab Stufe ${C.subL}`,hay:Object.values(C.f).flat().map(x=>x.join(' ')).join(' ')+' '+C.subs.join(' ')}));
+Object.entries(RACES).forEach(([n,R])=>addCat({k:'race',n,ic:'mask',c:'Volk',p:`${R.asi} · Tempo ${fmtM(R.sp)} m`,hay:R.tr.map(x=>x.join(' ')).join(' ')+' '+Object.keys(R.subs).join(' ')}));
+
+/* ---------- Zustand ---------- */
+const def=()=>({v:4,name:'Neuer Charakter',info:'',img:'',race:'',subrace:'',klass:'',sub:'',level:0,cls:'',hp:10,hpMax:10,tmp:0,ac:10,speed:9,prof:2,
+ abil:{str:10,dex:10,con:10,int:10,wis:10,cha:10},saves:{},skills:{},hd:{max:1,used:0,die:'W8'},death:{s:0,f:0},conc:'',
+ slots:Array.from({length:9},()=>({max:0,used:0})),pact:{max:0,used:0,lvl:1},res:[],spells:[],feats:[],bag:Array(24).fill(null),eq:{},
+ gold:{pp:0,gp:0,ep:0,sp:0,cp:0},cond:{},exh:0,notes:'',tab:'main'});
+const mk=(c,q)=>({id:uid(),n:c.n,ic:c.ic||'box',p:c.p||'',q:Math.max(1,q||c.q||1),slot:c.slot||'',cons:!!c.cons,att:!!c.att,magic:!!c.magic,tuned:false});
+const spFrom=c=>({n:c.n,ic:c.ic,lvl:c.lvl,time:c.time||'',range:c.range||'',dur:c.dur||'',eff:c.eff||'',conc:!!c.conc,ritual:!!c.ritual,school:c.school||'',cls:c.cls||'',src:c.src||'sum'});
+function putBag(s,it){
+  if(it.cons){const st=s.bag.find(x=>x&&x.cons&&x.n===it.n&&x.p===it.p);if(st){st.q+=it.q;return st}}
+  let i=s.bag.indexOf(null);if(i<0){i=s.bag.length;for(let k=0;k<6;k++)s.bag.push(null)}
+  s.bag[i]=it;return it}
+function norm(o){
+  o=o&&typeof o==='object'?o:{};const s=Object.assign(def(),o);
+  ['abil','gold','hd','pact'].forEach(k=>s[k]=Object.assign(def()[k],o[k]||{}));
+  s.death=Object.assign({s:0,f:0},o.death||{});
+  if(!Array.isArray(s.slots)||s.slots.length!==9)s.slots=def().slots;
+  ['saves','skills','cond','eq'].forEach(k=>{if(!s[k]||typeof s[k]!=='object'||Array.isArray(s[k]))s[k]={}});
+  ['res','spells','feats'].forEach(k=>{if(!Array.isArray(s[k]))s[k]=[]});
+  if(!Array.isArray(s.bag))s.bag=[];while(s.bag.length<24)s.bag.push(null);
+  ['hp','hpMax','tmp','ac','speed','prof','exh','level'].forEach(k=>{s[k]=+s[k]||0});
+  if(s.info==='Volk · Klasse · Stufe')s.info='';
+  if(!s.klass&&s.cls&&CLN[s.cls])s.klass=CLN[s.cls];
+  if(CLASSES[s.klass])s.cls=CLASSES[s.klass].l;
+  s.v=4;return s}
+function migrate(o){
+  const s=norm({name:o.name,info:o.info,hp:o.hp,hpMax:o.hpMax,ac:o.ac,speed:o.speed,prof:o.prof,abil:o.abil,hd:o.hd?{max:o.hd.max,used:o.hd.used}:undefined,slots:o.slots,gold:o.gold,cond:o.cond,exh:o.exh,notes:o.notes});
+  (o.res||[]).forEach(r=>{
+    if(r.rest==='none'){const q=Math.max(0,(r.max||1)-(r.used||0));if(q){const c=BYN['potion:'+r.n];putBag(s,mk(c||{n:r.n,ic:icFrom(r.i),p:r.p||'',cons:true},q))}}
+    else s.res.push({n:r.n,ic:icFrom(r.i),max:r.max||1,used:r.used||0,rest:r.rest||'long',p:r.p||''})});
+  (o.spells||[]).forEach(x=>{const c=BYN['spell:'+x.n];s.spells.push(c?spFrom(c):{n:x.n,ic:icFrom(x.i)||'star',lvl:x.lvl||0,time:'',range:'',dur:'',eff:x.p||'',conc:/Konz/.test(x.p||''),ritual:false,school:'',cls:'',src:'own'})});
+  (o.items||[]).forEach(x=>{const c=BYN['item:'+x.n]||BYN['magic:'+x.n]||BYN['potion:'+x.n];if((x.q??1)>0)putBag(s,mk(c||{n:x.n,ic:icFrom(x.i),p:x.p||''},x.q??1))});
+  return s}
+function load(){
+  for(const k of [KEY,'charbogen-v3']){let r=null;try{r=localStorage.getItem(k)}catch(e){}if(r){try{return norm(JSON.parse(r))}catch(e){}}}
+  let o=null;try{o=JSON.parse(localStorage.getItem(OLD)||'null')}catch(e){}
+  return o?migrate(o):def()}
+let S=load();
+let OPEN={},SEL=null,CONF=null,WF='all',WQ='',WC='',WSEL=null,EXP='',IMP='',LU=null,LUfocus=false;
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){toast('Speichern fehlgeschlagen. Ist das Porträt zu groß? Kleineres Bild wählen.')}};
+let tt;function toast(m){const t=$('toast');t.textContent=m;t.hidden=false;clearTimeout(tt);tt=setTimeout(()=>{t.hidden=true},4600)}
+
+/* ---------- Helfer ---------- */
+const skv=k=>{const s=SK.find(x=>x[0]===k);return mod(S.abil[s[1]])+S.prof*(S.skills[k]||0)};
+const pips=(max,used,attr)=>Array.from({length:max},(_,j)=>`<button class="pip ${j<max-used?'on':''}" ${attr} data-j="${j}" aria-label="${j<max-used?'Verfügbar, als verbraucht markieren':'Verbraucht, zurücksetzen'}"></button>`).join('');
+const fid=p=>'f-'+p.replace(/\./g,'-');
+const numIn=(p,v,l,min=0,max,step)=>`<input type="number" class="n" id="${fid(p)}" data-p="${p}" data-t="n" value="${v}" min="${min}"${max!=null?` max="${max}"`:''}${step?` step="${step}"`:''} inputmode="decimal" aria-label="${esc(l)}">`;
+const txtIn=(p,v,l,ph,extra='')=>`<input type="text" id="${fid(p)}" data-p="${p}" value="${esc(v)}" aria-label="${esc(l)}"${ph?` placeholder="${esc(ph)}"`:''} ${extra}>`;
+const classOpts=(sel,first)=>`<option value="">${first}</option>`+Object.entries(CLN).map(([k,v])=>`<option value="${k}"${k===sel?' selected':''}>${v}</option>`).join('');
+const get=r=>{const [a,b]=r.split(':');return a==='bag'?S.bag[+b]||null:S.eq[b]||null};
+const set=(r,v)=>{const [a,b]=r.split(':');if(a==='bag')S.bag[+b]=v||null;else if(v)S.eq[b]=v;else delete S.eq[b]};
+const refs=()=>[...EQ.map(e=>'eq:'+e[0]),...S.bag.map((_,i)=>'bag:'+i)].filter(r=>get(r));
+const fits=(it,r)=>{if(!it)return false;if(r.startsWith('bag'))return true;const base=r.split(':')[1].replace(/\d$/,'');const s=it.slot;if(!s)return false;if(s==='hand')return base==='main'||base==='off';return s===base};
+const slotLabel=r=>r.startsWith('bag')?'Rucksack':(EQ.find(e=>'eq:'+e[0]===r)||[])[1];
+const slotName=s=>(SLOTS.find(x=>x[0]===s)||['',''])[1];
+function atk(it){
+  const m=it.p.match(/(\d+W\d+|\b1\b) (Hieb|Stich|Wucht)/);if(!m)return null;
+  const st=mod(S.abil.str),dx=mod(S.abil.dex);
+  const am=/Munition/.test(it.p)?dx:/Finesse/.test(it.p)?Math.max(st,dx):st;
+  const plus=+((it.n.match(/\+(\d)/)||[])[1]||0),dm=am+plus;
+  const v=it.p.match(/Vielseitig \((\d+W\d+)\)/);
+  return {hit:sg(am+S.prof+plus),dmg:m[1]+(dm?sg(dm):''),type:m[2],vers:v?v[1]+(dm?sg(dm):''):''}}
+function raceTraits(){const R=RACES[S.race];if(!R)return [];const sb=R.subs[S.subrace];return [...R.tr,...(sb?sb.tr:[])].map(([n,p])=>({n,p,src:S.subrace||S.race}))}
+function applyRace(){
+  const R=RACES[S.race];if(!R)return;const sb=R.subs[S.subrace];
+  S.speed=(sb&&sb.sp)||R.sp;
+  const add=(n,max,rest,p,ic)=>{if(!S.res.some(r=>r.n===n))S.res.push({n,ic,max,used:0,rest,p})};
+  if(S.race==='Dragonborn')add('Breath Weapon',1,'short','Odemwaffe deines Volkes','flame');
+  if(S.race==='Half-Orc')add('Relentless Endurance',1,'long','Bei 0 TP stattdessen 1 TP','heart');
+  toast(`Volksbonus: ${(sb?sb.asi+', ':'')+R.asi}. Diese Boni bitte in die Attributswerte einrechnen.`)}
+function resFor(k,l){
+  const o=[],cha=mod(S.abil.cha),R=(n,max,rest,p,ic)=>o.push({n,max,rest,p,ic});
+  switch(k){
+    case 'Barbarian':R('Rage',l>=20?99:l>=17?6:l>=12?5:l>=6?4:l>=3?3:2,'long',l>=20?`unbegrenzt · Bonusschaden +4`:`Bonusschaden +${l>=16?4:l>=9?3:2}`,'flame');break;
+    case 'Bard':R('Bardic Inspiration',Math.max(1,cha),l>=5?'short':'long',`Inspirationswürfel W${l>=15?12:l>=10?10:l>=5?8:6}`,'music');break;
+    case 'Cleric':if(l>=2)R('Channel Divinity',l>=18?3:l>=6?2:1,'short','Turn Undead oder Effekt deiner Domäne','star');break;
+    case 'Druid':if(l>=2)R('Wild Shape',l>=20?99:2,'short',`Tiergestalt bis HG ${l>=8?'1':l>=4?'1/2':'1/4'}`,'leaf');break;
+    case 'Fighter':R('Second Wind',1,'short',`Bonusaktion: 1W10+${l} TP heilen`,'heart');if(l>=2)R('Action Surge',l>=17?2:1,'short','Eine zusätzliche Aktion','bolt');if(l>=9)R('Indomitable',l>=17?3:l>=13?2:1,'long','Misslungenen Rettungswurf wiederholen','shield');break;
+    case 'Monk':if(l>=2)R('Ki',l,'short',`Kampfwürfel W${l>=17?10:l>=11?8:l>=5?6:4}`,'swirl');break;
+    case 'Paladin':R('Divine Sense',1+Math.max(0,cha),'long','Himmlische, Unholde und Untote spüren','eye');R('Lay on Hands',5*l,'long','Heilpool in TP','heart');if(l>=3)R('Channel Divinity',1,'short','Effekt deines Eides','star');break;
+    case 'Rogue':if(l>=20)R('Stroke of Luck',1,'short','Fehlschlag wird Treffer','star');break;
+    case 'Sorcerer':if(l>=2)R('Sorcery Points',l,'long','Font of Magic','gem');break;
+    case 'Warlock':if(l>=11)R('Mystic Arcanum',l>=17?4:l>=15?3:l>=13?2:1,'long','Je ein hoher Zauber ohne Platz','gem');if(l>=20)R('Eldritch Master',1,'long','Alle Paktplätze zurück','eye');break;
+    case 'Wizard':R('Arcane Recovery',1,'long',`Bei kurzer Rast Plätze bis Gesamtgrad ${Math.ceil(l/2)} zurück`,'book');break;
+  }
+  return o}
+
+/* ---------- Ansichten: Karte ---------- */
+function vAbil(edit){
+  return `<div class="abs">${AB.map(([k,n])=>{const m=mod(S.abil[k]),sv=m+(S.saves[k]?S.prof:0);
+    return `<div class="abw"><div class="ab"><div class="abi"><small>${n}</small><b>${sg(m)}</b></div></div><div class="abv">${edit?numIn('abil.'+k,S.abil[k],n,1,30):S.abil[k]}</div>${edit?`<button class="tg${S.saves[k]?' on':''}" data-a="tsave" data-k="${k}" aria-pressed="${!!S.saves[k]}">RW geübt</button>`:`<div class="sv${S.saves[k]?' p':''}" title="Rettungswurf"><i></i><span class="svl">Rettungswurf</span><span class="svs">RW</span> ${sg(sv)}</div>`}</div>`}).join('')}</div>`}
+function vHP(){
+  const pct=S.hpMax?clamp(S.hp/S.hpMax*100,0,100):0,tp=S.hpMax?clamp(S.tmp/S.hpMax*100,0,100-pct):0;
+  return `<h2>Lebenspunkte</h2><div class="card">
+  <div class="hpt"><button class="sq" data-a="hp" data-d="-1" aria-label="Einen TP abziehen">−</button><div class="hpn${S.hp===0?' down':''}"><b>${S.hp}</b><small>/ ${S.hpMax}</small>${S.tmp?`<span class="tmp">+${S.tmp} temporäre TP</span>`:''}</div><button class="sq" data-a="hp" data-d="1" aria-label="Einen TP dazu">+</button></div>
+  <div class="bar" aria-hidden="true"><i style="width:${pct}%"></i><u style="width:${tp}%"></u></div>
+  <div class="hpin"><input type="number" id="hpv" min="1" inputmode="numeric" placeholder="Betrag" aria-label="Betrag für Schaden, Heilung oder temporäre TP"><button class="btn bad" data-a="dmg">Schaden</button><button class="btn good" data-a="heal">Heilen</button><button class="btn" data-a="temp">Temp-TP</button></div>
+  ${S.hp===0?vDeath():''}
+  <div class="row" style="margin-top:8px"><div class="ic">${tok('dice')}</div><div class="nm">Trefferwürfel<small>${S.hd.max-S.hd.used} von ${S.hd.max} übrig · je ${S.hd.die} ${sg(mod(S.abil.con))} bei kurzer Rast</small></div><div class="pips">${pips(S.hd.max,S.hd.used,'data-a="pip" data-k="hd"')}</div></div></div>`}
+function vDeath(){
+  const r=(t,l)=>`<div class="dsr${t==='f'?' f':''}"><span>${l}</span>${[0,1,2].map(j=>`<button class="dot${j<S.death[t]?' on':''}" data-a="ds" data-t="${t}" data-j="${j}" aria-label="${l} ${j+1}"></button>`).join('')}</div>`;
+  return `<div class="death"><div><b>Todesrettungswürfe</b><br><span>W20 zu Beginn deines Zuges: ab 10 Erfolg. Eine 1 zählt doppelt, eine 20 bringt 1 TP.</span></div>${r('s','Erfolge')}${r('f','Fehlschläge')}</div>`}
+function vCond(){
+  const act=COND.filter(c=>S.cond[c[0]]);
+  return `<h2>Zustände${act.length?`<em>${act.length} aktiv</em>`:''}</h2><div class="card"><div class="chips">${COND.map(([n,de])=>`<button class="chip${S.cond[n]?' on':''}" data-a="cond" data-c="${n}" aria-pressed="${!!S.cond[n]}" title="${de}">${n}</button>`).join('')}</div>${act.map(([n,de,ic,tx])=>`<div class="row"><div class="ic">${tok(ic)}</div><div class="nm">${n} <span class="lbl">${de}</span><small>${tx}</small></div></div>`).join('')}<div class="row"><div class="ic">${tok('skull')}</div><div class="nm">Exhaustion · Stufe ${S.exh}<small>${S.exh?EXH.slice(0,S.exh).join(' · '):'Keine. Die Stufen wirken zusammen.'}</small></div><div class="qty"><button data-a="exh" data-d="-1" aria-label="Exhaustion senken">−</button><button data-a="exh" data-d="1" aria-label="Exhaustion erhöhen">+</button></div></div></div>`}
+function vAtk(){
+  const rows=['main','off'].map(k=>S.eq[k]).filter(Boolean).map(it=>{const a=atk(it);if(!a)return '';
+    return `<div class="row"><div class="ic">${tok(it.ic,itTone(it))}</div><div class="nm">${esc(it.n)}<small>${esc(it.p)}</small></div><div class="atk"><b>${a.hit}</b><small>Treffer</small></div><div class="atk"><b>${a.dmg}</b><small>${a.type}${a.vers?` · 2H ${a.vers}`:''}</small></div></div>`}).join('');
+  return `<h2>Angriffe</h2><div class="card">${rows||'<div class="empty">Keine Waffe in der Hand. Zieh im Inventar eine Waffe auf Haupt- oder Nebenhand.</div>'}${rows?'<p class="note">Treffer = Attributsmodifikator + Übungsbonus (Übung mit der Waffe angenommen).</p>':''}</div>`}
+function vQuick(){
+  const r=refs().filter(x=>get(x).cons);if(!r.length)return '';
+  return `<h2>Schnellzugriff</h2><div class="card">${r.map(x=>{const it=get(x);return `<div class="row"><div class="ic">${tok(it.ic,itTone(it))}</div><div class="nm">${esc(it.n)} <span class="lbl">× ${it.q}</span><small>${esc(it.p)}</small></div><button class="btn sm" data-a="use" data-r="${x}">Benutzen</button></div>`}).join('')}</div>`}
+function vRes(){
+  if(!S.res.length)return '';
+  return `<h2>Klassenfähigkeiten</h2><div class="card">${S.res.map((r,i)=>`<div class="row"><div class="ic">${tok(r.ic)}</div><div class="nm">${esc(r.n)}<small>${REST[r.rest]||REST.long}${r.p?' · '+esc(r.p):''}</small></div>${r.max>12?`<div class="qty"><button data-a="resd" data-i="${i}" data-d="1" aria-label="Eins verbrauchen">−</button><span>${r.max>=99?'∞':(r.max-r.used)+' / '+r.max}</span><button data-a="resd" data-i="${i}" data-d="-1" aria-label="Eins zurück">+</button></div>`:`<div class="pips">${pips(r.max,r.used,`data-a="pip" data-k="res" data-i="${i}"`)}</div>`}</div>`).join('')}</div>`}
+function vFeats(){
+  const all=[...raceTraits(),...S.feats];if(!all.length)return '';
+  return `<h2>Merkmale<em>${all.length}</em></h2><div class="card">${all.map(f=>`<details class="feat"><summary>${tok(f.src==='Talent'?'star':S.race&&f.src===(S.subrace||S.race)?'mask':(CLIC[S.klass]||'star'))}<span>${esc(f.n)}</span><span class="lbl">${esc(f.src)}${f.lvl?' · Stufe '+f.lvl:''}</span></summary><p>${esc(f.p)}</p></details>`).join('')}</div>`}
+function spMeta(s){return [s.time,s.range,s.dur].filter(Boolean).map(esc).join(' · ')}
+function vSpells(){
+  const lv=new Set(S.spells.map(s=>s.lvl));S.slots.forEach((s,i)=>{if(s.max)lv.add(i+1)});
+  if(!lv.size&&!S.pact.max)return `<h2>Zauber</h2><div class="card"><div class="empty">Keine Zauber eingetragen. Im Wiki oder unter „Einrichten“ fügst du welche hinzu.</div></div>`;
+  let h='';
+  if(S.pact.max)h+=`<div class="lvh"><b>Paktmagie</b><small>Plätze auf Grad ${S.pact.lvl} · zurück nach kurzer Rast</small><div class="pips">${pips(S.pact.max,S.pact.used,'data-a="pip" data-k="pact"')}</div></div>`;
+  [...lv].sort((a,b)=>a-b).forEach(l=>{
+    const sl=l?S.slots[l-1]:null;
+    h+=`<div class="lvh"><b>${l?'Grad '+l:'Cantrips'}</b><small>${l?(sl.max?`${sl.max-sl.used} von ${sl.max} Plätzen frei`:'keine eigenen Plätze'):'beliebig oft'}</small>${sl&&sl.max?`<div class="pips">${pips(sl.max,sl.used,`data-a="pip" data-k="slots" data-i="${l-1}"`)}</div>`:''}</div>`;
+    S.spells.map((s,i)=>[s,i]).filter(x=>x[0].lvl===l).sort((a,b)=>a[0].n.localeCompare(b[0].n)).forEach(([s,i])=>{
+      const o=OPEN[i];
+      h+=`<div class="sp${S.conc===s.n?' cc':''}"><button class="sph" data-a="spopen" data-i="${i}" aria-expanded="${!!o}">${tok(s.ic)}<span class="nm">${esc(s.n)}<small>${spMeta(s)||'Details antippen'}</small></span></button><button class="btn sm" data-a="cast" data-i="${i}">${S.conc===s.n?'Aktiv':'Wirken'}</button>${o?`<div class="spb"><p>${esc(s.eff)}</p>${s.school?`<p class="cls">${esc(s.school)}${s.cls?' · '+s.cls.split('').map(c=>CLN[c]).join(', '):''}</p>`:''}<p class="src">${s.src==='own'?'Eigener Eintrag.':'Zusammenfassung in eigenen Worten, bei Unklarheit im Buch prüfen.'}</p></div>`:''}</div>`})});
+  return `<h2>Zauber</h2><div class="card">${h}<p class="note">„Wirken“ kreuzt den niedrigsten passenden Platz an (Paktmagie zuerst) und setzt bei Konzentrationszaubern die Konzentration.</p></div>`}
+function vSkills(){
+  return `<h2>Fertigkeiten</h2><div class="card"><div class="skl">${SK.map(([k,a,de])=>{const p=S.skills[k]||0;return `<div class="sk"><i class="m m${p}" title="${['nicht geübt','geübt','Expertise'][p]}"></i><span>${k}<small>${de} · ${ABS[a]}</small></span><b>${sg(skv(k))}</b></div>`}).join('')}</div></div>`}
+function vMain(){
+  const a=S.abil,st=(l,v)=>`<div class="st"><small>${l}</small><b>${v}</b></div>`;
+  let h='';
+  if(S.conc)h+=`<div class="conc"><div><small>Konzentration</small><b>${esc(S.conc)}</b><span>Bei Schaden: KON-Rettungswurf, SG 10 oder halber Schaden.</span></div><button class="btn" data-a="concend">Beenden</button></div>`;
+  h+=`<div class="stats">${st('Rüstungsklasse',S.ac)}${st('Initiative',sg(mod(a.dex)))}${st('Tempo',fmtM(S.speed)+' m')}${st('Übungsbonus',sg(S.prof))}${st('Passive Wahrnehmung',10+skv('Perception'))}</div>`;
+  h+=`<div class="sheet"><aside>${vAbil(false)}</aside><div class="col">${vHP()}${vCond()}${vAtk()}${vQuick()}${vRes()}${vSpells()}${vFeats()}${vSkills()}</div></div>`;
+  return h}
+
+/* ---------- Inventar ---------- */
+function cell(r,label,area){
+  const it=get(r),k=r.split(':')[1];
+  return `<div class="cell${label?' eqc':''}${SEL===r?' sel':''}" data-slot="${r}"${area?` style="grid-area:${area}"`:''}>${label?`<small>${label}</small>`:''}${it?`<div class="it tok t-${itTone(it)}" data-drag="${r}" tabindex="0" role="button" aria-label="${esc(it.n)}${it.q>1?', '+it.q+' Stück':''}">${icon(it.ic)}${it.q>1?`<b class="q">${it.q}</b>`:''}${it.tuned?'<i class="t"></i>':''}</div>`:(label?`<span class="ph">${icon((EQ.find(e=>e[0]===k)||[])[2])}</span>`:'')}</div>`}
+function vSel(){
+  const it=SEL&&get(SEL);if(!it)return '';
+  const eqd=SEL.startsWith('eq');
+  return `<h2>${esc(it.n)}</h2><div class="card selp">${tok(it.ic,itTone(it))}<div><p>${esc(it.p)||'<i>Keine Beschreibung.</i>'}</p><p class="lbl">${eqd?'Ausgerüstet: '+slotLabel(SEL):'Im Rucksack'}${it.att?' · braucht Einstimmung':''}</p></div>
+  <div class="acts"><div class="qty"><button data-a="qty" data-d="-1" aria-label="Weniger">−</button><span>${it.q}</span><button data-a="qty" data-d="1" aria-label="Mehr">+</button></div>
+  ${it.cons?`<button class="btn sm solid" data-a="use" data-r="${SEL}">Benutzen</button>`:''}
+  ${eqd?`<button class="btn sm" data-a="unequip">In den Rucksack</button>`:(it.slot?`<button class="btn sm" data-a="equip">Ausrüsten</button>`:'')}
+  ${it.att?`<button class="btn sm${it.tuned?' solid':''}" data-a="tune">${it.tuned?'Eingestimmt':'Einstimmen'}</button>`:''}
+  <select id="sel-slot" data-p="${SEL.replace(':','.')}.slot" aria-label="Ausrüstungsplatz">${SLOTS.map(([k,l])=>`<option value="${k}"${k===it.slot?' selected':''}>${l}</option>`).join('')}</select>
+  <button class="btn sm ${CONF==='rm'?'warn':'bad'}" data-a="rm">${CONF==='rm'?'Wirklich entfernen?':'Entfernen'}</button>
+  <button class="btn sm" data-a="unsel">Schließen</button></div></div>`}
+function catSelect(id,kinds){
+  const by={};CAT.filter(e=>kinds.includes(e.k)).forEach(e=>{(by[e.c]=by[e.c]||[]).push(e)});
+  return `<select id="${id}" aria-label="Aus Katalog wählen"><option value="">Aus Katalog wählen …</option>${Object.keys(by).map(c=>`<optgroup label="${esc(c)}">${by[c].map(e=>`<option value="${esc(e.key)}">${esc(e.n)}</option>`).join('')}</optgroup>`).join('')}</select>`}
+function vInv(){
+  const tuned=refs().filter(r=>get(r).tuned).length,n=Math.ceil(S.bag.length/6)*6;
+  while(S.bag.length<n)S.bag.push(null);
+  return `<h2>Geld</h2><div class="card"><div class="coins">${COINS.map(([c,l])=>`<div class="coin"><small class="lbl">${l}</small><div class="qty"><button data-a="gold" data-c="${c}" data-d="-1" aria-label="${l} weniger">−</button>${numIn('gold.'+c,S.gold[c],l)}<button data-a="gold" data-c="${c}" data-d="1" aria-label="${l} mehr">+</button></div></div>`).join('')}</div></div>
+  <div class="invg"><div><h2>Ausrüstung<em>Einstimmung ${tuned}/3</em></h2><div class="doll">${EQ.map(([k,l])=>cell('eq:'+k,l,k)).join('')}</div></div>
+  <div><h2>Rucksack</h2><div class="bag">${S.bag.map((_,i)=>cell('bag:'+i)).join('')}</div><p class="note">Maus darüber zeigt die Eigenschaften. Ziehen verschiebt, rüstet aus oder stapelt. Am Handy: antippen, dann ein freies Feld antippen.</p></div></div>
+  ${vSel()}
+  <h2>Gefunden oder gekauft</h2><div class="card"><div class="add">${catSelect('inv-sel',['potion','magic','item'])}<input type="number" class="n" id="inv-q" min="1" placeholder="Anzahl" aria-label="Anzahl"><button class="btn solid" data-a="addinv">Ins Inventar</button></div><p class="hint" id="inv-sel-h"></p>
+  <details><summary>Eigenen Gegenstand anlegen (z. B. von der Spielleitung)</summary><div class="add"><input type="text" id="own-n" placeholder="Name"><select id="own-ic" aria-label="Symbol">${iconOpts('box')}</select><select id="own-slot" aria-label="Ausrüstungsplatz">${SLOTS.map(([k,l])=>`<option value="${k}">${l}</option>`).join('')}</select></div><div class="add"><input type="text" id="own-p" class="wide" placeholder="Was macht es? (Regeln, Schaden, Wirkung)"></div><div class="add"><label class="ck"><input type="checkbox" id="own-c"> Verbrauchbar</label><label class="ck"><input type="checkbox" id="own-a"> Magisch, braucht Einstimmung</label><input type="number" class="n" id="own-q" min="1" value="1" aria-label="Anzahl"><button class="btn solid" data-a="addown">Anlegen</button></div></details></div>`}
+
+/* ---------- Wiki ---------- */
+const WFS=[['all','Alle'],['mine','Mein Bogen'],['spell','Zauber'],['class','Klassen'],['race','Völker'],['potion','Tränke'],['magic','Magische Gegenstände'],['item','Ausrüstung'],['cond','Zustände'],['rule','Regeln']];
+function myEntries(){
+  return [...S.spells.map(s=>Object.assign({k:'spell',mine:1,c:s.lvl?'Grad '+s.lvl:'Cantrips'},s)),
+    ...refs().map(r=>{const it=get(r);return {k:'item',mine:1,n:it.n,ic:it.ic,tone:itTone(it),p:it.p,c:r.startsWith('eq')?'Ausgerüstet':'Rucksack'}}),
+    ...S.res.map(r=>({k:'res',mine:1,n:r.n,ic:r.ic,p:r.p,c:'Klassenfähigkeit · '+(REST[r.rest]||'')})),
+    ...[...raceTraits(),...S.feats].map(f=>({k:'feat',mine:1,n:f.n,ic:'star',p:f.p,c:'Merkmal · '+f.src})),
+    ...COND.filter(c=>S.cond[c[0]]).map(c=>BYN['cond:'+c[0]])].map((e,i)=>Object.assign({},e,{key:'my:'+i+':'+e.n}))}
+function wList(){
+  let L2=WF==='mine'?myEntries():CAT.filter(e=>WF==='all'||e.k===WF);
+  if(WC)L2=L2.filter(e=>e.k!=='spell'||(e.cls||'').includes(WC));
+  const q=WQ.trim().toLowerCase();
+  if(q)L2=L2.filter(e=>[e.n,e.p,e.eff,e.de,e.school,e.c,e.hay].join(' ').toLowerCase().includes(q));
+  return L2}
+const wSub=e=>e.k==='spell'?`${e.lvl?'Grad '+e.lvl:'Cantrip'}${e.school?' · '+e.school:''}${e.conc?' · Konz.':''}${e.ritual?' · Ritual':''}`:e.k==='cond'?e.de:e.c+(e.att?' · Einstimmung':'');
+function wDetail(e,inline){
+  if(!e)return '<p class="empty">Links einen Eintrag wählen.</p>';
+  const known=new Set(S.spells.map(s=>s.n));
+  let btn='';
+  if(!e.mine&&e.k==='spell')btn=known.has(e.n)?'<button class="btn sm" disabled>Bekannt</button>':`<button class="btn sm solid" data-a="wadd" data-key="${esc(e.key)}">Zu meinen Zaubern</button>`;
+  if(!e.mine&&['potion','magic','item'].includes(e.k))btn=`<button class="btn sm solid" data-a="wadd" data-key="${esc(e.key)}">Ins Inventar</button>`;
+  let body='';
+  if(e.k==='spell')body=`${e.time||e.range||e.dur?`<dl class="sm"><div><dt>Zeitaufwand</dt><dd>${esc(e.time)}</dd></div><div><dt>Reichweite</dt><dd>${esc(e.range)}</dd></div><div><dt>Dauer</dt><dd>${esc(e.dur)}</dd></div></dl>`:''}<p>${esc(e.eff)}</p>${e.cls?`<p class="cls">Klassen: ${e.cls.split('').map(c=>CLN[c]).join(', ')}</p>`:''}<p class="src">${e.src==='own'?'Eigener Eintrag.':'Zusammenfassung in eigenen Worten, bei Unklarheit im Buch prüfen.'}</p>`;
+  else if(e.k==='class'){const C=CLASSES[e.n];body=`<dl class="sm"><div><dt>Trefferwürfel</dt><dd>W${C.hd}</dd></div><div><dt>Rettungswürfe</dt><dd>${C.sv.map(k=>AB.find(a=>a[0]===k)[1]).join(', ')}</dd></div><div><dt>Zaubern</dt><dd>${{full:'Vollzauberer',half:'Halbzauberer',pact:'Paktmagie','':'kein Zaubern'}[C.cast]}</dd></div></dl><p><b>${C.subN}</b> ab Stufe ${C.subL}: ${C.subs.join(', ')}.</p><div class="lvl">${Object.entries(C.f).map(([l,fs])=>`<h4>Stufe ${l}</h4>${fs.map(([n,p])=>`<p><b>${esc(n)}.</b> ${esc(p)}</p>`).join('')}`).join('')}<p class="cls">Talent oder Attributserhöhung auf Stufe ${C.asi.join(', ')}. Unterklassen-Merkmale auf Stufe ${C.sl.join(', ')}.</p></div><p class="src">Zusammenfassung in eigenen Worten, bei Unklarheit im Buch prüfen.</p>`}
+  else if(e.k==='race'){const R=RACES[e.n];body=`<dl class="sm"><div><dt>Attribute</dt><dd>${R.asi}</dd></div><div><dt>Tempo</dt><dd>${fmtM(R.sp)} m</dd></div><div><dt>Untervölker</dt><dd>${Object.keys(R.subs).length||'keine'}</dd></div></dl><div class="lvl">${R.tr.map(([n,p])=>`<p><b>${esc(n)}.</b> ${esc(p)}</p>`).join('')}${Object.entries(R.subs).map(([sn,sb])=>`<h4>${sn}</h4><p class="cls">${sb.asi}${sb.sp?' · Tempo '+fmtM(sb.sp)+' m':''}</p>${sb.tr.map(([n,p])=>`<p><b>${esc(n)}.</b> ${esc(p)}</p>`).join('')}`).join('')}</div><p class="src">Zusammenfassung in eigenen Worten, bei Unklarheit im Buch prüfen.</p>`}
+  else body=`<p>${esc(e.p)}</p>`;
+  return `<article class="wd${inline?' inl':' pane'}"><div class="wdh">${tok(e.ic,e.tone||(e.magic?'arcane':undefined))}<div><h3>${esc(e.n)}</h3><small>${esc(wSub(e))}</small></div></div>${btn?`<div class="add" style="margin-top:0">${btn}</div>`:''}${body}</article>`}
+function wikiBody(){
+  const L2=wList();
+  if(!L2.length)return `<p class="empty">Nichts gefunden.${WF==='mine'?' Auf deinem Bogen steht noch nichts Passendes.':' Fehlt etwas aus dem Buch, leg es als eigenen Eintrag an.'}</p>`;
+  const max=80,shown=L2.slice(0,max);
+  const sel=L2.find(e=>e.key===WSEL);
+  const cur=sel||shown[0];
+  return `<div class="wiki"><div class="wl" role="list">${shown.map(e=>`<button class="wli" role="listitem" data-a="wsel" data-key="${esc(e.key)}" aria-current="${e===cur}">${tok(e.ic,e.tone||(e.magic?'arcane':undefined))}<span><b>${esc(e.n)}</b><small>${esc(wSub(e))}</small></span></button>${sel&&e===sel?wDetail(e,true):''}`).join('')}${L2.length>max?`<p class="more" style="padding:0 10px">${L2.length-max} weitere. Suche eingrenzen.</p>`:''}</div>${wDetail(cur,false)}</div>`}
+function vWiki(){
+  return `<h2>Wiki</h2><div class="wtools"><input type="search" id="wq" placeholder="Suchen: Fireball, Heilung, Grappled, Rage, Elf …" value="${esc(WQ)}" aria-label="Wiki durchsuchen"><select id="wc" aria-label="Zauber nach Klasse filtern">${classOpts(WC,'Zauber aller Klassen')}</select></div><div class="chips">${WFS.map(([k,l])=>`<button class="chip${WF===k?' on':''}" data-a="wf" data-f="${k}" aria-pressed="${WF===k}">${l}</button>`).join('')}</div><div id="wres">${wikiBody()}</div>`}
+
+/* ---------- Einrichten ---------- */
+function vSetup(){
+  const sel=(p,opts,v,l)=>`<select id="${fid(p)}" data-p="${p}" aria-label="${l}">${opts.map(([k,t])=>`<option value="${k}"${String(k)===String(v)?' selected':''}>${t}</option>`).join('')}</select>`;
+  const R=RACES[S.race],C=CLASSES[S.klass];
+  let h=`<p class="note">Hier trägst du deinen Charakter ein. Gespielt wird auf der Karte, Gegenstände verwaltest du im Inventar.</p>
+  <h2>Charakter</h2><div class="card"><div class="porsetup"><label class="por" for="img-in2" title="Porträt wählen">${S.img?`<img src="${S.img}" alt="">`:`<span>${esc((S.name||'?').trim()[0]||'?')}</span>`}</label><input type="file" id="img-in2" accept="image/*" hidden><div class="add" style="margin:0"><label class="btn sm" for="img-in2">Porträt wählen</label>${S.img?'<button class="btn sm bad" data-a="imgdel">Porträt entfernen</button>':''}</div></div>
+  <div class="form" style="margin-top:12px">
+   <label><span class="lbl">Name</span>${txtIn('name',S.name,'Name')}</label>
+   <label><span class="lbl">Volk</span>${sel('race',[['','Wählen …'],...Object.keys(RACES).map(k=>[k,k])],S.race,'Volk')}</label>
+   ${R&&Object.keys(R.subs).length?`<label><span class="lbl">Untervolk</span>${sel('subrace',[['','Keins'],...Object.keys(R.subs).map(k=>[k,k])],S.subrace,'Untervolk')}</label>`:''}
+   <label><span class="lbl">Klasse</span>${sel('klass',[['','Wählen …'],...Object.keys(CLASSES).map(k=>[k,k])],S.klass,'Klasse')}</label>
+   <label><span class="lbl">Unterklasse</span>${txtIn('sub',S.sub,'Unterklasse',C?C.subN+' (ab Stufe '+C.subL+')':'',`list="sub-dl"`)}<datalist id="sub-dl">${(C?C.subs:[]).map(s=>`<option value="${esc(s)}">`).join('')}</datalist></label>
+   <label><span class="lbl">Stufe</span>${numIn('level',S.level,'Stufe',0,20)}</label>
+   <label><span class="lbl">Hintergrund, Gesinnung</span>${txtIn('info',S.info,'Hintergrund und Gesinnung','z. B. Sage · Chaotic Good')}</label>
+  </div>${R?`<p class="note">Volksbonus: ${(R.subs[S.subrace]?R.subs[S.subrace].asi+', ':'')+R.asi}. Bitte in die Attributswerte unten einrechnen.</p>`:''}
+  <p class="note">${S.level?'Neue Stufen holst du dir oben mit „Stufenaufstieg“. Dort werden TP, Übungsbonus, Zauberplätze, Fähigkeiten und Merkmale automatisch eingetragen.':'Wähle Klasse und Attributswerte, dann oben „Auf Stufe 1 bauen“. Für einen höheren Start danach mehrmals aufsteigen.'}</p></div>
+  <h2>Werte</h2><div class="card"><div class="form">
+   <label><span class="lbl">Rüstungsklasse</span>${numIn('ac',S.ac,'Rüstungsklasse')}</label>
+   <label><span class="lbl">Tempo (m)</span>${numIn('speed',S.speed,'Tempo in Metern',0,null,'1.5')}</label>
+   <label><span class="lbl">Übungsbonus</span>${numIn('prof',S.prof,'Übungsbonus',0,6)}</label>
+   <label><span class="lbl">Max-TP</span>${numIn('hpMax',S.hpMax,'Maximale Trefferpunkte',1)}</label>
+   <label><span class="lbl">Trefferwürfel (Anzahl)</span>${numIn('hd.max',S.hd.max,'Anzahl Trefferwürfel',0,30)}</label>
+   <label><span class="lbl">Trefferwürfel (Art)</span>${sel('hd.die',['W6','W8','W10','W12'].map(x=>[x,x]),S.hd.die,'Art der Trefferwürfel')}</label>
+  </div></div>
+  <h2>Attribute und Rettungswürfe</h2>${vAbil(true)}
+  <h2>Fertigkeiten</h2><div class="card"><p class="note" style="margin-top:0">Antippen wechselt: nicht geübt, geübt, Expertise.</p><div class="skl">${SK.map(([k,a,de])=>{const p=S.skills[k]||0;return `<button class="sk" data-a="tskill" data-k="${k}" style="background:none;border:0;border-bottom:1px dotted var(--line);text-align:left"><i class="m m${p}"></i><span>${k}<small>${de} · ${['nicht geübt','geübt','Expertise'][p]}</small></span><b>${sg(skv(k))}</b></button>`}).join('')}</div></div>
+  <h2>Merkmale und Talente</h2><div class="card">${S.feats.map((f,i)=>`<div class="edrow">${txtIn(`feats.${i}.n`,f.n,'Name')}<span class="lbl">${esc(f.src)}${f.lvl?' · Stufe '+f.lvl:''}</span><button class="del" data-a="del" data-k="feats" data-i="${i}" aria-label="${esc(f.n)} löschen">✕</button><input type="text" class="wide" id="f-feats-${i}-p" data-p="feats.${i}.p" value="${esc(f.p)}" aria-label="Beschreibung"></div>`).join('')||'<div class="empty">Kommen mit dem Stufenaufstieg. Eigene Talente oder Unterklassen-Merkmale trägst du hier ein.</div>'}
+   <div class="add"><input type="text" id="feat-n" placeholder="Name, z. B. Alert"><input type="text" id="feat-p" placeholder="Was macht es?"><button class="btn solid" data-a="addfeat">Anlegen</button></div></div>
+  <h2>Klassenfähigkeiten</h2><div class="card">${S.res.map((r,i)=>`<div class="edrow"><select id="f-res-${i}-ic" data-p="res.${i}.ic" aria-label="Symbol">${iconOpts(r.ic)}</select>${txtIn(`res.${i}.n`,r.n,'Name')}${numIn(`res.${i}.max`,r.max,'Anzahl',1,200)}${sel(`res.${i}.rest`,Object.entries(REST),r.rest,'Erholung')}<button class="del" data-a="del" data-k="res" data-i="${i}" aria-label="${esc(r.n)} löschen">✕</button><input type="text" class="wide" id="f-res-${i}-p" data-p="res.${i}.p" value="${esc(r.p)}" placeholder="Was macht es?" aria-label="Beschreibung"></div>`).join('')||'<div class="empty">Kommen mit dem Stufenaufstieg, z. B. Rage, Bardic Inspiration, Second Wind.</div>'}
+   <div class="add"><input type="text" id="res-n" placeholder="Name"><select id="res-ic" aria-label="Symbol">${iconOpts('star')}</select><input type="number" class="n" id="res-m" min="1" placeholder="Anzahl" aria-label="Anzahl"><select id="res-r" aria-label="Erholung"><option value="long">Lange Rast</option><option value="short">Kurze Rast</option><option value="none">Ohne Erholung</option></select></div><div class="add"><input type="text" id="res-p" class="wide" placeholder="Was macht es? (Regeln)"><button class="btn solid" data-a="addres">Anlegen</button></div></div>
+  <h2>Zauberplätze</h2><div class="card"><div class="slotg">${S.slots.map((s,i)=>`<label><span class="lbl">Grad ${i+1}</span>${numIn(`slots.${i}.max`,s.max,'Plätze Grad '+(i+1),0,9)}</label>`).join('')}</div>
+   <div class="slotg" style="margin-top:12px"><label><span class="lbl">Paktmagie: Plätze</span>${numIn('pact.max',S.pact.max,'Paktmagie Plätze',0,4)}</label><label><span class="lbl">Paktmagie: Grad</span>${numIn('pact.lvl',S.pact.lvl,'Paktmagie Grad',1,5)}</label></div><p class="note">Paktmagie (Warlock) kommt schon bei kurzer Rast zurück.</p></div>
+  <h2>Zauber</h2><div class="card">${S.spells.map((s,i)=>[s,i]).sort((a,b)=>a[0].lvl-b[0].lvl||a[0].n.localeCompare(b[0].n)).map(([s,i])=>`<div class="edrow">${tok(s.ic)}<span class="nm">${esc(s.n)}<small>${s.lvl?'Grad '+s.lvl:'Cantrip'}${s.src==='own'?' · eigener Eintrag':''}</small></span><button class="del" data-a="del" data-k="spells" data-i="${i}" aria-label="${esc(s.n)} löschen">✕</button></div>`).join('')||'<div class="empty">Noch keine Zauber.</div>'}
+   <div class="add">${spSelect()}<button class="btn solid" data-a="addsp">Hinzufügen</button></div><p class="hint" id="sp-sel-h"></p>
+   <details><summary>Eigenen Zauber anlegen</summary><div class="add"><input type="text" id="osp-n" placeholder="Name"><input type="number" class="n" id="osp-l" min="0" max="9" placeholder="Grad" aria-label="Grad"></div><div class="add"><input type="text" id="osp-t" placeholder="Zeit, z. B. 1 Aktion"><input type="text" id="osp-r" placeholder="Reichweite"><input type="text" id="osp-d" placeholder="Dauer"></div><div class="add"><input type="text" id="osp-e" class="wide" placeholder="Wirkung"></div><div class="add"><label class="ck"><input type="checkbox" id="osp-c"> Konzentration</label><label class="ck"><input type="checkbox" id="osp-ri"> Ritual</label><button class="btn solid" data-a="addspown">Anlegen</button></div></details></div>
+  <h2>Sichern und übertragen</h2><div class="card"><p class="note" style="margin-top:0">Der Bogen liegt nur in diesem Browser. Zum Sichern oder für ein anderes Gerät: exportieren, Text kopieren und dort importieren.</p>
+   <div class="add"><button class="btn" data-a="exp">Export erzeugen</button>${EXP?'<button class="btn solid" data-a="copy">Text kopieren</button>':''}</div>${EXP?`<textarea id="exp" readonly aria-label="Exportierter Charakter">${esc(EXP)}</textarea>`:''}
+   <div class="add" style="margin-top:14px"><label class="ck">Datei laden <input type="file" id="impf" accept=".json,application/json,text/plain"></label></div>
+   <textarea id="imp" placeholder="Oder exportierten Text hier einfügen …" aria-label="Import-Text" style="margin-top:8px">${esc(IMP)}</textarea>
+   <div class="add"><button class="btn ${CONF==='imp'?'warn':''}" data-a="imp">${CONF==='imp'?'Ersetzt den aktuellen Charakter. Nochmal klicken.':'Importieren'}</button><button class="btn ${CONF==='reset'?'warn':'bad'}" data-a="reset">${CONF==='reset'?'Alles löschen? Nochmal klicken.':'Neuer, leerer Charakter'}</button></div></div>`;
+  return h}
+function spSelect(){
+  const by={},l=CLASSES[S.klass]?CLASSES[S.klass].l:'';
+  CAT.filter(e=>e.k==='spell'&&(!l||e.cls.includes(l))).forEach(e=>{(by[e.c]=by[e.c]||[]).push(e)});
+  return `<select id="sp-sel" aria-label="Zauber aus Katalog"><option value="">${l?S.klass+'-Zauber wählen …':'Zauber wählen …'}</option>${Object.keys(by).map(c=>`<optgroup label="${c}">${by[c].map(e=>`<option value="${esc(e.n)}">${esc(e.n)}</option>`).join('')}</optgroup>`).join('')}</select>`}
+
+/* ---------- Stufenaufstieg ---------- */
+function openLU(){
+  if(!CLASSES[S.klass]){S.tab='setup';toast('Erst unter „Einrichten“ eine Klasse wählen.');return}
+  const to=(S.level||0)+1;if(to>20){toast('Stufe 20 ist das Maximum.');return}
+  LU={to,hp:'avg',roll:'',asi:'two',a1:'',a2:'',feat:'',sub:S.sub||''};LUfocus=true}
+function luData(){
+  const C=CLASSES[S.klass],to=LU.to,con=mod(S.abil.con),dw=S.subrace==='Hill Dwarf'?1:0,avg=C.hd/2+1;
+  const base=to===1?C.hd:(LU.hp==='roll'?clamp(Math.floor(+LU.roll)||0,1,C.hd):avg);
+  const gain=Math.max(1,base+con)+dw;
+  const feats=[...(C.f[to]||[])];
+  if(to===C.subL)feats.push([C.subN,`Du wählst deine Unterklasse (${C.subs.join(', ')}). Ihre Merkmale stehen im Buch; trag sie unter „Einrichten“ bei den Merkmalen ein.`]);
+  else if(C.sl.includes(to))feats.push([(S.sub||C.subN)+': neues Merkmal',`Auf Stufe ${to} bekommst du ein Merkmal deiner Unterklasse. Im Buch nachlesen und den Text unter „Einrichten“ ergänzen.`]);
+  const extra=[];
+  if(S.klass==='Rogue')extra.push(`Sneak Attack: ${Math.ceil(to/2)}W6`);
+  if(S.klass==='Barbarian'&&to===20)extra.push('STR und KON +4 (Maximum 24)');
+  return {C,to,gain,base,avg,con,dw,feats,extra,asi:C.asi.includes(to),profOld:S.level?S.prof:pb(0),profNew:pb(to),slotsOld:S.slots.map(s=>s.max),slotsNew:slotsFor(S.klass,to),pact:C.cast==='pact'?pactFor(to):null,res:resFor(S.klass,to),
+    cant:[cantripsFor(S.klass,to-1),cantripsFor(S.klass,to)],known:[knownFor(S.klass,to-1),knownFor(S.klass,to)]}}
+function vLU(){
+  const d=luData(),C=d.C,abOpt=sel=>`<option value="">Attribut …</option>`+AB.map(([k,n])=>`<option value="${k}"${k===sel?' selected':''}>${n} (${S.abil[k]})</option>`).join('');
+  const chg=(l,a,b)=>String(a)===String(b)?`<span>${l} ${a}</span>`:`<span class="up">${l} ${a} → ${b}</span>`;
+  const sl=d.slotsNew.map((n,i)=>[i+1,d.slotsOld[i],n]).filter(x=>x[1]||x[2]);
+  const prepared={Cleric:'wis',Druid:'wis',Wizard:'int',Paladin:'cha'}[S.klass];
+  const prepN=prepared?Math.max(1,mod(S.abil[prepared])+(S.klass==='Paladin'?Math.floor(d.to/2):d.to)):0;
+  const resOld=Object.fromEntries(S.res.map(r=>[r.n,r.max]));
+  return `<div class="ovl" data-a="luclose-bg"><div class="dlg" role="dialog" aria-modal="true" aria-labelledby="lu-h">
+  <h3 id="lu-h" tabindex="-1">${d.to===1?'Stufe 1':'Stufe '+(d.to-1)+' → '+d.to}</h3><p class="lbl" style="margin:4px 0 0">${S.klass}${S.sub?' · '+esc(S.sub):''}${S.subrace||S.race?' · '+(S.subrace||S.race):''}</p>
+  <h4>Trefferpunkte</h4>
+  ${d.to===1?`<p>Stufe 1: voller Trefferwürfel (W${C.hd} = ${C.hd}) ${sg(d.con)} KON${d.dw?' +1 Hill Dwarf':''} = <span class="big">${d.gain} TP</span></p><p class="note">KON vorher unter „Einrichten“ eintragen, sie zählt hier mit. Rettungswürfe ${C.sv.map(k=>AB.find(a=>a[0]===k)[1]).join(' und ')} werden als geübt markiert.</p>`
+  :`<div class="add"><select id="lu-hp" data-lu="hp" aria-label="Trefferpunkte"><option value="avg"${LU.hp==='avg'?' selected':''}>Durchschnitt nehmen (${d.avg})</option><option value="roll"${LU.hp==='roll'?' selected':''}>Selbst gewürfelt (W${C.hd})</option></select>${LU.hp==='roll'?`<input type="number" class="n" id="lu-roll" data-lu="roll" min="1" max="${C.hd}" value="${esc(LU.roll)}" placeholder="Wurf" aria-label="Gewürfelter Wert">`:''}</div><p>${d.base} ${sg(d.con)} KON${d.dw?' +1 Hill Dwarf':''} = <span class="big">+${d.gain} TP</span> <span class="lbl">(Max-TP ${S.hpMax} → ${S.hpMax+d.gain})</span></p>`}
+  ${d.profNew!==d.profOld||d.to===1?`<h4>Übungsbonus</h4><div class="chg">${chg('',sg(d.profOld),sg(d.profNew))}</div>`:''}
+  ${d.feats.length||d.extra.length?`<h4>Neue Merkmale</h4>${d.feats.map(([n,p])=>`<div class="row">${tok(CLIC[S.klass])}<div class="nm">${esc(n)}<small>${esc(p)}</small></div></div>`).join('')}${d.extra.map(x=>`<div class="row">${tok('star')}<div class="nm">${esc(x)}</div></div>`).join('')}`:''}
+  ${d.to===C.subL?`<h4>${C.subN} wählen</h4><div class="add"><input type="text" id="lu-sub" data-lu="sub" list="lu-sub-dl" value="${esc(LU.sub)}" placeholder="${C.subN}" aria-label="${C.subN}"><datalist id="lu-sub-dl">${C.subs.map(s=>`<option value="${esc(s)}">`).join('')}</datalist></div>`:''}
+  ${d.asi?`<h4>Attributserhöhung oder Talent</h4><div class="add"><select id="lu-asi" data-lu="asi" aria-label="Art der Erhöhung"><option value="two"${LU.asi==='two'?' selected':''}>+1 auf zwei Attribute</option><option value="one"${LU.asi==='one'?' selected':''}>+2 auf ein Attribut</option><option value="feat"${LU.asi==='feat'?' selected':''}>Talent statt Erhöhung</option></select>
+    ${LU.asi==='feat'?`<input type="text" id="lu-feat" data-lu="feat" value="${esc(LU.feat)}" placeholder="Name des Talents, z. B. War Caster" aria-label="Talent">`:`<select id="lu-a1" data-lu="a1" aria-label="Erstes Attribut">${abOpt(LU.a1)}</select>${LU.asi==='two'?`<select id="lu-a2" data-lu="a2" aria-label="Zweites Attribut">${abOpt(LU.a2)}</select>`:''}`}</div><p class="note">Maximum 20. Talente stehen im Player's Handbook, Kapitel 6.</p>`:''}
+  ${sl.length?`<h4>Zauberplätze</h4><div class="chg">${sl.map(([g,a,b])=>chg(`Grad ${g}:`,a,b)).join('')}</div>`:''}
+  ${d.pact?`<h4>Paktmagie</h4><div class="chg">${chg('',`${S.pact.max} Plätze auf Grad ${S.pact.lvl}`,`${d.pact[0]} Plätze auf Grad ${d.pact[1]}`)}</div>`:''}
+  ${d.cant[1]||d.known[1]!=null||prepared?`<h4>Zauber</h4><div class="chg">${d.cant[1]?chg('Cantrips',d.cant[0],d.cant[1]):''}${d.known[1]!=null?chg('bekannte Zauber',d.known[0]||0,d.known[1]):''}${prepared&&(S.klass!=='Paladin'||d.to>=2)?`<span>vorbereitbar: ${prepN}</span>`:''}${S.klass==='Wizard'?`<span class="up">${d.to===1?'6 Zauber im Zauberbuch':'+2 Zauber ins Zauberbuch'}</span>`:''}</div><p class="note">Neue Zauber suchst du danach im Wiki (Filter „Zauber“ und deine Klasse) und fügst sie mit einem Klick hinzu.</p>`:''}
+  ${d.res.length?`<h4>Klassenfähigkeiten</h4><div class="chg">${d.res.map(r=>chg(r.n+':',resOld[r.n]==null?'neu':resOld[r.n]>=99?'∞':resOld[r.n],r.max>=99?'∞':r.max)).join('')}</div>`:''}
+  <div class="dlgf"><button class="btn" data-a="luclose">Abbrechen</button><button class="btn solid" data-a="luapply">${d.to===1?'Stufe 1 übernehmen':'Aufstieg übernehmen'}</button></div></div></div>`}
+function applyLU(){
+  const d=luData(),C=d.C,to=d.to;
+  if(to>1&&LU.hp==='roll'&&!(+LU.roll>=1)){toast('Bitte den gewürfelten Wert eintragen oder den Durchschnitt nehmen.');return false}
+  if(to===C.subL&&!LU.sub.trim()){toast(`Bitte eine Unterklasse (${C.subN}) wählen.`);return false}
+  if(d.asi){if(LU.asi==='feat'){if(!LU.feat.trim()){toast('Bitte den Namen des Talents eintragen.');return false}}
+    else if(!LU.a1||(LU.asi==='two'&&(!LU.a2||LU.a2===LU.a1))){toast(LU.asi==='two'?'Bitte zwei verschiedene Attribute wählen.':'Bitte ein Attribut wählen.');return false}}
+  if(to===1){S.saves={};C.sv.forEach(k=>S.saves[k]=true);S.feats=S.feats.filter(f=>f.src!=='Klasse');S.hpMax=0;S.hp=0;S.hd.used=0}
+  S.level=to;S.hpMax+=d.gain;S.hp=Math.min(S.hpMax,S.hp+d.gain);S.hd.max=to;S.hd.die='W'+C.hd;S.prof=d.profNew;S.cls=C.l;
+  if(C.cast==='full'||C.cast==='half')d.slotsNew.forEach((m,i)=>{S.slots[i].max=m;S.slots[i].used=Math.min(S.slots[i].used,m)});
+  if(d.pact){S.pact.max=d.pact[0];S.pact.lvl=d.pact[1];S.pact.used=Math.min(S.pact.used,S.pact.max)}
+  if(to===C.subL)S.sub=LU.sub.trim();
+  d.feats.forEach(([n,p])=>S.feats.push({n,p,lvl:to,src:'Klasse'}));
+  if(d.asi){if(LU.asi==='feat')S.feats.push({n:LU.feat.trim(),p:'Talent. Wirkung im Buch nachlesen und hier ergänzen.',lvl:to,src:'Talent'});
+    else{const add=(k,v)=>S.abil[k]=Math.min(20,Math.max(S.abil[k],S.abil[k]+v));if(LU.asi==='one')add(LU.a1,2);else{add(LU.a1,1);add(LU.a2,1)}}}
+  if(S.klass==='Barbarian'&&to===20){S.abil.str=Math.min(24,S.abil.str+4);S.abil.con=Math.min(24,S.abil.con+4)}
+  d.res.forEach(r=>{const ex=S.res.find(x=>x.n===r.n);if(ex){ex.max=r.max;ex.rest=r.rest;ex.p=r.p;ex.used=Math.min(ex.used,r.max)}else S.res.push({n:r.n,ic:r.ic,max:r.max,used:0,rest:r.rest,p:r.p})});
+  LU=null;toast(`Stufe ${to} erreicht: +${d.gain} TP${d.feats.length?', neue Merkmale stehen auf der Karte':''}.`);return true}
+
+/* ---------- Rendern ---------- */
+function vHead(){
+  const line=[S.subrace||S.race,S.klass,S.sub].filter(Boolean).join(' · ');
+  return `<header class="hd"><label class="por" for="img-in" title="Porträt ändern">${S.img?`<img src="${S.img}" alt="Porträt von ${esc(S.name)}">`:`<span aria-hidden="true">${esc((S.name||'?').trim()[0]||'?')}</span>`}</label><input type="file" id="img-in" accept="image/*" hidden>
+  <div class="who"><h1>${esc(S.name)}</h1><p>${esc(line||'Volk und Klasse unter „Einrichten“ wählen')}</p>${S.info?`<p class="sub2">${esc(S.info)}</p>`:''}</div>
+  ${S.level?`<div class="seal" title="Charakterstufe"><small>STUFE</small><b>${S.level}</b></div>`:''}
+  <div class="hacts"><button class="btn gilt" data-a="lu">${S.level?(S.level>=20?'Stufe 20 erreicht':'Stufenaufstieg'):'Auf Stufe 1 bauen'}</button><div class="rests"><button class="btn ghost" data-a="rest" data-r="short">Kurze Rast</button><button class="btn ghost" data-a="rest" data-r="long">Lange Rast</button></div></div></header>`}
+const TABS=[['main','Karte'],['inv','Inventar'],['wiki','Wiki'],['notes','Notizen'],['setup','Einrichten']];
+const app=$('app');
+function render(){
+  hideTip();
+  if(!TABS.some(t=>t[0]===S.tab))S.tab='main';
+  const t=S.tab,ae=document.activeElement,keep=ae&&ae.id&&app.contains(ae)?ae.id:null;
+  let h=vHead();
+  h+=`<div class="tabs"><nav role="tablist" aria-label="Bereiche">${TABS.map(([k,l])=>`<button role="tab" aria-selected="${t===k}" data-a="tab" data-t="${k}">${l}</button>`).join('')}</nav><div class="mini${S.hp===0?' down':''}">TP <b>${S.hp}</b>/${S.hpMax}${S.tmp?` +${S.tmp}`:''}</div></div>`;
+  if(t==='main')h+=vMain();
+  if(t==='inv')h+=vInv();
+  if(t==='wiki')h+=vWiki();
+  if(t==='notes')h+=`<h2>Notizen</h2><textarea id="notes" placeholder="Hintergrundgeschichte, NPCs, Orte, offene Fragen …" aria-label="Notizen">${esc(S.notes)}</textarea>`;
+  if(t==='setup')h+=vSetup();
+  h+=`<footer>Regeltexte sind Zusammenfassungen in eigenen Worten nach D&amp;D 5e (2014). Bei Unklarheit im Buch prüfen. Gespeichert wird nur in diesem Browser; unter „Einrichten“ sicherst du den Bogen als Text.</footer>`;
+  if(LU&&CLASSES[S.klass])h+=vLU();
+  document.body.style.overflow=LU?'hidden':'';
+  app.innerHTML=h;
+  if(LU&&LUfocus){LUfocus=false;const f=$('lu-h');if(f)f.focus()}
+  else if(keep){const el=$(keep);if(el)el.focus({preventScroll:true})}}
+
+/* ---------- Spielregeln ---------- */
+function damage(d){
+  const msg=[],before=S.hp;let r=d;
+  if(S.tmp){const t=Math.min(S.tmp,r);S.tmp-=t;r-=t;if(t)msg.push(`${t} von temporären TP abgefangen.`)}
+  if(r>0){
+    if(before===0){if(r>=S.hpMax)msg.push('Schaden bei 0 TP mindestens so hoch wie die Max-TP: sofortiger Tod.');else{S.death.f=Math.min(3,S.death.f+1);msg.push('Schaden bei 0 TP: ein Fehlschlag beim Todesrettungswurf (bei kritischem Treffer zwei).')}}
+    else{S.hp=Math.max(0,before-r);if(S.hp===0){S.cond.Unconscious=true;msg.push(r-before>=S.hpMax?'Restschaden mindestens so hoch wie die Max-TP: sofortiger Tod nach Regelwerk.':'0 TP: bewusstlos, Todesrettungswürfe beginnen.')}}}
+  if(S.conc){if(S.hp===0){msg.push(`Konzentration auf ${S.conc} endet.`);S.conc=''}else msg.unshift(`Konzentration auf ${S.conc}: KON-Rettungswurf SG ${Math.max(10,Math.floor(d/2))}.`)}
+  toast(msg.join(' ')||`${d} Schaden.`)}
+function heal(d){if(S.hp===0){S.death={s:0,f:0};delete S.cond.Unconscious}S.hp=Math.min(S.hpMax,S.hp+d);toast(`${d} TP geheilt.`)}
+function rest(long){
+  S.res.forEach(r=>{if(r.rest==='short'||(long&&r.rest==='long'))r.used=0});
+  S.pact.used=0;
+  if(!long){toast('Kurze Rast: Fähigkeiten mit „kurze Rast“'+(S.pact.max?' und Paktmagie':'')+' sind zurück. Trefferwürfel ausgeben: Kästchen ankreuzen, Ergebnis bei „Heilen“ eintragen.');return}
+  const back=Math.max(1,Math.floor(S.hd.max/2));
+  S.hd.used=Math.max(0,S.hd.used-back);S.slots.forEach(s=>s.used=0);S.hp=S.hpMax;S.tmp=0;S.death={s:0,f:0};S.conc='';delete S.cond.Unconscious;
+  let m=`Lange Rast: TP voll, Zauberplätze und Fähigkeiten zurück, bis zu ${back} Trefferwürfel zurück.`;
+  if(S.exh>0){S.exh--;m+=' Exhaustion um 1 gesenkt (gilt nur mit Essen und Trinken).'}
+  const left=COND.filter(c=>S.cond[c[0]]).map(c=>c[0]);
+  if(left.length)m+=` ${left.join(', ')} bleibt aktiv: Zustände enden nicht durch die Rast, sondern wenn ihre Ursache endet.`;
+  toast(m)}
+function cast(i){
+  const s=S.spells[i];
+  if(s.lvl>0){
+    let msg='';
+    if(S.pact.max&&S.pact.used<S.pact.max&&S.pact.lvl>=s.lvl){S.pact.used++;msg=`Paktmagie-Platz (Grad ${S.pact.lvl}) verbraucht.`}
+    else{for(let l=s.lvl;l<=9;l++){const sl=S.slots[l-1];if(sl.used<sl.max){sl.used++;msg=`Platz Grad ${l} verbraucht.`;break}}}
+    if(!msg){toast(`Kein freier Zauberplatz ab Grad ${s.lvl}.${s.ritual?' Als Ritual geht es ohne Platz (10 Min länger).':''}`);return}
+    if(s.conc){msg+=S.conc&&S.conc!==s.n?` Konzentration wechselt von ${S.conc} zu ${s.n}.`:` Konzentration auf ${s.n}.`;S.conc=s.n}
+    toast(msg);return}
+  if(s.conc){toast(S.conc&&S.conc!==s.n?`Konzentration wechselt von ${S.conc} zu ${s.n}.`:`Konzentration auf ${s.n}.`);S.conc=s.n}
+  else toast(`${s.n} gewirkt.`)}
+function move(from,to){
+  if(from===to)return;const a=get(from),b=get(to);if(!a)return;
+  if(!fits(a,to)){toast(`${a.n} passt nicht auf „${slotLabel(to)}“.`);return}
+  if(b&&a.cons&&b.cons&&a.n===b.n&&a.p===b.p&&to.startsWith('bag')){b.q+=a.q;set(from,null);if(SEL===from)SEL=to;return}
+  if(b&&!fits(b,from)){toast(`Belegt: ${b.n} kann nicht auf „${slotLabel(from)}“. Erst woanders ablegen.`);return}
+  set(to,a);set(from,b);
+  if(SEL===from)SEL=to;else if(SEL===to)SEL=from;
+  const m=S.eq.main;if(m&&/Zweihändig/.test(m.p)&&S.eq.off)toast(`Hinweis: ${m.n} ist zweihändig, die Nebenhand ist aber belegt.`)}
+function use(r){
+  const it=get(r);if(!it)return;it.q--;
+  if(it.q<=0){set(r,null);if(SEL===r)SEL=null;toast(`${it.n}: ${it.p} · Das war das letzte Stück.`)}
+  else toast(`${it.n}: ${it.p} · Noch ${it.q}.`)}
+function importText(txt){
+  let o;try{o=JSON.parse(txt)}catch(e){toast('Das ist kein gültiger Export. Bitte den kompletten Text einfügen.');return false}
+  if(!o||typeof o!=='object'){toast('Das ist kein gültiger Export.');return false}
+  if(o.v>=3)S=norm(o);else if(o.abil||o.hpMax!=null)S=migrate(o);else{toast('Format nicht erkannt. Erwartet wird ein Export aus diesem Bogen.');return false}
+  S.tab='setup';OPEN={};SEL=null;EXP='';toast(`${S.name} importiert.`);return true}
+function loadPortrait(file){
+  if(!file||!/^image\//.test(file.type)){toast('Bitte eine Bilddatei wählen.');return}
+  const url=URL.createObjectURL(file),img=new Image();
+  img.onload=()=>{const z=320,c=document.createElement('canvas');c.width=c.height=z;const s=Math.min(img.width,img.height);c.getContext('2d').drawImage(img,(img.width-s)/2,(img.height-s)/3,s,s,0,0,z,z);URL.revokeObjectURL(url);S.img=c.toDataURL('image/jpeg',.85);save();render();toast('Porträt gespeichert.')};
+  img.onerror=()=>{URL.revokeObjectURL(url);toast('Das Bild ließ sich nicht öffnen. Ein JPG oder PNG versuchen.')};
+  img.src=url}
+
+/* ---------- Tooltip im Inventar ---------- */
+const tip=$('tip');
+function hideTip(){tip.hidden=true}
+function showTip(r,x,y,el){
+  const it=get(r);if(!it){hideTip();return}
+  const a=atk(it),tags=[r.startsWith('eq')?'Ausgerüstet: '+slotLabel(r):'Rucksack',it.slot?'Platz: '+slotName(it.slot):'',it.cons?'Verbrauchbar':'',it.att?(it.tuned?'Eingestimmt':'Braucht Einstimmung'):it.magic?'Magisch':''].filter(Boolean).join(' · ');
+  tip.innerHTML=`<b>${esc(it.n)}</b><span class="ttag">${esc(tags)}</span>${esc(it.p)||'<i>Keine Beschreibung.</i>'}${a?`<span class="ta">Treffer ${a.hit} · Schaden ${a.dmg} ${a.type}</span>`:''}<span class="tq">Anzahl ${it.q} · Klicken für Aktionen</span>`;
+  tip.hidden=false;
+  if(el){const b=el.getBoundingClientRect();x=b.right;y=b.top}
+  const w=tip.offsetWidth,h=tip.offsetHeight;
+  let L=x+16,T=y+16;if(L+w>innerWidth-8)L=x-w-12;if(T+h>innerHeight-8)T=Math.max(8,y-h-12);
+  tip.style.left=Math.max(8,L)+'px';tip.style.top=T+'px'}
+
+/* ---------- Ereignisse ---------- */
+let pressing=false,pend=false;
+document.addEventListener('pointerdown',()=>{pressing=true},true);
+document.addEventListener('pointerup',()=>{pressing=false;if(pend)setTimeout(()=>{if(pend){pend=false;render()}},0)},true);
+function later(){pend=true;if(!pressing)setTimeout(()=>{if(pend&&!pressing){pend=false;render()}},0)}
+function setPath(p,v){const ks=p.split('.');let o=S;for(let i=0;i<ks.length-1;i++){o=o[ks[i]];if(o==null)return}const k=ks[ks.length-1];o[k]=v;if(o.max!=null&&o.used>o.max)o.used=o.max;if(S.hp>S.hpMax)S.hp=S.hpMax}
+
+app.addEventListener('click',ev=>{
+  const c=ev.target.closest('[data-slot]');
+  if(c&&!ev.target.closest('[data-drag]')&&SEL&&!get(c.dataset.slot)){move(SEL,c.dataset.slot);save();render();return}
+  const b=ev.target.closest('[data-a]');if(!b)return;
+  const a=b.dataset.a,i=+b.dataset.i,k=b.dataset.k,v=id=>($(id)||{}).value||'';
+  if(a==='luclose-bg'&&ev.target!==b)return;
+  if(a!=='rm'&&a!=='imp'&&a!=='reset')CONF=null;
+  pend=false;
+  switch(a){
+    case 'tab':S.tab=b.dataset.t;SEL=null;window.scrollTo({top:0});break;
+    case 'lu':openLU();break;
+    case 'luclose':case 'luclose-bg':LU=null;break;
+    case 'luapply':if(!applyLU())return;break;
+    case 'rest':rest(b.dataset.r==='long');break;
+    case 'hp':{const was=S.hp;S.hp=clamp(S.hp+ +b.dataset.d,0,S.hpMax);if(was===0&&S.hp>0){S.death={s:0,f:0};delete S.cond.Unconscious}if(was>0&&S.hp===0)S.cond.Unconscious=true;break}
+    case 'dmg':case 'heal':case 'temp':{const d=Math.floor(+v('hpv'));if(!(d>0)){toast('Erst einen Betrag eintragen.');return}
+      if(a==='dmg')damage(d);else if(a==='heal')heal(d);else{if(d<=S.tmp)toast('Temporäre TP addieren sich nicht. Der höhere Wert bleibt.');else{S.tmp=d;toast(`${d} temporäre TP.`)}}break}
+    case 'ds':{const t=b.dataset.t,j=+b.dataset.j,cur=S.death[t];S.death[t]=j+1===cur?j:j+1;
+      if(S.death.s>=3)toast('Drei Erfolge: stabil. Bewusstlos, aber keine weiteren Würfe nötig.');if(S.death.f>=3)toast('Drei Fehlschläge: Der Charakter stirbt.');break}
+    case 'pip':{const o=k==='hd'?S.hd:k==='pact'?S.pact:S[k][i];o.used=clamp(+b.dataset.j<o.max-o.used?o.used+1:o.used-1,0,o.max);break}
+    case 'resd':{const r=S.res[i];if(r&&r.max<99)r.used=clamp(r.used+ +b.dataset.d,0,r.max);break}
+    case 'cond':S.cond[b.dataset.c]=!S.cond[b.dataset.c];if(!S.cond[b.dataset.c])delete S.cond[b.dataset.c];break;
+    case 'exh':S.exh=clamp(S.exh+ +b.dataset.d,0,6);break;
+    case 'cast':cast(i);break;
+    case 'spopen':OPEN[i]=!OPEN[i];break;
+    case 'concend':toast(`Konzentration auf ${S.conc} beendet.`);S.conc='';break;
+    case 'use':use(b.dataset.r);break;
+    case 'gold':{const c2=b.dataset.c;S.gold[c2]=Math.max(0,(+S.gold[c2]||0)+ +b.dataset.d);break}
+    case 'qty':{const it=get(SEL);if(it)it.q=Math.max(1,it.q+ +b.dataset.d);break}
+    case 'equip':{const it=get(SEL);if(!it)break;const c2=EQ.map(e=>'eq:'+e[0]).filter(r=>fits(it,r));const t=c2.find(r=>!get(r))||c2[0];if(!t){toast('Kein passender Ausrüstungsplatz. Platz im Auswahlfeld festlegen.');break}move(SEL,t);break}
+    case 'unequip':{let j=S.bag.indexOf(null);if(j<0){j=S.bag.length;for(let x=0;x<6;x++)S.bag.push(null)}move(SEL,'bag:'+j);break}
+    case 'tune':{const it=get(SEL);if(!it)break;if(!it.tuned&&refs().filter(r=>get(r).tuned).length>=3){toast('Höchstens drei eingestimmte Gegenstände. Erst einen anderen lösen.');break}it.tuned=!it.tuned;if(it.tuned)toast('Einstimmen dauert eine kurze Rast.');break}
+    case 'rm':if(CONF!=='rm'){CONF='rm';break}set(SEL,null);SEL=null;CONF=null;break;
+    case 'unsel':SEL=null;break;
+    case 'addinv':{const key=v('inv-sel');if(!key){toast('Erst einen Gegenstand auswählen.');return}const c2=BYN[key];const q=Math.floor(+v('inv-q'))||c2.q||1;putBag(S,mk(c2,q));toast(`${c2.n} ins Inventar gelegt.`);break}
+    case 'addown':{const n=v('own-n').trim();if(!n){toast('Bitte einen Namen eintragen.');return}const att=$('own-a').checked;putBag(S,mk({n,ic:v('own-ic'),p:v('own-p').trim(),slot:v('own-slot'),cons:$('own-c').checked,att,magic:att},Math.floor(+v('own-q'))||1));toast(`${n} angelegt.`);break}
+    case 'wf':WF=b.dataset.f;WSEL=null;break;
+    case 'wsel':WSEL=WSEL===b.dataset.key&&innerWidth<900?null:b.dataset.key;break;
+    case 'wadd':{const c2=BYN[b.dataset.key];if(!c2)break;if(c2.k==='spell'){S.spells.push(spFrom(c2));toast(`${c2.n} steht jetzt bei deinen Zaubern.`)}else{putBag(S,mk(c2));toast(`${c2.n} ins Inventar gelegt.`)}break}
+    case 'tsave':S.saves[k]=!S.saves[k];break;
+    case 'tskill':S.skills[k]=((S.skills[k]||0)+1)%3;break;
+    case 'imgdel':S.img='';break;
+    case 'addfeat':{const n=v('feat-n').trim();if(!n){toast('Bitte einen Namen eintragen.');return}S.feats.push({n,p:v('feat-p').trim(),lvl:0,src:'Eigener Eintrag'});break}
+    case 'addres':{const n=v('res-n').trim();if(!n){toast('Bitte einen Namen eintragen.');return}S.res.push({n,ic:v('res-ic')||'star',max:Math.max(1,Math.floor(+v('res-m'))||1),used:0,rest:v('res-r')||'long',p:v('res-p').trim()});break}
+    case 'addsp':{const n=v('sp-sel');if(!n){toast('Erst einen Zauber auswählen.');return}if(S.spells.some(s=>s.n===n)){toast(`${n} steht schon auf deiner Liste.`);return}S.spells.push(spFrom(BYN['spell:'+n]));toast(`${n} hinzugefügt.`);break}
+    case 'addspown':{const n=v('osp-n').trim();if(!n){toast('Bitte einen Namen eintragen.');return}S.spells.push({n,ic:'star',lvl:clamp(Math.floor(+v('osp-l'))||0,0,9),time:v('osp-t').trim(),range:v('osp-r').trim(),dur:v('osp-d').trim(),eff:v('osp-e').trim(),conc:$('osp-c').checked,ritual:$('osp-ri').checked,school:'',cls:'',src:'own'});toast(`${n} angelegt.`);break}
+    case 'del':{const it=S[k][i];if(k==='spells'){OPEN={};if(it&&S.conc===it.n)S.conc=''}S[k].splice(i,1);break}
+    case 'exp':{const o=JSON.parse(JSON.stringify(S));o.tab='main';EXP=JSON.stringify(o);break}
+    case 'copy':{const ta=$('exp');const p=navigator.clipboard&&navigator.clipboard.writeText?navigator.clipboard.writeText(EXP):Promise.reject();p.then(()=>toast('Kopiert. Auf dem anderen Gerät unter „Einrichten“ einfügen.')).catch(()=>{if(ta){ta.focus();ta.select()}toast('Text ist markiert. Mit Strg+C (Mac: Cmd+C) kopieren.')});return}
+    case 'imp':{const txt=v('imp').trim();if(!txt){toast('Erst den Export-Text einfügen oder eine Datei laden.');return}if(CONF!=='imp'){CONF='imp';break}CONF=null;if(importText(txt))IMP='';break}
+    case 'reset':if(CONF!=='reset'){CONF='reset';break}S=def();S.tab='setup';OPEN={};SEL=null;EXP='';CONF=null;toast('Neuer, leerer Charakter angelegt.');break;
+  }
+  save();render()});
+app.addEventListener('change',ev=>{
+  const el=ev.target;
+  if((el.id==='img-in'||el.id==='img-in2')&&el.files&&el.files[0]){loadPortrait(el.files[0]);return}
+  if(el.id==='impf'&&el.files&&el.files[0]){const fr=new FileReader();fr.onload=()=>{IMP=String(fr.result);const ta=$('imp');if(ta)ta.value=IMP;CONF=null;toast('Datei geladen. Jetzt „Importieren“ drücken.')};fr.readAsText(el.files[0]);return}
+  if(el.id==='inv-sel'||el.id==='sp-sel'){const c=el.id==='inv-sel'?BYN[el.value]:BYN['spell:'+el.value];const h=$(el.id+'-h');if(h)h.textContent=c?(c.k==='spell'?spMeta(c)+' — '+c.eff:c.p+(c.att?' · braucht Einstimmung':'')):'';return}
+  if(el.id==='wc'){WC=el.value;$('wres').innerHTML=wikiBody();return}
+  if(el.dataset.lu){LU[el.dataset.lu]=el.value;later();return}
+  const p=el.dataset.p;if(!p)return;
+  let val=el.value;
+  if(el.dataset.t==='n'){val=Math.max(+el.min||0,+String(val).replace(',','.')||0);if(el.max)val=Math.min(+el.max,val);if(p!=='speed')val=Math.floor(val)}
+  setPath(p,val);
+  if(p==='race'){S.subrace='';applyRace()}
+  if(p==='subrace')applyRace();
+  if(p==='klass'){const C=CLASSES[S.klass];S.cls=C?C.l:'';if(C){S.hd.die='W'+C.hd;if(!C.subs.includes(S.sub))S.sub=''}}
+  save();later()});
+app.addEventListener('input',ev=>{
+  const el=ev.target;
+  if(el.id==='notes'){S.notes=el.value;save()}
+  if(el.id==='imp'){IMP=el.value;if(CONF==='imp')CONF=null}
+  if(el.dataset&&el.dataset.lu&&el.tagName==='INPUT'&&LU)LU[el.dataset.lu]=el.value;
+  if(el.id==='wq'){WQ=el.value;WSEL=null;$('wres').innerHTML=wikiBody()}});
+app.addEventListener('keydown',ev=>{
+  const it=ev.target.closest&&ev.target.closest('[data-drag]');
+  if(it&&(ev.key==='Enter'||ev.key===' ')){ev.preventDefault();SEL=SEL===it.dataset.drag?null:it.dataset.drag;CONF=null;render();const f=document.querySelector(`[data-drag="${SEL}"]`);if(f)f.focus()}
+  if(ev.target.id==='hpv'&&ev.key==='Enter')ev.preventDefault();
+  if(ev.target.tagName==='LABEL'&&ev.target.classList.contains('por')&&(ev.key==='Enter'||ev.key===' ')){ev.preventDefault();ev.target.click()}});
+document.addEventListener('keydown',ev=>{if(ev.key==='Escape'&&LU){LU=null;render();const b=document.querySelector('[data-a=lu]');if(b)b.focus()}});
+
+/* Tooltip */
+app.addEventListener('pointerover',e=>{if(e.pointerType!=='mouse'||drag)return;const it=e.target.closest('[data-drag]');if(it)showTip(it.dataset.drag,e.clientX,e.clientY)});
+app.addEventListener('pointermove',e=>{if(e.pointerType!=='mouse'||drag||tip.hidden)return;const it=e.target.closest('[data-drag]');if(it)showTip(it.dataset.drag,e.clientX,e.clientY);else hideTip()});
+app.addEventListener('pointerout',e=>{const it=e.target.closest&&e.target.closest('[data-drag]');if(it&&!it.contains(e.relatedTarget))hideTip()});
+app.addEventListener('focusin',e=>{const it=e.target.closest&&e.target.closest('[data-drag]');if(it)showTip(it.dataset.drag,0,0,it)});
+app.addEventListener('focusout',e=>{if(e.target.closest&&e.target.closest('[data-drag]'))hideTip()});
+
+/* Ziehen und Ablegen (Maus und Touch) */
+let drag=null;
+app.addEventListener('pointerdown',e=>{const it=e.target.closest('[data-drag]');if(!it||e.button>0)return;drag={from:it.dataset.drag,x:e.clientX,y:e.clientY,moved:false,el:it,g:null,over:null}});
+const clearOver=()=>{if(drag&&drag.over)drag.over.classList.remove('over','no')};
+window.addEventListener('pointermove',e=>{
+  if(!drag)return;
+  if(!drag.moved){if(Math.hypot(e.clientX-drag.x,e.clientY-drag.y)<6)return;drag.moved=true;hideTip();const g=document.createElement('div');g.className='dragghost '+drag.el.className.replace('it ','');g.innerHTML=drag.el.innerHTML;document.body.appendChild(g);drag.g=g;drag.el.classList.add('lift')}
+  drag.g.style.left=e.clientX+'px';drag.g.style.top=e.clientY+'px';
+  const t=document.elementFromPoint(e.clientX,e.clientY),c=t&&t.closest('[data-slot]');
+  if(drag.over!==c){clearOver();if(c)c.classList.add(fits(get(drag.from),c.dataset.slot)?'over':'no');drag.over=c}});
+window.addEventListener('pointerup',e=>{
+  if(!drag)return;const d=drag;clearOver();drag=null;if(d.g)d.g.remove();
+  if(d.moved){const t=document.elementFromPoint(e.clientX,e.clientY),c=t&&t.closest('[data-slot]');if(c)move(d.from,c.dataset.slot)}
+  else{SEL=SEL===d.from?null:d.from;CONF=null}
+  save();render()});
+window.addEventListener('pointercancel',()=>{if(!drag)return;clearOver();if(drag.g)drag.g.remove();drag=null;render()});
+
+render();
+</script>
+
+</body></html>

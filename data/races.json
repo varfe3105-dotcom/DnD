@@ -1,0 +1,327 @@
+{
+ "Dwarf": {
+  "sp": 7.5,
+  "asi": "KON +2",
+  "tr": [
+   [
+    "Darkvision",
+    "Im Dunkeln bis 18 m wie im Dämmerlicht sehen, nur in Graustufen."
+   ],
+   [
+    "Dwarven Resilience",
+    "Vorteil auf Rettungswürfe gegen Gift, Resistenz gegen Giftschaden."
+   ],
+   [
+    "Dwarven Combat Training",
+    "Übung mit Streitaxt, Handaxt, leichtem Hammer und Kriegshammer."
+   ],
+   [
+    "Stonecunning",
+    "Bei Geschichtswürfen zu Steinarbeiten doppelter Übungsbonus."
+   ]
+  ],
+  "subs": {
+   "Hill Dwarf": {
+    "asi": "WEI +1",
+    "tr": [
+     [
+      "Dwarven Toughness",
+      "+1 Max-TP pro Stufe (beim Stufenaufstieg eingerechnet)."
+     ]
+    ]
+   },
+   "Mountain Dwarf": {
+    "asi": "STR +2",
+    "tr": [
+     [
+      "Dwarven Armor Training",
+      "Übung mit leichter und mittlerer Rüstung."
+     ]
+    ]
+   }
+  },
+  "source": "summary",
+  "verified": false
+ },
+ "Elf": {
+  "sp": 9,
+  "asi": "GES +2",
+  "tr": [
+   [
+    "Darkvision",
+    "Im Dunkeln bis 18 m wie im Dämmerlicht sehen, nur in Graustufen."
+   ],
+   [
+    "Keen Senses",
+    "Übung in Perception."
+   ],
+   [
+    "Fey Ancestry",
+    "Vorteil auf Rettungswürfe gegen Bezauberung; Magie kann dich nicht einschläfern."
+   ],
+   [
+    "Trance",
+    "4 Std Meditation statt 8 Std Schlaf."
+   ]
+  ],
+  "subs": {
+   "High Elf": {
+    "asi": "INT +1",
+    "tr": [
+     [
+      "Elf Weapon Training",
+      "Übung mit Lang- und Kurzschwert, Kurz- und Langbogen."
+     ],
+     [
+      "Cantrip",
+      "Ein Cantrip der Magierliste, Zauberattribut INT."
+     ],
+     [
+      "Extra Language",
+      "Eine weitere Sprache."
+     ]
+    ]
+   },
+   "Wood Elf": {
+    "asi": "WEI +1",
+    "sp": 10.5,
+    "tr": [
+     [
+      "Elf Weapon Training",
+      "Übung mit Lang- und Kurzschwert, Kurz- und Langbogen."
+     ],
+     [
+      "Fleet of Foot",
+      "Grundtempo 10,5 m."
+     ],
+     [
+      "Mask of the Wild",
+      "Verstecken schon bei leichter Verdeckung durch Natur wie Laub, Regen oder Nebel."
+     ]
+    ]
+   },
+   "Drow": {
+    "asi": "CHA +1",
+    "tr": [
+     [
+      "Superior Darkvision",
+      "Dunkelsicht 36 m."
+     ],
+     [
+      "Sunlight Sensitivity",
+      "Nachteil auf Angriffe und auf Wahrnehmung per Sicht im direkten Sonnenlicht."
+     ],
+     [
+      "Drow Magic",
+      "Dancing Lights; ab Stufe 3 Faerie Fire, ab Stufe 5 Darkness, je einmal pro langer Rast (CHA)."
+     ],
+     [
+      "Drow Weapon Training",
+      "Übung mit Rapier, Kurzschwert und Handarmbrust."
+     ]
+    ]
+   }
+  },
+  "source": "summary",
+  "verified": false
+ },
+ "Halfling": {
+  "sp": 7.5,
+  "asi": "GES +2",
+  "tr": [
+   [
+    "Lucky",
+    "Bei einer 1 auf Angriff, Attributs- oder Rettungswurf neu würfeln; das neue Ergebnis gilt."
+   ],
+   [
+    "Brave",
+    "Vorteil auf Rettungswürfe gegen Furcht."
+   ],
+   [
+    "Halfling Nimbleness",
+    "Du kannst dich durch den Platz größerer Kreaturen bewegen."
+   ]
+  ],
+  "subs": {
+   "Lightfoot": {
+    "asi": "CHA +1",
+    "tr": [
+     [
+      "Naturally Stealthy",
+      "Verstecken auch hinter einer Kreatur, die mindestens eine Größe größer ist."
+     ]
+    ]
+   },
+   "Stout": {
+    "asi": "KON +1",
+    "tr": [
+     [
+      "Stout Resilience",
+      "Vorteil auf Rettungswürfe gegen Gift, Resistenz gegen Giftschaden."
+     ]
+    ]
+   }
+  },
+  "source": "summary",
+  "verified": false
+ },
+ "Human": {
+  "sp": 9,
+  "asi": "alle Attribute +1",
+  "tr": [
+   [
+    "Extra Language",
+    "Eine weitere Sprache."
+   ]
+  ],
+  "subs": {
+   "Variant Human": {
+    "asi": "zwei Attribute +1 (statt alle)",
+    "tr": [
+     [
+      "Skills",
+      "Übung in einer Fertigkeit nach Wahl."
+     ],
+     [
+      "Feat",
+      "Ein Talent nach Wahl."
+     ]
+    ]
+   }
+  },
+  "source": "summary",
+  "verified": false
+ },
+ "Dragonborn": {
+  "sp": 9,
+  "asi": "STR +2, CHA +1",
+  "tr": [
+   [
+    "Draconic Ancestry",
+    "Deine Drachenart bestimmt Schadensart und Form der Odemwaffe."
+   ],
+   [
+    "Breath Weapon",
+    "Aktion: 2W6 (ab Stufe 6 3W6, 11 4W6, 16 5W6), Rettungswurf SG 8 + KON + Übung, halber Schaden bei Erfolg. Einmal pro kurzer Rast."
+   ],
+   [
+    "Damage Resistance",
+    "Resistenz gegen die Schadensart deiner Abstammung."
+   ]
+  ],
+  "subs": {},
+  "source": "summary",
+  "verified": false
+ },
+ "Gnome": {
+  "sp": 7.5,
+  "asi": "INT +2",
+  "tr": [
+   [
+    "Darkvision",
+    "Im Dunkeln bis 18 m wie im Dämmerlicht sehen, nur in Graustufen."
+   ],
+   [
+    "Gnome Cunning",
+    "Vorteil auf INT-, WEI- und CHA-Rettungswürfe gegen Magie."
+   ]
+  ],
+  "subs": {
+   "Forest Gnome": {
+    "asi": "GES +1",
+    "tr": [
+     [
+      "Natural Illusionist",
+      "Cantrip Minor Illusion (INT)."
+     ],
+     [
+      "Speak with Small Beasts",
+      "Einfache Verständigung mit kleinen Tieren."
+     ]
+    ]
+   },
+   "Rock Gnome": {
+    "asi": "KON +1",
+    "tr": [
+     [
+      "Artificer's Lore",
+      "Doppelter Übungsbonus bei Geschichtswürfen zu magischen und technischen Gegenständen."
+     ],
+     [
+      "Tinker",
+      "Kleine Uhrwerk-Geräte bauen."
+     ]
+    ]
+   }
+  },
+  "source": "summary",
+  "verified": false
+ },
+ "Half-Elf": {
+  "sp": 9,
+  "asi": "CHA +2, zwei andere Attribute +1",
+  "tr": [
+   [
+    "Darkvision",
+    "Im Dunkeln bis 18 m wie im Dämmerlicht sehen, nur in Graustufen."
+   ],
+   [
+    "Fey Ancestry",
+    "Vorteil auf Rettungswürfe gegen Bezauberung; Magie kann dich nicht einschläfern."
+   ],
+   [
+    "Skill Versatility",
+    "Übung in zwei Fertigkeiten nach Wahl."
+   ]
+  ],
+  "subs": {},
+  "source": "summary",
+  "verified": false
+ },
+ "Half-Orc": {
+  "sp": 9,
+  "asi": "STR +2, KON +1",
+  "tr": [
+   [
+    "Darkvision",
+    "Im Dunkeln bis 18 m wie im Dämmerlicht sehen, nur in Graustufen."
+   ],
+   [
+    "Menacing",
+    "Übung in Intimidation."
+   ],
+   [
+    "Relentless Endurance",
+    "Fällst du auf 0 TP, ohne zu sterben, bleibst du bei 1 TP. Einmal pro langer Rast."
+   ],
+   [
+    "Savage Attacks",
+    "Bei einem kritischen Nahkampftreffer einen Waffenschadenswürfel zusätzlich."
+   ]
+  ],
+  "subs": {},
+  "source": "summary",
+  "verified": false
+ },
+ "Tiefling": {
+  "sp": 9,
+  "asi": "CHA +2, INT +1",
+  "tr": [
+   [
+    "Darkvision",
+    "Im Dunkeln bis 18 m wie im Dämmerlicht sehen, nur in Graustufen."
+   ],
+   [
+    "Hellish Resistance",
+    "Resistenz gegen Feuerschaden."
+   ],
+   [
+    "Infernal Legacy",
+    "Thaumaturgy; ab Stufe 3 Hellish Rebuke (Grad 2), ab Stufe 5 Darkness, je einmal pro langer Rast (CHA)."
+   ]
+  ],
+  "subs": {},
+  "source": "summary",
+  "verified": false
+ }
+}

@@ -1,0 +1,25 @@
+{
+  "name": "charakterbogen",
+  "version": "5.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Digitaler D&D-5e-Charakterbogen (Edition 2014) als einzelne HTML-Datei",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "test": "npm run build && playwright test",
+    "test:legacy": "cross-env TARGET=legacy playwright test --grep-invert @new",
+    "screens": "node scripts/screenshots.mjs",
+    "lint": "eslint src"
+  },
+  "devDependencies": {
+    "@fontsource/alegreya": "^5.3.0",
+    "@fontsource/alegreya-sans-sc": "^5.3.0",
+    "@fontsource/grenze-gotisch": "^5.3.0",
+    "@playwright/test": "^1.65.0",
+    "cross-env": "^10.1.0",
+    "eslint": "^10.14.0",
+    "vite": "^8.3.7",
+    "vite-plugin-singlefile": "^2.3.4"
+  }
+}

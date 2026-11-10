@@ -1,0 +1,14 @@
+node_modules/
+dist/
+screenshots/
+test-results/
+playwright-report/
+.vite/
+*.log
+.DS_Store
+Thumbs.db
+# Persönliche Charakterdateien bleiben lokal
+import/*
+!import/.gitkeep
+# Rohdaten der Importskripte werden bei Bedarf neu geladen
+.cache/
