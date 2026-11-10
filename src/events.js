@@ -1,3 +1,5 @@
+import { t as tr, setLang, distInput } from './i18n/index.js';
+import { buildCatalog } from './catalog.js';
 import { $, clamp } from './util.js';
 import { EQ } from './constants.js';
 import { def, mk, spFrom, putBag, S, setS, U, save, toast } from './state.js';
@@ -25,60 +27,61 @@ app.addEventListener('click',ev=>{
   if(a!=='rm'&&a!=='imp'&&a!=='reset')U.CONF=null;
   pend=false;
   switch(a){
+    case 'lang':setLang(b.dataset.l);buildCatalog();break;
     case 'tab':S.tab=b.dataset.t;U.SEL=null;window.scrollTo({top:0});break;
     case 'lu':openLU();break;
     case 'luclose':case 'luclose-bg':U.LU=null;break;
     case 'luapply':if(!applyLU())return;break;
     case 'rest':rest(b.dataset.r==='long');break;
     case 'hp':{const was=S.hp;S.hp=clamp(S.hp+ +b.dataset.d,0,S.hpMax);if(was===0&&S.hp>0){S.death={s:0,f:0};delete S.cond.Unconscious}if(was>0&&S.hp===0)S.cond.Unconscious=true;break}
-    case 'dmg':case 'heal':case 'temp':{const d=Math.floor(+v('hpv'));if(!(d>0)){toast('Erst einen Betrag eintragen.');return}
-      if(a==='dmg')damage(d);else if(a==='heal')heal(d);else{if(d<=S.tmp)toast('Temporäre TP addieren sich nicht. Der höhere Wert bleibt.');else{S.tmp=d;toast(`${d} temporäre TP.`)}}break}
+    case 'dmg':case 'heal':case 'temp':{const d=Math.floor(+v('hpv'));if(!(d>0)){toast(tr('toast.needAmount'));return}
+      if(a==='dmg')damage(d);else if(a==='heal')heal(d);else{if(d<=S.tmp)toast(tr('toast.tempNoStack'));else{S.tmp=d;toast(tr('toast.tempSet',{n:d}))}}break}
     case 'ds':{const t=b.dataset.t,j=+b.dataset.j,cur=S.death[t];S.death[t]=j+1===cur?j:j+1;
-      if(S.death.s>=3)toast('Drei Erfolge: stabil. Bewusstlos, aber keine weiteren Würfe nötig.');if(S.death.f>=3)toast('Drei Fehlschläge: Der Charakter stirbt.');break}
+      if(S.death.s>=3)toast(tr('toast.stable'));if(S.death.f>=3)toast(tr('toast.dead'));break}
     case 'pip':{const o=k==='hd'?S.hd:k==='pact'?S.pact:S[k][i];o.used=clamp(+b.dataset.j<o.max-o.used?o.used+1:o.used-1,0,o.max);break}
     case 'resd':{const r=S.res[i];if(r&&r.max<99)r.used=clamp(r.used+ +b.dataset.d,0,r.max);break}
     case 'cond':S.cond[b.dataset.c]=!S.cond[b.dataset.c];if(!S.cond[b.dataset.c])delete S.cond[b.dataset.c];break;
     case 'exh':S.exh=clamp(S.exh+ +b.dataset.d,0,6);break;
     case 'cast':cast(i);break;
     case 'spopen':U.OPEN[i]=!U.OPEN[i];break;
-    case 'concend':toast(`Konzentration auf ${S.conc} beendet.`);S.conc='';break;
+    case 'concend':toast(tr('toast.concEnded',{s:S.conc}));S.conc='';break;
     case 'use':use(b.dataset.r);break;
     case 'gold':{const c2=b.dataset.c;S.gold[c2]=Math.max(0,(+S.gold[c2]||0)+ +b.dataset.d);break}
     case 'qty':{const it=get(U.SEL);if(it)it.q=Math.max(1,it.q+ +b.dataset.d);break}
-    case 'equip':{const it=get(U.SEL);if(!it)break;const c2=EQ.map(e=>'eq:'+e[0]).filter(r=>fits(it,r));const t=c2.find(r=>!get(r))||c2[0];if(!t){toast('Kein passender Ausrüstungsplatz. Platz im Auswahlfeld festlegen.');break}move(U.SEL,t);break}
+    case 'equip':{const it=get(U.SEL);if(!it)break;const c2=EQ.map(e=>'eq:'+e[0]).filter(r=>fits(it,r));const t=c2.find(r=>!get(r))||c2[0];if(!t){toast(tr('toast.noSlotFit'));break}move(U.SEL,t);break}
     case 'unequip':{let j=S.bag.indexOf(null);if(j<0){j=S.bag.length;for(let x=0;x<6;x++)S.bag.push(null)}move(U.SEL,'bag:'+j);break}
-    case 'tune':{const it=get(U.SEL);if(!it)break;if(!it.tuned&&refs().filter(r=>get(r).tuned).length>=3){toast('Höchstens drei eingestimmte Gegenstände. Erst einen anderen lösen.');break}it.tuned=!it.tuned;if(it.tuned)toast('Einstimmen dauert eine kurze Rast.');break}
+    case 'tune':{const it=get(U.SEL);if(!it)break;if(!it.tuned&&refs().filter(r=>get(r).tuned).length>=3){toast(tr('toast.maxAttune'));break}it.tuned=!it.tuned;if(it.tuned)toast(tr('toast.attuneTime'));break}
     case 'rm':if(U.CONF!=='rm'){U.CONF='rm';break}set(U.SEL,null);U.SEL=null;U.CONF=null;break;
     case 'unsel':U.SEL=null;break;
-    case 'addinv':{const key=v('inv-sel');if(!key){toast('Erst einen Gegenstand auswählen.');return}const c2=BYN[key];const q=Math.floor(+v('inv-q'))||c2.q||1;putBag(S,mk(c2,q));toast(`${c2.n} ins Inventar gelegt.`);break}
-    case 'addown':{const n=v('own-n').trim();if(!n){toast('Bitte einen Namen eintragen.');return}const att=$('own-a').checked;putBag(S,mk({n,ic:v('own-ic'),p:v('own-p').trim(),slot:v('own-slot'),cons:$('own-c').checked,att,magic:att},Math.floor(+v('own-q'))||1));toast(`${n} angelegt.`);break}
+    case 'addinv':{const key=v('inv-sel');if(!key){toast(tr('toast.pickItem'));return}const c2=BYN[key];const q=Math.floor(+v('inv-q'))||c2.q||1;putBag(S,mk(c2,q));toast(tr('toast.toBag',{n:c2.n}));break}
+    case 'addown':{const n=v('own-n').trim();if(!n){toast(tr('toast.needName'));return}const att=$('own-a').checked;putBag(S,mk({n,ic:v('own-ic'),p:v('own-p').trim(),slot:v('own-slot'),cons:$('own-c').checked,att,magic:att},Math.floor(+v('own-q'))||1));toast(tr('toast.created',{n}));break}
     case 'wf':U.WF=b.dataset.f;U.WSEL=null;break;
     case 'wsel':U.WSEL=U.WSEL===b.dataset.key&&innerWidth<900?null:b.dataset.key;break;
-    case 'wadd':{const c2=BYN[b.dataset.key];if(!c2)break;if(c2.k==='spell'){S.spells.push(spFrom(c2));toast(`${c2.n} steht jetzt bei deinen Zaubern.`)}else{putBag(S,mk(c2));toast(`${c2.n} ins Inventar gelegt.`)}break}
+    case 'wadd':{const c2=BYN[b.dataset.key];if(!c2)break;if(c2.k==='spell'){S.spells.push(spFrom(c2));toast(tr('toast.spellAdded',{n:c2.n}))}else{putBag(S,mk(c2));toast(tr('toast.toBag',{n:c2.n}))}break}
     case 'tsave':S.saves[k]=!S.saves[k];break;
     case 'tskill':S.skills[k]=((S.skills[k]||0)+1)%3;break;
     case 'imgdel':S.img='';break;
-    case 'addfeat':{const n=v('feat-n').trim();if(!n){toast('Bitte einen Namen eintragen.');return}S.feats.push({n,p:v('feat-p').trim(),lvl:0,src:'Eigener Eintrag'});break}
-    case 'addres':{const n=v('res-n').trim();if(!n){toast('Bitte einen Namen eintragen.');return}S.res.push({n,ic:v('res-ic')||'star',max:Math.max(1,Math.floor(+v('res-m'))||1),used:0,rest:v('res-r')||'long',p:v('res-p').trim()});break}
-    case 'addsp':{const n=v('sp-sel');if(!n){toast('Erst einen Zauber auswählen.');return}if(S.spells.some(s=>s.n===n)){toast(`${n} steht schon auf deiner Liste.`);return}S.spells.push(spFrom(BYN['spell:'+n]));toast(`${n} hinzugefügt.`);break}
-    case 'addspown':{const n=v('osp-n').trim();if(!n){toast('Bitte einen Namen eintragen.');return}S.spells.push({n,ic:'star',lvl:clamp(Math.floor(+v('osp-l'))||0,0,9),time:v('osp-t').trim(),range:v('osp-r').trim(),dur:v('osp-d').trim(),eff:v('osp-e').trim(),conc:$('osp-c').checked,ritual:$('osp-ri').checked,school:'',cls:'',src:'own'});toast(`${n} angelegt.`);break}
+    case 'addfeat':{const n=v('feat-n').trim();if(!n){toast(tr('toast.needName'));return}S.feats.push({n,p:v('feat-p').trim(),lvl:0,src:'Eigener Eintrag'});break}
+    case 'addres':{const n=v('res-n').trim();if(!n){toast(tr('toast.needName'));return}S.res.push({n,ic:v('res-ic')||'star',max:Math.max(1,Math.floor(+v('res-m'))||1),used:0,rest:v('res-r')||'long',p:v('res-p').trim()});break}
+    case 'addsp':{const n=v('sp-sel');if(!n){toast(tr('toast.pickSpell'));return}if(S.spells.some(s=>s.n===n)){toast(tr('toast.alreadySpell',{n}));return}S.spells.push(spFrom(BYN['spell:'+n]));toast(tr('toast.added',{n}));break}
+    case 'addspown':{const n=v('osp-n').trim();if(!n){toast(tr('toast.needName'));return}S.spells.push({n,ic:'star',lvl:clamp(Math.floor(+v('osp-l'))||0,0,9),time:v('osp-t').trim(),range:v('osp-r').trim(),dur:v('osp-d').trim(),eff:v('osp-e').trim(),conc:$('osp-c').checked,ritual:$('osp-ri').checked,school:'',cls:'',src:'own'});toast(tr('toast.created',{n}));break}
     case 'del':{const it=S[k][i];if(k==='spells'){U.OPEN={};if(it&&S.conc===it.n)S.conc=''}S[k].splice(i,1);break}
     case 'exp':{const o=JSON.parse(JSON.stringify(S));o.tab='main';U.EXP=JSON.stringify(o);break}
-    case 'copy':{const ta=$('exp');const p=navigator.clipboard&&navigator.clipboard.writeText?navigator.clipboard.writeText(U.EXP):Promise.reject();p.then(()=>toast('Kopiert. Auf dem anderen Gerät unter „Einrichten“ einfügen.')).catch(()=>{if(ta){ta.focus();ta.select()}toast('Text ist markiert. Mit Strg+C (Mac: Cmd+C) kopieren.')});return}
-    case 'imp':{const txt=v('imp').trim();if(!txt){toast('Erst den Export-Text einfügen oder eine Datei laden.');return}if(U.CONF!=='imp'){U.CONF='imp';break}U.CONF=null;if(importText(txt))U.IMP='';break}
-    case 'reset':if(U.CONF!=='reset'){U.CONF='reset';break}setS(def());S.tab='setup';U.OPEN={};U.SEL=null;U.EXP='';U.CONF=null;toast('Neuer, leerer Charakter angelegt.');break;
+    case 'copy':{const ta=$('exp');const p=navigator.clipboard&&navigator.clipboard.writeText?navigator.clipboard.writeText(U.EXP):Promise.reject();p.then(()=>toast(tr('toast.copied'))).catch(()=>{if(ta){ta.focus();ta.select()}toast(tr('toast.selected'))});return}
+    case 'imp':{const txt=v('imp').trim();if(!txt){toast(tr('toast.needImport'));return}if(U.CONF!=='imp'){U.CONF='imp';break}U.CONF=null;if(importText(txt))U.IMP='';break}
+    case 'reset':if(U.CONF!=='reset'){U.CONF='reset';break}setS(def());S.tab='setup';U.OPEN={};U.SEL=null;U.EXP='';U.CONF=null;toast(tr('toast.reset'));break;
   }
   save();render()});
 app.addEventListener('change',ev=>{
   const el=ev.target;
   if((el.id==='img-in'||el.id==='img-in2')&&el.files&&el.files[0]){loadPortrait(el.files[0]);return}
-  if(el.id==='impf'&&el.files&&el.files[0]){const fr=new FileReader();fr.onload=()=>{U.IMP=String(fr.result);const ta=$('imp');if(ta)ta.value=U.IMP;U.CONF=null;toast('Datei geladen. Jetzt „Importieren“ drücken.')};fr.readAsText(el.files[0]);return}
-  if(el.id==='inv-sel'||el.id==='sp-sel'){const c=el.id==='inv-sel'?BYN[el.value]:BYN['spell:'+el.value];const h=$(el.id+'-h');if(h)h.textContent=c?(c.k==='spell'?spMeta(c)+' — '+c.eff:c.p+(c.att?' · braucht Einstimmung':'')):'';return}
+  if(el.id==='impf'&&el.files&&el.files[0]){const fr=new FileReader();fr.onload=()=>{U.IMP=String(fr.result);const ta=$('imp');if(ta)ta.value=U.IMP;U.CONF=null;toast(tr('toast.fileLoaded'))};fr.readAsText(el.files[0]);return}
+  if(el.id==='inv-sel'||el.id==='sp-sel'){const c=el.id==='inv-sel'?BYN[el.value]:BYN['spell:'+el.value];const h=$(el.id+'-h');if(h)h.textContent=c?(c.k==='spell'?spMeta(c)+' — '+c.eff:c.p+(c.att?' · '+tr('item.needsAttune'):'')):'';return}
   if(el.id==='wc'){U.WC=el.value;$('wres').innerHTML=wikiBody();return}
   if(el.dataset.lu){U.LU[el.dataset.lu]=el.value;later();return}
   const p=el.dataset.p;if(!p)return;
   let val=el.value;
-  if(el.dataset.t==='n'){val=Math.max(+el.min||0,+String(val).replace(',','.')||0);if(el.max)val=Math.min(+el.max,val);if(p!=='speed')val=Math.floor(val)}
+  if(el.dataset.t==='n'){val=Math.max(+el.min||0,+String(val).replace(',','.')||0);if(el.max)val=Math.min(+el.max,val);if(el.dataset.u==='dist')val=distInput(val);if(p!=='speed')val=Math.floor(val)}
   setPath(p,val);
   if(p==='race'){S.subrace='';applyRace()}
   if(p==='subrace')applyRace();

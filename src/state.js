@@ -1,15 +1,15 @@
 import { $, uid } from './util.js';
 import { icFrom } from './icons.js';
 import { CLN } from './constants.js';
-import { rest } from './game.js';
+import { t } from './i18n/index.js';
 import { BYN, CLASSES } from './catalog.js';
 
 export const KEY='charbogen-v4',OLD='charbogen-v2';
-export const def=()=>({v:4,name:'Neuer Charakter',info:'',img:'',race:'',subrace:'',klass:'',sub:'',level:0,cls:'',hp:10,hpMax:10,tmp:0,ac:10,speed:9,prof:2,
+export const def=()=>({v:4,name:t('char.new'),info:'',img:'',race:'',subrace:'',klass:'',sub:'',level:0,cls:'',hp:10,hpMax:10,tmp:0,ac:10,speed:9,prof:2,
  abil:{str:10,dex:10,con:10,int:10,wis:10,cha:10},saves:{},skills:{},hd:{max:1,used:0,die:'W8'},death:{s:0,f:0},conc:'',
  slots:Array.from({length:9},()=>({max:0,used:0})),pact:{max:0,used:0,lvl:1},res:[],spells:[],feats:[],bag:Array(24).fill(null),eq:{},
  gold:{pp:0,gp:0,ep:0,sp:0,cp:0},cond:{},exh:0,notes:'',tab:'main'});
-export const mk=(c,q)=>({id:uid(),n:c.n,ic:c.ic||'box',p:c.p||'',q:Math.max(1,q||c.q||1),slot:c.slot||'',cons:!!c.cons,att:!!c.att,magic:!!c.magic,tuned:false});
+export const mk=(c,q)=>({id:uid(),n:c.n,ic:c.ic||'box',p:c.p||'',q:Math.max(1,q||c.q||1),slot:c.slot||'',cons:!!c.cons,att:!!c.att,magic:!!c.magic,tuned:false,...(c.key?{ref:c.key}:{})});
 export const spFrom=c=>({n:c.n,ic:c.ic,lvl:c.lvl,time:c.time||'',range:c.range||'',dur:c.dur||'',eff:c.eff||'',conc:!!c.conc,ritual:!!c.ritual,school:c.school||'',cls:c.cls||'',src:c.src||'sum'});
 export function putBag(s,it){
   if(it.cons){const st=s.bag.find(x=>x&&x.cons&&x.n===it.n&&x.p===it.p);if(st){st.q+=it.q;return st}}
@@ -43,6 +43,6 @@ export function load(){
 export let S=load();
 export function setS(v){S=v}
 export const U={OPEN:{},SEL:null,CONF:null,WF:'all',WQ:'',WC:'',WSEL:null,EXP:'',IMP:'',LU:null,LUfocus:false};
-export const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){toast('Speichern fehlgeschlagen. Ist das Porträt zu groß? Kleineres Bild wählen.')}};
+export const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){toast(t('toast.saveFailed'))}};
 export let tt;
 export function toast(m){const t=$('toast');t.textContent=m;t.hidden=false;clearTimeout(tt);tt=setTimeout(()=>{t.hidden=true},4600)}

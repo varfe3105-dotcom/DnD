@@ -1,0 +1,15 @@
+{
+"Mountain Dwarf|Dwarven Armor Training":"Proficiency with light and medium armor.",
+"High Elf|Cantrip":"One cantrip from the wizard list; Intelligence is its casting ability.",
+"Wood Elf|Fleet of Foot":"Base walking speed is 35 feet.",
+"Wood Elf|Mask of the Wild":"You can try to hide when only lightly obscured by natural phenomena such as foliage, rain or mist.",
+"Drow|Superior Darkvision":"Darkvision out to 120 feet.",
+"Drow|Sunlight Sensitivity":"Disadvantage on attack rolls and on sight-based Perception checks in direct sunlight.",
+"Drow|Drow Magic":"Dancing Lights cantrip; Faerie Fire from 3rd level and Darkness from 5th level, each once per long rest (Charisma).",
+"Drow|Drow Weapon Training":"Proficiency with rapiers, shortswords and hand crossbows.",
+"Stout|Stout Resilience":"Advantage on saves against poison and resistance to poison damage.",
+"Variant Human|Skills":"Proficiency in one skill of your choice.",
+"Variant Human|Feat":"One feat of your choice.",
+"Forest Gnome|Natural Illusionist":"Minor Illusion cantrip (Intelligence).",
+"Forest Gnome|Speak with Small Beasts":"Simple communication with small beasts."
+}

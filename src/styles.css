@@ -305,3 +305,12 @@ footer{margin-top:40px;padding-top:12px;border-top:3px double var(--line);color:
 @media (max-width:520px){.svl{display:none}.svs{display:inline}.seal{position:absolute;top:12px;right:12px}.who{padding-right:58px}.hd{padding:14px}.por{width:72px;height:72px}.seal{width:54px;height:54px}.seal b{font-size:1.4rem}.hacts{flex-basis:100%}.rests .btn{flex:1}}
 @media (max-width:420px){.sq{width:46px;height:46px}.hpn b{font-size:2.8rem}.doll{grid-template-columns:repeat(3,68px)}.tabs nav button{padding-inline:10px}.dlg{padding:18px 16px}}
 @media (prefers-reduced-motion:no-preference){.chip,.pip,.btn,.cell,.wli{transition:background-color .12s,color .12s}}
+
+/* Kopf: Aufstieg und Sprachumschalter */
+.hrow{display:flex;gap:8px;align-items:stretch}
+.hrow .btn.gilt{flex:1}
+.langs{display:flex;border:1px solid rgba(243,230,196,.55);border-radius:4px;overflow:hidden;flex:none}
+.langs button{background:none;border:0;color:var(--bandink);font:700 .85rem var(--f-ui);padding:6px 10px;letter-spacing:.04em}
+.langs button[aria-pressed="true"]{background:var(--gilt);color:#2b1a06}
+footer details{margin-top:6px}
+footer p{margin:0 0 6px}

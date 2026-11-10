@@ -22,7 +22,7 @@ test.describe('Inventar', () => {
     expect(s.bag[0]).toBeNull();
     await tab(page, 'main');
     await expect(page.locator('.atk b').first()).toHaveText('+4');
-    await expect(page.locator('.atk b').nth(1)).toHaveText('1W8+2');
+    await expect(page.locator('.atk b').nth(1)).toHaveText(/1[dW]8\+2/);
   });
 
   test('Ziehen auf einen unpassenden Platz wird abgelehnt', async ({ page }) => {
@@ -55,7 +55,7 @@ test.describe('Inventar', () => {
     await page.locator('[data-drag="bag:0"]').hover();
     await expect(page.locator('#tip')).toBeVisible();
     await expect(page.locator('#tip b').first()).toHaveText('Langschwert');
-    await expect(page.locator('#tip .ta')).toContainText('1W8+2');
+    await expect(page.locator('#tip .ta')).toContainText(/1[dW]8\+2/);
     await page.mouse.move(5, 5);
     await expect(page.locator('#tip')).toBeHidden();
   });

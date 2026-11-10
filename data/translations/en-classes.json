@@ -1,0 +1,18 @@
+{
+"Cleric|2|Turn Undead":"As an action, each undead within 30 feet that can see or hear you makes a Wisdom save. On a failure it is turned for 1 minute or until it takes damage.",
+"Monk|5|Martial Arts":"Your Martial Arts die becomes a d6.",
+"Monk|6|Ki-Empowered Strikes":"Your unarmed strikes count as magical.",
+"Monk|6|Unarmored Movement":"Speed bonus is now +15 feet.",
+"Monk|10|Unarmored Movement":"Speed bonus is now +20 feet.",
+"Monk|11|Martial Arts":"Your Martial Arts die becomes a d8.",
+"Monk|14|Unarmored Movement":"Speed bonus is now +25 feet.",
+"Monk|17|Martial Arts":"Your Martial Arts die becomes a d10.",
+"Monk|18|Unarmored Movement":"Speed bonus is now +30 feet.",
+"Warlock|5|Eldritch Invocations":"You now know three invocations.",
+"Warlock|7|Eldritch Invocations":"You now know four invocations.",
+"Warlock|9|Eldritch Invocations":"You now know five invocations.",
+"Warlock|12|Eldritch Invocations":"You now know six invocations.",
+"Warlock|15|Eldritch Invocations":"You now know seven invocations.",
+"Warlock|18|Eldritch Invocations":"You now know eight invocations.",
+"Wizard|20|Signature Spells":"Pick two 3rd-level spells. Each can be cast once per short rest without a slot."
+}

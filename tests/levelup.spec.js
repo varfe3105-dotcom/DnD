@@ -50,7 +50,7 @@ test.describe('Stufenaufstieg 1 bis 5', () => {
     }
     const s = await read(page);
     expect(s.res.map(r => r.n)).toEqual(['Second Wind', 'Action Surge']);
-    expect(s.res[0].p).toContain('1W10+5');
+    expect(s.res[0].p).toMatch(/1[dW]10\+5/);
     expect(s.feats.map(f => f.n)).toEqual(expect.arrayContaining(['Fighting Style', 'Extra Attack']));
     expect(s.slots.every(x => x.max === 0)).toBe(true);
     expect(s.prof).toBe(3);

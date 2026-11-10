@@ -1,3 +1,4 @@
+import { t } from './i18n/index.js';
 import { $ } from './util.js';
 
 export const IC={
@@ -44,7 +45,7 @@ export const ICN={sword:'Schwert',axe:'Axt',hammer:'Hammer',spear:'Speer',bow:'B
 export const icon=k=>`<svg class="i" viewBox="0 0 24 24" aria-hidden="true">${IC[k]||IC.box}</svg>`;
 export const EM={'🧪':'potion','💉':'potion','🔥':'flame','⚗️':'potion','💧':'potion','☠️':'skull','🔨':'hammer','🗡️':'sword','🪓':'axe','🔱':'spear','🪄':'wand','🏹':'bow','🎯':'spear','🪨':'coin','⛏️':'hammer','🪢':'box','🛡️':'shield','🔦':'torch','🍖':'food','🩹':'heart','🔑':'key','🎒':'bag','🏕️':'box','🔧':'tool','🏮':'torch','🧗':'box','🎭':'mask','🖋️':'scroll','🌿':'leaf','🧭':'eye','🍺':'potion','🍳':'food','🗺️':'scroll','🎲':'dice','🃏':'scroll','🎻':'music','🎵':'music','🥁':'music','🪕':'music','🛢️':'potion','⚪':'coin','🕯️':'torch','📌':'box','🔒':'key','⛓️':'box','🔭':'eye','💡':'torch','🪤':'box','👝':'bag','🔮':'gem','✝️':'amulet','📕':'book','👢':'boots','🛏️':'box','💚':'heart','✨':'star','❄️':'snow','⚡':'bolt','🌠':'star','🚫':'shield','✋':'swirl','🟣':'star','😴':'star','🪽':'wing','☀️':'star','📦':'box','💀':'skull','🌀':'swirl','💫':'star','🦋':'wing'};
 export const icFrom=x=>IC[x]?x:(EM[x]||'box');
-export const iconOpts=sel=>Object.keys(ICN).map(k=>`<option value="${k}"${k===sel?' selected':''}>${ICN[k]}</option>`).join('');
+export const iconOpts=sel=>Object.keys(ICN).map(k=>`<option value="${k}"${k===sel?' selected':''}>${t('icon.'+k)}</option>`).join('');
 
 export const TONE={sword:'steel',axe:'steel',hammer:'steel',spear:'steel',shield:'steel',armor:'steel',helm:'steel',tool:'steel',gloves:'leather',boots:'leather',belt:'leather',cloak:'leather',bag:'leather',scroll:'leather',book:'leather',music:'leather',box:'leather',dice:'leather',food:'leather',bow:'leather',key:'gold',coin:'gold',torch:'gold',ring:'gold',amulet:'gold',potion:'crimson',heart:'crimson',flame:'crimson',leaf:'verdant',gem:'arcane',wand:'arcane',star:'arcane',eye:'arcane',swirl:'arcane',mask:'arcane',wing:'arcane',bolt:'arcane',snow:'arcane',skull:'shadow'};
 export const tok=(k,tone)=>`<span class="tok t-${tone||TONE[k]||'leather'}">${icon(k)}</span>`;
