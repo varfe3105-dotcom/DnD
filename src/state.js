@@ -58,6 +58,7 @@ const drop=k=>{try{localStorage.removeItem(k)}catch(e){/* Datenschutzmodus */}};
 export const roster=()=>{const list=get(IDX)||[],me={id:S.id,name:S.name,klass:S.klass,level:S.level},i=list.findIndex(x=>x.id===S.id);if(i<0)list.unshift(me);else list[i]=me;return list};
 const fresh=()=>{U.OPEN={};U.SEL=null;U.EXP='';U.CONF=null};
 const park=()=>{const list=roster();if(!put(slotKey(S.id),S))return null;return list};
+export const charSnapshot=id=>id===S.id?S:get(slotKey(id));
 export function switchChar(id){if(id===S.id)return false;const o=get(slotKey(id));if(!o||!park())return false;setS(norm(o));drop(slotKey(id));fresh();save();return true}
 export function newChar(){if(!park())return;const list=roster();setS(def());S.tab='setup';fresh();put(IDX,list);save()}
 export function dupChar(){if(!park())return;const list=roster();const c=JSON.parse(JSON.stringify(S));c.id=uid();c.name=S.name+' (2)';setS(norm(c));fresh();put(IDX,list);save()}

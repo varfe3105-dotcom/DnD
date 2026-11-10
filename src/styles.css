@@ -356,3 +356,37 @@ footer p{margin:0 0 6px}
   .bar{border-color:#111}
   body{font-size:12.5pt}
 }
+
+/* DM-Bereich */
+.dm-bar{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-bottom:10px}
+.dm-round{display:flex;align-items:baseline;gap:6px;margin-right:auto}
+.dm-round small{font:500 .85rem var(--f-ui);color:var(--mute)}
+.dm-round b{font:700 1.8rem/1 var(--f-disp);color:var(--acc)}
+.dm-row{border-top:1px solid var(--line);padding:7px 6px;border-left:3px solid transparent}
+.dm-row.on{border-left-color:var(--acc);background:var(--sunk)}
+.dm-row.down{opacity:.55}
+.dm-main{display:flex;flex-wrap:wrap;align-items:center;gap:8px}
+.dm-init{width:62px;text-align:center}
+.dm-name{flex:1 1 150px;min-width:0;background:none;border:0;padding:2px 0;text-align:left}
+.dm-name b{display:block;overflow-wrap:anywhere}
+.dm-name small{display:block;font:500 .8rem var(--f-ui);color:var(--mute)}
+.dm-hp{display:flex;align-items:center;gap:5px;font-variant-numeric:tabular-nums}
+.dm-hp button{width:34px;height:34px;border-radius:4px;border:1.5px solid var(--ink);background:var(--bg);font-weight:700}
+.dm-hp .n{width:56px;text-align:center}
+.dm-hpv{min-width:62px;text-align:right}
+.dm-hpv b{font-size:1.15rem}
+.dm-more{padding:8px 0 4px;display:grid;gap:8px}
+.dm-more .wide{width:100%}
+.dm-stat dl.sm{grid-template-columns:repeat(6,minmax(0,1fr));margin:0}
+.dm-stat p{margin:6px 0 0}
+.dm-edit textarea{min-height:40vh;margin-top:8px}
+.dm-edit .lbl{margin:10px 0 4px}
+.chip.dm-new{border-style:dashed}
+.dm-backup{margin-top:20px}
+.dm-backup textarea{min-height:90px;font:.82rem/1.4 ui-monospace,Menlo,Consolas,monospace}
+@media (max-width:520px){.dm-stat dl.sm{grid-template-columns:repeat(3,minmax(0,1fr))}.dm-hp{width:100%}.dm-hpv{margin-left:auto}}
+@media print{.dm-hp button,.dm-backup{display:none}}
+
+.dm-more>.btn{justify-self:start}
+/* Am Handy brechen die Reiter um, damit keiner hinter der TP-Anzeige verschwindet */
+@media (max-width:520px){.tabs{align-items:center}.tabs nav{flex-wrap:wrap;overflow:visible;row-gap:4px}.tabs nav button,.tabs nav button[aria-selected="true"]{border-bottom:1.5px solid var(--line);border-radius:6px;top:0;padding:7px 10px}.tabs nav button[aria-selected="true"]{border-color:var(--ink)}.mini{padding-bottom:0}}

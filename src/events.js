@@ -1,3 +1,5 @@
+import * as dm from './dm.js';
+import { vResults, vNoteList } from './views/dm.js';
 import { t as tr, setLang, distInput } from './i18n/index.js';
 import { buildCatalog } from './catalog.js';
 import { $, clamp } from './util.js';
@@ -26,8 +28,25 @@ app.addEventListener('click',ev=>{
   const a=b.dataset.a,i=+b.dataset.i,k=b.dataset.k,v=id=>($(id)||{}).value||'';
   if(a==='luclose-bg'&&ev.target!==b)return;
   if(a!=='rm'&&a!=='imp'&&a!=='reset'&&a!=='chardel')U.CONF=null;
+  if(a!=='dmclear'&&a!=='dmndel')dm.DU.conf=null;
   pend=false;
   switch(a){
+    case 'dmview':dm.D.view=b.dataset.v;dm.saveD();break;
+    case 'dmstep':dm.step(+b.dataset.d);dm.saveD();break;
+    case 'dmclear':if(dm.DU.conf!=='clear'){dm.DU.conf='clear';break}dm.DU.conf=null;dm.clearCombat();dm.saveD();break;
+    case 'dmadd':dm.addMonster(b.dataset.m,clamp(Math.floor(+v('dm-qty'))||1,1,20));dm.saveD();break;
+    case 'dmman':{const n=v('dm-mn').trim();if(!n){toast(tr('toast.needName'));return}dm.addManual(n,v('dm-mac'),v('dm-mhp'));dm.saveD();break}
+    case 'dmchars':dm.addChars();dm.saveD();break;
+    case 'dmopen':dm.DU.open[b.dataset.id]=!dm.DU.open[b.dataset.id];break;
+    case 'dmhp':{const amt=Math.floor(+v('dm-amt-'+b.dataset.id))||1;dm.changeHp(b.dataset.id,amt*+b.dataset.d);dm.saveD();break}
+    case 'dmcond':{const c=dm.find(b.dataset.id);if(c){if(c.cond[b.dataset.c])delete c.cond[b.dataset.c];else c.cond[b.dataset.c]=true;dm.saveD()}break}
+    case 'dmrm':dm.removeC(b.dataset.id);dm.saveD();break;
+    case 'dmnew':dm.newNote();dm.saveD();break;
+    case 'dmsel':dm.D.sel=b.dataset.id;dm.saveD();break;
+    case 'dmlink':dm.openLink(b.dataset.t);dm.saveD();break;
+    case 'dmndel':if(dm.DU.conf!=='note'){dm.DU.conf='note';break}dm.DU.conf=null;dm.delNote(b.dataset.id);dm.saveD();break;
+    case 'dmexp':dm.DU.exp=dm.exportD();break;
+    case 'dmimp':{const txt=v('dm-imp').trim();if(!txt){toast(tr('toast.needImport'));return}if(!dm.importD(txt)){toast(tr('toast.badExport2'));return}dm.DU.imp='';toast(tr('dm.imported'));break}
     case 'charsw':switchChar(b.dataset.id);break;
     case 'charnew':newChar();toast(tr('toast.charNew'));break;
     case 'chardup':dupChar();toast(tr('toast.charDup'));break;
@@ -86,6 +105,9 @@ app.addEventListener('change',ev=>{
   if(el.id==='wc'){U.WC=el.value;$('wres').innerHTML=wikiBody();return}
   if(el.dataset.lu){U.LU[el.dataset.lu]=el.value;if(el.dataset.lu==='k'){const c=classLevels().find(x=>x.k===el.value);U.LU.sub=c?c.sub:''}later();return}
   if(el.id==='char-switch'){switchChar(el.value);render();return}
+  if(el.id==='dm-on'){dm.setDmOn(el.checked);later();return}
+  if(el.dataset.dm){const c=dm.find(el.dataset.id);if(c){c[el.dataset.dm]=el.dataset.dm==='init'?(+el.value||0):el.value;dm.saveD()}later();return}
+  if(el.dataset.dmn){const n=dm.curNote();if(n){n[el.dataset.dmn]=el.value;dm.saveD()}later();return}
   const p=el.dataset.p;if(!p)return;
   let val=el.value;
   if(el.dataset.t==='n'){val=Math.max(+el.min||0,+String(val).replace(',','.')||0);if(el.max)val=Math.min(+el.max,val);if(el.dataset.u==='dist')val=distInput(val);if(p!=='speed')val=Math.floor(val)}
@@ -96,6 +118,10 @@ app.addEventListener('change',ev=>{
   save();later()});
 app.addEventListener('input',ev=>{
   const el=ev.target;
+  if(el.id==='dm-mq'){dm.DU.mq=el.value;$('dm-results').innerHTML=vResults();return}
+  if(el.id==='dm-nq'){dm.DU.nq=el.value;$('dm-nlist').innerHTML=vNoteList();return}
+  if(el.id==='dm-imp'){dm.DU.imp=el.value;return}
+  if(el.dataset&&el.dataset.dmn){const n=dm.curNote();if(n){n[el.dataset.dmn]=el.value;dm.saveD()}return}
   if(el.id==='notes'){S.notes=el.value;save()}
   if(el.id==='imp'){U.IMP=el.value;if(U.CONF==='imp')U.CONF=null}
   if(el.dataset&&el.dataset.lu&&el.tagName==='INPUT'&&U.LU)U.LU[el.dataset.lu]=el.value;

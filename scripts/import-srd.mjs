@@ -337,7 +337,20 @@ function subclasses() {
   console.log(`Unterklassen: ${Object.values(out).reduce((a, c) => a + Object.keys(c).length, 0)}, Talente: ${ft.length}`);
 }
 
-const steps = { conditions, classes, races, spells, items, magic, subclasses };
+/* ---- Monster für den Kampf-Tracker ---- */
+function monsters() {
+  const part = (title, list) => (list?.length ? [`${title}`, ...list.map(x => `${x.name}. ${x.desc || ''}`.trim())] : []);
+  const out = srd('Monsters').map(m => ({
+    id: m.index, n: m.name, size: m.size, type: m.type, cr: m.challenge_rating, ac: m.armor_class?.[0]?.value ?? 10, hp: m.hit_points, hd: m.hit_points_roll || m.hit_dice, speed: Object.entries(m.speed || {}).map(([k, v]) => `${k} ${v}`).join(', '),
+    abil: { str: m.strength, dex: m.dexterity, con: m.constitution, int: m.intelligence, wis: m.wisdom, cha: m.charisma },
+    text: [...part('Traits', m.special_abilities), ...part('Actions', m.actions), ...part('Reactions', m.reactions), ...part('Legendary Actions', m.legendary_actions)].join('\n'),
+    source: 'srd', verified: false,
+  }));
+  writeArr('monsters.json', out);
+  console.log(`Monster: ${out.length}`);
+}
+
+const steps = { conditions, classes, races, spells, items, magic, subclasses, monsters };
 const only = process.argv.slice(2).filter(a => !a.startsWith('--'));
 for (const [name, fn] of Object.entries(steps)) if (!only.length || only.includes(name)) fn();
 if (report.missing.length) console.log(report.missing.join('\n'));
