@@ -314,3 +314,5 @@ footer{margin-top:40px;padding-top:12px;border-top:3px double var(--line);color:
 .langs button[aria-pressed="true"]{background:var(--gilt);color:#2b1a06}
 footer details{margin-top:6px}
 footer p{margin:0 0 6px}
+
+.ptext{white-space:pre-line}

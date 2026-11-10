@@ -54,5 +54,5 @@ export function vSetup() {
 export function spSelect() {
   const by = {}, l = CLASSES[S.klass] ? CLASSES[S.klass].l : '';
   CAT.filter(e => e.k === 'spell' && (!l || e.cls.includes(l))).forEach(e => { (by[e.c] = by[e.c] || []).push(e); });
-  return `<select id="sp-sel" aria-label="${t('setup.spellCat')}"><option value="">${l ? t('setup.spellsOf', { k: S.klass }) : t('setup.spellPick')}</option>${Object.keys(by).map(c => `<optgroup label="${c}">${by[c].map(e => `<option value="${esc(e.n)}">${esc(e.n)}</option>`).join('')}</optgroup>`).join('')}</select>`;
+  return `<select id="sp-sel" aria-label="${t('setup.spellCat')}"><option value="">${l ? t('setup.spellsOf', { k: S.klass }) : t('setup.spellPick')}</option>${Object.keys(by).map(c => `<optgroup label="${c}">${by[c].map(e => `<option value="${esc(e.n)}">${esc(nameLine(e.n, e.de))}</option>`).join('')}</optgroup>`).join('')}</select>`;
 }

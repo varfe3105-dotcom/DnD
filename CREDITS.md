@@ -8,6 +8,17 @@
 | Alegreya Sans SC (Juan Pablo del Peral, Huerta Tipográfica) | SIL OFL 1.1 | https://fontsource.org/fonts/alegreya-sans-sc | Beschriftungen, lokal eingebettet |
 | Grenze Gotisch (Renata Polastri, Omnibus-Type) | SIL OFL 1.1 | https://fontsource.org/fonts/grenze-gotisch | Überschriften, lokal eingebettet |
 
+## Regeldaten
+
+| Name | Lizenz | Link | Wofür |
+|---|---|---|---|
+| System Reference Document 5.1, Wizards of the Coast LLC | CC BY 4.0 | https://dnd.wizards.com/resources/systems-reference-document | Englische Regeltexte, wörtlich |
+| 5e-bits/5e-database | MIT | https://github.com/5e-bits/5e-database | SRD 5.1 als JSON, Importquelle |
+
+This work includes material taken from the System Reference Document 5.1 (“SRD 5.1”) by Wizards of the Coast LLC and available at https://dnd.wizards.com/resources/systems-reference-document. The SRD 5.1 is licensed under the Creative Commons Attribution 4.0 International License available at https://creativecommons.org/licenses/by/4.0/legalcode.
+
+Deutsche Texte und alles außerhalb des SRD sind eigene Zusammenfassungen und Übersetzungen.
+
 ## Nur zum Bauen und Testen (nicht im Bogen enthalten)
 
 | Name | Lizenz | Link |

@@ -46,8 +46,10 @@ test.describe('Migration alter Speicherstände', () => {
     expect(s.gold).toMatchObject({ pp: 1, gp: 2, sp: 3, cp: 4 });
     expect(s.cond.Blinded).toBe(true);
     expect(s.res.map(r => r.n)).toEqual(['Inspiration']);
-    const names = s.bag.filter(Boolean).map(x => [x.n, x.q]);
-    expect(names).toEqual(expect.arrayContaining([['Trank der Heilung', 2], ['Dolch', 2], ['Kiste', 1]]));
+    const q = re => s.bag.filter(Boolean).find(x => re.test(x.n))?.q;
+    expect(q(/Potion of Healing|Trank der Heilung/)).toBe(2);
+    expect(q(/Dagger|Dolch/)).toBe(2);
+    expect(q(/Kiste/)).toBe(1);
     expect(s.spells.find(x => x.n === 'Fire Bolt').src).toBe('sum');
     const own = s.spells.find(x => x.n === 'Eigenbau');
     expect(own.src).toBe('own');

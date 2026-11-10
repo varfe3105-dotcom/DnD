@@ -27,7 +27,7 @@ export function itemView(it) {
 /** Zauber für die Anzeige, eigene Einträge bleiben unverändert. */
 export function spellView(s) {
   const c = s.src !== 'own' && BYN['spell:' + s.n];
-  return c ? { ...s, time: c.time, range: c.range, dur: c.dur, eff: c.eff, school: c.school, cls: c.cls || s.cls, source: c.source } : s;
+  return c ? { ...s, time: c.time, range: c.range, dur: c.dur, eff: c.eff, school: c.school, cls: c.cls || s.cls, comp: c.comp, material: c.material, higher: c.higher, de: c.de, aka: c.aka, source: c.source } : s;
 }
 
 const DMG = { Hieb: 'slashing', Stich: 'piercing', Wucht: 'bludgeoning', slashing: 'slashing', piercing: 'piercing', bludgeoning: 'bludgeoning' };

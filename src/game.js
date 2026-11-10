@@ -1,4 +1,4 @@
-import { def, S, setS, U, migrate, norm, save, toast } from './state.js';
+import { def, S, setS, U, migrate, norm, save, toast, sameItem } from './state.js';
 import { get, set, fits, slotLabel, itemView } from './helpers.js';
 import { COND } from './catalog.js';
 import { render } from './render.js';
@@ -63,7 +63,7 @@ export function move(from, to) {
   const a = get(from), b = get(to);
   if (!a) return;
   if (!fits(a, to)) { toast(t('toast.noFit', { a: itemView(a).n, s: slotLabel(to) })); return; }
-  if (b && a.cons && b.cons && a.n === b.n && a.p === b.p && to.startsWith('bag')) { b.q += a.q; set(from, null); if (U.SEL === from) U.SEL = to; return; }
+  if (b && a.cons && b.cons && sameItem(a, b) && to.startsWith('bag')) { b.q += a.q; set(from, null); if (U.SEL === from) U.SEL = to; return; }
   if (b && !fits(b, from)) { toast(t('toast.occupied', { a: itemView(b).n, s: slotLabel(from) })); return; }
   set(to, a); set(from, b);
   if (U.SEL === from) U.SEL = to; else if (U.SEL === to) U.SEL = from;

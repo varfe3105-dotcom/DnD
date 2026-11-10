@@ -19,10 +19,13 @@ export function wList() {
   let L2 = U.WF === 'mine' ? myEntries() : CAT.filter(e => U.WF === 'all' || e.k === U.WF);
   if (U.WC) L2 = L2.filter(e => e.k !== 'spell' || (e.cls || '').includes(U.WC));
   const q = U.WQ.trim().toLowerCase();
-  if (q) L2 = L2.filter(e => [e.n, e.p, e.eff, e.de, e.school, e.c, e.hay].join(' ').toLowerCase().includes(q));
+  if (q) {
+    const rank = e => { const n = e.n.toLowerCase(); return n === q ? 0 : n.startsWith(q) ? 1 : n.includes(q) ? 2 : String(e.de || '').toLowerCase().includes(q) ? 3 : 4; };
+    L2 = L2.filter(e => [e.n, e.p, e.eff, e.de, e.aka, e.school, e.c, e.hay, e.school ? schoolName(e.school) : ''].join(' ').toLowerCase().includes(q)).map((e, i) => [rank(e), i, e]).sort((a, b) => a[0] - b[0] || a[1] - b[1]).map(x => x[2]);
+  }
   return L2;
 }
-export const wSub = e => e.k === 'spell' ? `${e.lvl ? t('spell.level', { n: e.lvl }) : t('spell.cantrip')}${e.school ? ' · ' + schoolName(e.school) : ''}${e.conc ? ' · ' + t('spell.concShort') : ''}${e.ritual ? ' · ' + t('spell.ritual') : ''}` : e.k === 'cond' ? (deName(e.n, e.de) || e.c) : e.c + (e.att ? ' · ' + t('item.attuneTag') : '');
+export const wSub = e => e.k === 'spell' ? `${deName(e.n, e.de) ? e.de + ' · ' : ''}${e.lvl ? t('spell.level', { n: e.lvl }) : t('spell.cantrip')}${e.school ? ' · ' + schoolName(e.school) : ''}${e.conc ? ' · ' + t('spell.concShort') : ''}${e.ritual ? ' · ' + t('spell.ritual') : ''}` : e.k === 'cond' ? (deName(e.n, e.de) || e.c) : e.c + (e.att ? ' · ' + t('item.attuneTag') : '');
 const CASTK = { full: 'cast.full', half: 'cast.half', pact: 'cast.pact', '': 'cast.none' };
 const feat = (f, x) => `<p><b>${esc(f.n)}.</b> ${esc(dice(loc(f.text)))}</p>${x || ''}`;
 const srcFoot = s => `<p class="src">${srcNote(s)}</p>`;
@@ -33,14 +36,14 @@ export function wDetail(e, inline) {
   if (!e.mine && e.k === 'spell') btn = known.has(e.n) ? `<button class="btn sm" disabled>${t('wiki.known')}</button>` : `<button class="btn sm solid" data-a="wadd" data-key="${esc(e.key)}">${t('wiki.addSpell')}</button>`;
   if (!e.mine && ['potion', 'magic', 'item'].includes(e.k)) btn = `<button class="btn sm solid" data-a="wadd" data-key="${esc(e.key)}">${t('inv.add')}</button>`;
   let body = '';
-  if (e.k === 'spell') body = `${e.time || e.range || e.dur ? `<dl class="sm"><div><dt>${t('spell.time')}</dt><dd>${esc(e.time)}</dd></div><div><dt>${t('spell.range')}</dt><dd>${esc(e.range)}</dd></div><div><dt>${t('spell.dur')}</dt><dd>${esc(e.dur)}</dd></div></dl>` : ''}<p>${esc(e.eff)}</p>${e.cls ? `<p class="cls">${t('wiki.classes')}: ${e.cls.split('').map(c => CLN[c]).join(', ')}</p>` : ''}${srcFoot(e.src === 'own' ? 'own' : e.source)}`;
+  if (e.k === 'spell') body = `${e.time || e.range || e.dur ? `<dl class="sm"><div><dt>${t('spell.time')}</dt><dd>${esc(e.time)}</dd></div><div><dt>${t('spell.range')}</dt><dd>${esc(e.range)}</dd></div><div><dt>${t('spell.dur')}</dt><dd>${esc(e.dur)}</dd></div></dl>` : ''}${e.aka ? `<p class="cls">PHB: ${esc(e.aka)}</p>` : ''}<p class="ptext">${esc(e.eff)}</p>${e.higher ? `<p class="ptext"><b>${t('spell.higher')}:</b> ${esc(e.higher)}</p>` : ''}${e.comp ? `<p class="cls">${t('spell.comp')}: ${esc(e.comp)}${e.material ? ' (' + esc(e.material) + ')' : ''}</p>` : ''}${e.cls ? `<p class="cls">${t('wiki.classes')}: ${e.cls.split('').map(c => CLN[c]).join(', ')}</p>` : ''}${srcFoot(e.src === 'own' ? 'own' : e.source)}`;
   else if (e.k === 'class') {
     const C = CLASSES[e.n];
     body = `<dl class="sm"><div><dt>${t('hd.title')}</dt><dd>${dice('W' + C.hd)}</dd></div><div><dt>${t('ab.saves')}</dt><dd>${C.sv.map(abName).join(', ')}</dd></div><div><dt>${t('wiki.casting')}</dt><dd>${t(CASTK[C.cast])}</dd></div></dl><p><b>${C.subN}</b> ${t('wiki.fromLevel', { n: C.subL })}: ${C.subs.join(', ')}.</p><div class="lvl">${Object.entries(C.f).map(([l, fs]) => `<h4>${t('feat.level', { n: l })}</h4>${fs.map(f => feat(f)).join('')}`).join('')}<p class="cls">${t('wiki.asiLevels', { a: C.asi.join(', '), b: C.sl.join(', ') })}</p></div>${srcFoot('summary')}`;
   } else if (e.k === 'race') {
     const R = RACES[e.n], subs = Object.entries(R.subs);
     body = `<dl class="sm"><div><dt>${t('wiki.abilities')}</dt><dd>${esc(loc(R.asi))}</dd></div><div><dt>${t('stat.speed')}</dt><dd>${dist(R.sp)}</dd></div><div><dt>${t('wiki.subraces')}</dt><dd>${subs.length || t('common.none')}</dd></div></dl><div class="lvl">${R.tr.map(f => feat(f)).join('')}${subs.map(([sn, sb]) => `<h4>${esc(nameLine(sn))}</h4><p class="cls">${esc(loc(sb.asi))}${sb.sp ? ' · ' + t('stat.speed') + ' ' + dist(sb.sp) : ''}</p>${sb.tr.map(f => feat(f)).join('')}`).join('')}</div>${srcFoot('summary')}`;
-  } else body = `<p>${esc(e.p)}</p>${e.source ? srcFoot(e.source) : ''}`;
+  } else body = `${e.rarity ? `<p class="cls">${t('wiki.rarity')}: ${esc(e.rarity)}${e.att ? ' · ' + t('item.needsAttune') : ''}</p>` : ''}<p class="ptext">${esc(e.p)}</p>${e.source ? srcFoot(e.source) : ''}`;
   const de = (e.k === 'class' || e.k === 'race' || e.k === 'cond') && deName(e.n, e.de);
   return `<article class="wd${inline ? ' inl' : ' pane'}"><div class="wdh">${tok(e.ic, e.tone || (e.magic ? 'arcane' : undefined))}<div><h3>${esc(e.n)}</h3><small>${esc(de && e.k !== 'cond' ? de + ' · ' + e.c : wSub(e))}</small></div></div>${btn ? `<div class="add" style="margin-top:0">${btn}</div>` : ''}${body}</article>`;
 }

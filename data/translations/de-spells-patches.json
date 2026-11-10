@@ -1,0 +1,16 @@
+[
+["Fear","30-m-Kegel","9-m-Kegel"],
+["Hallucinatory Terrain","150-m-Würfel","45-m-Würfel"],
+["Disintegrate","Fernkampf-Zauberangriff? Ein Ziel","Ein Ziel"],
+["Earthquake","Bis 30-m-Kreis, schwieriges Gelände. KON-RW gegen Prone, Risse, Einstürze (Ge bäude 50 Schaden pro Runde; GES-RW, 5W6 Wucht bei Einsturz).","Bis 30 m Radius, schwieriges Gelände, stört Konzentration im Bereich. GES-RW gegen Prone. 1W6 Spalten öffnen sich, je 1W10 × 3 m tief und 3 m breit. Gebäude nehmen 50 Wucht pro Runde; bei Einsturz GES-RW, sonst 5W6 Wucht, Prone und verschüttet (Aktion: STR (Athletics) SG 20 zum Befreien)."],
+["Detect Thoughts","WIS-RW","WEI-RW"],
+["Guardian of Faith","DEX-RW","GES-RW"],
+["Control Water","Strudel (4W8 Wucht)","Strudel (STR-RW, 2W8 Wucht)"],
+["Animate Objects","Werte je Größe (Angriff, 1W4 bis 2W12 plus Kraft).","Angriff und Schaden je Größe: Tiny +8, 1W4+4; Small +6, 1W8+2; Medium +5, 2W6+1; Large +6, 2W10+2; Huge +8, 2W12+4."],
+["Teleport","Vertrautheit bestimmt die Gefahr von Fehlern.","Vertrautheit bestimmt die Gefahr von Fehlern (W100-Tabelle). Missgeschick: 3W10 Kraft, dann neu würfeln. Abweichung: 1W10 × 1W10 Prozent der Strecke."],
+["Wish","Danach Belastung: 33 % bleibender Verlust dieser Fähigkeit.","Bei großen Effekten Belastung: bis zur langen Rast je gewirktem Zauber 1W10 nekrotisch pro Grad, STR sinkt für 2W4 Tage auf 3, 33 % Chance, Wish nie wieder wirken zu können."],
+["Control Weather","Niederschlag, Temperatur und Wind je eine Stufe.","Niederschlag, Temperatur und Wind je eine Stufe; jede Änderung braucht 1W4 × 10 Minuten."],
+["Prismatic Wall","Durchqueren: Effekte wie Prismatic Spray.","Durchqueren: GES-RW je Schicht. Rot 10W6 Feuer, Orange 10W6 Säure, Gelb 10W6 Blitz, Grün 10W6 Gift, Blau 10W6 Kälte, Indigo Restrained und später Petrified, Violett Blinded und andere Ebene."],
+["Glyph of Warding","oder eine Explosion aus:","oder eine Explosion in 6-m-Sphäre aus:"],
+["Call Lightning","Wolke 18 m hoch.","Wolke (18 m Radius) 30 m über dir."]
+]

@@ -464,5 +464,9 @@
  "icon.bolt": "Blitz",
  "icon.snow": "Frost",
  "icon.wing": "Flügel",
- "icon.box": "Kiste"
+ "icon.box": "Kiste",
+ "cat.mount": "Reittiere und Fahrzeuge",
+ "spell.higher": "Auf höheren Graden",
+ "spell.comp": "Komponenten",
+ "wiki.rarity": "Seltenheit"
 }

@@ -10,6 +10,8 @@ Dieses Dokument fasst zusammen, was in einem Chat zu einem digitalen D&D-Charakt
 - `legacy/`: Original v4 (Quelle war das Artifact „D&D Charakterbogen“) und der ältere v2-Prototyp. Nicht ändern. Die Datei `charakterbogen.html` aus den Downloads ist nur der v2-Prototyp.
 - `src/`: `charakterbogen.html` (Gerüst), `styles.css`, `main.js`, `state.js` (Zustand `S`, UI-Zustand `U`, Laden und Migration), `catalog.js` (baut `CAT`/`BYN` aus `data/`), `tables.js`, `helpers.js`, `game.js` (Regeln), `render.js`, `events.js`, `tooltip.js`, `icons.js`, `constants.js`, `util.js`, `views/` (sheet, inventory, wiki, setup, levelup).
 - `data/`: `spells`, `items`, `magic-items`, `potions`, `conditions`, `exhaustion`, `rules`, `classes`, `races`, `tables` als JSON. Datensätze tragen `source` und `verified`.
+- `data/translations/`: deutsche Texte (`de-spells-*`, `de-magic`, `de-items`), PHB-/DMG-Zusammenfassungen (`phb-extra-spells`, `dmg-extra-items`). `scripts/import-srd.mjs` führt sie mit dem SRD zusammen (Rohdaten in `.cache/5e-database`, per `git clone --depth 1 https://github.com/5e-bits/5e-database .cache/5e-database`). `scripts/check-translations.mjs` meldet Würfel und SG, die nur im Deutschen stehen. `docs/srd-gaps.md` zeigt den Abgleich mit dem PHB.
+- Zweisprachig: `src/i18n/` (Wörterbücher, `t()`, `loc()`, `dice()`, `dist()`). Sprache liegt in localStorage `charbogen-lang`, Strecken intern in Metern. Gespeicherte Gegenstände haben optional `ref` (Katalogschlüssel) und folgen dann der Sprache; eigene Einträge bleiben wörtlich.
 - `S` ist eine Live-Bindung aus `state.js`. Neu zuweisen geht nur über `setS()`. Oberflächenzustand liegt in `U` (`U.SEL`, `U.LU` …).
 
 

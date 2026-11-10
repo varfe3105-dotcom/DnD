@@ -464,5 +464,9 @@
  "icon.bolt": "Lightning",
  "icon.snow": "Frost",
  "icon.wing": "Wing",
- "icon.box": "Chest"
+ "icon.box": "Chest",
+ "cat.mount": "Mounts and vehicles",
+ "spell.higher": "At higher levels",
+ "spell.comp": "Components",
+ "wiki.rarity": "Rarity"
 }

@@ -54,7 +54,7 @@ test.describe('Inventar', () => {
     await expect(page.locator('#tip')).toBeHidden();
     await page.locator('[data-drag="bag:0"]').hover();
     await expect(page.locator('#tip')).toBeVisible();
-    await expect(page.locator('#tip b').first()).toHaveText('Langschwert');
+    await expect(page.locator('#tip b').first()).toHaveText(/Longsword|Langschwert/);
     await expect(page.locator('#tip .ta')).toContainText(/1[dW]8\+2/);
     await page.mouse.move(5, 5);
     await expect(page.locator('#tip')).toBeHidden();
