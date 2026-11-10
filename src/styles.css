@@ -112,7 +112,7 @@ h2 em{font:500 .85rem var(--f-ui);color:var(--mute);font-style:normal;letter-spa
 .sv{font:500 .85rem var(--f-ui);color:var(--mute);display:flex;align-items:center;gap:6px}
 .sv i{width:10px;height:10px;border:1.5px solid var(--ink);border-radius:50%}
 .sv.p{color:var(--ink)}.sv.p i{background:var(--acc);border-color:var(--acc)}
-@media (min-width:780px){.sheet{grid-template-columns:176px minmax(0,1fr)}.abs{grid-template-columns:1fr}}
+@media (min-width:780px){.sheet{grid-template-columns:176px minmax(0,1fr)}.sheet .abs{grid-template-columns:1fr}.abs.edit{grid-template-columns:repeat(6,minmax(0,1fr))}}
 
 /* Lebenspunkte */
 .hpt{display:flex;align-items:center;gap:12px}
