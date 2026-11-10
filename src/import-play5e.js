@@ -82,7 +82,17 @@ function catalogItem(it) {
   const id = slug(it.itemId || it.name);
   const candidates = [id, id.replace(/-s(-|$)/g, 's$1'), `${id}-armor`, id.replace(/^(.*)-clothes$/, 'clothes-$1'), id.replace(/^leather$/, 'leather-armor')];
   for (const c of candidates) for (const k of ['item', 'potion', 'magic']) if (BYN[`${k}:${c}`]) return BYN[`${k}:${c}`];
-  return byName(it.name) || null;
+  const direct = byName(it.name);
+  if (direct) return direct;
+  const inner = (it.name.match(/\(([^)]+)\)/) || [])[1];
+  return wordIndex().get(wordKey(inner || it.name)) || wordIndex().get(wordKey(it.name)) || null;
+}
+// Findet auch umgestellte Namen wie „Heavy crossbow“ für „Crossbow, heavy“.
+const wordKey = n => String(n).toLowerCase().replace(/\(.*?\)/g, ' ').split(/[^a-z'äöüß]+/).filter(Boolean).map(w => w.replace(/s$/, '')).sort().join(' ');
+let WORDS = null;
+function wordIndex() {
+  if (!WORDS) { WORDS = new Map(); Object.values(BYN).filter(e => ['item', 'potion', 'magic'].includes(e.k)).forEach(e => { [e.n, ...String(e.hay || '').split(' undefined')].forEach(() => WORDS.set(wordKey(e.n), e)); }); }
+  return WORDS;
 }
 function ownItem(it) {
   const m = it.meta || {};
@@ -107,9 +117,9 @@ function build(c) {
   c.classes.forEach((x, i) => { if (x.subclassId && !list[i].sub) toNotes.push(`${t('setup.subclass')}: ${titled(String(x.subclassId).split('/').pop())}`); });
   const race = findKey(Object.keys(RACES), c.raceId);
   const subrace = race ? findSubrace(race, c.subraceId) : '';
-  if (c.raceId && !race) toNotes.push(`${t('setup.race')}: ${titled(c.raceId)}`);
+  if (c.raceId && !race) toNotes.push(`${t('setup.race')}: ${c.raceId}`);
   if (c.subraceId && !subrace) toNotes.push(`${t('setup.subrace')}: ${titled(String(c.subraceId).split('/').pop())}`);
-  const bonus = raceBonus(race, subrace, c.raceAsiChoice);
+  const bonus = c.scoresFinal ? { str: 0, dex: 0, con: 0, int: 0, wis: 0, cha: 0 } : raceBonus(race, subrace, c.raceAsiChoice);
   const abil = Object.fromEntries(Object.entries(c.abilities).map(([k, v]) => [k, Math.min(30, v + bonus[k])]));
   const level = list.reduce((a, x) => a + x.lvl, 0);
   const con = mod(abil.con), perLevel = subrace === 'Hill Dwarf' ? 1 : 0;
@@ -118,6 +128,7 @@ function build(c) {
     const die = CLASSES[x.k].hd;
     for (let l = 0; l < x.lvl; l++) hpMax += (ci === 0 && l === 0 ? die : (x.raw.hitPointsPerLevel[l] || die / 2 + 1)) + con + perLevel;
   });
+  if (c.hpMaxOverride) hpMax = c.hpMaxOverride;
   const bg = c.customBackground?.name || (c.backgroundId ? titled(c.backgroundId) : '');
   const alignment = typeof c.details.alignment === 'string' ? c.details.alignment : '';
   const skills = {};
@@ -133,7 +144,7 @@ function build(c) {
   c.conditions.forEach(n => { const m = [...condNames].find(x => x.toLowerCase() === String(n).toLowerCase()); if (m) cond[m] = true; else toNotes.push(`${t('cond.title')}: ${n}`); });
 
   setS(norm({
-    ...def(), name: c.name || t('char.new'), info: [bg, alignment].filter(Boolean).join(' · '), race: race || '', subrace, klass: first.k, sub: first.sub, level, cls: CLASSES[first.k].l,
+    ...def(), name: c.name || t('char.new'), info: [race ? '' : (c.raceId || ''), bg, alignment].filter(Boolean).join(' · '), race: race || '', subrace, klass: first.k, sub: first.sub, level, cls: CLASSES[first.k].l,
     multi: list.slice(1).map(x => ({ k: x.k, sub: x.sub, lvl: x.lvl })), hpMax, hp: Math.min(hpMax, Math.max(0, c.hitPoints.current)), tmp: Math.max(0, c.hitPoints.temporary),
     ac: 10 + mod(abil.dex), prof: pb(level), abil, saves, skills, cond, exh: c.exhaustion, conc: c.concentratingOn || '', death: { s: c.deathSaves.successes, f: c.deathSaves.failures },
     hd: { max: level, used: Math.min(level, Object.values(c.hitDiceSpent).reduce((a, n) => a + n, 0)), die: 'W' + CLASSES[first.k].hd },
@@ -177,6 +188,8 @@ function build(c) {
   });
 
   syncAc();
+  if (c.acOverride != null) { S.acMode = 'manual'; S.ac = c.acOverride; }
+  if (c.speedFt) S.speed = Math.round(c.speedFt * 0.3 * 2) / 2;
 
   // Notizen
   if (missingSpells.length) toNotes.push(`${t('imp.spellsMissing')}: ${missingSpells.join(', ')}`);
@@ -220,3 +233,18 @@ export function importPlay5e(raw) {
   return { reports };
 }
 export { CLN };
+
+const ABK = ['str', 'dex', 'con', 'int', 'wis', 'cha'];
+/** Wandelt einen geprüften Bogen-Entwurf in das Importformat. */
+export function importDraft(d) {
+  const owner = Object.entries(RACES).find(([, R]) => Object.keys(R.subs).some(s => s.toLowerCase() === d.race.trim().toLowerCase()));
+  const raw = {
+    name: d.name, classes: [{ classId: d.klass, subclassId: d.sub ? slug(d.klass) + '/' + slug(d.sub) : null, level: Math.max(1, +d.level || 1), hitPointsPerLevel: [] }],
+    raceId: owner ? owner[0] : d.race, subraceId: owner ? d.race : null, abilities: Object.fromEntries(ABK.map(k => [k, +d.abil[k] || 10])), scoresFinal: true,
+    hpMaxOverride: +d.hpMax || 0, hitPoints: { current: +d.hpMax || 0, temporary: 0, bonusMax: 0 }, acOverride: d.ac === '' || d.ac == null ? null : +d.ac, speedFt: +d.speedFt || 0,
+    skillProficiencies: Object.entries(d.skills).filter(([, v]) => v === 1).map(([k]) => k), skillExpertise: Object.entries(d.skills).filter(([, v]) => v === 2).map(([k]) => k), savingThrowProficiencies: d.saves,
+    toolProficiencies: d.tools, languages: d.langs, featIds: d.feats, spells: d.spells.map(s => ({ spellId: s })), inventory: d.items.map(i => ({ name: i.name, quantity: i.q })), currency: d.coins,
+    details: { alignment: d.alignment, backstory: d.backstory || '', appearance: d.appearance || '', notes: [...(d.features || []), ...(d.traits || [])].join('\n') }, customBackground: { name: d.background },
+  };
+  return importPlay5e(raw);
+}

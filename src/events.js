@@ -1,3 +1,5 @@
+import { isSheetFile, readSheets } from './sheet-read.js';
+import { importDraft } from './import-play5e.js';
 import { isPlay5e } from './import-play5e.js';
 import * as live from './live.js';
 import * as dm from './dm.js';
@@ -53,6 +55,9 @@ app.addEventListener('click',ev=>{
     case 'livejoin':{const code=v('live-code').trim().toUpperCase();if(!live.isCode(code)){toast(tr('live.badCode'));return}live.connect(code,'player');break}
     case 'liveoff':live.disconnect();break;
     case 'liveadd':dm.addLive(live.players());dm.saveD();toast(tr('live.added'));break;
+    case 'sheetcancel':U.SHEET=null;break;
+    case 'sheetapply':{if(!U.SHEET.draft.klass){toast(tr('sheet.needClass'));return}const r=importDraft(U.SHEET.draft);if(r.error){toast(r.error);return}U.IMPREP=r.reports;U.SHEET=null;S.tab='setup';toast(tr('imp.done',{n:r.reports.map(x=>x.name).join(', ')}));break}
+    case 'sheetspells':{const known=new Set(S.spells.map(x=>x.n));let n=0;U.SHEET.draft.spells.forEach(x=>{if(!known.has(x)&&BYN['spell:'+x]){S.spells.push(spFrom(BYN['spell:'+x]));n++}});U.SHEET=null;toast(tr('sheet.added',{n}));break}
     case 'charsw':switchChar(b.dataset.id);break;
     case 'charnew':newChar();toast(tr('toast.charNew'));break;
     case 'chardup':dupChar();toast(tr('toast.charDup'));break;
@@ -106,6 +111,8 @@ app.addEventListener('click',ev=>{
 app.addEventListener('change',ev=>{
   const el=ev.target;
   if((el.id==='img-in'||el.id==='img-in2')&&el.files&&el.files[0]){loadPortrait(el.files[0]);return}
+  if(el.dataset.sh){setDraft(el);return}
+  if(el.id==='impf'&&el.files&&[...el.files].some(isSheetFile)){startSheets([...el.files].filter(isSheetFile));return}
   if(el.id==='impf'&&el.files&&el.files[0]){const fr=new FileReader();fr.onload=()=>{U.IMP=String(fr.result);const ta=$('imp');if(ta)ta.value=U.IMP;U.CONF=null;toast(tr('toast.fileLoaded'))};fr.readAsText(el.files[0]);return}
   if(el.id==='inv-sel'||el.id==='sp-sel'){const c=el.id==='inv-sel'?BYN[el.value]:BYN['spell:'+el.value];const h=$(el.id+'-h');if(h)h.textContent=c?(c.k==='spell'?spMeta(c)+' — '+c.eff:c.p+(c.att?' · '+tr('item.needsAttune'):'')):'';return}
   if(el.id==='wc'){U.WC=el.value;$('wres').innerHTML=wikiBody();return}
@@ -172,3 +179,24 @@ const typing=()=>{const a=document.activeElement;return !!a&&app.contains(a)&&/^
 live.setPeerHook(()=>dm.syncLive(live.players()));
 live.setLiveListener(force=>{if(!force&&S.tab!=='dm'&&S.tab!=='setup')return;if(typing()){livePending=true;return}later()});
 app.addEventListener('focusout',()=>{if(livePending)setTimeout(()=>{if(livePending&&!typing()){livePending=false;later()}},0)});
+
+/* Charakterbogen aus PDF oder Bild */
+async function startSheets(files){
+  U.SHEET={busy:'reading'};render();
+  try{
+    const draft=await readSheets(files,st=>{U.SHEET={busy:st};render()});
+    if(!draft.hasSheet&&!draft.spells.length){U.SHEET=null;toast(tr('sheet.nothing'));render();return}
+    U.SHEET={draft};
+  }catch(e){U.SHEET=null;toast(tr(e.message==='ocr-load'?'sheet.ocrLoad':'sheet.failed'))}
+  render();
+}
+function setDraft(el){
+  const d=U.SHEET.draft,f=el.dataset.sh;let v=el.value;
+  if(el.dataset.shnum)v=v===''?null:+v;
+  const list=el.dataset.shlist?v.split(',').map(x=>x.trim()).filter(Boolean):null;
+  if(f==='skillList'){d.skills={};list.forEach(x=>{const m=x.match(/^(.*?)(?:\s*\((\d)\))?$/);d.skills[m[1]]=m[2]?+m[2]:1});return}
+  if(f==='itemList'){d.items=list.map(x=>{const m=x.match(/^(\d+)\s+(.+)$/);return m?{name:m[2],q:+m[1]}:{name:x,q:1}});return}
+  if(f==='saves'){d.saves=list.map(x=>x.toLowerCase().slice(0,3));return}
+  if(f.includes('.')){const [a,b]=f.split('.');d[a][b]=v;return}
+  d[f]=list||v;
+}

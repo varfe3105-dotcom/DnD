@@ -6,7 +6,10 @@
 |---|---|---|---|
 | Alegreya (Juan Pablo del Peral, Huerta Tipográfica) | SIL OFL 1.1 | https://fontsource.org/fonts/alegreya | Fließtext, lokal eingebettet |
 | Alegreya Sans SC (Juan Pablo del Peral, Huerta Tipográfica) | SIL OFL 1.1 | https://fontsource.org/fonts/alegreya-sans-sc | Beschriftungen, lokal eingebettet |
-| Cinzel (Natanael Gama) | SIL OFL 1.1 | https://fontsource.org/fonts/cinzel | Überschriften, lokal eingebettet |
+| Almendra und Almendra SC (Ana Sanfelippo) | SIL OFL 1.1 | https://fontsource.org/fonts/almendra | Text und Überschriften, lokal eingebettet |
+| Uncial Antiqua (Astigmatic) | SIL OFL 1.1 | https://fontsource.org/fonts/uncial-antiqua | Namen und Zahlen, lokal eingebettet |
+| IM Fell English (Igino Marini) | SIL OFL 1.1 | https://fontsource.org/fonts/im-fell-english | Regeltexte, lokal eingebettet |
+| Texturen, Landschaft, Beschläge, Ornamente | eigene Erzeugung | scripts/make-art.mjs | Oberfläche |
 
 ## Icons
 
@@ -21,6 +24,8 @@
 |---|---|---|---|
 | Fuse.js | Apache-2.0 | https://www.fusejs.io | Unscharfe Suche im Wiki |
 | Zod | MIT | https://zod.dev | Prüfung importierter Dateien |
+| pdf.js (pdfjs-dist) | Apache-2.0 | https://mozilla.github.io/pdf.js/ | PDF-Charakterbögen lesen |
+| Tesseract.js | Apache-2.0 | https://tesseract.projectnaptha.com | Bilder von Charakterbögen lesen, wird erst bei Bedarf geladen |
 | @supabase/realtime-js | MIT | https://github.com/supabase/realtime-js | Live-Tisch |
 
 ## Regeldaten

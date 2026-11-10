@@ -10,10 +10,11 @@ export const schoolName = s => { const k = { Hervorrufung: 'evocation', Bannmagi
 export const srcNote = s => s === 'own' ? t('src.own') : s === 'srd' ? t('src.srd') : t('src.summary');
 export const restLabel = r => t('rest.' + (['short', 'long', 'none'].includes(r) ? r : 'long'));
 
+const RUNES = { str: 'M6 2v16M6 3l8 5-8 5', dex: 'M5 2l10 16M15 2L5 18', con: 'M10 2v16M4 6l6 4 6-4', int: 'M4 18V2l12 16V2', wis: 'M10 2l6 8-6 8-6-8z', cha: 'M4 4l6 6 6-6M10 10v8' };
 export function vAbil(edit) {
   return `<div class="abs">${ABK.map(k => {
     const n = abName(k), m = mod(S.abil[k]), sv = m + (S.saves[k] ? S.prof : 0);
-    return `<div class="abw"><div class="ab"><div class="abi"><small>${n}</small><b>${sg(m)}</b></div></div><div class="abv">${edit ? numIn('abil.' + k, S.abil[k], n, 1, 30) : S.abil[k]}</div>${edit ? `<button class="tg${S.saves[k] ? ' on' : ''}" data-a="tsave" data-k="${k}" aria-pressed="${!!S.saves[k]}">${t('ab.saveProf')}</button>` : `<div class="sv${S.saves[k] ? ' p' : ''}" title="${t('ab.save')}"><i></i><span class="svl">${t('ab.save')}</span><span class="svs">${t('ab.saveShort')}</span> ${sg(sv)}</div>`}</div>`;
+    return `<div class="abw"><div class="ab"><div class="abi"><svg class="rune" viewBox="0 0 20 20" aria-hidden="true"><path d="${RUNES[k]}"/></svg><small>${n}</small><b>${sg(m)}</b></div></div><div class="abv">${edit ? numIn('abil.' + k, S.abil[k], n, 1, 30) : S.abil[k]}</div>${edit ? `<button class="tg${S.saves[k] ? ' on' : ''}" data-a="tsave" data-k="${k}" aria-pressed="${!!S.saves[k]}">${t('ab.saveProf')}</button>` : `<div class="sv${S.saves[k] ? ' p' : ''}" title="${t('ab.save')}"><i></i><span class="svl">${t('ab.save')}</span><span class="svs">${t('ab.saveShort')}</span> ${sg(sv)}</div>`}</div>`;
   }).join('')}</div>`;
 }
 export function vHP() {

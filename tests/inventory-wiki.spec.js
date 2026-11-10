@@ -4,6 +4,7 @@ const bag = (...its) => { const b = Array(24).fill(null); its.forEach((x, i) => 
 const sword = () => item('a', 'Langschwert', { ic: 'sword', p: 'Krieg · 1W8 Hieb · Vielseitig (1W10) · 15 GM', slot: 'hand' });
 
 async function drag(page, from, to) {
+  await page.setViewportSize({ width: 1280, height: 1500 });
   const a = await page.locator(`[data-drag="${from}"]`).boundingBox();
   const b = await page.locator(`[data-slot="${to}"]`).boundingBox();
   await page.mouse.move(a.x + a.width / 2, a.y + a.height / 2);

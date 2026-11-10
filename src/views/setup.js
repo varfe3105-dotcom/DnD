@@ -54,9 +54,28 @@ export function vSetup() {
    <details><summary>${t('setup.ownSpell')}</summary><div class="add"><input type="text" id="osp-n" placeholder="${t('common.name')}"><input type="number" class="n" id="osp-l" min="0" max="9" placeholder="${t('setup.spellLevel')}" aria-label="${t('setup.spellLevel')}"></div><div class="add"><input type="text" id="osp-t" placeholder="${t('setup.ospTime')}"><input type="text" id="osp-r" placeholder="${t('spell.range')}"><input type="text" id="osp-d" placeholder="${t('spell.dur')}"></div><div class="add"><input type="text" id="osp-e" class="wide" placeholder="${t('setup.ospEffect')}"></div><div class="add"><label class="ck"><input type="checkbox" id="osp-c"> ${t('conc.title')}</label><label class="ck"><input type="checkbox" id="osp-ri"> ${t('spell.ritual')}</label><button class="btn solid" data-a="addspown">${t('common.create')}</button></div></details></div>
   <h2>${t('setup.backup')}</h2><div class="card"><p class="note" style="margin-top:0">${t('setup.backupHint')}</p>
    <div class="add"><button class="btn" data-a="print">${t('setup.print')}</button><button class="btn" data-a="exp">${t('setup.export')}</button>${U.EXP ? `<button class="btn solid" data-a="copy">${t('setup.copy')}</button>` : ''}</div>${U.EXP ? `<textarea id="exp" readonly aria-label="${t('setup.exportLabel')}">${esc(U.EXP)}</textarea>` : ''}
-   <div class="add" style="margin-top:14px"><label class="ck">${t('setup.loadFile')} <input type="file" id="impf" accept=".json,application/json,text/plain"></label></div>
+   <div class="add" style="margin-top:14px"><label class="ck">${t('setup.loadFile')} <input type="file" id="impf" accept=".json,application/json,text/plain,application/pdf,image/*" multiple></label></div>
    <textarea id="imp" placeholder="${t('setup.pasteImport')}" aria-label="${t('setup.importLabel')}" style="margin-top:8px">${esc(U.IMP)}</textarea>
-   <p class="note">${t('imp.hint')}</p><div class="add"><button class="btn ${U.CONF === 'imp' ? 'warn' : ''}" data-a="imp">${U.CONF === 'imp' ? t('setup.importConfirm') : t('setup.import')}</button><button class="btn ${U.CONF === 'reset' ? 'warn' : 'bad'}" data-a="reset">${U.CONF === 'reset' ? t('setup.resetConfirm') : t('setup.reset')}</button></div>${vImportReport()}</div>`;
+   <p class="note">${t('imp.hint')} ${t('sheet.hint')}</p>${vSheet()}<div class="add"><button class="btn ${U.CONF === 'imp' ? 'warn' : ''}" data-a="imp">${U.CONF === 'imp' ? t('setup.importConfirm') : t('setup.import')}</button><button class="btn ${U.CONF === 'reset' ? 'warn' : 'bad'}" data-a="reset">${U.CONF === 'reset' ? t('setup.resetConfirm') : t('setup.reset')}</button></div>${vImportReport()}</div>`;
+}
+function vSheet() {
+  const s = U.SHEET;
+  if (!s) return '';
+  if (s.busy) return `<p class="live-state connecting">${t('sheet.' + s.busy)}</p>`;
+  const d = s.draft;
+  const text = (f, l, v) => `<label><span class="lbl">${l}</span><input type="text" data-sh="${f}" value="${esc(v ?? '')}"></label>`;
+  const list = (f, l, v) => `<label class="wide"><span class="lbl">${l}</span><textarea data-sh="${f}" data-shlist="1" rows="2">${esc(v.join(', '))}</textarea></label>`;
+  const num = (f, l, v) => `<label><span class="lbl">${l}</span><input type="number" min="0" data-sh="${f}" data-shnum="1" value="${v ?? ''}"></label>`;
+  if (!d.hasSheet) return `<div class="sheet-rev"><h4>${t('sheet.spellsOnly', { n: d.spells.length })}</h4><p class="cls">${esc(d.spells.join(', '))}</p><div class="add"><button class="btn solid" data-a="sheetspells"${d.spells.length ? '' : ' disabled'}>${t('sheet.addSpells')}</button><button class="btn" data-a="sheetcancel">${t('common.cancel')}</button></div></div>`;
+  return `<div class="sheet-rev"><h4>${t('sheet.review')}</h4><p class="note">${t('sheet.reviewHint')}</p><div class="form">
+   ${text('name', t('common.name'), d.name)}
+   <label><span class="lbl">${t('setup.class')}</span><select data-sh="klass"><option value="">${t('common.choose')}</option>${Object.keys(CLASSES).map(k => `<option${k === d.klass ? ' selected' : ''}>${k}</option>`).join('')}</select></label>
+   ${text('sub', t('setup.subclass'), d.sub)}${num('level', t('setup.level'), d.level)}${text('race', t('setup.race'), d.race)}${text('background', t('imp.background'), d.background)}${text('alignment', t('imp.alignment'), d.alignment)}
+   ${num('ac', t('stat.ac'), d.ac)}${num('hpMax', t('setup.maxHp'), d.hpMax)}${num('speedFt', t('imp.speedFt'), d.speedFt)}
+   ${['str', 'dex', 'con', 'int', 'wis', 'cha'].map(k => num('abil.' + k, t('ab.' + k), d.abil[k])).join('')}
+   ${num('coins.gp', t('coin.gp'), d.coins.gp)}${num('coins.sp', t('coin.sp'), d.coins.sp)}${num('coins.cp', t('coin.cp'), d.coins.cp)}${num('coins.pp', t('coin.pp'), d.coins.pp)}
+   </div><div class="form" style="margin-top:10px">${list('saves', t('ab.saves'), d.saves.map(k => t('abs.' + k)))}${list('skillList', t('skill.title'), Object.entries(d.skills).map(([k, v]) => k + (v === 2 ? ' (2)' : '')))}${list('spells', t('spell.title'), d.spells)}${list('itemList', t('inv.equipment'), d.items.map(i => (i.q > 1 ? i.q + ' ' : '') + i.name))}${list('tools', t('setup.tools'), d.tools)}${list('langs', t('setup.langs'), d.langs)}</div>
+   <div class="add"><button class="btn solid" data-a="sheetapply">${t('sheet.create')}</button><button class="btn" data-a="sheetcancel">${t('common.cancel')}</button></div></div>`;
 }
 function vImportReport() {
   if (!U.IMPREP) return '';
