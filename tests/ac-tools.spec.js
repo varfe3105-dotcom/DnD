@@ -102,11 +102,4 @@ test.describe('Werkzeuge und Sprachen @new', () => {
     await expect(page.locator('h2', { hasText: /Tools and Languages/ })).toHaveCount(0);
   });
 
-  test('Word of Radiance steht im Katalog mit Herkunft', async ({ page }) => {
-    await seed(page, base4({ tab: 'wiki' }));
-    await page.locator('#wq').fill('Word of Radiance');
-    await act(page, 'wsel', '[data-key="spell:Word of Radiance"]').click();
-    await expect(page.locator('.wd.pane')).toContainText("Xanathar's Guide");
-    await expect(page.locator('.wd.pane .src')).toContainText('Summary');
-  });
 });

@@ -42,7 +42,17 @@ export function render() {
   h += `<footer><p>${t('footer.rules')}</p><details><summary>${t('footer.about')}</summary><p>${t('footer.srd')}</p><p>${t('footer.icons')}</p><p>${t('footer.fonts')}</p></details></footer>`;
   if (U.LU && CLASSES[S.klass]) h += vLU();
   document.body.style.overflow = U.LU ? 'hidden' : '';
+  const wl = document.querySelector('.wl'), wlTop = wl && !U.resetWl ? wl.scrollTop : 0, pageY = window.scrollY;
   app.innerHTML = h;
+  U.resetWl = false;
+  const wl2 = document.querySelector('.wl');
+  if (wl2) wl2.scrollTop = wlTop;
+  window.scrollTo({ top: pageY, behavior: 'instant' });
+  if (U.anchor) {
+    const el = document.querySelector(`.wli[data-key="${CSS.escape(U.anchor.key)}"]`);
+    if (el) window.scrollBy({ top: el.getBoundingClientRect().top - U.anchor.top, behavior: 'instant' });
+    U.anchor = null;
+  }
   if (U.LU && U.LUfocus) { U.LUfocus = false; const f = $('lu-h'); if (f) f.focus(); }
   else if (keep) { const el = $(keep); if (el) el.focus({ preventScroll: true }); }
 }

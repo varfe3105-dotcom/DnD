@@ -6,7 +6,7 @@
 |---|---|---|---|
 | Alegreya (Juan Pablo del Peral, Huerta Tipográfica) | SIL OFL 1.1 | https://fontsource.org/fonts/alegreya | Fließtext, lokal eingebettet |
 | Alegreya Sans SC (Juan Pablo del Peral, Huerta Tipográfica) | SIL OFL 1.1 | https://fontsource.org/fonts/alegreya-sans-sc | Beschriftungen, lokal eingebettet |
-| Grenze Gotisch (Renata Polastri, Omnibus-Type) | SIL OFL 1.1 | https://fontsource.org/fonts/grenze-gotisch | Überschriften, lokal eingebettet |
+| Cinzel (Natanael Gama) | SIL OFL 1.1 | https://fontsource.org/fonts/cinzel | Überschriften, lokal eingebettet |
 
 ## Icons
 

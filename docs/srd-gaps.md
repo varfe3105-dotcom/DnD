@@ -4,7 +4,7 @@ Erzeugt von scripts/import-srd.mjs.
 
 ## Zauber
 
-PHB-Liste: 361. Im SRD: 319. Im Katalog gesamt: 362.
+PHB-Liste: 361. Im SRD: 319. Im Katalog gesamt: 361.
 
 Im PHB, aber nicht im SRD (42, als Zusammenfassung ergänzt):
 

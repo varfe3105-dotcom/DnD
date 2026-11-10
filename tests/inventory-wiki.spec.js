@@ -126,3 +126,40 @@ test.describe('Icons @new', () => {
     await expect(page.locator('footer')).toContainText("Shikashi's Fantasy Icons Pack");
   });
 });
+
+test.describe('Wiki-Scrollposition @new', () => {
+  test('Desktop: Klick lässt die Liste stehen', async ({ page }) => {
+    await seed(page, base4({ tab: 'wiki' }));
+    await act(page, 'wf', '[data-f="spell"]').click();
+    const list = page.locator('.wl');
+    await list.evaluate(el => { el.scrollTop = 900; });
+    const before = await list.evaluate(el => el.scrollTop);
+    expect(before).toBeGreaterThan(500);
+    const target = page.locator('.wli').nth(25);
+    await target.click();
+    expect(await page.locator('.wl').evaluate(el => el.scrollTop)).toBe(before);
+    await expect(page.locator('.wli').nth(25)).toHaveAttribute('aria-current', 'true');
+  });
+
+  test('Handy: angetipptes Element bleibt an seiner Stelle', async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 800 });
+    await seed(page, base4({ tab: 'wiki' }));
+    await act(page, 'wf', '[data-f="spell"]').click();
+    const first = page.locator('.wli').nth(30);
+    await first.scrollIntoViewIfNeeded();
+    await page.evaluate(() => window.scrollBy(0, 200));
+    const key = await first.getAttribute('data-key');
+    const box = async () => (await page.locator(`.wli[data-key="${key}"]`).boundingBox()).y;
+    const y = await box();
+    await first.click();
+    expect(Math.abs(await box() - y)).toBeLessThan(3);
+    expect(await page.evaluate(() => window.scrollY)).toBeGreaterThan(500);
+  });
+
+  test('Filterwechsel beginnt wieder oben', async ({ page }) => {
+    await seed(page, base4({ tab: 'wiki' }));
+    await page.locator('.wl').evaluate(el => { el.scrollTop = 900; });
+    await act(page, 'wf', '[data-f="spell"]').click();
+    expect(await page.locator('.wl').evaluate(el => el.scrollTop)).toBe(0);
+  });
+});

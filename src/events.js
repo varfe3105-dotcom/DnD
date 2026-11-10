@@ -86,8 +86,8 @@ app.addEventListener('click',ev=>{
     case 'unsel':U.SEL=null;break;
     case 'addinv':{const key=v('inv-sel');if(!key){toast(tr('toast.pickItem'));return}const c2=BYN[key];const q=Math.floor(+v('inv-q'))||c2.q||1;putBag(S,mk(c2,q));toast(tr('toast.toBag',{n:c2.n}));break}
     case 'addown':{const n=v('own-n').trim();if(!n){toast(tr('toast.needName'));return}const att=$('own-a').checked;putBag(S,mk({n,ic:v('own-ic'),p:v('own-p').trim(),slot:v('own-slot'),cons:$('own-c').checked,att,magic:att},Math.floor(+v('own-q'))||1));toast(tr('toast.created',{n}));break}
-    case 'wf':U.WF=b.dataset.f;U.WSEL=null;break;
-    case 'wsel':U.WSEL=U.WSEL===b.dataset.key&&innerWidth<900?null:b.dataset.key;break;
+    case 'wf':U.WF=b.dataset.f;U.WSEL=null;U.resetWl=true;break;
+    case 'wsel':U.anchor={key:b.dataset.key,top:b.getBoundingClientRect().top};U.WSEL=U.WSEL===b.dataset.key&&innerWidth<900?null:b.dataset.key;break;
     case 'wadd':{const c2=BYN[b.dataset.key];if(!c2)break;if(c2.k==='spell'){S.spells.push(spFrom(c2));toast(tr('toast.spellAdded',{n:c2.n}))}else{putBag(S,mk(c2));toast(tr('toast.toBag',{n:c2.n}))}break}
     case 'tsave':S.saves[k]=!S.saves[k];break;
     case 'tskill':S.skills[k]=((S.skills[k]||0)+1)%3;break;

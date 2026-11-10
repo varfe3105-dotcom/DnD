@@ -40,7 +40,8 @@ test.describe('Import aus dem anderen Tool @new', () => {
     await seed(page, base4({ name: '', level: 0, tab: 'setup', klass: '' }));
     await doImport(page, backup(character()));
     const s = await read(page);
-    expect(s.spells.map(x => x.n).sort()).toEqual(['Charm Person', 'Guidance', 'Word of Radiance']);
+    expect(s.spells.map(x => x.n).sort()).toEqual(['Charm Person', 'Guidance']);
+    expect(s.notes).toContain('Word Of Radiance');
     expect(s.tools).toEqual(["Poisoner's kit"]);
     expect(s.notes).toContain('Sie floh aus dem Tempel.');
     expect(s.notes).toContain('vom Meister');
@@ -108,7 +109,7 @@ test.describe('Import aus dem anderen Tool @new', () => {
     const s = await read(page);
     expect(s).toMatchObject({ klass: 'Cleric', sub: 'Trickery Domain', subrace: 'Drow', level: 1, hp: 9, hpMax: 9 });
     expect(s.abil.dex).toBe(17);
-    expect(s.spells.length).toBe(9);
+    expect(s.spells.length).toBe(8);
     expect(s.ac).toBe(13);
     expect(s.tools).toEqual(["Poisoner's kit", 'Forgery kit']);
     console.log(await page.locator('.imp-rep').innerText());
