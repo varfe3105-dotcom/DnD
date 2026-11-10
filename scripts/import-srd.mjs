@@ -303,10 +303,14 @@ function magic() {
     return { id: x.index, k: cat === 'potion' ? 'potion' : 'magic', n: { en: x.name, ...(nDe ? { de: nDe } : {}) }, ic: magicIc(x.name, cat), slot: magicSlot(x.name, cat), att, cons: CONS_MAGIC.test(x.name), rarity: { en: rarity, de: RARITY_DE[rarity] || rarity }, text: { en: descText(rest.length ? rest : x.desc), ...(tDe ? { de: tDe } : {}) }, source: 'srd', verified: false };
   });
   for (const [en, deN, ic, slot, att, cons, rarity, te, td] of readTr('dmg-extra-items.json')) rows.push({ id: en.toLowerCase().replace(/[^a-z0-9]+/g, '-'), k: /^(Potion|Elixir)/.test(en) ? 'potion' : 'magic', n: { en, de: deN }, ic, slot, att: !!att, cons: !!cons, rarity: { en: rarity, de: RARITY_DE[rarity] || rarity }, text: { en: te, de: td }, source: 'summary', verified: false });
+  const fullIt = fullTr('de-full-items-');
+  const overlay = r => { if (fullIt[r.id]) r.text = { ...r.text, de: fullIt[r.id] }; return r; };
+  rows.forEach(overlay);
   writeArr('magic-items.json', rows.filter(r => r.k !== 'potion'));
   const gear = readData('items.json');
-  const gearPotions = new Map([...readData('potions.json').filter(r => r.rarity === undefined), ...gear.filter(r => r.k === 'potion')].map(r => [r.id, r]));
+  const gearPotions = new Map([...readData('potions.json').filter(r => r.rarity === undefined), ...gear.filter(r => r.k === 'potion')].map(r => [r.id, overlay(r)]));
   const potionRows = [...gearPotions.values(), ...rows.filter(r => r.k === 'potion')];
+  console.log(`Gegenstände mit vollständiger deutscher Fassung: ${[...rows, ...gearPotions.values()].filter(r => fullIt[r.id]).length}`);
   writeArr('potions.json', potionRows);
   writeArr('items.json', gear.filter(r => r.k !== 'potion'));
   console.log(`Magische Gegenstände: ${rows.length}`);
