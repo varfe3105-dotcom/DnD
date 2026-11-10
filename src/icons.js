@@ -1,4 +1,5 @@
 import { t } from './i18n/index.js';
+import { artFor, SHEET } from './icon-art.js';
 import { $ } from './util.js';
 
 export const IC={
@@ -48,5 +49,7 @@ export const icFrom=x=>IC[x]?x:(EM[x]||'box');
 export const iconOpts=sel=>Object.keys(ICN).map(k=>`<option value="${k}"${k===sel?' selected':''}>${t('icon.'+k)}</option>`).join('');
 
 export const TONE={sword:'steel',axe:'steel',hammer:'steel',spear:'steel',shield:'steel',armor:'steel',helm:'steel',tool:'steel',gloves:'leather',boots:'leather',belt:'leather',cloak:'leather',bag:'leather',scroll:'leather',book:'leather',music:'leather',box:'leather',dice:'leather',food:'leather',bow:'leather',key:'gold',coin:'gold',torch:'gold',ring:'gold',amulet:'gold',potion:'crimson',heart:'crimson',flame:'crimson',leaf:'verdant',gem:'arcane',wand:'arcane',star:'arcane',eye:'arcane',swirl:'arcane',mask:'arcane',wing:'arcane',bolt:'arcane',snow:'arcane',skull:'shadow'};
-export const tok=(k,tone)=>`<span class="tok t-${tone||TONE[k]||'leather'}">${icon(k)}</span>`;
-export const itTone=it=>(it.att||it.magic)?'arcane':(TONE[it.ic]||'leather');
+/** Bild aus dem Icon-Pack oder, wenn es keines gibt, das eigene SVG-Symbol. */
+export const glyph=(k,key)=>{const a=artFor(k,key);return a?`<span class="spr" style="background-position:${a[1]/(SHEET.cols-1)*100}% ${a[0]/(SHEET.rows-1)*100}%" aria-hidden="true"></span>`:icon(k)};
+export const tok=(k,tone,key)=>`<span class="tok t-${tone||TONE[k]||'leather'}${artFor(k,key)?' has-spr':''}">${glyph(k,key)}</span>`;
+export const itTone=it=>(it.att||it.magic)?'arcane':(TONE[it.ic]==='arcane'?'leather':(TONE[it.ic]||'leather'));

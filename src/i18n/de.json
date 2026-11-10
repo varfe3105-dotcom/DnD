@@ -478,5 +478,6 @@
  "lu.featOwn": "Anderes (Name eintragen)",
  "lu.opt.fightingStyles": "Kampfstil",
  "lu.opt.metamagic": "Metamagie",
- "lu.opt.invocations": "Schauerliche Anrufung"
+ "lu.opt.invocations": "Schauerliche Anrufung",
+ "footer.icons": "Icons: Shikashi's Fantasy Icons Pack von Matt Firth (shikashipx, cheekyinkling), CC BY 4.0, teils nach Vorlagen von game-icons.net, CC BY 3.0."
 }

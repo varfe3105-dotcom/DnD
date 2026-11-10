@@ -95,3 +95,34 @@ test.describe('Wiki', () => {
     await expect(page.locator('.wd.pane')).toContainText('Arcane Recovery');
   });
 });
+
+test.describe('Icons @new', () => {
+  test('Gegenstände zeigen das Pack, unbekannte Motive das eigene Symbol', async ({ page }) => {
+    await seed(page, base4({ tab: 'inv', bag: bag(sword(), item('m', 'Maske', { ic: 'mask' })) }));
+    await expect(page.locator('[data-drag="bag:0"] .spr')).toHaveCount(1);
+    await expect(page.locator('[data-drag="bag:1"] svg.i')).toHaveCount(1);
+  });
+
+  test('Spritesheet ist eingebettet und wird geladen', async ({ page }) => {
+    await seed(page, base4({ tab: 'inv', bag: bag(sword()) }));
+    const bg = await page.locator('[data-drag="bag:0"] .spr').evaluate(el => getComputedStyle(el).backgroundImage);
+    expect(bg.startsWith('url("data:image/png')).toBe(true);
+  });
+
+  test('alle Zuordnungen liegen im Blatt und treffen vorhandene Schlüssel', async () => {
+    const fs = await import('node:fs');
+    const src = fs.readFileSync('src/icon-art.js', 'utf8');
+    const read = f => JSON.parse(fs.readFileSync(`data/${f}.json`, 'utf8'));
+    const known = new Set([...read('items'), ...read('potions'), ...read('magic-items')].map(i => `${i.k}:${i.id}`));
+    read('conditions').forEach(c => known.add('cond:' + c.n));
+    read('spells').forEach(s => known.add('spell:' + s.n));
+    Object.keys(read('classes')).forEach(c => known.add('class:' + c));
+    const unknown = [...src.matchAll(/'((?:item|potion|cond|class|spell):[^']+)': \[(\d+), [^\]]+\]/g)].filter(m => !known.has(m[1])).map(m => m[1]);
+    expect(unknown).toEqual([]);
+  });
+
+  test('Lizenzhinweis steht im Bogen', async ({ page }) => {
+    await seed(page, base4({}));
+    await expect(page.locator('footer')).toContainText("Shikashi's Fantasy Icons Pack");
+  });
+});

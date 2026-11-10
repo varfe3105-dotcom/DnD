@@ -478,5 +478,6 @@
  "lu.featOwn": "Other (enter name)",
  "lu.opt.fightingStyles": "Fighting Style",
  "lu.opt.metamagic": "Metamagic",
- "lu.opt.invocations": "Eldritch Invocation"
+ "lu.opt.invocations": "Eldritch Invocation",
+ "footer.icons": "Icons: Shikashi's Fantasy Icons Pack by Matt Firth (shikashipx, cheekyinkling), CC BY 4.0, based in part on designs from game-icons.net, CC BY 3.0."
 }

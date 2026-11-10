@@ -8,6 +8,13 @@
 | Alegreya Sans SC (Juan Pablo del Peral, Huerta Tipográfica) | SIL OFL 1.1 | https://fontsource.org/fonts/alegreya-sans-sc | Beschriftungen, lokal eingebettet |
 | Grenze Gotisch (Renata Polastri, Omnibus-Type) | SIL OFL 1.1 | https://fontsource.org/fonts/grenze-gotisch | Überschriften, lokal eingebettet |
 
+## Icons
+
+| Name | Lizenz | Link | Wofür |
+|---|---|---|---|
+| Shikashi's Fantasy Icons Pack v2, Matt Firth (shikashipx, cheekyinkling) | CC BY 4.0 laut itch.io-Seite | https://cheekyinkling.itch.io/shikashis-fantasy-icons-pack | Bilder für Gegenstände, Zauber, Zustände, Klassen (`src/assets/icons.png`, auf belegte Zeilen zugeschnitten) |
+| game-icons.net (Vorlage vieler Motive des Packs) | CC BY 3.0 | https://game-icons.net | Designgrundlage, genannt wie vom Pack verlangt |
+
 ## Regeldaten
 
 | Name | Lizenz | Link | Wofür |

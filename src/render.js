@@ -30,7 +30,7 @@ export function render() {
   if (tb === 'wiki') h += vWiki();
   if (tb === 'notes') h += `<h2>${t('tab.notes')}</h2><textarea id="notes" placeholder="${t('notes.placeholder')}" aria-label="${t('tab.notes')}">${esc(S.notes)}</textarea>`;
   if (tb === 'setup') h += vSetup();
-  h += `<footer><p>${t('footer.rules')}</p><details><summary>${t('footer.about')}</summary><p>${t('footer.srd')}</p><p>${t('footer.fonts')}</p></details></footer>`;
+  h += `<footer><p>${t('footer.rules')}</p><details><summary>${t('footer.about')}</summary><p>${t('footer.srd')}</p><p>${t('footer.icons')}</p><p>${t('footer.fonts')}</p></details></footer>`;
   if (U.LU && CLASSES[S.klass]) h += vLU();
   document.body.style.overflow = U.LU ? 'hidden' : '';
   app.innerHTML = h;

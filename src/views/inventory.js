@@ -1,5 +1,6 @@
 import { esc } from '../util.js';
-import { icon, tok, itTone, iconOpts } from '../icons.js';
+import { icon, glyph, tok, itTone, iconOpts } from '../icons.js';
+import { artFor } from '../icon-art.js';
 import { EQ, SLOTK, COINK } from '../constants.js';
 import { S, U } from '../state.js';
 import { numIn, get, refs, slotLabel, slotName, itemView } from '../helpers.js';
@@ -9,14 +10,14 @@ import { t } from '../i18n/index.js';
 export function cell(r, label, area) {
   const raw = get(r), k = r.split(':')[1];
   const it = raw && itemView(raw);
-  return `<div class="cell${label ? ' eqc' : ''}${U.SEL === r ? ' sel' : ''}" data-slot="${r}"${area ? ` style="grid-area:${area}"` : ''}>${label ? `<small>${label}</small>` : ''}${it ? `<div class="it tok t-${itTone(it)}" data-drag="${r}" tabindex="0" role="button" aria-label="${esc(it.n)}${it.q > 1 ? t('item.pieces', { n: it.q }) : ''}">${icon(it.ic)}${it.q > 1 ? `<b class="q">${it.q}</b>` : ''}${it.tuned ? '<i class="t"></i>' : ''}</div>` : (label ? `<span class="ph">${icon((EQ.find(e => e[0] === k) || [])[1])}</span>` : '')}</div>`;
+  return `<div class="cell${label ? ' eqc' : ''}${U.SEL === r ? ' sel' : ''}" data-slot="${r}"${area ? ` style="grid-area:${area}"` : ''}>${label ? `<small>${label}</small>` : ''}${it ? `<div class="it tok t-${itTone(it)}${artFor(it.ic, it.ref) ? ' has-spr' : ''}" data-drag="${r}" tabindex="0" role="button" aria-label="${esc(it.n)}${it.q > 1 ? t('item.pieces', { n: it.q }) : ''}">${glyph(it.ic, it.ref)}${it.q > 1 ? `<b class="q">${it.q}</b>` : ''}${it.tuned ? '<i class="t"></i>' : ''}</div>` : (label ? `<span class="ph">${icon((EQ.find(e => e[0] === k) || [])[1])}</span>` : '')}</div>`;
 }
 const slotOptions = sel => SLOTK.map(k => `<option value="${k}"${k === sel ? ' selected' : ''}>${slotName(k)}</option>`).join('');
 export function vSel() {
   const raw = U.SEL && get(U.SEL);
   if (!raw) return '';
   const it = itemView(raw), eqd = U.SEL.startsWith('eq');
-  return `<h2>${esc(it.n)}</h2><div class="card selp">${tok(it.ic, itTone(it))}<div><p>${esc(it.p) || `<i>${t('item.noDesc')}</i>`}</p><p class="lbl">${eqd ? t('item.equipped', { s: slotLabel(U.SEL) }) : t('item.inBag')}${it.att ? ' · ' + t('item.needsAttune') : ''}</p></div>
+  return `<h2>${esc(it.n)}</h2><div class="card selp">${tok(it.ic, itTone(it), it.ref)}<div><p>${esc(it.p) || `<i>${t('item.noDesc')}</i>`}</p><p class="lbl">${eqd ? t('item.equipped', { s: slotLabel(U.SEL) }) : t('item.inBag')}${it.att ? ' · ' + t('item.needsAttune') : ''}</p></div>
   <div class="acts"><div class="qty"><button data-a="qty" data-d="-1" aria-label="${t('common.less')}">−</button><span>${it.q}</span><button data-a="qty" data-d="1" aria-label="${t('common.more')}">+</button></div>
   ${it.cons ? `<button class="btn sm solid" data-a="use" data-r="${U.SEL}">${t('item.use')}</button>` : ''}
   ${eqd ? `<button class="btn sm" data-a="unequip">${t('item.toBag')}</button>` : (it.slot ? `<button class="btn sm" data-a="equip">${t('item.equip')}</button>` : '')}

@@ -31,20 +31,20 @@ export function vDeath() {
 }
 export function vCond() {
   const act = COND.filter(c => S.cond[c.n]);
-  return `<h2>${t('cond.title')}${act.length ? `<em>${t('cond.active', { n: act.length })}</em>` : ''}</h2><div class="card"><div class="chips">${COND.map(c => `<button class="chip${S.cond[c.n] ? ' on' : ''}" data-a="cond" data-c="${c.n}" aria-pressed="${!!S.cond[c.n]}" title="${esc(c.de)}">${esc(nameLine(c.n, c.de))}</button>`).join('')}</div>${act.map(c => `<div class="row"><div class="ic">${tok(c.ic)}</div><div class="nm">${c.n}${deName(c.n, c.de) ? ` <span class="lbl">${c.de}</span>` : ''}<small>${esc(loc(c.text))}</small></div></div>`).join('')}<div class="row"><div class="ic">${tok('skull')}</div><div class="nm">${t('exh.title', { n: S.exh })}<small>${S.exh ? EXH.slice(0, S.exh).map(e => `${e.level}: ${esc(loc(e.text))}`).join(' · ') : t('exh.none')}</small></div><div class="qty"><button data-a="exh" data-d="-1" aria-label="${t('exh.down')}">−</button><button data-a="exh" data-d="1" aria-label="${t('exh.up')}">+</button></div></div></div>`;
+  return `<h2>${t('cond.title')}${act.length ? `<em>${t('cond.active', { n: act.length })}</em>` : ''}</h2><div class="card"><div class="chips">${COND.map(c => `<button class="chip${S.cond[c.n] ? ' on' : ''}" data-a="cond" data-c="${c.n}" aria-pressed="${!!S.cond[c.n]}" title="${esc(c.de)}">${esc(nameLine(c.n, c.de))}</button>`).join('')}</div>${act.map(c => `<div class="row"><div class="ic">${tok(c.ic, undefined, 'cond:' + c.n)}</div><div class="nm">${c.n}${deName(c.n, c.de) ? ` <span class="lbl">${c.de}</span>` : ''}<small>${esc(loc(c.text))}</small></div></div>`).join('')}<div class="row"><div class="ic">${tok('skull')}</div><div class="nm">${t('exh.title', { n: S.exh })}<small>${S.exh ? EXH.slice(0, S.exh).map(e => `${e.level}: ${esc(loc(e.text))}`).join(' · ') : t('exh.none')}</small></div><div class="qty"><button data-a="exh" data-d="-1" aria-label="${t('exh.down')}">−</button><button data-a="exh" data-d="1" aria-label="${t('exh.up')}">+</button></div></div></div>`;
 }
 export function vAtk() {
   const rows = ['main', 'off'].map(k => S.eq[k]).filter(Boolean).map(raw => {
     const a = atk(raw); if (!a) return '';
     const it = itemView(raw);
-    return `<div class="row"><div class="ic">${tok(it.ic, itTone(it))}</div><div class="nm">${esc(it.n)}<small>${esc(it.p)}</small></div><div class="atk"><b>${a.hit}</b><small>${t('atk.hit')}</small></div><div class="atk"><b>${a.dmg}</b><small>${esc(a.type)}${a.vers ? ` · 2H ${a.vers}` : ''}</small></div></div>`;
+    return `<div class="row"><div class="ic">${tok(it.ic, itTone(it), it.ref)}</div><div class="nm">${esc(it.n)}<small>${esc(it.p)}</small></div><div class="atk"><b>${a.hit}</b><small>${t('atk.hit')}</small></div><div class="atk"><b>${a.dmg}</b><small>${esc(a.type)}${a.vers ? ` · 2H ${a.vers}` : ''}</small></div></div>`;
   }).join('');
   return `<h2>${t('atk.title')}</h2><div class="card">${rows || `<div class="empty">${t('atk.none')}</div>`}${rows ? `<p class="note">${t('atk.note')}</p>` : ''}</div>`;
 }
 export function vQuick() {
   const r = refs().filter(x => get(x).cons);
   if (!r.length) return '';
-  return `<h2>${t('quick.title')}</h2><div class="card">${r.map(x => { const it = itemView(get(x)); return `<div class="row"><div class="ic">${tok(it.ic, itTone(it))}</div><div class="nm">${esc(it.n)} <span class="lbl">× ${it.q}</span><small>${esc(it.p)}</small></div><button class="btn sm" data-a="use" data-r="${x}">${t('item.use')}</button></div>`; }).join('')}</div>`;
+  return `<h2>${t('quick.title')}</h2><div class="card">${r.map(x => { const it = itemView(get(x)); return `<div class="row"><div class="ic">${tok(it.ic, itTone(it), it.ref)}</div><div class="nm">${esc(it.n)} <span class="lbl">× ${it.q}</span><small>${esc(it.p)}</small></div><button class="btn sm" data-a="use" data-r="${x}">${t('item.use')}</button></div>`; }).join('')}</div>`;
 }
 export function vRes() {
   if (!S.res.length) return '';
@@ -69,7 +69,7 @@ export function vSpells() {
     h += `<div class="lvh"><b>${l ? t('spell.level', { n: l }) : t('spell.cantrips')}</b><small>${l ? (sl.max ? t('spell.free', { a: sl.max - sl.used, b: sl.max }) : t('spell.noSlots')) : t('spell.atWill')}</small>${sl && sl.max ? `<div class="pips">${pips(sl.max, sl.used, `data-a="pip" data-k="slots" data-i="${l - 1}"`)}</div>` : ''}</div>`;
     S.spells.map((s, i) => [s, i]).filter(x => x[0].lvl === l).sort((a, b) => a[0].n.localeCompare(b[0].n)).forEach(([raw, i]) => {
       const o = U.OPEN[i], s = spellView(raw);
-      h += `<div class="sp${S.conc === s.n ? ' cc' : ''}"><button class="sph" data-a="spopen" data-i="${i}" aria-expanded="${!!o}">${tok(s.ic)}<span class="nm">${esc(s.n)}${deName(s.n, s.de) ? ` <span class="lbl">${esc(s.de)}</span>` : ''}<small>${spMeta(s) || t('spell.details')}</small></span></button><button class="btn sm" data-a="cast" data-i="${i}">${S.conc === s.n ? t('spell.active') : t('spell.cast')}</button>${o ? `<div class="spb"><p class="ptext">${esc(s.eff)}</p>${s.higher ? `<p class="ptext"><b>${t('spell.higher')}:</b> ${esc(s.higher)}</p>` : ''}${s.comp ? `<p class="cls">${t('spell.comp')}: ${esc(s.comp)}${s.material ? ' (' + esc(s.material) + ')' : ''}</p>` : ''}${s.school ? `<p class="cls">${esc(schoolName(s.school))}${s.cls ? ' · ' + s.cls.split('').map(c => CLN[c]).join(', ') : ''}</p>` : ''}<p class="src">${srcNote(s.src === 'own' ? 'own' : s.source)}</p></div>` : ''}</div>`;
+      h += `<div class="sp${S.conc === s.n ? ' cc' : ''}"><button class="sph" data-a="spopen" data-i="${i}" aria-expanded="${!!o}">${tok(s.ic, undefined, s.src === 'own' ? '' : 'spell:' + s.n)}<span class="nm">${esc(s.n)}${deName(s.n, s.de) ? ` <span class="lbl">${esc(s.de)}</span>` : ''}<small>${spMeta(s) || t('spell.details')}</small></span></button><button class="btn sm" data-a="cast" data-i="${i}">${S.conc === s.n ? t('spell.active') : t('spell.cast')}</button>${o ? `<div class="spb"><p class="ptext">${esc(s.eff)}</p>${s.higher ? `<p class="ptext"><b>${t('spell.higher')}:</b> ${esc(s.higher)}</p>` : ''}${s.comp ? `<p class="cls">${t('spell.comp')}: ${esc(s.comp)}${s.material ? ' (' + esc(s.material) + ')' : ''}</p>` : ''}${s.school ? `<p class="cls">${esc(schoolName(s.school))}${s.cls ? ' · ' + s.cls.split('').map(c => CLN[c]).join(', ') : ''}</p>` : ''}<p class="src">${srcNote(s.src === 'own' ? 'own' : s.source)}</p></div>` : ''}</div>`;
     });
   });
   return `<h2>${t('spell.title')}</h2><div class="card">${h}<p class="note">${t('spell.castNote')}</p></div>`;
