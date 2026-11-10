@@ -2,6 +2,7 @@ import { def, S, setS, U, migrate, norm, save, toast, sameItem } from './state.j
 import { get, set, fits, slotLabel, itemView } from './helpers.js';
 import { COND } from './catalog.js';
 import { render } from './render.js';
+import { isPlay5e, importPlay5e } from './import-play5e.js';
 import { t, dice } from './i18n/index.js';
 
 export function damage(d) {
@@ -82,6 +83,14 @@ export function importText(txt) {
   let o;
   try { o = JSON.parse(txt); } catch (e) { toast(t('toast.badExport')); return false; }
   if (!o || typeof o !== 'object') { toast(t('toast.badExport2')); return false; }
+  if (isPlay5e(o)) {
+    const r = importPlay5e(o);
+    if (r.error) { toast(r.error); return false; }
+    U.IMPREP = r.reports;
+    S.tab = 'setup'; U.OPEN = {}; U.SEL = null; U.EXP = '';
+    toast(t('imp.done', { n: r.reports.map(x => x.name).join(', ') }));
+    return true;
+  }
   const keepId = S.id;
   if (o.v >= 3) setS(norm(o));
   else if (o.abil || o.hpMax != null) setS(migrate(o));

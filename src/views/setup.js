@@ -55,7 +55,12 @@ export function vSetup() {
    <div class="add"><button class="btn" data-a="print">${t('setup.print')}</button><button class="btn" data-a="exp">${t('setup.export')}</button>${U.EXP ? `<button class="btn solid" data-a="copy">${t('setup.copy')}</button>` : ''}</div>${U.EXP ? `<textarea id="exp" readonly aria-label="${t('setup.exportLabel')}">${esc(U.EXP)}</textarea>` : ''}
    <div class="add" style="margin-top:14px"><label class="ck">${t('setup.loadFile')} <input type="file" id="impf" accept=".json,application/json,text/plain"></label></div>
    <textarea id="imp" placeholder="${t('setup.pasteImport')}" aria-label="${t('setup.importLabel')}" style="margin-top:8px">${esc(U.IMP)}</textarea>
-   <div class="add"><button class="btn ${U.CONF === 'imp' ? 'warn' : ''}" data-a="imp">${U.CONF === 'imp' ? t('setup.importConfirm') : t('setup.import')}</button><button class="btn ${U.CONF === 'reset' ? 'warn' : 'bad'}" data-a="reset">${U.CONF === 'reset' ? t('setup.resetConfirm') : t('setup.reset')}</button></div></div>`;
+   <p class="note">${t('imp.hint')}</p><div class="add"><button class="btn ${U.CONF === 'imp' ? 'warn' : ''}" data-a="imp">${U.CONF === 'imp' ? t('setup.importConfirm') : t('setup.import')}</button><button class="btn ${U.CONF === 'reset' ? 'warn' : 'bad'}" data-a="reset">${U.CONF === 'reset' ? t('setup.resetConfirm') : t('setup.reset')}</button></div>${vImportReport()}</div>`;
+}
+function vImportReport() {
+  if (!U.IMPREP) return '';
+  const block = (title, list) => (list.length ? `<p class="lbl">${title}</p><ul class="imp-list">${list.map(x => `<li>${esc(x)}</li>`).join('')}</ul>` : '');
+  return `<div class="imp-rep">${U.IMPREP.map(r => `<h4>${t('imp.reportFor', { n: esc(r.name) })}</h4>${block(t('imp.taken'), r.ok)}${block(t('imp.ownItems'), r.own)}${block(t('imp.inNotes'), r.notes)}`).join('')}</div>`;
 }
 function vLiveJoin() {
   const inside = L.role === 'player';

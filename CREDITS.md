@@ -20,6 +20,7 @@
 | Name | Lizenz | Link | Wofür |
 |---|---|---|---|
 | Fuse.js | Apache-2.0 | https://www.fusejs.io | Unscharfe Suche im Wiki |
+| Zod | MIT | https://zod.dev | Prüfung importierter Dateien |
 | @supabase/realtime-js | MIT | https://github.com/supabase/realtime-js | Live-Tisch |
 
 ## Regeldaten

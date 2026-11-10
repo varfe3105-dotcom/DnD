@@ -1,3 +1,4 @@
+import { isPlay5e } from './import-play5e.js';
 import * as live from './live.js';
 import * as dm from './dm.js';
 import { vResults, vNoteList } from './views/dm.js';
@@ -98,7 +99,7 @@ app.addEventListener('click',ev=>{
     case 'del':{const it=S[k][i];if(k==='spells'){U.OPEN={};if(it&&S.conc===it.n)S.conc=''}S[k].splice(i,1);break}
     case 'exp':{const o=JSON.parse(JSON.stringify(S));o.tab='main';U.EXP=JSON.stringify(o);break}
     case 'copy':{const ta=$('exp');const p=navigator.clipboard&&navigator.clipboard.writeText?navigator.clipboard.writeText(U.EXP):Promise.reject();p.then(()=>toast(tr('toast.copied'))).catch(()=>{if(ta){ta.focus();ta.select()}toast(tr('toast.selected'))});return}
-    case 'imp':{const txt=v('imp').trim();if(!txt){toast(tr('toast.needImport'));return}if(U.CONF!=='imp'){U.CONF='imp';break}U.CONF=null;if(importText(txt))U.IMP='';break}
+    case 'imp':{const txt=v('imp').trim();if(!txt){toast(tr('toast.needImport'));return}let foreign=false;try{foreign=isPlay5e(JSON.parse(txt))}catch(e){/* importText meldet den Fehler */}if(!foreign&&U.CONF!=='imp'){U.CONF='imp';break}U.CONF=null;if(importText(txt))U.IMP='';break}
     case 'reset':if(U.CONF!=='reset'){U.CONF='reset';break}{const keepId=S.id;setS(def());S.id=keepId}S.tab='setup';U.OPEN={};U.SEL=null;U.EXP='';U.CONF=null;toast(tr('toast.reset'));break;
   }
   save();render()});

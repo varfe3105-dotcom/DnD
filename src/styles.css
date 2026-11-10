@@ -402,3 +402,7 @@ footer p{margin:0 0 6px}
 #live-code{text-transform:uppercase;letter-spacing:.14em;font-family:ui-monospace,Menlo,Consolas,monospace}
 .dm-row .bar{margin:6px 0}
 span.chip{cursor:default}
+
+.imp-rep{margin-top:12px;padding-top:6px;border-top:1px solid var(--line)}
+.imp-rep h4{margin:6px 0;font:700 1.15rem var(--f-disp);color:var(--acc)}
+.imp-list{margin:2px 0 8px 18px;padding:0}

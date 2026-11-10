@@ -47,7 +47,7 @@ export function load(){
   return o?migrate(o):def()}
 export let S=load();
 export function setS(v){S=v}
-export const U={OPEN:{},SEL:null,CONF:null,WF:'all',WQ:'',WC:'',WSEL:null,EXP:'',IMP:'',LU:null,LUfocus:false};
+export const U={OPEN:{},SEL:null,CONF:null,WF:'all',WQ:'',WC:'',WSEL:null,EXP:'',IMP:'',LU:null,LUfocus:false,IMPREP:null};
 export const hooks={onSave:null};
 export const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S));localStorage.setItem(IDX,JSON.stringify(roster()))}catch(e){toast(t('toast.saveFailed'))}if(hooks.onSave)hooks.onSave()};
 
@@ -61,6 +61,9 @@ const fresh=()=>{U.OPEN={};U.SEL=null;U.EXP='';U.CONF=null};
 const park=()=>{const list=roster();if(!put(slotKey(S.id),S))return null;return list};
 export const charSnapshot=id=>id===S.id?S:get(slotKey(id));
 export function switchChar(id){if(id===S.id)return false;const o=get(slotKey(id));if(!o||!park())return false;setS(norm(o));drop(slotKey(id));fresh();save();return true}
+const pristine=()=>!S.klass&&!S.level&&!S.spells.length&&!S.notes&&!S.bag.some(Boolean)&&!Object.keys(S.eq).length;
+/** Platz für einen importierten Charakter: Ein noch leerer Bogen wird ersetzt, alle anderen bleiben. */
+export function openFresh(){if(pristine()){const list=roster().filter(x=>x.id!==S.id);put(IDX,list);setS(def());fresh();return true}if(!park())return false;const list=roster();setS(def());fresh();put(IDX,list);return true}
 export function newChar(){if(!park())return;const list=roster();setS(def());S.tab='setup';fresh();put(IDX,list);save()}
 export function dupChar(){if(!park())return;const list=roster();const c=JSON.parse(JSON.stringify(S));c.id=uid();c.name=S.name+' (2)';setS(norm(c));fresh();put(IDX,list);save()}
 export function delChar(id){const list=roster().filter(x=>x.id!==id);drop(slotKey(id));put(IDX,list);if(id!==S.id)return;const next=list[0]&&get(slotKey(list[0].id));if(next){setS(norm(next));drop(slotKey(list[0].id))}else{setS(def());S.tab='setup'}fresh();save()}
