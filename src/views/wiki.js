@@ -1,3 +1,4 @@
+import { lootLocked } from '../live.js';
 import { esc } from '../util.js';
 import { tok, itTone, rarityTone } from '../icons.js';
 import { CLN, ABK } from '../constants.js';
@@ -39,7 +40,7 @@ export function wDetail(e, inline) {
   const known = new Set(S.spells.map(s => s.n));
   let btn = '';
   if (!e.mine && e.k === 'spell') btn = known.has(e.n) ? `<button class="btn sm" disabled>${t('wiki.known')}</button>` : `<button class="btn sm solid" data-a="wadd" data-key="${esc(e.key)}">${t('wiki.addSpell')}</button>`;
-  if (!e.mine && ['potion', 'magic', 'item'].includes(e.k)) btn = `<button class="btn sm solid" data-a="wadd" data-key="${esc(e.key)}">${t('inv.add')}</button>`;
+  if (!e.mine && !lootLocked() && ['potion', 'magic', 'item'].includes(e.k)) btn = `<button class="btn sm solid" data-a="wadd" data-key="${esc(e.key)}">${t('inv.add')}</button>`;
   let body = '';
   if (e.k === 'spell') body = `${e.time || e.range || e.dur ? `<dl class="sm"><div><dt>${t('spell.time')}</dt><dd>${esc(e.time)}</dd></div><div><dt>${t('spell.range')}</dt><dd>${esc(e.range)}</dd></div><div><dt>${t('spell.dur')}</dt><dd>${esc(e.dur)}</dd></div></dl>` : ''}${e.aka ? `<p class="cls">PHB: ${esc(e.aka)}</p>` : ''}${e.origin ? `<p class="cls">${esc(e.origin)}</p>` : ''}<p class="ptext">${esc(e.eff)}</p>${e.higher ? `<p class="ptext"><b>${t('spell.higher')}:</b> ${esc(e.higher)}</p>` : ''}${e.comp ? `<p class="cls">${t('spell.comp')}: ${esc(e.comp)}${e.material ? ' (' + esc(e.material) + ')' : ''}</p>` : ''}${e.cls ? `<p class="cls">${t('wiki.classes')}: ${e.cls.split('').map(c => CLN[c]).join(', ')}</p>` : ''}${srcFoot(e.src === 'own' ? 'own' : e.source)}`;
   else if (e.k === 'class') {

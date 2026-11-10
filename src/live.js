@@ -3,7 +3,7 @@
 import { RealtimeClient } from '@supabase/realtime-js';
 import { uid } from './util.js';
 import { S, hooks } from './state.js';
-import { COND } from './catalog.js';
+import { COND, BYN } from './catalog.js';
 
 const WS = 'wss://ovkxoqgqocspwjvxhige.supabase.co/realtime/v1';
 const API_KEY = 'sb_publishable__g6JJhXOVsiXLvgvqYiK0w_cE4tmXTn';
@@ -40,11 +40,12 @@ const str = (v, n = 60) => String(v ?? '').slice(0, n);
 function clean(p) {
   return {
     key: str(p.key, 40), role: p.role === 'dm' ? 'dm' : 'player', name: str(p.name), klass: str(p.klass, 30), level: int(p.level, 20),
-    insp: !!p.insp, hp: int(p.hp), hpMax: int(p.hpMax), tmp: int(p.tmp), ac: int(p.ac, 99), exh: int(p.exh, 6), conc: str(p.conc),
+    insp: !!p.insp, lock: !!p.lock, hp: int(p.hp), hpMax: int(p.hpMax), tmp: int(p.tmp), ac: int(p.ac, 99), exh: int(p.exh, 6), conc: str(p.conc),
     cond: Array.isArray(p.cond) ? p.cond.filter(c => CONDS.has(c)) : [], death: { s: int(p.death?.s, 3), f: int(p.death?.f, 3) },
   };
 }
-const MSG_TYPES = new Set(['dmg', 'heal', 'temp', 'cond', 'handout', 'ack']);
+const MSG_TYPES = new Set(['dmg', 'heal', 'temp', 'cond', 'handout', 'ack', 'item', 'gold']);
+const COINS = ['pp', 'gp', 'ep', 'sp', 'cp'];
 const JPEG = /^data:image\/jpeg;base64,[A-Za-z0-9+/=]+$/;
 /** Nachrichten kommen von jedem mit dem Raumcode. Werte werden begrenzt, Änderungen am Bogen muss der Spieler annehmen. */
 function cleanMsg(m) {
@@ -58,6 +59,12 @@ function cleanMsg(m) {
     if (!out.title && !out.text && !out.img) return null;
   }
   if (m.type === 'ack') { out.name = str(m.name); out.ok = !!m.ok; }
+  if (m.type === 'item') {
+    out.q = Math.max(1, int(m.q, 99));
+    if (typeof m.key === 'string' && BYN[m.key] && ['item', 'potion', 'magic'].includes(BYN[m.key].k)) out.key = m.key;
+    else { out.n = str(m.n, 80); out.p = str(m.p, 600); if (!out.n) return null; }
+  }
+  if (m.type === 'gold') { out.coins = {}; COINS.forEach(k => { out.coins[k] = int(m.coins?.[k], 99999); }); if (!COINS.some(k => out.coins[k])) return null; }
   return out;
 }
 function onMessage(raw) {
@@ -84,7 +91,12 @@ export function answer(id, ok) {
   return ok ? m : null;
 }
 
-const payload = () => (L.role === 'dm' ? { role: 'dm' } : { role: 'player', insp: !!S.insp, name: S.name, klass: S.klass, level: S.level, hp: S.hp, hpMax: S.hpMax, tmp: S.tmp, ac: S.ac, exh: S.exh, conc: S.conc, cond: Object.keys(S.cond).filter(c => S.cond[c]), death: S.death });
+let dmFlags = () => ({});
+export const setDmFlags = fn => { dmFlags = fn; };
+/** Absprache der Spielleitung: Beute nur über sie. Gilt nur, solange der Spieler verbunden ist. */
+export const lootLocked = () => L.role === 'player' && L.status === 'on' && L.peers.some(p => p.role === 'dm' && p.lock);
+export const refresh = () => push();
+const payload = () => (L.role === 'dm' ? { role: 'dm', lock: !!dmFlags().lock } : { role: 'player', insp: !!S.insp, name: S.name, klass: S.klass, level: S.level, hp: S.hp, hpMax: S.hpMax, tmp: S.tmp, ac: S.ac, exh: S.exh, conc: S.conc, cond: Object.keys(S.cond).filter(c => S.cond[c]), death: S.death });
 function push() {
   if (!transport) return;
   const p = payload(), j = JSON.stringify(p);

@@ -1,3 +1,4 @@
+import { statText } from './dm-rules.js';
 // Ansichten für Ladungen, Begleiter, Hintergrund und Kampfstile.
 import { esc } from '../util.js';
 import { tok, itTone } from '../icons.js';
@@ -49,7 +50,7 @@ export function vPets() {
     const p = petView(raw);
     return `<div class="row wrow${p.hp === 0 ? ' petdown' : ''}"><div class="ic">${tok('leaf')}</div><div class="nm">${esc(p.n)}<small>${t('dm.acShort')} ${p.ac}${p.speed ? ' · ' + esc(speedText(p.speed)) : ''}${p.hp === 0 ? ' · ' + t('pet.down') : ''}</small></div><div class="qty"><button data-a="pethp" data-i="${i}" data-d="-1" aria-label="${t('hp.minusOne')}">−</button><span class="pethp"><b>${p.hp}</b>/${p.hpMax}</span><button data-a="pethp" data-i="${i}" data-d="1" aria-label="${t('common.more')}">+</button></div></div>
     ${p.attacks.map(a => `<div class="petatk"><span>${esc(a.n)}</span><b>+${a.hit}</b><b>${esc(dice(a.dmg))}</b><small>${esc(typeText(a.type))}</small></div>`).join('')}
-    ${p.text ? `<details class="feat"><summary><span>${t('pet.details')}</span></summary><p class="pettext">${esc(p.text)}</p><p class="note">${p.source === 'own' ? t('src.own') : srcNote(p.source) && t('dm.srcMonster')}</p></details>` : ''}`;
+    ${p.text ? `<details class="feat"><summary><span>${t('pet.details')}</span></summary><div class="pettext stat">${statText(p.text)}</div><p class="note">${p.source === 'own' ? t('src.own') : srcNote(p.source) && t('dm.srcMonster')}</p></details>` : ''}`;
   }).join('')}</div>`;
 }
 

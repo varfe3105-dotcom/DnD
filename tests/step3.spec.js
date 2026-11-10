@@ -263,7 +263,9 @@ test.describe('Spickzettel @new', () => {
     await page.locator('#dm-rq').fill('');
     await en(page);
     await page.locator('.dm-rs[data-rid="objects"] summary').first().click();
-    await expect(page.locator('.dm-rs[data-rid="objects"] table').first()).toBeVisible();
+    await page.locator('.dm-rs[data-rid="objects"] .rs-orig > summary').click();
+    await expect(page.locator('.dm-rs[data-rid="objects"] .rs-sub').first()).toBeVisible();
+    await expect(page.locator('.dm-rs[data-rid="objects"] table').first()).toBeAttached();
   });
 
   test('deutsche Kurzfassung mit Originaltext', async ({ page }) => {

@@ -1,3 +1,5 @@
+import { uid as newId } from './util.js';
+import { putBag as toBag } from './state.js';
 import { petView } from './companions.js';
 import { def, S, setS, U, migrate, norm, save, toast, sameItem } from './state.js';
 import { get, set, fits, slotLabel, itemView } from './helpers.js';
@@ -80,6 +82,12 @@ export function move(from, to) {
   if (!a) return;
   if (!fits(a, to)) { toast(t('toast.noFit', { a: itemView(a).n, s: slotLabel(to) })); return; }
   if (b && a.cons && b.cons && sameItem(a, b) && to.startsWith('bag')) { b.q += a.q; set(from, null); if (U.SEL === from) U.SEL = to; return; }
+  if (a.q > 1 && !to.startsWith('bag')) {
+    a.q--;
+    if (b) toBag(S, b);
+    set(to, { ...a, id: newId(), q: 1 });
+    return;
+  }
   if (b && !fits(b, from)) { toast(t('toast.occupied', { a: itemView(b).n, s: slotLabel(from) })); return; }
   set(to, a); set(from, b);
   if (U.SEL === from) U.SEL = to; else if (U.SEL === to) U.SEL = from;
@@ -114,6 +122,22 @@ export function importText(txt) {
   S.tab = 'setup'; U.OPEN = {}; U.SEL = null; U.EXP = '';
   toast(t('toast.imported', { n: S.name }));
   return true;
+}
+/** Bild für die Figur im Inventar: Seitenverhältnis bleibt, höchstens 480 × 720 Pixel. */
+export function loadFigure(file) {
+  if (!file || !/^image\//.test(file.type)) { toast(t('toast.notImage')); return; }
+  const url = URL.createObjectURL(file), img = new Image();
+  img.onload = () => {
+    const k = Math.min(1, 480 / img.width, 720 / img.height), c = document.createElement('canvas');
+    c.width = Math.round(img.width * k); c.height = Math.round(img.height * k);
+    c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
+    URL.revokeObjectURL(url);
+    S.fig = c.toDataURL('image/jpeg', 0.82);
+    save(); render();
+    toast(t('toast.figure'));
+  };
+  img.onerror = () => { URL.revokeObjectURL(url); toast(t('toast.notImage')); };
+  img.src = url;
 }
 export function loadPortrait(file) {
   if (!file || !/^image\//.test(file.type)) { toast(t('toast.notImage')); return; }

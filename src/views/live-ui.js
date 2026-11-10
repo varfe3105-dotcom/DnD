@@ -2,13 +2,16 @@
 import { esc } from '../util.js';
 import { U } from '../state.js';
 import { DU } from '../dm.js';
-import { COND, CAT } from '../catalog.js';
-import { L } from '../live.js';
+import { COND, CAT, BYN } from '../catalog.js';
+import { L, players } from '../live.js';
+import { D } from '../dm.js';
 import { lastBackup, needsBackup, charCount } from '../backup.js';
 import { TIERS, COINS, raritiesFor, coinRow } from '../loot.js';
 import { t, lang, dice } from '../i18n/index.js';
 
-const proposalText = m => (m.type === 'cond' ? t('live.pCond', { c: m.cond }) : t('live.p.' + m.type, { n: m.value }));
+const COINK = ['pp', 'gp', 'ep', 'sp', 'cp'];
+const coinList = c => COINK.filter(k => c[k]).map(k => `${c[k]} ${t('coin.' + k)}`).join(', ');
+const proposalText = m => (m.type === 'cond' ? t('live.pCond', { c: m.cond }) : m.type === 'item' ? t('live.pItem', { q: m.q, n: m.key && BYN[m.key] ? BYN[m.key].n : m.n }) : m.type === 'gold' ? t('live.pGold', { c: coinList(m.coins) }) : t('live.p.' + m.type, { n: m.value }));
 
 export function vInbox() {
   if (L.role !== 'player' || !L.inbox.length) return '';
@@ -63,5 +66,8 @@ export function vLootItems() {
 export function vLoot() {
   const online = L.role === 'dm' && L.status === 'on';
   return `<div class="card"><div class="add" style="margin-top:0"><label class="ck">${t('loot.tier')} <select id="dm-lt" aria-label="${t('loot.tier')}">${TIERS.map(x => `<option value="${x}"${x === tier() ? ' selected' : ''}>CR ${x}</option>`).join('')}</select></label><label class="ck">${t('loot.roll')} <input type="number" class="n" id="dm-lr" min="1" max="100" value="${esc(DU.lr || '')}" aria-label="${t('loot.roll')}"></label></div><div class="rs-t rs"><table class="loot"><tbody id="dm-lc">${vLootCoins()}</tbody></table></div><p class="note">${t('loot.coinHint')} ${t('src.summary')}</p></div>
-  <h2>${t('loot.items')}</h2><div class="card"><div class="add" style="margin-top:0"><input type="search" id="dm-lq" value="${esc(DU.lq || '')}" placeholder="${t('loot.search')}" aria-label="${t('loot.search')}"><select id="dm-lrar" aria-label="${t('loot.rarity')}"><option value="">${t('loot.allFit')}</option>${raritiesFor(tier()).map(r => `<option value="${r}"${r === DU.lrar ? ' selected' : ''}>${esc(t('rar.' + r.toLowerCase().replace(' ', '')))}</option>`).join('')}</select></div><div id="dm-li">${vLootItems()}</div><p class="note">${online ? t('loot.sendHint') : t('loot.offline')}</p></div>`;
+  <h2>${t('loot.give')}</h2><div class="card"><div class="add" style="margin-top:0"><label class="ck">${t('live.hoTo')} <select id="dm-lto" aria-label="${t('live.hoTo')}"><option value="all">${t('loot.toAll')}</option>${players().map(p => `<option value="${esc(p.key)}"${DU.lto === p.key ? ' selected' : ''}>${esc(p.name)}</option>`).join('')}</select></label></div><label class="ck"><input type="checkbox" id="dm-lock"${D.lootLock ? ' checked' : ''}> ${t('loot.lock')}</label><p class="note">${online ? t('loot.lockHint') : t('loot.offline')}</p>
+  <div class="coins loot-coins">${COINK.map(k => `<label class="ck">${t('coin.' + k)} <input type="number" class="n" id="lc-${k}" min="0" aria-label="${t('coin.' + k)}"></label>`).join('')}<button class="btn sm solid" data-a="lootgold"${online ? '' : ' disabled'}>${t('loot.giveCoins')}</button></div>
+  <details><summary>${t('loot.own')}</summary><div class="add"><input type="text" id="lo-n" placeholder="${t('common.name')}" aria-label="${t('common.name')}"><input type="text" id="lo-p" class="wide" placeholder="${t('inv.ownText')}" aria-label="${t('inv.ownText')}"><button class="btn sm solid" data-a="lootown"${online ? '' : ' disabled'}>${t('loot.give')}</button></div></details></div>
+  <h2>${t('loot.items')}</h2><div class="card"><div class="add" style="margin-top:0"><input type="search" id="dm-lq" value="${esc(DU.lq || '')}" placeholder="${t('loot.search')}" aria-label="${t('loot.search')}"><select id="dm-lrar" aria-label="${t('loot.rarity')}"><option value="">${t('loot.allFit')}</option>${raritiesFor(tier()).map(r => `<option value="${r}"${r === DU.lrar ? ' selected' : ''}>${esc(t('rar.' + r.toLowerCase().replace(' ', '')))}</option>`).join('')}</select></div><div id="dm-li">${vLootItems()}</div></div>`;
 }

@@ -1,3 +1,4 @@
+import { uid as newUid } from './util.js';
 import { applyProposal, shrinkImage } from './live-actions.js';
 import { downloadBackup, parseBackup, loadSnap, restoreBackup, initBackup } from './backup.js';
 import { vLootCoins, vLootItems, vBakHist } from './views/live-ui.js';
@@ -23,7 +24,7 @@ import { spMeta } from './views/sheet.js';
 import { wikiBody } from './views/wiki.js';
 import { openLU, applyLU } from './views/levelup.js';
 import { app, render } from './render.js';
-import { castAt, damage, heal, rest, cast, move, use, importText, loadPortrait } from './game.js';
+import { castAt, damage, heal, rest, cast, move, use, importText, loadPortrait, loadFigure } from './game.js';
 import { tip, hideTip, showTip } from './tooltip.js';
 import { BYN, CLASSES } from './catalog.js';
 
@@ -90,7 +91,11 @@ app.addEventListener('click',ev=>{
     case 'honote':{const m=live.L.handouts.shift();if(m){S.notes=(S.notes?S.notes+'\n\n':'')+[m.title,m.text].filter(Boolean).join('\n');toast(tr('live.noted'))}break}
     case 'hoimgdel':dm.DU.hoImg='';break;
     case 'hosend':{const D=dm.DU,title=(D.hoT||'').trim(),text=(D.hoX||'').trim();if(!title&&!text&&!D.hoImg){toast(tr('live.hoEmpty'));return}if(!live.sendMsg({type:'handout',to:D.hoTo||'all',title,text,img:D.hoImg||''})){toast(tr('live.notOn'));return}D.hoT='';D.hoX='';D.hoImg='';toast(tr('live.sent'));break}
-    case 'lootsend':{const c=BYN[b.dataset.key];if(c&&live.sendMsg({type:'handout',to:'all',title:c.n,text:c.p}))toast(tr('live.sent'));return}
+    case 'lootsend':{const c=BYN[b.dataset.key];if(c&&live.sendMsg({type:'item',to:dm.DU.lto||'all',key:c.key,q:1}))toast(tr('live.sent'));return}
+    case 'lootgold':{const coins={};['pp','gp','ep','sp','cp'].forEach(k=>{coins[k]=Math.max(0,Math.floor(+v('lc-'+k))||0)});if(!Object.values(coins).some(Boolean)){toast(tr('toast.needAmount'));return}if(live.sendMsg({type:'gold',to:dm.DU.lto||'all',coins})){toast(tr('live.sent'));break}return}
+    case 'lootown':{const n=v('lo-n').trim();if(!n){toast(tr('toast.needName'));return}if(live.sendMsg({type:'item',to:dm.DU.lto||'all',n,p:v('lo-p').trim(),q:1})){toast(tr('live.sent'));break}return}
+    case 'split':{const it=get(U.SEL);if(it&&it.q>1){it.q--;putBag(S,{...it,id:newUid(),q:1})}break}
+    case 'figdel':S.fig='';break;
     case 'bakdl':downloadBackup();toast(tr('bak.saved'));break;
     case 'baklater':U.NAGOFF=true;break;
     case 'baksnap':loadSnap(b.dataset.at).then(x=>{if(x){U.RESTORE=x;render()}});return;
@@ -173,6 +178,9 @@ app.addEventListener('change',ev=>{
   if(el.id==='bak-f'&&el.files&&el.files[0]){const fr=new FileReader();fr.onload=()=>{const bak=parseBackup(String(fr.result));el.value='';if(!bak){toast(tr('bak.bad'));return}U.RESTORE=bak;render()};fr.readAsText(el.files[0]);return}
   if(el.id==='ho-f'&&el.files&&el.files[0]){shrinkImage(el.files[0]).then(d=>{if(!d){toast(tr('live.hoBadImage'));return}dm.DU.hoImg=d;render()});return}
   if(el.id==='ho-to'){dm.DU.hoTo=el.value;return}
+  if(el.id==='dm-lto'){dm.DU.lto=el.value;return}
+  if(el.id==='dm-lock'){dm.D.lootLock=el.checked;dm.saveD();live.refresh();return}
+  if(el.id==='fig-in'&&el.files&&el.files[0]){loadFigure(el.files[0]);return}
   if(el.id==='dm-lt'){dm.DU.lt=el.value;dm.DU.lrar='';later();return}
   if(el.id==='dm-lrar'){dm.DU.lrar=el.value;$('dm-li').innerHTML=vLootItems();return}
   if(el.id==='bg-sel'){pickBg(el.value);later();return}
@@ -248,9 +256,11 @@ app.addEventListener('toggle',e=>{if(e.target.classList&&e.target.classList.cont
 let livePending=false;
 const typing=()=>{const a=document.activeElement;return !!a&&app.contains(a)&&/^(INPUT|TEXTAREA|SELECT)$/.test(a.tagName)};
 live.setPeerHook(()=>dm.syncLive(live.players()));
+live.setDmFlags(()=>({lock:!!dm.D.lootLock}));
 live.setAckHook(m=>toast(tr(m.ok?'live.ackYes':'live.ackNo',{n:m.name})));
 initBackup(()=>{const el=$('bak-hist');if(el)el.innerHTML=vBakHist()});
-live.setLiveListener(force=>{if(!force&&S.tab!=='dm'&&S.tab!=='setup')return;if(typing()){livePending=true;return}later()});
+let lastLock=false;
+live.setLiveListener(force=>{const lk=live.lootLocked(),lockChanged=lk!==lastLock;lastLock=lk;if(!force&&!lockChanged&&S.tab!=='dm'&&S.tab!=='setup')return;if(typing()){livePending=true;return}later()});
 app.addEventListener('focusout',()=>{if(livePending)setTimeout(()=>{if(livePending&&!typing()){livePending=false;later()}},0)});
 
 /* Charakterbogen aus PDF oder Bild */

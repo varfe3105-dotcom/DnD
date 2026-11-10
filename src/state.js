@@ -6,7 +6,7 @@ import { BYN, CLASSES, byName, findRef } from './catalog.js';
 import { loc } from './i18n/index.js';
 
 export const KEY='charbogen-v4',OLD='charbogen-v2';
-export const def=()=>({v:4,id:uid(),pets:[],bg:null,multi:[],tools:[],langs:[],acMode:'auto',insp:false,name:t('char.new'),info:'',img:'',race:'',subrace:'',klass:'',sub:'',level:0,cls:'',hp:10,hpMax:10,tmp:0,ac:10,speed:9,prof:2,
+export const def=()=>({v:4,id:uid(),fig:'',pets:[],bg:null,multi:[],tools:[],langs:[],acMode:'auto',insp:false,name:t('char.new'),info:'',img:'',race:'',subrace:'',klass:'',sub:'',level:0,cls:'',hp:10,hpMax:10,tmp:0,ac:10,speed:9,prof:2,
  abil:{str:10,dex:10,con:10,int:10,wis:10,cha:10},saves:{},skills:{},hd:{max:1,used:0,die:'W8'},death:{s:0,f:0},conc:'',
  slots:Array.from({length:9},()=>({max:0,used:0})),pact:{max:0,used:0,lvl:1},res:[],spells:[],feats:[],bag:Array(24).fill(null),eq:{},
  gold:{pp:0,gp:0,ep:0,sp:0,cp:0},cond:{},exh:0,notes:'',tab:'main'});
@@ -33,7 +33,7 @@ export function norm(o){
   if(!s.klass&&s.cls&&CLN[s.cls])s.klass=CLN[s.cls];
   if(CLASSES[s.klass])s.cls=CLASSES[s.klass].l;
   // Ältere Gegenstände dem Katalog zuordnen, damit sie der Sprache folgen. Eigene Einträge bleiben, wie sie sind.
-  [...s.bag,...Object.values(s.eq)].forEach(it=>{if(it&&!it.ref){const r=findRef(it.n,it.p);if(r)it.ref=r}});
+  [...s.bag,...Object.values(s.eq)].forEach(it=>{if(it&&!it.ref){const r=findRef(it.n,it.p);if(r)it.ref=r}if(it&&it.ref==='item:amulet'&&it.slot==='hand')it.slot='neck'});
   s.v=4;return s}
 export function migrate(o){
   const s=norm({name:o.name,info:o.info,hp:o.hp,hpMax:o.hpMax,ac:o.ac,speed:o.speed,prof:o.prof,abil:o.abil,hd:o.hd?{max:o.hd.max,used:o.hd.used}:undefined,slots:o.slots,gold:o.gold,cond:o.cond,exh:o.exh,notes:o.notes});

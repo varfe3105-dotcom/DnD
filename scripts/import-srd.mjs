@@ -235,7 +235,7 @@ function items() {
     else {
       const body = e.desc?.length && !/^(These special tools|Several of the most|This item encompasses|Barding is armor|An arcane focus|A druidic focus|A holy symbol)/.test(e.desc[0]) ? descText(e.desc) : '';
       if (gc === 'equipment-packs') { group = 'pack'; ic = 'bag'; }
-      else if (['holy-symbols', 'arcane-foci', 'druidic-foci'].includes(gc)) { group = 'focus'; slot = 'hand'; ic = gc === 'holy-symbols' ? 'amulet' : gc === 'druidic-foci' ? 'leaf' : /crystal|orb/i.test(e.name) ? 'gem' : 'wand'; }
+      else if (['holy-symbols', 'arcane-foci', 'druidic-foci'].includes(gc)) { group = 'focus'; slot = e.index === 'amulet' ? 'neck' : 'hand'; ic = gc === 'holy-symbols' ? 'amulet' : gc === 'druidic-foci' ? 'leaf' : /crystal|orb/i.test(e.name) ? 'gem' : 'wand'; }
       else if (ec === 'tools') { group = 'tool'; ic = tc === 'Musical Instrument' ? 'music' : tc === 'Gaming Sets' ? 'dice' : 'tool'; }
       else if (ec === 'mounts-and-vehicles') { group = 'mount'; ic = 'box'; }
       else if (gc === 'kits') { group = 'tool'; ic = /Healer/.test(e.name) ? 'heart' : /Poison/.test(e.name) ? 'skull' : /Disguise/.test(e.name) ? 'mask' : /Herbal/.test(e.name) ? 'leaf' : /Mess/.test(e.name) ? 'food' : 'tool'; }
@@ -369,11 +369,11 @@ function backgrounds() {
 }
 
 function rulesections() {
-  const de = readTr('rule-sections-de.json');
+  const de = readTr('rule-sections-de.json'), en = readTr('rule-sections-en.json');
   const group = Object.fromEntries(srd('Rules').flatMap(g => g.subsections.map(s => [s.index, g.index])));
-  const out = srd('Rule-Sections').map(x => ({ id: x.index, n: { en: x.name, ...(de[x.index] ? { de: de[x.index].n } : {}) }, group: group[x.index], text: { en: descText(x.desc) }, ...(de[x.index] ? { de: de[x.index].text } : {}), source: 'srd', verified: false }));
+  const out = srd('Rule-Sections').map(x => ({ id: x.index, n: { en: x.name, ...(de[x.index] ? { de: de[x.index].n } : {}) }, group: group[x.index], text: { en: descText(x.desc) }, ...(de[x.index] || en[x.index] ? { sum: { ...(en[x.index] ? { en: en[x.index] } : {}), ...(de[x.index] ? { de: de[x.index].text } : {}) } } : {}), source: 'srd', verified: false }));
   writeArr('rule-sections.json', out);
-  console.log(`Regelabschnitte: ${out.length}, deutsche Kurzfassungen: ${out.filter(x => x.de).length}`);
+  console.log(`Regelabschnitte: ${out.length}, Kurzfassungen: ${out.filter(x => x.sum).length}`);
 }
 
 const steps = { conditions, classes, races, spells, items, magic, subclasses, monsters, backgrounds, rulesections };

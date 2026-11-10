@@ -1,5 +1,5 @@
 import { vLiveSend, vHandoutForm, vLoot } from './live-ui.js';
-import { vCheat } from './dm-rules.js';
+import { vCheat, statText } from './dm-rules.js';
 import { esc, mod, sg } from '../util.js';
 import { COND } from '../catalog.js';
 import { t, nameLine, dist } from '../i18n/index.js';
@@ -18,7 +18,7 @@ export function vResults() {
 function statBlock(c) {
   const m = findMonster(c.mon);
   if (!m) return '';
-  return `<div class="dm-stat"><dl class="sm">${ABK.map(k => `<div><dt>${t('abs.' + k)}</dt><dd>${m.abil[k]} (${sg(mod(m.abil[k]))})</dd></div>`).join('')}</dl><p class="cls">${esc([m.size, m.type].filter(Boolean).join(' '))}${m.size || m.type ? ' · ' : ''}CR ${crText(m.cr)} · ${esc(m.speed)}${m.hd ? ' · ' + esc(m.hd) : ''}</p><p class="ptext">${esc(m.text)}</p><p class="src">${m.custom ? t('src.own') : t('dm.srcMonster')}</p></div>`;
+  return `<div class="dm-stat"><dl class="sm">${ABK.map(k => `<div><dt>${t('abs.' + k)}</dt><dd>${m.abil[k]} (${sg(mod(m.abil[k]))})</dd></div>`).join('')}</dl><p class="cls">${esc([m.size, m.type].filter(Boolean).join(' '))}${m.size || m.type ? ' · ' : ''}CR ${crText(m.cr)} · ${esc(m.speed)}${m.hd ? ' · ' + esc(m.hd) : ''}</p><div class="ptext stat">${statText(m.text)}</div><p class="src">${m.custom ? t('src.own') : t('dm.srcMonster')}</p></div>`;
 }
 const pipsOf = (o, attr) => Array.from({ length: o.max }, (_, j) => `<button class="pip ${j < o.max - o.used ? 'on' : ''}" ${attr} data-j="${j}" aria-label="${t(j < o.max - o.used ? 'pip.use' : 'pip.reset')}"></button>`).join('');
 function row(c, active) {

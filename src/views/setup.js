@@ -23,7 +23,7 @@ export function vSetup() {
   return `<p class="note">${t('setup.intro')}</p>
   ${vChars()}
   ${vLiveJoin()}
-  <h2>${t('setup.char')}</h2><div class="card"><div class="porsetup"><label class="por" for="img-in2" title="${t('setup.portrait')}">${S.img ? `<img src="${S.img}" alt="">` : `<span>${esc((S.name || '?').trim()[0] || '?')}</span>`}</label><input type="file" id="img-in2" accept="image/*" hidden><div class="add" style="margin:0"><label class="btn sm" for="img-in2">${t('setup.portrait')}</label>${S.img ? `<button class="btn sm bad" data-a="imgdel">${t('setup.portraitDel')}</button>` : ''}</div></div>
+  <h2>${t('setup.char')}</h2><div class="card"><div class="porsetup"><label class="por" for="img-in2" title="${t('setup.portrait')}">${S.img ? `<img src="${S.img}" alt="">` : `<span>${esc((S.name || '?').trim()[0] || '?')}</span>`}</label><input type="file" id="img-in2" accept="image/*" hidden><div class="add" style="margin:0"><label class="btn sm" for="img-in2">${t('setup.portrait')}</label>${S.img ? `<button class="btn sm bad" data-a="imgdel">${t('setup.portraitDel')}</button>` : ''}${S.fig ? `<button class="btn sm bad" data-a="figdel">${t('setup.figDel')}</button>` : ''}</div></div>
   <div class="form" style="margin-top:12px">
    ${field(t('common.name'), txtIn('name', S.name, t('common.name')))}
    ${field(t('setup.race'), sel('race', [['', t('common.choose')], ...named(Object.keys(RACES))], S.race, t('setup.race')))}

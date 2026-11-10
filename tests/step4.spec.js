@@ -206,7 +206,7 @@ test.describe('Beute @new', () => {
     await expect(page.locator('.live-state')).toHaveClass(/on/);
     await act(page, 'dmview', '[data-v="loot"]').click();
     await act(page, 'lootsend').first().click();
-    expect((await sent(page)).at(-1)).toMatchObject({ type: 'handout', to: 'all', title: expect.stringMatching(/Bag|Nimmervoller/) });
+    expect((await sent(page)).at(-1)).toMatchObject({ type: 'item', to: 'all', key: 'magic:bag-of-holding' });
   });
 });
 
