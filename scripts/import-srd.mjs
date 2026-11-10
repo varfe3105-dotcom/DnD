@@ -17,6 +17,8 @@ const readData = f => JSON.parse(fs.readFileSync(dataFile(f), 'utf8'));
 const readTr = f => { const p = dataFile('translations/' + f); return fs.existsSync(p) ? JSON.parse(fs.readFileSync(p, 'utf8')) : {}; };
 const writeArr = (f, a) => fs.writeFileSync(dataFile(f), '[\n' + a.map(x => '  ' + JSON.stringify(x)).join(',\n') + '\n]\n');
 const writeObj = (f, o) => fs.writeFileSync(dataFile(f), JSON.stringify(o, null, 1) + '\n');
+/** Vollständige Übersetzungen, verteilt auf mehrere Dateien mit gemeinsamem Präfix. Sie gehen den Kurzfassungen vor. */
+const fullTr = prefix => Object.assign({}, ...fs.readdirSync(dataFile('translations')).filter(f => f.startsWith(prefix)).sort().map(readTr));
 export const descText = d => (Array.isArray(d) ? d : [d]).join('\n').replace(/\r/g, '').trim();
 
 const report = { missing: [] };
@@ -143,6 +145,9 @@ function spells() {
   }
   for (const [n, deName, lvl, school, time, range, dur, comp, conc, ritual, cls, en, deT, higherEn, higherDe, origin] of readTr('other-extra-spells.json')) out.push({ n, de: deName, lvl, school, ic: SCHOOL_IC[school], cls, time: { en: time, de: timeDe(time) }, range: { en: range, de: rangeDe(range) }, dur: { en: dur, de: durDe(dur) }, comp, conc: !!conc, ritual: !!ritual, text: { en, de: deT }, higher: { en: higherEn, de: higherDe }, origin, source: 'summary', verified: false });
   out.sort((a, b) => a.lvl - b.lvl || a.n.localeCompare(b.n));
+  const full = fullTr('de-full-spells-');
+  out.forEach(s => { const f = full[s.n]; if (!f) return; s.text.de = f[0]; if (f[1]) s.higher = { ...(s.higher || {}), de: f[1] }; });
+  console.log(`Zauber mit vollständiger deutscher Fassung: ${out.filter(s => full[s.n]).length} von ${out.length}`);
   writeArr('spells.json', out);
 
   // Abgleich mit der PHB-Liste
