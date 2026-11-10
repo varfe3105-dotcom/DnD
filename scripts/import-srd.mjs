@@ -275,7 +275,7 @@ function variantDe(v, parentName, d) {
   if (g) { const score = GIANT[g[1]]; const potion = /^Potion/.test(v.name); return [g[1] === 'Hill' && potion ? 'Trank der Hügelriesenstärke' : `${d[0]} (${g[1]})`, `${potion ? '1 Stunde: ' : ''}Deine Stärke wird ${score} (keine Wirkung, wenn sie schon höher ist).`]; }
   if (/, \+1, \+2, or \+3$/.test(parentName)) return [`${d[0]}, ${v.name.match(/\+\d/)[0]}`, d[1]];
   const parentWords = new Set(parentName.toLowerCase().split(/[\s,()]+/));
-  const diff = v.name.split(/[\s]+/).filter(w => !parentWords.has(w.toLowerCase().replace(/[,()]/g, ''))).join(' ');
+  const diff = v.name.split(/[\s]+/).filter(w => !parentWords.has(w.toLowerCase().replace(/[,()]/g, ''))).join(' ').replace(/^\(|\)$/g, '');
   return [`${d[0]}${diff ? ` (${diff})` : ''}`, d[1]];
 }
 function magic() {
@@ -359,7 +359,24 @@ function monsters() {
   console.log(`Monster: ${out.length}`);
 }
 
-const steps = { conditions, classes, races, spells, items, magic, subclasses, monsters };
+function backgrounds() {
+  const a = srd('Backgrounds')[0];
+  const out = readTr('backgrounds.json').map(b => (b.id === a.index
+    ? { ...b, feature: { n: a.feature.name, text: { en: descText(a.feature.desc), de: b.feature.text.de } }, source: 'srd', verified: false }
+    : { ...b, source: 'summary', verified: false }));
+  writeArr('backgrounds.json', out);
+  console.log(`Hintergruende: ${out.length}`);
+}
+
+function rulesections() {
+  const de = readTr('rule-sections-de.json');
+  const group = Object.fromEntries(srd('Rules').flatMap(g => g.subsections.map(s => [s.index, g.index])));
+  const out = srd('Rule-Sections').map(x => ({ id: x.index, n: { en: x.name, ...(de[x.index] ? { de: de[x.index].n } : {}) }, group: group[x.index], text: { en: descText(x.desc) }, ...(de[x.index] ? { de: de[x.index].text } : {}), source: 'srd', verified: false }));
+  writeArr('rule-sections.json', out);
+  console.log(`Regelabschnitte: ${out.length}, deutsche Kurzfassungen: ${out.filter(x => x.de).length}`);
+}
+
+const steps = { conditions, classes, races, spells, items, magic, subclasses, monsters, backgrounds, rulesections };
 const only = process.argv.slice(2).filter(a => !a.startsWith('--'));
 for (const [name, fn] of Object.entries(steps)) if (!only.length || only.includes(name)) fn();
 if (report.missing.length) console.log(report.missing.join('\n'));

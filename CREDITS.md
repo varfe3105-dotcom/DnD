@@ -50,3 +50,7 @@ Deutsche Texte und alles außerhalb des SRD sind eigene Zusammenfassungen und Ü
 | ESLint | MIT | https://eslint.org |
 | cross-env | MIT | https://github.com/kentcdodds/cross-env |
 | Fontsource (Paketierung der Schriften) | MIT | https://fontsource.org |
+
+## Regelabschnitte und Hintergründe
+
+Der Spickzettel der Spielleitung nutzt die Rule Sections aus dem SRD 5.1 (CC BY 4.0, Wizards of the Coast) über 5e-bits/5e-database, die deutschen Kurzfassungen sind eigene Zusammenfassungen. Vom PHB-Hintergrund Acolyte stammt das Merkmal aus dem SRD; die übrigen zwölf Hintergründe sind Zusammenfassungen in eigenen Worten und nicht am Buch geprüft.

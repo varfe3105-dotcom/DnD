@@ -1,3 +1,5 @@
+import { unarmed } from '../attacks.js';
+import { vCharges, vPets } from './extras.js';
 import { castOptions } from '../game.js';
 import { prepCap, spellStats } from '../tables.js';
 import { esc, clamp, mod, sg } from '../util.js';
@@ -37,12 +39,14 @@ export function vCond() {
   return `<h2>${t('cond.title')}${act.length ? `<em>${t('cond.active', { n: act.length })}</em>` : ''}</h2><div class="card"><div class="chips">${COND.map(c => `<button class="chip${S.cond[c.n] ? ' on' : ''}" data-a="cond" data-c="${c.n}" aria-pressed="${!!S.cond[c.n]}" title="${esc(c.de)}">${esc(nameLine(c.n, c.de))}</button>`).join('')}</div>${act.map(c => `<div class="row"><div class="ic">${tok(c.ic, undefined, 'cond:' + c.n)}</div><div class="nm">${c.n}${deName(c.n, c.de) ? ` <span class="lbl">${c.de}</span>` : ''}<small>${esc(loc(c.text))}</small></div></div>`).join('')}<div class="row"><div class="ic">${tok('skull')}</div><div class="nm">${t('exh.title', { n: S.exh })}<small>${S.exh ? EXH.slice(0, S.exh).map(e => `${e.level}: ${esc(loc(e.text))}`).join(' · ') : t('exh.none')}</small></div><div class="qty"><button data-a="exh" data-d="-1" aria-label="${t('exh.down')}">−</button><button data-a="exh" data-d="1" aria-label="${t('exh.up')}">+</button></div></div></div>`;
 }
 export function vAtk() {
-  const rows = ['main', 'off'].map(k => S.eq[k]).filter(Boolean).map(raw => {
-    const a = atk(raw); if (!a) return '';
+  const rows = ['main', 'off'].filter(k => S.eq[k]).map(k => {
+    const raw = S.eq[k], a = atk(raw, k); if (!a) return '';
     const it = itemView(raw);
-    return `<div class="row"><div class="ic">${tok(it.ic, itTone(it), it.ref)}</div><div class="nm">${esc(it.n)}<small>${esc(it.p)}</small></div><div class="atk"><b>${a.hit}</b><small>${t('atk.hit')}</small></div><div class="atk"><b>${a.dmg}</b><small>${esc(a.type)}${a.vers ? ` · 2H ${a.vers}` : ''}</small></div></div>`;
+    return `<div class="row wrow"><div class="ic">${tok(it.ic, itTone(it), it.ref)}</div><div class="nm">${esc(it.n)}<small>${esc(it.p)}</small><span class="atkt"><button class="chip prf${a.prof ? ' on' : ''}" data-a="wprof" data-k="${k}" aria-pressed="${a.prof}">${t(a.prof ? 'atk.prof' : 'atk.noProf')}</button>${a.tags.map(x => `<span class="lbl">${esc(x)}</span>`).join('')}</span></div><div class="atk"><b>${a.hit}</b><small>${t('atk.hit')}</small></div><div class="atk"><b>${a.dmg}</b><small>${esc(a.type)}${a.vers ? ` · 2H ${a.vers}` : ''}</small></div></div>`;
   }).join('');
-  return `<h2>${t('atk.title')}</h2><div class="card">${rows || `<div class="empty">${t('atk.none')}</div>`}${rows ? `<p class="note">${t('atk.note')}</p>` : ''}</div>`;
+  const u = unarmed();
+  const fist = `<div class="row wrow atk-un"><div class="ic">${tok('swirl')}</div><div class="nm">${t('atk.unarmed')}${u.tags.length ? `<small>${esc(u.tags.join(' · '))}</small>` : ''}</div><div class="atk"><b>${u.hit}</b><small>${t('atk.hit')}</small></div><div class="atk"><b>${u.dmg}</b><small>${esc(u.type)}</small></div></div>`;
+  return `<h2>${t('atk.title')}</h2><div class="card">${rows}${fist}<p class="note">${rows ? t('atk.note') : t('atk.none')}</p></div>`;
 }
 export function vQuick() {
   const r = refs().filter(x => get(x).cons);
@@ -53,7 +57,7 @@ export function vRes() {
   if (!S.res.length) return '';
   return `<h2>${t('res.title')}</h2><div class="card">${S.res.map((r, i) => `<div class="row"><div class="ic">${tok(r.ic)}</div><div class="nm">${esc(r.n)}<small>${restLabel(r.rest)}${r.p ? ' · ' + esc(resText(r)) : ''}</small></div>${r.max > 12 ? `<div class="qty"><button data-a="resd" data-i="${i}" data-d="1" aria-label="${t('res.useOne')}">−</button><span>${r.max >= 99 ? '∞' : (r.max - r.used) + ' / ' + r.max}</span><button data-a="resd" data-i="${i}" data-d="-1" aria-label="${t('res.backOne')}">+</button></div>` : `<div class="pips">${pips(r.max, r.used, `data-a="pip" data-k="res" data-i="${i}"`)}</div>`}</div>`).join('')}</div>`;
 }
-export const featSrc = f => ({ Klasse: t('feat.class'), Unterklasse: t('feat.sub'), Talent: t('feat.feat'), 'Eigener Eintrag': t('feat.own') }[f.src] || f.src);
+export const featSrc = f => ({ Klasse: t('feat.class'), Unterklasse: t('feat.sub'), Talent: t('feat.feat'), 'Eigener Eintrag': t('feat.own'), Hintergrund: t('feat.bg') }[f.src] || f.src);
 export function vFeats() {
   const all = [...raceTraits(), ...S.feats];
   if (!all.length) return '';
@@ -95,6 +99,6 @@ export function vMain() {
   let h = '';
   if (S.conc) h += `<div class="conc"><div><small>${t('conc.title')}</small><b>${esc(S.conc)}</b><span>${t('conc.hint')}</span></div><button class="btn" data-a="concend">${t('conc.end')}</button></div>`;
   h += `<div class="stats">${st(t('stat.ac'), S.ac)}${st(t('stat.init'), sg(mod(a.dex)))}${st(t('stat.speed'), dist(S.speed))}${st(t('stat.prof'), sg(S.prof))}${st(t('stat.pp'), 10 + skv('Perception'))}</div>`;
-  h += `<div class="sheet"><aside>${vAbil(false)}</aside><div class="col">${vHP()}${vCond()}${vAtk()}${vQuick()}${vRes()}${vSpells()}${vFeats()}${vSkills()}${vProfs()}</div></div>`;
+  h += `<div class="sheet"><aside>${vAbil(false)}</aside><div class="col">${vHP()}${vCond()}${vAtk()}${vQuick()}${vCharges()}${vRes()}${vPets()}${vSpells()}${vFeats()}${vSkills()}${vProfs()}</div></div>`;
   return h;
 }

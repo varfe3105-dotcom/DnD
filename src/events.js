@@ -1,3 +1,8 @@
+import { vRuleList } from './views/dm-rules.js';
+import { vPetResults } from './views/extras.js';
+import { weaponProf } from './attacks.js';
+import { chargeOf, applyDawn, petFrom, petOwn, petView } from './companions.js';
+import { pickBg, applyBg, bgById, toggleStyle } from './backgrounds.js';
 import { isSheetFile, readSheets } from './sheet-read.js';
 import { importDraft } from './import-play5e.js';
 import { isPlay5e } from './import-play5e.js';
@@ -75,6 +80,17 @@ app.addEventListener('click',ev=>{
     case 'sheetcancel':U.SHEET=null;break;
     case 'sheetapply':{if(!U.SHEET.draft.klass){toast(tr('sheet.needClass'));return}const r=importDraft(U.SHEET.draft);if(r.error){toast(r.error);return}U.IMPREP=r.reports;U.SHEET=null;S.tab='setup';toast(tr('imp.done',{n:r.reports.map(x=>x.name).join(', ')}));break}
     case 'sheetspells':{const known=new Set(S.spells.map(x=>x.n));let n=0;U.SHEET.draft.spells.forEach(x=>{if(!known.has(x)&&BYN['spell:'+x]){S.spells.push(spFrom(BYN['spell:'+x]));n++}});U.SHEET=null;toast(tr('sheet.added',{n}));break}
+    case 'wprof':{const it=S.eq[k];if(it)it.prof=!weaponProf(it);break}
+    case 'style':toggleStyle(b.dataset.n);break;
+    case 'chg':{const it=get(b.dataset.r),c=chargeOf(it);if(c)it.chUsed=clamp(+b.dataset.j<c.max-c.used?c.used+1:c.used-1,0,c.max);break}
+    case 'chgd':{const it=get(b.dataset.r),c=chargeOf(it);if(c)it.chUsed=clamp(c.used+ +b.dataset.d,0,c.max);break}
+    case 'dawn':U.DAWN=!U.DAWN;break;
+    case 'dawnapply':{const n=applyDawn([...document.querySelectorAll('[data-dawn]')].map(x=>[x.dataset.dawn,x.value]));U.DAWN=false;toast(tr('chg.dawnDone',{n}));break}
+    case 'pethp':{const p=S.pets[i];if(p){p.hp=clamp(petView(p).hp+ +b.dataset.d,0,petView(p).hpMax)}break}
+    case 'petadd':{const m=dm.findMonster(b.dataset.m);if(!m)break;S.pets.push(petFrom(m));U.petQ='';toast(tr('toast.added',{n:m.n}));break}
+    case 'petown':{const n=v('pet-n').trim();if(!n){toast(tr('toast.needName'));return}S.pets.push(petOwn(n,v('pet-ac'),v('pet-hp'),v('pet-sp').trim(),v('pet-t').trim()));toast(tr('toast.created',{n}));break}
+    case 'bgcancel':U.BGPICK=null;break;
+    case 'bgapply':{const bg=bgById(U.BGPICK);if(!bg)break;const sel=[...document.querySelectorAll('[data-bgl]')].map(x=>x.value);const tool=v('bg-tool');if(sel.some(x=>!x)||(bg.choose.tool&&!tool)){toast(tr('bg.needPick'));return}U.BGPICK=null;applyBg(bg,sel,tool);break}
     case 'insp':S.insp=!S.insp;break;
     case 'castslot':castAt(i,b.dataset.l);break;
     case 'prep':{const s=S.spells[i];if(s&&!s.always)s.prep=s.prep===false;break}
@@ -138,6 +154,8 @@ app.addEventListener('change',ev=>{
   if(el.id==='inv-sel'||el.id==='sp-sel'){const c=el.id==='inv-sel'?BYN[el.value]:BYN['spell:'+el.value];const h=$(el.id+'-h');if(h)h.textContent=c?(c.k==='spell'?spMeta(c)+' — '+c.eff:c.p+(c.att?' · '+tr('item.needsAttune'):'')):'';return}
   if(el.id==='wc'){U.WC=el.value;$('wres').innerHTML=wikiBody();return}
   if(el.dataset.lu){U.LU[el.dataset.lu]=el.value;if(el.dataset.lu==='k'){const c=classLevels().find(x=>x.k===el.value);U.LU.sub=c?c.sub:''}later();return}
+  if(el.id==='bg-sel'){pickBg(el.value);later();return}
+  if(el.dataset.petbm!=null){const p=S.pets[+el.dataset.petbm];if(p){p.bm=el.checked;save()}later();return}
   if(el.id==='char-switch'){switchChar(el.value);render();return}
   if(el.id==='dm-on'){dm.setDmOn(el.checked);later();return}
   if(el.id==='ac-auto'){S.acMode=el.checked?'auto':'manual';save();later();return}
@@ -157,6 +175,8 @@ app.addEventListener('change',ev=>{
 app.addEventListener('input',ev=>{
   const el=ev.target;
   if(el.id==='inv-filter'){U.invQ=el.value;later();return}
+  if(el.id==='pet-q'){U.petQ=el.value;$('pet-res').innerHTML=vPetResults();return}
+  if(el.id==='dm-rq'){dm.DU.rq=el.value;$('dm-rlist').innerHTML=vRuleList();return}
   if(el.id==='dm-eq'){dm.DU.eq=el.value;$('dm-eres').innerHTML=vEncResults();return}
   if(el.id==='dm-mq'){dm.DU.mq=el.value;$('dm-results').innerHTML=vResults();return}
   if(el.id==='dm-nq'){dm.DU.nq=el.value;$('dm-nlist').innerHTML=vNoteList();return}
@@ -197,7 +217,7 @@ window.addEventListener('pointerup',e=>{
   save();render()});
 window.addEventListener('pointercancel',()=>{if(!drag)return;clearOver();if(drag.g)drag.g.remove();drag=null;render()});
 
-app.addEventListener('toggle',e=>{if(e.target.classList&&e.target.classList.contains('dm-custom'))dm.DU.customOpen=e.target.open},true);
+app.addEventListener('toggle',e=>{if(e.target.classList&&e.target.classList.contains('dm-custom'))dm.DU.customOpen=e.target.open;if(e.target.dataset&&e.target.dataset.rid){dm.DU.ropen=dm.DU.ropen||{};dm.DU.ropen[e.target.dataset.rid]=e.target.open}},true);
 
 /* Live-Tisch: Beim Tippen nicht neu zeichnen, damit Eingaben nicht verloren gehen */
 let livePending=false;

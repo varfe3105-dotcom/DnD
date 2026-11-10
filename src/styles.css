@@ -444,3 +444,28 @@ span.chip{cursor:default}
 .dm-diff.deadly{background:#8f2a22;color:#ffe6dc}
 .dm-total{display:flex;align-items:center;gap:10px;margin:10px 0 2px}
 .dm-custom{margin-top:18px}
+
+/* Schritt 3: Angriffe, Ladungen, Begleiter, Hintergrund, Spickzettel */
+.atkt{display:flex;flex-wrap:wrap;align-items:center;gap:4px 8px;margin-top:4px}
+.chip.prf{font-size:.72rem;padding:1px 8px;min-height:0}
+.atk-un .nm small{margin-top:2px}
+.dawn{margin-top:10px;padding-top:10px;border-top:1px solid var(--line)}
+.dawnr{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:8px}
+.dawnr small{display:block;color:var(--mute)}
+.chg-edit{margin-top:8px}
+.petatk{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 12px;padding:2px 0 2px 44px}
+.petatk span{flex:1 1 40%;min-width:0}
+.petatk small{color:var(--mute)}
+.pethp{min-width:52px;text-align:center}
+.petdown .nm{opacity:.6}
+.pettext{white-space:pre-line}
+.bgpick{margin-top:12px;padding-top:12px;border-top:1px solid var(--line)}
+.rs h4{margin:12px 0 4px}
+.rs p{margin:6px 0}
+.rs ul{margin:6px 0;padding-left:20px}
+.rs-t{overflow-x:auto}
+.rs table{border-collapse:collapse;width:100%;font-size:.9rem}
+.rs th,.rs td{text-align:left;padding:3px 8px;border-bottom:1px solid var(--line)}
+.rs-orig{margin-top:6px}
+@media (max-width:520px){.wrow{flex-wrap:wrap}.wrow .nm{flex:1 1 calc(100% - 60px);min-width:0}.wrow .atk,.wrow .qty,.wrow .pips{margin-left:auto}}
+.dm-rs>.note{margin-left:0;padding-left:0}

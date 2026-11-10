@@ -1,3 +1,4 @@
+import { petView } from './companions.js';
 import { def, S, setS, U, migrate, norm, save, toast, sameItem } from './state.js';
 import { get, set, fits, slotLabel, itemView } from './helpers.js';
 import { COND } from './catalog.js';
@@ -36,6 +37,7 @@ export function rest(long) {
   const back = Math.max(1, Math.floor(S.hd.max / 2));
   S.hd.used = Math.max(0, S.hd.used - back);
   S.slots.forEach(s => { s.used = 0; });
+  S.pets.forEach(p => { p.hp = petView(p).hpMax; });
   S.hp = S.hpMax; S.tmp = 0; S.death = { s: 0, f: 0 }; S.conc = '';
   delete S.cond.Unconscious;
   let m = t('toast.long', { n: back });

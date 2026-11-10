@@ -12,6 +12,7 @@ import tables from '../data/tables.json';
 import subclasses from '../data/subclasses.json';
 import feats from '../data/feats.json';
 import options from '../data/options.json';
+import backgrounds from '../data/backgrounds.json';
 import multiclass from '../data/multiclass.json';
 import legacyTexts from '../data/reference/legacy-texts.json';
 import Fuse from 'fuse.js';
@@ -27,6 +28,18 @@ export const MULTICLASS = multiclass;
 export const SUBCLASSES = subclasses;
 export const FEATS = feats;
 export const OPTIONS = options;
+
+const WORDS = { one: 1, two: 2, three: 3, four: 4, five: 5, six: 6, seven: 7, ten: 10 };
+/** Liest Ladungen aus dem englischen Regeltext. Würfelt das Buch den Startwert aus, gilt der Höchstwert. */
+export function chargeInfo(en) {
+  const m = String(en || '').match(/\b(?:has|have|starts with|holds?|contains?|of its)\s+(\d+d\d+(?:\s*[+\-−]\s*\d+)?|\d+|one|two|three|four|five|six|seven|ten)\s+(?:\w+\s+)?charges?\b/i);
+  if (!m) return undefined;
+  const v = m[1].toLowerCase().replace(/\s+/g, '').replace('−', '-');
+  const d = v.match(/^(\d+)d(\d+)([+-]\d+)?$/);
+  const max = d ? +d[1] * +d[2] + (+d[3] || 0) : (WORDS[v] || +v);
+  const r = String(en).match(/regains?\s+(all|\d+d\d+(?:\s*[+-]\s*\d+)?)\s+(?:of\s+)?(?:its\s+)?(?:expended\s+)?charges?\s+daily\s+at\s+dawn/i);
+  return { max, regain: r ? r[1].toLowerCase().replace(/\s+/g, '') : '' };
+}
 
 let fuse = null;
 /** Unscharfe Namenssuche, z. B. findet „firbal“ Fireball. */
@@ -45,7 +58,7 @@ export function buildCatalog() {
   fuse = null;
   CAT.length = 0;
   Object.keys(BYN).forEach(k => delete BYN[k]);
-  [...potions, ...items, ...magicItems].forEach(i => addCat({ k: i.k, id: i.id, n: loc(i.n), ic: i.ic, p: loc(i.text), c: i.rarity ? (i.k === 'potion' ? t('cat.potion') : t('cat.magic')) : t('cat.' + i.group), group: i.group, slot: i.slot, att: i.att, cons: i.cons, q: i.q, ac: i.ac, w: i.w, rar: i.rarity?.en, magic: !!i.rarity, rarity: i.rarity ? loc(i.rarity) : '', source: i.source, hay: hayOf(i.n) }));
+  [...potions, ...items, ...magicItems].forEach(i => addCat({ k: i.k, id: i.id, n: loc(i.n), ic: i.ic, p: loc(i.text), c: i.rarity ? (i.k === 'potion' ? t('cat.potion') : t('cat.magic')) : t('cat.' + i.group), group: i.group, slot: i.slot, att: i.att, cons: i.cons, q: i.q, ac: i.ac, w: i.w, rar: i.rarity?.en, magic: !!i.rarity, ch: i.rarity ? chargeInfo(i.text.en) : undefined, rarity: i.rarity ? loc(i.rarity) : '', source: i.source, hay: hayOf(i.n) }));
   spells.forEach(s => addCat({ k: 'spell', n: s.n, de: s.de, aka: s.aka, origin: s.origin, lvl: s.lvl, school: s.school, ic: s.ic, cls: s.cls, c: s.lvl ? t('spell.level', { n: s.lvl }) : t('spell.cantrips'), time: loc(s.time), range: loc(s.range), dur: loc(s.dur), comp: s.comp, material: s.material, conc: s.conc, ritual: s.ritual, eff: loc(s.text), higher: s.higher ? loc(s.higher) : '', source: s.source, hay: [s.de, s.aka].join(' ') }));
   COND.forEach(c => addCat({ k: 'cond', n: c.n, de: c.de, ic: c.ic, p: loc(c.text), c: t('cat.cond'), source: c.source }));
   feats.forEach(f => addCat({ k: 'feat', n: f.n, de: f.de, ic: 'star', p: loc(f.text), c: t('cat.feat'), source: f.source, req: f.req, hay: f.de }));
@@ -77,6 +90,7 @@ Object.values(CLASSES).forEach(C => Object.values(C.f).flat().forEach(f => noteF
 Object.entries(multiclass).forEach(([k, m]) => noteFeat('Multiclass: ' + k, m.prof));
 Object.values(subclasses).forEach(c => Object.values(c).forEach(s => Object.values(s).flat().forEach(f => noteFeat(f.n, f.text))));
 feats.forEach(f => noteFeat(f.n, f.text));
+backgrounds.forEach(b => noteFeat(b.feature.n, b.feature.text));
 Object.values(options).flat().forEach(f => noteFeat(f.n, f.text));
 export const featText = f => { const m = FEATX[f.n + '|' + f.p]; return m ? loc(m) : f.p; };
 export { lang };

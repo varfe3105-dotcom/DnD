@@ -1,3 +1,4 @@
+import { vCheat } from './dm-rules.js';
 import { esc, mod, sg } from '../util.js';
 import { COND } from '../catalog.js';
 import { t, nameLine, dist } from '../i18n/index.js';
@@ -94,7 +95,7 @@ function vEncounters() {
 }
 export function vDm() {
   const tab = (k, l) => `<button class="chip${D.view === k ? ' on' : ''}" data-a="dmview" data-v="${k}" aria-pressed="${D.view === k}">${l}</button>`;
-  return `<h2>${t('tab.dm')}</h2><div class="chips">${tab('combat', t('dm.combat'))}${tab('enc', t('dm.encounters'))}${tab('notes', t('dm.notes'))}${tab('live', t('live.title'))}</div><div style="margin-top:14px">${D.view === 'notes' ? vNotes() : D.view === 'live' ? vLive() : D.view === 'enc' ? vEncounters() : vCombat()}</div>
+  return `<h2>${t('tab.dm')}</h2><div class="chips">${tab('combat', t('dm.combat'))}${tab('enc', t('dm.encounters'))}${tab('cheat', t('dm.cheat'))}${tab('notes', t('dm.notes'))}${tab('live', t('live.title'))}</div><div style="margin-top:14px">${D.view === 'notes' ? vNotes() : D.view === 'live' ? vLive() : D.view === 'enc' ? vEncounters() : D.view === 'cheat' ? vCheat() : vCombat()}</div>
   <details class="dm-backup"><summary>${t('setup.backup')}</summary><p class="note">${t('dm.backupHint')}</p><div class="add"><button class="btn" data-a="dmexp">${t('setup.export')}</button><button class="btn" data-a="dmimp">${t('setup.import')}</button></div>${DU.exp ? `<textarea id="dm-exp" readonly aria-label="${t('setup.exportLabel')}">${esc(DU.exp)}</textarea>` : ''}<textarea id="dm-imp" placeholder="${t('setup.pasteImport')}" aria-label="${t('setup.importLabel')}" style="margin-top:8px">${esc(DU.imp)}</textarea></details>`;
 }
 export { dist };

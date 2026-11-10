@@ -6,7 +6,7 @@ import { BYN, CLASSES, byName, findRef } from './catalog.js';
 import { loc } from './i18n/index.js';
 
 export const KEY='charbogen-v4',OLD='charbogen-v2';
-export const def=()=>({v:4,id:uid(),multi:[],tools:[],langs:[],acMode:'auto',insp:false,name:t('char.new'),info:'',img:'',race:'',subrace:'',klass:'',sub:'',level:0,cls:'',hp:10,hpMax:10,tmp:0,ac:10,speed:9,prof:2,
+export const def=()=>({v:4,id:uid(),pets:[],bg:null,multi:[],tools:[],langs:[],acMode:'auto',insp:false,name:t('char.new'),info:'',img:'',race:'',subrace:'',klass:'',sub:'',level:0,cls:'',hp:10,hpMax:10,tmp:0,ac:10,speed:9,prof:2,
  abil:{str:10,dex:10,con:10,int:10,wis:10,cha:10},saves:{},skills:{},hd:{max:1,used:0,die:'W8'},death:{s:0,f:0},conc:'',
  slots:Array.from({length:9},()=>({max:0,used:0})),pact:{max:0,used:0,lvl:1},res:[],spells:[],feats:[],bag:Array(24).fill(null),eq:{},
  gold:{pp:0,gp:0,ep:0,sp:0,cp:0},cond:{},exh:0,notes:'',tab:'main'});
@@ -25,9 +25,10 @@ export function norm(o){
   if(!Array.isArray(s.slots)||s.slots.length!==9)s.slots=def().slots;
   ['saves','skills','cond','eq'].forEach(k=>{if(!s[k]||typeof s[k]!=='object'||Array.isArray(s[k]))s[k]={}});
   s.acMode=o.acMode==='auto'?'auto':'manual';s.insp=!!o.insp;
-  ['res','spells','feats','multi','tools','langs'].forEach(k=>{if(!Array.isArray(s[k]))s[k]=[]});
+  ['res','spells','feats','multi','tools','langs','pets'].forEach(k=>{if(!Array.isArray(s[k]))s[k]=[]});
   if(!Array.isArray(s.bag))s.bag=[];while(s.bag.length<24)s.bag.push(null);
   ['hp','hpMax','tmp','ac','speed','prof','exh','level'].forEach(k=>{s[k]=+s[k]||0});
+  if(!s.bg||!Array.isArray(s.bg.skills))s.bg=null;
   if(s.info==='Volk · Klasse · Stufe')s.info='';
   if(!s.klass&&s.cls&&CLN[s.cls])s.klass=CLN[s.cls];
   if(CLASSES[s.klass])s.cls=CLASSES[s.klass].l;
@@ -48,7 +49,7 @@ export function load(){
   return o?migrate(o):def()}
 export let S=load();
 export function setS(v){S=v}
-export const U={OPEN:{},SEL:null,CONF:null,WF:'all',WQ:'',WC:'',WSEL:null,EXP:'',IMP:'',LU:null,LUfocus:false,IMPREP:null,invQ:'',resetWl:false,anchor:null,SHEET:null,CASTPICK:null,SPALL:false};
+export const U={OPEN:{},SEL:null,CONF:null,WF:'all',WQ:'',WC:'',WSEL:null,EXP:'',IMP:'',LU:null,LUfocus:false,IMPREP:null,invQ:'',resetWl:false,anchor:null,SHEET:null,CASTPICK:null,SPALL:false,DAWN:false,BGPICK:null,petQ:''};
 export const hooks={onSave:null,beforeSave:null};
 export const save=()=>{if(hooks.beforeSave)hooks.beforeSave();try{localStorage.setItem(KEY,JSON.stringify(S));localStorage.setItem(IDX,JSON.stringify(roster()))}catch(e){toast(t('toast.saveFailed'))}if(hooks.onSave)hooks.onSave()};
 
@@ -58,7 +59,7 @@ const get=k=>{try{return JSON.parse(localStorage.getItem(k)||'null')}catch(e){re
 const put=(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v));return true}catch(e){toast(t('toast.saveFailed'));return false}};
 const drop=k=>{try{localStorage.removeItem(k)}catch(e){/* Datenschutzmodus */}};
 export const roster=()=>{const list=get(IDX)||[],me={id:S.id,name:S.name,klass:S.klass,level:S.level},i=list.findIndex(x=>x.id===S.id);if(i<0)list.unshift(me);else list[i]=me;return list};
-const fresh=()=>{U.OPEN={};U.SEL=null;U.EXP='';U.CONF=null};
+const fresh=()=>{U.OPEN={};U.SEL=null;U.EXP='';U.CONF=null;U.DAWN=false;U.BGPICK=null;U.petQ=''};
 const park=()=>{const list=roster();if(!put(slotKey(S.id),S))return null;return list};
 export const charSnapshot=id=>id===S.id?S:get(slotKey(id));
 export function switchChar(id){if(id===S.id)return false;const o=get(slotKey(id));if(!o||!park())return false;setS(norm(o));drop(slotKey(id));fresh();save();return true}

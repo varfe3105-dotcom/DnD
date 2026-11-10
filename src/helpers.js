@@ -31,17 +31,7 @@ export function spellView(s) {
   return c ? { ...s, time: c.time, range: c.range, dur: c.dur, eff: c.eff, school: c.school, cls: c.cls || s.cls, comp: c.comp, material: c.material, higher: c.higher, de: c.de, aka: c.aka, source: c.source } : s;
 }
 
-const DMG = { Hieb: 'slashing', Stich: 'piercing', Wucht: 'bludgeoning', slashing: 'slashing', piercing: 'piercing', bludgeoning: 'bludgeoning' };
-export function atk(raw) {
-  const it = itemView(raw);
-  const m = it.p.match(/(\d+[Wd]\d+|\b1\b) (Hieb|Stich|Wucht|slashing|piercing|bludgeoning)/i);
-  if (!m) return null;
-  const st = mod(S.abil.str), dx = mod(S.abil.dex);
-  const am = /Munition|Ammunition/i.test(it.p) ? dx : /Finesse/i.test(it.p) ? Math.max(st, dx) : st;
-  const plus = +((it.n.match(/\+(\d)/) || [])[1] || 0), dm = am + plus;
-  const v = it.p.match(/(?:Vielseitig|Versatile) \((\d+[Wd]\d+)\)/i);
-  return { hit: sg(am + S.prof + plus), dmg: dice(m[1]) + (dm ? sg(dm) : ''), type: t('dmg.' + (DMG[m[2]] || DMG[m[2].toLowerCase()])), vers: v ? dice(v[1]) + (dm ? sg(dm) : '') : '' };
-}
+export { atk } from './attacks.js';
 export function raceTraits() {
   const R = RACES[S.race];
   if (!R) return [];
@@ -107,7 +97,7 @@ function armorStats(it) {
   const m = String(it.p).match(/\b(?:RK|AC) (\d+)(?: \+ (?:GES|DEX)(?: \(max\.? \+(\d)\))?)?/);
   return m ? { b: +m[1], dex: /\+ (?:GES|DEX)/.test(it.p), max: m[2] ? +m[2] : null, cat: m[2] ? 'Medium' : '' } : null;
 }
-const isShield = it => !!it && (it.slot === 'off' && (it.ref && BYN[it.ref]?.ac?.shield || /shield|schild/i.test(it.n)));
+export const isShield = it => !!it && (it.slot === 'off' && (it.ref && BYN[it.ref]?.ac?.shield || /shield|schild/i.test(it.n)));
 const shieldBonus = it => (isShield(it) ? 2 + numPlus(it.n) : 0);
 const WORN_AC = { 'magic:ring-of-protection': 1, 'magic:cloak-of-protection': 1 };
 const hasFeat = (n, src) => S.feats.some(f => f.n === n && (!src || f.src === src));

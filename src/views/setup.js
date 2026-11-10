@@ -1,3 +1,4 @@
+import { vBgField, vBgPick, vStylePicker, vPetSetup } from './extras.js';
 import { esc, sg } from '../util.js';
 import { tok, iconOpts } from '../icons.js';
 import { SK, RESTK } from '../constants.js';
@@ -29,9 +30,10 @@ export function vSetup() {
    ${field(t('setup.class'), sel('klass', [['', t('common.choose')], ...named(Object.keys(CLASSES))], S.klass, t('setup.class')))}
    <label><span class="lbl">${t('setup.subclass')}</span>${txtIn('sub', S.sub, t('setup.subclass'), C ? t('setup.subFrom', { n: C.subN, l: C.subL }) : '', `list="sub-dl"`)}<datalist id="sub-dl">${(C ? C.subs : []).map(s => `<option value="${esc(s)}">`).join('')}</datalist></label>
    ${field(t('setup.level'), numIn('level', S.level, t('setup.level'), 0, 20))}
+   ${vBgField()}
    ${field(t('setup.background'), txtIn('info', S.info, t('setup.backgroundLabel'), t('setup.backgroundPh')))}
   </div>${R ? `<p class="note">${t('setup.raceBonus', { b: esc(bonus) })}</p>` : ''}
-  <p class="note">${S.level ? t('setup.hintLevel') : t('setup.hintStart')}</p></div>
+  <p class="note">${S.level ? t('setup.hintLevel') : t('setup.hintStart')}</p>${vBgPick()}</div>
   <h2>${t('setup.values')}</h2><div class="card"><div class="form">
    ${field(t('stat.ac'), numIn('ac', S.ac, t('stat.ac'), 0, null, null, S.acMode === 'auto' ? 'disabled' : ''))}
    ${field(t('setup.speedUnit'), numIn('speed', distValue(S.speed), t('setup.speedUnit'), 0, null, lang === 'en' ? '5' : '1.5', 'data-u="dist"'))}
@@ -43,6 +45,7 @@ export function vSetup() {
   <h2>${t('setup.abilities')}</h2>${vAbil(true)}
   <h2>${t('skill.title')}</h2><div class="card"><p class="note" style="margin-top:0">${t('setup.skillHint')}</p><div class="skl">${SK.map(([k, a, de]) => { const p = S.skills[k] || 0; return `<button class="sk" data-a="tskill" data-k="${k}" style="background:none;border:0;border-bottom:1px dotted var(--line);text-align:left"><i class="m m${p}"></i><span>${k}<small>${lang === 'de' ? de + ' · ' : ''}${t('skill.p' + p)}</small></span><b>${sg(skv(k))}</b></button>`; }).join('')}</div></div>
   <h2>${t('setup.profs')}</h2><div class="card"><div class="form">${field(t('setup.tools'), `<input type="text" id="f-tools" data-p="tools" data-list="1" value="${esc(S.tools.join(', '))}" aria-label="${t('setup.tools')}" placeholder="${t('setup.toolsPh')}">`)}${field(t('setup.langs'), `<input type="text" id="f-langs" data-p="langs" data-list="1" value="${esc(S.langs.join(', '))}" aria-label="${t('setup.langs')}" placeholder="${t('setup.langsPh')}">`)}</div></div>
+  ${vStylePicker()}${vPetSetup()}
   <h2>${t('setup.feats')}</h2><div class="card">${S.feats.map((f, i) => `<div class="edrow">${txtIn(`feats.${i}.n`, f.n, t('common.name'))}<span class="lbl">${esc(featSrc(f))}${f.lvl ? ' · ' + t('feat.level', { n: f.lvl }) : ''}</span><button class="del" data-a="del" data-k="feats" data-i="${i}" aria-label="${esc(f.n)} ${t('common.delete')}">✕</button><input type="text" class="wide" id="f-feats-${i}-p" data-p="feats.${i}.p" value="${esc(f.p)}" aria-label="${t('common.desc')}"></div>`).join('') || `<div class="empty">${t('setup.featsEmpty')}</div>`}
    <div class="add"><input type="text" id="feat-n" placeholder="${t('setup.featName')}"><input type="text" id="feat-p" placeholder="${t('setup.whatDoes')}"><button class="btn solid" data-a="addfeat">${t('common.create')}</button></div></div>
   <h2>${t('res.title')}</h2><div class="card">${S.res.map((r, i) => `<div class="edrow"><select id="f-res-${i}-ic" data-p="res.${i}.ic" aria-label="${t('common.icon')}">${iconOpts(r.ic)}</select>${txtIn(`res.${i}.n`, r.n, t('common.name'))}${numIn(`res.${i}.max`, r.max, t('common.count'), 1, 200)}${sel(`res.${i}.rest`, RESTK.map(k => [k, restLabel(k)]), r.rest, t('setup.recovery'))}<button class="del" data-a="del" data-k="res" data-i="${i}" aria-label="${esc(r.n)} ${t('common.delete')}">✕</button><input type="text" class="wide" id="f-res-${i}-p" data-p="res.${i}.p" value="${esc(r.p)}" placeholder="${t('setup.whatDoes')}" aria-label="${t('common.desc')}"></div>`).join('') || `<div class="empty">${t('setup.resEmpty')}</div>`}
