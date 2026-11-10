@@ -272,7 +272,7 @@
  "setup.background": "Hintergrund, Gesinnung",
  "setup.backgroundLabel": "Hintergrund und Gesinnung",
  "setup.backgroundPh": "z. B. Sage · Chaotic Good",
- "setup.raceBonus": "Volksbonus: {b}. Bitte in die Attributswerte unten einrechnen.",
+ "setup.raceBonus": "Volksbonus: {b}. Falls noch nicht geschehen, in die Attributswerte unten einrechnen (bei importierten Charakteren schon enthalten).",
  "setup.hintLevel": "Neue Stufen holst du dir oben mit „Stufenaufstieg“. Dort werden TP, Übungsbonus, Zauberplätze, Fähigkeiten und Merkmale automatisch eingetragen.",
  "setup.hintStart": "Wähle Klasse und Attributswerte, dann oben „Auf Stufe 1 bauen“. Für einen höheren Start danach mehrmals aufsteigen.",
  "setup.values": "Werte",

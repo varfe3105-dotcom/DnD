@@ -272,7 +272,7 @@
  "setup.background": "Background, alignment",
  "setup.backgroundLabel": "Background and alignment",
  "setup.backgroundPh": "e.g. Sage · Chaotic Good",
- "setup.raceBonus": "Racial bonus: {b}. Please add it to the ability scores below.",
+ "setup.raceBonus": "Racial bonus: {b}. If not done yet, add it to the ability scores below (imported characters already include it).",
  "setup.hintLevel": "Get new levels with “Level Up” above. HP, proficiency, spell slots, abilities and features are filled in automatically.",
  "setup.hintStart": "Choose class and ability scores, then “Build Level 1” above. For a higher start, level up several times afterwards.",
  "setup.values": "Stats",
