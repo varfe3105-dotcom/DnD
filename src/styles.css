@@ -390,3 +390,15 @@ footer p{margin:0 0 6px}
 .dm-more>.btn{justify-self:start}
 /* Am Handy brechen die Reiter um, damit keiner hinter der TP-Anzeige verschwindet */
 @media (max-width:520px){.tabs{align-items:center}.tabs nav{flex-wrap:wrap;overflow:visible;row-gap:4px}.tabs nav button,.tabs nav button[aria-selected="true"]{border-bottom:1.5px solid var(--line);border-radius:6px;top:0;padding:7px 10px}.tabs nav button[aria-selected="true"]{border-color:var(--ink)}.mini{padding-bottom:0}}
+
+/* Live-Tisch */
+.live-code{display:flex;flex-direction:column;margin-right:auto}
+.live-code small{font:500 .8rem var(--f-ui);color:var(--mute)}
+.live-code b{font:700 1.7rem/1.1 ui-monospace,Menlo,Consolas,monospace;letter-spacing:.14em;color:var(--acc)}
+.live-state{font:700 .85rem var(--f-ui);color:var(--mute)}
+.live-state.on{color:var(--good)}
+.live-state.error{color:var(--acc)}
+.live-dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--good);margin-right:5px;vertical-align:1px}
+#live-code{text-transform:uppercase;letter-spacing:.14em;font-family:ui-monospace,Menlo,Consolas,monospace}
+.dm-row .bar{margin:6px 0}
+span.chip{cursor:default}

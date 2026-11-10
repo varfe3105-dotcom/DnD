@@ -8,6 +8,7 @@ import { vSetup } from './views/setup.js';
 import { vLU } from './views/levelup.js';
 import { vDm } from './views/dm.js';
 import { dmOn } from './dm.js';
+import { L } from './live.js';
 import { hideTip } from './tooltip.js';
 import { CLASSES } from './catalog.js';
 import { t, lang } from './i18n/index.js';
@@ -29,7 +30,7 @@ export function render() {
   if (!tabs().includes(S.tab)) S.tab = 'main';
   const tb = S.tab, ae = document.activeElement, keep = ae && ae.id && app.contains(ae) ? ae.id : null;
   let h = vHead();
-  h += `<div class="tabs"><nav role="tablist" aria-label="${t('head.areas')}">${tabs().map(k => `<button role="tab" aria-selected="${tb === k}" data-a="tab" data-t="${k}">${t('tab.' + k)}</button>`).join('')}</nav><div class="mini${S.hp === 0 ? ' down' : ''}">${t('head.hpShort')} <b>${S.hp}</b>/${S.hpMax}${S.tmp ? ` +${S.tmp}` : ''}</div></div>`;
+  h += `<div class="tabs"><nav role="tablist" aria-label="${t('head.areas')}">${tabs().map(k => `<button role="tab" aria-selected="${tb === k}" data-a="tab" data-t="${k}">${t('tab.' + k)}</button>`).join('')}</nav><div class="mini${S.hp === 0 ? ' down' : ''}">${L.status === 'on' ? `<i class="live-dot" title="${t('live.on')}"></i>` : ''}${t('head.hpShort')} <b>${S.hp}</b>/${S.hpMax}${S.tmp ? ` +${S.tmp}` : ''}</div></div>`;
   if (tb === 'main') h += vMain();
   if (tb === 'inv') h += vInv();
   if (tb === 'wiki') h += vWiki();

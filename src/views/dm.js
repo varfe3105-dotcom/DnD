@@ -1,6 +1,7 @@
 import { esc, mod, sg } from '../util.js';
 import { COND } from '../catalog.js';
 import { t, nameLine, dist } from '../i18n/index.js';
+import { L, players } from '../live.js';
 import { D, DU, MONSTERS, ordered, searchMonsters, KINDS, curNote, linksOf, noteByTitle, backlinks, searchNotes } from '../dm.js';
 
 const ABK = ['str', 'dex', 'con', 'int', 'wis', 'cha'];
@@ -55,9 +56,19 @@ function vNotes() {
   return `<div class="wtools"><input type="search" id="dm-nq" value="${esc(DU.nq)}" placeholder="${t('dm.noteSearch')}" aria-label="${t('dm.noteSearch')}"><button class="btn solid" data-a="dmnew">${t('dm.newNote')}</button></div>
   <div class="wiki"><div class="wl" id="dm-nlist">${vNoteList()}</div><div class="wd">${n ? noteBody(n) : `<p class="empty">${t('dm.noteNone')}</p>`}</div></div>`;
 }
+function vLive() {
+  if (L.role !== 'dm') return `<div class="card"><p class="note" style="margin-top:0">${t('live.dmIntro')}</p>${L.role === 'player' ? `<p class="note">${t('live.dmBusy')}</p>` : ''}<div class="add"><button class="btn solid" data-a="livecreate">${t('live.create')}</button></div></div>`;
+  const list = players();
+  return `<div class="card"><div class="dm-bar"><div class="live-code"><small>${t('live.code')}</small><b>${esc(L.code)}</b></div>${liveState()}<button class="btn" data-a="liveadd"${list.length ? '' : ' disabled'}>${t('live.addAll')}</button><button class="btn bad" data-a="liveoff">${t('live.close')}</button></div>
+  ${list.length ? list.map(p => { const pct = p.hpMax ? Math.min(100, p.hp / p.hpMax * 100) : 0; return `<div class="dm-row${p.hp === 0 ? ' down' : ''}"><div class="dm-main"><div class="dm-name"><b>${esc(p.name)}</b><small>${esc(p.klass)}${p.level ? ' · ' + t('feat.level', { n: p.level }) : ''} · ${t('dm.acShort')} ${p.ac}${p.conc ? ' · ' + t('conc.title') + ': ' + esc(p.conc) : ''}</small></div><span class="dm-hpv"><b>${p.hp}</b>/${p.hpMax}${p.tmp ? ' +' + p.tmp : ''}</span></div><div class="bar" aria-hidden="true"><i style="width:${pct}%"></i></div>${p.cond.length || p.exh ? `<div class="chips">${p.cond.map(c => `<span class="chip on">${esc(c)}</span>`).join('')}${p.exh ? `<span class="chip">${t('exh.title', { n: p.exh })}</span>` : ''}</div>` : ''}${p.hp === 0 ? `<p class="lbl">${t('death.s')} ${p.death.s} · ${t('death.f')} ${p.death.f}</p>` : ''}</div>`; }).join('') : `<div class="empty">${t('live.waiting')}</div>`}</div>`;
+}
+export function liveState() {
+  const k = { on: 'live.on', connecting: 'live.connecting', error: 'live.error' }[L.status];
+  return k ? `<span class="live-state ${L.status}">${t(k)}</span>` : '';
+}
 export function vDm() {
   const tab = (k, l) => `<button class="chip${D.view === k ? ' on' : ''}" data-a="dmview" data-v="${k}" aria-pressed="${D.view === k}">${l}</button>`;
-  return `<h2>${t('tab.dm')}</h2><div class="chips">${tab('combat', t('dm.combat'))}${tab('notes', t('dm.notes'))}</div><div style="margin-top:14px">${D.view === 'notes' ? vNotes() : vCombat()}</div>
+  return `<h2>${t('tab.dm')}</h2><div class="chips">${tab('combat', t('dm.combat'))}${tab('notes', t('dm.notes'))}${tab('live', t('live.title'))}</div><div style="margin-top:14px">${D.view === 'notes' ? vNotes() : D.view === 'live' ? vLive() : vCombat()}</div>
   <details class="dm-backup"><summary>${t('setup.backup')}</summary><p class="note">${t('dm.backupHint')}</p><div class="add"><button class="btn" data-a="dmexp">${t('setup.export')}</button><button class="btn" data-a="dmimp">${t('setup.import')}</button></div>${DU.exp ? `<textarea id="dm-exp" readonly aria-label="${t('setup.exportLabel')}">${esc(DU.exp)}</textarea>` : ''}<textarea id="dm-imp" placeholder="${t('setup.pasteImport')}" aria-label="${t('setup.importLabel')}" style="margin-top:8px">${esc(DU.imp)}</textarea></details>`;
 }
 export { dist };

@@ -75,6 +75,23 @@ export function removeC(id) {
 }
 export function clearCombat() { D.combat = { round: 1, active: null, list: [] }; DU.open = {}; }
 
+/* ---- Live-Tisch ---- */
+export function addLive(peers) {
+  const have = new Set(D.combat.list.map(c => c.live));
+  peers.filter(p => !have.has(p.key)).forEach(p => D.combat.list.push({ ...base(), kind: 'pc', live: p.key, name: p.name, ac: p.ac, hp: p.hp, hpMax: p.hpMax, cond: Object.fromEntries(p.cond.map(c => [c, true])) }));
+}
+/** Hält verknüpfte Spieler im Tracker aktuell. */
+export function syncLive(peers) {
+  let changed = false;
+  D.combat.list.forEach(c => {
+    const p = c.live && peers.find(x => x.key === c.live);
+    if (!p) return;
+    const cond = Object.fromEntries(p.cond.map(x => [x, true]));
+    if (c.hp !== p.hp || c.hpMax !== p.hpMax || c.ac !== p.ac || JSON.stringify(c.cond) !== JSON.stringify(cond)) { Object.assign(c, { hp: p.hp, hpMax: p.hpMax, ac: p.ac, cond }); changed = true; }
+  });
+  if (changed) saveD();
+}
+
 /* ---- Notizen ---- */
 export const KINDS = ['npc', 'place', 'plot', 'other'];
 export const curNote = () => D.notes.find(n => n.id === D.sel) || null;

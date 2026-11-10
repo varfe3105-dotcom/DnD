@@ -4,6 +4,8 @@ import { SK, RESTK } from '../constants.js';
 import { S, U, roster } from '../state.js';
 import { classLevels } from '../tables.js';
 import { dmOn } from '../dm.js';
+import { L, dmOnline } from '../live.js';
+import { liveState } from './dm.js';
 import { skv, fid, numIn, txtIn } from '../helpers.js';
 import { CLASSES, RACES, CAT } from '../catalog.js';
 import { vAbil, restLabel, featSrc } from './sheet.js';
@@ -18,6 +20,7 @@ export function vSetup() {
   const bonus = R ? (R.subs[S.subrace] ? loc(R.subs[S.subrace].asi) + ', ' : '') + loc(R.asi) : '';
   return `<p class="note">${t('setup.intro')}</p>
   ${vChars()}
+  ${vLiveJoin()}
   <h2>${t('setup.char')}</h2><div class="card"><div class="porsetup"><label class="por" for="img-in2" title="${t('setup.portrait')}">${S.img ? `<img src="${S.img}" alt="">` : `<span>${esc((S.name || '?').trim()[0] || '?')}</span>`}</label><input type="file" id="img-in2" accept="image/*" hidden><div class="add" style="margin:0"><label class="btn sm" for="img-in2">${t('setup.portrait')}</label>${S.img ? `<button class="btn sm bad" data-a="imgdel">${t('setup.portraitDel')}</button>` : ''}</div></div>
   <div class="form" style="margin-top:12px">
    ${field(t('common.name'), txtIn('name', S.name, t('common.name')))}
@@ -53,6 +56,10 @@ export function vSetup() {
    <div class="add" style="margin-top:14px"><label class="ck">${t('setup.loadFile')} <input type="file" id="impf" accept=".json,application/json,text/plain"></label></div>
    <textarea id="imp" placeholder="${t('setup.pasteImport')}" aria-label="${t('setup.importLabel')}" style="margin-top:8px">${esc(U.IMP)}</textarea>
    <div class="add"><button class="btn ${U.CONF === 'imp' ? 'warn' : ''}" data-a="imp">${U.CONF === 'imp' ? t('setup.importConfirm') : t('setup.import')}</button><button class="btn ${U.CONF === 'reset' ? 'warn' : 'bad'}" data-a="reset">${U.CONF === 'reset' ? t('setup.resetConfirm') : t('setup.reset')}</button></div></div>`;
+}
+function vLiveJoin() {
+  const inside = L.role === 'player';
+  return `<h2>${t('live.title')}</h2><div class="card">${inside ? `<div class="dm-bar"><div class="live-code"><small>${t('live.code')}</small><b>${esc(L.code)}</b></div>${liveState()}<span class="lbl">${dmOnline() ? t('live.dmOn') : t('live.dmOff')}</span><button class="btn bad" data-a="liveoff">${t('live.leave')}</button></div>` : `<div class="add" style="margin-top:0"><input type="text" id="live-code" maxlength="6" autocomplete="off" placeholder="${t('live.codePh')}" aria-label="${t('live.code')}"><button class="btn solid" data-a="livejoin">${t('live.join')}</button></div>`}<p class="note">${t('live.shared')}</p></div>`;
 }
 function vChars() {
   const list = roster();

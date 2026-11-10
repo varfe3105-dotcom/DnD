@@ -48,7 +48,8 @@ export function load(){
 export let S=load();
 export function setS(v){S=v}
 export const U={OPEN:{},SEL:null,CONF:null,WF:'all',WQ:'',WC:'',WSEL:null,EXP:'',IMP:'',LU:null,LUfocus:false};
-export const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S));localStorage.setItem(IDX,JSON.stringify(roster()))}catch(e){toast(t('toast.saveFailed'))}};
+export const hooks={onSave:null};
+export const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S));localStorage.setItem(IDX,JSON.stringify(roster()))}catch(e){toast(t('toast.saveFailed'))}if(hooks.onSave)hooks.onSave()};
 
 /* Mehrere Charaktere: Der aktive liegt unter KEY, alle anderen in eigenen Schlüsseln, IDX hält die Übersicht. */
 const IDX='charbogen-index',slotKey=id=>'charbogen-char-'+id;

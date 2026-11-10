@@ -1,3 +1,4 @@
+import * as live from './live.js';
 import * as dm from './dm.js';
 import { vResults, vNoteList } from './views/dm.js';
 import { t as tr, setLang, distInput } from './i18n/index.js';
@@ -47,6 +48,10 @@ app.addEventListener('click',ev=>{
     case 'dmndel':if(dm.DU.conf!=='note'){dm.DU.conf='note';break}dm.DU.conf=null;dm.delNote(b.dataset.id);dm.saveD();break;
     case 'dmexp':dm.DU.exp=dm.exportD();break;
     case 'dmimp':{const txt=v('dm-imp').trim();if(!txt){toast(tr('toast.needImport'));return}if(!dm.importD(txt)){toast(tr('toast.badExport2'));return}dm.DU.imp='';toast(tr('dm.imported'));break}
+    case 'livecreate':live.createRoom();break;
+    case 'livejoin':{const code=v('live-code').trim().toUpperCase();if(!live.isCode(code)){toast(tr('live.badCode'));return}live.connect(code,'player');break}
+    case 'liveoff':live.disconnect();break;
+    case 'liveadd':dm.addLive(live.players());dm.saveD();toast(tr('live.added'));break;
     case 'charsw':switchChar(b.dataset.id);break;
     case 'charnew':newChar();toast(tr('toast.charNew'));break;
     case 'chardup':dupChar();toast(tr('toast.charDup'));break;
@@ -156,3 +161,10 @@ window.addEventListener('pointerup',e=>{
   else{U.SEL=U.SEL===d.from?null:d.from;U.CONF=null}
   save();render()});
 window.addEventListener('pointercancel',()=>{if(!drag)return;clearOver();if(drag.g)drag.g.remove();drag=null;render()});
+
+/* Live-Tisch: Beim Tippen nicht neu zeichnen, damit Eingaben nicht verloren gehen */
+let livePending=false;
+const typing=()=>{const a=document.activeElement;return !!a&&app.contains(a)&&/^(INPUT|TEXTAREA|SELECT)$/.test(a.tagName)};
+live.setPeerHook(()=>dm.syncLive(live.players()));
+live.setLiveListener(force=>{if(!force&&S.tab!=='dm'&&S.tab!=='setup')return;if(typing()){livePending=true;return}later()});
+app.addEventListener('focusout',()=>{if(livePending)setTimeout(()=>{if(livePending&&!typing()){livePending=false;later()}},0)});

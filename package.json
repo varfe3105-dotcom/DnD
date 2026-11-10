@@ -11,7 +11,8 @@
     "test:legacy": "cross-env TARGET=legacy playwright test --grep-invert @new",
     "screens": "node scripts/screenshots.mjs",
     "lint": "eslint src",
-    "build:web": "vite build --mode web"
+    "build:web": "vite build --mode web",
+    "test:live": "cross-env LIVE_REAL=1 playwright test tests/live.spec.js --grep @real"
   },
   "devDependencies": {
     "@fontsource/alegreya": "^5.3.0",
@@ -25,6 +26,7 @@
     "vite-plugin-singlefile": "^2.3.4"
   },
   "dependencies": {
+    "@supabase/realtime-js": "^2.119.0",
     "fuse.js": "^7.5.0"
   }
 }
