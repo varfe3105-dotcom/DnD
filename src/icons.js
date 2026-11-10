@@ -1,3 +1,4 @@
+import { BYN } from './catalog.js';
 import { t } from './i18n/index.js';
 import { artFor, SHEET } from './icon-art.js';
 import { $ } from './util.js';
@@ -52,4 +53,7 @@ export const TONE={sword:'steel',axe:'steel',hammer:'steel',spear:'steel',shield
 /** Bild aus dem Icon-Pack oder, wenn es keines gibt, das eigene SVG-Symbol. */
 export const glyph=(k,key)=>{const a=artFor(k,key);return a?`<span class="spr" style="background-position:${a[1]/(SHEET.cols-1)*100}% ${a[0]/(SHEET.rows-1)*100}%" aria-hidden="true"></span>`:icon(k)};
 export const tok=(k,tone,key)=>`<span class="tok t-${tone||TONE[k]||'leather'}${artFor(k,key)?' has-spr':''}">${glyph(k,key)}</span>`;
-export const itTone=it=>(it.att||it.magic)?'arcane':(TONE[it.ic]==='arcane'?'leather':(TONE[it.ic]||'leather'));
+const RARITY={Uncommon:'uncommon',Rare:'rare','Very Rare':'veryrare','Very rare':'veryrare',Legendary:'legendary',Artifact:'legendary'};
+/** Rahmenfarbe nach Seltenheit, ohne bekannte Seltenheit neutral oder allgemein magisch. */
+export const rarityTone=e=>RARITY[e.rar]||'arcane';
+export const itTone=it=>{const c=it.ref&&BYN[it.ref];if(c&&RARITY[c.rar])return RARITY[c.rar];return (it.att||it.magic)?'arcane':(TONE[it.ic]==='arcane'?'leather':(TONE[it.ic]||'leather'))};

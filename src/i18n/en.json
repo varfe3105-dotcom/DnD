@@ -574,5 +574,9 @@
  "setup.tools": "Tool proficiencies",
  "setup.toolsPh": "Comma-separated, e.g. Poisoner's kit",
  "setup.langs": "Languages",
- "setup.langsPh": "Comma-separated"
+ "setup.langsPh": "Comma-separated",
+ "inv.filter": "Filter items …",
+ "inv.carry": "Carried",
+ "inv.carryHint": "Carrying capacity: Strength × 15 lb",
+ "inv.noWeapon": "No weapon"
 }

@@ -134,3 +134,9 @@ export function computeAc() {
 }
 export function syncAc() { if (S.acMode === 'auto') { const v = computeAc(); if (v != null) S.ac = v; } }
 hooks.beforeSave = syncAc;
+
+/** Getragenes Gewicht in Pfund. Gebinde wie Pfeile wiegen anteilig. */
+export function carried() {
+  return refs().reduce((sum, r) => { const it = get(r), c = it.ref && BYN[it.ref]; return sum + (c?.w != null ? c.w / (c.q || 1) : it.w || 0) * it.q; }, 0);
+}
+export const carryMax = () => S.abil.str * 15;

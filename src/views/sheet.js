@@ -75,7 +75,8 @@ export function vSpells() {
   return `<h2>${t('spell.title')}</h2><div class="card">${h}<p class="note">${t('spell.castNote')}</p></div>`;
 }
 export function vSkills() {
-  return `<h2>${t('skill.title')}</h2><div class="card"><div class="skl">${SK.map(([k, a, de]) => { const p = S.skills[k] || 0; return `<div class="sk"><i class="m m${p}" title="${t('skill.p' + p)}"></i><span>${k}<small>${lang === 'de' ? de + ' · ' : ''}${abShort(a)}</small></span><b>${sg(skv(k))}</b></div>`; }).join('')}</div></div>`;
+  const star = p => (p ? `<i class="skstar" title="${t('skill.p' + p)}">${'★'.repeat(p)}</i>` : '');
+  return `<h2>${t('skill.title')}</h2><div class="skgrid">${ABK.filter(a => SK.some(s => s[1] === a)).map(a => `<section class="skg"><h3>${abName(a)} <span>(${sg(mod(S.abil[a]))})</span></h3>${SK.filter(s => s[1] === a).map(([k, , de]) => `<div class="skr"><span>${k}${lang === 'de' ? `<small>${de}</small>` : ''}</span>${star(S.skills[k] || 0)}<b>${sg(skv(k))}</b></div>`).join('')}</section>`).join('')}</div>`;
 }
 export function vProfs() {
   if (!S.tools.length && !S.langs.length) return '';

@@ -254,7 +254,7 @@ function items() {
     const cons = CONS_GEAR.test(e.name) || CONSUMABLE.test(e.name) || e.gear_category?.index === 'ammunition';
     const q = AMMO_Q[e.name] || 1;
     if (e.weapon_category && d?.[1]) text.de += ' · ' + d[1];
-    return { id: e.index, k: CONSUMABLE.test(e.name) ? 'potion' : 'item', n: { en: e.name, ...(d ? { de: d[0] } : {}) }, ic, group: CONSUMABLE.test(e.name) ? 'potion' : group, slot, cons, q, text, ...(ac ? { ac } : {}), source: 'srd', verified: false };
+    return { id: e.index, k: CONSUMABLE.test(e.name) ? 'potion' : 'item', n: { en: e.name, ...(d ? { de: d[0] } : {}) }, ic, group: CONSUMABLE.test(e.name) ? 'potion' : group, slot, cons, q, text, ...(ac ? { ac } : {}), ...(e.weight ? { w: e.weight } : {}), source: 'srd', verified: false };
   });
   writeArr('items.json', out);
   console.log(`Ausrüstung: ${out.length}`);

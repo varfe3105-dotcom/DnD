@@ -126,6 +126,7 @@ app.addEventListener('change',ev=>{
   save();later()});
 app.addEventListener('input',ev=>{
   const el=ev.target;
+  if(el.id==='inv-filter'){U.invQ=el.value;later();return}
   if(el.id==='dm-mq'){dm.DU.mq=el.value;$('dm-results').innerHTML=vResults();return}
   if(el.id==='dm-nq'){dm.DU.nq=el.value;$('dm-nlist').innerHTML=vNoteList();return}
   if(el.id==='dm-imp'){dm.DU.imp=el.value;return}

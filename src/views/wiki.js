@@ -1,5 +1,5 @@
 import { esc } from '../util.js';
-import { tok, itTone } from '../icons.js';
+import { tok, itTone, rarityTone } from '../icons.js';
 import { CLN, ABK } from '../constants.js';
 import { S, U } from '../state.js';
 import { get, refs, classOpts, raceTraits, abName, itemView, spellView, resText } from '../helpers.js';
@@ -52,13 +52,13 @@ export function wDetail(e, inline) {
     body = `${e.req ? `<p class="cls">${t('wiki.prereq')}: ${esc(reqText(e.req))}</p>` : ''}<p class="ptext">${esc(dice(e.p))}</p>${srcFoot(e.source)}`;
   } else body = `${e.rarity ? `<p class="cls">${t('wiki.rarity')}: ${esc(e.rarity)}${e.att ? ' · ' + t('item.needsAttune') : ''}</p>` : ''}<p class="ptext">${esc(e.p)}</p>${e.source ? srcFoot(e.source) : ''}`;
   const de = (e.k === 'class' || e.k === 'race' || e.k === 'cond' || e.k === 'feat') && deName(e.n, e.de);
-  return `<article class="wd${inline ? ' inl' : ' pane'}"><div class="wdh">${tok(e.ic, e.tone || (e.magic ? 'arcane' : ['item', 'potion'].includes(e.k) ? 'leather' : undefined), e.artKey || e.key)}<div><h3>${esc(e.n)}</h3><small>${esc(de && e.k !== 'cond' ? de + ' · ' + e.c : wSub(e))}</small></div></div>${btn ? `<div class="add" style="margin-top:0">${btn}</div>` : ''}${body}</article>`;
+  return `<article class="wd${inline ? ' inl' : ' pane'}"><div class="wdh">${tok(e.ic, e.tone || (e.magic ? rarityTone(e) : ['item', 'potion'].includes(e.k) ? 'leather' : undefined), e.artKey || e.key)}<div><h3>${esc(e.n)}</h3><small>${esc(de && e.k !== 'cond' ? de + ' · ' + e.c : wSub(e))}</small></div></div>${btn ? `<div class="add" style="margin-top:0">${btn}</div>` : ''}${body}</article>`;
 }
 export function wikiBody() {
   const L2 = wList();
   if (!L2.length) return `<p class="empty">${t('wiki.nothing')}${U.WF === 'mine' ? t('wiki.nothingMine') : t('wiki.nothingAll')}</p>`;
   const max = 80, shown = L2.slice(0, max), sel = L2.find(e => e.key === U.WSEL), cur = sel || shown[0];
-  return `<div class="wiki"><div class="wl" role="list">${shown.map(e => `<button class="wli" role="listitem" data-a="wsel" data-key="${esc(e.key)}" aria-current="${e === cur}">${tok(e.ic, e.tone || (e.magic ? 'arcane' : ['item', 'potion'].includes(e.k) ? 'leather' : undefined), e.artKey || e.key)}<span><b>${esc(e.n)}</b><small>${esc(wSub(e))}</small></span></button>${sel && e === sel ? wDetail(e, true) : ''}`).join('')}${L2.length > max ? `<p class="more" style="padding:0 10px">${t('wiki.more', { n: L2.length - max })}</p>` : ''}</div>${wDetail(cur, false)}</div>`;
+  return `<div class="wiki"><div class="wl" role="list">${shown.map(e => `<button class="wli" role="listitem" data-a="wsel" data-key="${esc(e.key)}" aria-current="${e === cur}">${tok(e.ic, e.tone || (e.magic ? rarityTone(e) : ['item', 'potion'].includes(e.k) ? 'leather' : undefined), e.artKey || e.key)}<span><b>${esc(e.n)}</b><small>${esc(wSub(e))}</small></span></button>${sel && e === sel ? wDetail(e, true) : ''}`).join('')}${L2.length > max ? `<p class="more" style="padding:0 10px">${t('wiki.more', { n: L2.length - max })}</p>` : ''}</div>${wDetail(cur, false)}</div>`;
 }
 export function vWiki() {
   return `<h2>${t('tab.wiki')}</h2><div class="wtools"><input type="search" id="wq" placeholder="${t('wiki.search')}" value="${esc(U.WQ)}" aria-label="${t('wiki.searchLabel')}"><select id="wc" aria-label="${t('wiki.classFilter')}">${classOpts(U.WC, t('wiki.allClasses'))}</select></div><div class="chips">${WFS.map(k => `<button class="chip${U.WF === k ? ' on' : ''}" data-a="wf" data-f="${k}" aria-pressed="${U.WF === k}">${t('wf.' + k)}</button>`).join('')}</div><div id="wres">${wikiBody()}</div>`;

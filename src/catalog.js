@@ -45,7 +45,7 @@ export function buildCatalog() {
   fuse = null;
   CAT.length = 0;
   Object.keys(BYN).forEach(k => delete BYN[k]);
-  [...potions, ...items, ...magicItems].forEach(i => addCat({ k: i.k, id: i.id, n: loc(i.n), ic: i.ic, p: loc(i.text), c: i.rarity ? (i.k === 'potion' ? t('cat.potion') : t('cat.magic')) : t('cat.' + i.group), group: i.group, slot: i.slot, att: i.att, cons: i.cons, q: i.q, ac: i.ac, magic: !!i.rarity, rarity: i.rarity ? loc(i.rarity) : '', source: i.source, hay: hayOf(i.n) }));
+  [...potions, ...items, ...magicItems].forEach(i => addCat({ k: i.k, id: i.id, n: loc(i.n), ic: i.ic, p: loc(i.text), c: i.rarity ? (i.k === 'potion' ? t('cat.potion') : t('cat.magic')) : t('cat.' + i.group), group: i.group, slot: i.slot, att: i.att, cons: i.cons, q: i.q, ac: i.ac, w: i.w, rar: i.rarity?.en, magic: !!i.rarity, rarity: i.rarity ? loc(i.rarity) : '', source: i.source, hay: hayOf(i.n) }));
   spells.forEach(s => addCat({ k: 'spell', n: s.n, de: s.de, aka: s.aka, origin: s.origin, lvl: s.lvl, school: s.school, ic: s.ic, cls: s.cls, c: s.lvl ? t('spell.level', { n: s.lvl }) : t('spell.cantrips'), time: loc(s.time), range: loc(s.range), dur: loc(s.dur), comp: s.comp, material: s.material, conc: s.conc, ritual: s.ritual, eff: loc(s.text), higher: s.higher ? loc(s.higher) : '', source: s.source, hay: [s.de, s.aka].join(' ') }));
   COND.forEach(c => addCat({ k: 'cond', n: c.n, de: c.de, ic: c.ic, p: loc(c.text), c: t('cat.cond'), source: c.source }));
   feats.forEach(f => addCat({ k: 'feat', n: f.n, de: f.de, ic: 'star', p: loc(f.text), c: t('cat.feat'), source: f.source, req: f.req, hay: f.de }));

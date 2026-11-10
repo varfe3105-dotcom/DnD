@@ -574,5 +574,9 @@
  "setup.tools": "Werkzeugübungen",
  "setup.toolsPh": "Durch Kommas getrennt, z. B. Poisoner's kit",
  "setup.langs": "Sprachen",
- "setup.langsPh": "Durch Kommas getrennt"
+ "setup.langsPh": "Durch Kommas getrennt",
+ "inv.filter": "Gegenstände filtern …",
+ "inv.carry": "Getragen",
+ "inv.carryHint": "Tragfähigkeit: Stärke × 15 Pfund",
+ "inv.noWeapon": "Keine Waffe"
 }

@@ -123,7 +123,7 @@ Eine ältere Empfehlung (Next.js, Supabase, Vercel) wurde besprochen und als **z
 
 ## 7. Design-Richtlinien
 
-**Aktuell gilt:** dunkle Dark-Fantasy-Optik auf allen Geräten (Block „Erscheinungsbild“ am Ende von `styles.css`), Überschriften in Cinzel. Angelehnt ans Genre klassischer Rollenspiele, ohne Grafiken, Logos oder das Layout eines bestimmten Spiels zu übernehmen. Die Punkte unten beschreiben den früheren Pergament-Stil; die Druckansicht bleibt hell.
+**Aktuell gilt:** dunkle Dark-Fantasy-Optik auf allen Geräten (Block „Erscheinungsbild“ am Ende von `styles.css`), Überschriften in Cinzel. Angelehnt ans Genre klassischer Rollenspiele, ohne Grafiken, Logos oder das Layout eines bestimmten Spiels zu übernehmen. Inventar: Figur mit Plätzen, dichtes Gitter, Rahmen nach Seltenheit, Traglast (Gewichte aus `w` in den Daten), Fertigkeiten nach Attribut gruppiert. Die Punkte unten beschreiben den früheren Pergament-Stil; die Druckansicht bleibt hell.
 
 - Pergament-Optik: warmes Beige (`#efe4cc` Hintergrund, `#f8f1de` Karten), dunkle Tinte (`#2b2118`), Akzent Dunkelrot (`#8a2a2a`); **Dunkelmodus** als Lederton (`#17130f`, Akzent Gold `#d9a441`). Farben als CSS-Variablen auf `:root`.
 - Serifenschrift (Iowan Old Style/Palatino/Georgia), Überschriften in Großbuchstaben mit Linie, doppelte Rahmen an Karten, Attribute als „Wappenfelder“ mit Modifikator groß und Wert in einer Kapsel darunter.

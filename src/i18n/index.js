@@ -49,5 +49,7 @@ export const dice = (s, l = lang) => String(s ?? '').replace(/(^|[^\p{L}])(\d*)[
 export const metersToFeet = m => Math.round(m * 10 / 3);
 export const feetToMeters = f => Math.round(f * 0.3 * 2) / 2;
 export const dist = m => (lang === 'en' ? `${metersToFeet(m)} ft.` : `${String(m).replace('.', ',')} m`);
+/** Gewicht intern in Pfund, deutsch in Kilogramm. */
+export const weight = lb => (lang === 'en' ? `${Math.round(lb * 10) / 10} lb` : `${String(Math.round(lb * 0.45 * 10) / 10).replace('.', ',')} kg`);
 export const distValue = m => (lang === 'en' ? metersToFeet(m) : m);
 export const distInput = v => (lang === 'en' ? feetToMeters(v) : v);

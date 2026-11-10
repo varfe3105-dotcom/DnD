@@ -87,10 +87,11 @@ function catalogItem(it) {
 function ownItem(it) {
   const m = it.meta || {};
   const bits = [m.category, m.damage && `${m.damage} ${m.damageType || ''}`.trim(), Array.isArray(m.properties) && m.properties.join(', '), m.cost, m.description].filter(Boolean);
-  return { n: it.name, ic: it.kind === 'weapon' ? 'sword' : it.kind === 'armor' ? 'armor' : 'box', p: bits.join(' · '), slot: it.kind === 'weapon' ? 'hand' : it.kind === 'armor' ? 'body' : '', cons: false, att: false };
+  return { w: typeof m.weightLb === 'number' ? m.weightLb : 0, n: it.name, ic: it.kind === 'weapon' ? 'sword' : it.kind === 'armor' ? 'armor' : 'box', p: bits.join(' · '), slot: it.kind === 'weapon' ? 'hand' : it.kind === 'armor' ? 'body' : '', cons: false, att: false };
 }
 function place(entry, it) {
   const item = mk(entry, Math.max(1, it.quantity || 1));
+  if (entry.w && !entry.key) item.w = entry.w;
   if (it.attuned) item.tuned = true;
   const free = it.equipped && (item.slot === 'hand' ? ['main', 'off'] : item.slot === 'ring' ? ['ring1', 'ring2'] : item.slot ? [item.slot] : []).find(k => !S.eq[k]);
   if (free) S.eq[free] = item; else putBag(S, item);

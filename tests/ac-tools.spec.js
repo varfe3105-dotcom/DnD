@@ -103,3 +103,38 @@ test.describe('Werkzeuge und Sprachen @new', () => {
   });
 
 });
+
+test.describe('Inventar und Fertigkeiten @new', () => {
+  const bagOf = (...x) => { const b = Array(24).fill(null); x.forEach((v, i) => { b[i] = v; }); return b; };
+  test('Rahmen folgt der Seltenheit', async ({ page }) => {
+    await seed(page, base4({ tab: 'inv', bag: bagOf(item('r', 'Ring', { ref: 'magic:ring-of-protection', slot: 'ring' }), item('d', 'Dagger', { ref: 'item:dagger', slot: 'hand' })) }));
+    await expect(page.locator('[data-drag="bag:0"]')).toHaveClass(/t-rare/);
+    await expect(page.locator('[data-drag="bag:1"]')).not.toHaveClass(/t-(uncommon|rare|veryrare|legendary|arcane)/);
+  });
+  test('Traglast rechnet Gewicht und Stärke, Sprache wechselt die Einheit', async ({ page }) => {
+    await seed(page, base4({ tab: 'inv', abil: { ...abil, str: 10 }, bag: bagOf(item('d', 'Dagger', { ref: 'item:dagger', slot: 'hand', q: 2 }), item('a', 'Arrows', { ref: 'item:arrow', q: 20 })) }));
+    await expect(page.locator('.carryv')).toHaveText('3 lb / 150 lb');
+    await page.locator('[data-a="lang"][data-l="de"]').click();
+    await expect(page.locator('.carryv')).toHaveText('1,4 kg / 67,5 kg');
+  });
+  test('Filter blendet Unpassendes ab, Eingabe bleibt', async ({ page }) => {
+    await seed(page, base4({ tab: 'inv', bag: bagOf(item('a', 'Seil'), item('b', 'Fackel')) }));
+    await page.locator('#inv-filter').fill('sei');
+    await expect(page.locator('[data-slot="bag:1"]')).toHaveClass(/dim/);
+    await expect(page.locator('[data-slot="bag:0"]')).not.toHaveClass(/dim/);
+    await expect(page.locator('#inv-filter')).toHaveValue('sei');
+    await expect(page.locator('#inv-filter')).toBeFocused();
+  });
+  test('Figur zeigt RK und Angriff der Haupthand', async ({ page }) => {
+    await seed(page, auto({ tab: 'inv', eq: { main: item('d', 'Dagger', { ref: 'item:dagger', slot: 'hand' }), body: leather() } }));
+    await expect(page.locator('.acb b')).toHaveText('14');
+    await expect(page.locator('.dstat')).toContainText('1d4+3');
+  });
+  test('Fertigkeiten nach Attribut mit Stern', async ({ page }) => {
+    await seed(page, base4({ skills: { Stealth: 2, Arcana: 1 } }));
+    const dex = page.locator('.skg', { hasText: 'Dexterity' });
+    await expect(dex).toContainText('Stealth');
+    await expect(dex.locator('.skr', { hasText: 'Stealth' }).locator('.skstar')).toHaveText('★★');
+    await expect(page.locator('.skg')).toHaveCount(5);
+  });
+});
