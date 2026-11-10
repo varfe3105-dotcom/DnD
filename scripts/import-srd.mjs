@@ -307,7 +307,37 @@ function magic() {
   console.log(`Tränke und Verbrauchsgüter: ${potionRows.length}`);
 }
 
-const steps = { conditions, classes, races, spells, items, magic };
+/* ---- Unterklassen, Talente, Auswahloptionen ---- */
+const SUB_SRD = { 'Path of the Berserker': 'Berserker', 'College of Lore': 'Lore', 'Life Domain': 'Life', 'Circle of the Land': 'Land', Champion: 'Champion', 'Way of the Open Hand': 'Open Hand', 'Oath of Devotion': 'Devotion', Hunter: 'Hunter', Thief: 'Thief', 'Draconic Bloodline': 'Draconic', 'The Fiend': 'Fiend', 'School of Evocation': 'Evocation' };
+function subclasses() {
+  const feats = srd('Features').filter(f => f.subclass);
+  const data = { ...readTr('subclasses-1.json'), ...readTr('subclasses-2.json') };
+  const out = {};
+  for (const [key, levels] of Object.entries(data)) {
+    const [klass, sub] = key.split('|');
+    const srdName = SUB_SRD[sub];
+    const res = {};
+    for (const [lvl, list] of Object.entries(levels)) {
+      res[lvl] = list.map(([n, en, de]) => {
+        if (en) return { n, text: { en, de }, source: 'summary', verified: false };
+        const main = feats.find(f => f.subclass.name === srdName && +f.level === +lvl && f.name === n);
+        if (!main) { miss('Unterklassenmerkmal ohne SRD', `${key}|${lvl}|${n}`); return { n, text: { en: '', de }, source: 'summary', verified: false }; }
+        const parts = feats.filter(f => f.subclass.name === srdName && +f.level === +lvl && f.name.startsWith(n + ':')).map(f => `${f.name.slice(n.length + 2)}: ${descText(f.desc)}`);
+        return { n, text: { en: [descText(main.desc), ...parts].join('\n'), de }, source: 'srd', verified: false };
+      });
+    }
+    (out[klass] = out[klass] || {})[sub] = res;
+  }
+  writeObj('subclasses.json', out);
+  const { feats: ft, fightingStyles, metamagic, invocations } = readTr('feats-options.json');
+  const grappler = srd('Feats')[0];
+  writeArr('feats.json', ft.map(([n, de, req, asi, en, deT]) => ({ n, de, ...(req ? { req } : {}), ...(asi ? { asi } : {}), text: { en: n === 'Grappler' ? descText(grappler.desc).replace(/^- /gm, '') : en, de: deT }, source: n === 'Grappler' ? 'srd' : 'summary', verified: false })));
+  const opt = a => a.map(([n, en, de]) => ({ n, text: { en, de }, source: 'summary', verified: false }));
+  writeObj('options.json', { fightingStyles: opt(fightingStyles), metamagic: opt(metamagic), invocations: opt(invocations) });
+  console.log(`Unterklassen: ${Object.values(out).reduce((a, c) => a + Object.keys(c).length, 0)}, Talente: ${ft.length}`);
+}
+
+const steps = { conditions, classes, races, spells, items, magic, subclasses };
 const only = process.argv.slice(2).filter(a => !a.startsWith('--'));
 for (const [name, fn] of Object.entries(steps)) if (!only.length || only.includes(name)) fn();
 if (report.missing.length) console.log(report.missing.join('\n'));

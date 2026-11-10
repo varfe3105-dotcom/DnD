@@ -323,7 +323,6 @@
  "lu.sneak": "Sneak Attack: {d}",
  "lu.barb20": "STR und KON +4 (Maximum 24)",
  "lu.ability": "Attribut …",
- "lu.hillDwarf": "+1 Hill Dwarf",
  "lu.level1": "Stufe 1",
  "lu.fromTo": "Stufe {a} → {b}",
  "lu.hp": "Trefferpunkte",
@@ -468,5 +467,16 @@
  "cat.mount": "Reittiere und Fahrzeuge",
  "spell.higher": "Auf höheren Graden",
  "spell.comp": "Komponenten",
- "wiki.rarity": "Seltenheit"
+ "wiki.rarity": "Seltenheit",
+ "feat.sub": "Unterklasse",
+ "cat.feat": "Talent",
+ "wf.feat": "Talente",
+ "wiki.prereq": "Voraussetzung",
+ "wiki.reqSpell": "Fähigkeit, Zauber zu wirken",
+ "lu.perLevel": "pro Stufe",
+ "lu.featChoose": "Talent wählen …",
+ "lu.featOwn": "Anderes (Name eintragen)",
+ "lu.opt.fightingStyles": "Kampfstil",
+ "lu.opt.metamagic": "Metamagie",
+ "lu.opt.invocations": "Schauerliche Anrufung"
 }

@@ -323,7 +323,6 @@
  "lu.sneak": "Sneak Attack: {d}",
  "lu.barb20": "STR and CON +4 (maximum 24)",
  "lu.ability": "Ability …",
- "lu.hillDwarf": "+1 Hill Dwarf",
  "lu.level1": "Level 1",
  "lu.fromTo": "Level {a} → {b}",
  "lu.hp": "Hit Points",
@@ -468,5 +467,16 @@
  "cat.mount": "Mounts and vehicles",
  "spell.higher": "At higher levels",
  "spell.comp": "Components",
- "wiki.rarity": "Rarity"
+ "wiki.rarity": "Rarity",
+ "feat.sub": "Subclass",
+ "cat.feat": "Feat",
+ "wf.feat": "Feats",
+ "wiki.prereq": "Prerequisite",
+ "wiki.reqSpell": "ability to cast a spell",
+ "lu.perLevel": "per level",
+ "lu.featChoose": "Choose a feat …",
+ "lu.featOwn": "Other (enter name)",
+ "lu.opt.fightingStyles": "Fighting Style",
+ "lu.opt.metamagic": "Metamagic",
+ "lu.opt.invocations": "Eldritch Invocation"
 }
