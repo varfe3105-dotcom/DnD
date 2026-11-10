@@ -425,3 +425,22 @@ span.chip{cursor:default}
 .insp .spr{width:32px;height:32px}
 @media (max-width:520px){.insp{position:absolute;top:12px;right:68px;width:38px;height:38px}.who{padding-right:104px}}
 @media print{.insp:not(.on),.prepck,.castpick,.spprep .btn{display:none}}
+
+.dm-fx{margin:4px 0 0}
+.dm-fx .chip{padding:1px 8px}
+.dm-fx .chip b{color:var(--acc)}
+.dm-la{display:flex;align-items:center;gap:6px}
+.dm-la .pip{width:20px;height:20px}
+.dm-more .pip{width:20px;height:20px}
+.dm-th{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 22px;margin-top:12px;padding-top:10px;border-top:1px solid var(--line)}
+.dm-th small{display:block;color:var(--mute);font-size:.82rem}
+.dm-th b{font-size:1.2rem;font-variant-numeric:tabular-nums}
+.dm-th i{font-style:normal;color:var(--mute);font-size:.8rem;margin-left:4px}
+@media (max-width:520px){.dm-er{flex-wrap:wrap}.dm-er .dm-name{flex:1 0 100%}}
+.dm-diff{flex:none;padding:1px 10px;border-radius:3px;font-size:.85rem;background:#3a2e20;color:#e9dcc2}
+.dm-diff.easy{background:#2f5a35;color:#dff2df}
+.dm-diff.medium{background:#7b6a22;color:#fff5cc}
+.dm-diff.hard{background:#9a5420;color:#ffeeda}
+.dm-diff.deadly{background:#8f2a22;color:#ffe6dc}
+.dm-total{display:flex;align-items:center;gap:10px;margin:10px 0 2px}
+.dm-custom{margin-top:18px}

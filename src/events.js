@@ -3,7 +3,7 @@ import { importDraft } from './import-play5e.js';
 import { isPlay5e } from './import-play5e.js';
 import * as live from './live.js';
 import * as dm from './dm.js';
-import { vResults, vNoteList } from './views/dm.js';
+import { vResults, vNoteList, vEncResults } from './views/dm.js';
 import { t as tr, setLang, distInput } from './i18n/index.js';
 import { buildCatalog } from './catalog.js';
 import { $, clamp } from './util.js';
@@ -32,12 +32,28 @@ app.addEventListener('click',ev=>{
   const a=b.dataset.a,i=+b.dataset.i,k=b.dataset.k,v=id=>($(id)||{}).value||'';
   if(a==='luclose-bg'&&ev.target!==b)return;
   if(a!=='rm'&&a!=='imp'&&a!=='reset'&&a!=='chardel')U.CONF=null;
-  if(a!=='dmclear'&&a!=='dmndel')dm.DU.conf=null;
+  if(!['dmclear','dmndel','dmedel','dmcdel'].includes(a))dm.DU.conf=null;
   if(a!=='cast'&&a!=='castslot')U.CASTPICK=null;
   pend=false;
   switch(a){
+    case 'dmfx':{const id=b.dataset.id,n=v('dm-fxn-'+id).trim();if(!n){toast(tr('toast.needName'));return}dm.addEffect(id,n,+v('dm-fxr-'+id));dm.saveD();break}
+    case 'dmfxdel':dm.removeEffect(b.dataset.id,b.dataset.f);dm.saveD();break;
+    case 'dmla':{const c=dm.find(b.dataset.id);if(c?.la){dm.togglePip(c.la,+b.dataset.j);dm.saveD()}break}
+    case 'dmslot':{const c=dm.find(b.dataset.id),o=c?.slots?.[+b.dataset.k];if(o){dm.togglePip(o,+b.dataset.j);dm.saveD()}break}
+    case 'dmpadd':dm.D.party.push({count:1,level:1});dm.saveD();break;
+    case 'dmprm':dm.D.party.splice(i,1);dm.saveD();break;
+    case 'dmenew':dm.newEnc('');dm.saveD();break;
+    case 'dmesel':dm.D.encSel=dm.D.encSel===b.dataset.id?null:b.dataset.id;dm.saveD();break;
+    case 'dmestart':dm.startEnc(b.dataset.id);dm.saveD();break;
+    case 'dmedel':{const k='e'+b.dataset.id;if(dm.DU.conf!==k){dm.DU.conf=k;break}dm.DU.conf=null;dm.delEnc(b.dataset.id);dm.saveD();break}
+    case 'dmeadd':dm.encAdd(b.dataset.m);dm.saveD();break;
+    case 'dmeqty':dm.encQty(b.dataset.m,+b.dataset.d);dm.saveD();break;
+    case 'dmcedit':dm.DU.editMon=b.dataset.id;break;
+    case 'dmcnew':dm.DU.editMon=null;break;
+    case 'dmcdel':{const k='c'+b.dataset.id;if(dm.DU.conf!==k){dm.DU.conf=k;break}dm.DU.conf=null;dm.delCustom(b.dataset.id);dm.DU.editMon=null;dm.saveD();break}
+    case 'dmcsave':{const n=v('dmc-n').trim();if(!n){toast(tr('toast.needName'));return}dm.saveCustom({n,cr:v('dmc-cr'),ac:v('dmc-ac'),hp:v('dmc-hp'),speed:v('dmc-sp'),text:v('dmc-t'),abil:Object.fromEntries(['str','dex','con','int','wis','cha'].map(k=>[k,Math.min(30,Math.max(1,+v('dmc-'+k)||10))]))},dm.DU.editMon);dm.DU.editMon=null;dm.saveD();toast(tr('toast.created',{n}));break}
     case 'dmview':dm.D.view=b.dataset.v;dm.saveD();break;
-    case 'dmstep':dm.step(+b.dataset.d);dm.saveD();break;
+    case 'dmstep':{const gone=dm.step(+b.dataset.d);dm.saveD();if(gone&&gone.length)toast(gone.map(x=>tr('dm.fxEnded',x)).join(' '));break}
     case 'dmclear':if(dm.DU.conf!=='clear'){dm.DU.conf='clear';break}dm.DU.conf=null;dm.clearCombat();dm.saveD();break;
     case 'dmadd':dm.addMonster(b.dataset.m,clamp(Math.floor(+v('dm-qty'))||1,1,20));dm.saveD();break;
     case 'dmman':{const n=v('dm-mn').trim();if(!n){toast(tr('toast.needName'));return}dm.addManual(n,v('dm-mac'),v('dm-mhp'));dm.saveD();break}
@@ -125,6 +141,8 @@ app.addEventListener('change',ev=>{
   if(el.id==='char-switch'){switchChar(el.value);render();return}
   if(el.id==='dm-on'){dm.setDmOn(el.checked);later();return}
   if(el.id==='ac-auto'){S.acMode=el.checked?'auto':'manual';save();later();return}
+  if(el.dataset.dp){const p=dm.D.party[+el.dataset.i];if(p){p[el.dataset.dp]=Math.max(el.dataset.dp==='level'?1:0,Math.min(el.dataset.dp==='level'?20:99,Math.floor(+el.value)||0));dm.saveD()}later();return}
+  if(el.dataset.de){const e=dm.curEnc();if(e){e.name=el.value;dm.saveD()}later();return}
   if(el.dataset.dm){const c=dm.find(el.dataset.id);if(c){c[el.dataset.dm]=el.dataset.dm==='init'?(+el.value||0):el.value;dm.saveD()}later();return}
   if(el.dataset.dmn){const n=dm.curNote();if(n){n[el.dataset.dmn]=el.value;dm.saveD()}later();return}
   const p=el.dataset.p;if(!p)return;
@@ -139,6 +157,7 @@ app.addEventListener('change',ev=>{
 app.addEventListener('input',ev=>{
   const el=ev.target;
   if(el.id==='inv-filter'){U.invQ=el.value;later();return}
+  if(el.id==='dm-eq'){dm.DU.eq=el.value;$('dm-eres').innerHTML=vEncResults();return}
   if(el.id==='dm-mq'){dm.DU.mq=el.value;$('dm-results').innerHTML=vResults();return}
   if(el.id==='dm-nq'){dm.DU.nq=el.value;$('dm-nlist').innerHTML=vNoteList();return}
   if(el.id==='dm-imp'){dm.DU.imp=el.value;return}
@@ -177,6 +196,8 @@ window.addEventListener('pointerup',e=>{
   else{U.SEL=U.SEL===d.from?null:d.from;U.CONF=null}
   save();render()});
 window.addEventListener('pointercancel',()=>{if(!drag)return;clearOver();if(drag.g)drag.g.remove();drag=null;render()});
+
+app.addEventListener('toggle',e=>{if(e.target.classList&&e.target.classList.contains('dm-custom'))dm.DU.customOpen=e.target.open},true);
 
 /* Live-Tisch: Beim Tippen nicht neu zeichnen, damit Eingaben nicht verloren gehen */
 let livePending=false;
