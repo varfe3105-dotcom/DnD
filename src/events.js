@@ -1,3 +1,6 @@
+import { applyProposal, shrinkImage } from './live-actions.js';
+import { downloadBackup, parseBackup, loadSnap, restoreBackup, initBackup } from './backup.js';
+import { vLootCoins, vLootItems, vBakHist } from './views/live-ui.js';
 import { vRuleList } from './views/dm-rules.js';
 import { vPetResults } from './views/extras.js';
 import { weaponProf } from './attacks.js';
@@ -80,6 +83,19 @@ app.addEventListener('click',ev=>{
     case 'sheetcancel':U.SHEET=null;break;
     case 'sheetapply':{if(!U.SHEET.draft.klass){toast(tr('sheet.needClass'));return}const r=importDraft(U.SHEET.draft);if(r.error){toast(r.error);return}U.IMPREP=r.reports;U.SHEET=null;S.tab='setup';toast(tr('imp.done',{n:r.reports.map(x=>x.name).join(', ')}));break}
     case 'sheetspells':{const known=new Set(S.spells.map(x=>x.n));let n=0;U.SHEET.draft.spells.forEach(x=>{if(!known.has(x)&&BYN['spell:'+x]){S.spells.push(spFrom(BYN['spell:'+x]));n++}});U.SHEET=null;toast(tr('sheet.added',{n}));break}
+    case 'livesend':{const to=b.dataset.k,type=b.dataset.t;if(type==='cond'){const cond=v('lv-c-'+to);if(!cond){toast(tr('live.pickCond'));return}if(live.sendMsg({type,to,cond}))toast(tr('live.sent'));return}const value=Math.floor(+v('lv-a-'+to));if(!(value>0)){toast(tr('toast.needAmount'));return}if(live.sendMsg({type,to,value}))toast(tr('live.sent'));return}
+    case 'liveyes':{const m=live.answer(b.dataset.id,true);if(m)applyProposal(m);break}
+    case 'liveno':live.answer(b.dataset.id,false);break;
+    case 'hoclose':live.L.handouts.shift();break;
+    case 'honote':{const m=live.L.handouts.shift();if(m){S.notes=(S.notes?S.notes+'\n\n':'')+[m.title,m.text].filter(Boolean).join('\n');toast(tr('live.noted'))}break}
+    case 'hoimgdel':dm.DU.hoImg='';break;
+    case 'hosend':{const D=dm.DU,title=(D.hoT||'').trim(),text=(D.hoX||'').trim();if(!title&&!text&&!D.hoImg){toast(tr('live.hoEmpty'));return}if(!live.sendMsg({type:'handout',to:D.hoTo||'all',title,text,img:D.hoImg||''})){toast(tr('live.notOn'));return}D.hoT='';D.hoX='';D.hoImg='';toast(tr('live.sent'));break}
+    case 'lootsend':{const c=BYN[b.dataset.key];if(c&&live.sendMsg({type:'handout',to:'all',title:c.n,text:c.p}))toast(tr('live.sent'));return}
+    case 'bakdl':downloadBackup();toast(tr('bak.saved'));break;
+    case 'baklater':U.NAGOFF=true;break;
+    case 'baksnap':loadSnap(b.dataset.at).then(x=>{if(x){U.RESTORE=x;render()}});return;
+    case 'bakno':U.RESTORE=null;break;
+    case 'bakyes':restoreBackup(U.RESTORE).then(ok=>{if(!ok)toast(tr('toast.saveFailed'))});return;
     case 'wprof':{const it=S.eq[k];if(it)it.prof=!weaponProf(it);break}
     case 'style':toggleStyle(b.dataset.n);break;
     case 'chg':{const it=get(b.dataset.r),c=chargeOf(it);if(c)it.chUsed=clamp(+b.dataset.j<c.max-c.used?c.used+1:c.used-1,0,c.max);break}
@@ -150,10 +166,15 @@ app.addEventListener('change',ev=>{
   if((el.id==='img-in'||el.id==='img-in2')&&el.files&&el.files[0]){loadPortrait(el.files[0]);return}
   if(el.dataset.sh){setDraft(el);return}
   if(el.id==='impf'&&el.files&&[...el.files].some(isSheetFile)){startSheets([...el.files].filter(isSheetFile));return}
-  if(el.id==='impf'&&el.files&&el.files[0]){const fr=new FileReader();fr.onload=()=>{U.IMP=String(fr.result);const ta=$('imp');if(ta)ta.value=U.IMP;U.CONF=null;toast(tr('toast.fileLoaded'))};fr.readAsText(el.files[0]);return}
+  if(el.id==='impf'&&el.files&&el.files[0]){const fr=new FileReader();fr.onload=()=>{const bak=parseBackup(String(fr.result));if(bak){U.RESTORE=bak;render();return}U.IMP=String(fr.result);const ta=$('imp');if(ta)ta.value=U.IMP;U.CONF=null;toast(tr('toast.fileLoaded'))};fr.readAsText(el.files[0]);return}
   if(el.id==='inv-sel'||el.id==='sp-sel'){const c=el.id==='inv-sel'?BYN[el.value]:BYN['spell:'+el.value];const h=$(el.id+'-h');if(h)h.textContent=c?(c.k==='spell'?spMeta(c)+' — '+c.eff:c.p+(c.att?' · '+tr('item.needsAttune'):'')):'';return}
   if(el.id==='wc'){U.WC=el.value;$('wres').innerHTML=wikiBody();return}
   if(el.dataset.lu){U.LU[el.dataset.lu]=el.value;if(el.dataset.lu==='k'){const c=classLevels().find(x=>x.k===el.value);U.LU.sub=c?c.sub:''}later();return}
+  if(el.id==='bak-f'&&el.files&&el.files[0]){const fr=new FileReader();fr.onload=()=>{const bak=parseBackup(String(fr.result));el.value='';if(!bak){toast(tr('bak.bad'));return}U.RESTORE=bak;render()};fr.readAsText(el.files[0]);return}
+  if(el.id==='ho-f'&&el.files&&el.files[0]){shrinkImage(el.files[0]).then(d=>{if(!d){toast(tr('live.hoBadImage'));return}dm.DU.hoImg=d;render()});return}
+  if(el.id==='ho-to'){dm.DU.hoTo=el.value;return}
+  if(el.id==='dm-lt'){dm.DU.lt=el.value;dm.DU.lrar='';later();return}
+  if(el.id==='dm-lrar'){dm.DU.lrar=el.value;$('dm-li').innerHTML=vLootItems();return}
   if(el.id==='bg-sel'){pickBg(el.value);later();return}
   if(el.dataset.petbm!=null){const p=S.pets[+el.dataset.petbm];if(p){p.bm=el.checked;save()}later();return}
   if(el.id==='char-switch'){switchChar(el.value);render();return}
@@ -175,6 +196,10 @@ app.addEventListener('change',ev=>{
 app.addEventListener('input',ev=>{
   const el=ev.target;
   if(el.id==='inv-filter'){U.invQ=el.value;later();return}
+  if(el.id==='ho-t'){dm.DU.hoT=el.value;return}
+  if(el.id==='ho-x'){dm.DU.hoX=el.value;return}
+  if(el.id==='dm-lr'){dm.DU.lr=el.value;$('dm-lc').innerHTML=vLootCoins();return}
+  if(el.id==='dm-lq'){dm.DU.lq=el.value;$('dm-li').innerHTML=vLootItems();return}
   if(el.id==='pet-q'){U.petQ=el.value;$('pet-res').innerHTML=vPetResults();return}
   if(el.id==='dm-rq'){dm.DU.rq=el.value;$('dm-rlist').innerHTML=vRuleList();return}
   if(el.id==='dm-eq'){dm.DU.eq=el.value;$('dm-eres').innerHTML=vEncResults();return}
@@ -223,6 +248,8 @@ app.addEventListener('toggle',e=>{if(e.target.classList&&e.target.classList.cont
 let livePending=false;
 const typing=()=>{const a=document.activeElement;return !!a&&app.contains(a)&&/^(INPUT|TEXTAREA|SELECT)$/.test(a.tagName)};
 live.setPeerHook(()=>dm.syncLive(live.players()));
+live.setAckHook(m=>toast(tr(m.ok?'live.ackYes':'live.ackNo',{n:m.name})));
+initBackup(()=>{const el=$('bak-hist');if(el)el.innerHTML=vBakHist()});
 live.setLiveListener(force=>{if(!force&&S.tab!=='dm'&&S.tab!=='setup')return;if(typing()){livePending=true;return}later()});
 app.addEventListener('focusout',()=>{if(livePending)setTimeout(()=>{if(livePending&&!typing()){livePending=false;later()}},0)});
 

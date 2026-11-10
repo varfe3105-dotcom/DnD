@@ -141,6 +141,15 @@ test.describe('Live-Tisch gegen das echte Projekt @new @real', () => {
     await guest.locator('[data-a="tab"][data-t="main"]').click();
     await guest.locator('[data-a="hp"][data-d="-1"]').first().click();
     await expect(host.locator('.dm-hpv b')).toHaveText('10', { timeout: 15000 });
+    const key = await host.locator('[data-a="livesend"][data-t="dmg"]').getAttribute('data-k');
+    await host.locator('[id="lv-a-' + key + '"]').fill('4');
+    await host.locator('[data-a="livesend"][data-t="dmg"]').click();
+    await guest.locator('[data-a="liveyes"]').click({ timeout: 15000 });
+    await expect(host.locator('.dm-hpv b')).toHaveText('6', { timeout: 15000 });
+    await host.locator('#ho-t').fill('Brief');
+    await host.locator('[data-a="hosend"]').click();
+    await expect(guest.locator('.dlg')).toContainText('Brief', { timeout: 15000 });
+    await guest.locator('[data-a="hoclose"]').click();
     await guest.context().close();
     await expect(host.locator('.dm-row')).toHaveCount(0, { timeout: 45000 });
     await host.context().close();

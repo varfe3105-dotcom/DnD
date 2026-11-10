@@ -10,25 +10,27 @@ const API_KEY = 'sb_publishable__g6JJhXOVsiXLvgvqYiK0w_cE4tmXTn';
 const LS = 'charbogen-live';
 const CODE_CHARS = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
 
-export const L = { status: 'off', code: '', role: '', peers: [] };
+export const L = { status: 'off', code: '', role: '', peers: [], inbox: [], handouts: [] };
 export const isCode = c => /^[A-HJ-NP-Z2-9]{6}$/.test(c);
 export const players = () => L.peers.filter(p => p.role === 'player');
 export const dmOnline = () => L.peers.some(p => p.role === 'dm');
 
-let transport = null, listener = () => {}, peerHook = () => {}, lastSent = '', timer = null;
+let transport = null, listener = () => {}, peerHook = () => {}, ackHook = () => {}, lastSent = '', timer = null, myKey = '';
+export const setAckHook = fn => { ackHook = fn; };
 export const setLiveListener = fn => { listener = fn; };
 export const setPeerHook = fn => { peerHook = fn; };
 
-function realtime(code, key, onPeers, onStatus) {
+function realtime(code, key, onPeers, onStatus, onMsg) {
   const client = new RealtimeClient(WS, { params: { apikey: API_KEY } });
   const ch = client.channel('charbogen:' + code, { config: { presence: { key } } });
   let last = null, joined = false;
   ch.on('presence', { event: 'sync' }, () => onPeers(Object.entries(ch.presenceState()).map(([k, a]) => ({ ...a[a.length - 1], key: k }))));
+  ch.on('broadcast', { event: 'msg' }, ({ payload }) => onMsg(payload));
   ch.subscribe(s => {
     if (s === 'SUBSCRIBED') { joined = true; onStatus('on'); if (last) ch.track(last); }
     else if (s === 'CHANNEL_ERROR' || s === 'TIMED_OUT') { joined = false; onStatus('error'); }
   });
-  return { track(p) { last = p; if (joined) ch.track(p); }, close() { client.removeChannel(ch); client.disconnect(); } };
+  return { track(p) { last = p; if (joined) ch.track(p); }, send(m) { if (joined) ch.send({ type: 'broadcast', event: 'msg', payload: m }); }, close() { client.removeChannel(ch); client.disconnect(); } };
 }
 
 const CONDS = new Set(COND.map(c => c.n));
@@ -42,6 +44,46 @@ function clean(p) {
     cond: Array.isArray(p.cond) ? p.cond.filter(c => CONDS.has(c)) : [], death: { s: int(p.death?.s, 3), f: int(p.death?.f, 3) },
   };
 }
+const MSG_TYPES = new Set(['dmg', 'heal', 'temp', 'cond', 'handout', 'ack']);
+const JPEG = /^data:image\/jpeg;base64,[A-Za-z0-9+/=]+$/;
+/** Nachrichten kommen von jedem mit dem Raumcode. Werte werden begrenzt, Änderungen am Bogen muss der Spieler annehmen. */
+function cleanMsg(m) {
+  if (!m || typeof m !== 'object' || !MSG_TYPES.has(m.type)) return null;
+  const out = { id: str(m.id, 40), type: m.type, to: str(m.to, 40) };
+  if (['dmg', 'heal', 'temp'].includes(m.type)) { out.value = int(m.value, 999); if (!out.value) return null; }
+  if (m.type === 'cond') { if (!CONDS.has(m.cond)) return null; out.cond = m.cond; }
+  if (m.type === 'handout') {
+    out.title = str(m.title, 80); out.text = str(m.text, 4000);
+    out.img = typeof m.img === 'string' && m.img.length < 300000 && JPEG.test(m.img) ? m.img : '';
+    if (!out.title && !out.text && !out.img) return null;
+  }
+  if (m.type === 'ack') { out.name = str(m.name); out.ok = !!m.ok; }
+  return out;
+}
+function onMessage(raw) {
+  const m = cleanMsg(raw);
+  if (!m) return;
+  if (L.role === 'dm') { if (m.type === 'ack' && m.to === 'dm') ackHook(m); return; }
+  if (m.type === 'ack' || (m.to !== myKey && m.to !== 'all')) return;
+  const list = m.type === 'handout' ? L.handouts : L.inbox;
+  if (list.length >= 10 || list.some(x => x.id === m.id)) return;
+  list.push(m);
+  listener(true);
+}
+export function sendMsg(m) {
+  if (!transport || !transport.send || L.status !== 'on') return false;
+  transport.send({ id: uid(), ...m });
+  return true;
+}
+/** Beantwortet einen Vorschlag. Gibt ihn bei Zustimmung zurück, damit er angewendet wird. */
+export function answer(id, ok) {
+  const i = L.inbox.findIndex(x => x.id === id);
+  if (i < 0) return null;
+  const [m] = L.inbox.splice(i, 1);
+  sendMsg({ type: 'ack', to: 'dm', ok, name: S.name });
+  return ok ? m : null;
+}
+
 const payload = () => (L.role === 'dm' ? { role: 'dm' } : { role: 'player', insp: !!S.insp, name: S.name, klass: S.klass, level: S.level, hp: S.hp, hpMax: S.hpMax, tmp: S.tmp, ac: S.ac, exh: S.exh, conc: S.conc, cond: Object.keys(S.cond).filter(c => S.cond[c]), death: S.death });
 function push() {
   if (!transport) return;
@@ -56,11 +98,12 @@ const store = () => { try { if (L.code) localStorage.setItem(LS, JSON.stringify(
 
 export function connect(code, role) {
   disconnect();
-  L.code = code; L.role = role; L.status = 'connecting'; L.peers = [];
+  L.code = code; L.role = role; L.status = 'connecting'; L.peers = []; L.inbox = []; L.handouts = [];
   store();
   const key = role === 'dm' ? 'dm-' + uid() : S.id;
+  myKey = key;
   const factory = window.__liveFake || realtime;
-  transport = factory(code, key, list => { L.peers = list.map(clean); peerHook(); listener(); }, st => { if (st !== L.status) { L.status = st; listener(true); } });
+  transport = factory(code, key, list => { L.peers = list.map(clean); peerHook(); listener(); }, st => { if (st !== L.status) { L.status = st; listener(true); } }, onMessage);
   lastSent = '';
   push();
   listener(true);
@@ -69,7 +112,7 @@ export function disconnect() {
   clearTimeout(timer);
   if (transport) { try { transport.close(); } catch (e) { /* bereits getrennt */ } }
   transport = null;
-  L.code = ''; L.role = ''; L.status = 'off'; L.peers = [];
+  L.code = ''; L.role = ''; L.status = 'off'; L.peers = []; L.inbox = []; L.handouts = [];
   store();
 }
 export function createRoom() {

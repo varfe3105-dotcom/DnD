@@ -49,9 +49,9 @@ export function load(){
   return o?migrate(o):def()}
 export let S=load();
 export function setS(v){S=v}
-export const U={OPEN:{},SEL:null,CONF:null,WF:'all',WQ:'',WC:'',WSEL:null,EXP:'',IMP:'',LU:null,LUfocus:false,IMPREP:null,invQ:'',resetWl:false,anchor:null,SHEET:null,CASTPICK:null,SPALL:false,DAWN:false,BGPICK:null,petQ:''};
-export const hooks={onSave:null,beforeSave:null};
-export const save=()=>{if(hooks.beforeSave)hooks.beforeSave();try{localStorage.setItem(KEY,JSON.stringify(S));localStorage.setItem(IDX,JSON.stringify(roster()))}catch(e){toast(t('toast.saveFailed'))}if(hooks.onSave)hooks.onSave()};
+export const U={OPEN:{},SEL:null,CONF:null,WF:'all',WQ:'',WC:'',WSEL:null,EXP:'',IMP:'',LU:null,LUfocus:false,IMPREP:null,invQ:'',resetWl:false,anchor:null,SHEET:null,CASTPICK:null,SPALL:false,DAWN:false,BGPICK:null,petQ:'',NAGOFF:false,RESTORE:null,SNAPS:[]};
+export const hooks={onSave:null,beforeSave:null,afterSave:null};
+export const save=()=>{if(hooks.beforeSave)hooks.beforeSave();try{localStorage.setItem(KEY,JSON.stringify(S));localStorage.setItem(IDX,JSON.stringify(roster()))}catch(e){toast(t('toast.saveFailed'))}if(hooks.onSave)hooks.onSave();if(hooks.afterSave)hooks.afterSave()};
 
 /* Mehrere Charaktere: Der aktive liegt unter KEY, alle anderen in eigenen Schlüsseln, IDX hält die Übersicht. */
 const IDX='charbogen-index',slotKey=id=>'charbogen-char-'+id;

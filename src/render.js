@@ -1,3 +1,4 @@
+import { vInbox, vHandout, vBackupNag } from './views/live-ui.js';
 import { $, esc } from './util.js';
 import { S, U, roster } from './state.js';
 import { classLevels } from './tables.js';
@@ -35,6 +36,7 @@ export function render() {
   const tb = S.tab, ae = document.activeElement, keep = ae && ae.id && app.contains(ae) ? ae.id : null;
   let h = vHead();
   h += `<div class="tabs"><nav role="tablist" aria-label="${t('head.areas')}">${tabs().map(k => `<button role="tab" aria-selected="${tb === k}" data-a="tab" data-t="${k}">${glyph(TAB_IC[k])}<span>${t('tab.' + k)}</span></button>`).join('')}</nav><div class="mini${S.hp === 0 ? ' down' : ''}">${L.status === 'on' ? `<i class="live-dot" title="${t('live.on')}"></i>` : ''}${t('head.hpShort')} <b>${S.hp}</b>/${S.hpMax}${S.tmp ? ` +${S.tmp}` : ''}</div></div>`;
+  h += vInbox() + vBackupNag();
   if (tb === 'main') h += vMain();
   if (tb === 'inv') h += vInv();
   if (tb === 'wiki') h += vWiki();
@@ -43,6 +45,7 @@ export function render() {
   if (tb === 'dm') h += vDm();
   h += `<footer><p>${t('footer.rules')}</p><details><summary>${t('footer.about')}</summary><p>${t('footer.srd')}</p><p>${t('footer.icons')}</p><p>${t('footer.fonts')}</p></details></footer>`;
   if (U.LU && CLASSES[S.klass]) h += vLU();
+  h += vHandout();
   document.body.style.overflow = U.LU ? 'hidden' : '';
   const wl = document.querySelector('.wl'), wlTop = wl && !U.resetWl ? wl.scrollTop : 0, pageY = window.scrollY;
   app.innerHTML = h;

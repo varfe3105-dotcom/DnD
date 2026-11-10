@@ -469,3 +469,15 @@ span.chip{cursor:default}
 .rs-orig{margin-top:6px}
 @media (max-width:520px){.wrow{flex-wrap:wrap}.wrow .nm{flex:1 1 calc(100% - 60px);min-width:0}.wrow .atk,.wrow .qty,.wrow .pips{margin-left:auto}}
 .dm-rs>.note{margin-left:0;padding-left:0}
+
+/* Schritt 4: Vorschläge, Handouts, Sicherung, Beute */
+.inbox,.baknag{margin-top:12px}
+.live-send{margin:8px 0 0}
+.live-send select{flex:1 1 130px;min-width:0}
+.ho-img{display:block;max-width:100%;max-height:60vh;margin:12px auto;border-radius:4px}
+.ho-img.sm{max-height:160px;margin:10px 0}
+.ho-text{white-space:pre-line}
+.bakpanel{margin-top:10px;padding-top:10px;border-top:1px solid var(--line)}
+.bakhist{margin-top:10px}
+.loot tr.on td{background:rgba(190,60,40,.35);font-weight:700}
+.loot td:first-child{white-space:nowrap;width:1%}

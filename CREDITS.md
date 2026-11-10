@@ -54,3 +54,7 @@ Deutsche Texte und alles außerhalb des SRD sind eigene Zusammenfassungen und Ü
 ## Regelabschnitte und Hintergründe
 
 Der Spickzettel der Spielleitung nutzt die Rule Sections aus dem SRD 5.1 (CC BY 4.0, Wizards of the Coast) über 5e-bits/5e-database, die deutschen Kurzfassungen sind eigene Zusammenfassungen. Vom PHB-Hintergrund Acolyte stammt das Merkmal aus dem SRD; die übrigen zwölf Hintergründe sind Zusammenfassungen in eigenen Worten und nicht am Buch geprüft.
+
+## Beute
+
+Die Münztabellen in `src/loot.js` sind eine Zusammenfassung der DMG-Tabellen für einzelne Monster und nicht am Buch geprüft.
