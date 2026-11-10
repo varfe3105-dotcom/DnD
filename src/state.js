@@ -6,7 +6,7 @@ import { BYN, CLASSES, byName, findRef } from './catalog.js';
 import { loc } from './i18n/index.js';
 
 export const KEY='charbogen-v4',OLD='charbogen-v2';
-export const def=()=>({v:4,id:uid(),multi:[],name:t('char.new'),info:'',img:'',race:'',subrace:'',klass:'',sub:'',level:0,cls:'',hp:10,hpMax:10,tmp:0,ac:10,speed:9,prof:2,
+export const def=()=>({v:4,id:uid(),multi:[],tools:[],langs:[],acMode:'auto',name:t('char.new'),info:'',img:'',race:'',subrace:'',klass:'',sub:'',level:0,cls:'',hp:10,hpMax:10,tmp:0,ac:10,speed:9,prof:2,
  abil:{str:10,dex:10,con:10,int:10,wis:10,cha:10},saves:{},skills:{},hd:{max:1,used:0,die:'W8'},death:{s:0,f:0},conc:'',
  slots:Array.from({length:9},()=>({max:0,used:0})),pact:{max:0,used:0,lvl:1},res:[],spells:[],feats:[],bag:Array(24).fill(null),eq:{},
  gold:{pp:0,gp:0,ep:0,sp:0,cp:0},cond:{},exh:0,notes:'',tab:'main'});
@@ -24,7 +24,8 @@ export function norm(o){
   s.death=Object.assign({s:0,f:0},o.death||{});
   if(!Array.isArray(s.slots)||s.slots.length!==9)s.slots=def().slots;
   ['saves','skills','cond','eq'].forEach(k=>{if(!s[k]||typeof s[k]!=='object'||Array.isArray(s[k]))s[k]={}});
-  ['res','spells','feats','multi'].forEach(k=>{if(!Array.isArray(s[k]))s[k]=[]});
+  s.acMode=o.acMode==='auto'?'auto':'manual';
+  ['res','spells','feats','multi','tools','langs'].forEach(k=>{if(!Array.isArray(s[k]))s[k]=[]});
   if(!Array.isArray(s.bag))s.bag=[];while(s.bag.length<24)s.bag.push(null);
   ['hp','hpMax','tmp','ac','speed','prof','exh','level'].forEach(k=>{s[k]=+s[k]||0});
   if(s.info==='Volk · Klasse · Stufe')s.info='';
@@ -48,8 +49,8 @@ export function load(){
 export let S=load();
 export function setS(v){S=v}
 export const U={OPEN:{},SEL:null,CONF:null,WF:'all',WQ:'',WC:'',WSEL:null,EXP:'',IMP:'',LU:null,LUfocus:false,IMPREP:null};
-export const hooks={onSave:null};
-export const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S));localStorage.setItem(IDX,JSON.stringify(roster()))}catch(e){toast(t('toast.saveFailed'))}if(hooks.onSave)hooks.onSave()};
+export const hooks={onSave:null,beforeSave:null};
+export const save=()=>{if(hooks.beforeSave)hooks.beforeSave();try{localStorage.setItem(KEY,JSON.stringify(S));localStorage.setItem(IDX,JSON.stringify(roster()))}catch(e){toast(t('toast.saveFailed'))}if(hooks.onSave)hooks.onSave()};
 
 /* Mehrere Charaktere: Der aktive liegt unter KEY, alle anderen in eigenen Schlüsseln, IDX hält die Übersicht. */
 const IDX='charbogen-index',slotKey=id=>'charbogen-char-'+id;

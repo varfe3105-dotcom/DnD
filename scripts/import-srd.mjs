@@ -141,6 +141,7 @@ function spells() {
     const [n, deName, lvl, school, time, range, dur, comp, conc, ritual, cls, en, deT, higherEn, higherDe] = r;
     out.push({ n, de: deName, lvl, school, ic: SPELL_IC[n] || SCHOOL_IC[school], cls, time: { en: time, de: timeDe(time) }, range: { en: range, de: rangeDe(range) }, dur: { en: dur, de: durDe(dur) }, comp, conc: !!conc, ritual: !!ritual, text: { en, de: deT }, ...(higherEn ? { higher: { en: higherEn, de: higherDe } } : {}), source: 'summary', verified: false });
   }
+  for (const [n, deName, lvl, school, time, range, dur, comp, conc, ritual, cls, en, deT, higherEn, higherDe, origin] of readTr('other-extra-spells.json')) out.push({ n, de: deName, lvl, school, ic: SCHOOL_IC[school], cls, time: { en: time, de: timeDe(time) }, range: { en: range, de: rangeDe(range) }, dur: { en: dur, de: durDe(dur) }, comp, conc: !!conc, ritual: !!ritual, text: { en, de: deT }, higher: { en: higherEn, de: higherDe }, origin, source: 'summary', verified: false });
   out.sort((a, b) => a.lvl - b.lvl || a.n.localeCompare(b.n));
   writeArr('spells.json', out);
 
@@ -228,9 +229,9 @@ function items() {
     const d = de[e.name];
     if (!d) miss('Ausrüstung ohne Deutsch', e.name);
     const gc = e.gear_category?.index, ec = e.equipment_category.index, tc = e.tool_category;
-    let group, slot = '', ic, text;
+    let group, slot = '', ic, text, ac;
     if (ec === 'weapon') { group = e.weapon_category === 'Simple' ? 'simple' : 'martial'; slot = 'hand'; ic = WEAPON_IC(e.name); text = weaponText(e); }
-    else if (ec === 'armor') { group = 'armor'; slot = e.armor_category === 'Shield' ? 'off' : 'body'; ic = e.armor_category === 'Shield' ? 'shield' : 'armor'; text = armorText(e); }
+    else if (ec === 'armor') { group = 'armor'; slot = e.armor_category === 'Shield' ? 'off' : 'body'; ic = e.armor_category === 'Shield' ? 'shield' : 'armor'; text = armorText(e); ac = e.armor_category === 'Shield' ? { shield: e.armor_class.base } : { b: e.armor_class.base, dex: !!e.armor_class.dex_bonus, max: e.armor_class.max_bonus ?? null, cat: e.armor_category }; }
     else {
       const body = e.desc?.length && !/^(These special tools|Several of the most|This item encompasses|Barding is armor|An arcane focus|A druidic focus|A holy symbol)/.test(e.desc[0]) ? descText(e.desc) : '';
       if (gc === 'equipment-packs') { group = 'pack'; ic = 'bag'; }
@@ -253,7 +254,7 @@ function items() {
     const cons = CONS_GEAR.test(e.name) || CONSUMABLE.test(e.name) || e.gear_category?.index === 'ammunition';
     const q = AMMO_Q[e.name] || 1;
     if (e.weapon_category && d?.[1]) text.de += ' · ' + d[1];
-    return { id: e.index, k: CONSUMABLE.test(e.name) ? 'potion' : 'item', n: { en: e.name, ...(d ? { de: d[0] } : {}) }, ic, group: CONSUMABLE.test(e.name) ? 'potion' : group, slot, cons, q, text, source: 'srd', verified: false };
+    return { id: e.index, k: CONSUMABLE.test(e.name) ? 'potion' : 'item', n: { en: e.name, ...(d ? { de: d[0] } : {}) }, ic, group: CONSUMABLE.test(e.name) ? 'potion' : group, slot, cons, q, text, ...(ac ? { ac } : {}), source: 'srd', verified: false };
   });
   writeArr('items.json', out);
   console.log(`Ausrüstung: ${out.length}`);
@@ -299,7 +300,8 @@ function magic() {
   for (const [en, deN, ic, slot, att, cons, rarity, te, td] of readTr('dmg-extra-items.json')) rows.push({ id: en.toLowerCase().replace(/[^a-z0-9]+/g, '-'), k: /^(Potion|Elixir)/.test(en) ? 'potion' : 'magic', n: { en, de: deN }, ic, slot, att: !!att, cons: !!cons, rarity: { en: rarity, de: RARITY_DE[rarity] || rarity }, text: { en: te, de: td }, source: 'summary', verified: false });
   writeArr('magic-items.json', rows.filter(r => r.k !== 'potion'));
   const gear = readData('items.json');
-  const potionRows = [...readData('potions.json').filter(r => r.rarity === undefined), ...gear.filter(r => r.k === 'potion'), ...rows.filter(r => r.k === 'potion')];
+  const gearPotions = new Map([...readData('potions.json').filter(r => r.rarity === undefined), ...gear.filter(r => r.k === 'potion')].map(r => [r.id, r]));
+  const potionRows = [...gearPotions.values(), ...rows.filter(r => r.k === 'potion')];
   writeArr('potions.json', potionRows);
   writeArr('items.json', gear.filter(r => r.k !== 'potion'));
   console.log(`Magische Gegenstände: ${rows.length}`);

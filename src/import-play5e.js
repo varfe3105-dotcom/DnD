@@ -4,7 +4,7 @@ import { z } from 'zod';
 import { S, def, mk, spFrom, putBag, norm, setS, save, openFresh } from './state.js';
 import { CLASSES, RACES, BYN, FEATS, SUBCLASSES, COND, byName } from './catalog.js';
 import { classLevels, slotsAll, pactFor, pb } from './tables.js';
-import { resFor, applyRace } from './helpers.js';
+import { resFor, applyRace, syncAc } from './helpers.js';
 import { SK, CLN } from './constants.js';
 import { mod } from './util.js';
 import { t, loc } from './i18n/index.js';
@@ -136,7 +136,7 @@ function build(c) {
     multi: list.slice(1).map(x => ({ k: x.k, sub: x.sub, lvl: x.lvl })), hpMax, hp: Math.min(hpMax, Math.max(0, c.hitPoints.current)), tmp: Math.max(0, c.hitPoints.temporary),
     ac: 10 + mod(abil.dex), prof: pb(level), abil, saves, skills, cond, exh: c.exhaustion, conc: c.concentratingOn || '', death: { s: c.deathSaves.successes, f: c.deathSaves.failures },
     hd: { max: level, used: Math.min(level, Object.values(c.hitDiceSpent).reduce((a, n) => a + n, 0)), die: 'W' + CLASSES[first.k].hd },
-    gold: { pp: c.currency.pp, gp: c.currency.gp, ep: c.currency.ep, sp: c.currency.sp, cp: c.currency.cp }, tab: 'setup',
+    acMode: 'auto', tools: c.toolProficiencies, langs: c.languages, gold: { pp: c.currency.pp, gp: c.currency.gp, ep: c.currency.ep, sp: c.currency.sp, cp: c.currency.cp }, tab: 'setup',
   }));
   if (typeof c.details.portrait === 'string' && /^data:image\/(png|jpe?g|webp);base64,/.test(c.details.portrait)) S.img = c.details.portrait;
   if (race) applyRace();
@@ -175,11 +175,11 @@ function build(c) {
     if (it.notes) toNotes.push(`${it.name}: ${it.notes}`);
   });
 
+  syncAc();
+
   // Notizen
   if (missingSpells.length) toNotes.push(`${t('imp.spellsMissing')}: ${missingSpells.join(', ')}`);
   if (unknownSkills.length) toNotes.push(`${t('skill.title')}: ${unknownSkills.join(', ')}`);
-  if (c.toolProficiencies.length) toNotes.push(`${t('imp.tools')}: ${c.toolProficiencies.join(', ')}`);
-  if (c.languages.length) toNotes.push(`${t('imp.languages')}: ${c.languages.join(', ')}`);
   if (c.otherProficiencies.length) toNotes.push(`${t('imp.other')}: ${c.otherProficiencies.join(', ')}`);
   if (c.inspiration) toNotes.push(t('imp.inspiration'));
   const sections = ['backstory', 'personality', 'ideals', 'bonds', 'flaws', 'appearance', 'notes'].map(k => [k, c.details[k]]).filter(([, v]) => typeof v === 'string' && v.trim());
@@ -192,6 +192,8 @@ function build(c) {
     `${t('wiki.abilities')}: ${Object.entries(abil).map(([k, v]) => `${t('abs.' + k)} ${v}`).join(', ')}${bonusText ? ` (${t('imp.withBonus', { b: bonusText })})` : ''}`,
     `${t('head.hpShort')}: ${S.hp}/${S.hpMax} · ${t('stat.ac')}: ${S.ac}`,
     t('imp.count', { a: S.spells.length, b: matched + rep.own.length, c: features }),
+    ...(S.tools.length ? [`${t('setup.tools')}: ${S.tools.join(', ')}`] : []),
+    ...(S.langs.length ? [`${t('setup.langs')}: ${S.langs.join(', ')}`] : []),
     `${t('inv.money')}: ${S.gold.gp} ${t('coin.gp')}`,
   );
   rep.notes = toNotes;

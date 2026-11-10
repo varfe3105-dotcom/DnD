@@ -27,7 +27,7 @@ test.describe('Import aus dem anderen Tool @new', () => {
     await doImport(page, backup(character()));
     await expect(page.locator('.imp-rep')).toContainText('Nyx');
     const s = await read(page);
-    expect(s).toMatchObject({ name: 'Nyx', race: 'Elf', subrace: 'Drow', klass: 'Cleric', sub: 'Trickery Domain', level: 1, hp: 9, hpMax: 9, prof: 2, ac: 13, speed: 9, info: 'Fallen Acolyte · Lawful evil' });
+    expect(s).toMatchObject({ name: 'Nyx', race: 'Elf', subrace: 'Drow', klass: 'Cleric', sub: 'Trickery Domain', level: 1, hp: 9, hpMax: 9, prof: 2, ac: 14, acMode: 'auto', speed: 9, info: 'Fallen Acolyte · Lawful evil' });
     expect(s.abil).toEqual({ str: 8, dex: 17, con: 13, int: 12, wis: 14, cha: 11 });
     expect(s.saves).toEqual({ wis: true, cha: true });
     expect(s.skills).toEqual({ Perception: 1, Insight: 1 });
@@ -40,10 +40,9 @@ test.describe('Import aus dem anderen Tool @new', () => {
     await seed(page, base4({ name: '', level: 0, tab: 'setup', klass: '' }));
     await doImport(page, backup(character()));
     const s = await read(page);
-    expect(s.spells.map(x => x.n).sort()).toEqual(['Charm Person', 'Guidance']);
-    expect(s.notes).toContain('Word Of Radiance');
+    expect(s.spells.map(x => x.n).sort()).toEqual(['Charm Person', 'Guidance', 'Word of Radiance']);
+    expect(s.tools).toEqual(["Poisoner's kit"]);
     expect(s.notes).toContain('Sie floh aus dem Tempel.');
-    expect(s.notes).toContain("Poisoner's kit");
     expect(s.notes).toContain('vom Meister');
     const bag = s.bag.filter(Boolean);
     expect(bag.find(x => x.ref === 'item:dagger').q).toBe(2);
@@ -109,7 +108,9 @@ test.describe('Import aus dem anderen Tool @new', () => {
     const s = await read(page);
     expect(s).toMatchObject({ klass: 'Cleric', sub: 'Trickery Domain', subrace: 'Drow', level: 1, hp: 9, hpMax: 9 });
     expect(s.abil.dex).toBe(17);
-    expect(s.spells.length).toBe(8);
+    expect(s.spells.length).toBe(9);
+    expect(s.ac).toBe(13);
+    expect(s.tools).toEqual(["Poisoner's kit", 'Forgery kit']);
     console.log(await page.locator('.imp-rep').innerText());
     console.log('NOTIZEN:\n' + s.notes);
     console.log('BAG:', s.bag.filter(Boolean).map(x => `${x.n} ×${x.q} ${x.ref || 'eigen'}`).join('; '));

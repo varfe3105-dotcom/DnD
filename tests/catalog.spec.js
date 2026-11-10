@@ -10,8 +10,8 @@ const setLang = (page, l) => page.locator(`[data-a="lang"][data-l="${l}"]`).clic
 
 test.describe('Katalogdaten @new', () => {
   test('alle 361 PHB-Zauber sind vorhanden, kein Name doppelt', () => {
-    expect(spells.length).toBe(361);
-    expect(new Set(spells.map(s => s.n)).size).toBe(361);
+    expect(spells.filter(s => !s.origin).length).toBe(361);
+    expect(new Set(spells.map(s => s.n)).size).toBe(spells.length);
   });
 
   test('jeder Zauber hat alle Spielwerte in beiden Sprachen', () => {
@@ -37,6 +37,11 @@ test.describe('Katalogdaten @new', () => {
     for (const r of [...items, ...magic, ...potions]) { expect(r.n.en).toBeTruthy(); expect(r.n.de, r.n.en).toBeTruthy(); expect(r.text.en, r.n.en).toBeTruthy(); }
     const noDe = [...items, ...magic, ...potions].filter(r => !r.text.de).map(r => r.n.en);
     expect(noDe).toEqual([]);
+  });
+
+  test('keine Katalog-ID kommt doppelt vor', () => {
+    const ids = [...items, ...magic, ...potions].map(r => `${r.k}:${r.id}`);
+    expect(ids.filter((x, i) => ids.indexOf(x) !== i)).toEqual([]);
   });
 
   test('Abgleich mit dem SRD wurde dokumentiert', () => {

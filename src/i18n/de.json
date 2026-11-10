@@ -559,8 +559,6 @@
  "imp.count": "{a} Zauber, {b} Gegenstände, {c} Merkmale",
  "imp.asiNote": "Attributserhöhungen aus Stufen wurden nicht eingerechnet, bitte prüfen.",
  "imp.spellsMissing": "Zauber außerhalb des Katalogs",
- "imp.tools": "Werkzeugübungen",
- "imp.languages": "Sprachen",
  "imp.other": "Weitere Übungen",
  "imp.inspiration": "Hat Inspiration",
  "imp.d.backstory": "Hintergrundgeschichte",
@@ -569,5 +567,12 @@
  "imp.d.bonds": "Bindungen",
  "imp.d.flaws": "Makel",
  "imp.d.appearance": "Aussehen",
- "imp.d.notes": "Notizen"
+ "imp.d.notes": "Notizen",
+ "setup.acAuto": "RK aus der Ausrüstung berechnen",
+ "setup.acUnknown": "Die getragene Rüstung hat keine bekannten Werte. Entweder RK von Hand eintragen oder die Berechnung ausschalten.",
+ "setup.profs": "Werkzeuge und Sprachen",
+ "setup.tools": "Werkzeugübungen",
+ "setup.toolsPh": "Durch Kommas getrennt, z. B. Poisoner's kit",
+ "setup.langs": "Sprachen",
+ "setup.langsPh": "Durch Kommas getrennt"
 }

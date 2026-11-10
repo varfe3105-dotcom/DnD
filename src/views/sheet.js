@@ -3,7 +3,7 @@ import { tok, itTone } from '../icons.js';
 import { CLN, SK, ABK, CLIC } from '../constants.js';
 import { S, U } from '../state.js';
 import { hdText, skv, pips, numIn, get, refs, atk, raceTraits, abName, abShort, itemView, spellView, resText } from '../helpers.js';
-import { COND, EXH, featText } from '../catalog.js';
+import { COND, EXH, featText, byName } from '../catalog.js';
 import { t, loc, dice, dist, lang, nameLine, deName } from '../i18n/index.js';
 
 export const schoolName = s => { const k = { Hervorrufung: 'evocation', Bannmagie: 'abjuration', Beschwörung: 'conjuration', Wahrsagung: 'divination', Verzauberung: 'enchantment', Illusion: 'illusion', Nekromantie: 'necromancy', Verwandlung: 'transmutation' }[s] || String(s || '').toLowerCase(); return k ? t('school.' + k) : ''; };
@@ -77,11 +77,16 @@ export function vSpells() {
 export function vSkills() {
   return `<h2>${t('skill.title')}</h2><div class="card"><div class="skl">${SK.map(([k, a, de]) => { const p = S.skills[k] || 0; return `<div class="sk"><i class="m m${p}" title="${t('skill.p' + p)}"></i><span>${k}<small>${lang === 'de' ? de + ' · ' : ''}${abShort(a)}</small></span><b>${sg(skv(k))}</b></div>`; }).join('')}</div></div>`;
 }
+export function vProfs() {
+  if (!S.tools.length && !S.langs.length) return '';
+  const chips = list => `<div class="chips">${list.map(x => { const c = byName(x); return `<span class="chip" ${c ? `title="${esc(c.p)}"` : ''}>${esc(c ? c.n : x)}</span>`; }).join('')}</div>`;
+  return `<h2>${t('setup.profs')}</h2><div class="card">${S.tools.length ? `<p class="lbl" style="margin:0 0 4px">${t('setup.tools')}</p>${chips(S.tools)}` : ''}${S.langs.length ? `<p class="lbl" style="margin:10px 0 4px">${t('setup.langs')}</p>${chips(S.langs)}` : ''}</div>`;
+}
 export function vMain() {
   const a = S.abil, st = (l, v) => `<div class="st"><small>${l}</small><b>${v}</b></div>`;
   let h = '';
   if (S.conc) h += `<div class="conc"><div><small>${t('conc.title')}</small><b>${esc(S.conc)}</b><span>${t('conc.hint')}</span></div><button class="btn" data-a="concend">${t('conc.end')}</button></div>`;
   h += `<div class="stats">${st(t('stat.ac'), S.ac)}${st(t('stat.init'), sg(mod(a.dex)))}${st(t('stat.speed'), dist(S.speed))}${st(t('stat.prof'), sg(S.prof))}${st(t('stat.pp'), 10 + skv('Perception'))}</div>`;
-  h += `<div class="sheet"><aside>${vAbil(false)}</aside><div class="col">${vHP()}${vCond()}${vAtk()}${vQuick()}${vRes()}${vSpells()}${vFeats()}${vSkills()}</div></div>`;
+  h += `<div class="sheet"><aside>${vAbil(false)}</aside><div class="col">${vHP()}${vCond()}${vAtk()}${vQuick()}${vRes()}${vSpells()}${vFeats()}${vSkills()}${vProfs()}</div></div>`;
   return h;
 }

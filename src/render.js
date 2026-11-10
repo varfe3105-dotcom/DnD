@@ -10,6 +10,7 @@ import { vDm } from './views/dm.js';
 import { dmOn } from './dm.js';
 import { L } from './live.js';
 import { hideTip } from './tooltip.js';
+import { syncAc } from './helpers.js';
 import { CLASSES } from './catalog.js';
 import { t, lang } from './i18n/index.js';
 
@@ -27,6 +28,7 @@ export const tabs = () => ['main', 'inv', 'wiki', 'notes', 'setup', ...(dmOn() ?
 export const app = $('app');
 export function render() {
   hideTip();
+  syncAc();
   if (!tabs().includes(S.tab)) S.tab = 'main';
   const tb = S.tab, ae = document.activeElement, keep = ae && ae.id && app.contains(ae) ? ae.id : null;
   let h = vHead();

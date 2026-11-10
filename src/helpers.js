@@ -1,5 +1,5 @@
 import { esc, mod, sg, clamp } from './util.js';
-import { S, toast } from './state.js';
+import { S, toast, hooks } from './state.js';
 import { CLN, EQ, SK, ABK } from './constants.js';
 import { RACES, BYN, CLASSES } from './catalog.js';
 import { classLevels } from './tables.js';
@@ -98,3 +98,39 @@ export function hdText() {
   list.forEach(c => { const d = 'W' + CLASSES[c.k].hd; by[d] = (by[d] || 0) + c.lvl; });
   return Object.entries(by).map(([d, n]) => dice(n + d)).join(' + ');
 }
+
+/* Rüstungsklasse aus der Ausrüstung */
+const numPlus = n => +((String(n).match(/\+(\d)/) || [])[1] || 0);
+function armorStats(it) {
+  const c = it.ref && BYN[it.ref];
+  if (c?.ac) return c.ac;
+  const m = String(it.p).match(/\b(?:RK|AC) (\d+)(?: \+ (?:GES|DEX)(?: \(max\.? \+(\d)\))?)?/);
+  return m ? { b: +m[1], dex: /\+ (?:GES|DEX)/.test(it.p), max: m[2] ? +m[2] : null, cat: m[2] ? 'Medium' : '' } : null;
+}
+const isShield = it => !!it && (it.slot === 'off' && (it.ref && BYN[it.ref]?.ac?.shield || /shield|schild/i.test(it.n)));
+const shieldBonus = it => (isShield(it) ? 2 + numPlus(it.n) : 0);
+const WORN_AC = { 'magic:ring-of-protection': 1, 'magic:cloak-of-protection': 1 };
+const hasFeat = (n, src) => S.feats.some(f => f.n === n && (!src || f.src === src));
+/** Rüstungsklasse nach Ausrüstung und Klasse. null, wenn eine getragene Rüstung keine erkennbaren Werte hat. */
+export function computeAc() {
+  const dex = mod(S.abil.dex), body = S.eq.body, off = S.eq.off;
+  let ac;
+  if (body) {
+    const a = armorStats(body);
+    if (!a || a.shield) return null;
+    const cap = a.max == null ? Infinity : a.max + (a.cat === 'Medium' && hasFeat('Medium Armor Master', 'Talent') ? 1 : 0);
+    ac = a.b + (a.dex ? Math.min(dex, cap) : 0) + numPlus(body.n) + (hasFeat('Defense', 'Klasse') ? 1 : 0);
+  } else {
+    const list = classLevels();
+    const opts = [10 + dex];
+    if (list.some(c => c.k === 'Barbarian')) opts.push(10 + dex + mod(S.abil.con));
+    if (list.some(c => c.k === 'Monk') && !isShield(off)) opts.push(10 + dex + mod(S.abil.wis));
+    if (list.some(c => c.k === 'Sorcerer' && c.sub === 'Draconic Bloodline')) opts.push(13 + dex);
+    ac = Math.max(...opts);
+    if (S.eq.hands?.ref === 'magic:bracers-of-defense' && S.eq.hands.tuned && !isShield(off)) ac += 2;
+  }
+  ['ring1', 'ring2', 'cloak'].forEach(k => { const it = S.eq[k]; if (it?.tuned) ac += WORN_AC[it.ref] || 0; });
+  return ac + shieldBonus(off);
+}
+export function syncAc() { if (S.acMode === 'auto') { const v = computeAc(); if (v != null) S.ac = v; } }
+hooks.beforeSave = syncAc;

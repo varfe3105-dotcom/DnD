@@ -112,11 +112,13 @@ app.addEventListener('change',ev=>{
   if(el.dataset.lu){U.LU[el.dataset.lu]=el.value;if(el.dataset.lu==='k'){const c=classLevels().find(x=>x.k===el.value);U.LU.sub=c?c.sub:''}later();return}
   if(el.id==='char-switch'){switchChar(el.value);render();return}
   if(el.id==='dm-on'){dm.setDmOn(el.checked);later();return}
+  if(el.id==='ac-auto'){S.acMode=el.checked?'auto':'manual';save();later();return}
   if(el.dataset.dm){const c=dm.find(el.dataset.id);if(c){c[el.dataset.dm]=el.dataset.dm==='init'?(+el.value||0):el.value;dm.saveD()}later();return}
   if(el.dataset.dmn){const n=dm.curNote();if(n){n[el.dataset.dmn]=el.value;dm.saveD()}later();return}
   const p=el.dataset.p;if(!p)return;
   let val=el.value;
   if(el.dataset.t==='n'){val=Math.max(+el.min||0,+String(val).replace(',','.')||0);if(el.max)val=Math.min(+el.max,val);if(el.dataset.u==='dist')val=distInput(val);if(p!=='speed')val=Math.floor(val)}
+  if(el.dataset.list)val=val.split(',').map(x=>x.trim()).filter(Boolean);
   setPath(p,val);
   if(p==='race'){S.subrace='';applyRace()}
   if(p==='subrace')applyRace();

@@ -559,8 +559,6 @@
  "imp.count": "{a} spells, {b} items, {c} features",
  "imp.asiNote": "Ability score increases from levels were not applied; please check.",
  "imp.spellsMissing": "Spells not in the catalog",
- "imp.tools": "Tool proficiencies",
- "imp.languages": "Languages",
  "imp.other": "Other proficiencies",
  "imp.inspiration": "Has Inspiration",
  "imp.d.backstory": "Backstory",
@@ -569,5 +567,12 @@
  "imp.d.bonds": "Bonds",
  "imp.d.flaws": "Flaws",
  "imp.d.appearance": "Appearance",
- "imp.d.notes": "Notes"
+ "imp.d.notes": "Notes",
+ "setup.acAuto": "Calculate AC from equipment",
+ "setup.acUnknown": "The equipped armor has no known values. Enter the AC by hand, or turn off the automatic calculation.",
+ "setup.profs": "Tools and Languages",
+ "setup.tools": "Tool proficiencies",
+ "setup.toolsPh": "Comma-separated, e.g. Poisoner's kit",
+ "setup.langs": "Languages",
+ "setup.langsPh": "Comma-separated"
 }
