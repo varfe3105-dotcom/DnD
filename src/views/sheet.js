@@ -2,7 +2,7 @@ import { esc, clamp, mod, sg } from '../util.js';
 import { tok, itTone } from '../icons.js';
 import { CLN, SK, ABK, CLIC } from '../constants.js';
 import { S, U } from '../state.js';
-import { skv, pips, numIn, get, refs, atk, raceTraits, abName, abShort, itemView, spellView, resText } from '../helpers.js';
+import { hdText, skv, pips, numIn, get, refs, atk, raceTraits, abName, abShort, itemView, spellView, resText } from '../helpers.js';
 import { COND, EXH, featText } from '../catalog.js';
 import { t, loc, dice, dist, lang, nameLine, deName } from '../i18n/index.js';
 
@@ -23,7 +23,7 @@ export function vHP() {
   <div class="bar" aria-hidden="true"><i style="width:${pct}%"></i><u style="width:${tp}%"></u></div>
   <div class="hpin"><input type="number" id="hpv" min="1" inputmode="numeric" placeholder="${t('hp.amount')}" aria-label="${t('hp.amountLabel')}"><button class="btn bad" data-a="dmg">${t('hp.damage')}</button><button class="btn good" data-a="heal">${t('hp.heal')}</button><button class="btn" data-a="temp">${t('hp.tempBtn')}</button></div>
   ${S.hp === 0 ? vDeath() : ''}
-  <div class="row" style="margin-top:8px"><div class="ic">${tok('dice')}</div><div class="nm">${t('hd.title')}<small>${t('hd.left', { a: S.hd.max - S.hd.used, b: S.hd.max, d: dice(S.hd.die), m: sg(mod(S.abil.con)) })}</small></div><div class="pips">${pips(S.hd.max, S.hd.used, 'data-a="pip" data-k="hd"')}</div></div></div>`;
+  <div class="row" style="margin-top:8px"><div class="ic">${tok('dice')}</div><div class="nm">${t('hd.title')}<small>${t('hd.left', { a: S.hd.max - S.hd.used, b: S.hd.max, d: hdText(), m: sg(mod(S.abil.con)) })}</small></div><div class="pips">${pips(S.hd.max, S.hd.used, 'data-a="pip" data-k="hd"')}</div></div></div>`;
 }
 export function vDeath() {
   const r = (x, l) => `<div class="dsr${x === 'f' ? ' f' : ''}"><span>${l}</span>${[0, 1, 2].map(j => `<button class="dot${j < S.death[x] ? ' on' : ''}" data-a="ds" data-t="${x}" data-j="${j}" aria-label="${l} ${j + 1}"></button>`).join('')}</div>`;

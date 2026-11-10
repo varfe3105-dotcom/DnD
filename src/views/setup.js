@@ -1,7 +1,8 @@
 import { esc, sg } from '../util.js';
 import { tok, iconOpts } from '../icons.js';
 import { SK, RESTK } from '../constants.js';
-import { S, U } from '../state.js';
+import { S, U, roster } from '../state.js';
+import { classLevels } from '../tables.js';
 import { skv, fid, numIn, txtIn } from '../helpers.js';
 import { CLASSES, RACES, CAT } from '../catalog.js';
 import { vAbil, restLabel, featSrc } from './sheet.js';
@@ -15,6 +16,7 @@ export function vSetup() {
   const R = RACES[S.race], C = CLASSES[S.klass];
   const bonus = R ? (R.subs[S.subrace] ? loc(R.subs[S.subrace].asi) + ', ' : '') + loc(R.asi) : '';
   return `<p class="note">${t('setup.intro')}</p>
+  ${vChars()}
   <h2>${t('setup.char')}</h2><div class="card"><div class="porsetup"><label class="por" for="img-in2" title="${t('setup.portrait')}">${S.img ? `<img src="${S.img}" alt="">` : `<span>${esc((S.name || '?').trim()[0] || '?')}</span>`}</label><input type="file" id="img-in2" accept="image/*" hidden><div class="add" style="margin:0"><label class="btn sm" for="img-in2">${t('setup.portrait')}</label>${S.img ? `<button class="btn sm bad" data-a="imgdel">${t('setup.portraitDel')}</button>` : ''}</div></div>
   <div class="form" style="margin-top:12px">
    ${field(t('common.name'), txtIn('name', S.name, t('common.name')))}
@@ -46,13 +48,17 @@ export function vSetup() {
    <div class="add">${spSelect()}<button class="btn solid" data-a="addsp">${t('common.add')}</button></div><p class="hint" id="sp-sel-h"></p>
    <details><summary>${t('setup.ownSpell')}</summary><div class="add"><input type="text" id="osp-n" placeholder="${t('common.name')}"><input type="number" class="n" id="osp-l" min="0" max="9" placeholder="${t('setup.spellLevel')}" aria-label="${t('setup.spellLevel')}"></div><div class="add"><input type="text" id="osp-t" placeholder="${t('setup.ospTime')}"><input type="text" id="osp-r" placeholder="${t('spell.range')}"><input type="text" id="osp-d" placeholder="${t('spell.dur')}"></div><div class="add"><input type="text" id="osp-e" class="wide" placeholder="${t('setup.ospEffect')}"></div><div class="add"><label class="ck"><input type="checkbox" id="osp-c"> ${t('conc.title')}</label><label class="ck"><input type="checkbox" id="osp-ri"> ${t('spell.ritual')}</label><button class="btn solid" data-a="addspown">${t('common.create')}</button></div></details></div>
   <h2>${t('setup.backup')}</h2><div class="card"><p class="note" style="margin-top:0">${t('setup.backupHint')}</p>
-   <div class="add"><button class="btn" data-a="exp">${t('setup.export')}</button>${U.EXP ? `<button class="btn solid" data-a="copy">${t('setup.copy')}</button>` : ''}</div>${U.EXP ? `<textarea id="exp" readonly aria-label="${t('setup.exportLabel')}">${esc(U.EXP)}</textarea>` : ''}
+   <div class="add"><button class="btn" data-a="print">${t('setup.print')}</button><button class="btn" data-a="exp">${t('setup.export')}</button>${U.EXP ? `<button class="btn solid" data-a="copy">${t('setup.copy')}</button>` : ''}</div>${U.EXP ? `<textarea id="exp" readonly aria-label="${t('setup.exportLabel')}">${esc(U.EXP)}</textarea>` : ''}
    <div class="add" style="margin-top:14px"><label class="ck">${t('setup.loadFile')} <input type="file" id="impf" accept=".json,application/json,text/plain"></label></div>
    <textarea id="imp" placeholder="${t('setup.pasteImport')}" aria-label="${t('setup.importLabel')}" style="margin-top:8px">${esc(U.IMP)}</textarea>
    <div class="add"><button class="btn ${U.CONF === 'imp' ? 'warn' : ''}" data-a="imp">${U.CONF === 'imp' ? t('setup.importConfirm') : t('setup.import')}</button><button class="btn ${U.CONF === 'reset' ? 'warn' : 'bad'}" data-a="reset">${U.CONF === 'reset' ? t('setup.resetConfirm') : t('setup.reset')}</button></div></div>`;
 }
+function vChars() {
+  const list = roster();
+  return `<h2>${t('chars.title')}<em>${list.length}</em></h2><div class="card">${list.map(c => `<div class="edrow"><span class="nm">${esc(c.name)}${c.id === S.id ? ` <span class="lbl">${t('chars.active')}</span>` : ''}<small>${[c.klass, c.level ? t('feat.level', { n: c.level }) : ''].filter(Boolean).join(' · ')}</small></span>${c.id === S.id ? '' : `<button class="btn sm" data-a="charsw" data-id="${esc(c.id)}">${t('chars.open')}</button>`}<button class="btn sm ${U.CONF === 'chardel:' + c.id ? 'warn' : 'bad'}" data-a="chardel" data-id="${esc(c.id)}">${U.CONF === 'chardel:' + c.id ? t('chars.delConfirm') : t('common.deleteBtn')}</button></div>`).join('')}<div class="add"><button class="btn solid" data-a="charnew">${t('chars.new')}</button><button class="btn" data-a="chardup">${t('chars.dup')}</button></div></div>`;
+}
 export function spSelect() {
-  const by = {}, l = CLASSES[S.klass] ? CLASSES[S.klass].l : '';
-  CAT.filter(e => e.k === 'spell' && (!l || e.cls.includes(l))).forEach(e => { (by[e.c] = by[e.c] || []).push(e); });
+  const by = {}, ls = classLevels().map(c => CLASSES[c.k]?.l).filter(Boolean), l = ls.join('');
+  CAT.filter(e => e.k === 'spell' && (!l || ls.some(x => e.cls.includes(x)))).forEach(e => { (by[e.c] = by[e.c] || []).push(e); });
   return `<select id="sp-sel" aria-label="${t('setup.spellCat')}"><option value="">${l ? t('setup.spellsOf', { k: S.klass }) : t('setup.spellPick')}</option>${Object.keys(by).map(c => `<optgroup label="${c}">${by[c].map(e => `<option value="${esc(e.n)}">${esc(nameLine(e.n, e.de))}</option>`).join('')}</optgroup>`).join('')}</select>`;
 }

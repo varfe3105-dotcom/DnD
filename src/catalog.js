@@ -12,7 +12,9 @@ import tables from '../data/tables.json';
 import subclasses from '../data/subclasses.json';
 import feats from '../data/feats.json';
 import options from '../data/options.json';
+import multiclass from '../data/multiclass.json';
 import legacyTexts from '../data/reference/legacy-texts.json';
+import Fuse from 'fuse.js';
 import { CLIC } from './constants.js';
 import { lang, t, loc, deName, dist, dice } from './i18n/index.js';
 
@@ -21,9 +23,17 @@ export const RACES = races;
 export const { FULL, CANT, KNOWN } = tables;
 export const COND = conditions;
 export const EXH = exhaustion;
+export const MULTICLASS = multiclass;
 export const SUBCLASSES = subclasses;
 export const FEATS = feats;
 export const OPTIONS = options;
+
+let fuse = null;
+/** Unscharfe Namenssuche, z. B. findet „firbal“ Fireball. */
+export function fuzzy(q) {
+  if (!fuse) fuse = new Fuse(CAT, { keys: ['n', 'de', 'aka'], threshold: 0.34, ignoreLocation: true, minMatchCharLength: 2 });
+  return fuse.search(q, { limit: 40 }).map(r => r.item);
+}
 
 export const CAT = [];
 export const BYN = {};
@@ -32,6 +42,7 @@ const hayOf = o => [o?.en, o?.de].join(' ');
 
 /** Baut den Katalog in der aktuellen Sprache neu auf (beim Start und beim Umschalten). */
 export function buildCatalog() {
+  fuse = null;
   CAT.length = 0;
   Object.keys(BYN).forEach(k => delete BYN[k]);
   [...potions, ...items, ...magicItems].forEach(i => addCat({ k: i.k, id: i.id, n: loc(i.n), ic: i.ic, p: loc(i.text), c: i.rarity ? (i.k === 'potion' ? t('cat.potion') : t('cat.magic')) : t('cat.' + i.group), group: i.group, slot: i.slot, att: i.att, cons: i.cons, q: i.q, magic: !!i.rarity, rarity: i.rarity ? loc(i.rarity) : '', source: i.source, hay: hayOf(i.n) }));
@@ -63,6 +74,7 @@ export function findRef(n, p) {
 const FEATX = {};
 const noteFeat = (n, text) => { [text.en, text.de].forEach(s => { if (s) FEATX[n + '|' + s] = text; }); };
 Object.values(CLASSES).forEach(C => Object.values(C.f).flat().forEach(f => noteFeat(f.n, f.text)));
+Object.entries(multiclass).forEach(([k, m]) => noteFeat('Multiclass: ' + k, m.prof));
 Object.values(subclasses).forEach(c => Object.values(c).forEach(s => Object.values(s).flat().forEach(f => noteFeat(f.n, f.text))));
 feats.forEach(f => noteFeat(f.n, f.text));
 Object.values(options).flat().forEach(f => noteFeat(f.n, f.text));

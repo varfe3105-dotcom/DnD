@@ -15,6 +15,12 @@
 | Shikashi's Fantasy Icons Pack v2, Matt Firth (shikashipx, cheekyinkling) | CC BY 4.0 laut itch.io-Seite | https://cheekyinkling.itch.io/shikashis-fantasy-icons-pack | Bilder für Gegenstände, Zauber, Zustände, Klassen (`src/assets/icons.png`, auf belegte Zeilen zugeschnitten) |
 | game-icons.net (Vorlage vieler Motive des Packs) | CC BY 3.0 | https://game-icons.net | Designgrundlage, genannt wie vom Pack verlangt |
 
+## Bibliotheken im Bogen
+
+| Name | Lizenz | Link | Wofür |
+|---|---|---|---|
+| Fuse.js | Apache-2.0 | https://www.fusejs.io | Unscharfe Suche im Wiki |
+
 ## Regeldaten
 
 | Name | Lizenz | Link | Wofür |
@@ -33,6 +39,7 @@ Deutsche Texte und alles außerhalb des SRD sind eigene Zusammenfassungen und Ü
 | Vite | MIT | https://vite.dev |
 | vite-plugin-singlefile | MIT | https://github.com/richardtallent/vite-plugin-singlefile |
 | Playwright | Apache-2.0 | https://playwright.dev |
+| vite-plugin-pwa | MIT | https://vite-pwa-org.netlify.app |
 | ESLint | MIT | https://eslint.org |
 | cross-env | MIT | https://github.com/kentcdodds/cross-env |
 | Fontsource (Paketierung der Schriften) | MIT | https://fontsource.org |

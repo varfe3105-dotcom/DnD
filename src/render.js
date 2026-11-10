@@ -1,5 +1,6 @@
 import { $, esc } from './util.js';
-import { S, U } from './state.js';
+import { S, U, roster } from './state.js';
+import { classLevels } from './tables.js';
 import { vMain } from './views/sheet.js';
 import { vInv } from './views/inventory.js';
 import { vWiki } from './views/wiki.js';
@@ -10,12 +11,14 @@ import { CLASSES } from './catalog.js';
 import { t, lang } from './i18n/index.js';
 
 export function vHead() {
-  const line = [S.subrace || S.race, S.klass, S.sub].filter(Boolean).join(' · ');
+  const classes = S.multi?.length ? classLevels().map(c => `${c.k} ${c.lvl}`).join(' / ') : [S.klass, S.sub].filter(Boolean).join(' · ');
+  const line = [S.subrace || S.race, classes].filter(Boolean).join(' · ');
+  const others = roster();
   const langBtn = l => `<button data-a="lang" data-l="${l}" aria-pressed="${lang === l}" lang="${l}">${l.toUpperCase()}</button>`;
   return `<header class="hd"><label class="por" for="img-in" title="${t('head.portrait')}">${S.img ? `<img src="${S.img}" alt="${t('head.portraitAlt', { n: esc(S.name) })}">` : `<span aria-hidden="true">${esc((S.name || '?').trim()[0] || '?')}</span>`}</label><input type="file" id="img-in" accept="image/*" hidden>
   <div class="who"><h1>${esc(S.name)}</h1><p>${esc(line || t('head.pickRace'))}</p>${S.info ? `<p class="sub2">${esc(S.info)}</p>` : ''}</div>
   ${S.level ? `<div class="seal" title="${t('head.level')}"><small>${t('head.seal')}</small><b>${S.level}</b></div>` : ''}
-  <div class="hacts"><div class="hrow"><button class="btn gilt" data-a="lu">${S.level ? (S.level >= 20 ? t('head.lvl20') : t('head.levelUp')) : t('head.build1')}</button><div class="langs" role="group" aria-label="${t('head.language')}">${langBtn('en')}${langBtn('de')}</div></div><div class="rests"><button class="btn ghost" data-a="rest" data-r="short">${t('rest.short')}</button><button class="btn ghost" data-a="rest" data-r="long">${t('rest.long')}</button></div></div></header>`;
+  <div class="hacts">${others.length > 1 ? `<select id="char-switch" class="charsw" aria-label="${t('chars.switch')}">${others.map(c => `<option value="${esc(c.id)}"${c.id === S.id ? ' selected' : ''}>${esc(c.name)}</option>`).join('')}</select>` : ''}<div class="hrow"><button class="btn gilt" data-a="lu">${S.level ? (S.level >= 20 ? t('head.lvl20') : t('head.levelUp')) : t('head.build1')}</button><div class="langs" role="group" aria-label="${t('head.language')}">${langBtn('en')}${langBtn('de')}</div></div><div class="rests"><button class="btn ghost" data-a="rest" data-r="short">${t('rest.short')}</button><button class="btn ghost" data-a="rest" data-r="long">${t('rest.long')}</button></div></div></header>`;
 }
 export const TABS = ['main', 'inv', 'wiki', 'notes', 'setup'];
 export const app = $('app');

@@ -2,7 +2,8 @@ import { t as tr, setLang, distInput } from './i18n/index.js';
 import { buildCatalog } from './catalog.js';
 import { $, clamp } from './util.js';
 import { EQ } from './constants.js';
-import { def, mk, spFrom, putBag, S, setS, U, save, toast } from './state.js';
+import { def, mk, spFrom, putBag, S, setS, U, save, toast, switchChar, newChar, dupChar, delChar } from './state.js';
+import { classLevels } from './tables.js';
 import { get, set, refs, fits, applyRace } from './helpers.js';
 import { spMeta } from './views/sheet.js';
 import { wikiBody } from './views/wiki.js';
@@ -24,9 +25,14 @@ app.addEventListener('click',ev=>{
   const b=ev.target.closest('[data-a]');if(!b)return;
   const a=b.dataset.a,i=+b.dataset.i,k=b.dataset.k,v=id=>($(id)||{}).value||'';
   if(a==='luclose-bg'&&ev.target!==b)return;
-  if(a!=='rm'&&a!=='imp'&&a!=='reset')U.CONF=null;
+  if(a!=='rm'&&a!=='imp'&&a!=='reset'&&a!=='chardel')U.CONF=null;
   pend=false;
   switch(a){
+    case 'charsw':switchChar(b.dataset.id);break;
+    case 'charnew':newChar();toast(tr('toast.charNew'));break;
+    case 'chardup':dupChar();toast(tr('toast.charDup'));break;
+    case 'chardel':{const id=b.dataset.id;if(U.CONF!=='chardel:'+id){U.CONF='chardel:'+id;break}U.CONF=null;delChar(id);break}
+    case 'print':S.tab='main';render();setTimeout(()=>window.print(),50);return;
     case 'lang':setLang(b.dataset.l);buildCatalog();break;
     case 'tab':S.tab=b.dataset.t;U.SEL=null;window.scrollTo({top:0});break;
     case 'lu':openLU();break;
@@ -69,7 +75,7 @@ app.addEventListener('click',ev=>{
     case 'exp':{const o=JSON.parse(JSON.stringify(S));o.tab='main';U.EXP=JSON.stringify(o);break}
     case 'copy':{const ta=$('exp');const p=navigator.clipboard&&navigator.clipboard.writeText?navigator.clipboard.writeText(U.EXP):Promise.reject();p.then(()=>toast(tr('toast.copied'))).catch(()=>{if(ta){ta.focus();ta.select()}toast(tr('toast.selected'))});return}
     case 'imp':{const txt=v('imp').trim();if(!txt){toast(tr('toast.needImport'));return}if(U.CONF!=='imp'){U.CONF='imp';break}U.CONF=null;if(importText(txt))U.IMP='';break}
-    case 'reset':if(U.CONF!=='reset'){U.CONF='reset';break}setS(def());S.tab='setup';U.OPEN={};U.SEL=null;U.EXP='';U.CONF=null;toast(tr('toast.reset'));break;
+    case 'reset':if(U.CONF!=='reset'){U.CONF='reset';break}{const keepId=S.id;setS(def());S.id=keepId}S.tab='setup';U.OPEN={};U.SEL=null;U.EXP='';U.CONF=null;toast(tr('toast.reset'));break;
   }
   save();render()});
 app.addEventListener('change',ev=>{
@@ -78,7 +84,8 @@ app.addEventListener('change',ev=>{
   if(el.id==='impf'&&el.files&&el.files[0]){const fr=new FileReader();fr.onload=()=>{U.IMP=String(fr.result);const ta=$('imp');if(ta)ta.value=U.IMP;U.CONF=null;toast(tr('toast.fileLoaded'))};fr.readAsText(el.files[0]);return}
   if(el.id==='inv-sel'||el.id==='sp-sel'){const c=el.id==='inv-sel'?BYN[el.value]:BYN['spell:'+el.value];const h=$(el.id+'-h');if(h)h.textContent=c?(c.k==='spell'?spMeta(c)+' — '+c.eff:c.p+(c.att?' · '+tr('item.needsAttune'):'')):'';return}
   if(el.id==='wc'){U.WC=el.value;$('wres').innerHTML=wikiBody();return}
-  if(el.dataset.lu){U.LU[el.dataset.lu]=el.value;later();return}
+  if(el.dataset.lu){U.LU[el.dataset.lu]=el.value;if(el.dataset.lu==='k'){const c=classLevels().find(x=>x.k===el.value);U.LU.sub=c?c.sub:''}later();return}
+  if(el.id==='char-switch'){switchChar(el.value);render();return}
   const p=el.dataset.p;if(!p)return;
   let val=el.value;
   if(el.dataset.t==='n'){val=Math.max(+el.min||0,+String(val).replace(',','.')||0);if(el.max)val=Math.min(+el.max,val);if(el.dataset.u==='dist')val=distInput(val);if(p!=='speed')val=Math.floor(val)}

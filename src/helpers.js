@@ -2,6 +2,7 @@ import { esc, mod, sg, clamp } from './util.js';
 import { S, toast } from './state.js';
 import { CLN, EQ, SK, ABK } from './constants.js';
 import { RACES, BYN, CLASSES } from './catalog.js';
+import { classLevels } from './tables.js';
 import { t, tl, lang, loc, dice, nameLine } from './i18n/index.js';
 
 export const skv = k => { const s = SK.find(x => x[0] === k); return mod(S.abil[s[1]]) + S.prof * (S.skills[k] || 0); };
@@ -79,11 +80,21 @@ export function resFor(k, l, tongue = lang) {
 /** Beschreibung einer Fähigkeit in der aktuellen Sprache; von Hand geänderte Texte bleiben. */
 export function resText(r) {
   for (const l of ['en', 'de']) {
-    const a = resFor(S.klass, S.level, l).find(x => x.n === r.n);
-    if (a && a.p === r.p) return resFor(S.klass, S.level, lang).find(x => x.n === r.n).p;
+    for (const c of classLevels()) {
+      const a = resFor(c.k, c.lvl, l).find(x => x.n === r.n);
+      if (a && a.p === r.p) return resFor(c.k, c.lvl, lang).find(x => x.n === r.n).p;
+    }
     const rr = RACE_RES[r.n];
     if (rr && tl(l, rr[0]) === r.p) return t(rr[0]);
   }
   return r.p;
 }
 export { ABK, clamp, CLASSES };
+/** Trefferwürfel als Text, bei Multiclassing nach Art getrennt. */
+export function hdText() {
+  const list = classLevels().filter(c => c.lvl > 0);
+  if (list.length < 2) return dice(S.hd.die);
+  const by = {};
+  list.forEach(c => { const d = 'W' + CLASSES[c.k].hd; by[d] = (by[d] || 0) + c.lvl; });
+  return Object.entries(by).map(([d, n]) => dice(n + d)).join(' + ');
+}

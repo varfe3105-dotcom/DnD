@@ -3,7 +3,7 @@ import { tok, itTone } from '../icons.js';
 import { CLN, ABK } from '../constants.js';
 import { S, U } from '../state.js';
 import { get, refs, classOpts, raceTraits, abName, itemView, spellView, resText } from '../helpers.js';
-import { CLASSES, RACES, CAT, BYN, COND, featText, SUBCLASSES } from '../catalog.js';
+import { CLASSES, RACES, CAT, BYN, COND, featText, SUBCLASSES, fuzzy } from '../catalog.js';
 import { schoolName, srcNote, restLabel, featSrc } from './sheet.js';
 import { t, loc, dice, dist, deName, nameLine } from '../i18n/index.js';
 
@@ -22,6 +22,10 @@ export function wList() {
   if (q) {
     const rank = e => { const n = e.n.toLowerCase(); return n === q ? 0 : n.startsWith(q) ? 1 : n.includes(q) ? 2 : String(e.de || '').toLowerCase().includes(q) ? 3 : 4; };
     L2 = L2.filter(e => [e.n, e.p, e.eff, e.de, e.aka, e.school, e.c, e.hay, e.school ? schoolName(e.school) : ''].join(' ').toLowerCase().includes(q)).map((e, i) => [rank(e), i, e]).sort((a, b) => a[0] - b[0] || a[1] - b[1]).map(x => x[2]);
+  }
+  if (q.length >= 3 && U.WF !== 'mine' && L2.length < 8) {
+    const have = new Set(L2);
+    L2 = [...L2, ...fuzzy(q).filter(e => !have.has(e) && (U.WF === 'all' || e.k === U.WF) && (!U.WC || e.k !== 'spell' || (e.cls || '').includes(U.WC)))];
   }
   return L2;
 }

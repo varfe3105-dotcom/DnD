@@ -82,9 +82,11 @@ export function importText(txt) {
   let o;
   try { o = JSON.parse(txt); } catch (e) { toast(t('toast.badExport')); return false; }
   if (!o || typeof o !== 'object') { toast(t('toast.badExport2')); return false; }
+  const keepId = S.id;
   if (o.v >= 3) setS(norm(o));
   else if (o.abil || o.hpMax != null) setS(migrate(o));
   else { toast(t('toast.unknownFormat')); return false; }
+  S.id = keepId;
   S.tab = 'setup'; U.OPEN = {}; U.SEL = null; U.EXP = '';
   toast(t('toast.imported', { n: S.name }));
   return true;

@@ -6,7 +6,7 @@ import { BYN, CLASSES, byName, findRef } from './catalog.js';
 import { loc } from './i18n/index.js';
 
 export const KEY='charbogen-v4',OLD='charbogen-v2';
-export const def=()=>({v:4,name:t('char.new'),info:'',img:'',race:'',subrace:'',klass:'',sub:'',level:0,cls:'',hp:10,hpMax:10,tmp:0,ac:10,speed:9,prof:2,
+export const def=()=>({v:4,id:uid(),multi:[],name:t('char.new'),info:'',img:'',race:'',subrace:'',klass:'',sub:'',level:0,cls:'',hp:10,hpMax:10,tmp:0,ac:10,speed:9,prof:2,
  abil:{str:10,dex:10,con:10,int:10,wis:10,cha:10},saves:{},skills:{},hd:{max:1,used:0,die:'W8'},death:{s:0,f:0},conc:'',
  slots:Array.from({length:9},()=>({max:0,used:0})),pact:{max:0,used:0,lvl:1},res:[],spells:[],feats:[],bag:Array(24).fill(null),eq:{},
  gold:{pp:0,gp:0,ep:0,sp:0,cp:0},cond:{},exh:0,notes:'',tab:'main'});
@@ -24,7 +24,7 @@ export function norm(o){
   s.death=Object.assign({s:0,f:0},o.death||{});
   if(!Array.isArray(s.slots)||s.slots.length!==9)s.slots=def().slots;
   ['saves','skills','cond','eq'].forEach(k=>{if(!s[k]||typeof s[k]!=='object'||Array.isArray(s[k]))s[k]={}});
-  ['res','spells','feats'].forEach(k=>{if(!Array.isArray(s[k]))s[k]=[]});
+  ['res','spells','feats','multi'].forEach(k=>{if(!Array.isArray(s[k]))s[k]=[]});
   if(!Array.isArray(s.bag))s.bag=[];while(s.bag.length<24)s.bag.push(null);
   ['hp','hpMax','tmp','ac','speed','prof','exh','level'].forEach(k=>{s[k]=+s[k]||0});
   if(s.info==='Volk · Klasse · Stufe')s.info='';
@@ -48,6 +48,19 @@ export function load(){
 export let S=load();
 export function setS(v){S=v}
 export const U={OPEN:{},SEL:null,CONF:null,WF:'all',WQ:'',WC:'',WSEL:null,EXP:'',IMP:'',LU:null,LUfocus:false};
-export const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){toast(t('toast.saveFailed'))}};
+export const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S));localStorage.setItem(IDX,JSON.stringify(roster()))}catch(e){toast(t('toast.saveFailed'))}};
+
+/* Mehrere Charaktere: Der aktive liegt unter KEY, alle anderen in eigenen Schlüsseln, IDX hält die Übersicht. */
+const IDX='charbogen-index',slotKey=id=>'charbogen-char-'+id;
+const get=k=>{try{return JSON.parse(localStorage.getItem(k)||'null')}catch(e){return null}};
+const put=(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v));return true}catch(e){toast(t('toast.saveFailed'));return false}};
+const drop=k=>{try{localStorage.removeItem(k)}catch(e){/* Datenschutzmodus */}};
+export const roster=()=>{const list=get(IDX)||[],me={id:S.id,name:S.name,klass:S.klass,level:S.level},i=list.findIndex(x=>x.id===S.id);if(i<0)list.unshift(me);else list[i]=me;return list};
+const fresh=()=>{U.OPEN={};U.SEL=null;U.EXP='';U.CONF=null};
+const park=()=>{const list=roster();if(!put(slotKey(S.id),S))return null;return list};
+export function switchChar(id){if(id===S.id)return false;const o=get(slotKey(id));if(!o||!park())return false;setS(norm(o));drop(slotKey(id));fresh();save();return true}
+export function newChar(){if(!park())return;const list=roster();setS(def());S.tab='setup';fresh();put(IDX,list);save()}
+export function dupChar(){if(!park())return;const list=roster();const c=JSON.parse(JSON.stringify(S));c.id=uid();c.name=S.name+' (2)';setS(norm(c));fresh();put(IDX,list);save()}
+export function delChar(id){const list=roster().filter(x=>x.id!==id);drop(slotKey(id));put(IDX,list);if(id!==S.id)return;const next=list[0]&&get(slotKey(list[0].id));if(next){setS(norm(next));drop(slotKey(list[0].id))}else{setS(def());S.tab='setup'}fresh();save()}
 export let tt;
 export function toast(m){const t=$('toast');t.textContent=m;t.hidden=false;clearTimeout(tt);tt=setTimeout(()=>{t.hidden=true},4600)}
