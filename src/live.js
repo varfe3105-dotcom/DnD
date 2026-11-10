@@ -38,11 +38,11 @@ const str = (v, n = 60) => String(v ?? '').slice(0, n);
 function clean(p) {
   return {
     key: str(p.key, 40), role: p.role === 'dm' ? 'dm' : 'player', name: str(p.name), klass: str(p.klass, 30), level: int(p.level, 20),
-    hp: int(p.hp), hpMax: int(p.hpMax), tmp: int(p.tmp), ac: int(p.ac, 99), exh: int(p.exh, 6), conc: str(p.conc),
+    insp: !!p.insp, hp: int(p.hp), hpMax: int(p.hpMax), tmp: int(p.tmp), ac: int(p.ac, 99), exh: int(p.exh, 6), conc: str(p.conc),
     cond: Array.isArray(p.cond) ? p.cond.filter(c => CONDS.has(c)) : [], death: { s: int(p.death?.s, 3), f: int(p.death?.f, 3) },
   };
 }
-const payload = () => (L.role === 'dm' ? { role: 'dm' } : { role: 'player', name: S.name, klass: S.klass, level: S.level, hp: S.hp, hpMax: S.hpMax, tmp: S.tmp, ac: S.ac, exh: S.exh, conc: S.conc, cond: Object.keys(S.cond).filter(c => S.cond[c]), death: S.death });
+const payload = () => (L.role === 'dm' ? { role: 'dm' } : { role: 'player', insp: !!S.insp, name: S.name, klass: S.klass, level: S.level, hp: S.hp, hpMax: S.hpMax, tmp: S.tmp, ac: S.ac, exh: S.exh, conc: S.conc, cond: Object.keys(S.cond).filter(c => S.cond[c]), death: S.death });
 function push() {
   if (!transport) return;
   const p = payload(), j = JSON.stringify(p);

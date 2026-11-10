@@ -36,7 +36,7 @@ test.describe('Live-Tisch @new', () => {
     expect((await page.evaluate(() => window.__liveInfo)).code).toBe('ABC234');
     const p = await lastSent(page);
     expect(p.hp).toBe(15);
-    expect(Object.keys(p).sort()).toEqual(['ac', 'conc', 'cond', 'death', 'exh', 'hp', 'hpMax', 'klass', 'level', 'name', 'role', 'tmp']);
+    expect(Object.keys(p).sort()).toEqual(['ac', 'conc', 'cond', 'death', 'exh', 'hp', 'hpMax', 'insp', 'klass', 'level', 'name', 'role', 'tmp']);
   });
 
   test('Änderungen gehen automatisch hinaus', async ({ page }) => {

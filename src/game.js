@@ -45,20 +45,33 @@ export function rest(long) {
   toast(m);
 }
 const concMsg = s => (S.conc && S.conc !== s.n ? t('toast.concSwitch', { a: S.conc, b: s.n }) : t('toast.concOn', { s: s.n }));
+/** Freie Plätze, auf denen dieser Zauber gewirkt werden kann; Paktmagie zuerst. */
+export function castOptions(s) {
+  const out = [];
+  if (S.pact.max && S.pact.used < S.pact.max && S.pact.lvl >= s.lvl) out.push('pact');
+  for (let l = s.lvl; l <= 9; l++) { const sl = S.slots[l - 1]; if (sl.used < sl.max) out.push(l); }
+  return out;
+}
+function castWith(s, choice) {
+  let msg;
+  if (choice === 'pact') { S.pact.used++; msg = t('toast.pactUsed', { n: S.pact.lvl }); }
+  else { S.slots[choice - 1].used++; msg = t('toast.slotUsed', { n: choice }); }
+  if (s.conc) { msg += ' ' + concMsg(s); S.conc = s.n; }
+  toast(msg);
+}
+/** Mehrere freie Grade öffnen die Auswahl, sonst wird sofort gewirkt. */
 export function cast(i) {
   const s = S.spells[i];
-  if (s.lvl > 0) {
-    let msg = '';
-    if (S.pact.max && S.pact.used < S.pact.max && S.pact.lvl >= s.lvl) { S.pact.used++; msg = t('toast.pactUsed', { n: S.pact.lvl }); }
-    else { for (let l = s.lvl; l <= 9; l++) { const sl = S.slots[l - 1]; if (sl.used < sl.max) { sl.used++; msg = t('toast.slotUsed', { n: l }); break; } } }
-    if (!msg) { toast(t('toast.noSlot', { n: s.lvl }) + (s.ritual ? ' ' + t('toast.ritualHint') : '')); return; }
-    if (s.conc) { msg += ' ' + concMsg(s); S.conc = s.n; }
-    toast(msg);
+  if (s.lvl === 0) {
+    if (s.conc) { toast(concMsg(s)); S.conc = s.n; } else toast(t('toast.cast', { s: s.n }));
     return;
   }
-  if (s.conc) { toast(concMsg(s)); S.conc = s.n; }
-  else toast(t('toast.cast', { s: s.n }));
+  const opts = castOptions(s);
+  if (!opts.length) { toast(t('toast.noSlot', { n: s.lvl }) + (s.ritual ? ' ' + t('toast.ritualHint') : '')); return; }
+  if (opts.length > 1) { U.CASTPICK = U.CASTPICK === i ? null : i; return; }
+  castWith(s, opts[0]);
 }
+export function castAt(i, choice) { U.CASTPICK = null; castWith(S.spells[i], choice === 'pact' ? 'pact' : +choice); }
 export function move(from, to) {
   if (from === to) return;
   const a = get(from), b = get(to);

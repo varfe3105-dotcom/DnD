@@ -19,3 +19,18 @@ export function slotsAll(list){
   const row=FULL[Math.min(20,lvl)];return Array.from({length:9},(_,i)=>row[i]||0)}
 /** Voraussetzung zum Multiclassing erfüllt? */
 export const mcMet=k=>{const r=MULTICLASS[k]?.req||{};const {any,...all}=r;return Object.entries(all).every(([a,v])=>S.abil[a]>=v)&&(!any||Object.entries(any).some(([a,v])=>S.abil[a]>=v))};
+
+const PREP = { Cleric: 'wis', Druid: 'wis', Wizard: 'int', Paladin: 'cha' };
+/** Wie viele Zauber vorbereitet werden dürfen; null, wenn keine Klasse vorbereitet. */
+export function prepCap() {
+  const list = classLevels().filter(c => PREP[c.k] && c.lvl > 0 && (c.k !== 'Paladin' || c.lvl >= 2));
+  if (!list.length) return null;
+  return list.reduce((a, c) => a + Math.max(1, Math.floor((S.abil[PREP[c.k]] - 10) / 2) + (c.k === 'Paladin' ? Math.floor(c.lvl / 2) : c.lvl)), 0);
+}
+/** Zauber-SG und Angriffsbonus je Zauberklasse. */
+export function spellStats() {
+  return classLevels().filter(c => c.lvl > 0 && (castKind(c.k, c.sub) || CLASSES[c.k]?.cast === 'pact')).map(c => {
+    const a = CLASSES[c.k].sa || 'int', m = Math.floor((S.abil[a] - 10) / 2);
+    return { k: c.k, a, dc: 8 + S.prof + m, atk: S.prof + m };
+  });
+}

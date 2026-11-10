@@ -42,3 +42,10 @@ export async function amount(page, a, value) {
   await page.locator('#hpv').fill(String(value));
   await act(page, a).click();
 }
+
+/** Wirkt einen Zauber; öffnet sich die Gradauswahl, wird der erste Vorschlag genommen. */
+export async function castFirst(page, button) {
+  await (button || act(page, 'cast')).click();
+  const pick = page.locator('[data-a="castslot"]');
+  if (await pick.count()) await pick.first().click();
+}

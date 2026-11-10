@@ -1,3 +1,5 @@
+import { castOptions } from '../game.js';
+import { prepCap, spellStats } from '../tables.js';
 import { esc, clamp, mod, sg } from '../util.js';
 import { tok, itTone } from '../icons.js';
 import { CLN, SK, ABK, CLIC } from '../constants.js';
@@ -63,14 +65,18 @@ export function vSpells() {
   const lv = new Set(S.spells.map(s => s.lvl));
   S.slots.forEach((s, i) => { if (s.max) lv.add(i + 1); });
   if (!lv.size && !S.pact.max) return `<h2>${t('spell.title')}</h2><div class="card"><div class="empty">${t('spell.none')}</div></div>`;
-  let h = '';
+  const stats = spellStats(), cap = prepCap();
+  const prepared = S.spells.filter(s => s.lvl > 0 && !s.always && s.prep !== false).length;
+  let h = stats.map(s => `<div class="spstats">${stats.length > 1 ? `<span class="lbl">${s.k}</span>` : ''}<span>${abName(s.a)}</span><b>${t('spell.dc', { n: s.dc })}</b><b>${t('spell.atk', { n: sg(s.atk) })}</b></div>`).join('');
+  if (cap != null) h += `<div class="spprep"><span class="${prepared > cap ? 'over' : ''}">${t('spell.prepCount', { a: prepared, b: cap })}</span><button class="btn sm" data-a="spall">${U.SPALL ? t('spell.showPrep') : t('spell.showAll')}</button></div>`;
   if (S.pact.max) h += `<div class="lvh"><b>${t('spell.pact')}</b><small>${t('spell.pactHint', { n: S.pact.lvl })}</small><div class="pips">${pips(S.pact.max, S.pact.used, 'data-a="pip" data-k="pact"')}</div></div>`;
+  const hidden = s => cap != null && !U.SPALL && s.lvl > 0 && !s.always && s.prep === false;
   [...lv].sort((a, b) => a - b).forEach(l => {
     const sl = l ? S.slots[l - 1] : null;
     h += `<div class="lvh"><b>${l ? t('spell.level', { n: l }) : t('spell.cantrips')}</b><small>${l ? (sl.max ? t('spell.free', { a: sl.max - sl.used, b: sl.max }) : t('spell.noSlots')) : t('spell.atWill')}</small>${sl && sl.max ? `<div class="pips">${pips(sl.max, sl.used, `data-a="pip" data-k="slots" data-i="${l - 1}"`)}</div>` : ''}</div>`;
-    S.spells.map((s, i) => [s, i]).filter(x => x[0].lvl === l).sort((a, b) => a[0].n.localeCompare(b[0].n)).forEach(([raw, i]) => {
-      const o = U.OPEN[i], s = spellView(raw);
-      h += `<div class="sp${S.conc === s.n ? ' cc' : ''}"><button class="sph" data-a="spopen" data-i="${i}" aria-expanded="${!!o}">${tok(s.ic, undefined, s.src === 'own' ? '' : 'spell:' + s.n)}<span class="nm">${esc(s.n)}${deName(s.n, s.de) ? ` <span class="lbl">${esc(s.de)}</span>` : ''}<small>${spMeta(s) || t('spell.details')}</small></span></button><button class="btn sm" data-a="cast" data-i="${i}">${S.conc === s.n ? t('spell.active') : t('spell.cast')}</button>${o ? `<div class="spb"><p class="ptext">${esc(s.eff)}</p>${s.higher ? `<p class="ptext"><b>${t('spell.higher')}:</b> ${esc(s.higher)}</p>` : ''}${s.comp ? `<p class="cls">${t('spell.comp')}: ${esc(s.comp)}${s.material ? ' (' + esc(s.material) + ')' : ''}</p>` : ''}${s.school ? `<p class="cls">${esc(schoolName(s.school))}${s.cls ? ' · ' + s.cls.split('').map(c => CLN[c]).join(', ') : ''}</p>` : ''}<p class="src">${srcNote(s.src === 'own' ? 'own' : s.source)}</p></div>` : ''}</div>`;
+    S.spells.map((s, i) => [s, i]).filter(x => x[0].lvl === l && !hidden(x[0])).sort((a, b) => a[0].n.localeCompare(b[0].n)).forEach(([raw, i]) => {
+      const o = U.OPEN[i], s = spellView(raw), can = cap != null && s.lvl > 0, off = can && !s.always && raw.prep === false, picking = U.CASTPICK === i;
+      h += `<div class="sp${S.conc === s.n ? ' cc' : ''}${can ? ' pr' : ''}${off ? ' off' : ''}">${can ? `<button class="prepck${off ? '' : ' on'}" data-a="prep" data-i="${i}" aria-pressed="${!off}" aria-label="${t('spell.prepared')}" title="${s.always ? t('spell.always') : t('spell.prepared')}"${s.always ? ' disabled' : ''}></button>` : ''}<button class="sph" data-a="spopen" data-i="${i}" aria-expanded="${!!o}">${tok(s.ic, undefined, s.src === 'own' ? '' : 'spell:' + s.n)}<span class="nm">${esc(s.n)}${deName(s.n, s.de) ? ` <span class="lbl">${esc(s.de)}</span>` : ''}<small>${spMeta(s) || t('spell.details')}</small></span></button>${off ? '<span></span>' : `<button class="btn sm" data-a="cast" data-i="${i}" aria-expanded="${picking}">${S.conc === s.n ? t('spell.active') : t('spell.cast')}</button>`}${picking ? `<div class="castpick"><span class="lbl">${t('spell.pickLevel')}</span>${castOptions(raw).map(c => `<button class="btn sm solid" data-a="castslot" data-i="${i}" data-l="${c}">${c === 'pact' ? t('spell.pactShort', { n: S.pact.lvl }) : t('spell.level', { n: c })}</button>`).join('')}</div>` : ''}${o ? `<div class="spb"><p class="ptext">${esc(s.eff)}</p>${s.higher ? `<p class="ptext"><b>${t('spell.higher')}:</b> ${esc(s.higher)}</p>` : ''}${s.comp ? `<p class="cls">${t('spell.comp')}: ${esc(s.comp)}${s.material ? ' (' + esc(s.material) + ')' : ''}</p>` : ''}${s.school ? `<p class="cls">${esc(schoolName(s.school))}${s.cls ? ' · ' + s.cls.split('').map(c => CLN[c]).join(', ') : ''}</p>` : ''}<p class="src">${srcNote(s.src === 'own' ? 'own' : s.source)}</p></div>` : ''}</div>`;
     });
   });
   return `<h2>${t('spell.title')}</h2><div class="card">${h}<p class="note">${t('spell.castNote')}</p></div>`;

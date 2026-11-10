@@ -15,7 +15,7 @@ import { spMeta } from './views/sheet.js';
 import { wikiBody } from './views/wiki.js';
 import { openLU, applyLU } from './views/levelup.js';
 import { app, render } from './render.js';
-import { damage, heal, rest, cast, move, use, importText, loadPortrait } from './game.js';
+import { castAt, damage, heal, rest, cast, move, use, importText, loadPortrait } from './game.js';
 import { tip, hideTip, showTip } from './tooltip.js';
 import { BYN, CLASSES } from './catalog.js';
 
@@ -33,6 +33,7 @@ app.addEventListener('click',ev=>{
   if(a==='luclose-bg'&&ev.target!==b)return;
   if(a!=='rm'&&a!=='imp'&&a!=='reset'&&a!=='chardel')U.CONF=null;
   if(a!=='dmclear'&&a!=='dmndel')dm.DU.conf=null;
+  if(a!=='cast'&&a!=='castslot')U.CASTPICK=null;
   pend=false;
   switch(a){
     case 'dmview':dm.D.view=b.dataset.v;dm.saveD();break;
@@ -58,6 +59,10 @@ app.addEventListener('click',ev=>{
     case 'sheetcancel':U.SHEET=null;break;
     case 'sheetapply':{if(!U.SHEET.draft.klass){toast(tr('sheet.needClass'));return}const r=importDraft(U.SHEET.draft);if(r.error){toast(r.error);return}U.IMPREP=r.reports;U.SHEET=null;S.tab='setup';toast(tr('imp.done',{n:r.reports.map(x=>x.name).join(', ')}));break}
     case 'sheetspells':{const known=new Set(S.spells.map(x=>x.n));let n=0;U.SHEET.draft.spells.forEach(x=>{if(!known.has(x)&&BYN['spell:'+x]){S.spells.push(spFrom(BYN['spell:'+x]));n++}});U.SHEET=null;toast(tr('sheet.added',{n}));break}
+    case 'insp':S.insp=!S.insp;break;
+    case 'castslot':castAt(i,b.dataset.l);break;
+    case 'prep':{const s=S.spells[i];if(s&&!s.always)s.prep=s.prep===false;break}
+    case 'spall':U.SPALL=!U.SPALL;break;
     case 'charsw':switchChar(b.dataset.id);break;
     case 'charnew':newChar();toast(tr('toast.charNew'));break;
     case 'chardup':dupChar();toast(tr('toast.charDup'));break;

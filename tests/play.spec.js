@@ -1,4 +1,4 @@
-import { test, expect, seed, read, act, rest, amount, base4, spell, blankSlots } from './helpers.js';
+import { test, expect, seed, read, act, rest, amount, base4, spell, blankSlots, castFirst } from './helpers.js';
 
 test.describe('Schaden, Heilen, Temp-TP', () => {
   test('Schaden und Heilen, begrenzt auf Max-TP', async ({ page }) => {
@@ -70,37 +70,37 @@ test.describe('Zauber wirken', () => {
 
   test('verbraucht den niedrigsten passenden Platz und steigt dann auf', async ({ page }) => {
     await seed(page, base4({ slots: slots(1, 1), spells: [spell('Magic Missile', 1)] }));
-    await act(page, 'cast').click();
+    await castFirst(page);
     let s = await read(page);
     expect([s.slots[0].used, s.slots[1].used]).toEqual([1, 0]);
-    await act(page, 'cast').click();
+    await castFirst(page);
     s = await read(page);
     expect([s.slots[0].used, s.slots[1].used]).toEqual([1, 1]);
-    await act(page, 'cast').click();
+    await castFirst(page);
     s = await read(page);
     expect([s.slots[0].used, s.slots[1].used]).toEqual([1, 1]);
   });
 
   test('Cantrips verbrauchen keinen Platz', async ({ page }) => {
     await seed(page, base4({ slots: slots(2), spells: [spell('Fire Bolt', 0)] }));
-    await act(page, 'cast').click();
+    await castFirst(page);
     expect((await read(page)).slots[0].used).toBe(0);
   });
 
   test('Paktmagie wird zuerst verbraucht', async ({ page }) => {
     await seed(page, base4({ slots: slots(2), pact: { max: 1, used: 0, lvl: 2 }, spells: [spell('Hex', 1)] }));
-    await act(page, 'cast').click();
+    await castFirst(page);
     let s = await read(page);
     expect(s.pact.used).toBe(1);
     expect(s.slots[0].used).toBe(0);
-    await act(page, 'cast').click();
+    await castFirst(page);
     s = await read(page);
     expect(s.slots[0].used).toBe(1);
   });
 
   test('Konzentration wird gesetzt, gewechselt und beendet', async ({ page }) => {
     await seed(page, base4({ slots: slots(4), spells: [spell('Bless', 1, { conc: true }), spell('Shield', 1)] }));
-    const cast = n => page.locator('.sp', { hasText: n }).locator('[data-a="cast"]').click();
+    const cast = n => castFirst(page, page.locator('.sp', { hasText: n }).locator('[data-a="cast"]'));
     await cast('Bless');
     expect((await read(page)).conc).toBe('Bless');
     await expect(page.locator('.conc')).toBeVisible();

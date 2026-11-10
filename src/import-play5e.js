@@ -175,7 +175,7 @@ function build(c) {
   const missingSpells = [];
   c.spells.forEach(s => {
     const e = spellByslug[slug(s.spellId)];
-    if (e && !S.spells.some(x => x.n === e.n)) S.spells.push(spFrom(e));
+    if (e && !S.spells.some(x => x.n === e.n)) { const sp = spFrom(e); if (s.alwaysPrepared) sp.always = true; else if (s.prepared === false) sp.prep = false; S.spells.push(sp); }
     else if (!e) missingSpells.push(titled(s.spellId));
   });
 
@@ -195,7 +195,7 @@ function build(c) {
   if (missingSpells.length) toNotes.push(`${t('imp.spellsMissing')}: ${missingSpells.join(', ')}`);
   if (unknownSkills.length) toNotes.push(`${t('skill.title')}: ${unknownSkills.join(', ')}`);
   if (c.otherProficiencies.length) toNotes.push(`${t('imp.other')}: ${c.otherProficiencies.join(', ')}`);
-  if (c.inspiration) toNotes.push(t('imp.inspiration'));
+  S.insp = !!c.inspiration;
   const sections = ['backstory', 'personality', 'ideals', 'bonds', 'flaws', 'appearance', 'notes'].map(k => [k, c.details[k]]).filter(([, v]) => typeof v === 'string' && v.trim());
   S.notes = [...sections.map(([k, v]) => `## ${t('imp.d.' + k)}\n${v.trim()}`), ...(toNotes.length ? [`## ${t('imp.unmapped')}\n${toNotes.map(x => '- ' + x).join('\n')}`] : [])].join('\n\n');
 
