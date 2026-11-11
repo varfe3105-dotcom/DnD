@@ -287,3 +287,19 @@ summary{color:var(--acc);font-family:var(--f-ui)}
 .cloud-st{margin:0 0 6px;font:500 .92rem var(--f-ui);color:var(--mute)}
 .cloud-st.ok{color:var(--verd)}
 .cloud-st.conflict,.cloud-st.setup,.cloud-st.error{color:#f0a87d}
+
+/* Wirkungen von Zuständen, Erschöpfung und Rüstung */
+.fx{margin-top:14px}
+.fx .fxh{font:400 1.1rem var(--f-disp);color:var(--bandink)}
+.fx ul{margin:6px 0 0;padding:0;list-style:none;display:grid;gap:4px}
+.fx li{line-height:1.4}
+.fx li .lbl{margin-right:4px}
+.fxw.dis,.fxw.fail{color:#f0a87d}
+.fxw.adv{color:var(--verd)}
+.fxm{display:inline-grid;place-items:center;min-width:18px;height:18px;padding:0 3px;margin-left:5px;border-radius:3px;font:700 .72rem/1 var(--f-ui);vertical-align:middle;cursor:help}
+.fxm.dis,.fxm.fail{background:#7a2a1c;color:#ffe2d0}
+.fxm.adv{background:#2f5a4b;color:#dff3ea}
+.fxsub{display:block;font:500 .7rem var(--f-ui);color:var(--mute)}
+.fxnote{margin:0 0 8px}
+@media print{.fxm{border:1px solid #111;background:none;color:#111}}
+@media screen and (min-width:1280px){.fx ul{grid-template-columns:repeat(2,minmax(0,1fr));column-gap:32px}}

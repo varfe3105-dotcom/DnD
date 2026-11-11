@@ -7,6 +7,7 @@ import { COND } from './catalog.js';
 import { render } from './render.js';
 import { isPlay5e, importPlay5e } from './import-play5e.js';
 import { t, dice } from './i18n/index.js';
+import { hpMaxNow } from './effects.js';
 
 export function damage(d) {
   const msg = [], before = S.hp;
@@ -29,7 +30,7 @@ export function damage(d) {
 }
 export function heal(d) {
   if (S.hp === 0) { S.death = { s: 0, f: 0 }; delete S.cond.Unconscious; }
-  S.hp = Math.min(S.hpMax, S.hp + d);
+  S.hp = Math.min(hpMaxNow(), S.hp + d);
   toast(t('toast.healed', { n: d }));
 }
 export function rest(long) {
@@ -40,10 +41,10 @@ export function rest(long) {
   S.hd.used = Math.max(0, S.hd.used - back);
   S.slots.forEach(s => { s.used = 0; });
   S.pets.forEach(p => { p.hp = petView(p).hpMax; });
-  S.hp = S.hpMax; S.tmp = 0; S.death = { s: 0, f: 0 }; S.conc = '';
+  S.hp = hpMaxNow(); S.tmp = 0; S.death = { s: 0, f: 0 }; S.conc = '';
   delete S.cond.Unconscious;
   let m = t('toast.long', { n: back });
-  if (S.exh > 0) { S.exh--; m += ' ' + t('toast.exhDown'); }
+  if (S.exh > 0) { S.exh--; S.hp = hpMaxNow(); m += ' ' + t('toast.exhDown'); }
   const left = COND.filter(c => S.cond[c.n]).map(c => c.n);
   if (left.length) m += ' ' + t('toast.condStay', { s: left.join(', ') });
   toast(m);

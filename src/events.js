@@ -13,6 +13,7 @@ import { importDraft } from './import-play5e.js';
 import { isPlay5e } from './import-play5e.js';
 import * as live from './live.js';
 import * as cloud from './cloud.js';
+import { hpMaxNow } from './effects.js';
 import * as dm from './dm.js';
 import { vResults, vNoteList, vEncResults, vPlaceResults } from './views/dm.js';
 import { t as tr, setLang, distInput } from './i18n/index.js';
@@ -143,7 +144,7 @@ app.addEventListener('click',ev=>{
     case 'luclose':case 'luclose-bg':U.LU=null;break;
     case 'luapply':if(!applyLU())return;break;
     case 'rest':rest(b.dataset.r==='long');break;
-    case 'hp':{const was=S.hp;S.hp=clamp(S.hp+ +b.dataset.d,0,S.hpMax);if(was===0&&S.hp>0){S.death={s:0,f:0};delete S.cond.Unconscious}if(was>0&&S.hp===0)S.cond.Unconscious=true;break}
+    case 'hp':{const was=S.hp;S.hp=clamp(S.hp+ +b.dataset.d,0,hpMaxNow());if(was===0&&S.hp>0){S.death={s:0,f:0};delete S.cond.Unconscious}if(was>0&&S.hp===0)S.cond.Unconscious=true;break}
     case 'dmg':case 'heal':case 'temp':{const d=Math.floor(+v('hpv'));if(!(d>0)){toast(tr('toast.needAmount'));return}
       if(a==='dmg')damage(d);else if(a==='heal')heal(d);else{if(d<=S.tmp)toast(tr('toast.tempNoStack'));else{S.tmp=d;toast(tr('toast.tempSet',{n:d}))}}break}
     case 'ds':{const t=b.dataset.t,j=+b.dataset.j,cur=S.death[t];S.death[t]=j+1===cur?j:j+1;

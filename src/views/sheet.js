@@ -9,22 +9,66 @@ import { S, U } from '../state.js';
 import { hdText, skv, pips, numIn, get, refs, atk, raceTraits, abName, abShort, itemView, spellView, resText } from '../helpers.js';
 import { COND, EXH, featText, byName } from '../catalog.js';
 import { t, loc, dice, dist, lang, nameLine, deName } from '../i18n/index.js';
+import { effects, hpMaxNow, rollState, anyEffect } from '../effects.js';
 
-export const schoolName = s => { const k = { Hervorrufung: 'evocation', Bannmagie: 'abjuration', Beschwörung: 'conjuration', Wahrsagung: 'divination', Verzauberung: 'enchantment', Illusion: 'illusion', Nekromantie: 'necromancy', Verwandlung: 'transmutation' }[s] || String(s || '').toLowerCase(); return k ? t('school.' + k) : ''; };
+/* ---- Wirkungen von Zuständen, Erschöpfung und Rüstung ---- */
+const why = list => [...new Set(list)].join(', ');
+/** Kurzmarke (V/N/✕) mit Begründung im Tooltip. */
+function fxMark(adv, dis, fail) {
+  if (fail && fail.length) return `<b class="fxm fail" title="${esc(t('fx.fail') + ': ' + why(fail))}">${t('fx.failShort')}</b>`;
+  const st = rollState(adv || [], dis || []);
+  if (!st || st === 'both') return '';
+  return `<b class="fxm ${st}" title="${esc(t('fx.' + st) + ': ' + why(st === 'adv' ? adv : dis))}">${t(st === 'adv' ? 'fx.advShort' : 'fx.disShort')}</b>`;
+}
+/** Ausgeschriebener Vor-/Nachteil mit Gründen. */
+function fxText(adv, dis) {
+  const st = rollState(adv, dis);
+  if (!st) return '';
+  return st === 'both' ? `${t('fx.both')} (${esc(why([...adv, ...dis]))})` : `<b class="fxw ${st}">${t('fx.' + st)}</b> (${esc(why(st === 'adv' ? adv : dis))})`;
+}
+export function vFx(e) {
+  if (!anyEffect(e)) return '';
+  const L = [], line = (k, v) => L.push(`<li><span class="lbl">${k}</span> ${v}</li>`);
+  if (e.noAct.length) line(t('fx.noAct'), `(${esc(why(e.noAct))})`);
+  const a = fxText(e.atk.adv, e.atk.dis); if (a) line(t('fx.atk'), a);
+  if (e.checks.length) line(t('fx.checks'), fxText([], e.checks));
+  if (e.checkAb.str.length) line(t('fx.checkStrDex'), fxText([], e.checkAb.str));
+  if (e.stealth.length) line(t('fx.stealth'), fxText([], e.stealth));
+  if (e.sight.length) line(t('fx.sight'), `(${esc(why(e.sight))})`);
+  if (e.hear.length) line(t('fx.hear'), `(${esc(why(e.hear))})`);
+  ABK.forEach(k => {
+    const s = e.saves[k];
+    if (s.fail.length) line(`${t('fx.saves')} ${abName(k)}`, `<b class="fxw fail">${t('fx.fail')}</b> (${esc(why(s.fail))})`);
+    else if (s.dis.length) line(`${t('fx.saves')} ${abName(k)}`, fxText([], s.dis));
+  });
+  if (e.speed.val !== e.speed.base) line(t('fx.speed'), `<b class="fxw dis">${dist(e.speed.val)}</b> (${esc(why([...e.speed.zero, ...e.speed.half, ...e.speed.minus]))})`);
+  if (e.hpHalf) line(t('fx.hp'), `(${esc(e.hpHalf)})`);
+  if (e.noCast.length) line(t('fx.noCast'), `(${esc(why(e.noCast))})`);
+  const vs = [];
+  if (e.vs.adv.length) vs.push(`${t('fx.adv')} (${esc(why(e.vs.adv))})`);
+  if (e.vs.meleeAdv.length) vs.push(`${t('fx.vsMelee')}, ${t('fx.vsRanged')} (${esc(why(e.vs.meleeAdv))})`);
+  if (e.vs.dis.length) vs.push(`${t('fx.dis')} (${esc(why(e.vs.dis))})`);
+  if (e.vs.crit.length) vs.push(`${t('fx.crit')} (${esc(why(e.vs.crit))})`);
+  if (vs.length) line(t('fx.vs'), vs.join(' · '));
+  return `<div class="fx card"><b class="fxh">${t('fx.title')}</b><ul>${L.join('')}</ul><p class="note">${t('fx.note')}</p></div>`;
+}
+
+export const schoolName =s => { const k = { Hervorrufung: 'evocation', Bannmagie: 'abjuration', Beschwörung: 'conjuration', Wahrsagung: 'divination', Verzauberung: 'enchantment', Illusion: 'illusion', Nekromantie: 'necromancy', Verwandlung: 'transmutation' }[s] || String(s || '').toLowerCase(); return k ? t('school.' + k) : ''; };
 export const srcNote = s => s === 'own' ? t('src.own') : s === 'srd' ? t('src.srd') : t('src.summary');
 export const restLabel = r => t('rest.' + (['short', 'long', 'none'].includes(r) ? r : 'long'));
 
 const RUNES = { str: 'M6 2v16M6 3l8 5-8 5', dex: 'M5 2l10 16M15 2L5 18', con: 'M10 2v16M4 6l6 4 6-4', int: 'M4 18V2l12 16V2', wis: 'M10 2l6 8-6 8-6-8z', cha: 'M4 4l6 6 6-6M10 10v8' };
 export function vAbil(edit) {
+  const fx = edit ? null : effects();
   return `<div class="abs${edit ? ' edit' : ''}">${ABK.map(k => {
     const n = abName(k), m = mod(S.abil[k]), sv = m + (S.saves[k] ? S.prof : 0);
-    return `<div class="abw"><div class="ab"><div class="abi"><svg class="rune" viewBox="0 0 20 20" aria-hidden="true"><path d="${RUNES[k]}"/></svg><small>${n}</small><b>${sg(m)}</b></div></div><div class="abv">${edit ? numIn('abil.' + k, S.abil[k], n, 1, 30) : S.abil[k]}</div>${edit ? `<button class="tg${S.saves[k] ? ' on' : ''}" data-a="tsave" data-k="${k}" aria-pressed="${!!S.saves[k]}">${t('ab.saveProf')}</button>` : `<div class="sv${S.saves[k] ? ' p' : ''}" title="${t('ab.save')}"><i></i><span class="svl">${t('ab.save')}</span><span class="svs">${t('ab.saveShort')}</span> ${sg(sv)}</div>`}</div>`;
+    return `<div class="abw"><div class="ab"><div class="abi"><svg class="rune" viewBox="0 0 20 20" aria-hidden="true"><path d="${RUNES[k]}"/></svg><small>${n}</small><b>${sg(m)}</b></div></div><div class="abv">${edit ? numIn('abil.' + k, S.abil[k], n, 1, 30) : S.abil[k]}</div>${edit ? `<button class="tg${S.saves[k] ? ' on' : ''}" data-a="tsave" data-k="${k}" aria-pressed="${!!S.saves[k]}">${t('ab.saveProf')}</button>` : `<div class="sv${S.saves[k] ? ' p' : ''}" title="${t('ab.save')}"><i></i><span class="svl">${t('ab.save')}</span><span class="svs">${t('ab.saveShort')}</span> ${sg(sv)}${fx ? fxMark([], fx.saves[k].dis, fx.saves[k].fail) : ''}</div>`}</div>`;
   }).join('')}</div>`;
 }
 export function vHP() {
-  const pct = S.hpMax ? clamp(S.hp / S.hpMax * 100, 0, 100) : 0, tp = S.hpMax ? clamp(S.tmp / S.hpMax * 100, 0, 100 - pct) : 0;
+  const max = hpMaxNow(), pct = max ? clamp(S.hp / max * 100, 0, 100) : 0, tp = max ? clamp(S.tmp / max * 100, 0, 100 - pct) : 0;
   return `<h2>${t('hp.title')}</h2><div class="card">
-  <div class="hpt"><button class="sq" data-a="hp" data-d="-1" aria-label="${t('hp.minusOne')}">−</button><div class="hpn${S.hp === 0 ? ' down' : ''}"><b>${S.hp}</b><small>/ ${S.hpMax}</small>${S.tmp ? `<span class="tmp">${t('hp.temp', { n: S.tmp })}</span>` : ''}</div><button class="sq" data-a="hp" data-d="1" aria-label="${t('hp.plusOne')}">+</button></div>
+  <div class="hpt"><button class="sq" data-a="hp" data-d="-1" aria-label="${t('hp.minusOne')}">−</button><div class="hpn${S.hp === 0 ? ' down' : ''}"><b>${S.hp}</b><small>/ ${max}${max !== S.hpMax ? ` <span class="fxw dis" title="${esc(t('fx.hp'))}">(${S.hpMax})</span>` : ''}</small>${S.tmp ? `<span class="tmp">${t('hp.temp', { n: S.tmp })}</span>` : ''}</div><button class="sq" data-a="hp" data-d="1" aria-label="${t('hp.plusOne')}">+</button></div>
   <div class="bar" aria-hidden="true"><i style="width:${pct}%"></i><u style="width:${tp}%"></u></div>
   <div class="hpin"><input type="number" id="hpv" min="1" inputmode="numeric" placeholder="${t('hp.amount')}" aria-label="${t('hp.amountLabel')}"><button class="btn bad" data-a="dmg">${t('hp.damage')}</button><button class="btn good" data-a="heal">${t('hp.heal')}</button><button class="btn" data-a="temp">${t('hp.tempBtn')}</button></div>
   ${S.hp === 0 ? vDeath() : ''}
@@ -39,13 +83,14 @@ export function vCond() {
   return `<h2>${t('cond.title')}${act.length ? `<em>${t('cond.active', { n: act.length })}</em>` : ''}</h2><div class="card"><div class="chips">${COND.map(c => `<button class="chip${S.cond[c.n] ? ' on' : ''}" data-a="cond" data-c="${c.n}" aria-pressed="${!!S.cond[c.n]}" title="${esc(c.de)}">${esc(nameLine(c.n, c.de))}</button>`).join('')}</div>${act.map(c => `<div class="row"><div class="ic">${tok(c.ic, undefined, 'cond:' + c.n)}</div><div class="nm">${c.n}${deName(c.n, c.de) ? ` <span class="lbl">${c.de}</span>` : ''}<small>${esc(loc(c.text))}</small></div></div>`).join('')}<div class="row"><div class="ic">${tok('skull')}</div><div class="nm">${t('exh.title', { n: S.exh })}<small>${S.exh ? EXH.slice(0, S.exh).map(e => `${e.level}: ${esc(loc(e.text))}`).join(' · ') : t('exh.none')}</small></div><div class="qty"><button data-a="exh" data-d="-1" aria-label="${t('exh.down')}">−</button><button data-a="exh" data-d="1" aria-label="${t('exh.up')}">+</button></div></div></div>`;
 }
 export function vAtk() {
+  const fx = effects(), st = rollState(fx.atk.adv, fx.atk.dis), fxTag = st && st !== 'both' ? `<span class="lbl fxw ${st}" title="${esc([...fx.atk.adv, ...fx.atk.dis].join(', '))}">${t('fx.' + st)}</span>` : '';
   const rows = ['main', 'off'].filter(k => S.eq[k]).map(k => {
     const raw = S.eq[k], a = atk(raw, k); if (!a) return '';
     const it = itemView(raw);
-    return `<div class="row wrow"><div class="ic">${tok(it.ic, itTone(it), it.ref)}</div><div class="nm">${esc(it.n)}<small>${esc(it.p)}</small><span class="atkt"><button class="chip prf${a.prof ? ' on' : ''}" data-a="wprof" data-k="${k}" aria-pressed="${a.prof}">${t(a.prof ? 'atk.prof' : 'atk.noProf')}</button>${a.tags.map(x => `<span class="lbl">${esc(x)}</span>`).join('')}</span></div><div class="atk"><b>${a.hit}</b><small>${t('atk.hit')}</small></div><div class="atk"><b>${a.dmg}</b><small>${esc(a.type)}${a.vers ? ` · 2H ${a.vers}` : ''}</small></div></div>`;
+    return `<div class="row wrow"><div class="ic">${tok(it.ic, itTone(it), it.ref)}</div><div class="nm">${esc(it.n)}<small>${esc(it.p)}</small><span class="atkt"><button class="chip prf${a.prof ? ' on' : ''}" data-a="wprof" data-k="${k}" aria-pressed="${a.prof}">${t(a.prof ? 'atk.prof' : 'atk.noProf')}</button>${a.tags.map(x => `<span class="lbl">${esc(x)}</span>`).join('')}${fxTag}</span></div><div class="atk"><b>${a.hit}</b><small>${t('atk.hit')}</small></div><div class="atk"><b>${a.dmg}</b><small>${esc(a.type)}${a.vers ? ` · 2H ${a.vers}` : ''}</small></div></div>`;
   }).join('');
   const u = unarmed();
-  const fist = `<div class="row wrow atk-un"><div class="ic">${tok('swirl')}</div><div class="nm">${t('atk.unarmed')}${u.tags.length ? `<small>${esc(u.tags.join(' · '))}</small>` : ''}</div><div class="atk"><b>${u.hit}</b><small>${t('atk.hit')}</small></div><div class="atk"><b>${u.dmg}</b><small>${esc(u.type)}</small></div></div>`;
+  const fist = `<div class="row wrow atk-un"><div class="ic">${tok('swirl')}</div><div class="nm">${t('atk.unarmed')}${u.tags.length ? `<small>${esc(u.tags.join(' · '))}</small>` : ''}${fxTag ? `<span class="atkt">${fxTag}</span>` : ''}</div><div class="atk"><b>${u.hit}</b><small>${t('atk.hit')}</small></div><div class="atk"><b>${u.dmg}</b><small>${esc(u.type)}</small></div></div>`;
   return `<h2>${t('atk.title')}</h2><div class="card">${rows}${fist}<p class="note">${rows ? t('atk.note') : t('atk.none')}</p></div>`;
 }
 export function vQuick() {
@@ -69,9 +114,10 @@ export function vSpells() {
   const lv = new Set(S.spells.map(s => s.lvl));
   S.slots.forEach((s, i) => { if (s.max) lv.add(i + 1); });
   if (!lv.size && !S.pact.max) return `<h2>${t('spell.title')}</h2><div class="card"><div class="empty">${t('spell.none')}</div></div>`;
-  const stats = spellStats(), cap = prepCap();
+  const stats = spellStats(), cap = prepCap(), fx = effects();
   const prepared = S.spells.filter(s => s.lvl > 0 && !s.always && s.prep !== false).length;
-  let h = stats.map(s => `<div class="spstats">${stats.length > 1 ? `<span class="lbl">${s.k}</span>` : ''}<span>${abName(s.a)}</span><b>${t('spell.dc', { n: s.dc })}</b><b>${t('spell.atk', { n: sg(s.atk) })}</b></div>`).join('');
+  let h = fx.noCast.length ? `<p class="fxnote"><b class="fxw dis">${t('fx.noCast')}</b> (${esc(fx.noCast.join(', '))})</p>` : '';
+  h += stats.map(s => `<div class="spstats">${stats.length > 1 ? `<span class="lbl">${s.k}</span>` : ''}<span>${abName(s.a)}</span><b>${t('spell.dc', { n: s.dc })}</b><b>${t('spell.atk', { n: sg(s.atk) })}</b></div>`).join('');
   if (cap != null) h += `<div class="spprep"><span class="${prepared > cap ? 'over' : ''}">${t('spell.prepCount', { a: prepared, b: cap })}</span><button class="btn sm" data-a="spall">${U.SPALL ? t('spell.showPrep') : t('spell.showAll')}</button></div>`;
   if (S.pact.max) h += `<div class="lvh"><b>${t('spell.pact')}</b><small>${t('spell.pactHint', { n: S.pact.lvl })}</small><div class="pips">${pips(S.pact.max, S.pact.used, 'data-a="pip" data-k="pact"')}</div></div>`;
   const hidden = s => cap != null && !U.SPALL && s.lvl > 0 && !s.always && s.prep === false;
@@ -87,7 +133,8 @@ export function vSpells() {
 }
 export function vSkills() {
   const star = p => (p ? `<i class="skstar" title="${t('skill.p' + p)}">${'★'.repeat(p)}</i>` : '');
-  const group = a => `<section class="skg"><h3>${abName(a)} <span>(${sg(mod(S.abil[a]))})</span></h3>${SK.filter(s => s[1] === a).map(([k, , de]) => `<div class="skr"><span>${k}${lang === 'de' ? `<small>${de}</small>` : ''}</span>${star(S.skills[k] || 0)}<b>${sg(skv(k))}</b></div>`).join('')}</section>`;
+  const fx = effects(), dis = a => [...fx.checks, ...(fx.checkAb[a] || [])];
+  const group = a => `<section class="skg"><h3>${abName(a)} <span>(${sg(mod(S.abil[a]))})</span>${fxMark([], dis(a))}</h3>${SK.filter(s => s[1] === a).map(([k, , de]) => `<div class="skr"><span>${k}${lang === 'de' ? `<small>${de}</small>` : ''}</span>${star(S.skills[k] || 0)}${k === 'Stealth' && !dis(a).length ? fxMark([], fx.stealth) : ''}<b>${sg(skv(k))}</b></div>`).join('')}</section>`;
   // Vier gleich hohe Spalten: Stärke und Geschicklichkeit teilen sich eine (4 Fertigkeiten), dann 5, 5, 4.
   return `<h2>${t('skill.title')}</h2><div class="skgrid">${[['str', 'dex'], ['int'], ['wis'], ['cha']].map(c => `<div class="skcol">${c.map(group).join('')}</div>`).join('')}</div>`;
 }
@@ -97,10 +144,12 @@ export function vProfs() {
   return `<h2>${t('setup.profs')}</h2><div class="card">${S.tools.length ? `<p class="lbl" style="margin:0 0 4px">${t('setup.tools')}</p>${chips(S.tools)}` : ''}${S.langs.length ? `<p class="lbl" style="margin:10px 0 4px">${t('setup.langs')}</p>${chips(S.langs)}` : ''}</div>`;
 }
 export function vMain() {
-  const a = S.abil, st = (l, v) => `<div class="st"><small>${l}</small><b>${v}</b></div>`;
+  const a = S.abil, st = (l, v, x = '') => `<div class="st"><small>${l}</small><b>${v}</b>${x}</div>`, fx = effects();
+  const spd = fx.speed.val !== fx.speed.base ? st(t('stat.speed'), `<span class="fxw dis">${dist(fx.speed.val)}</span>`, `<small class="fxsub">${esc(dist(fx.speed.base))} · ${esc([...fx.speed.zero, ...fx.speed.half, ...fx.speed.minus].join(', '))}</small>`) : st(t('stat.speed'), dist(S.speed));
   let h = '';
   if (S.conc) h += `<div class="conc"><div><small>${t('conc.title')}</small><b>${esc(S.conc)}</b><span>${t('conc.hint')}</span></div><button class="btn" data-a="concend">${t('conc.end')}</button></div>`;
-  h += `<div class="stats">${st(t('stat.ac'), S.ac)}${st(t('stat.init'), sg(mod(a.dex)))}${st(t('stat.speed'), dist(S.speed))}${st(t('stat.prof'), sg(S.prof))}${st(t('stat.pp'), 10 + skv('Perception'))}</div>`;
+  h += `<div class="stats">${st(t('stat.ac'), S.ac)}${st(t('stat.init'), sg(mod(a.dex)))}${spd}${st(t('stat.prof'), sg(S.prof))}${st(t('stat.pp'), 10 + skv('Perception'))}</div>`;
+  h += vFx(fx);
   h += `<div class="sheet"><aside>${vAbil(false)}</aside><div class="col c1">${vHP()}${vCond()}${vAtk()}${vQuick()}${vCharges()}${vRes()}${vPets()}</div><div class="col c2">${vSpells()}${vFeats()}<div class="c2sk">${vSkills()}</div>${vProfs()}</div></div>`;
   return h;
 }
