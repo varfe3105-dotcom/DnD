@@ -6,7 +6,7 @@ import { BYN, CLASSES, byName, findRef } from './catalog.js';
 import { loc } from './i18n/index.js';
 
 export const KEY='charbogen-v4',OLD='charbogen-v2';
-export const def=()=>({v:4,id:uid(),fig:'',pets:[],bg:null,multi:[],tools:[],langs:[],acMode:'auto',insp:false,name:t('char.new'),info:'',img:'',race:'',subrace:'',klass:'',sub:'',level:0,cls:'',hp:10,hpMax:10,tmp:0,ac:10,speed:9,prof:2,
+export const def=()=>({v:4,id:uid(),noteTitle:'',notePages:[],notePage:0,fig:'',pets:[],bg:null,multi:[],tools:[],langs:[],acMode:'auto',insp:false,name:t('char.new'),info:'',img:'',race:'',subrace:'',klass:'',sub:'',level:0,cls:'',hp:10,hpMax:10,tmp:0,ac:10,speed:9,prof:2,
  abil:{str:10,dex:10,con:10,int:10,wis:10,cha:10},saves:{},skills:{},hd:{max:1,used:0,die:'W8'},death:{s:0,f:0},conc:'',
  slots:Array.from({length:9},()=>({max:0,used:0})),pact:{max:0,used:0,lvl:1},res:[],spells:[],feats:[],bag:Array(24).fill(null),eq:{},
  gold:{pp:0,gp:0,ep:0,sp:0,cp:0},cond:{},exh:0,notes:'',tab:'main'});
@@ -25,9 +25,10 @@ export function norm(o){
   if(!Array.isArray(s.slots)||s.slots.length!==9)s.slots=def().slots;
   ['saves','skills','cond','eq'].forEach(k=>{if(!s[k]||typeof s[k]!=='object'||Array.isArray(s[k]))s[k]={}});
   s.acMode=o.acMode==='auto'?'auto':'manual';s.insp=!!o.insp;
-  ['res','spells','feats','multi','tools','langs','pets'].forEach(k=>{if(!Array.isArray(s[k]))s[k]=[]});
+  ['res','spells','feats','multi','tools','langs','pets','notePages'].forEach(k=>{if(!Array.isArray(s[k]))s[k]=[]});
   if(!Array.isArray(s.bag))s.bag=[];while(s.bag.length<24)s.bag.push(null);
   ['hp','hpMax','tmp','ac','speed','prof','exh','level'].forEach(k=>{s[k]=+s[k]||0});
+  s.notePages=s.notePages.filter(p=>p&&typeof p==='object').map(p=>({id:p.id||uid(),title:String(p.title||''),text:String(p.text||'')}));s.noteTitle=String(s.noteTitle||'');s.notePage=Math.max(0,Math.floor(+s.notePage)||0);
   if(!s.bg||!Array.isArray(s.bg.skills))s.bg=null;
   if(s.info==='Volk · Klasse · Stufe')s.info='';
   if(!s.klass&&s.cls&&CLN[s.cls])s.klass=CLN[s.cls];

@@ -1,3 +1,4 @@
+import { vNotesTab } from './views/notes.js';
 import { vInbox, vHandout, vBackupNag } from './views/live-ui.js';
 import { $, esc } from './util.js';
 import { S, U, roster } from './state.js';
@@ -40,7 +41,7 @@ export function render() {
   if (tb === 'main') h += vMain();
   if (tb === 'inv') h += vInv();
   if (tb === 'wiki') h += vWiki();
-  if (tb === 'notes') h += `<h2>${t('tab.notes')}</h2><textarea id="notes" placeholder="${t('notes.placeholder')}" aria-label="${t('tab.notes')}">${esc(S.notes)}</textarea>`;
+  if (tb === 'notes') h += vNotesTab();
   if (tb === 'setup') h += vSetup();
   if (tb === 'dm') h += vDm();
   h += `<footer><p>${t('footer.rules')}</p><details><summary>${t('footer.about')}</summary><p>${t('footer.srd')}</p><p>${t('footer.icons')}</p><p>${t('footer.fonts')}</p></details></footer>`;

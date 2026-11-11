@@ -497,7 +497,7 @@
  "tab.dm": "DM",
  "dm.enable": "Show DM area on this device",
  "dm.combat": "Combat",
- "dm.notes": "Campaign notes",
+ "dm.notes": "Places and notes",
  "dm.round": "Round",
  "dm.prev": "Previous",
  "dm.next": "Next turn",
@@ -753,5 +753,16 @@
  "loot.lock": "Loot only through the DM",
  "loot.lockHint": "While players are connected they cannot add items themselves. This is an agreement, not a protection.",
  "loot.giveCoins": "Send coins",
- "loot.own": "Custom item"
+ "loot.own": "Custom item",
+ "notes.first": "General",
+ "notes.page": "Page {n}",
+ "notes.addPage": "New page",
+ "notes.pageName": "Page name",
+ "notes.delPage": "Delete page",
+ "notes.delConfirm": "Really delete?",
+ "dm.newPlace": "New place",
+ "dm.kindAll": "All",
+ "dm.placeMon": "Monsters at this place",
+ "dm.placeEmpty": "No monsters at this place yet.",
+ "dm.monsterCount": "{n} monsters"
 }

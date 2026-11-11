@@ -503,3 +503,10 @@ label.fig:hover .figedit,label.fig:focus-visible .figedit{opacity:1}
 .stat p{margin:4px 0;line-height:1.45}
 @media (max-width:520px){.rs-kv{grid-template-columns:1fr;gap:2px}}
 [hidden]{display:none!important}
+
+/* Notizseiten und Orte */
+.notepages{margin-bottom:8px}
+.np-head{margin:8px 0}
+.np-head input{flex:1 1 200px;min-width:0}
+.dm-place{margin-top:12px;padding-top:10px;border-top:1px solid var(--line)}
+.dm-nk{margin:8px 0}

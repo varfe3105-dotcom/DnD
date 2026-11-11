@@ -1,7 +1,8 @@
 // Hintergründe aus dem PHB: Auswahl trägt Übungen, Ausrüstung, Gold und Merkmal ein.
 import backgrounds from '../data/backgrounds.json';
 import { S, U, mk, putBag, save, toast } from './state.js';
-import { BYN, OPTIONS } from './catalog.js';
+import { BYN, OPTIONS, SUBCLASSES } from './catalog.js';
+import { classLevels } from './tables.js';
 import { t, loc } from './i18n/index.js';
 
 export const BACKGROUNDS = backgrounds;
@@ -71,4 +72,17 @@ export function toggleStyle(n) {
   if (j >= 0) { S.feats.splice(j, 1); return; }
   const o = OPTIONS.fightingStyles.find(x => x.n === n);
   if (o) S.feats.push({ n, p: loc(o.text), lvl: 0, src: 'Klasse' });
+}
+
+/** Trägt die Merkmale der gewählten Unterklasse bis zur aktuellen Stufe ein und nimmt die der vorherigen zurück. */
+export function applySubclass(old) {
+  const data = SUBCLASSES[S.klass];
+  if (!data) return;
+  const lvl = classLevels().find(c => c.k === S.klass)?.lvl || 0;
+  const oldNames = new Set(Object.values(data[old] || {}).flat().map(f => f.n));
+  S.feats = S.feats.filter(f => !(f.src === 'Unterklasse' && oldNames.has(f.n)));
+  Object.entries(data[S.sub] || {}).forEach(([l, fs]) => {
+    if (+l > lvl) return;
+    fs.forEach(f => { if (!S.feats.some(x => x.n === f.n)) S.feats.push({ n: f.n, p: loc(f.text), lvl: +l, src: 'Unterklasse' }); });
+  });
 }

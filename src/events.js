@@ -1,3 +1,4 @@
+import { pageList, curPage, setPageText, setPageTitle, addPage, delPage, pageLabel } from './views/notes.js';
 import { uid as newUid } from './util.js';
 import { applyProposal, shrinkImage } from './live-actions.js';
 import { downloadBackup, parseBackup, loadSnap, restoreBackup, initBackup } from './backup.js';
@@ -6,13 +7,13 @@ import { vRuleList } from './views/dm-rules.js';
 import { vPetResults } from './views/extras.js';
 import { weaponProf } from './attacks.js';
 import { chargeOf, applyDawn, petFrom, petOwn, petView } from './companions.js';
-import { pickBg, applyBg, bgById, toggleStyle } from './backgrounds.js';
+import { pickBg, applyBg, bgById, toggleStyle, applySubclass } from './backgrounds.js';
 import { isSheetFile, readSheets } from './sheet-read.js';
 import { importDraft } from './import-play5e.js';
 import { isPlay5e } from './import-play5e.js';
 import * as live from './live.js';
 import * as dm from './dm.js';
-import { vResults, vNoteList, vEncResults } from './views/dm.js';
+import { vResults, vNoteList, vEncResults, vPlaceResults } from './views/dm.js';
 import { t as tr, setLang, distInput } from './i18n/index.js';
 import { buildCatalog } from './catalog.js';
 import { $, clamp } from './util.js';
@@ -40,7 +41,7 @@ app.addEventListener('click',ev=>{
   const b=ev.target.closest('[data-a]');if(!b)return;
   const a=b.dataset.a,i=+b.dataset.i,k=b.dataset.k,v=id=>($(id)||{}).value||'';
   if(a==='luclose-bg'&&ev.target!==b)return;
-  if(a!=='rm'&&a!=='imp'&&a!=='reset'&&a!=='chardel')U.CONF=null;
+  if(a!=='rm'&&a!=='imp'&&a!=='reset'&&a!=='chardel'&&a!=='npdel')U.CONF=null;
   if(!['dmclear','dmndel','dmedel','dmcdel'].includes(a))dm.DU.conf=null;
   if(a!=='cast'&&a!=='castslot')U.CASTPICK=null;
   pend=false;
@@ -71,7 +72,15 @@ app.addEventListener('click',ev=>{
     case 'dmhp':{const amt=Math.floor(+v('dm-amt-'+b.dataset.id))||1;dm.changeHp(b.dataset.id,amt*+b.dataset.d);dm.saveD();break}
     case 'dmcond':{const c=dm.find(b.dataset.id);if(c){if(c.cond[b.dataset.c])delete c.cond[b.dataset.c];else c.cond[b.dataset.c]=true;dm.saveD()}break}
     case 'dmrm':dm.removeC(b.dataset.id);dm.saveD();break;
-    case 'dmnew':dm.newNote();dm.saveD();break;
+    case 'dmnew':dm.newNote(dm.DU.nk||'npc');dm.saveD();break;
+    case 'dmnewp':dm.DU.nk='';dm.newNote('place');dm.saveD();break;
+    case 'dmnk':dm.DU.nk=k;break;
+    case 'dmpladd':dm.placeAdd(b.dataset.m);dm.saveD();break;
+    case 'dmplqty':dm.placeQty(b.dataset.m,+b.dataset.d);dm.saveD();break;
+    case 'dmplstart':dm.startPlace(b.dataset.id);dm.saveD();break;
+    case 'npsel':S.notePage=i;break;
+    case 'npadd':addPage();break;
+    case 'npdel':{const p=pageList()[curPage()];if(p.text.trim()&&U.CONF!=='npdel'){U.CONF='npdel';break}U.CONF=null;delPage();break}
     case 'dmsel':dm.D.sel=b.dataset.id;dm.saveD();break;
     case 'dmlink':dm.openLink(b.dataset.t);dm.saveD();break;
     case 'dmndel':if(dm.DU.conf!=='note'){dm.DU.conf='note';break}dm.DU.conf=null;dm.delNote(b.dataset.id);dm.saveD();break;
@@ -196,7 +205,9 @@ app.addEventListener('change',ev=>{
   let val=el.value;
   if(el.dataset.t==='n'){val=Math.max(+el.min||0,+String(val).replace(',','.')||0);if(el.max)val=Math.min(+el.max,val);if(el.dataset.u==='dist')val=distInput(val);if(p!=='speed')val=Math.floor(val)}
   if(el.dataset.list)val=val.split(',').map(x=>x.trim()).filter(Boolean);
+  const oldSub=S.sub;
   setPath(p,val);
+  if(p==='sub')applySubclass(oldSub);
   if(p==='race'){S.subrace='';applyRace()}
   if(p==='subrace')applyRace();
   if(p==='klass'){const C=CLASSES[S.klass];S.cls=C?C.l:'';if(C){S.hd.die='W'+C.hd;if(!C.subs.includes(S.sub))S.sub=''}}
@@ -210,12 +221,14 @@ app.addEventListener('input',ev=>{
   if(el.id==='dm-lq'){dm.DU.lq=el.value;$('dm-li').innerHTML=vLootItems();return}
   if(el.id==='pet-q'){U.petQ=el.value;$('pet-res').innerHTML=vPetResults();return}
   if(el.id==='dm-rq'){dm.DU.rq=el.value;$('dm-rlist').innerHTML=vRuleList();return}
+  if(el.id==='dm-pq'){dm.DU.pq=el.value;$('dm-pres').innerHTML=vPlaceResults();return}
   if(el.id==='dm-eq'){dm.DU.eq=el.value;$('dm-eres').innerHTML=vEncResults();return}
   if(el.id==='dm-mq'){dm.DU.mq=el.value;$('dm-results').innerHTML=vResults();return}
   if(el.id==='dm-nq'){dm.DU.nq=el.value;$('dm-nlist').innerHTML=vNoteList();return}
   if(el.id==='dm-imp'){dm.DU.imp=el.value;return}
   if(el.dataset&&el.dataset.dmn){const n=dm.curNote();if(n){n[el.dataset.dmn]=el.value;dm.saveD()}return}
-  if(el.id==='notes'){S.notes=el.value;save()}
+  if(el.id==='notes'){setPageText(el.value);save()}
+  if(el.id==='np-title'){setPageTitle(el.value);save();const c=document.querySelector('.notepages .chip.on');if(c)c.textContent=pageLabel(pageList()[curPage()],curPage());return}
   if(el.id==='imp'){U.IMP=el.value;if(U.CONF==='imp')U.CONF=null}
   if(el.dataset&&el.dataset.lu&&el.tagName==='INPUT'&&U.LU)U.LU[el.dataset.lu]=el.value;
   if(el.id==='wq'){U.WQ=el.value;U.WSEL=null;$('wres').innerHTML=wikiBody()}});

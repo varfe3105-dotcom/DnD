@@ -126,10 +126,15 @@ export function encQty(mid, d) { const e = curEnc(); if (!e) return; const r = e
 /** Startet eine Begegnung: Monster werden ersetzt, Spieler bleiben. */
 export function startEnc(id) {
   const e = D.encounters.find(x => x.id === id);
-  if (!e) return;
+  if (e) startMonsters(e.monsters);
+}
+export function placeAdd(mid) { const n = curNote(); if (!n) return; n.monsters = n.monsters || []; const r = n.monsters.find(x => x.id === mid); if (r) r.qty += 1; else n.monsters.push({ id: mid, qty: 1 }); }
+export function placeQty(mid, d) { const n = curNote(); if (!n?.monsters) return; const r = n.monsters.find(x => x.id === mid); if (r) r.qty += d; n.monsters = n.monsters.filter(x => x.qty > 0); }
+export function startPlace(id) { const n = D.notes.find(x => x.id === id); if (n?.monsters?.length) startMonsters(n.monsters); }
+function startMonsters(monsters) {
   D.combat.list = D.combat.list.filter(c => c.kind !== 'mon');
   D.combat.round = 1; D.combat.active = null; DU.open = {};
-  e.monsters.forEach(m => addMonster(m.id, m.qty));
+  monsters.forEach(m => addMonster(m.id, m.qty));
   D.view = 'combat';
 }
 
@@ -162,8 +167,8 @@ export function syncLive(peers) {
 /* ---- Notizen ---- */
 export const KINDS = ['npc', 'place', 'plot', 'other'];
 export const curNote = () => D.notes.find(n => n.id === D.sel) || null;
-export function newNote() {
-  const n = { id: uid(), kind: 'npc', title: '', body: '' };
+export function newNote(kind = 'npc') {
+  const n = { id: uid(), kind, title: '', body: '', ...(kind === 'place' ? { monsters: [] } : {}) };
   D.notes.unshift(n);
   D.sel = n.id;
 }
@@ -177,7 +182,8 @@ export const noteByTitle = title => D.notes.find(n => n.title.trim().toLowerCase
 export const backlinks = n => (n.title.trim() ? D.notes.filter(o => o.id !== n.id && linksOf(o).some(l => l.toLowerCase() === n.title.trim().toLowerCase())) : []);
 export function searchNotes(q) {
   const s = q.trim().toLowerCase();
-  return s ? D.notes.filter(n => (n.title + ' ' + n.body).toLowerCase().includes(s)) : D.notes;
+  const list = DU.nk ? D.notes.filter(n => n.kind === DU.nk) : D.notes;
+  return s ? list.filter(n => (n.title + ' ' + n.body).toLowerCase().includes(s)) : list;
 }
 /** Legt eine verlinkte, noch nicht vorhandene Notiz an. */
 export function openLink(title) {

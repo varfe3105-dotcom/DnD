@@ -29,7 +29,7 @@ export function vSetup() {
    ${field(t('setup.race'), sel('race', [['', t('common.choose')], ...named(Object.keys(RACES))], S.race, t('setup.race')))}
    ${R && Object.keys(R.subs).length ? field(t('setup.subrace'), sel('subrace', [['', t('common.noneOpt')], ...named(Object.keys(R.subs))], S.subrace, t('setup.subrace'))) : ''}
    ${field(t('setup.class'), sel('klass', [['', t('common.choose')], ...named(Object.keys(CLASSES))], S.klass, t('setup.class')))}
-   <label><span class="lbl">${t('setup.subclass')}</span>${txtIn('sub', S.sub, t('setup.subclass'), C ? t('setup.subFrom', { n: C.subN, l: C.subL }) : '', `list="sub-dl"`)}<datalist id="sub-dl">${(C ? C.subs : []).map(s => `<option value="${esc(s)}">`).join('')}</datalist></label>
+   ${field(t('setup.subclass'), sel('sub', [['', C ? t('setup.subFrom', { n: C.subN, l: C.subL }) : t('common.choose')], ...(C ? C.subs : []).map(x => [x, x]), ...(S.sub && !(C && C.subs.includes(S.sub)) ? [[S.sub, S.sub]] : [])].map(([k, x]) => [esc(k), esc(x)]), esc(S.sub), t('setup.subclass')))}
    ${field(t('setup.level'), numIn('level', S.level, t('setup.level'), 0, 20))}
    ${vBgField()}
    ${field(t('setup.background'), txtIn('info', S.info, t('setup.backgroundLabel'), t('setup.backgroundPh')))}

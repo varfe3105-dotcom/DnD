@@ -47,18 +47,31 @@ function vCombat() {
 function noteBody(n) {
   const links = linksOf(n), back = backlinks(n);
   return `<div class="dm-edit"><div class="add" style="margin-top:0"><input type="text" id="dm-ntitle" data-dmn="title" value="${esc(n.title)}" placeholder="${t('dm.noteTitle')}" aria-label="${t('dm.noteTitle')}"><select id="dm-nkind" data-dmn="kind" aria-label="${t('dm.noteKind')}">${KINDS.map(k => `<option value="${k}"${n.kind === k ? ' selected' : ''}>${t('dm.kind.' + k)}</option>`).join('')}</select></div>
-  <textarea id="dm-nbody" data-dmn="body" placeholder="${t('dm.notePh')}" aria-label="${t('dm.noteBody')}">${esc(n.body)}</textarea>
+  <textarea id="dm-nbody" data-dmn="body" placeholder="${t('dm.notePh')}" aria-label="${t('dm.noteBody')}">${esc(n.body)}</textarea>${n.kind === 'place' ? vPlace(n) : ''}
   ${links.length ? `<p class="lbl">${t('dm.links')}</p><div class="chips">${links.map(l => `<button class="chip${noteByTitle(l) ? '' : ' dm-new'}" data-a="dmlink" data-t="${esc(l)}">${esc(l)}</button>`).join('')}</div>` : ''}
   ${back.length ? `<p class="lbl">${t('dm.backlinks')}</p><div class="chips">${back.map(o => `<button class="chip" data-a="dmsel" data-id="${o.id}">${esc(o.title || t('dm.untitled'))}</button>`).join('')}</div>` : ''}
   <div class="add"><button class="btn sm ${DU.conf === 'note' ? 'warn' : 'bad'}" data-a="dmndel" data-id="${n.id}">${DU.conf === 'note' ? t('item.removeConfirm') : t('item.remove')}</button></div></div>`;
 }
 export function vNoteList() {
   const list = searchNotes(DU.nq);
-  return list.length ? list.map(n => `<button class="wli" data-a="dmsel" data-id="${n.id}" aria-current="${n.id === D.sel}"><span><b>${esc(n.title || t('dm.untitled'))}</b><small>${t('dm.kind.' + n.kind)}</small></span></button>`).join('') : `<p class="empty" style="padding:0 10px">${t('wiki.nothing')}</p>`;
+  return list.length ? list.map(n => `<button class="wli" data-a="dmsel" data-id="${n.id}" aria-current="${n.id === D.sel}"><span><b>${esc(n.title || t('dm.untitled'))}</b><small>${t('dm.kind.' + n.kind)}${n.monsters?.length ? ' · ' + t('dm.monsterCount', { n: n.monsters.reduce((a, m) => a + m.qty, 0) }) : ''}</small></span></button>`).join('') : `<p class="empty" style="padding:0 10px">${t('wiki.nothing')}</p>`;
+}
+export function vPlaceResults() {
+  const q = (DU.pq || '').trim();
+  if (!q) return '';
+  const hits = searchMonsters(q);
+  return hits.length ? hits.map(m => `<div class="row"><div class="nm">${esc(m.n)}<small>CR ${crText(m.cr)} · ${xpOf(m.cr)} XP</small></div><button class="btn sm solid" data-a="dmpladd" data-m="${esc(m.id)}">${t('common.add')}</button></div>`).join('') : `<p class="empty">${t('wiki.nothing')}</p>`;
+}
+function vPlace(n) {
+  const list = n.monsters || [], r = rate({ monsters: list });
+  return `<div class="dm-place"><p class="lbl">${t('dm.placeMon')}</p>${list.map(e => { const m = findMonster(e.id); return m ? `<div class="row"><div class="nm">${esc(m.n)}<small>CR ${crText(m.cr)} · ${xpOf(m.cr)} XP</small></div><div class="qty"><button data-a="dmplqty" data-m="${esc(e.id)}" data-d="-1" aria-label="${t('common.less')}">−</button><span>${e.qty}</span><button data-a="dmplqty" data-m="${esc(e.id)}" data-d="1" aria-label="${t('common.more')}">+</button></div></div>` : ''; }).join('') || `<p class="empty">${t('dm.placeEmpty')}</p>`}
+  ${list.length ? `<p class="dm-total">${badge(r)} <span>${t('dm.xpLine', { a: r.xp, m: r.mult, b: r.adj })}</span></p><div class="add" style="margin-top:0"><button class="btn solid" data-a="dmplstart" data-id="${n.id}">${t('dm.start')}</button></div>` : ''}
+  <div class="add"><input type="search" id="dm-pq" value="${esc(DU.pq || '')}" placeholder="${t('dm.search')}" aria-label="${t('dm.search')}"></div><div id="dm-pres">${vPlaceResults()}</div></div>`;
 }
 function vNotes() {
   const n = curNote();
-  return `<div class="wtools"><input type="search" id="dm-nq" value="${esc(DU.nq)}" placeholder="${t('dm.noteSearch')}" aria-label="${t('dm.noteSearch')}"><button class="btn solid" data-a="dmnew">${t('dm.newNote')}</button></div>
+  return `<div class="wtools"><input type="search" id="dm-nq" value="${esc(DU.nq)}" placeholder="${t('dm.noteSearch')}" aria-label="${t('dm.noteSearch')}"><button class="btn solid" data-a="dmnew">${t('dm.newNote')}</button><button class="btn solid" data-a="dmnewp">${t('dm.newPlace')}</button></div>
+  <div class="chips dm-nk">${['', ...KINDS].map(k => `<button class="chip${(DU.nk || '') === k ? ' on' : ''}" data-a="dmnk" data-k="${k}" aria-pressed="${(DU.nk || '') === k}">${k ? t('dm.kind.' + k) : t('dm.kindAll')}</button>`).join('')}</div>
   <div class="wiki"><div class="wl" id="dm-nlist">${vNoteList()}</div><div class="wd">${n ? noteBody(n) : `<p class="empty">${t('dm.noteNone')}</p>`}</div></div>`;
 }
 function vLive() {
