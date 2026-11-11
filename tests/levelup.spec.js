@@ -162,7 +162,7 @@ test.describe('Unterklassen und Talente @new', () => {
     for (let l = 1; l <= 2; l++) await levelUp(page, 'School of Evocation');
     await page.locator('[data-a="lang"][data-l="de"]').click();
     await page.locator('.feat', { hasText: 'Sculpt Spells' }).locator('summary').click();
-    await expect(page.locator('.feat', { hasText: 'Sculpt Spells' })).toContainText('schützt');
+    await expect(page.locator('.feat', { hasText: 'Sculpt Spells' })).toContainText('relativer Sicherheit');
   });
 
   test('Talente im Wiki mit Voraussetzung', async ({ page }) => {

@@ -32,7 +32,7 @@
      "n": "Rage",
      "text": {
       "en": "In battle, you fight with primal ferocity. On your turn, you can enter a rage as a bonus action. While raging, you gain the following benefits if you aren't wearing heavy armor:\n- You have advantage on Strength checks and Strength saving throws.\n- When you make a melee weapon Attack using Strength, you gain a +2 bonus to the damage roll. This bonus increases as you level.\n- You have Resistance to bludgeoning, piercing, and slashing damage.\nIf you are able to cast Spells, you can't cast them or concentrate on them while raging.\nYour rage lasts for 1 minute. It ends early if you are knocked Unconscious or if Your Turn ends and you haven't attacked a hostile creature since your last turn or taken damage since then. You can also end your rage on Your Turn as a Bonus Action.\nOnce you have raged the maximum number of times for your barbarian level, you must finish a Long Rest before you can rage again. You may rage 2 times at 1st level, 3 at 3rd, 4 at 6th, 5 at 12th, and 6 at 17th.",
-      "de": "Bonusaktion, 1 Min: Vorteil auf STR-Würfe und STR-Rettungswürfe, Bonusschaden auf STR-Nahkampfangriffe, Resistenz gegen Hieb, Stich und Wucht. Keine Zauber, keine Konzentration. Endet früher, wenn du in einer Runde weder angreifst noch Schaden nimmst."
+      "de": "Im Kampf kämpfst du mit urtümlicher Wildheit. In deinem Zug kannst du als Bonusaktion in Kampfrausch verfallen. Während des Kampfrauschs erhältst du folgende Vorteile, wenn du keine schwere Rüstung trägst:\n- Du hast Vorteil bei Stärkewürfen und Stärkerettungswürfen.\n- Führst du einen Nahkampfwaffenangriff mit Stärke aus, erhältst du einen Bonus von +2 auf den Schadenswurf. Dieser Bonus steigt mit deiner Stufe.\n- Du hast Resistenz gegen Wucht-, Stich- und Hiebschaden.\nKannst du zaubern, kannst du während des Kampfrauschs weder Zauber wirken noch dich auf sie konzentrieren.\nDein Kampfrausch hält 1 Minute an. Er endet vorzeitig, wenn du Unconscious wirst oder wenn dein Zug endet und du seit deinem letzten Zug weder eine feindliche Kreatur angegriffen noch Schaden erlitten hast. Du kannst den Kampfrausch auch in deinem Zug als Bonusaktion beenden.\nHast du so oft gewütet, wie deine Barbarenstufe erlaubt, musst du eine lange Rast beenden, bevor du erneut in Kampfrausch verfallen kannst. Du kannst auf Stufe 1 zweimal wüten, auf Stufe 3 dreimal, auf Stufe 6 viermal, auf Stufe 12 fünfmal und auf Stufe 17 sechsmal."
      },
      "source": "srd",
      "verified": false
@@ -41,7 +41,7 @@
      "n": "Unarmored Defense",
      "text": {
       "en": "While you are not wearing any armor, your Armor Class equals 10 + your Dexterity modifier + your Constitution modifier. You can use a shield and still gain this benefit.",
-      "de": "Ohne Rüstung: RK = 10 + GES + KON. Schild erlaubt."
+      "de": "Solange du keine Rüstung trägst, beträgt deine Rüstungsklasse 10 + dein Geschicklichkeitsmodifikator + dein Konstitutionsmodifikator. Du kannst einen Schild benutzen und erhältst diesen Vorteil trotzdem."
      },
      "source": "srd",
      "verified": false
@@ -52,7 +52,7 @@
      "n": "Reckless Attack",
      "text": {
       "en": "Starting at 2nd level, you can throw aside all concern for defense to attack with fierce desperation. When you make your first attack on your turn, you can decide to attack recklessly. Doing so gives you advantage on melee weapon attack rolls using Strength during this turn, but attack rolls against you have advantage until your next turn.",
-      "de": "Ersten Angriff im Zug mit Vorteil (STR-Nahkampf). Dafür haben Angriffe gegen dich Vorteil bis zu deinem nächsten Zug."
+      "de": "Ab Stufe 2 kannst du jede Rücksicht auf deine Verteidigung fahren lassen und mit wilder Verzweiflung angreifen. Wenn du in deinem Zug deinen ersten Angriff ausführst, kannst du entscheiden, rücksichtslos anzugreifen. Dann hast du in diesem Zug Vorteil bei Nahkampfwaffenangriffen mit Stärke, aber Angriffswürfe gegen dich haben bis zu deinem nächsten Zug Vorteil."
      },
      "source": "srd",
      "verified": false
@@ -61,7 +61,7 @@
      "n": "Danger Sense",
      "text": {
       "en": "At 2nd level, you gain an uncanny sense of when things nearby aren't as they should be, giving you an edge when you dodge away from danger. You have advantage on Dexterity saving throws against effects that you can see, such as traps and spells. To gain this benefit, you can't be blinded, deafened, or incapacitated.",
-      "de": "Vorteil auf GES-Rettungswürfe gegen Effekte, die du sehen kannst (nicht blind, taub oder kampfunfähig)."
+      "de": "Auf Stufe 2 erhältst du ein unheimliches Gespür dafür, wenn in der Nähe etwas nicht stimmt, was dir beim Ausweichen vor Gefahren hilft. Du hast Vorteil bei Geschicklichkeitsrettungswürfen gegen Effekte, die du sehen kannst, etwa Fallen und Zauber. Dafür darfst du nicht Blinded, Deafened oder Incapacitated sein."
      },
      "source": "srd",
      "verified": false
@@ -72,7 +72,7 @@
      "n": "Extra Attack",
      "text": {
       "en": "Beginning at 5th level, you can attack twice, instead of once, whenever you take the Attack action on your turn.",
-      "de": "Zwei Angriffe, wenn du die Angriffsaktion nutzt."
+      "de": "Ab Stufe 5 kannst du zweimal statt einmal angreifen, wenn du in deinem Zug die Aktion Angriff ausführst."
      },
      "source": "srd",
      "verified": false
@@ -81,7 +81,7 @@
      "n": "Fast Movement",
      "text": {
       "en": "Starting at 5th level, your speed increases by 10 feet while you aren't wearing heavy armor.",
-      "de": "+3 m Tempo, solange du keine schwere Rüstung trägst."
+      "de": "Ab Stufe 5 steigt dein Tempo um 3 m, solange du keine schwere Rüstung trägst."
      },
      "source": "srd",
      "verified": false
@@ -92,7 +92,7 @@
      "n": "Feral Instinct",
      "text": {
       "en": "By 7th level, your instincts are so honed that you have advantage on initiative rolls.\nAdditionally, if you are surprised at the beginning of combat and aren't incapacitated, you can act normally on your first turn, but only if you enter your rage before doing anything else on that turn.",
-      "de": "Vorteil auf Initiative. Bist du überrascht, kannst du trotzdem handeln, wenn du sofort in Kampfrausch gehst."
+      "de": "Ab Stufe 7 sind deine Instinkte so geschärft, dass du Vorteil bei Initiativewürfen hast.\nAußerdem kannst du, wenn du zu Beginn eines Kampfes überrascht und nicht Incapacitated bist, in deinem ersten Zug normal handeln, aber nur, wenn du in Kampfrausch verfällst, bevor du in diesem Zug etwas anderes tust."
      },
      "source": "srd",
      "verified": false
@@ -103,7 +103,7 @@
      "n": "Brutal Critical",
      "text": {
       "en": "Beginning at 9th level, you can roll one additional weapon damage die when determining the extra damage for a critical hit with a melee attack. This increases to two additional dice at 13th level and three additional dice at 17th level.",
-      "de": "Bei einem kritischen Nahkampftreffer einen zusätzlichen Waffenschadenswürfel."
+      "de": "Ab Stufe 9 kannst du beim Bestimmen des Zusatzschadens eines kritischen Treffers mit einem Nahkampfangriff einen zusätzlichen Schadenswürfel der Waffe würfeln. Das steigt auf zwei zusätzliche Würfel ab Stufe 13 und drei zusätzliche Würfel ab Stufe 17."
      },
      "source": "srd",
      "verified": false
@@ -114,7 +114,7 @@
      "n": "Relentless Rage",
      "text": {
       "en": "Starting at 11th level, your rage can keep you fighting despite grievous wounds. If you drop to 0 hit points while you're raging and don't die outright, you can make a DC 10 Constitution saving throw. If you succeed, you drop to 1 hit point instead.\nEach time you use this feature after the first, the DC increases by 5. When you finish a short or long rest, the DC resets to 10.",
-      "de": "Fällst du im Kampfrausch auf 0 TP: KON-Rettungswurf SG 10 (+5 bei jeder weiteren Nutzung bis zur Rast). Bei Erfolg bleibst du bei 1 TP."
+      "de": "Ab Stufe 11 kann dich dein Kampfrausch trotz schwerer Wunden weiterkämpfen lassen. Sinkst du während des Kampfrauschs auf 0 Trefferpunkte und stirbst nicht sofort, kannst du einen Konstitutionsrettungswurf gegen SG 10 ablegen. Bei Erfolg sinkst du stattdessen auf 1 Trefferpunkt.\nJedes Mal, wenn du dieses Merkmal nach dem ersten Mal nutzt, steigt der SG um 5. Nach einer kurzen oder langen Rast sinkt der SG wieder auf 10."
      },
      "source": "srd",
      "verified": false
@@ -125,7 +125,7 @@
      "n": "Brutal Critical",
      "text": {
       "en": "Beginning at 9th level, you can roll one additional weapon damage die when determining the extra damage for a critical hit with a melee attack. This increases to two additional dice at 13th level and three additional dice at 17th level.",
-      "de": "Jetzt zwei zusätzliche Würfel."
+      "de": "Ab Stufe 9 kannst du beim Bestimmen des Zusatzschadens eines kritischen Treffers mit einem Nahkampfangriff einen zusätzlichen Schadenswürfel der Waffe würfeln. Das steigt auf zwei zusätzliche Würfel ab Stufe 13 und drei zusätzliche Würfel ab Stufe 17."
      },
      "source": "srd",
      "verified": false
@@ -136,7 +136,7 @@
      "n": "Persistent Rage",
      "text": {
       "en": "Beginning at 15th level, your rage is so fierce that it ends early only if you fall unconscious or if you choose to end it.",
-      "de": "Der Kampfrausch endet nur, wenn du bewusstlos wirst oder ihn selbst beendest."
+      "de": "Ab Stufe 15 ist dein Kampfrausch so heftig, dass er nur vorzeitig endet, wenn du bewusstlos wirst oder ihn selbst beendest."
      },
      "source": "srd",
      "verified": false
@@ -147,7 +147,7 @@
      "n": "Brutal Critical",
      "text": {
       "en": "Beginning at 9th level, you can roll one additional weapon damage die when determining the extra damage for a critical hit with a melee attack. This increases to two additional dice at 13th level and three additional dice at 17th level.",
-      "de": "Jetzt drei zusätzliche Würfel."
+      "de": "Ab Stufe 9 kannst du beim Bestimmen des Zusatzschadens eines kritischen Treffers mit einem Nahkampfangriff einen zusätzlichen Schadenswürfel der Waffe würfeln. Das steigt auf zwei zusätzliche Würfel ab Stufe 13 und drei zusätzliche Würfel ab Stufe 17."
      },
      "source": "srd",
      "verified": false
@@ -158,7 +158,7 @@
      "n": "Indomitable Might",
      "text": {
       "en": "Beginning at 18th level, if your total for a Strength check is less than your Strength score, you can use that score in place of the total.",
-      "de": "Ist dein STR-Wurf niedriger als dein Stärkewert, zählt stattdessen der Wert."
+      "de": "Ab Stufe 18 kannst du, wenn das Ergebnis eines Stärkewurfs niedriger als dein Stärkewert ist, den Stärkewert statt des Ergebnisses verwenden."
      },
      "source": "srd",
      "verified": false
@@ -169,7 +169,7 @@
      "n": "Primal Champion",
      "text": {
       "en": "At 20th level, you embody the power of the wilds. Your Strength and Constitution scores increase by 4. Your maximum for those scores is now 24.",
-      "de": "STR und KON steigen um 4, Maximum 24 (wird automatisch eingetragen)."
+      "de": "Auf Stufe 20 verkörperst du die Macht der Wildnis. Deine Stärke- und Konstitutionswerte steigen um 4. Dein Höchstwert für diese Werte ist jetzt 24."
      },
      "source": "srd",
      "verified": false
@@ -212,7 +212,7 @@
      "n": "Spellcasting",
      "text": {
       "en": "You have learned to untangle and reshape the fabric of reality in harmony with your wishes and music. Your spells are part of your vast repertoire, magic that you can tune to different situations.",
-      "de": "Zaubern mit CHA. Zauber-SG = 8 + Übung + CHA, Zauberangriff = Übung + CHA. Instrument als Fokus."
+      "de": "Du hast gelernt, das Gewebe der Wirklichkeit im Einklang mit deinen Wünschen und deiner Musik zu entwirren und neu zu formen. Deine Zauber sind Teil deines umfangreichen Repertoires, Magie, die du auf verschiedene Situationen abstimmen kannst."
      },
      "source": "srd",
      "verified": false
@@ -221,7 +221,7 @@
      "n": "Bardic Inspiration",
      "text": {
       "en": "You can inspire others through stirring words or music. To do so, you use a bonus action on your turn to choose one creature other than yourself within 60 feet of you who can hear you. That creature gains one Bardic Inspiration die, a d6. Once within the next 10 minutes, the creature can roll the die and add the number rolled to one ability check, attack roll, or saving throw it makes. The creature can wait until after it rolls the d20 before deciding to use the Bardic Inspiration die, but must decide before the GM says whether the roll succeeds or fails. Once the Bardic Inspiration die is rolled, it is lost. A creature can have only one Bardic Inspiration die at a time.\nYou can use this feature a number of times equal to your Charisma modifier (a minimum of once). You regain any expended uses when you finish a long rest. \nYour Bardic Inspiration die changes when you reach certain levels in this class. The die becomes a d8 at 5th level, a d10 at 10th level, and a d12 at 15th level.",
-      "de": "Bonusaktion: Eine Kreatur in 18 m erhält einen Inspirationswürfel (W6), den sie binnen 10 Min auf einen Angriff, Attributs- oder Rettungswurf addiert. Anwendungen = CHA-Mod (mind. 1)."
+      "de": "Du kannst andere mit mitreißenden Worten oder Musik inspirieren. Dazu wählst du in deinem Zug als Bonusaktion eine andere Kreatur als dich innerhalb von 18 m, die dich hören kann. Diese Kreatur erhält einen Bardeninspirationswürfel, einen W6. Einmal innerhalb der nächsten 10 Minuten kann die Kreatur den Würfel werfen und das Ergebnis zu einem Attributswurf, Angriffswurf oder Rettungswurf addieren. Die Kreatur kann warten, bis sie den W20 gewürfelt hat, bevor sie sich entscheidet, muss sich aber entscheiden, bevor die Spielleitung sagt, ob der Wurf gelingt oder misslingt. Sobald der Bardeninspirationswürfel geworfen ist, ist er verbraucht. Eine Kreatur kann nur einen Bardeninspirationswürfel gleichzeitig haben.\nDu kannst dieses Merkmal so oft nutzen, wie dein Charismamodifikator angibt (mindestens einmal). Verbrauchte Anwendungen erhältst du nach einer langen Rast zurück.\nDein Bardeninspirationswürfel ändert sich auf bestimmten Stufen dieser Klasse: Er wird auf Stufe 5 zum W8, auf Stufe 10 zum W10 und auf Stufe 15 zum W12."
      },
      "source": "srd",
      "verified": false
@@ -232,7 +232,7 @@
      "n": "Jack of All Trades",
      "text": {
       "en": "Starting at 2nd level, you can add half your proficiency bonus, rounded down, to any ability check you make that doesn't already include your proficiency bonus.",
-      "de": "Halber Übungsbonus (abgerundet) auf Attributswürfe ohne Übung."
+      "de": "Ab Stufe 2 kannst du die Hälfte deines Übungsbonus (abgerundet) zu jedem Attributswurf addieren, der deinen Übungsbonus nicht bereits enthält."
      },
      "source": "srd",
      "verified": false
@@ -241,7 +241,7 @@
      "n": "Song of Rest",
      "text": {
       "en": "Beginning at 2nd level, you can use soothing music or oration to help revitalize your wounded allies during a short rest. If you or any friendly creatures who can hear your performance regain hit points at the end of the short rest by spending one or more Hit Dice, each of those creatures regains an extra 1d6 hit points. \nThe extra hit points increase when you reach certain levels in this class: to 1d8 at 9th level, to 1d10 at 13th level, and to 1d12 at 17th level.",
-      "de": "Bei einer kurzen Rast heilen Verbündete, die Trefferwürfel ausgeben, zusätzlich 1W6."
+      "de": "Ab Stufe 2 kannst du mit beruhigender Musik oder Rede während einer kurzen Rast deine verwundeten Verbündeten stärken. Gewinnen du oder freundliche Kreaturen, die deinen Vortrag hören können, am Ende der kurzen Rast durch das Ausgeben von Trefferwürfeln Trefferpunkte zurück, erhält jede dieser Kreaturen zusätzlich 1W6 Trefferpunkte.\nDie zusätzlichen Trefferpunkte steigen auf bestimmten Stufen dieser Klasse: auf 1W8 ab Stufe 9, auf 1W10 ab Stufe 13 und auf 1W12 ab Stufe 17."
      },
      "source": "srd",
      "verified": false
@@ -252,7 +252,7 @@
      "n": "Expertise",
      "text": {
       "en": "At 3rd level, choose two of your skill proficiencies. Your proficiency bonus is doubled for any ability check you make that uses either of the chosen proficiencies. At 10th level, you can choose another two skill proficiencies to gain this benefit.",
-      "de": "Doppelter Übungsbonus für zwei geübte Fertigkeiten."
+      "de": "Auf Stufe 3 wählst du zwei deiner Fertigkeitsübungen. Dein Übungsbonus verdoppelt sich bei jedem Attributswurf, der eine der gewählten Übungen nutzt. Auf Stufe 10 kannst du zwei weitere Fertigkeitsübungen wählen, die diesen Vorteil erhalten."
      },
      "source": "srd",
      "verified": false
@@ -263,7 +263,7 @@
      "n": "Bardic Inspiration",
      "text": {
       "en": "You can inspire others through stirring words or music. To do so, you use a bonus action on your turn to choose one creature other than yourself within 60 feet of you who can hear you. That creature gains one Bardic Inspiration die, a d6. Once within the next 10 minutes, the creature can roll the die and add the number rolled to one ability check, attack roll, or saving throw it makes. The creature can wait until after it rolls the d20 before deciding to use the Bardic Inspiration die, but must decide before the GM says whether the roll succeeds or fails. Once the Bardic Inspiration die is rolled, it is lost. A creature can have only one Bardic Inspiration die at a time.\nYou can use this feature a number of times equal to your Charisma modifier (a minimum of once). You regain any expended uses when you finish a long rest. \nYour Bardic Inspiration die changes when you reach certain levels in this class. The die becomes a d8 at 5th level, a d10 at 10th level, and a d12 at 15th level.",
-      "de": "Würfel wird zum W8."
+      "de": "Du kannst andere mit mitreißenden Worten oder Musik inspirieren. Dazu wählst du in deinem Zug als Bonusaktion eine andere Kreatur als dich innerhalb von 18 m, die dich hören kann. Diese Kreatur erhält einen Bardeninspirationswürfel, einen W6. Einmal innerhalb der nächsten 10 Minuten kann die Kreatur den Würfel werfen und das Ergebnis zu einem Attributswurf, Angriffswurf oder Rettungswurf addieren. Die Kreatur kann warten, bis sie den W20 gewürfelt hat, bevor sie sich entscheidet, muss sich aber entscheiden, bevor die Spielleitung sagt, ob der Wurf gelingt oder misslingt. Sobald der Bardeninspirationswürfel geworfen ist, ist er verbraucht. Eine Kreatur kann nur einen Bardeninspirationswürfel gleichzeitig haben.\nDu kannst dieses Merkmal so oft nutzen, wie dein Charismamodifikator angibt (mindestens einmal). Verbrauchte Anwendungen erhältst du nach einer langen Rast zurück.\nDein Bardeninspirationswürfel ändert sich auf bestimmten Stufen dieser Klasse: Er wird auf Stufe 5 zum W8, auf Stufe 10 zum W10 und auf Stufe 15 zum W12."
      },
      "source": "srd",
      "verified": false
@@ -272,7 +272,7 @@
      "n": "Font of Inspiration",
      "text": {
       "en": "Beginning when you reach 5th level, you regain all of your expended uses of Bardic Inspiration when you finish a short or long rest.",
-      "de": "Bardic Inspiration kommt schon nach kurzer Rast zurück."
+      "de": "Ab Stufe 5 erhältst du alle verbrauchten Anwendungen der Bardeninspiration nach einer kurzen oder langen Rast zurück."
      },
      "source": "srd",
      "verified": false
@@ -283,7 +283,7 @@
      "n": "Countercharm",
      "text": {
       "en": "At 6th level, you gain the ability to use musical notes or words of power to disrupt mind-influencing effects. As an action, you can start a performance that lasts until the end of your next turn. During that time, you and any friendly creatures within 30 feet of you have advantage on saving throws against being frightened or charmed. A creature must be able to hear you to gain this benefit. The performance ends early if you are incapacitated or silenced or if you voluntarily end it (no action required).",
-      "de": "Aktion: Bis Ende deines nächsten Zuges haben du und Verbündete in 9 m Vorteil auf Rettungswürfe gegen Furcht und Bezauberung."
+      "de": "Auf Stufe 6 erhältst du die Fähigkeit, mit Tönen oder Worten der Macht geistbeeinflussende Effekte zu stören. Als Aktion kannst du einen Vortrag beginnen, der bis zum Ende deines nächsten Zuges anhält. Während dieser Zeit haben du und alle freundlichen Kreaturen innerhalb von 9 m Vorteil bei Rettungswürfen gegen Frightened und Charmed. Eine Kreatur muss dich hören können, um diesen Vorteil zu erhalten. Der Vortrag endet vorzeitig, wenn du Incapacitated oder zum Schweigen gebracht wirst oder ihn freiwillig beendest (keine Aktion nötig)."
      },
      "source": "srd",
      "verified": false
@@ -294,7 +294,7 @@
      "n": "Song of Rest",
      "text": {
       "en": "Beginning at 2nd level, you can use soothing music or oration to help revitalize your wounded allies during a short rest. If you or any friendly creatures who can hear your performance regain hit points at the end of the short rest by spending one or more Hit Dice, each of those creatures regains an extra 1d6 hit points. \nThe extra hit points increase when you reach certain levels in this class: to 1d8 at 9th level, to 1d10 at 13th level, and to 1d12 at 17th level.",
-      "de": "Jetzt 1W8."
+      "de": "Ab Stufe 2 kannst du mit beruhigender Musik oder Rede während einer kurzen Rast deine verwundeten Verbündeten stärken. Gewinnen du oder freundliche Kreaturen, die deinen Vortrag hören können, am Ende der kurzen Rast durch das Ausgeben von Trefferwürfeln Trefferpunkte zurück, erhält jede dieser Kreaturen zusätzlich 1W6 Trefferpunkte.\nDie zusätzlichen Trefferpunkte steigen auf bestimmten Stufen dieser Klasse: auf 1W8 ab Stufe 9, auf 1W10 ab Stufe 13 und auf 1W12 ab Stufe 17."
      },
      "source": "srd",
      "verified": false
@@ -305,7 +305,7 @@
      "n": "Bardic Inspiration",
      "text": {
       "en": "You can inspire others through stirring words or music. To do so, you use a bonus action on your turn to choose one creature other than yourself within 60 feet of you who can hear you. That creature gains one Bardic Inspiration die, a d6. Once within the next 10 minutes, the creature can roll the die and add the number rolled to one ability check, attack roll, or saving throw it makes. The creature can wait until after it rolls the d20 before deciding to use the Bardic Inspiration die, but must decide before the GM says whether the roll succeeds or fails. Once the Bardic Inspiration die is rolled, it is lost. A creature can have only one Bardic Inspiration die at a time.\nYou can use this feature a number of times equal to your Charisma modifier (a minimum of once). You regain any expended uses when you finish a long rest. \nYour Bardic Inspiration die changes when you reach certain levels in this class. The die becomes a d8 at 5th level, a d10 at 10th level, and a d12 at 15th level.",
-      "de": "Würfel wird zum W10."
+      "de": "Du kannst andere mit mitreißenden Worten oder Musik inspirieren. Dazu wählst du in deinem Zug als Bonusaktion eine andere Kreatur als dich innerhalb von 18 m, die dich hören kann. Diese Kreatur erhält einen Bardeninspirationswürfel, einen W6. Einmal innerhalb der nächsten 10 Minuten kann die Kreatur den Würfel werfen und das Ergebnis zu einem Attributswurf, Angriffswurf oder Rettungswurf addieren. Die Kreatur kann warten, bis sie den W20 gewürfelt hat, bevor sie sich entscheidet, muss sich aber entscheiden, bevor die Spielleitung sagt, ob der Wurf gelingt oder misslingt. Sobald der Bardeninspirationswürfel geworfen ist, ist er verbraucht. Eine Kreatur kann nur einen Bardeninspirationswürfel gleichzeitig haben.\nDu kannst dieses Merkmal so oft nutzen, wie dein Charismamodifikator angibt (mindestens einmal). Verbrauchte Anwendungen erhältst du nach einer langen Rast zurück.\nDein Bardeninspirationswürfel ändert sich auf bestimmten Stufen dieser Klasse: Er wird auf Stufe 5 zum W8, auf Stufe 10 zum W10 und auf Stufe 15 zum W12."
      },
      "source": "srd",
      "verified": false
@@ -314,7 +314,7 @@
      "n": "Expertise",
      "text": {
       "en": "At 3rd level, choose two of your skill proficiencies. Your proficiency bonus is doubled for any ability check you make that uses either of the chosen proficiencies. At 10th level, you can choose another two skill proficiencies to gain this benefit.",
-      "de": "Zwei weitere Fertigkeiten mit doppeltem Übungsbonus."
+      "de": "Auf Stufe 3 wählst du zwei deiner Fertigkeitsübungen. Dein Übungsbonus verdoppelt sich bei jedem Attributswurf, der eine der gewählten Übungen nutzt. Auf Stufe 10 kannst du zwei weitere Fertigkeitsübungen wählen, die diesen Vorteil erhalten."
      },
      "source": "srd",
      "verified": false
@@ -323,7 +323,7 @@
      "n": "Magical Secrets",
      "text": {
       "en": "By 10th level, you have plundered magical knowledge from a wide spectrum of disciplines. Choose two spells from any class, including this one. A spell you choose must be of a level you can cast, as shown on the Bard table, or a cantrip. \nThe chosen spells count as bard spells for you and are included in the number in the Spells Known column of the Bard table. \nYou learn two additional spells from any class at 14th level and again at 18th level.",
-      "de": "Zwei Zauber aus beliebigen Klassenlisten lernen; sie zählen als Bardenzauber."
+      "de": "Ab Stufe 10 hast du magisches Wissen aus vielen Disziplinen geplündert. Wähle zwei Zauber einer beliebigen Klasse, auch dieser. Ein gewählter Zauber muss einen Grad haben, den du wirken kannst (siehe Bardentabelle), oder ein Zaubertrick sein.\nDie gewählten Zauber gelten für dich als Bardenzauber und zählen zu der Zahl in der Spalte „Bekannte Zauber“ der Bardentabelle.\nAuf Stufe 14 und erneut auf Stufe 18 lernst du je zwei weitere Zauber einer beliebigen Klasse."
      },
      "source": "srd",
      "verified": false
@@ -334,7 +334,7 @@
      "n": "Song of Rest",
      "text": {
       "en": "Beginning at 2nd level, you can use soothing music or oration to help revitalize your wounded allies during a short rest. If you or any friendly creatures who can hear your performance regain hit points at the end of the short rest by spending one or more Hit Dice, each of those creatures regains an extra 1d6 hit points. \nThe extra hit points increase when you reach certain levels in this class: to 1d8 at 9th level, to 1d10 at 13th level, and to 1d12 at 17th level.",
-      "de": "Jetzt 1W10."
+      "de": "Ab Stufe 2 kannst du mit beruhigender Musik oder Rede während einer kurzen Rast deine verwundeten Verbündeten stärken. Gewinnen du oder freundliche Kreaturen, die deinen Vortrag hören können, am Ende der kurzen Rast durch das Ausgeben von Trefferwürfeln Trefferpunkte zurück, erhält jede dieser Kreaturen zusätzlich 1W6 Trefferpunkte.\nDie zusätzlichen Trefferpunkte steigen auf bestimmten Stufen dieser Klasse: auf 1W8 ab Stufe 9, auf 1W10 ab Stufe 13 und auf 1W12 ab Stufe 17."
      },
      "source": "srd",
      "verified": false
@@ -345,7 +345,7 @@
      "n": "Magical Secrets",
      "text": {
       "en": "By 10th level, you have plundered magical knowledge from a wide spectrum of disciplines. Choose two spells from any class, including this one. A spell you choose must be of a level you can cast, as shown on the Bard table, or a cantrip. \nThe chosen spells count as bard spells for you and are included in the number in the Spells Known column of the Bard table. \nYou learn two additional spells from any class at 14th level and again at 18th level.",
-      "de": "Zwei weitere Zauber aus beliebigen Listen."
+      "de": "Ab Stufe 10 hast du magisches Wissen aus vielen Disziplinen geplündert. Wähle zwei Zauber einer beliebigen Klasse, auch dieser. Ein gewählter Zauber muss einen Grad haben, den du wirken kannst (siehe Bardentabelle), oder ein Zaubertrick sein.\nDie gewählten Zauber gelten für dich als Bardenzauber und zählen zu der Zahl in der Spalte „Bekannte Zauber“ der Bardentabelle.\nAuf Stufe 14 und erneut auf Stufe 18 lernst du je zwei weitere Zauber einer beliebigen Klasse."
      },
      "source": "srd",
      "verified": false
@@ -356,7 +356,7 @@
      "n": "Bardic Inspiration",
      "text": {
       "en": "You can inspire others through stirring words or music. To do so, you use a bonus action on your turn to choose one creature other than yourself within 60 feet of you who can hear you. That creature gains one Bardic Inspiration die, a d6. Once within the next 10 minutes, the creature can roll the die and add the number rolled to one ability check, attack roll, or saving throw it makes. The creature can wait until after it rolls the d20 before deciding to use the Bardic Inspiration die, but must decide before the GM says whether the roll succeeds or fails. Once the Bardic Inspiration die is rolled, it is lost. A creature can have only one Bardic Inspiration die at a time.\nYou can use this feature a number of times equal to your Charisma modifier (a minimum of once). You regain any expended uses when you finish a long rest. \nYour Bardic Inspiration die changes when you reach certain levels in this class. The die becomes a d8 at 5th level, a d10 at 10th level, and a d12 at 15th level.",
-      "de": "Würfel wird zum W12."
+      "de": "Du kannst andere mit mitreißenden Worten oder Musik inspirieren. Dazu wählst du in deinem Zug als Bonusaktion eine andere Kreatur als dich innerhalb von 18 m, die dich hören kann. Diese Kreatur erhält einen Bardeninspirationswürfel, einen W6. Einmal innerhalb der nächsten 10 Minuten kann die Kreatur den Würfel werfen und das Ergebnis zu einem Attributswurf, Angriffswurf oder Rettungswurf addieren. Die Kreatur kann warten, bis sie den W20 gewürfelt hat, bevor sie sich entscheidet, muss sich aber entscheiden, bevor die Spielleitung sagt, ob der Wurf gelingt oder misslingt. Sobald der Bardeninspirationswürfel geworfen ist, ist er verbraucht. Eine Kreatur kann nur einen Bardeninspirationswürfel gleichzeitig haben.\nDu kannst dieses Merkmal so oft nutzen, wie dein Charismamodifikator angibt (mindestens einmal). Verbrauchte Anwendungen erhältst du nach einer langen Rast zurück.\nDein Bardeninspirationswürfel ändert sich auf bestimmten Stufen dieser Klasse: Er wird auf Stufe 5 zum W8, auf Stufe 10 zum W10 und auf Stufe 15 zum W12."
      },
      "source": "srd",
      "verified": false
@@ -367,7 +367,7 @@
      "n": "Song of Rest",
      "text": {
       "en": "Beginning at 2nd level, you can use soothing music or oration to help revitalize your wounded allies during a short rest. If you or any friendly creatures who can hear your performance regain hit points at the end of the short rest by spending one or more Hit Dice, each of those creatures regains an extra 1d6 hit points. \nThe extra hit points increase when you reach certain levels in this class: to 1d8 at 9th level, to 1d10 at 13th level, and to 1d12 at 17th level.",
-      "de": "Jetzt 1W12."
+      "de": "Ab Stufe 2 kannst du mit beruhigender Musik oder Rede während einer kurzen Rast deine verwundeten Verbündeten stärken. Gewinnen du oder freundliche Kreaturen, die deinen Vortrag hören können, am Ende der kurzen Rast durch das Ausgeben von Trefferwürfeln Trefferpunkte zurück, erhält jede dieser Kreaturen zusätzlich 1W6 Trefferpunkte.\nDie zusätzlichen Trefferpunkte steigen auf bestimmten Stufen dieser Klasse: auf 1W8 ab Stufe 9, auf 1W10 ab Stufe 13 und auf 1W12 ab Stufe 17."
      },
      "source": "srd",
      "verified": false
@@ -378,7 +378,7 @@
      "n": "Magical Secrets",
      "text": {
       "en": "By 10th level, you have plundered magical knowledge from a wide spectrum of disciplines. Choose two spells from any class, including this one. A spell you choose must be of a level you can cast, as shown on the Bard table, or a cantrip. \nThe chosen spells count as bard spells for you and are included in the number in the Spells Known column of the Bard table. \nYou learn two additional spells from any class at 14th level and again at 18th level.",
-      "de": "Zwei weitere Zauber aus beliebigen Listen."
+      "de": "Ab Stufe 10 hast du magisches Wissen aus vielen Disziplinen geplündert. Wähle zwei Zauber einer beliebigen Klasse, auch dieser. Ein gewählter Zauber muss einen Grad haben, den du wirken kannst (siehe Bardentabelle), oder ein Zaubertrick sein.\nDie gewählten Zauber gelten für dich als Bardenzauber und zählen zu der Zahl in der Spalte „Bekannte Zauber“ der Bardentabelle.\nAuf Stufe 14 und erneut auf Stufe 18 lernst du je zwei weitere Zauber einer beliebigen Klasse."
      },
      "source": "srd",
      "verified": false
@@ -389,7 +389,7 @@
      "n": "Superior Inspiration",
      "text": {
       "en": "At 20th level, when you roll initiative and have no uses of Bardic Inspiration left, you regain one use.",
-      "de": "Hast du beim Initiativewurf keine Inspiration übrig, erhältst du eine zurück."
+      "de": "Ab Stufe 20 erhältst du eine Anwendung zurück, wenn du Initiative würfelst und keine Bardeninspiration mehr übrig hast."
      },
      "source": "srd",
      "verified": false
@@ -439,7 +439,7 @@
      "n": "Spellcasting",
      "text": {
       "en": "As a conduit for divine power, you can cast cleric spells.",
-      "de": "Zaubern mit WEI. Vorbereitet: WEI-Mod + Klerikerstufe (mind. 1) aus der ganzen Klerikerliste, Wechsel nach langer Rast."
+      "de": "Als Kanal göttlicher Macht kannst du Klerikerzauber wirken."
      },
      "source": "srd",
      "verified": false
@@ -450,7 +450,7 @@
      "n": "Channel Divinity",
      "text": {
       "en": "At 2nd level, you gain the ability to channel divine energy directly from your deity, using that energy to fuel magical effects. You start with two such effects: Turn Undead and an effect determined by your domain. Some domains grant you additional effects as you advance in levels, as noted in the domain description.\nWhen you use your Channel Divinity, you choose which effect to create. You must then finish a short or long rest to use your Channel Divinity again.\nSome Channel Divinity effects require saving throws. When you use such an effect from this class, the DC equals your cleric spell save DC.\nBeginning at 6th level, you can use your Channel Divinity twice between rests, and beginning at 18th level, you can use it three times between rests. When you finish a short or long rest, you regain your expended uses.",
-      "de": "Göttliche Energie für Turn Undead oder einen Effekt deiner Domäne, einmal pro kurzer oder langer Rast."
+      "de": "Ab Stufe 2 erhältst du die Fähigkeit, göttliche Energie direkt von deiner Gottheit zu leiten und damit magische Effekte anzutreiben. Du beginnst mit zwei solchen Effekten: Turn Undead und einem Effekt, der von deiner Domäne abhängt. Manche Domänen gewähren dir auf höheren Stufen weitere Effekte, wie in der Beschreibung der Domäne angegeben.\nWenn du Channel Divinity nutzt, wählst du, welchen Effekt du erzeugst. Danach musst du eine kurze oder lange Rast beenden, um Channel Divinity erneut zu nutzen.\nManche Effekte von Channel Divinity erfordern Rettungswürfe. Nutzt du einen solchen Effekt dieser Klasse, entspricht der SG deinem Zauberrettungswurf-SG als Kleriker.\nAb Stufe 6 kannst du Channel Divinity zweimal zwischen zwei Rasten nutzen, ab Stufe 18 dreimal. Nach einer kurzen oder langen Rast erhältst du verbrauchte Anwendungen zurück."
      },
      "source": "srd",
      "verified": false
@@ -459,7 +459,7 @@
      "n": "Turn Undead",
      "text": {
       "en": "As an action, each undead within 30 feet that can see or hear you makes a Wisdom save. On a failure it is turned for 1 minute or until it takes damage.",
-      "de": "Aktion: Untote in 9 m, die dich sehen oder hören, machen einen WEI-Rettungswurf. Bei Misserfolg fliehen sie 1 Min lang (bis sie Schaden nehmen)."
+      "de": "Als Aktion legt jeder Untote innerhalb von 9 m, der dich sehen oder hören kann, einen Weisheitsrettungswurf ab. Bei einem Misserfolg ist er 1 Minute lang oder bis er Schaden erleidet vertrieben."
      },
      "source": "summary",
      "verified": false
@@ -470,7 +470,7 @@
      "n": "Destroy Undead",
      "text": {
       "en": "Starting at 5th level, when an undead fails its saving throw against your Turn Undead feature, the creature is instantly destroyed if its challenge rating is at or below a certain threshold.",
-      "de": "Untote bis HG 1/2, die bei Turn Undead scheitern, werden sofort zerstört."
+      "de": "Ab Stufe 5 wird ein Untoter, der seinen Rettungswurf gegen dein Turn Undead nicht besteht, sofort vernichtet, wenn sein Herausforderungsgrad höchstens einem bestimmten Schwellenwert entspricht."
      },
      "source": "srd",
      "verified": false
@@ -481,7 +481,7 @@
      "n": "Channel Divinity",
      "text": {
       "en": "Beginning at 6th level, you can use your Channel Divinity twice between rests, and beginning at 18th level, you can use it three times between rests. When you finish a short or long rest, you regain your expended uses.",
-      "de": "Jetzt zweimal pro Rast."
+      "de": "Ab Stufe 6 kannst du Channel Divinity zweimal zwischen zwei Rasten nutzen, ab Stufe 18 dreimal. Nach einer kurzen oder langen Rast erhältst du verbrauchte Anwendungen zurück."
      },
      "source": "srd",
      "verified": false
@@ -492,7 +492,7 @@
      "n": "Destroy Undead",
      "text": {
       "en": "Starting at 5th level, when an undead fails its saving throw against your Turn Undead feature, the creature is instantly destroyed if its challenge rating is at or below a certain threshold.",
-      "de": "Jetzt bis HG 1."
+      "de": "Ab Stufe 5 wird ein Untoter, der seinen Rettungswurf gegen dein Turn Undead nicht besteht, sofort vernichtet, wenn sein Herausforderungsgrad höchstens einem bestimmten Schwellenwert entspricht."
      },
      "source": "srd",
      "verified": false
@@ -503,7 +503,7 @@
      "n": "Divine Intervention",
      "text": {
       "en": "Beginning at 10th level, you can call on your deity to intervene on your behalf when your need is great.\nImploring your deity's aid requires you to use your action. Describe the assistance you seek, and roll percentile dice. If you roll a number equal to or lower than your cleric level, your deity intervenes. The GM chooses the nature of the intervention; the effect of any cleric spell or cleric domain spell would be appropriate.\nIf your deity intervenes, you can't use this feature again for 7 days. Otherwise, you can use it again after you finish a long rest.\nAt 20th level, your call for intervention succeeds automatically, no roll required.",
-      "de": "Aktion: Würfelst du mit W100 höchstens deine Klerikerstufe, greift deine Gottheit ein. Danach 7 Tage warten, bei Misserfolg nur bis zur langen Rast."
+      "de": "Ab Stufe 10 kannst du deine Gottheit anrufen, für dich einzugreifen, wenn deine Not groß ist.\nUm die Hilfe deiner Gottheit zu erflehen, brauchst du deine Aktion. Beschreibe die Hilfe, die du suchst, und würfle mit Prozentwürfeln. Würfelst du eine Zahl, die höchstens deiner Klerikerstufe entspricht, greift deine Gottheit ein. Die Spielleitung bestimmt die Art des Eingreifens; passend wäre die Wirkung eines Klerikerzaubers oder Domänenzaubers.\nGreift deine Gottheit ein, kannst du dieses Merkmal 7 Tage lang nicht erneut nutzen. Andernfalls kannst du es nach einer langen Rast wieder nutzen.\nAuf Stufe 20 gelingt dein Ruf nach Eingreifen automatisch, ohne Wurf."
      },
      "source": "srd",
      "verified": false
@@ -514,7 +514,7 @@
      "n": "Destroy Undead",
      "text": {
       "en": "Starting at 5th level, when an undead fails its saving throw against your Turn Undead feature, the creature is instantly destroyed if its challenge rating is at or below a certain threshold.",
-      "de": "Jetzt bis HG 2."
+      "de": "Ab Stufe 5 wird ein Untoter, der seinen Rettungswurf gegen dein Turn Undead nicht besteht, sofort vernichtet, wenn sein Herausforderungsgrad höchstens einem bestimmten Schwellenwert entspricht."
      },
      "source": "srd",
      "verified": false
@@ -525,7 +525,7 @@
      "n": "Destroy Undead",
      "text": {
       "en": "Starting at 5th level, when an undead fails its saving throw against your Turn Undead feature, the creature is instantly destroyed if its challenge rating is at or below a certain threshold.",
-      "de": "Jetzt bis HG 3."
+      "de": "Ab Stufe 5 wird ein Untoter, der seinen Rettungswurf gegen dein Turn Undead nicht besteht, sofort vernichtet, wenn sein Herausforderungsgrad höchstens einem bestimmten Schwellenwert entspricht."
      },
      "source": "srd",
      "verified": false
@@ -536,7 +536,7 @@
      "n": "Destroy Undead",
      "text": {
       "en": "Starting at 5th level, when an undead fails its saving throw against your Turn Undead feature, the creature is instantly destroyed if its challenge rating is at or below a certain threshold.",
-      "de": "Jetzt bis HG 4."
+      "de": "Ab Stufe 5 wird ein Untoter, der seinen Rettungswurf gegen dein Turn Undead nicht besteht, sofort vernichtet, wenn sein Herausforderungsgrad höchstens einem bestimmten Schwellenwert entspricht."
      },
      "source": "srd",
      "verified": false
@@ -547,7 +547,7 @@
      "n": "Channel Divinity",
      "text": {
       "en": "Beginning at 6th level, you can use your Channel Divinity twice between rests, and beginning at 18th level, you can use it three times between rests. When you finish a short or long rest, you regain your expended uses.",
-      "de": "Jetzt dreimal pro Rast."
+      "de": "Ab Stufe 6 kannst du Channel Divinity zweimal zwischen zwei Rasten nutzen, ab Stufe 18 dreimal. Nach einer kurzen oder langen Rast erhältst du verbrauchte Anwendungen zurück."
      },
      "source": "srd",
      "verified": false
@@ -558,7 +558,7 @@
      "n": "Divine Intervention",
      "text": {
       "en": "At 20th level, your call for intervention succeeds automatically, no roll required.",
-      "de": "Gelingt jetzt automatisch."
+      "de": "Auf Stufe 20 gelingt dein Ruf nach Eingreifen automatisch, ohne Wurf."
      },
      "source": "srd",
      "verified": false
@@ -602,7 +602,7 @@
      "n": "Druidic",
      "text": {
       "en": "You know Druidic, the secret language of druids. You can speak the language and use it to leave hidden messages. You and others who know this language automatically spot such a message. Others spot the message's presence with a successful DC 15 Wisdom (Perception) check but can't decipher it without magic.",
-      "de": "Du sprichst die Geheimsprache der Druiden."
+      "de": "Du beherrschst Druidisch, die Geheimsprache der Druiden. Du kannst sie sprechen und mit ihr versteckte Botschaften hinterlassen. Du und andere, die diese Sprache kennen, bemerken solche Botschaften automatisch. Andere bemerken eine Botschaft mit einem erfolgreichen Weisheitswurf (Perception) gegen SG 15, können sie aber ohne Magie nicht entziffern."
      },
      "source": "srd",
      "verified": false
@@ -611,7 +611,7 @@
      "n": "Spellcasting",
      "text": {
       "en": "Drawing on the divine essence of nature itself, you can cast spells to shape that essence to your will.",
-      "de": "Zaubern mit WEI. Vorbereitet: WEI-Mod + Druidenstufe (mind. 1), Wechsel nach langer Rast."
+      "de": "Du schöpfst aus dem göttlichen Wesen der Natur selbst und kannst Zauber wirken, um dieses Wesen nach deinem Willen zu formen."
      },
      "source": "srd",
      "verified": false
@@ -622,7 +622,7 @@
      "n": "Wild Shape",
      "text": {
       "en": "Starting at 2nd level, you can use your action to magically assume the shape of a beast that you have seen before. You can use this feature twice. You regain expended uses when you finish a short or long rest.\nYour druid level determines the beasts you can transform into, as shown in the Beast Shapes table. At 2nd level, for example, you can transform into any beast that has a challenge rating of 1/4 or lower that doesn't have a flying or swimming speed.\nYou can stay in a beast shape for a number of hours equal to half your druid level (rounded down). You then revert to your normal form unless you expend another use of this feature. You can revert to your normal form earlier by using a bonus action on your turn. You automatically revert if you fall unconscious, drop to 0 hit points, or die.\nWhile you are transformed, the following rules apply:\n- Your game statistics are replaced by the statistics of the beast, but you retain your alignment, personality, and Intelligence, Wisdom, and Charisma scores. You also retain all of your skill and saving throw proficiencies, in addition to gaining those of the creature. If the creature has the same proficiency as you and the bonus in its stat block is higher than yours, use the creature's bonus instead of yours. If the creature has any legendary or lair actions, you can't use them.\n- When you transform, you assume the beast's hit points and Hit Dice. When you revert to your normal form, you return to the number of hit points you had before you transformed. However, if you revert as a result of dropping to 0 hit points, any excess damage carries over to your normal form. For example, if you take 10 damage in animal form and have only 1 hit point left, you revert and take 9 damage. As long as the excess damage doesn't reduce your normal form to 0 hit points, you aren't knocked unconscious.\n- You can't cast spells, and your ability to speak or take any action that requires hands is limited to the capabilities of your beast form. Transforming doesn't break your concentration on a spell you've already cast, however, or prevent you from taking actions that are part of a spell, such as call lightning, that you've already cast.\n- You retain the benefit of any features from your class, race, or other source and can use them if the new form is physically capable of doing so. However, you can't use any of your special senses, such as darkvision, unless your new form also has that sense.\n- You choose whether your equipment falls to the ground in your space, merges into your new form, or is worn by it. Worn equipment functions as normal, but the GM decides whether it is practical for the new form to wear a piece of equipment, based on the creature's shape and size. Your equipment doesn't change size or shape to match the new form, and any equipment that the new form can't wear must either fall to the ground or merge with it. Equipment that merges with the form has no effect until you leave the form.",
-      "de": "Aktion: in ein gesehenes Tier verwandeln, zweimal pro kurzer Rast. Bis HG 1/4, ohne Flug- oder Schwimmtempo. Dauer: halbe Druidenstufe in Stunden."
+      "de": "Ab Stufe 2 kannst du mit deiner Aktion auf magische Weise die Gestalt eines Tiers annehmen, das du schon einmal gesehen hast. Du kannst dieses Merkmal zweimal nutzen. Verbrauchte Anwendungen erhältst du nach einer kurzen oder langen Rast zurück.\nDeine Druidenstufe bestimmt, in welche Tiere du dich verwandeln kannst, wie in der Tabelle der Tiergestalten angegeben. Auf Stufe 2 kannst du dich zum Beispiel in jedes Tier mit einem Herausforderungsgrad von höchstens 1/4 verwandeln, das kein Flug- oder Schwimmtempo hat.\nDu kannst so viele Stunden in Tiergestalt bleiben, wie die Hälfte deiner Druidenstufe (abgerundet) angibt. Danach nimmst du wieder deine normale Gestalt an, sofern du nicht eine weitere Anwendung dieses Merkmals verbrauchst. Du kannst früher in deine normale Gestalt zurückkehren, indem du in deinem Zug eine Bonusaktion nutzt. Du kehrst automatisch zurück, wenn du bewusstlos wirst, auf 0 Trefferpunkte sinkst oder stirbst.\nWährend du verwandelt bist, gelten folgende Regeln:\n- Deine Spielwerte werden durch die des Tiers ersetzt, du behältst aber Gesinnung, Persönlichkeit sowie Intelligenz-, Weisheits- und Charismawerte. Du behältst auch alle Übungen in Fertigkeiten und Rettungswürfen und erhältst zusätzlich die der Kreatur. Hat die Kreatur dieselbe Übung wie du und ist der Bonus in ihren Spielwerten höher als deiner, verwende den Bonus der Kreatur. Legendäre Aktionen oder Hortaktionen der Kreatur kannst du nicht nutzen.\n- Bei der Verwandlung übernimmst du die Trefferpunkte und Trefferwürfel des Tiers. Kehrst du in deine normale Gestalt zurück, hast du wieder so viele Trefferpunkte wie vor der Verwandlung. Kehrst du jedoch zurück, weil du auf 0 Trefferpunkte gesunken bist, wird überschüssiger Schaden auf deine normale Gestalt übertragen. Erleidest du zum Beispiel in Tiergestalt 10 Schaden und hast nur noch 1 Trefferpunkt, kehrst du zurück und erleidest 9 Schaden. Solange der überschüssige Schaden deine normale Gestalt nicht auf 0 Trefferpunkte bringt, wirst du nicht bewusstlos.\n- Du kannst nicht zaubern, und deine Fähigkeit zu sprechen oder Aktionen auszuführen, die Hände erfordern, ist auf die Möglichkeiten deiner Tiergestalt beschränkt. Die Verwandlung unterbricht aber nicht deine Konzentration auf einen bereits gewirkten Zauber und hindert dich nicht daran, Aktionen auszuführen, die zu einem bereits gewirkten Zauber gehören, etwa Call Lightning.\n- Du behältst den Nutzen aller Merkmale aus Klasse, Volk oder anderen Quellen und kannst sie nutzen, wenn die neue Gestalt körperlich dazu in der Lage ist. Besondere Sinne wie Darkvision kannst du jedoch nur nutzen, wenn auch deine neue Gestalt diesen Sinn hat.\n- Du entscheidest, ob deine Ausrüstung in deinem Feld zu Boden fällt, mit deiner neuen Gestalt verschmilzt oder von ihr getragen wird. Getragene Ausrüstung funktioniert normal, doch die Spielleitung entscheidet anhand von Form und Größe der Kreatur, ob die neue Gestalt ein Ausrüstungsteil sinnvoll tragen kann. Deine Ausrüstung ändert Größe und Form nicht, um sich der neuen Gestalt anzupassen; Ausrüstung, die die neue Gestalt nicht tragen kann, muss entweder zu Boden fallen oder mit ihr verschmelzen. Verschmolzene Ausrüstung hat keine Wirkung, bis du die Gestalt verlässt."
      },
      "source": "srd",
      "verified": false
@@ -633,7 +633,7 @@
      "n": "Wild Shape",
      "text": {
       "en": "Starting at 2nd level, you can use your action to magically assume the shape of a beast that you have seen before. You can use this feature twice. You regain expended uses when you finish a short or long rest.\nYour druid level determines the beasts you can transform into, as shown in the Beast Shapes table. At 2nd level, for example, you can transform into any beast that has a challenge rating of 1/4 or lower that doesn't have a flying or swimming speed.\nYou can stay in a beast shape for a number of hours equal to half your druid level (rounded down). You then revert to your normal form unless you expend another use of this feature. You can revert to your normal form earlier by using a bonus action on your turn. You automatically revert if you fall unconscious, drop to 0 hit points, or die.\nWhile you are transformed, the following rules apply:\n- Your game statistics are replaced by the statistics of the beast, but you retain your alignment, personality, and Intelligence, Wisdom, and Charisma scores. You also retain all of your skill and saving throw proficiencies, in addition to gaining those of the creature. If the creature has the same proficiency as you and the bonus in its stat block is higher than yours, use the creature's bonus instead of yours. If the creature has any legendary or lair actions, you can't use them.\n- When you transform, you assume the beast's hit points and Hit Dice. When you revert to your normal form, you return to the number of hit points you had before you transformed. However, if you revert as a result of dropping to 0 hit points, any excess damage carries over to your normal form. For example, if you take 10 damage in animal form and have only 1 hit point left, you revert and take 9 damage. As long as the excess damage doesn't reduce your normal form to 0 hit points, you aren't knocked unconscious.\n- You can't cast spells, and your ability to speak or take any action that requires hands is limited to the capabilities of your beast form. Transforming doesn't break your concentration on a spell you've already cast, however, or prevent you from taking actions that are part of a spell, such as call lightning, that you've already cast.\n- You retain the benefit of any features from your class, race, or other source and can use them if the new form is physically capable of doing so. However, you can't use any of your special senses, such as darkvision, unless your new form also has that sense.\n- You choose whether your equipment falls to the ground in your space, merges into your new form, or is worn by it. Worn equipment functions as normal, but the GM decides whether it is practical for the new form to wear a piece of equipment, based on the creature's shape and size. Your equipment doesn't change size or shape to match the new form, and any equipment that the new form can't wear must either fall to the ground or merge with it. Equipment that merges with the form has no effect until you leave the form.",
-      "de": "Jetzt bis HG 1/2, ohne Flugtempo."
+      "de": "Ab Stufe 2 kannst du mit deiner Aktion auf magische Weise die Gestalt eines Tiers annehmen, das du schon einmal gesehen hast. Du kannst dieses Merkmal zweimal nutzen. Verbrauchte Anwendungen erhältst du nach einer kurzen oder langen Rast zurück.\nDeine Druidenstufe bestimmt, in welche Tiere du dich verwandeln kannst, wie in der Tabelle der Tiergestalten angegeben. Auf Stufe 2 kannst du dich zum Beispiel in jedes Tier mit einem Herausforderungsgrad von höchstens 1/4 verwandeln, das kein Flug- oder Schwimmtempo hat.\nDu kannst so viele Stunden in Tiergestalt bleiben, wie die Hälfte deiner Druidenstufe (abgerundet) angibt. Danach nimmst du wieder deine normale Gestalt an, sofern du nicht eine weitere Anwendung dieses Merkmals verbrauchst. Du kannst früher in deine normale Gestalt zurückkehren, indem du in deinem Zug eine Bonusaktion nutzt. Du kehrst automatisch zurück, wenn du bewusstlos wirst, auf 0 Trefferpunkte sinkst oder stirbst.\nWährend du verwandelt bist, gelten folgende Regeln:\n- Deine Spielwerte werden durch die des Tiers ersetzt, du behältst aber Gesinnung, Persönlichkeit sowie Intelligenz-, Weisheits- und Charismawerte. Du behältst auch alle Übungen in Fertigkeiten und Rettungswürfen und erhältst zusätzlich die der Kreatur. Hat die Kreatur dieselbe Übung wie du und ist der Bonus in ihren Spielwerten höher als deiner, verwende den Bonus der Kreatur. Legendäre Aktionen oder Hortaktionen der Kreatur kannst du nicht nutzen.\n- Bei der Verwandlung übernimmst du die Trefferpunkte und Trefferwürfel des Tiers. Kehrst du in deine normale Gestalt zurück, hast du wieder so viele Trefferpunkte wie vor der Verwandlung. Kehrst du jedoch zurück, weil du auf 0 Trefferpunkte gesunken bist, wird überschüssiger Schaden auf deine normale Gestalt übertragen. Erleidest du zum Beispiel in Tiergestalt 10 Schaden und hast nur noch 1 Trefferpunkt, kehrst du zurück und erleidest 9 Schaden. Solange der überschüssige Schaden deine normale Gestalt nicht auf 0 Trefferpunkte bringt, wirst du nicht bewusstlos.\n- Du kannst nicht zaubern, und deine Fähigkeit zu sprechen oder Aktionen auszuführen, die Hände erfordern, ist auf die Möglichkeiten deiner Tiergestalt beschränkt. Die Verwandlung unterbricht aber nicht deine Konzentration auf einen bereits gewirkten Zauber und hindert dich nicht daran, Aktionen auszuführen, die zu einem bereits gewirkten Zauber gehören, etwa Call Lightning.\n- Du behältst den Nutzen aller Merkmale aus Klasse, Volk oder anderen Quellen und kannst sie nutzen, wenn die neue Gestalt körperlich dazu in der Lage ist. Besondere Sinne wie Darkvision kannst du jedoch nur nutzen, wenn auch deine neue Gestalt diesen Sinn hat.\n- Du entscheidest, ob deine Ausrüstung in deinem Feld zu Boden fällt, mit deiner neuen Gestalt verschmilzt oder von ihr getragen wird. Getragene Ausrüstung funktioniert normal, doch die Spielleitung entscheidet anhand von Form und Größe der Kreatur, ob die neue Gestalt ein Ausrüstungsteil sinnvoll tragen kann. Deine Ausrüstung ändert Größe und Form nicht, um sich der neuen Gestalt anzupassen; Ausrüstung, die die neue Gestalt nicht tragen kann, muss entweder zu Boden fallen oder mit ihr verschmelzen. Verschmolzene Ausrüstung hat keine Wirkung, bis du die Gestalt verlässt."
      },
      "source": "srd",
      "verified": false
@@ -644,7 +644,7 @@
      "n": "Wild Shape",
      "text": {
       "en": "Starting at 2nd level, you can use your action to magically assume the shape of a beast that you have seen before. You can use this feature twice. You regain expended uses when you finish a short or long rest.\nYour druid level determines the beasts you can transform into, as shown in the Beast Shapes table. At 2nd level, for example, you can transform into any beast that has a challenge rating of 1/4 or lower that doesn't have a flying or swimming speed.\nYou can stay in a beast shape for a number of hours equal to half your druid level (rounded down). You then revert to your normal form unless you expend another use of this feature. You can revert to your normal form earlier by using a bonus action on your turn. You automatically revert if you fall unconscious, drop to 0 hit points, or die.\nWhile you are transformed, the following rules apply:\n- Your game statistics are replaced by the statistics of the beast, but you retain your alignment, personality, and Intelligence, Wisdom, and Charisma scores. You also retain all of your skill and saving throw proficiencies, in addition to gaining those of the creature. If the creature has the same proficiency as you and the bonus in its stat block is higher than yours, use the creature's bonus instead of yours. If the creature has any legendary or lair actions, you can't use them.\n- When you transform, you assume the beast's hit points and Hit Dice. When you revert to your normal form, you return to the number of hit points you had before you transformed. However, if you revert as a result of dropping to 0 hit points, any excess damage carries over to your normal form. For example, if you take 10 damage in animal form and have only 1 hit point left, you revert and take 9 damage. As long as the excess damage doesn't reduce your normal form to 0 hit points, you aren't knocked unconscious.\n- You can't cast spells, and your ability to speak or take any action that requires hands is limited to the capabilities of your beast form. Transforming doesn't break your concentration on a spell you've already cast, however, or prevent you from taking actions that are part of a spell, such as call lightning, that you've already cast.\n- You retain the benefit of any features from your class, race, or other source and can use them if the new form is physically capable of doing so. However, you can't use any of your special senses, such as darkvision, unless your new form also has that sense.\n- You choose whether your equipment falls to the ground in your space, merges into your new form, or is worn by it. Worn equipment functions as normal, but the GM decides whether it is practical for the new form to wear a piece of equipment, based on the creature's shape and size. Your equipment doesn't change size or shape to match the new form, and any equipment that the new form can't wear must either fall to the ground or merge with it. Equipment that merges with the form has no effect until you leave the form.",
-      "de": "Jetzt bis HG 1, auch mit Flugtempo."
+      "de": "Ab Stufe 2 kannst du mit deiner Aktion auf magische Weise die Gestalt eines Tiers annehmen, das du schon einmal gesehen hast. Du kannst dieses Merkmal zweimal nutzen. Verbrauchte Anwendungen erhältst du nach einer kurzen oder langen Rast zurück.\nDeine Druidenstufe bestimmt, in welche Tiere du dich verwandeln kannst, wie in der Tabelle der Tiergestalten angegeben. Auf Stufe 2 kannst du dich zum Beispiel in jedes Tier mit einem Herausforderungsgrad von höchstens 1/4 verwandeln, das kein Flug- oder Schwimmtempo hat.\nDu kannst so viele Stunden in Tiergestalt bleiben, wie die Hälfte deiner Druidenstufe (abgerundet) angibt. Danach nimmst du wieder deine normale Gestalt an, sofern du nicht eine weitere Anwendung dieses Merkmals verbrauchst. Du kannst früher in deine normale Gestalt zurückkehren, indem du in deinem Zug eine Bonusaktion nutzt. Du kehrst automatisch zurück, wenn du bewusstlos wirst, auf 0 Trefferpunkte sinkst oder stirbst.\nWährend du verwandelt bist, gelten folgende Regeln:\n- Deine Spielwerte werden durch die des Tiers ersetzt, du behältst aber Gesinnung, Persönlichkeit sowie Intelligenz-, Weisheits- und Charismawerte. Du behältst auch alle Übungen in Fertigkeiten und Rettungswürfen und erhältst zusätzlich die der Kreatur. Hat die Kreatur dieselbe Übung wie du und ist der Bonus in ihren Spielwerten höher als deiner, verwende den Bonus der Kreatur. Legendäre Aktionen oder Hortaktionen der Kreatur kannst du nicht nutzen.\n- Bei der Verwandlung übernimmst du die Trefferpunkte und Trefferwürfel des Tiers. Kehrst du in deine normale Gestalt zurück, hast du wieder so viele Trefferpunkte wie vor der Verwandlung. Kehrst du jedoch zurück, weil du auf 0 Trefferpunkte gesunken bist, wird überschüssiger Schaden auf deine normale Gestalt übertragen. Erleidest du zum Beispiel in Tiergestalt 10 Schaden und hast nur noch 1 Trefferpunkt, kehrst du zurück und erleidest 9 Schaden. Solange der überschüssige Schaden deine normale Gestalt nicht auf 0 Trefferpunkte bringt, wirst du nicht bewusstlos.\n- Du kannst nicht zaubern, und deine Fähigkeit zu sprechen oder Aktionen auszuführen, die Hände erfordern, ist auf die Möglichkeiten deiner Tiergestalt beschränkt. Die Verwandlung unterbricht aber nicht deine Konzentration auf einen bereits gewirkten Zauber und hindert dich nicht daran, Aktionen auszuführen, die zu einem bereits gewirkten Zauber gehören, etwa Call Lightning.\n- Du behältst den Nutzen aller Merkmale aus Klasse, Volk oder anderen Quellen und kannst sie nutzen, wenn die neue Gestalt körperlich dazu in der Lage ist. Besondere Sinne wie Darkvision kannst du jedoch nur nutzen, wenn auch deine neue Gestalt diesen Sinn hat.\n- Du entscheidest, ob deine Ausrüstung in deinem Feld zu Boden fällt, mit deiner neuen Gestalt verschmilzt oder von ihr getragen wird. Getragene Ausrüstung funktioniert normal, doch die Spielleitung entscheidet anhand von Form und Größe der Kreatur, ob die neue Gestalt ein Ausrüstungsteil sinnvoll tragen kann. Deine Ausrüstung ändert Größe und Form nicht, um sich der neuen Gestalt anzupassen; Ausrüstung, die die neue Gestalt nicht tragen kann, muss entweder zu Boden fallen oder mit ihr verschmelzen. Verschmolzene Ausrüstung hat keine Wirkung, bis du die Gestalt verlässt."
      },
      "source": "srd",
      "verified": false
@@ -655,7 +655,7 @@
      "n": "Timeless Body",
      "text": {
       "en": "Starting at 18th level, the primal magic that you wield causes you to age more slowly. For every 10 years that pass, your body ages only 1 year.",
-      "de": "Du alterst nur noch ein Jahr pro zehn Jahre."
+      "de": "Ab Stufe 18 lässt dich die urtümliche Magie, die du führst, langsamer altern. Für je 10 Jahre, die vergehen, altert dein Körper nur um 1 Jahr."
      },
      "source": "srd",
      "verified": false
@@ -664,7 +664,7 @@
      "n": "Beast Spells",
      "text": {
       "en": "Beginning at 18th level, you can cast many of your druid spells in any shape you assume using Wild Shape. You can perform the somatic and verbal components of a druid spell while in a beast shape, but you aren't able to provide material components.",
-      "de": "Du kannst in Tiergestalt viele deiner Zauber wirken."
+      "de": "Ab Stufe 18 kannst du viele deiner Druidenzauber in jeder Gestalt wirken, die du mit Wild Shape annimmst. Du kannst in Tiergestalt die Gesten- und verbalen Komponenten eines Druidenzaubers ausführen, aber keine Materialkomponenten bereitstellen."
      },
      "source": "srd",
      "verified": false
@@ -675,7 +675,7 @@
      "n": "Archdruid",
      "text": {
       "en": "At 20th level, you can use your Wild Shape an unlimited number of times.\nAdditionally, you can ignore the verbal and somatic components of your druid spells, as well as any material components that lack a cost and aren't consumed by a spell. You gain this benefit in both your normal shape and your beast shape from Wild Shape.",
-      "de": "Wild Shape beliebig oft; Verbal- und Gestenkomponenten deiner Druidenzauber entfallen."
+      "de": "Auf Stufe 20 kannst du Wild Shape beliebig oft nutzen.\nAußerdem kannst du die verbalen und Gestenkomponenten deiner Druidenzauber ignorieren, ebenso Materialkomponenten, die keinen Preis haben und vom Zauber nicht verbraucht werden. Diesen Vorteil hast du sowohl in deiner normalen Gestalt als auch in deiner Tiergestalt durch Wild Shape."
      },
      "source": "srd",
      "verified": false
@@ -722,7 +722,7 @@
      "n": "Fighting Style",
      "text": {
       "en": "You adopt a particular style of fighting as your specialty. Choose one of the following options. You can't take a Fighting Style option more than once, even if you later get to choose again.",
-      "de": "Wähle einen Kampfstil: Archery, Defense, Dueling, Great Weapon Fighting, Protection oder Two-Weapon Fighting."
+      "de": "Du wählst einen bestimmten Kampfstil als deine Spezialität. Wähle eine der folgenden Optionen. Du kannst keinen Kampfstil mehr als einmal wählen, auch wenn du später erneut wählen darfst."
      },
      "source": "srd",
      "verified": false
@@ -731,7 +731,7 @@
      "n": "Second Wind",
      "text": {
       "en": "You have a limited well of stamina that you can draw on to protect yourself from harm. On your turn, you can use a bonus action to regain hit points equal to 1d10 + your fighter level. Once you use this feature, you must finish a short or long rest before you can use it again.",
-      "de": "Bonusaktion: 1W10 + Kämpferstufe TP heilen, einmal pro kurzer Rast."
+      "de": "Du hast eine begrenzte Ausdauerreserve, aus der du schöpfen kannst, um dich vor Schaden zu schützen. In deinem Zug kannst du als Bonusaktion Trefferpunkte in Höhe von 1W10 + deiner Kämpferstufe zurückgewinnen. Danach musst du eine kurze oder lange Rast beenden, bevor du dieses Merkmal erneut nutzen kannst."
      },
      "source": "srd",
      "verified": false
@@ -742,7 +742,7 @@
      "n": "Action Surge",
      "text": {
       "en": "Starting at 2nd level, you can push yourself beyond your normal limits for a moment. On your turn, you can take one additional action on top of your regular action and a possible bonus action.\nOnce you use this feature, you must finish a short or long rest before you can use it again. Starting at 17th level, you can use it twice before a rest, but only once on the same turn.",
-      "de": "Eine zusätzliche Aktion in deinem Zug, einmal pro kurzer Rast."
+      "de": "Ab Stufe 2 kannst du für einen Moment über deine normalen Grenzen hinausgehen. In deinem Zug kannst du zusätzlich zu deiner normalen Aktion und einer möglichen Bonusaktion eine weitere Aktion ausführen.\nDanach musst du eine kurze oder lange Rast beenden, bevor du dieses Merkmal erneut nutzen kannst. Ab Stufe 17 kannst du es vor einer Rast zweimal nutzen, aber nur einmal im selben Zug."
      },
      "source": "srd",
      "verified": false
@@ -753,7 +753,7 @@
      "n": "Extra Attack",
      "text": {
       "en": "Beginning at 5th level, you can attack twice, instead of once, whenever you take the Attack action on your turn. The number of attacks increases to three when you reach 11th level in this class and to four when you reach 20th level in this class.",
-      "de": "Zwei Angriffe, wenn du die Angriffsaktion nutzt."
+      "de": "Ab Stufe 5 kannst du zweimal statt einmal angreifen, wenn du in deinem Zug die Aktion Angriff ausführst. Die Zahl der Angriffe steigt auf drei, wenn du Stufe 11 dieser Klasse erreichst, und auf vier ab Stufe 20 dieser Klasse."
      },
      "source": "srd",
      "verified": false
@@ -764,7 +764,7 @@
      "n": "Indomitable",
      "text": {
       "en": "Beginning at 9th level, you can reroll a saving throw that you fail. If you do so, you must use the new roll, and you can't use this feature again until you finish a long rest. You can use this feature twice between long rests starting at 13th level and three times between long rests starting at 17th level.",
-      "de": "Einen misslungenen Rettungswurf wiederholen, einmal pro langer Rast."
+      "de": "Ab Stufe 9 kannst du einen misslungenen Rettungswurf wiederholen. Dann musst du das neue Ergebnis verwenden und kannst dieses Merkmal erst nach einer langen Rast erneut nutzen. Ab Stufe 13 kannst du es zweimal zwischen zwei langen Rasten nutzen, ab Stufe 17 dreimal."
      },
      "source": "srd",
      "verified": false
@@ -775,7 +775,7 @@
      "n": "Extra Attack",
      "text": {
       "en": "Beginning at 5th level, you can attack twice, instead of once, whenever you take the Attack action on your turn. The number of attacks increases to three when you reach 11th level in this class and to four when you reach 20th level in this class.",
-      "de": "Jetzt drei Angriffe pro Angriffsaktion."
+      "de": "Ab Stufe 5 kannst du zweimal statt einmal angreifen, wenn du in deinem Zug die Aktion Angriff ausführst. Die Zahl der Angriffe steigt auf drei, wenn du Stufe 11 dieser Klasse erreichst, und auf vier ab Stufe 20 dieser Klasse."
      },
      "source": "srd",
      "verified": false
@@ -786,7 +786,7 @@
      "n": "Indomitable",
      "text": {
       "en": "Beginning at 9th level, you can reroll a saving throw that you fail. If you do so, you must use the new roll, and you can't use this feature again until you finish a long rest. You can use this feature twice between long rests starting at 13th level and three times between long rests starting at 17th level.",
-      "de": "Jetzt zweimal pro langer Rast."
+      "de": "Ab Stufe 9 kannst du einen misslungenen Rettungswurf wiederholen. Dann musst du das neue Ergebnis verwenden und kannst dieses Merkmal erst nach einer langen Rast erneut nutzen. Ab Stufe 13 kannst du es zweimal zwischen zwei langen Rasten nutzen, ab Stufe 17 dreimal."
      },
      "source": "srd",
      "verified": false
@@ -797,7 +797,7 @@
      "n": "Action Surge",
      "text": {
       "en": "Starting at 2nd level, you can push yourself beyond your normal limits for a moment. On your turn, you can take one additional action on top of your regular action and a possible bonus action.\nOnce you use this feature, you must finish a short or long rest before you can use it again. Starting at 17th level, you can use it twice before a rest, but only once on the same turn.",
-      "de": "Jetzt zweimal pro Rast, aber nur einmal pro Zug."
+      "de": "Ab Stufe 2 kannst du für einen Moment über deine normalen Grenzen hinausgehen. In deinem Zug kannst du zusätzlich zu deiner normalen Aktion und einer möglichen Bonusaktion eine weitere Aktion ausführen.\nDanach musst du eine kurze oder lange Rast beenden, bevor du dieses Merkmal erneut nutzen kannst. Ab Stufe 17 kannst du es vor einer Rast zweimal nutzen, aber nur einmal im selben Zug."
      },
      "source": "srd",
      "verified": false
@@ -806,7 +806,7 @@
      "n": "Indomitable",
      "text": {
       "en": "Beginning at 9th level, you can reroll a saving throw that you fail. If you do so, you must use the new roll, and you can't use this feature again until you finish a long rest. You can use this feature twice between long rests starting at 13th level and three times between long rests starting at 17th level.",
-      "de": "Jetzt dreimal pro langer Rast."
+      "de": "Ab Stufe 9 kannst du einen misslungenen Rettungswurf wiederholen. Dann musst du das neue Ergebnis verwenden und kannst dieses Merkmal erst nach einer langen Rast erneut nutzen. Ab Stufe 13 kannst du es zweimal zwischen zwei langen Rasten nutzen, ab Stufe 17 dreimal."
      },
      "source": "srd",
      "verified": false
@@ -817,7 +817,7 @@
      "n": "Extra Attack",
      "text": {
       "en": "Beginning at 5th level, you can attack twice, instead of once, whenever you take the Attack action on your turn. The number of attacks increases to three when you reach 11th level in this class and to four when you reach 20th level in this class.",
-      "de": "Jetzt vier Angriffe pro Angriffsaktion."
+      "de": "Ab Stufe 5 kannst du zweimal statt einmal angreifen, wenn du in deinem Zug die Aktion Angriff ausführst. Die Zahl der Angriffe steigt auf drei, wenn du Stufe 11 dieser Klasse erreichst, und auf vier ab Stufe 20 dieser Klasse."
      },
      "source": "srd",
      "verified": false
@@ -861,7 +861,7 @@
      "n": "Unarmored Defense",
      "text": {
       "en": "Beginning at 1st level, while you are wearing no armor and not wielding a shield, your AC equals 10 + your Dexterity modifier + your Wisdom modifier.",
-      "de": "Ohne Rüstung und Schild: RK = 10 + GES + WEI."
+      "de": "Ab Stufe 1 beträgt deine RK 10 + dein Geschicklichkeitsmodifikator + dein Weisheitsmodifikator, solange du keine Rüstung trägst und keinen Schild führst."
      },
      "source": "srd",
      "verified": false
@@ -870,7 +870,7 @@
      "n": "Martial Arts",
      "text": {
       "en": "At 1st level, your practice of martial arts gives you mastery of combat styles that use unarmed strikes and monk weapons, which are shortswords and any simple melee weapons that don't have the two- handed or heavy property.\nYou gain the following benefits while you are unarmed or wielding only monk weapons and you aren't wearing armor or wielding a shield:\n- You can use Dexterity instead of Strength for the attack and damage rolls of your unarmed strikes and monk weapons.\n- You can roll a d4 in place of the normal damage of your unarmed strike or monk weapon. This die changes as you gain monk levels, as shown in the Martial Arts column of Table: The Monk.\n- When you use the Attack action with an unarmed strike or a monk weapon on your turn, you can make one unarmed strike as a bonus action. For example, if you take the Attack action and attack with a quarterstaff, you can also make an unarmed strike as a bonus action, assuming you haven't already taken a bonus action this turn.\nCertain monasteries use specialized forms of the monk weapons. For example, you might use a club that is two lengths of wood connected by a short chain (called a nunchaku) or a sickle with a shorter, straighter blade (called a kama). Whatever name you use for a monk weapon, you can use the game statistics provided for the weapon.",
-      "de": "Waffenlos und mit Mönchswaffen: GES statt STR, Kampfwürfel W4 statt Waffenschaden, nach der Angriffsaktion ein waffenloser Schlag als Bonusaktion."
+      "de": "Auf Stufe 1 gibt dir dein Kampfkunsttraining die Beherrschung von Kampfstilen mit waffenlosen Schlägen und Mönchswaffen. Mönchswaffen sind Kurzschwerter und alle einfachen Nahkampfwaffen ohne die Eigenschaften zweihändig oder schwer.\nDu erhältst folgende Vorteile, solange du waffenlos bist oder nur Mönchswaffen führst und weder Rüstung trägst noch einen Schild führst:\n- Du kannst für Angriffs- und Schadenswürfe deiner waffenlosen Schläge und Mönchswaffen Geschicklichkeit statt Stärke verwenden.\n- Du kannst statt des normalen Schadens deines waffenlosen Schlags oder deiner Mönchswaffe einen W4 würfeln. Dieser Würfel ändert sich mit deiner Mönchsstufe, wie in der Spalte „Kampfkunst“ der Mönchstabelle angegeben.\n- Nutzt du in deinem Zug die Aktion Angriff mit einem waffenlosen Schlag oder einer Mönchswaffe, kannst du als Bonusaktion einen waffenlosen Schlag ausführen. Greifst du zum Beispiel mit der Aktion Angriff mit einem Kampfstab an, kannst du außerdem als Bonusaktion einen waffenlosen Schlag ausführen, sofern du in diesem Zug noch keine Bonusaktion genutzt hast.\nManche Klöster verwenden besondere Formen der Mönchswaffen. Du könntest zum Beispiel eine Keule aus zwei Holzstücken nutzen, die mit einer kurzen Kette verbunden sind (Nunchaku), oder eine Sichel mit kürzerer, geraderer Klinge (Kama). Wie auch immer du eine Mönchswaffe nennst, du kannst die angegebenen Spielwerte der Waffe verwenden."
      },
      "source": "srd",
      "verified": false
@@ -881,7 +881,7 @@
      "n": "Ki",
      "text": {
       "en": "Starting at 2nd level, your training allows you to harness the mystic energy of ki. Your access to this energy is represented by a number of ki points. Your monk level determines the number of points you have, as shown in the Ki Points column of Table: The Monk.\nYou can spend these points to fuel various ki features. You start knowing three such features: Flurry of Blows, Patient Defense, and Step of the Wind. You learn more ki features as you gain levels in this class.\nWhen you spend a ki point, it is unavailable until you finish a short or long rest, at the end of which you draw all of your expended ki back into yourself. You must spend at least 30 minutes of the rest meditating to regain your ki points.\nSome of your ki features require your target to make a saving throw to resist the feature's effects. The saving throw DC is calculated as follows:\nKi save DC = 8 + your proficiency bonus + your Wisdom modifier",
-      "de": "Ki-Punkte = Mönchsstufe, zurück nach kurzer Rast. Flurry of Blows, Patient Defense und Step of the Wind kosten je 1 Ki."
+      "de": "Ab Stufe 2 erlaubt dir dein Training, die mystische Energie Ki zu nutzen. Dein Zugang zu dieser Energie wird durch eine Anzahl Ki-Punkte dargestellt. Deine Mönchsstufe bestimmt, wie viele Punkte du hast, wie in der Spalte „Ki-Punkte“ der Mönchstabelle angegeben.\nDu kannst diese Punkte für verschiedene Ki-Merkmale ausgeben. Zu Beginn kennst du drei: Flurry of Blows, Patient Defense und Step of the Wind. Weitere Ki-Merkmale lernst du mit steigender Stufe dieser Klasse.\nEin ausgegebener Ki-Punkt steht dir erst nach einer kurzen oder langen Rast wieder zur Verfügung; an ihrem Ende ziehst du alles verbrauchte Ki wieder in dich zurück. Du musst mindestens 30 Minuten der Rast meditieren, um deine Ki-Punkte zurückzugewinnen.\nManche Ki-Merkmale verlangen vom Ziel einen Rettungswurf gegen ihre Wirkung. Der SG berechnet sich so:\nKi-Rettungswurf-SG = 8 + dein Übungsbonus + dein Weisheitsmodifikator"
      },
      "source": "srd",
      "verified": false
@@ -890,7 +890,7 @@
      "n": "Unarmored Movement",
      "text": {
       "en": "Starting at 2nd level, your speed increases by 10 feet while you are not wearing armor or wielding a shield. This bonus increases when you reach certain monk levels, as shown in Table: The Monk.\nAt 9th level, you gain the ability to move along vertical surfaces and across liquids on your turn without falling during the move.",
-      "de": "+3 m Tempo ohne Rüstung und Schild."
+      "de": "Ab Stufe 2 steigt dein Tempo um 3 m, solange du keine Rüstung trägst und keinen Schild führst. Dieser Bonus steigt auf bestimmten Mönchsstufen, wie in der Mönchstabelle angegeben.\nAuf Stufe 9 erhältst du die Fähigkeit, dich in deinem Zug an senkrechten Flächen und über Flüssigkeiten zu bewegen, ohne während der Bewegung zu fallen."
      },
      "source": "srd",
      "verified": false
@@ -901,7 +901,7 @@
      "n": "Deflect Missiles",
      "text": {
       "en": "Starting at 3rd level, you can use your reaction to deflect or catch the missile when you are hit by a ranged weapon attack. When you do so, the damage you take from the attack is reduced by 1d10 + your Dexterity modifier + your monk level.\nIf you reduce the damage to 0, you can catch the missile if it is small enough for you to hold in one hand and you have at least one hand free. If you catch a missile in this way, you can spend 1 ki point to make a ranged attack with the weapon or piece of ammunition you just caught, as part of the same reaction. You make this attack with proficiency, regardless of your weapon proficiencies, and the missile counts as a monk weapon for the attack, which has a normal range of 20 feet and a long range of 60 feet.",
-      "de": "Reaktion: Fernkampfschaden um 1W10 + GES + Mönchsstufe senken. Bei 0 Schaden fangen und für 1 Ki zurückwerfen."
+      "de": "Ab Stufe 3 kannst du mit deiner Reaktion ein Geschoss ablenken oder fangen, wenn dich ein Fernkampfwaffenangriff trifft. Dann sinkt der Schaden des Angriffs um 1W10 + deinen Geschicklichkeitsmodifikator + deine Mönchsstufe.\nSenkst du den Schaden auf 0, kannst du das Geschoss fangen, sofern es klein genug ist, um es in einer Hand zu halten, und du mindestens eine Hand frei hast. Fängst du so ein Geschoss, kannst du als Teil derselben Reaktion 1 Ki-Punkt ausgeben, um mit der gefangenen Waffe oder Munition einen Fernkampfangriff auszuführen. Du greifst dabei unabhängig von deinen Waffenübungen mit Übung an, und das Geschoss gilt für diesen Angriff als Mönchswaffe mit einer normalen Reichweite von 6 m und einer großen Reichweite von 18 m."
      },
      "source": "srd",
      "verified": false
@@ -912,7 +912,7 @@
      "n": "Slow Fall",
      "text": {
       "en": "Beginning at 4th level, you can use your reaction when you fall to reduce any falling damage you take by an amount equal to five times your monk level.",
-      "de": "Reaktion: Fallschaden um 5 × Mönchsstufe senken."
+      "de": "Ab Stufe 4 kannst du beim Fallen deine Reaktion nutzen, um erlittenen Fallschaden um das Fünffache deiner Mönchsstufe zu verringern."
      },
      "source": "srd",
      "verified": false
@@ -923,7 +923,7 @@
      "n": "Extra Attack",
      "text": {
       "en": "Beginning at 5th level, you can attack twice, instead of once, whenever you take the Attack action on your turn.",
-      "de": "Zwei Angriffe, wenn du die Angriffsaktion nutzt."
+      "de": "Ab Stufe 5 kannst du zweimal statt einmal angreifen, wenn du in deinem Zug die Aktion Angriff ausführst."
      },
      "source": "srd",
      "verified": false
@@ -932,7 +932,7 @@
      "n": "Stunning Strike",
      "text": {
       "en": "Starting at 5th level, you can interfere with the flow of ki in an opponent's body. When you hit another creature with a melee weapon attack, you can spend 1 ki point to attempt a stunning strike. The target must succeed on a Constitution saving throw or be stunned until the end of your next turn.",
-      "de": "Nach einem Nahkampftreffer 1 Ki: Ziel macht KON-Rettungswurf oder ist bis Ende deines nächsten Zuges betäubt."
+      "de": "Ab Stufe 5 kannst du den Ki-Fluss im Körper eines Gegners stören. Triffst du eine andere Kreatur mit einem Nahkampfwaffenangriff, kannst du 1 Ki-Punkt ausgeben, um einen betäubenden Schlag zu versuchen. Das Ziel muss einen Konstitutionsrettungswurf bestehen, sonst ist es bis zum Ende deines nächsten Zuges Stunned."
      },
      "source": "srd",
      "verified": false
@@ -941,7 +941,7 @@
      "n": "Martial Arts",
      "text": {
       "en": "Your Martial Arts die becomes a d6.",
-      "de": "Kampfwürfel wird zum W6."
+      "de": "Dein Kampfkunstwürfel wird zum W6."
      },
      "source": "summary",
      "verified": false
@@ -952,7 +952,7 @@
      "n": "Ki-Empowered Strikes",
      "text": {
       "en": "Your unarmed strikes count as magical.",
-      "de": "Waffenlose Schläge gelten als magisch."
+      "de": "Deine waffenlosen Schläge gelten als magisch."
      },
      "source": "summary",
      "verified": false
@@ -961,7 +961,7 @@
      "n": "Unarmored Movement",
      "text": {
       "en": "Speed bonus is now +15 feet.",
-      "de": "Jetzt +4,5 m."
+      "de": "Der Tempobonus beträgt jetzt +4,5 m."
      },
      "source": "summary",
      "verified": false
@@ -972,7 +972,7 @@
      "n": "Evasion",
      "text": {
       "en": "At 7th level, your instinctive agility lets you dodge out of the way of certain area effects, such as a blue dragon's lightning breath or a fireball spell. When you are subjected to an effect that allows you to make a Dexterity saving throw to take only half damage, you instead take no damage if you succeed on the saving throw, and only half damage if you fail.",
-      "de": "Bei GES-Rettungswürfen für halben Schaden: Erfolg = kein Schaden, Misserfolg = halber Schaden."
+      "de": "Ab Stufe 7 kannst du dank deiner instinktiven Wendigkeit bestimmten Flächeneffekten ausweichen, etwa dem Blitzodem eines blauen Drachen oder dem Zauber Fireball. Bist du einem Effekt ausgesetzt, bei dem du mit einem Geschicklichkeitsrettungswurf nur halben Schaden erleidest, erleidest du stattdessen bei Erfolg keinen Schaden und bei Misserfolg nur halben Schaden."
      },
      "source": "srd",
      "verified": false
@@ -981,7 +981,7 @@
      "n": "Stillness of Mind",
      "text": {
       "en": "Starting at 7th level, you can use your action to end one effect on yourself that is causing you to be charmed or frightened.",
-      "de": "Aktion: Bezauberung oder Furcht bei dir beenden."
+      "de": "Ab Stufe 7 kannst du mit deiner Aktion einen Effekt auf dir beenden, der dich Charmed oder Frightened macht."
      },
      "source": "srd",
      "verified": false
@@ -992,7 +992,7 @@
      "n": "Unarmored Movement",
      "text": {
       "en": "Starting at 2nd level, your speed increases by 10 feet while you are not wearing armor or wielding a shield. This bonus increases when you reach certain monk levels, as shown in Table: The Monk.\nAt 9th level, you gain the ability to move along vertical surfaces and across liquids on your turn without falling during the move.",
-      "de": "Senkrechte Flächen und Wasser in deinem Zug überqueren."
+      "de": "Ab Stufe 2 steigt dein Tempo um 3 m, solange du keine Rüstung trägst und keinen Schild führst. Dieser Bonus steigt auf bestimmten Mönchsstufen, wie in der Mönchstabelle angegeben.\nAuf Stufe 9 erhältst du die Fähigkeit, dich in deinem Zug an senkrechten Flächen und über Flüssigkeiten zu bewegen, ohne während der Bewegung zu fallen."
      },
      "source": "srd",
      "verified": false
@@ -1003,7 +1003,7 @@
      "n": "Purity of Body",
      "text": {
       "en": "At 10th level, your mastery of the ki flowing through you makes you immune to disease and poison.",
-      "de": "Immun gegen Krankheiten und Gift."
+      "de": "Auf Stufe 10 macht dich deine Beherrschung des Ki, das durch dich fließt, immun gegen Krankheit und Gift."
      },
      "source": "srd",
      "verified": false
@@ -1012,7 +1012,7 @@
      "n": "Unarmored Movement",
      "text": {
       "en": "Speed bonus is now +20 feet.",
-      "de": "Jetzt +6 m."
+      "de": "Der Tempobonus beträgt jetzt +6 m."
      },
      "source": "summary",
      "verified": false
@@ -1023,7 +1023,7 @@
      "n": "Martial Arts",
      "text": {
       "en": "Your Martial Arts die becomes a d8.",
-      "de": "Kampfwürfel wird zum W8."
+      "de": "Dein Kampfkunstwürfel wird zum W8."
      },
      "source": "summary",
      "verified": false
@@ -1034,7 +1034,7 @@
      "n": "Tongue of the Sun and Moon",
      "text": {
       "en": "Starting at 13th level, you learn to touch the ki of other minds so that you understand all spoken languages. Moreover, any creature that can understand a language can understand what you say.",
-      "de": "Du verstehst alle gesprochenen Sprachen, und jeder mit einer Sprache versteht dich."
+      "de": "Ab Stufe 13 lernst du, das Ki anderer Geister zu berühren, sodass du alle gesprochenen Sprachen verstehst. Außerdem versteht jede Kreatur, die eine Sprache versteht, was du sagst."
      },
      "source": "srd",
      "verified": false
@@ -1045,7 +1045,7 @@
      "n": "Diamond Soul",
      "text": {
       "en": "Beginning at 14th level, your mastery of ki grants you proficiency in all saving throws.\nAdditionally, whenever you make a saving throw and fail, you can spend 1 ki point to reroll it and take the second result.",
-      "de": "Übung in allen Rettungswürfen; 1 Ki für die Wiederholung eines misslungenen Rettungswurfs."
+      "de": "Ab Stufe 14 gewährt dir deine Beherrschung des Ki Übung in allen Rettungswürfen.\nAußerdem kannst du, wenn dir ein Rettungswurf misslingt, 1 Ki-Punkt ausgeben, um ihn zu wiederholen, und musst das zweite Ergebnis nehmen."
      },
      "source": "srd",
      "verified": false
@@ -1054,7 +1054,7 @@
      "n": "Unarmored Movement",
      "text": {
       "en": "Speed bonus is now +25 feet.",
-      "de": "Jetzt +7,5 m."
+      "de": "Der Tempobonus beträgt jetzt +7,5 m."
      },
      "source": "summary",
      "verified": false
@@ -1065,7 +1065,7 @@
      "n": "Timeless Body",
      "text": {
       "en": "At 15th level, your ki sustains you so that you suffer none of the frailty of old age, and you can't be aged magically. You can still die of old age, however. In addition, you no longer need food or water.",
-      "de": "Keine Altersschwäche, kein Essen und Trinken nötig."
+      "de": "Auf Stufe 15 erhält dich dein Ki so, dass du keine Gebrechen des Alters erleidest und nicht magisch gealtert werden kannst. An Altersschwäche sterben kannst du trotzdem. Außerdem brauchst du weder Nahrung noch Wasser."
      },
      "source": "srd",
      "verified": false
@@ -1076,7 +1076,7 @@
      "n": "Martial Arts",
      "text": {
       "en": "Your Martial Arts die becomes a d10.",
-      "de": "Kampfwürfel wird zum W10."
+      "de": "Dein Kampfkunstwürfel wird zum W10."
      },
      "source": "summary",
      "verified": false
@@ -1087,7 +1087,7 @@
      "n": "Empty Body",
      "text": {
       "en": "Beginning at 18th level, you can use your action to spend 4 ki points to become invisible for 1 minute. During that time, you also have resistance to all damage but force damage.\nAdditionally, you can spend 8 ki points to cast the astral projection spell, without needing material components. When you do so, you can't take any other creatures with you.",
-      "de": "4 Ki: 1 Min unsichtbar und resistent gegen allen Schaden außer Kraftschaden. 8 Ki: Astral Projection ohne Material."
+      "de": "Ab Stufe 18 kannst du mit deiner Aktion 4 Ki-Punkte ausgeben, um 1 Minute lang unsichtbar zu werden. Während dieser Zeit hast du außerdem Resistenz gegen allen Schaden außer Energieschaden.\nAußerdem kannst du 8 Ki-Punkte ausgeben, um den Zauber Astral Projection ohne Materialkomponenten zu wirken. Dabei kannst du keine anderen Kreaturen mitnehmen."
      },
      "source": "srd",
      "verified": false
@@ -1096,7 +1096,7 @@
      "n": "Unarmored Movement",
      "text": {
       "en": "Speed bonus is now +30 feet.",
-      "de": "Jetzt +9 m."
+      "de": "Der Tempobonus beträgt jetzt +9 m."
      },
      "source": "summary",
      "verified": false
@@ -1107,7 +1107,7 @@
      "n": "Perfect Self",
      "text": {
       "en": "At 20th level, when you roll for initiative and have no ki points remaining, you regain 4 ki points.",
-      "de": "Hast du beim Initiativewurf kein Ki mehr, erhältst du 4 Ki zurück."
+      "de": "Auf Stufe 20 erhältst du 4 Ki-Punkte zurück, wenn du Initiative würfelst und keine Ki-Punkte mehr übrig hast."
      },
      "source": "srd",
      "verified": false
@@ -1152,7 +1152,7 @@
      "n": "Divine Sense",
      "text": {
       "en": "The presence of strong evil registers on your senses like a noxious odor, and powerful good rings like heavenly music in your ears. As an action, you can open your awareness to detect such forces. Until the end of your next turn, you know the location of any celestial, fiend, or undead within 60 feet of you that is not behind total cover. You know the type (celestial, fiend, or undead) of any being whose presence you sense, but not its identity. Within the same radius, you also detect the presence of any place or object that has been consecrated or desecrated, as with the hallow spell.\nYou can use this feature a number of times equal to 1 + your Charisma modifier. When you finish a long rest, you regain all expended uses.",
-      "de": "Aktion: Bis Ende deines nächsten Zuges Himmlische, Unholde und Untote in 18 m spüren. 1 + CHA-Mod pro langer Rast."
+      "de": "Die Gegenwart starken Bösen nimmst du wie einen üblen Geruch wahr, und mächtiges Gutes klingt dir wie himmlische Musik in den Ohren. Als Aktion kannst du deine Wahrnehmung öffnen, um solche Kräfte zu entdecken. Bis zum Ende deines nächsten Zuges kennst du den Ort jedes Himmlischen, Unholds oder Untoten innerhalb von 18 m, der nicht hinter vollständiger Deckung ist. Du kennst die Art (Himmlischer, Unhold oder Untoter) jedes Wesens, dessen Gegenwart du spürst, aber nicht seine Identität. Im selben Radius bemerkst du auch jeden Ort und Gegenstand, der geweiht oder entweiht wurde, wie beim Zauber Hallow.\nDu kannst dieses Merkmal 1 + Charismamodifikator Mal nutzen. Nach einer langen Rast erhältst du alle verbrauchten Anwendungen zurück."
      },
      "source": "srd",
      "verified": false
@@ -1161,7 +1161,7 @@
      "n": "Lay on Hands",
      "text": {
       "en": "Your blessed touch can heal wounds. You have a pool of healing power that replenishes when you take a long rest. With that pool, you can restore a total number of hit points equal to your paladin level x 5.\nAs an action, you can touch a creature and draw power from the pool to restore a number of hit points to that creature, up to the maximum amount remaining in your pool.\nAlternatively, you can expend 5 hit points from your pool of healing to cure the target of one disease or neutralize one poison affecting it. You can cure multiple diseases and neutralize multiple poisons with a single use of Lay on Hands, expending hit points separately for each one.\nThis feature has no effect on undead and constructs.",
-      "de": "Heilpool von 5 × Paladinstufe TP pro langer Rast. 5 Punkte heilen alternativ eine Krankheit oder ein Gift."
+      "de": "Deine gesegnete Berührung kann Wunden heilen. Du hast einen Vorrat an Heilkraft, der sich nach einer langen Rast auffüllt. Mit diesem Vorrat kannst du insgesamt so viele Trefferpunkte wiederherstellen, wie deine Paladinstufe × 5 ergibt.\nAls Aktion kannst du eine Kreatur berühren und Kraft aus dem Vorrat ziehen, um ihr Trefferpunkte wiederherzustellen, höchstens so viele, wie noch im Vorrat sind.\nStattdessen kannst du 5 Trefferpunkte aus deinem Heilvorrat ausgeben, um das Ziel von einer Krankheit zu heilen oder ein Gift zu neutralisieren, das auf es wirkt. Du kannst mit einer Anwendung von Lay on Hands mehrere Krankheiten heilen und mehrere Gifte neutralisieren, wobei du für jede einzeln Trefferpunkte ausgibst.\nDieses Merkmal wirkt nicht auf Untote und Konstrukte."
      },
      "source": "srd",
      "verified": false
@@ -1172,7 +1172,7 @@
      "n": "Fighting Style",
      "text": {
       "en": "At 2nd level, you adopt a style of fighting as your specialty. Choose one of the following options. You can't take a Fighting Style option more than once, even if you later get to choose again.",
-      "de": "Wähle Defense, Dueling, Great Weapon Fighting oder Protection."
+      "de": "Auf Stufe 2 wählst du einen Kampfstil als deine Spezialität. Wähle eine der folgenden Optionen. Du kannst keinen Kampfstil mehr als einmal wählen, auch wenn du später erneut wählen darfst."
      },
      "source": "srd",
      "verified": false
@@ -1181,7 +1181,7 @@
      "n": "Spellcasting",
      "text": {
       "en": "By 2nd level, you have learned to draw on divine magic through meditation and prayer to cast spells as a cleric does.",
-      "de": "Zaubern mit CHA. Vorbereitet: CHA-Mod + halbe Paladinstufe (mind. 1)."
+      "de": "Ab Stufe 2 hast du gelernt, durch Meditation und Gebet göttliche Magie zu nutzen und Zauber zu wirken wie ein Kleriker."
      },
      "source": "srd",
      "verified": false
@@ -1190,7 +1190,7 @@
      "n": "Divine Smite",
      "text": {
       "en": "Starting at 2nd level, when you hit a creature with a melee weapon attack, you can expend one spell slot to deal radiant damage to the target, in addition to the weapon's damage. The extra damage is 2d8 for a 1st-level spell slot, plus 1d8 for each spell level higher than 1st, to a maximum of 5d8. The damage increases by 1d8 if the target is an undead or a fiend.",
-      "de": "Nach einem Nahkampftreffer einen Zauberplatz verbrauchen: +2W8 gleißend, +1W8 pro Grad über 1 (max. 5W8), +1W8 gegen Untote und Unholde."
+      "de": "Ab Stufe 2 kannst du, wenn du eine Kreatur mit einem Nahkampfwaffenangriff triffst, einen Zauberplatz verbrauchen, um dem Ziel zusätzlich zum Waffenschaden gleißenden Schaden zuzufügen. Der Zusatzschaden beträgt 2W8 bei einem Platz des 1. Grades, plus 1W8 für jeden Grad über dem 1., höchstens 5W8. Ist das Ziel ein Untoter oder Unhold, steigt der Schaden um 1W8."
      },
      "source": "srd",
      "verified": false
@@ -1201,7 +1201,7 @@
      "n": "Divine Health",
      "text": {
       "en": "By 3rd level, the divine magic flowing through you makes you immune to disease.",
-      "de": "Immun gegen Krankheiten."
+      "de": "Ab Stufe 3 macht dich die göttliche Magie, die durch dich fließt, immun gegen Krankheiten."
      },
      "source": "srd",
      "verified": false
@@ -1210,7 +1210,7 @@
      "n": "Channel Divinity",
      "text": {
       "en": "Your oath allows you to channel divine energy to fuel magical effects. Each Channel Divinity option provided by your oath explains how to use it.\nWhen you use your Channel Divinity, you choose which option to use. You must then finish a short or long rest to use your Channel Divinity again.\nSome Channel Divinity effects require saving throws. When you use such an effect from this class, the DC equals your paladin spell save DC.",
-      "de": "Effekt deines Eides, einmal pro kurzer oder langer Rast."
+      "de": "Dein Eid erlaubt dir, göttliche Energie zu leiten, um magische Effekte anzutreiben. Jede Channel-Divinity-Option deines Eids erklärt, wie sie genutzt wird.\nWenn du Channel Divinity nutzt, wählst du die Option. Danach musst du eine kurze oder lange Rast beenden, um Channel Divinity erneut zu nutzen.\nManche Effekte von Channel Divinity erfordern Rettungswürfe. Nutzt du einen solchen Effekt dieser Klasse, entspricht der SG deinem Zauberrettungswurf-SG als Paladin."
      },
      "source": "srd",
      "verified": false
@@ -1221,7 +1221,7 @@
      "n": "Extra Attack",
      "text": {
       "en": "Beginning at 5th level, you can attack twice, instead of once, whenever you take the Attack action on your turn.",
-      "de": "Zwei Angriffe, wenn du die Angriffsaktion nutzt."
+      "de": "Ab Stufe 5 kannst du zweimal statt einmal angreifen, wenn du in deinem Zug die Aktion Angriff ausführst."
      },
      "source": "srd",
      "verified": false
@@ -1232,7 +1232,7 @@
      "n": "Aura of Protection",
      "text": {
       "en": "Starting at 6th level, whenever you or a friendly creature within 10 feet of you must make a saving throw, the creature gains a bonus to the saving throw equal to your Charisma modifier (with a minimum bonus of +1). You must be conscious to grant this bonus.\nAt 18th level, the range of this aura increases to 30 feet.",
-      "de": "Du und Verbündete in 3 m addieren deinen CHA-Mod (mind. +1) auf Rettungswürfe, solange du bei Bewusstsein bist."
+      "de": "Ab Stufe 6 erhält jede freundliche Kreatur innerhalb von 3 m und du selbst, wenn ein Rettungswurf nötig ist, einen Bonus auf den Rettungswurf in Höhe deines Charismamodifikators (mindestens +1). Du musst bei Bewusstsein sein, um diesen Bonus zu gewähren.\nAuf Stufe 18 steigt die Reichweite dieser Aura auf 9 m."
      },
      "source": "srd",
      "verified": false
@@ -1243,7 +1243,7 @@
      "n": "Aura of Courage",
      "text": {
       "en": "Starting at 10th level, you and friendly creatures within 10 feet of you can't be frightened while you are conscious.\nAt 18th level, the range of this aura increases to 30 feet.",
-      "de": "Du und Verbündete in 3 m können nicht verängstigt werden."
+      "de": "Ab Stufe 10 können du und freundliche Kreaturen innerhalb von 3 m nicht Frightened werden, solange du bei Bewusstsein bist.\nAuf Stufe 18 steigt die Reichweite dieser Aura auf 9 m."
      },
      "source": "srd",
      "verified": false
@@ -1254,7 +1254,7 @@
      "n": "Improved Divine Smite",
      "text": {
       "en": "By 11th level, you are so suffused with righteous might that all your melee weapon strikes carry divine power with them. Whenever you hit a creature with a melee weapon, the creature takes an extra 1d8 radiant damage. If you also use your Divine Smite with an attack, you add this damage to the extra damage of your Divine Smite.",
-      "de": "Jeder Nahkampftreffer mit einer Waffe verursacht +1W8 gleißend."
+      "de": "Ab Stufe 11 bist du so von gerechter Macht durchdrungen, dass alle deine Nahkampfwaffenschläge göttliche Kraft tragen. Triffst du eine Kreatur mit einer Nahkampfwaffe, erleidet sie zusätzlich 1W8 gleißenden Schaden. Nutzt du bei einem Angriff auch Divine Smite, addierst du diesen Schaden zum Zusatzschaden von Divine Smite."
      },
      "source": "srd",
      "verified": false
@@ -1265,7 +1265,7 @@
      "n": "Cleansing Touch",
      "text": {
       "en": "Beginning at 14th level, you can use your action to end one spell on yourself or on one willing creature that you touch.\nYou can use this feature a number of times equal to your Charisma modifier (a minimum of once). You regain expended uses when you finish a long rest.",
-      "de": "Aktion: Einen Zauber auf dir oder einer berührten bereiten Kreatur beenden, CHA-Mod-mal (mind. 1) pro langer Rast."
+      "de": "Ab Stufe 14 kannst du mit deiner Aktion einen Zauber auf dir oder auf einer bereitwilligen Kreatur, die du berührst, beenden.\nDu kannst dieses Merkmal so oft nutzen, wie dein Charismamodifikator angibt (mindestens einmal). Verbrauchte Anwendungen erhältst du nach einer langen Rast zurück."
      },
      "source": "srd",
      "verified": false
@@ -1276,7 +1276,7 @@
      "n": "Aura improvements",
      "text": {
       "en": "At 18th level, the range of your auras increase to 30 feet.",
-      "de": "Deine Auren reichen jetzt 9 m weit."
+      "de": "Auf Stufe 18 steigt die Reichweite deiner Auren auf 9 m."
      },
      "source": "srd",
      "verified": false
@@ -1320,7 +1320,7 @@
      "n": "Favored Enemy",
      "text": {
       "en": "Beginning at 1st level, you have significant experience studying, tracking, hunting, and even talking to a certain type of enemy.\nChoose a type of favored enemy: aberrations, beasts, celestials, constructs, dragons, elementals, fey, fiends, giants, monstrosities, oozes, plants, or undead. Alternatively, you can select two races of humanoid (such as gnolls and orcs) as favored enemies.\nYou have advantage on Wisdom (Survival) checks to track your favored enemies, as well as on Intelligence checks to recall information about them.\nWhen you gain this feature, you also learn one language of your choice that is spoken by your favored enemies, if they speak one at all.\nYou choose one additional favored enemy, as well as an associated language, at 6th and 14th level. As you gain levels, your choices should reflect the types of monsters you have encountered on your adventures.",
-      "de": "Wähle eine Feindart: Vorteil beim Aufspüren und bei INT-Würfen über sie, dazu eine ihrer Sprachen."
+      "de": "Ab Stufe 1 hast du große Erfahrung darin, eine bestimmte Art von Feind zu studieren, zu verfolgen, zu jagen und sogar mit ihr zu sprechen.\nWähle eine Art von bevorzugtem Feind: Aberrationen, Tiere, Himmlische, Konstrukte, Drachen, Elementare, Feenwesen, Unholde, Riesen, Monstrositäten, Schleime, Pflanzen oder Untote. Stattdessen kannst du zwei humanoide Völker (etwa Gnolle und Orks) als bevorzugte Feinde wählen.\nDu hast Vorteil bei Weisheitswürfen (Survival), um deine bevorzugten Feinde zu verfolgen, und bei Intelligenzwürfen, um dich an Wissen über sie zu erinnern.\nWenn du dieses Merkmal erhältst, lernst du außerdem eine Sprache deiner Wahl, die deine bevorzugten Feinde sprechen, falls sie überhaupt eine sprechen.\nAuf Stufe 6 und 14 wählst du je einen weiteren bevorzugten Feind samt zugehöriger Sprache. Deine Wahl sollte mit steigender Stufe die Monsterarten widerspiegeln, denen du auf deinen Abenteuern begegnet bist."
      },
      "source": "srd",
      "verified": false
@@ -1329,7 +1329,7 @@
      "n": "Natural Explorer",
      "text": {
       "en": "You are particularly familiar with one type of natural environment and are adept at traveling and surviving in such regions. Choose one type of favored terrain: arctic, coast, desert, forest, grassland, mountain, or swamp. When you make an Intelligence or Wisdom check related to your favored terrain, your proficiency bonus is doubled if you are using a skill that you're proficient in.\nWhile traveling for an hour or more in your favored terrain, you gain the following benefits:\n- Difficult terrain doesn't slow your group's travel.\n- Your group can't become lost except by magical means.\n- Even when you are engaged in another activity while traveling (such as foraging, navigating, or tracking), you remain alert to danger.\n- If you are traveling alone, you can move stealthily at a normal pace.\n- When you forage, you find twice as much food as you normally would.\n- While tracking other creatures, you also learn their exact number, their sizes, and how long ago they passed through the area.\nYou choose additional favored terrain types at 6th and 10th level.",
-      "de": "Ein bevorzugtes Gelände: doppelter Übungsbonus bei INT- und WEI-Würfen dazu und Vorteile beim Reisen."
+      "de": "Du kennst eine Art natürlicher Umgebung besonders gut und bist geschickt darin, in solchen Gegenden zu reisen und zu überleben. Wähle eine Art von bevorzugtem Gelände: Arktis, Küste, Wüste, Wald, Grasland, Gebirge oder Sumpf. Legst du einen Intelligenz- oder Weisheitswurf ab, der mit deinem bevorzugten Gelände zu tun hat, verdoppelt sich dein Übungsbonus, wenn du eine Fertigkeit nutzt, in der du geübt bist.\nReist du eine Stunde oder länger in deinem bevorzugten Gelände, erhältst du folgende Vorteile:\n- Schwieriges Gelände verlangsamt die Reise deiner Gruppe nicht.\n- Deine Gruppe kann sich nur durch Magie verirren.\n- Selbst wenn du unterwegs eine andere Tätigkeit ausübst (etwa Nahrung suchen, navigieren oder Spuren lesen), bleibst du wachsam für Gefahren.\n- Reist du allein, kannst du dich bei normalem Reisetempo leise bewegen.\n- Suchst du Nahrung, findest du doppelt so viel wie sonst.\n- Verfolgst du andere Kreaturen, erfährst du auch ihre genaue Zahl, ihre Größe und wie lange es her ist, dass sie durch das Gebiet gezogen sind.\nAuf Stufe 6 und 10 wählst du weitere bevorzugte Geländearten."
      },
      "source": "srd",
      "verified": false
@@ -1340,7 +1340,7 @@
      "n": "Fighting Style",
      "text": {
       "en": "At 2nd level, you adopt a particular style of fighting as your specialty. Choose one of the following options. You can't take a Fighting Style option more than once, even if you later get to choose again.",
-      "de": "Wähle Archery, Defense, Dueling oder Two-Weapon Fighting."
+      "de": "Auf Stufe 2 wählst du einen bestimmten Kampfstil als deine Spezialität. Wähle eine der folgenden Optionen. Du kannst keinen Kampfstil mehr als einmal wählen, auch wenn du später erneut wählen darfst."
      },
      "source": "srd",
      "verified": false
@@ -1349,7 +1349,7 @@
      "n": "Spellcasting",
      "text": {
       "en": "By the time you reach 2nd level, you have learned to use the magical essence of nature to cast spells, much as a druid does.",
-      "de": "Zaubern mit WEI."
+      "de": "Wenn du Stufe 2 erreichst, hast du gelernt, das magische Wesen der Natur zu nutzen, um Zauber zu wirken, ähnlich wie ein Druide."
      },
      "source": "srd",
      "verified": false
@@ -1360,7 +1360,7 @@
      "n": "Primeval Awareness",
      "text": {
       "en": "Beginning at 3rd level, you can use your action and expend one ranger spell slot to focus your awareness on the region around you. For 1 minute per level of the spell slot you expend, you can sense whether the following types of creatures are present within 1 mile of you (or within up to 6 miles if you are in your favored terrain): aberrations, celestials, dragons, elementals, fey, fiends, and undead. This feature doesn't reveal the creatures' location or number.",
-      "de": "Einen Zauberplatz verbrauchen: 1 Min pro Grad spüren, ob bestimmte Kreaturenarten in 1,5 km sind (9 km im bevorzugten Gelände)."
+      "de": "Ab Stufe 3 kannst du deine Aktion nutzen und einen Waldläufer-Zauberplatz verbrauchen, um deine Wahrnehmung auf die Umgebung zu richten. 1 Minute pro Grad des verbrauchten Platzes spürst du, ob folgende Kreaturarten innerhalb von 1,5 km (oder bis zu 9 km in deinem bevorzugten Gelände) vorhanden sind: Aberrationen, Himmlische, Drachen, Elementare, Feenwesen, Unholde und Untote. Ort und Anzahl der Kreaturen verrät dieses Merkmal nicht."
      },
      "source": "srd",
      "verified": false
@@ -1371,7 +1371,7 @@
      "n": "Extra Attack",
      "text": {
       "en": "Beginning at 5th level, you can attack twice, instead of once, whenever you take the Attack action on your turn.",
-      "de": "Zwei Angriffe, wenn du die Angriffsaktion nutzt."
+      "de": "Ab Stufe 5 kannst du zweimal statt einmal angreifen, wenn du in deinem Zug die Aktion Angriff ausführst."
      },
      "source": "srd",
      "verified": false
@@ -1382,7 +1382,7 @@
      "n": "Favored Enemy",
      "text": {
       "en": "Beginning at 1st level, you have significant experience studying, tracking, hunting, and even talking to a certain type of enemy.\nChoose a type of favored enemy: aberrations, beasts, celestials, constructs, dragons, elementals, fey, fiends, giants, monstrosities, oozes, plants, or undead. Alternatively, you can select two races of humanoid (such as gnolls and orcs) as favored enemies.\nYou have advantage on Wisdom (Survival) checks to track your favored enemies, as well as on Intelligence checks to recall information about them.\nWhen you gain this feature, you also learn one language of your choice that is spoken by your favored enemies, if they speak one at all.\nYou choose one additional favored enemy, as well as an associated language, at 6th and 14th level. As you gain levels, your choices should reflect the types of monsters you have encountered on your adventures.",
-      "de": "Eine weitere Feindart."
+      "de": "Ab Stufe 1 hast du große Erfahrung darin, eine bestimmte Art von Feind zu studieren, zu verfolgen, zu jagen und sogar mit ihr zu sprechen.\nWähle eine Art von bevorzugtem Feind: Aberrationen, Tiere, Himmlische, Konstrukte, Drachen, Elementare, Feenwesen, Unholde, Riesen, Monstrositäten, Schleime, Pflanzen oder Untote. Stattdessen kannst du zwei humanoide Völker (etwa Gnolle und Orks) als bevorzugte Feinde wählen.\nDu hast Vorteil bei Weisheitswürfen (Survival), um deine bevorzugten Feinde zu verfolgen, und bei Intelligenzwürfen, um dich an Wissen über sie zu erinnern.\nWenn du dieses Merkmal erhältst, lernst du außerdem eine Sprache deiner Wahl, die deine bevorzugten Feinde sprechen, falls sie überhaupt eine sprechen.\nAuf Stufe 6 und 14 wählst du je einen weiteren bevorzugten Feind samt zugehöriger Sprache. Deine Wahl sollte mit steigender Stufe die Monsterarten widerspiegeln, denen du auf deinen Abenteuern begegnet bist."
      },
      "source": "srd",
      "verified": false
@@ -1391,7 +1391,7 @@
      "n": "Natural Explorer",
      "text": {
       "en": "You are particularly familiar with one type of natural environment and are adept at traveling and surviving in such regions. Choose one type of favored terrain: arctic, coast, desert, forest, grassland, mountain, or swamp. When you make an Intelligence or Wisdom check related to your favored terrain, your proficiency bonus is doubled if you are using a skill that you're proficient in.\nWhile traveling for an hour or more in your favored terrain, you gain the following benefits:\n- Difficult terrain doesn't slow your group's travel.\n- Your group can't become lost except by magical means.\n- Even when you are engaged in another activity while traveling (such as foraging, navigating, or tracking), you remain alert to danger.\n- If you are traveling alone, you can move stealthily at a normal pace.\n- When you forage, you find twice as much food as you normally would.\n- While tracking other creatures, you also learn their exact number, their sizes, and how long ago they passed through the area.\nYou choose additional favored terrain types at 6th and 10th level.",
-      "de": "Ein weiteres Gelände."
+      "de": "Du kennst eine Art natürlicher Umgebung besonders gut und bist geschickt darin, in solchen Gegenden zu reisen und zu überleben. Wähle eine Art von bevorzugtem Gelände: Arktis, Küste, Wüste, Wald, Grasland, Gebirge oder Sumpf. Legst du einen Intelligenz- oder Weisheitswurf ab, der mit deinem bevorzugten Gelände zu tun hat, verdoppelt sich dein Übungsbonus, wenn du eine Fertigkeit nutzt, in der du geübt bist.\nReist du eine Stunde oder länger in deinem bevorzugten Gelände, erhältst du folgende Vorteile:\n- Schwieriges Gelände verlangsamt die Reise deiner Gruppe nicht.\n- Deine Gruppe kann sich nur durch Magie verirren.\n- Selbst wenn du unterwegs eine andere Tätigkeit ausübst (etwa Nahrung suchen, navigieren oder Spuren lesen), bleibst du wachsam für Gefahren.\n- Reist du allein, kannst du dich bei normalem Reisetempo leise bewegen.\n- Suchst du Nahrung, findest du doppelt so viel wie sonst.\n- Verfolgst du andere Kreaturen, erfährst du auch ihre genaue Zahl, ihre Größe und wie lange es her ist, dass sie durch das Gebiet gezogen sind.\nAuf Stufe 6 und 10 wählst du weitere bevorzugte Geländearten."
      },
      "source": "srd",
      "verified": false
@@ -1402,7 +1402,7 @@
      "n": "Land's Stride",
      "text": {
       "en": "Starting at 8th level, moving through nonmagical difficult terrain costs you no extra movement. You can also pass through nonmagical plants without being slowed by them and without taking damage from them if they have thorns, spines, or a similar hazard.\nIn addition, you have advantage on saving throws against plants that are magically created or manipulated to impede movement, such those created by the entangle spell.",
-      "de": "Nichtmagisches schwieriges Gelände kostet kein zusätzliches Tempo; Vorteil gegen magisch beeinflusste Pflanzen."
+      "de": "Ab Stufe 8 kostet dich die Bewegung durch nichtmagisches schwieriges Gelände keine zusätzliche Bewegung. Du kannst außerdem nichtmagische Pflanzen durchqueren, ohne von ihnen verlangsamt zu werden und ohne Schaden zu erleiden, wenn sie Dornen, Stacheln oder Ähnliches haben.\nZusätzlich hast du Vorteil bei Rettungswürfen gegen Pflanzen, die magisch erschaffen oder beeinflusst werden, um Bewegung zu behindern, etwa durch den Zauber Entangle."
      },
      "source": "srd",
      "verified": false
@@ -1413,7 +1413,7 @@
      "n": "Natural Explorer",
      "text": {
       "en": "You are particularly familiar with one type of natural environment and are adept at traveling and surviving in such regions. Choose one type of favored terrain: arctic, coast, desert, forest, grassland, mountain, or swamp. When you make an Intelligence or Wisdom check related to your favored terrain, your proficiency bonus is doubled if you are using a skill that you're proficient in.\nWhile traveling for an hour or more in your favored terrain, you gain the following benefits:\n- Difficult terrain doesn't slow your group's travel.\n- Your group can't become lost except by magical means.\n- Even when you are engaged in another activity while traveling (such as foraging, navigating, or tracking), you remain alert to danger.\n- If you are traveling alone, you can move stealthily at a normal pace.\n- When you forage, you find twice as much food as you normally would.\n- While tracking other creatures, you also learn their exact number, their sizes, and how long ago they passed through the area.\nYou choose additional favored terrain types at 6th and 10th level.",
-      "de": "Ein weiteres Gelände."
+      "de": "Du kennst eine Art natürlicher Umgebung besonders gut und bist geschickt darin, in solchen Gegenden zu reisen und zu überleben. Wähle eine Art von bevorzugtem Gelände: Arktis, Küste, Wüste, Wald, Grasland, Gebirge oder Sumpf. Legst du einen Intelligenz- oder Weisheitswurf ab, der mit deinem bevorzugten Gelände zu tun hat, verdoppelt sich dein Übungsbonus, wenn du eine Fertigkeit nutzt, in der du geübt bist.\nReist du eine Stunde oder länger in deinem bevorzugten Gelände, erhältst du folgende Vorteile:\n- Schwieriges Gelände verlangsamt die Reise deiner Gruppe nicht.\n- Deine Gruppe kann sich nur durch Magie verirren.\n- Selbst wenn du unterwegs eine andere Tätigkeit ausübst (etwa Nahrung suchen, navigieren oder Spuren lesen), bleibst du wachsam für Gefahren.\n- Reist du allein, kannst du dich bei normalem Reisetempo leise bewegen.\n- Suchst du Nahrung, findest du doppelt so viel wie sonst.\n- Verfolgst du andere Kreaturen, erfährst du auch ihre genaue Zahl, ihre Größe und wie lange es her ist, dass sie durch das Gebiet gezogen sind.\nAuf Stufe 6 und 10 wählst du weitere bevorzugte Geländearten."
      },
      "source": "srd",
      "verified": false
@@ -1422,7 +1422,7 @@
      "n": "Hide in Plain Sight",
      "text": {
       "en": "Starting at 10th level, you can spend 1 minute creating camouflage for yourself. You must have access to fresh mud, dirt, plants, soot, and other naturally occurring materials with which to create your camouflage.\nOnce you are camouflaged in this way, you can try to hide by pressing yourself up against a solid surface, such as a tree or wall, that is at least as tall and wide as you are. You gain a +10 bonus to Dexterity (Stealth) checks as long as you remain there without moving or taking actions. Once you move or take an action or a reaction, you must camouflage yourself again to gain this benefit.",
-      "de": "1 Min Tarnung vorbereiten: +10 auf Stealth, solange du dich nicht bewegst."
+      "de": "Ab Stufe 10 kannst du 1 Minute aufwenden, um dich zu tarnen. Dafür brauchst du frischen Schlamm, Erde, Pflanzen, Ruß und andere natürliche Stoffe.\nBist du so getarnt, kannst du versuchen, dich zu verstecken, indem du dich an eine feste Fläche drückst, etwa einen Baum oder eine Wand, die mindestens so hoch und breit ist wie du. Du erhältst +10 auf Geschicklichkeitswürfe (Stealth), solange du dort bleibst, ohne dich zu bewegen oder Aktionen auszuführen. Sobald du dich bewegst oder eine Aktion oder Reaktion ausführst, musst du dich erneut tarnen, um diesen Vorteil zu erhalten."
      },
      "source": "srd",
      "verified": false
@@ -1433,7 +1433,7 @@
      "n": "Favored Enemy",
      "text": {
       "en": "Beginning at 1st level, you have significant experience studying, tracking, hunting, and even talking to a certain type of enemy.\nChoose a type of favored enemy: aberrations, beasts, celestials, constructs, dragons, elementals, fey, fiends, giants, monstrosities, oozes, plants, or undead. Alternatively, you can select two races of humanoid (such as gnolls and orcs) as favored enemies.\nYou have advantage on Wisdom (Survival) checks to track your favored enemies, as well as on Intelligence checks to recall information about them.\nWhen you gain this feature, you also learn one language of your choice that is spoken by your favored enemies, if they speak one at all.\nYou choose one additional favored enemy, as well as an associated language, at 6th and 14th level. As you gain levels, your choices should reflect the types of monsters you have encountered on your adventures.",
-      "de": "Eine weitere Feindart."
+      "de": "Ab Stufe 1 hast du große Erfahrung darin, eine bestimmte Art von Feind zu studieren, zu verfolgen, zu jagen und sogar mit ihr zu sprechen.\nWähle eine Art von bevorzugtem Feind: Aberrationen, Tiere, Himmlische, Konstrukte, Drachen, Elementare, Feenwesen, Unholde, Riesen, Monstrositäten, Schleime, Pflanzen oder Untote. Stattdessen kannst du zwei humanoide Völker (etwa Gnolle und Orks) als bevorzugte Feinde wählen.\nDu hast Vorteil bei Weisheitswürfen (Survival), um deine bevorzugten Feinde zu verfolgen, und bei Intelligenzwürfen, um dich an Wissen über sie zu erinnern.\nWenn du dieses Merkmal erhältst, lernst du außerdem eine Sprache deiner Wahl, die deine bevorzugten Feinde sprechen, falls sie überhaupt eine sprechen.\nAuf Stufe 6 und 14 wählst du je einen weiteren bevorzugten Feind samt zugehöriger Sprache. Deine Wahl sollte mit steigender Stufe die Monsterarten widerspiegeln, denen du auf deinen Abenteuern begegnet bist."
      },
      "source": "srd",
      "verified": false
@@ -1442,7 +1442,7 @@
      "n": "Vanish",
      "text": {
       "en": "Starting at 14th level, you can use the Hide action as a bonus action on your turn. Also, you can't be tracked by nonmagical means, unless you choose to leave a trail.",
-      "de": "Hide als Bonusaktion; nichtmagisch kann dich niemand aufspüren."
+      "de": "Ab Stufe 14 kannst du die Aktion Verstecken in deinem Zug als Bonusaktion ausführen. Außerdem kann man dich mit nichtmagischen Mitteln nicht verfolgen, es sei denn, du willst eine Spur hinterlassen."
      },
      "source": "srd",
      "verified": false
@@ -1453,7 +1453,7 @@
      "n": "Feral Senses",
      "text": {
       "en": "At 18th level, you gain preternatural senses that help you fight creatures you can't see. When you attack a creature you can't see, your inability to see it doesn't impose disadvantage on your attack rolls against it.\nYou are also aware of the location of any invisible creature within 30 feet of you, provided that the creature isn't hidden from you and you aren't blinded or deafened.",
-      "de": "Keine Nachteile beim Angriff auf Kreaturen, die du nicht siehst; unsichtbare Kreaturen in 9 m kennst du."
+      "de": "Auf Stufe 18 erhältst du übernatürliche Sinne, die dir helfen, gegen Kreaturen zu kämpfen, die du nicht sehen kannst. Greifst du eine Kreatur an, die du nicht sehen kannst, gibt dir das keinen Nachteil auf deine Angriffswürfe gegen sie.\nDu kennst außerdem den Ort jeder unsichtbaren Kreatur innerhalb von 9 m, sofern sie sich nicht vor dir versteckt und du nicht Blinded oder Deafened bist."
      },
      "source": "srd",
      "verified": false
@@ -1464,7 +1464,7 @@
      "n": "Foe Slayer",
      "text": {
       "en": "At 20th level, you become an unparalleled hunter of your enemies. Once on each of your turns, you can add your Wisdom modifier to the attack roll or the damage roll of an attack you make against one of your favored enemies. You can choose to use this feature before or after the roll, but before any effects of the roll are applied.",
-      "de": "Einmal pro Zug WEI-Mod auf Angriff oder Schaden gegen einen bevorzugten Feind."
+      "de": "Auf Stufe 20 wirst du ein unvergleichlicher Jäger deiner Feinde. Einmal in jedem deiner Züge kannst du deinen Weisheitsmodifikator zum Angriffswurf oder Schadenswurf eines Angriffs gegen einen deiner bevorzugten Feinde addieren. Du kannst dich vor oder nach dem Wurf entscheiden, aber bevor Wirkungen des Wurfs angewendet werden."
      },
      "source": "srd",
      "verified": false
@@ -1509,7 +1509,7 @@
      "n": "Expertise",
      "text": {
       "en": "At 1st level, choose two of your skill proficiencies, or one of your skill proficiencies and your proficiency with thieves' tools. Your proficiency bonus is doubled for any ability check you make that uses either of the chosen proficiencies.\nAt 6th level, you can choose two more of your proficiencies (in skills or with thieves' tools) to gain this benefit",
-      "de": "Doppelter Übungsbonus für zwei Fertigkeiten (oder eine plus Diebeswerkzeug)."
+      "de": "Auf Stufe 1 wählst du zwei deiner Fertigkeitsübungen oder eine Fertigkeitsübung und deine Übung mit Diebeswerkzeug. Dein Übungsbonus verdoppelt sich bei jedem Attributswurf, der eine der gewählten Übungen nutzt.\nAuf Stufe 6 kannst du zwei weitere deiner Übungen (Fertigkeiten oder Diebeswerkzeug) wählen, die diesen Vorteil erhalten."
      },
      "source": "srd",
      "verified": false
@@ -1518,7 +1518,7 @@
      "n": "Sneak Attack",
      "text": {
       "en": "Beginning at 1st level, you know how to strike subtly and exploit a foe's distraction. Once per turn, you can deal an extra 1d6 damage to one creature you hit with an attack if you have advantage on the attack roll. The attack must use a finesse or a ranged weapon.\nYou don't need advantage on the attack roll if another enemy of the target is within 5 feet of it, that enemy isn't incapacitated, and you don't have disadvantage on the attack roll.\nThe amount of the extra damage increases as you gain levels in this class, as shown in the Sneak Attack column of the Rogue table.",
-      "de": "Einmal pro Zug Zusatzschaden mit Finesse- oder Fernkampfwaffe, wenn du Vorteil hast oder ein Verbündeter neben dem Ziel steht (und du keinen Nachteil hast)."
+      "de": "Ab Stufe 1 weißt du, wie man unauffällig zuschlägt und die Ablenkung eines Gegners ausnutzt. Einmal pro Zug kannst du einer Kreatur, die du mit einem Angriff triffst, zusätzlich 1W6 Schaden zufügen, wenn du Vorteil beim Angriffswurf hast. Der Angriff muss mit einer Finesse- oder Fernkampfwaffe erfolgen.\nDu brauchst keinen Vorteil beim Angriffswurf, wenn ein anderer Feind des Ziels sich innerhalb von 1,5 m um das Ziel befindet, dieser Feind nicht Incapacitated ist und du keinen Nachteil beim Angriffswurf hast.\nDer Zusatzschaden steigt mit deiner Stufe in dieser Klasse, wie in der Spalte „Hinterhältiger Angriff“ der Schurkentabelle angegeben."
      },
      "source": "srd",
      "verified": false
@@ -1527,7 +1527,7 @@
      "n": "Thieves' Cant",
      "text": {
       "en": "During your rogue training you learned thieves' cant, a secret mix of dialect, jargon, and code that allows you to hide messages in seemingly normal conversation. Only another creature that knows thieves' cant understands such messages. It takes four times longer to convey such a message than it does to speak the same idea plainly.\nIn addition, you understand a set of secret signs and symbols used to convey short, simple messages, such as whether an area is dangerous or the territory of a thieves' guild, whether loot is nearby, or whether the people in an area are easy marks or will provide a safe house for thieves on the run.",
-      "de": "Geheimsprache und Zeichen der Diebe."
+      "de": "Während deiner Ausbildung als Schurke hast du die Diebessprache gelernt, eine geheime Mischung aus Dialekt, Fachjargon und Code, mit der du Botschaften in scheinbar normalen Gesprächen verstecken kannst. Nur eine andere Kreatur, die die Diebessprache kennt, versteht solche Botschaften. Eine solche Botschaft zu übermitteln, dauert viermal so lange, wie denselben Gedanken offen auszusprechen.\nAußerdem verstehst du geheime Zeichen und Symbole für kurze, einfache Botschaften, etwa ob ein Gebiet gefährlich ist oder einer Diebesgilde gehört, ob Beute in der Nähe ist oder ob die Leute in der Gegend leichte Opfer sind oder flüchtigen Dieben Unterschlupf bieten."
      },
      "source": "srd",
      "verified": false
@@ -1538,7 +1538,7 @@
      "n": "Cunning Action",
      "text": {
       "en": "Starting at 2nd level, your quick thinking and agility allow you to move and act quickly. You can take a bonus action on each of your turns in combat. This action can be used only to take the Dash, Disengage, or Hide action.",
-      "de": "Bonusaktion: Dash, Disengage oder Hide."
+      "de": "Ab Stufe 2 kannst du dich dank schnellen Denkens und Wendigkeit rasch bewegen und handeln. Du kannst in jedem deiner Züge im Kampf eine Bonusaktion ausführen. Diese Aktion kann nur für Spurt, Rückzug oder Verstecken genutzt werden."
      },
      "source": "srd",
      "verified": false
@@ -1549,7 +1549,7 @@
      "n": "Uncanny Dodge",
      "text": {
       "en": "Starting at 5th level, when an attacker that you can see hits you with an attack, you can use your reaction to halve the attack's damage against you.",
-      "de": "Reaktion: Schaden eines Angreifers, den du siehst, halbieren."
+      "de": "Ab Stufe 5 kannst du, wenn dich ein Angreifer, den du sehen kannst, mit einem Angriff trifft, mit deiner Reaktion den Schaden des Angriffs gegen dich halbieren."
      },
      "source": "srd",
      "verified": false
@@ -1560,7 +1560,7 @@
      "n": "Expertise",
      "text": {
       "en": "At 1st level, choose two of your skill proficiencies, or one of your skill proficiencies and your proficiency with thieves' tools. Your proficiency bonus is doubled for any ability check you make that uses either of the chosen proficiencies.\nAt 6th level, you can choose two more of your proficiencies (in skills or with thieves' tools) to gain this benefit",
-      "de": "Zwei weitere Fertigkeiten mit doppeltem Übungsbonus."
+      "de": "Auf Stufe 1 wählst du zwei deiner Fertigkeitsübungen oder eine Fertigkeitsübung und deine Übung mit Diebeswerkzeug. Dein Übungsbonus verdoppelt sich bei jedem Attributswurf, der eine der gewählten Übungen nutzt.\nAuf Stufe 6 kannst du zwei weitere deiner Übungen (Fertigkeiten oder Diebeswerkzeug) wählen, die diesen Vorteil erhalten."
      },
      "source": "srd",
      "verified": false
@@ -1571,7 +1571,7 @@
      "n": "Evasion",
      "text": {
       "en": "Beginning at 7th level, you can nimbly dodge out of the way of certain area effects, such as a red dragon's fiery breath or an ice storm spell. When you are subjected to an effect that allows you to make a Dexterity saving throw to take only half damage, you instead take no damage if you succeed on the saving throw, and only half damage if you fail.",
-      "de": "Bei GES-Rettungswürfen für halben Schaden: Erfolg = kein Schaden, Misserfolg = halber Schaden."
+      "de": "Ab Stufe 7 kannst du bestimmten Flächeneffekten geschickt ausweichen, etwa dem Feuerodem eines roten Drachen oder dem Zauber Ice Storm. Bist du einem Effekt ausgesetzt, bei dem du mit einem Geschicklichkeitsrettungswurf nur halben Schaden erleidest, erleidest du stattdessen bei Erfolg keinen Schaden und bei Misserfolg nur halben Schaden."
      },
      "source": "srd",
      "verified": false
@@ -1582,7 +1582,7 @@
      "n": "Reliable Talent",
      "text": {
       "en": "By 11th level, you have refined your chosen skills until they approach perfection. Whenever you make an ability check that lets you add your proficiency bonus, you can treat a d20 roll of 9 or lower as a 10.",
-      "de": "Bei geübten Attributswürfen zählt eine 9 oder weniger auf dem W20 als 10."
+      "de": "Ab Stufe 11 hast du deine gewählten Fertigkeiten bis nahe an die Perfektion verfeinert. Bei jedem Attributswurf, zu dem du deinen Übungsbonus addieren darfst, kannst du einen W20-Wurf von 9 oder weniger als 10 werten."
      },
      "source": "srd",
      "verified": false
@@ -1593,7 +1593,7 @@
      "n": "Blindsense",
      "text": {
       "en": "Starting at 14th level, if you are able to hear, you are aware of the location of any hidden or invisible creature within 10 feet of you.",
-      "de": "Versteckte und unsichtbare Kreaturen in 3 m kennst du, solange du hören kannst."
+      "de": "Ab Stufe 14 kennst du, solange du hören kannst, den Ort jeder versteckten oder unsichtbaren Kreatur innerhalb von 3 m."
      },
      "source": "srd",
      "verified": false
@@ -1604,7 +1604,7 @@
      "n": "Slippery Mind",
      "text": {
       "en": "By 15th level, you have acquired greater mental strength. You gain proficiency in Wisdom saving throws.",
-      "de": "Übung in WEI-Rettungswürfen."
+      "de": "Ab Stufe 15 hast du größere geistige Stärke erworben. Du erhältst Übung in Weisheitsrettungswürfen."
      },
      "source": "srd",
      "verified": false
@@ -1615,7 +1615,7 @@
      "n": "Elusive",
      "text": {
       "en": "Beginning at 18th level, you are so evasive that attackers rarely gain the upper hand against you. No attack roll has advantage against you while you aren't incapacitated.",
-      "de": "Angriffe gegen dich haben keinen Vorteil, solange du nicht kampfunfähig bist."
+      "de": "Ab Stufe 18 bist du so schwer zu fassen, dass Angreifer selten die Oberhand gewinnen. Kein Angriffswurf gegen dich hat Vorteil, solange du nicht Incapacitated bist."
      },
      "source": "srd",
      "verified": false
@@ -1626,7 +1626,7 @@
      "n": "Stroke of Luck",
      "text": {
       "en": "At 20th level, you have an uncanny knack for succeeding when you need to. If your attack misses a target within range, you can turn the miss into a hit. Alternatively, if you fail an ability check, you can treat the d20 roll as a 20.\nOnce you use this feature, you can't use it again until you finish a short or long rest.",
-      "de": "Aus einem Fehlschlag einen Treffer machen oder einen Attributswurf als 20 werten, einmal pro kurzer Rast."
+      "de": "Auf Stufe 20 hast du ein unheimliches Geschick, Erfolg zu haben, wenn es darauf ankommt. Verfehlt dein Angriff ein Ziel in Reichweite, kannst du den Fehlschlag in einen Treffer verwandeln. Stattdessen kannst du bei einem misslungenen Attributswurf den W20-Wurf als 20 werten.\nDanach kannst du dieses Merkmal erst nach einer kurzen oder langen Rast erneut nutzen."
      },
      "source": "srd",
      "verified": false
@@ -1670,7 +1670,7 @@
      "n": "Spellcasting",
      "text": {
       "en": "An event in your past, or in the life of a parent or ancestor, left an indelible mark on you, infusing you with arcane magic. This font of magic, whatever its origin, fuels your spells.",
-      "de": "Zaubern mit CHA. Bekannte Zauber wechselst du beim Stufenaufstieg."
+      "de": "Ein Ereignis in deiner Vergangenheit oder im Leben eines Elternteils oder Vorfahren hat ein unauslöschliches Zeichen auf dir hinterlassen und dich mit arkaner Magie erfüllt. Diese Quelle der Magie, woher sie auch stammt, speist deine Zauber."
      },
      "source": "srd",
      "verified": false
@@ -1681,7 +1681,7 @@
      "n": "Font of Magic",
      "text": {
       "en": "At 2nd level, you tap into a deep wellspring of magic within yourself. This wellspring is represented by sorcery points, which allow you to create a variety of magical effects.\nSorcery Points\nYou have 2 sorcery points, and you gain more as you reach higher levels, as shown in the Sorcery Points column of the Sorcerer table. You can never have more sorcery points than shown on the table for your level. You regain all spent sorcery points when you finish a long rest.",
-      "de": "Zauberpunkte = Zaubererstufe pro langer Rast. Bonusaktion: Punkte in Zauberplätze umwandeln und umgekehrt."
+      "de": "Auf Stufe 2 erschließt du eine tiefe Quelle der Magie in dir. Diese Quelle wird durch Zaubereipunkte dargestellt, mit denen du verschiedene magische Effekte erzeugen kannst.\nZaubereipunkte\nDu hast 2 Zaubereipunkte und erhältst auf höheren Stufen mehr, wie in der Spalte „Zaubereipunkte“ der Zauberertabelle angegeben. Du kannst nie mehr Zaubereipunkte haben, als die Tabelle für deine Stufe angibt. Nach einer langen Rast erhältst du alle ausgegebenen Zaubereipunkte zurück."
      },
      "source": "srd",
      "verified": false
@@ -1692,7 +1692,7 @@
      "n": "Metamagic",
      "text": {
       "en": "At 3rd level, you gain the ability to twist your spells to suit your needs. You gain two of the following Metamagic options of your choice. You gain another one at 10th and 17th level.\nYou can use only one Metamagic option on a spell when you cast it, unless otherwise noted.",
-      "de": "Zwei Metamagie-Optionen, z. B. Quickened, Twinned oder Subtle Spell."
+      "de": "Auf Stufe 3 erhältst du die Fähigkeit, deine Zauber nach deinen Bedürfnissen zu verdrehen. Du erhältst zwei der folgenden Metamagie-Optionen deiner Wahl. Auf Stufe 10 und 17 erhältst du je eine weitere.\nDu kannst beim Wirken eines Zaubers nur eine Metamagie-Option darauf anwenden, sofern nicht anders angegeben."
      },
      "source": "srd",
      "verified": false
@@ -1703,7 +1703,7 @@
      "n": "Metamagic",
      "text": {
       "en": "At 3rd level, you gain the ability to twist your spells to suit your needs. You gain two of the following Metamagic options of your choice. You gain another one at 10th and 17th level.\nYou can use only one Metamagic option on a spell when you cast it, unless otherwise noted.",
-      "de": "Eine weitere Option."
+      "de": "Auf Stufe 3 erhältst du die Fähigkeit, deine Zauber nach deinen Bedürfnissen zu verdrehen. Du erhältst zwei der folgenden Metamagie-Optionen deiner Wahl. Auf Stufe 10 und 17 erhältst du je eine weitere.\nDu kannst beim Wirken eines Zaubers nur eine Metamagie-Option darauf anwenden, sofern nicht anders angegeben."
      },
      "source": "srd",
      "verified": false
@@ -1714,7 +1714,7 @@
      "n": "Metamagic",
      "text": {
       "en": "At 3rd level, you gain the ability to twist your spells to suit your needs. You gain two of the following Metamagic options of your choice. You gain another one at 10th and 17th level.\nYou can use only one Metamagic option on a spell when you cast it, unless otherwise noted.",
-      "de": "Eine weitere Option."
+      "de": "Auf Stufe 3 erhältst du die Fähigkeit, deine Zauber nach deinen Bedürfnissen zu verdrehen. Du erhältst zwei der folgenden Metamagie-Optionen deiner Wahl. Auf Stufe 10 und 17 erhältst du je eine weitere.\nDu kannst beim Wirken eines Zaubers nur eine Metamagie-Option darauf anwenden, sofern nicht anders angegeben."
      },
      "source": "srd",
      "verified": false
@@ -1725,7 +1725,7 @@
      "n": "Sorcerous Restoration",
      "text": {
       "en": "At 20th level, you regain 4 expended sorcery points whenever you finish a short rest.",
-      "de": "Bei einer kurzen Rast 4 Zauberpunkte zurück."
+      "de": "Auf Stufe 20 erhältst du nach jeder kurzen Rast 4 ausgegebene Zaubereipunkte zurück."
      },
      "source": "srd",
      "verified": false
@@ -1770,7 +1770,7 @@
      "n": "Pact Magic",
      "text": {
       "en": "Your arcane research and the magic bestowed on you by your patron have given you facility with spells.",
-      "de": "Zaubern mit CHA. Alle Plätze haben denselben Grad und kommen nach kurzer Rast zurück."
+      "de": "Deine arkanen Studien und die Magie, die dir dein Schutzherr verliehen hat, haben dir Geschick im Umgang mit Zaubern gegeben."
      },
      "source": "srd",
      "verified": false
@@ -1781,7 +1781,7 @@
      "n": "Eldritch Invocations",
      "text": {
       "en": "In your study of occult lore, you have unearthed eldritch invocations, fragments of forbidden knowledge that imbue you with an abiding magical ability.\nAt 2nd level, you gain two eldritch invocations of your choice. Your invocation options are detailed at the end of the class description. When you gain certain warlock levels, you gain additional invocations of your choice, as shown in the Invocations Known column of the Warlock table.\nAdditionally, when you gain a level in this class, you can choose one of the invocations you know and replace it with another invocation that you could learn at that level.",
-      "de": "Zwei Anrufungen, z. B. Agonizing Blast oder Devil's Sight."
+      "de": "Bei deinem Studium okkulter Überlieferungen hast du Schauerliche Anrufungen ausgegraben, Bruchstücke verbotenen Wissens, die dir eine dauerhafte magische Fähigkeit verleihen.\nAuf Stufe 2 erhältst du zwei Anrufungen deiner Wahl. Die Anrufungen sind am Ende der Klassenbeschreibung aufgeführt. Auf bestimmten Hexenmeisterstufen erhältst du weitere Anrufungen deiner Wahl, wie in der Spalte „Bekannte Anrufungen“ der Hexenmeistertabelle angegeben.\nAußerdem kannst du, wenn du eine Stufe in dieser Klasse aufsteigst, eine deiner bekannten Anrufungen durch eine andere ersetzen, die du auf dieser Stufe lernen könntest."
      },
      "source": "srd",
      "verified": false
@@ -1792,7 +1792,7 @@
      "n": "Pact Boon",
      "text": {
       "en": "At 3rd level, your otherworldly patron bestows a gift upon you for your loyal service. You gain one of the following features of your choice.",
-      "de": "Wähle Pact of the Chain, Pact of the Blade oder Pact of the Tome."
+      "de": "Auf Stufe 3 belohnt dich dein jenseitiger Schutzherr für deine treuen Dienste mit einer Gabe. Du erhältst eines der folgenden Merkmale deiner Wahl."
      },
      "source": "srd",
      "verified": false
@@ -1803,7 +1803,7 @@
      "n": "Eldritch Invocations",
      "text": {
       "en": "You now know three invocations.",
-      "de": "Jetzt drei Anrufungen."
+      "de": "Du kennst jetzt drei Anrufungen."
      },
      "source": "summary",
      "verified": false
@@ -1814,7 +1814,7 @@
      "n": "Eldritch Invocations",
      "text": {
       "en": "You now know four invocations.",
-      "de": "Jetzt vier Anrufungen."
+      "de": "Du kennst jetzt vier Anrufungen."
      },
      "source": "summary",
      "verified": false
@@ -1825,7 +1825,7 @@
      "n": "Eldritch Invocations",
      "text": {
       "en": "You now know five invocations.",
-      "de": "Jetzt fünf Anrufungen."
+      "de": "Du kennst jetzt fünf Anrufungen."
      },
      "source": "summary",
      "verified": false
@@ -1836,7 +1836,7 @@
      "n": "Mystic Arcanum (6. Grad)",
      "text": {
       "en": "At 11th level, your patron bestows upon you a magical secret called an arcanum. Choose one 6th- level spell from the warlock spell list as this arcanum.\nYou can cast your arcanum spell once without expending a spell slot. You must finish a long rest before you can do so again.\nAt higher levels, you gain more warlock spells of your choice that can be cast in this way: one 7th- level spell at 13th level, one 8th-level spell at 15th level, and one 9th-level spell at 17th level. You regain all uses of your Mystic Arcanum when you finish a long rest.",
-      "de": "Ein Zauber 6. Grades einmal pro langer Rast ohne Platz."
+      "de": "Auf Stufe 11 verleiht dir dein Schutzherr ein magisches Geheimnis, ein sogenanntes Arkanum. Wähle einen Zauber des 6. Grades aus der Hexenmeister-Zauberliste als dieses Arkanum.\nDu kannst deinen Arkanum-Zauber einmal wirken, ohne einen Zauberplatz zu verbrauchen. Danach musst du eine lange Rast beenden, bevor du es erneut tun kannst.\nAuf höheren Stufen erhältst du weitere Hexenmeisterzauber deiner Wahl, die du so wirken kannst: einen Zauber des 7. Grades auf Stufe 13, einen des 8. Grades auf Stufe 15 und einen des 9. Grades auf Stufe 17. Nach einer langen Rast erhältst du alle Anwendungen deines Mystic Arcanum zurück."
      },
      "source": "srd",
      "verified": false
@@ -1847,7 +1847,7 @@
      "n": "Eldritch Invocations",
      "text": {
       "en": "You now know six invocations.",
-      "de": "Jetzt sechs Anrufungen."
+      "de": "Du kennst jetzt sechs Anrufungen."
      },
      "source": "summary",
      "verified": false
@@ -1858,7 +1858,7 @@
      "n": "Mystic Arcanum (7. Grad)",
      "text": {
       "en": "At 11th level, your patron bestows upon you a magical secret called an arcanum. Choose one 6th- level spell from the warlock spell list as this arcanum.\nYou can cast your arcanum spell once without expending a spell slot. You must finish a long rest before you can do so again.\nAt higher levels, you gain more warlock spells of your choice that can be cast in this way: one 7th- level spell at 13th level, one 8th-level spell at 15th level, and one 9th-level spell at 17th level. You regain all uses of your Mystic Arcanum when you finish a long rest.",
-      "de": "Ein Zauber 7. Grades einmal pro langer Rast."
+      "de": "Auf Stufe 11 verleiht dir dein Schutzherr ein magisches Geheimnis, ein sogenanntes Arkanum. Wähle einen Zauber des 6. Grades aus der Hexenmeister-Zauberliste als dieses Arkanum.\nDu kannst deinen Arkanum-Zauber einmal wirken, ohne einen Zauberplatz zu verbrauchen. Danach musst du eine lange Rast beenden, bevor du es erneut tun kannst.\nAuf höheren Stufen erhältst du weitere Hexenmeisterzauber deiner Wahl, die du so wirken kannst: einen Zauber des 7. Grades auf Stufe 13, einen des 8. Grades auf Stufe 15 und einen des 9. Grades auf Stufe 17. Nach einer langen Rast erhältst du alle Anwendungen deines Mystic Arcanum zurück."
      },
      "source": "srd",
      "verified": false
@@ -1869,7 +1869,7 @@
      "n": "Mystic Arcanum (8. Grad)",
      "text": {
       "en": "At 11th level, your patron bestows upon you a magical secret called an arcanum. Choose one 6th- level spell from the warlock spell list as this arcanum.\nYou can cast your arcanum spell once without expending a spell slot. You must finish a long rest before you can do so again.\nAt higher levels, you gain more warlock spells of your choice that can be cast in this way: one 7th- level spell at 13th level, one 8th-level spell at 15th level, and one 9th-level spell at 17th level. You regain all uses of your Mystic Arcanum when you finish a long rest.",
-      "de": "Ein Zauber 8. Grades einmal pro langer Rast."
+      "de": "Auf Stufe 11 verleiht dir dein Schutzherr ein magisches Geheimnis, ein sogenanntes Arkanum. Wähle einen Zauber des 6. Grades aus der Hexenmeister-Zauberliste als dieses Arkanum.\nDu kannst deinen Arkanum-Zauber einmal wirken, ohne einen Zauberplatz zu verbrauchen. Danach musst du eine lange Rast beenden, bevor du es erneut tun kannst.\nAuf höheren Stufen erhältst du weitere Hexenmeisterzauber deiner Wahl, die du so wirken kannst: einen Zauber des 7. Grades auf Stufe 13, einen des 8. Grades auf Stufe 15 und einen des 9. Grades auf Stufe 17. Nach einer langen Rast erhältst du alle Anwendungen deines Mystic Arcanum zurück."
      },
      "source": "srd",
      "verified": false
@@ -1878,7 +1878,7 @@
      "n": "Eldritch Invocations",
      "text": {
       "en": "You now know seven invocations.",
-      "de": "Jetzt sieben Anrufungen."
+      "de": "Du kennst jetzt sieben Anrufungen."
      },
      "source": "summary",
      "verified": false
@@ -1889,7 +1889,7 @@
      "n": "Mystic Arcanum (9. Grad)",
      "text": {
       "en": "At 11th level, your patron bestows upon you a magical secret called an arcanum. Choose one 6th- level spell from the warlock spell list as this arcanum.\nYou can cast your arcanum spell once without expending a spell slot. You must finish a long rest before you can do so again.\nAt higher levels, you gain more warlock spells of your choice that can be cast in this way: one 7th- level spell at 13th level, one 8th-level spell at 15th level, and one 9th-level spell at 17th level. You regain all uses of your Mystic Arcanum when you finish a long rest.",
-      "de": "Ein Zauber 9. Grades einmal pro langer Rast."
+      "de": "Auf Stufe 11 verleiht dir dein Schutzherr ein magisches Geheimnis, ein sogenanntes Arkanum. Wähle einen Zauber des 6. Grades aus der Hexenmeister-Zauberliste als dieses Arkanum.\nDu kannst deinen Arkanum-Zauber einmal wirken, ohne einen Zauberplatz zu verbrauchen. Danach musst du eine lange Rast beenden, bevor du es erneut tun kannst.\nAuf höheren Stufen erhältst du weitere Hexenmeisterzauber deiner Wahl, die du so wirken kannst: einen Zauber des 7. Grades auf Stufe 13, einen des 8. Grades auf Stufe 15 und einen des 9. Grades auf Stufe 17. Nach einer langen Rast erhältst du alle Anwendungen deines Mystic Arcanum zurück."
      },
      "source": "srd",
      "verified": false
@@ -1900,7 +1900,7 @@
      "n": "Eldritch Invocations",
      "text": {
       "en": "You now know eight invocations.",
-      "de": "Jetzt acht Anrufungen."
+      "de": "Du kennst jetzt acht Anrufungen."
      },
      "source": "summary",
      "verified": false
@@ -1911,7 +1911,7 @@
      "n": "Eldritch Master",
      "text": {
       "en": "At 20th level, you can draw on your inner reserve of mystical power while entreating your patron to regain expended spell slots. You can spend 1 minute entreating your patron for aid to regain all your expended spell slots from your Pact Magic feature.\nOnce you regain spell slots with this feature, you must finish a long rest before you can do so again.",
-      "de": "1 Min konzentrieren: alle Paktplätze zurück, einmal pro langer Rast."
+      "de": "Auf Stufe 20 kannst du aus deiner inneren Reserve mystischer Kraft schöpfen, während du deinen Schutzherrn anflehst, um verbrauchte Zauberplätze zurückzugewinnen. Du kannst 1 Minute lang deinen Schutzherrn um Hilfe bitten, um alle verbrauchten Zauberplätze deines Merkmals Pact Magic zurückzuerhalten.\nHast du mit diesem Merkmal Zauberplätze zurückgewonnen, musst du eine lange Rast beenden, bevor du es erneut tun kannst."
      },
      "source": "srd",
      "verified": false
@@ -1961,7 +1961,7 @@
      "n": "Spellcasting",
      "text": {
       "en": "As a student of arcane magic, you have a spellbook containing spells that show the first glimmerings of your true power.",
-      "de": "Zaubern mit INT aus dem Zauberbuch (startet mit 6 Zaubern 1. Grades). Vorbereitet: INT-Mod + Magierstufe."
+      "de": "Als Schüler arkaner Magie besitzt du ein Zauberbuch mit Zaubern, die erste Ansätze deiner wahren Macht zeigen."
      },
      "source": "srd",
      "verified": false
@@ -1970,7 +1970,7 @@
      "n": "Arcane Recovery",
      "text": {
       "en": "You have learned to regain some of your magical energy by studying your spellbook. Once per day when you finish a short rest, you can choose expended spell slots to recover. The spell slots can have a combined level that is equal to or less than half your wizard level (rounded up), and none of the slots can be 6th level or higher.\nFor example, if you're a 4th-level wizard, you can recover up to two levels worth of spell slots. You can recover either a 2nd-level spell slot or two 1st-level spell slots.",
-      "de": "Einmal pro Tag bei einer kurzen Rast verbrauchte Plätze zurückholen: Gesamtgrad bis zur halben Magierstufe (aufgerundet), keiner höher als Grad 5."
+      "de": "Du hast gelernt, durch das Studium deines Zauberbuchs einen Teil deiner magischen Energie zurückzugewinnen. Einmal pro Tag kannst du nach einer kurzen Rast verbrauchte Zauberplätze wählen, die du zurückgewinnst. Die Plätze dürfen zusammen höchstens einen Grad haben, der der Hälfte deiner Magierstufe (aufgerundet) entspricht, und keiner davon darf vom 6. Grad oder höher sein.\nBist du zum Beispiel Magier der Stufe 4, kannst du Zauberplätze im Wert von bis zu zwei Graden zurückgewinnen: entweder einen Platz des 2. Grades oder zwei Plätze des 1. Grades."
      },
      "source": "srd",
      "verified": false
@@ -1981,7 +1981,7 @@
      "n": "Spell Mastery",
      "text": {
       "en": "At 18th level, you have achieved such mastery over certain spells that you can cast them at will. Choose a 1st-level wizard spell and a 2nd-level wizard spell that are in your spellbook. You can cast those spells at their lowest level without expending a spell slot when you have them prepared. If you want to cast either spell at a higher level, you must expend a spell slot as normal.\nBy spending 8 hours in study, you can exchange one or both of the spells you chose for different spells of the same levels.",
-      "de": "Je einen Zauber 1. und 2. Grades auf niedrigstem Grad ohne Platz wirken."
+      "de": "Auf Stufe 18 beherrschst du bestimmte Zauber so gut, dass du sie beliebig oft wirken kannst. Wähle einen Magierzauber des 1. Grades und einen des 2. Grades aus deinem Zauberbuch. Du kannst diese Zauber auf ihrem niedrigsten Grad wirken, ohne einen Zauberplatz zu verbrauchen, solange du sie vorbereitet hast. Willst du einen davon auf höherem Grad wirken, musst du wie üblich einen Zauberplatz verbrauchen.\nMit 8 Stunden Studium kannst du einen oder beide gewählten Zauber gegen andere Zauber desselben Grades tauschen."
      },
      "source": "srd",
      "verified": false
@@ -1992,7 +1992,7 @@
      "n": "Signature Spells",
      "text": {
       "en": "Pick two 3rd-level spells. Each can be cast once per short rest without a slot.",
-      "de": "Zwei Zauber 3. Grades je einmal pro kurzer Rast ohne Platz."
+      "de": "Wähle zwei Zauber des 3. Grades. Jeden kannst du einmal pro kurzer Rast ohne Zauberplatz wirken."
      },
      "source": "summary",
      "verified": false

@@ -10,7 +10,7 @@
     "n": "Darkvision",
     "text": {
      "en": "You have superior vision in dark and dim conditions. You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You cannot discern color in darkness, only shades of gray.",
-     "de": "Im Dunkeln bis 18 m wie im Dämmerlicht sehen, nur in Graustufen."
+     "de": "Du siehst in Dunkelheit und Dämmerlicht besonders gut. Innerhalb von 18 m siehst du in dämmrigem Licht, als wäre es helles Licht, und in Dunkelheit, als wäre es dämmriges Licht. In der Dunkelheit kannst du keine Farben unterscheiden, nur Grautöne."
     },
     "source": "srd",
     "verified": false
@@ -19,7 +19,7 @@
     "n": "Dwarven Resilience",
     "text": {
      "en": "You have advantage on saving throws against poison, and you have resistance against poison damage.",
-     "de": "Vorteil auf Rettungswürfe gegen Gift, Resistenz gegen Giftschaden."
+     "de": "Du hast Vorteil bei Rettungswürfen gegen Gift und Resistenz gegen Giftschaden."
     },
     "source": "srd",
     "verified": false
@@ -28,7 +28,7 @@
     "n": "Dwarven Combat Training",
     "text": {
      "en": "You have proficiency with the battleaxe, handaxe, light hammer, and warhammer.",
-     "de": "Übung mit Streitaxt, Handaxt, leichtem Hammer und Kriegshammer."
+     "de": "Du bist im Umgang mit Streitaxt, Handaxt, leichtem Hammer und Kriegshammer geübt."
     },
     "source": "srd",
     "verified": false
@@ -37,7 +37,7 @@
     "n": "Stonecunning",
     "text": {
      "en": "Whenever you make an Intelligence (History) check related to the origin of stonework, you are considered proficient in the History skill and add double your proficiency bonus to the check, instead of your normal proficiency bonus.",
-     "de": "Bei Geschichtswürfen zu Steinarbeiten doppelter Übungsbonus."
+     "de": "Wann immer du einen Intelligenzwurf (History) zur Herkunft von Steinarbeiten ablegst, giltst du als in der Fertigkeit History geübt und addierst statt deines normalen Übungsbonus den doppelten Übungsbonus zum Wurf."
     },
     "source": "srd",
     "verified": false
@@ -54,7 +54,7 @@
       "n": "Dwarven Toughness",
       "text": {
        "en": "Your hit point maximum increases by 1, and it increases by 1 every time you gain a level.",
-       "de": "+1 Max-TP pro Stufe (beim Stufenaufstieg eingerechnet)."
+       "de": "Dein Trefferpunktmaximum steigt um 1 und jedes Mal, wenn du eine Stufe aufsteigst, um weitere 1."
       },
       "source": "srd",
       "verified": false
@@ -93,7 +93,7 @@
     "n": "Darkvision",
     "text": {
      "en": "You have superior vision in dark and dim conditions. You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You cannot discern color in darkness, only shades of gray.",
-     "de": "Im Dunkeln bis 18 m wie im Dämmerlicht sehen, nur in Graustufen."
+     "de": "Du siehst in Dunkelheit und Dämmerlicht besonders gut. Innerhalb von 18 m siehst du in dämmrigem Licht, als wäre es helles Licht, und in Dunkelheit, als wäre es dämmriges Licht. In der Dunkelheit kannst du keine Farben unterscheiden, nur Grautöne."
     },
     "source": "srd",
     "verified": false
@@ -102,7 +102,7 @@
     "n": "Keen Senses",
     "text": {
      "en": "You have proficiency in the Perception skill.",
-     "de": "Übung in Perception."
+     "de": "Du bist in der Fertigkeit Perception geübt."
     },
     "source": "srd",
     "verified": false
@@ -111,7 +111,7 @@
     "n": "Fey Ancestry",
     "text": {
      "en": "You have advantage on saving throws against being charmed, and magic cannot put you to sleep.",
-     "de": "Vorteil auf Rettungswürfe gegen Bezauberung; Magie kann dich nicht einschläfern."
+     "de": "Du hast Vorteil bei Rettungswürfen gegen den Zustand Charmed, und Magie kann dich nicht in Schlaf versetzen."
     },
     "source": "srd",
     "verified": false
@@ -120,7 +120,7 @@
     "n": "Trance",
     "text": {
      "en": "Elves do not need to sleep. Instead, they meditate deeply, remaining semiconscious, for 4 hours a day. (The Common word for such meditation is \"trance.\") While meditating, you can dream after a fashion; such dreams are actually mental exercises that have become reflexive through years of practice. After resting this way, you gain the same benefit that a human does from 8 hours of sleep.",
-     "de": "4 Std Meditation statt 8 Std Schlaf."
+     "de": "Elfen müssen nicht schlafen. Stattdessen meditieren sie täglich 4 Stunden lang tief und bleiben dabei halb bei Bewusstsein. (In der Gemeinsprache heißt diese Meditation „Trance“.) Während der Meditation kannst du gewissermaßen träumen; solche Träume sind in Wahrheit geistige Übungen, die durch jahrelange Praxis zum Reflex geworden sind. Nach einer solchen Rast hast du denselben Nutzen wie ein Mensch nach 8 Stunden Schlaf."
     },
     "source": "srd",
     "verified": false
@@ -137,7 +137,7 @@
       "n": "Elf Weapon Training",
       "text": {
        "en": "You have proficiency with the longsword, shortsword, shortbow, and longbow.",
-       "de": "Übung mit Lang- und Kurzschwert, Kurz- und Langbogen."
+       "de": "Du bist im Umgang mit Langschwert, Kurzschwert, Kurzbogen und Langbogen geübt."
       },
       "source": "srd",
       "verified": false
@@ -146,7 +146,7 @@
       "n": "Cantrip",
       "text": {
        "en": "One cantrip from the wizard list; Intelligence is its casting ability.",
-       "de": "Ein Cantrip der Magierliste, Zauberattribut INT."
+       "de": "Ein Zaubertrick aus der Liste des Magiers; Intelligenz ist das Zauberattribut dafür."
       },
       "source": "summary",
       "verified": false
@@ -155,7 +155,7 @@
       "n": "Extra Language",
       "text": {
        "en": "You can speak, read, and write one extra language of your choice.",
-       "de": "Eine weitere Sprache."
+       "de": "Du kannst eine zusätzliche Sprache deiner Wahl sprechen, lesen und schreiben."
       },
       "source": "srd",
       "verified": false
@@ -173,7 +173,7 @@
       "n": "Elf Weapon Training",
       "text": {
        "en": "You have proficiency with the longsword, shortsword, shortbow, and longbow.",
-       "de": "Übung mit Lang- und Kurzschwert, Kurz- und Langbogen."
+       "de": "Du bist im Umgang mit Langschwert, Kurzschwert, Kurzbogen und Langbogen geübt."
       },
       "source": "srd",
       "verified": false
@@ -182,7 +182,7 @@
       "n": "Fleet of Foot",
       "text": {
        "en": "Base walking speed is 35 feet.",
-       "de": "Grundtempo 10,5 m."
+       "de": "Dein Grund-Gehtempo beträgt 10,5 m."
       },
       "source": "summary",
       "verified": false
@@ -191,7 +191,7 @@
       "n": "Mask of the Wild",
       "text": {
        "en": "You can try to hide when only lightly obscured by natural phenomena such as foliage, rain or mist.",
-       "de": "Verstecken schon bei leichter Verdeckung durch Natur wie Laub, Regen oder Nebel."
+       "de": "Du kannst versuchen, dich zu verstecken, auch wenn du nur durch natürliche Erscheinungen wie Laub, Regen oder Nebel leicht verschleiert bist."
       },
       "source": "summary",
       "verified": false
@@ -208,7 +208,7 @@
       "n": "Superior Darkvision",
       "text": {
        "en": "Darkvision out to 120 feet.",
-       "de": "Dunkelsicht 36 m."
+       "de": "Darkvision bis 36 m."
       },
       "source": "summary",
       "verified": false
@@ -217,7 +217,7 @@
       "n": "Sunlight Sensitivity",
       "text": {
        "en": "Disadvantage on attack rolls and on sight-based Perception checks in direct sunlight.",
-       "de": "Nachteil auf Angriffe und auf Wahrnehmung per Sicht im direkten Sonnenlicht."
+       "de": "Nachteil bei Angriffswürfen und bei Würfen auf Perception, die auf Sicht beruhen, wenn du in direktem Sonnenlicht bist."
       },
       "source": "summary",
       "verified": false
@@ -226,7 +226,7 @@
       "n": "Drow Magic",
       "text": {
        "en": "Dancing Lights cantrip; Faerie Fire from 3rd level and Darkness from 5th level, each once per long rest (Charisma).",
-       "de": "Dancing Lights; ab Stufe 3 Faerie Fire, ab Stufe 5 Darkness, je einmal pro langer Rast (CHA)."
+       "de": "Zaubertrick Dancing Lights; ab Stufe 3 Faerie Fire und ab Stufe 5 Darkness, jeweils einmal pro langer Rast (Charisma)."
       },
       "source": "summary",
       "verified": false
@@ -235,7 +235,7 @@
       "n": "Drow Weapon Training",
       "text": {
        "en": "Proficiency with rapiers, shortswords and hand crossbows.",
-       "de": "Übung mit Rapier, Kurzschwert und Handarmbrust."
+       "de": "Übung mit Rapieren, Kurzschwertern und Handarmbrüsten."
       },
       "source": "summary",
       "verified": false
@@ -257,7 +257,7 @@
     "n": "Lucky",
     "text": {
      "en": "When you roll a 1 on the d20 for an attack roll, ability check, or saving throw, you can reroll the die and must use the new roll.",
-     "de": "Bei einer 1 auf Angriff, Attributs- oder Rettungswurf neu würfeln; das neue Ergebnis gilt."
+     "de": "Würfelst du bei einem Angriffswurf, Attributswurf oder Rettungswurf mit dem W20 eine 1, kannst du neu würfeln und musst das neue Ergebnis verwenden."
     },
     "source": "srd",
     "verified": false
@@ -266,7 +266,7 @@
     "n": "Brave",
     "text": {
      "en": "You have advantage on saving throw against being frightened.",
-     "de": "Vorteil auf Rettungswürfe gegen Furcht."
+     "de": "Du hast Vorteil bei Rettungswürfen gegen den Zustand Frightened."
     },
     "source": "srd",
     "verified": false
@@ -275,7 +275,7 @@
     "n": "Halfling Nimbleness",
     "text": {
      "en": "You can move through the space of any creature that is of a size larger than yours.",
-     "de": "Du kannst dich durch den Platz größerer Kreaturen bewegen."
+     "de": "Du kannst dich durch das Feld jeder Kreatur bewegen, die größer ist als du."
     },
     "source": "srd",
     "verified": false
@@ -292,7 +292,7 @@
       "n": "Naturally Stealthy",
       "text": {
        "en": "You can attempt to hide even when you are obscured only by a creature that is at least one size larger than you.",
-       "de": "Verstecken auch hinter einer Kreatur, die mindestens eine Größe größer ist."
+       "de": "Du kannst versuchen, dich zu verstecken, selbst wenn du nur durch eine Kreatur verdeckt bist, die mindestens eine Größenkategorie größer ist als du."
       },
       "source": "srd",
       "verified": false
@@ -309,7 +309,7 @@
       "n": "Stout Resilience",
       "text": {
        "en": "Advantage on saves against poison and resistance to poison damage.",
-       "de": "Vorteil auf Rettungswürfe gegen Gift, Resistenz gegen Giftschaden."
+       "de": "Vorteil bei Rettungswürfen gegen Gift und Resistenz gegen Giftschaden."
       },
       "source": "summary",
       "verified": false
@@ -331,7 +331,7 @@
     "n": "Extra Language",
     "text": {
      "en": "You can speak, read, and write one extra language of your choice.",
-     "de": "Eine weitere Sprache."
+     "de": "Du kannst eine zusätzliche Sprache deiner Wahl sprechen, lesen und schreiben."
     },
     "source": "srd",
     "verified": false
@@ -348,7 +348,7 @@
       "n": "Skills",
       "text": {
        "en": "Proficiency in one skill of your choice.",
-       "de": "Übung in einer Fertigkeit nach Wahl."
+       "de": "Übung in einer Fertigkeit deiner Wahl."
       },
       "source": "summary",
       "verified": false
@@ -357,7 +357,7 @@
       "n": "Feat",
       "text": {
        "en": "One feat of your choice.",
-       "de": "Ein Talent nach Wahl."
+       "de": "Ein Talent deiner Wahl."
       },
       "source": "summary",
       "verified": false
@@ -379,7 +379,7 @@
     "n": "Draconic Ancestry",
     "text": {
      "en": "You have draconic ancestry. Choose one type of dragon from the Draconic Ancestry table. Your breath weapon and damage resistance are determined by the dragon type, as shown in the table.",
-     "de": "Deine Drachenart bestimmt Schadensart und Form der Odemwaffe."
+     "de": "Du hast drachische Vorfahren. Wähle eine Drachenart aus der Tabelle der drachischen Abstammung. Deine Odemwaffe und deine Schadensresistenz hängen von dieser Drachenart ab, wie in der Tabelle angegeben."
     },
     "source": "srd",
     "verified": false
@@ -388,7 +388,7 @@
     "n": "Breath Weapon",
     "text": {
      "en": "You can use your action to exhale destructive energy. Your draconic ancestry determines the size, shape, and damage type of the exhalation.\nWhen you use your breath weapon, each creature in the area of the exhalation must make a saving throw, the type of which is determined by your draconic ancestry. The DC for this saving throw equals 8 + your Constitution modifier + your proficiency bonus. A creature takes 2d6 damage on a failed save, and half as much damage on a successful one. The damage increases to 3d6 at 6th level, 4d6 at 11th level, and 5d6 at 16th level.\nAfter you use your breath weapon, you cannot use it again until you complete a short or long rest.",
-     "de": "Aktion: 2W6 (ab Stufe 6 3W6, 11 4W6, 16 5W6), Rettungswurf SG 8 + KON + Übung, halber Schaden bei Erfolg. Einmal pro kurzer Rast."
+     "de": "Mit deiner Aktion kannst du zerstörerische Energie ausatmen. Deine drachische Abstammung bestimmt Größe, Form und Schadensart des Atems.\nWenn du deine Odemwaffe benutzt, muss jede Kreatur im Bereich des Atems einen Rettungswurf ablegen, dessen Art von deiner drachischen Abstammung abhängt. Der SG beträgt 8 + dein Konstitutionsmodifikator + dein Übungsbonus. Bei Misserfolg erleidet eine Kreatur 2W6 Schaden, bei Erfolg die Hälfte. Der Schaden steigt auf 3W6 ab Stufe 6, auf 4W6 ab Stufe 11 und auf 5W6 ab Stufe 16.\nNachdem du deine Odemwaffe benutzt hast, kannst du sie erst nach einer kurzen oder langen Rast wieder benutzen."
     },
     "source": "srd",
     "verified": false
@@ -397,7 +397,7 @@
     "n": "Damage Resistance",
     "text": {
      "en": "You have resistance to the damage type associated with your draconic ancestry.",
-     "de": "Resistenz gegen die Schadensart deiner Abstammung."
+     "de": "Du hast Resistenz gegen die Schadensart deiner drachischen Abstammung."
     },
     "source": "srd",
     "verified": false
@@ -418,7 +418,7 @@
     "n": "Darkvision",
     "text": {
      "en": "You have superior vision in dark and dim conditions. You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You cannot discern color in darkness, only shades of gray.",
-     "de": "Im Dunkeln bis 18 m wie im Dämmerlicht sehen, nur in Graustufen."
+     "de": "Du siehst in Dunkelheit und Dämmerlicht besonders gut. Innerhalb von 18 m siehst du in dämmrigem Licht, als wäre es helles Licht, und in Dunkelheit, als wäre es dämmriges Licht. In der Dunkelheit kannst du keine Farben unterscheiden, nur Grautöne."
     },
     "source": "srd",
     "verified": false
@@ -427,7 +427,7 @@
     "n": "Gnome Cunning",
     "text": {
      "en": "You have advantage on all Intelligence, Wisdom, and Charisma saving throws against magic.",
-     "de": "Vorteil auf INT-, WEI- und CHA-Rettungswürfe gegen Magie."
+     "de": "Du hast Vorteil bei allen Intelligenz-, Weisheits- und Charismarettungswürfen gegen Magie."
     },
     "source": "srd",
     "verified": false
@@ -444,7 +444,7 @@
       "n": "Natural Illusionist",
       "text": {
        "en": "Minor Illusion cantrip (Intelligence).",
-       "de": "Cantrip Minor Illusion (INT)."
+       "de": "Zaubertrick Minor Illusion (Intelligenz)."
       },
       "source": "summary",
       "verified": false
@@ -470,7 +470,7 @@
       "n": "Artificer's Lore",
       "text": {
        "en": "Whenever you make an Intelligence (History) check related to magic items, alchemical objects, or technological devices, you can add twice your proficiency bonus, instead of any proficiency bonus you normally apply.",
-       "de": "Doppelter Übungsbonus bei Geschichtswürfen zu magischen und technischen Gegenständen."
+       "de": "Wann immer du einen Intelligenzwurf (History) zu magischen Gegenständen, alchemistischen Objekten oder technischen Geräten ablegst, kannst du statt eines normalen Übungsbonus den doppelten Übungsbonus addieren."
       },
       "source": "srd",
       "verified": false
@@ -479,7 +479,7 @@
       "n": "Tinker",
       "text": {
        "en": "You have proficiency with artisan's tools (tinker's tools). Using those tools, you can spend 1 hour and 10 gp worth of materials to construct a Tiny clockwork device (AC 5, 1 hp). The device ceases to function after 24 hours (unless you spend 1 hour repairing it to keep the device functioning), or when you use your action to dismantle it; at that time, you can reclaim the materials used to create it. You can have up to three such devices active at a time.\nWhen you create a device, choose one of the following options:\nClockwork Toy: This toy is a clockwork animal, monster, or person, such as a frog, mouse, bird, dragon, or soldier. When placed on the ground, the toy moves 5 feet across the ground on each of your turns in a random direction. It makes noises as appropriate to the creature it represents.\nFire Starter: The device produces a miniature flame, which you can use to light a candle, torch, or campfire. Using the device requires your action.\nMusic Box: When opened, this music box plays a single song at a moderate volume. The box stops playing when it reaches the song's end or when it is closed.",
-       "de": "Kleine Uhrwerk-Geräte bauen."
+       "de": "Du bist mit Handwerkszeug (Bastlerwerkzeug) geübt. Damit kannst du 1 Stunde und Material im Wert von 10 GM aufwenden, um ein winziges Uhrwerkgerät zu bauen (RK 5, 1 TP). Das Gerät hört nach 24 Stunden auf zu funktionieren (sofern du nicht 1 Stunde aufwendest, um es instand zu halten) oder wenn du es mit deiner Aktion zerlegst; dann kannst du das verwendete Material zurückgewinnen. Du kannst bis zu drei solcher Geräte gleichzeitig in Betrieb haben.\nWähle beim Bau eines Geräts eine der folgenden Optionen:\nUhrwerkspielzeug: Dieses Spielzeug ist ein Uhrwerktier, -monster oder eine Uhrwerkperson, etwa ein Frosch, eine Maus, ein Vogel, ein Drache oder ein Soldat. Auf den Boden gestellt, bewegt es sich in jedem deiner Züge 1,5 m in eine zufällige Richtung. Es macht Geräusche, die zur dargestellten Kreatur passen.\nFeuermacher: Das Gerät erzeugt eine winzige Flamme, mit der du eine Kerze, eine Fackel oder ein Lagerfeuer anzünden kannst. Das Gerät zu benutzen, erfordert deine Aktion.\nSpieluhr: Geöffnet spielt diese Spieluhr in mäßiger Lautstärke ein einzelnes Lied. Sie hört auf, wenn das Lied zu Ende ist oder sie geschlossen wird."
       },
       "source": "srd",
       "verified": false
@@ -501,7 +501,7 @@
     "n": "Darkvision",
     "text": {
      "en": "You have superior vision in dark and dim conditions. You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You cannot discern color in darkness, only shades of gray.",
-     "de": "Im Dunkeln bis 18 m wie im Dämmerlicht sehen, nur in Graustufen."
+     "de": "Du siehst in Dunkelheit und Dämmerlicht besonders gut. Innerhalb von 18 m siehst du in dämmrigem Licht, als wäre es helles Licht, und in Dunkelheit, als wäre es dämmriges Licht. In der Dunkelheit kannst du keine Farben unterscheiden, nur Grautöne."
     },
     "source": "srd",
     "verified": false
@@ -510,7 +510,7 @@
     "n": "Fey Ancestry",
     "text": {
      "en": "You have advantage on saving throws against being charmed, and magic cannot put you to sleep.",
-     "de": "Vorteil auf Rettungswürfe gegen Bezauberung; Magie kann dich nicht einschläfern."
+     "de": "Du hast Vorteil bei Rettungswürfen gegen den Zustand Charmed, und Magie kann dich nicht in Schlaf versetzen."
     },
     "source": "srd",
     "verified": false
@@ -519,7 +519,7 @@
     "n": "Skill Versatility",
     "text": {
      "en": "You gain proficiency in two skills of your choice.",
-     "de": "Übung in zwei Fertigkeiten nach Wahl."
+     "de": "Du erhältst Übung in zwei Fertigkeiten deiner Wahl."
     },
     "source": "srd",
     "verified": false
@@ -540,7 +540,7 @@
     "n": "Darkvision",
     "text": {
      "en": "You have superior vision in dark and dim conditions. You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You cannot discern color in darkness, only shades of gray.",
-     "de": "Im Dunkeln bis 18 m wie im Dämmerlicht sehen, nur in Graustufen."
+     "de": "Du siehst in Dunkelheit und Dämmerlicht besonders gut. Innerhalb von 18 m siehst du in dämmrigem Licht, als wäre es helles Licht, und in Dunkelheit, als wäre es dämmriges Licht. In der Dunkelheit kannst du keine Farben unterscheiden, nur Grautöne."
     },
     "source": "srd",
     "verified": false
@@ -549,7 +549,7 @@
     "n": "Menacing",
     "text": {
      "en": "You gain proficiency in the Intimidation skill.",
-     "de": "Übung in Intimidation."
+     "de": "Du erhältst Übung in der Fertigkeit Intimidation."
     },
     "source": "srd",
     "verified": false
@@ -558,7 +558,7 @@
     "n": "Relentless Endurance",
     "text": {
      "en": "When you are reduced to 0 hit points but not killed outright, you can drop to 1 hit point instead. you cannot use this feature again until you finish a long rest.",
-     "de": "Fällst du auf 0 TP, ohne zu sterben, bleibst du bei 1 TP. Einmal pro langer Rast."
+     "de": "Sinkst du auf 0 Trefferpunkte, ohne sofort getötet zu werden, kannst du stattdessen auf 1 Trefferpunkt sinken. Du kannst dieses Merkmal erst nach einer langen Rast wieder nutzen."
     },
     "source": "srd",
     "verified": false
@@ -567,7 +567,7 @@
     "n": "Savage Attacks",
     "text": {
      "en": "When you score a critical hit with a melee weapon attack, you can roll one of the weapon's damage dice one additional time and add it to the extra damage of the critical hit.",
-     "de": "Bei einem kritischen Nahkampftreffer einen Waffenschadenswürfel zusätzlich."
+     "de": "Erzielst du mit einem Nahkampf-Waffenangriff einen kritischen Treffer, kannst du einen der Schadenswürfel der Waffe ein weiteres Mal würfeln und zum Zusatzschaden des kritischen Treffers addieren."
     },
     "source": "srd",
     "verified": false
@@ -588,7 +588,7 @@
     "n": "Darkvision",
     "text": {
      "en": "You have superior vision in dark and dim conditions. You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You cannot discern color in darkness, only shades of gray.",
-     "de": "Im Dunkeln bis 18 m wie im Dämmerlicht sehen, nur in Graustufen."
+     "de": "Du siehst in Dunkelheit und Dämmerlicht besonders gut. Innerhalb von 18 m siehst du in dämmrigem Licht, als wäre es helles Licht, und in Dunkelheit, als wäre es dämmriges Licht. In der Dunkelheit kannst du keine Farben unterscheiden, nur Grautöne."
     },
     "source": "srd",
     "verified": false
@@ -597,7 +597,7 @@
     "n": "Hellish Resistance",
     "text": {
      "en": "You have resistance to fire damage.",
-     "de": "Resistenz gegen Feuerschaden."
+     "de": "Du hast Resistenz gegen Feuerschaden."
     },
     "source": "srd",
     "verified": false
@@ -606,7 +606,7 @@
     "n": "Infernal Legacy",
     "text": {
      "en": "You know the thaumaturgy cantrip. When you reach 3rd level, you can cast the hellish rebuke spell as a 2nd-level spell once with this trait and regain the ability to do so when you finish a long rest. When you reach 5th level, you can cast the darkness spell once with this trait and regain the ability to do so when you finish a long rest. Charisma is your spellcasting ability for these spells.",
-     "de": "Thaumaturgy; ab Stufe 3 Hellish Rebuke (Grad 2), ab Stufe 5 Darkness, je einmal pro langer Rast (CHA)."
+     "de": "Du kennst den Zaubertrick Thaumaturgy. Ab Stufe 3 kannst du mit diesem Merkmal einmal den Zauber Hellish Rebuke als Zauber des 2. Grades wirken und erhältst diese Möglichkeit nach einer langen Rast zurück. Ab Stufe 5 kannst du mit diesem Merkmal einmal den Zauber Darkness wirken und erhältst diese Möglichkeit nach einer langen Rast zurück. Charisma ist dein Zauberattribut für diese Zauber."
     },
     "source": "srd",
     "verified": false

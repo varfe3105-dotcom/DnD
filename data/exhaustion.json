@@ -1,8 +1,8 @@
 [
-  {"level":1,"text":{"en":"Disadvantage on ability checks","de":"Nachteil auf Attributswürfe"},"source":"srd","verified":false},
+  {"level":1,"text":{"en":"Disadvantage on ability checks","de":"Nachteil bei Attributswürfen"},"source":"srd","verified":false},
   {"level":2,"text":{"en":"Speed halved","de":"Tempo halbiert"},"source":"srd","verified":false},
-  {"level":3,"text":{"en":"Disadvantage on attack rolls and saving throws","de":"Nachteil auf Angriffe und Rettungswürfe"},"source":"srd","verified":false},
-  {"level":4,"text":{"en":"Hit point maximum halved","de":"Max-TP halbiert"},"source":"srd","verified":false},
-  {"level":5,"text":{"en":"Speed reduced to 0","de":"Tempo 0"},"source":"srd","verified":false},
+  {"level":3,"text":{"en":"Disadvantage on attack rolls and saving throws","de":"Nachteil bei Angriffswürfen und Rettungswürfen"},"source":"srd","verified":false},
+  {"level":4,"text":{"en":"Hit point maximum halved","de":"Trefferpunktmaximum halbiert"},"source":"srd","verified":false},
+  {"level":5,"text":{"en":"Speed reduced to 0","de":"Tempo auf 0 gesenkt"},"source":"srd","verified":false},
   {"level":6,"text":{"en":"Death","de":"Tod"},"source":"srd","verified":false}
 ]

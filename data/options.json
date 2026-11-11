@@ -4,7 +4,7 @@
    "n": "Archery",
    "text": {
     "en": "+2 to ranged weapon attack rolls.",
-    "de": "+2 auf Fernkampf-Angriffswürfe."
+    "de": "+2 auf Angriffswürfe mit Fernkampfwaffen."
    },
    "source": "summary",
    "verified": false
@@ -13,7 +13,7 @@
    "n": "Defense",
    "text": {
     "en": "+1 AC while wearing armor.",
-    "de": "+1 RK in Rüstung."
+    "de": "+1 RK, solange du Rüstung trägst."
    },
    "source": "summary",
    "verified": false
@@ -22,7 +22,7 @@
    "n": "Dueling",
    "text": {
     "en": "+2 damage with a one-handed melee weapon and no other weapon.",
-    "de": "+2 Schaden mit einhändiger Nahkampfwaffe ohne weitere Waffe."
+    "de": "+2 Schaden mit einer einhändigen Nahkampfwaffe und keiner weiteren Waffe."
    },
    "source": "summary",
    "verified": false
@@ -31,7 +31,7 @@
    "n": "Great Weapon Fighting",
    "text": {
     "en": "Reroll 1s and 2s on damage dice with two-handed or versatile weapons held in two hands.",
-    "de": "Einsen und Zweien auf Schadenswürfeln mit zweihändig geführten Waffen neu würfeln."
+    "de": "Einsen und Zweien auf Schadenswürfeln mit zweihändigen oder vielseitigen Waffen, die du mit beiden Händen führst, neu würfeln."
    },
    "source": "summary",
    "verified": false
@@ -40,7 +40,7 @@
    "n": "Protection",
    "text": {
     "en": "Reaction with a shield: impose disadvantage on an attack against a nearby ally.",
-    "de": "Reaktion mit Schild: Nachteil auf einen Angriff gegen Verbündete in der Nähe."
+    "de": "Reaktion mit einem Schild: Ein Angriff gegen einen Verbündeten in der Nähe hat Nachteil."
    },
    "source": "summary",
    "verified": false
@@ -49,7 +49,7 @@
    "n": "Two-Weapon Fighting",
    "text": {
     "en": "Add your ability modifier to the damage of the off-hand attack.",
-    "de": "Attributsmodifikator auf den Schaden des Nebenhand-Angriffs."
+    "de": "Addiere deinen Attributsmodifikator zum Schaden des Angriffs mit der Nebenhand."
    },
    "source": "summary",
    "verified": false
@@ -60,7 +60,7 @@
    "n": "Careful Spell",
    "text": {
     "en": "1 point: creatures choose to succeed on your spell's save.",
-    "de": "1 Punkt: Kreaturen schaffen automatisch den RW gegen deinen Zauber."
+    "de": "1 Punkt: Gewählte Kreaturen bestehen den Rettungswurf gegen deinen Zauber automatisch."
    },
    "source": "summary",
    "verified": false
@@ -69,7 +69,7 @@
    "n": "Distant Spell",
    "text": {
     "en": "1 point: double range, or touch becomes 30 feet.",
-    "de": "1 Punkt: Reichweite verdoppelt, Berührung wird 9 m."
+    "de": "1 Punkt: doppelte Reichweite, oder Berührung wird zu 9 m."
    },
    "source": "summary",
    "verified": false
@@ -78,7 +78,7 @@
    "n": "Empowered Spell",
    "text": {
     "en": "1 point: reroll up to your CHA modifier damage dice.",
-    "de": "1 Punkt: Bis zu CHA-Mod Schadenswürfel neu würfeln."
+    "de": "1 Punkt: bis zu Charismamodifikator viele Schadenswürfel neu würfeln."
    },
    "source": "summary",
    "verified": false
@@ -87,7 +87,7 @@
    "n": "Extended Spell",
    "text": {
     "en": "1 point: double duration up to 24 hours.",
-    "de": "1 Punkt: Dauer verdoppelt, bis 24 Stunden."
+    "de": "1 Punkt: doppelte Wirkungsdauer, höchstens 24 Stunden."
    },
    "source": "summary",
    "verified": false
@@ -96,7 +96,7 @@
    "n": "Heightened Spell",
    "text": {
     "en": "3 points: one target has disadvantage on its first save.",
-    "de": "3 Punkte: Ein Ziel hat Nachteil auf den ersten RW."
+    "de": "3 Punkte: Ein Ziel hat Nachteil beim ersten Rettungswurf."
    },
    "source": "summary",
    "verified": false
@@ -105,7 +105,7 @@
    "n": "Quickened Spell",
    "text": {
     "en": "2 points: cast a spell of 1 action as a bonus action.",
-    "de": "2 Punkte: Zauber mit 1 Aktion als Bonusaktion wirken."
+    "de": "2 Punkte: Einen Zauber mit 1 Aktion Zeitaufwand als Bonusaktion wirken."
    },
    "source": "summary",
    "verified": false
@@ -114,7 +114,7 @@
    "n": "Subtle Spell",
    "text": {
     "en": "1 point: no verbal or somatic components.",
-    "de": "1 Punkt: keine verbalen oder gestischen Komponenten."
+    "de": "1 Punkt: keine verbalen oder Gestenkomponenten."
    },
    "source": "summary",
    "verified": false
@@ -123,7 +123,7 @@
    "n": "Twinned Spell",
    "text": {
     "en": "Points equal to spell level: target a second creature with a single-target spell.",
-    "de": "Punkte gleich Grad: Einzelziel-Zauber trifft eine zweite Kreatur."
+    "de": "Punkte in Höhe des Zaubergrads: Ein Zauber mit einem einzelnen Ziel trifft eine zweite Kreatur."
    },
    "source": "summary",
    "verified": false
@@ -134,7 +134,7 @@
    "n": "Agonizing Blast",
    "text": {
     "en": "Add your Charisma modifier to Eldritch Blast damage.",
-    "de": "CHA-Mod auf den Schaden von Eldritch Blast."
+    "de": "Addiere deinen Charismamodifikator zum Schaden von Eldritch Blast."
    },
    "source": "summary",
    "verified": false
@@ -143,7 +143,7 @@
    "n": "Armor of Shadows",
    "text": {
     "en": "Cast Mage Armor on yourself at will.",
-    "de": "Mage Armor auf dich nach Belieben."
+    "de": "Mage Armor beliebig oft auf dich selbst wirken."
    },
    "source": "summary",
    "verified": false
@@ -152,7 +152,7 @@
    "n": "Ascendant Step",
    "text": {
     "en": "Levitate on yourself at will (level 9).",
-    "de": "Levitate auf dich nach Belieben (ab Stufe 9)."
+    "de": "Levitate beliebig oft auf dich selbst wirken (Stufe 9)."
    },
    "source": "summary",
    "verified": false
@@ -161,7 +161,7 @@
    "n": "Beast Speech",
    "text": {
     "en": "Speak with Animals at will.",
-    "de": "Speak with Animals nach Belieben."
+    "de": "Speak with Animals beliebig oft wirken."
    },
    "source": "summary",
    "verified": false
@@ -179,7 +179,7 @@
    "n": "Bewitching Whispers",
    "text": {
     "en": "Compulsion once per long rest using a pact slot (level 7).",
-    "de": "Compulsion einmal pro langer Rast mit Paktplatz (ab Stufe 7)."
+    "de": "Compulsion einmal pro langer Rast mit einem Paktplatz (Stufe 7)."
    },
    "source": "summary",
    "verified": false
@@ -188,7 +188,7 @@
    "n": "Book of Ancient Secrets",
    "text": {
     "en": "Pact of the Tome: inscribe rituals.",
-    "de": "Pact of the Tome: Rituale eintragen."
+    "de": "Pakt des Folianten: Rituale ins Buch schreiben."
    },
    "source": "summary",
    "verified": false
@@ -197,7 +197,7 @@
    "n": "Chains of Carceri",
    "text": {
     "en": "Hold Monster at will on celestials, fiends, elementals (level 15, Pact of the Chain).",
-    "de": "Hold Monster nach Belieben gegen Himmlische, Unholde, Elementare (ab Stufe 15, Pact of the Chain)."
+    "de": "Hold Monster beliebig oft gegen Himmlische, Unholde und Elementare (Stufe 15, Pakt der Kette)."
    },
    "source": "summary",
    "verified": false
@@ -206,7 +206,7 @@
    "n": "Devil's Sight",
    "text": {
     "en": "See normally in darkness, magical and nonmagical, 120 feet.",
-    "de": "Sehen in Dunkelheit, auch magisch, 36 m."
+    "de": "Normale Sicht in magischer und nichtmagischer Dunkelheit bis 36 m."
    },
    "source": "summary",
    "verified": false
@@ -215,7 +215,7 @@
    "n": "Dreadful Word",
    "text": {
     "en": "Confusion once per long rest using a pact slot (level 7).",
-    "de": "Confusion einmal pro langer Rast mit Paktplatz (ab Stufe 7)."
+    "de": "Confusion einmal pro langer Rast mit einem Paktplatz (Stufe 7)."
    },
    "source": "summary",
    "verified": false
@@ -224,7 +224,7 @@
    "n": "Eldritch Sight",
    "text": {
     "en": "Detect Magic at will.",
-    "de": "Detect Magic nach Belieben."
+    "de": "Detect Magic beliebig oft wirken."
    },
    "source": "summary",
    "verified": false
@@ -233,7 +233,7 @@
    "n": "Eldritch Spear",
    "text": {
     "en": "Eldritch Blast range becomes 300 feet.",
-    "de": "Eldritch Blast Reichweite 90 m."
+    "de": "Reichweite von Eldritch Blast wird 90 m."
    },
    "source": "summary",
    "verified": false
@@ -242,7 +242,7 @@
    "n": "Eyes of the Rune Keeper",
    "text": {
     "en": "Read all writing.",
-    "de": "Jede Schrift lesen."
+    "de": "Du kannst jede Schrift lesen."
    },
    "source": "summary",
    "verified": false
@@ -251,7 +251,7 @@
    "n": "Fiendish Vigor",
    "text": {
     "en": "False Life on yourself at will (1st level).",
-    "de": "False Life auf dich nach Belieben (Grad 1)."
+    "de": "False Life beliebig oft auf dich selbst wirken (als Zauber des 1. Grades)."
    },
    "source": "summary",
    "verified": false
@@ -260,7 +260,7 @@
    "n": "Gaze of Two Minds",
    "text": {
     "en": "Action: perceive through a willing humanoid's senses.",
-    "de": "Aktion: Durch die Sinne eines willigen Humanoiden wahrnehmen."
+    "de": "Aktion: Durch die Sinne eines bereitwilligen Humanoiden wahrnehmen."
    },
    "source": "summary",
    "verified": false
@@ -269,7 +269,7 @@
    "n": "Lifedrinker",
    "text": {
     "en": "Pact of the Blade: +CHA necrotic damage (level 12).",
-    "de": "Pact of the Blade: +CHA nekrotisch (ab Stufe 12)."
+    "de": "Pakt der Klinge: + Charismamodifikator nekrotischer Schaden (Stufe 12)."
    },
    "source": "summary",
    "verified": false
@@ -278,7 +278,7 @@
    "n": "Mask of Many Faces",
    "text": {
     "en": "Disguise Self at will.",
-    "de": "Disguise Self nach Belieben."
+    "de": "Disguise Self beliebig oft wirken."
    },
    "source": "summary",
    "verified": false
@@ -287,7 +287,7 @@
    "n": "Master of Myriad Forms",
    "text": {
     "en": "Alter Self at will (level 15).",
-    "de": "Alter Self nach Belieben (ab Stufe 15)."
+    "de": "Alter Self beliebig oft wirken (Stufe 15)."
    },
    "source": "summary",
    "verified": false
@@ -296,7 +296,7 @@
    "n": "Minions of Chaos",
    "text": {
     "en": "Conjure Elemental once per long rest using a pact slot (level 9).",
-    "de": "Conjure Elemental einmal pro langer Rast mit Paktplatz (ab Stufe 9)."
+    "de": "Conjure Elemental einmal pro langer Rast mit einem Paktplatz (Stufe 9)."
    },
    "source": "summary",
    "verified": false
@@ -305,7 +305,7 @@
    "n": "Mire the Mind",
    "text": {
     "en": "Slow once per long rest using a pact slot (level 5).",
-    "de": "Slow einmal pro langer Rast mit Paktplatz (ab Stufe 5)."
+    "de": "Slow einmal pro langer Rast mit einem Paktplatz (Stufe 5)."
    },
    "source": "summary",
    "verified": false
@@ -314,7 +314,7 @@
    "n": "Misty Visions",
    "text": {
     "en": "Silent Image at will.",
-    "de": "Silent Image nach Belieben."
+    "de": "Silent Image beliebig oft wirken."
    },
    "source": "summary",
    "verified": false
@@ -323,7 +323,7 @@
    "n": "One with Shadows",
    "text": {
     "en": "In dim light or darkness, action: Invisible until you move or act (level 5).",
-    "de": "In Dämmerlicht oder Dunkelheit, Aktion: Invisible, bis du dich bewegst oder handelst (ab Stufe 5)."
+    "de": "In dämmrigem Licht oder Dunkelheit, Aktion: Invisible, bis du dich bewegst oder handelst (Stufe 5)."
    },
    "source": "summary",
    "verified": false
@@ -332,7 +332,7 @@
    "n": "Otherworldly Leap",
    "text": {
     "en": "Jump on yourself at will (level 9).",
-    "de": "Jump auf dich nach Belieben (ab Stufe 9)."
+    "de": "Jump beliebig oft auf dich selbst wirken (Stufe 9)."
    },
    "source": "summary",
    "verified": false
@@ -350,7 +350,7 @@
    "n": "Sculptor of Flesh",
    "text": {
     "en": "Polymorph once per long rest using a pact slot (level 7).",
-    "de": "Polymorph einmal pro langer Rast mit Paktplatz (ab Stufe 7)."
+    "de": "Polymorph einmal pro langer Rast mit einem Paktplatz (Stufe 7)."
    },
    "source": "summary",
    "verified": false
@@ -359,7 +359,7 @@
    "n": "Sign of Ill Omen",
    "text": {
     "en": "Bestow Curse once per long rest using a pact slot (level 5).",
-    "de": "Bestow Curse einmal pro langer Rast mit Paktplatz (ab Stufe 5)."
+    "de": "Bestow Curse einmal pro langer Rast mit einem Paktplatz (Stufe 5)."
    },
    "source": "summary",
    "verified": false
@@ -368,7 +368,7 @@
    "n": "Thief of Five Fates",
    "text": {
     "en": "Bane once per long rest using a pact slot.",
-    "de": "Bane einmal pro langer Rast mit Paktplatz."
+    "de": "Bane einmal pro langer Rast mit einem Paktplatz."
    },
    "source": "summary",
    "verified": false
@@ -377,7 +377,7 @@
    "n": "Thirsting Blade",
    "text": {
     "en": "Pact of the Blade: attack twice (level 5).",
-    "de": "Pact of the Blade: zwei Angriffe (ab Stufe 5)."
+    "de": "Pakt der Klinge: zweimal angreifen (Stufe 5)."
    },
    "source": "summary",
    "verified": false
@@ -386,7 +386,7 @@
    "n": "Visions of Distant Realms",
    "text": {
     "en": "Arcane Eye at will (level 15).",
-    "de": "Arcane Eye nach Belieben (ab Stufe 15)."
+    "de": "Arcane Eye beliebig oft wirken (Stufe 15)."
    },
    "source": "summary",
    "verified": false
@@ -395,7 +395,7 @@
    "n": "Voice of the Chain Master",
    "text": {
     "en": "Pact of the Chain: speak through your familiar on any plane.",
-    "de": "Pact of the Chain: Durch deinen Vertrauten sprechen, auch auf anderen Ebenen."
+    "de": "Pakt der Kette: Durch deinen Vertrauten sprechen, auf jeder Ebene."
    },
    "source": "summary",
    "verified": false
@@ -404,7 +404,7 @@
    "n": "Whispers of the Grave",
    "text": {
     "en": "Speak with Dead at will (level 9).",
-    "de": "Speak with Dead nach Belieben (ab Stufe 9)."
+    "de": "Speak with Dead beliebig oft wirken (Stufe 9)."
    },
    "source": "summary",
    "verified": false
@@ -413,7 +413,7 @@
    "n": "Witch Sight",
    "text": {
     "en": "See true forms within 30 feet (level 15).",
-    "de": "Wahre Gestalten in 9 m sehen (ab Stufe 15)."
+    "de": "Wahre Gestalten innerhalb von 9 m sehen (Stufe 15)."
    },
    "source": "summary",
    "verified": false

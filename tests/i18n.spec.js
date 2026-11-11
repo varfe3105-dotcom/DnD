@@ -92,7 +92,7 @@ test.describe('Umschalten @new', () => {
     await seed(page, base4({ cond: { Blinded: true } }));
     await expect(page.locator('.row', { hasText: 'Blinded' }).first()).toContainText("can't see");
     await setLang('de')(page);
-    await expect(page.locator('.row', { hasText: 'Blinded' }).first()).toContainText('Kann nicht sehen');
+    await expect(page.locator('.row', { hasText: 'Blinded' }).first()).toContainText('kann nicht sehen');
   });
 
   test('Würfel: 1d8 auf Englisch, 1W8 auf Deutsch', async ({ page }) => {

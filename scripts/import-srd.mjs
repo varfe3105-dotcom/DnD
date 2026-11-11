@@ -390,3 +390,5 @@ const only = process.argv.slice(2).filter(a => !a.startsWith('--'));
 for (const [name, fn] of Object.entries(steps)) if (!only.length || only.includes(name)) fn();
 if (report.missing.length) console.log(report.missing.join('\n'));
 console.log(`Fehlend: ${report.missing.length}`);
+// Vollständige deutsche Texte für Zustände, Merkmale, Talente, Optionen und Regeln (de-full-texts-*).
+if (!only.length) (await import('./apply-full.mjs')).applyFull();
