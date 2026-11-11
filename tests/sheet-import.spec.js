@@ -49,9 +49,8 @@ test.describe('Bogen aus PDF @new', () => {
     expect(s.bag.filter(Boolean).find(x => x.ref === 'item:arrow').q).toBe(20);
     expect(s.tools).toEqual(["Carpenter's Tools"]);
     expect(s.langs).toEqual(['Common', 'Giant', 'Druidic']);
-    expect(s.info).toContain('Goliath');
+    expect(s.race).toBe('Goliath');
     expect(s.feats.map(f => f.n)).toContain('Tough');
-    expect(s.notes).toContain('Goliath');
     expect(s.notes).toContain('Favored Enemy');
   });
 
