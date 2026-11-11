@@ -20,7 +20,15 @@ let transport = null, listener = () => {}, peerHook = () => {}, ackHook = () => 
 export const setAckHook = fn => { ackHook = fn; };
 export const setLiveListener = fn => { listener = fn; };
 export const setPeerHook = fn => { peerHook = fn; };
-let joinHook = () => {};
+let joinHook = () => {}, endTurnHook = () => {}, turnHook = () => {}, lastTurn = '';
+/** Spielleitung: ein Spieler hat „Zug beenden“ gedrückt. */
+export const setEndTurnHook = fn => { endTurnHook = fn; };
+/** Spieler: die Zuganzeige hat sich geändert (mine = jetzt am Zug). */
+export const setTurnHook = fn => { turnHook = fn; };
+/** Zugstand der Spielleitung, falls sie ihn sendet. */
+export const dmTurn = () => L.peers.find(p => p.role === 'dm' && p.turn)?.turn || null;
+export const myTurn = () => { const tr = dmTurn(); return !!tr && L.role === 'player' && tr.cur === myKey; };
+export function endTurn() { return sendMsg({ type: 'endturn', to: 'dm' }); }
 /** Wird nach jedem Betreten und Verlassen eines Raums aufgerufen (Online-Speicherung). */
 export const setJoinHook = fn => { joinHook = fn; };
 
@@ -46,15 +54,16 @@ function clean(p) {
     key: str(p.key, 40), role: p.role === 'dm' ? 'dm' : 'player', name: str(p.name), klass: str(p.klass, 30), level: int(p.level, 20),
     insp: !!p.insp, lock: !!p.lock, hp: int(p.hp), hpMax: int(p.hpMax), tmp: int(p.tmp), ac: int(p.ac, 99), exh: int(p.exh, 6), conc: str(p.conc),
     cond: Array.isArray(p.cond) ? p.cond.filter(c => CONDS.has(c)) : [], death: { s: int(p.death?.s, 3), f: int(p.death?.f, 3) },
+    turn: p.role === 'dm' && p.turn && typeof p.turn === 'object' ? { r: int(p.turn.r, 999), cur: str(p.turn.cur, 40), name: str(p.turn.name), next: str(p.turn.next), enemy: !!p.turn.enemy, nextEnemy: !!p.turn.nextEnemy } : null,
   };
 }
-const MSG_TYPES = new Set(['dmg', 'heal', 'temp', 'cond', 'handout', 'ack', 'item', 'gold']);
+const MSG_TYPES = new Set(['dmg', 'heal', 'temp', 'cond', 'handout', 'ack', 'item', 'gold', 'endturn']);
 const COINS = ['pp', 'gp', 'ep', 'sp', 'cp'];
 const JPEG = /^data:image\/jpeg;base64,[A-Za-z0-9+/=]+$/;
 /** Nachrichten kommen von jedem mit dem Raumcode. Werte werden begrenzt, Änderungen am Bogen muss der Spieler annehmen. */
 function cleanMsg(m) {
   if (!m || typeof m !== 'object' || !MSG_TYPES.has(m.type)) return null;
-  const out = { id: str(m.id, 40), type: m.type, to: str(m.to, 40) };
+  const out = { id: str(m.id, 40), type: m.type, to: str(m.to, 40), from: str(m.from, 40) };
   if (['dmg', 'heal', 'temp'].includes(m.type)) { out.value = int(m.value, 999); if (!out.value) return null; }
   if (m.type === 'cond') { if (!CONDS.has(m.cond)) return null; out.cond = m.cond; }
   if (m.type === 'handout') {
@@ -74,7 +83,8 @@ function cleanMsg(m) {
 function onMessage(raw) {
   const m = cleanMsg(raw);
   if (!m) return;
-  if (L.role === 'dm') { if (m.type === 'ack' && m.to === 'dm') ackHook(m); return; }
+  if (L.role === 'dm') { if (m.type === 'ack' && m.to === 'dm') ackHook(m); if (m.type === 'endturn' && m.to === 'dm') endTurnHook(m.from); return; }
+  if (m.type === 'endturn') return;
   if (m.type === 'ack' || (m.to !== myKey && m.to !== 'all')) return;
   const list = m.type === 'handout' ? L.handouts : L.inbox;
   if (list.length >= 10 || list.some(x => x.id === m.id)) return;
@@ -83,7 +93,7 @@ function onMessage(raw) {
 }
 export function sendMsg(m) {
   if (!transport || !transport.send || L.status !== 'on') return false;
-  transport.send({ id: uid(), ...m });
+  transport.send({ id: uid(), from: myKey, ...m });
   return true;
 }
 /** Beantwortet einen Vorschlag. Gibt ihn bei Zustimmung zurück, damit er angewendet wird. */
@@ -100,7 +110,7 @@ export const setDmFlags = fn => { dmFlags = fn; };
 /** Absprache der Spielleitung: Beute nur über sie. Gilt nur, solange der Spieler verbunden ist. */
 export const lootLocked = () => L.role === 'player' && L.status === 'on' && L.peers.some(p => p.role === 'dm' && p.lock);
 export const refresh = () => push();
-const payload = () => (L.role === 'dm' ? { role: 'dm', lock: !!dmFlags().lock } : { role: 'player', insp: !!S.insp, name: S.name, klass: S.klass, level: S.level, hp: S.hp, hpMax: S.hpMax, tmp: S.tmp, ac: S.ac, exh: S.exh, conc: S.conc, cond: Object.keys(S.cond).filter(c => S.cond[c]), death: S.death });
+const payload = () => (L.role === 'dm' ? { role: 'dm', lock: !!dmFlags().lock, turn: dmFlags().turn || null } : { role: 'player', insp: !!S.insp, name: S.name, klass: S.klass, level: S.level, hp: S.hp, hpMax: S.hpMax, tmp: S.tmp, ac: S.ac, exh: S.exh, conc: S.conc, cond: Object.keys(S.cond).filter(c => S.cond[c]), death: S.death });
 function push() {
   if (!transport) return;
   const p = payload(), j = JSON.stringify(p);
@@ -119,7 +129,7 @@ export function connect(code, role) {
   const key = role === 'dm' ? 'dm-' + uid() : S.id;
   myKey = key;
   const factory = window.__liveFake || realtime;
-  transport = factory(code, key, list => { L.peers = list.map(clean); peerHook(); listener(); }, st => { if (st !== L.status) { L.status = st; listener(true); } }, onMessage);
+  transport = factory(code, key, list => { L.peers = list.map(clean); peerHook(); const tr = dmTurn(), sig = tr ? JSON.stringify(tr) : ''; if (sig !== lastTurn) { lastTurn = sig; if (L.role === 'player') turnHook(myTurn()); listener(true); } else listener(); }, st => { if (st !== L.status) { L.status = st; listener(true); } }, onMessage);
   lastSent = '';
   push();
   listener(true);

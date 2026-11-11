@@ -822,5 +822,17 @@
  "fx.advShort": "V",
  "fx.disShort": "N",
  "fx.failShort": "✕",
- "fx.note": "Automatisch aus Zuständen, Erschöpfung und Rüstung ermittelt. Bei Unklarheit gilt der Regeltext."
+ "fx.note": "Automatisch aus Zuständen, Erschöpfung und Rüstung ermittelt. Bei Unklarheit gilt der Regeltext.",
+ "turn.yours": "Dein Zug!",
+ "turn.mineTitle": "Dein Zug",
+ "turn.end": "Zug beenden",
+ "turn.ended": "Zug beendet.",
+ "turn.offline": "Keine Verbindung zum Raum.",
+ "turn.round": "Runde {n}",
+ "turn.now": "Am Zug: {n}",
+ "turn.enemy": "Gegner",
+ "turn.next": "danach: {n}",
+ "turn.show": "Zuganzeige auf diesem Gerät",
+ "dm.turns": "Züge an Spieler senden",
+ "dm.turnsHint": "Spieler im Live-Raum sehen, wer dran ist, und können ihren Zug selbst beenden. Monster erscheinen nur als „Gegner“."
 }

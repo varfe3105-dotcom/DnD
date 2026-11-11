@@ -822,5 +822,17 @@
  "fx.advShort": "A",
  "fx.disShort": "D",
  "fx.failShort": "✕",
- "fx.note": "Worked out from conditions, exhaustion and armor. If in doubt, the rule text applies."
+ "fx.note": "Worked out from conditions, exhaustion and armor. If in doubt, the rule text applies.",
+ "turn.yours": "Your turn!",
+ "turn.mineTitle": "Your turn",
+ "turn.end": "End turn",
+ "turn.ended": "Turn ended.",
+ "turn.offline": "Not connected to the room.",
+ "turn.round": "Round {n}",
+ "turn.now": "Now: {n}",
+ "turn.enemy": "Enemy",
+ "turn.next": "next: {n}",
+ "turn.show": "Turn display on this device",
+ "dm.turns": "Send turns to players",
+ "dm.turnsHint": "Players in the live room see whose turn it is and can end their own turn. Monsters only show as “Enemy”."
 }

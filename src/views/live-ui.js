@@ -4,7 +4,7 @@ import { U, S } from '../state.js';
 import { C } from '../cloud.js';
 import { DU } from '../dm.js';
 import { COND, CAT, BYN } from '../catalog.js';
-import { L, players } from '../live.js';
+import { L, players, dmTurn, myTurn } from '../live.js';
 import { D } from '../dm.js';
 import { lastBackup, needsBackup, charCount } from '../backup.js';
 import { TIERS, COINS, raritiesFor, coinRow } from '../loot.js';
@@ -85,4 +85,18 @@ export function vCloud() {
     return `<div class="edrow"><span class="nm">${esc(r.kind === 'dm' ? t('cloud.dmData') : r.name || '?')}${me ? ` <span class="lbl">${t('cloud.mine')}</span>` : ''}<small>${fmtAt(r.updated_at)}</small></span><button class="btn sm" data-a="cloudpull" data-kind="${esc(r.kind)}" data-id="${esc(r.id)}">${t('cloud.load')}</button>${L.role === 'dm' ? `<button class="btn sm ${U.CONF === ck ? 'warn' : 'bad'}" data-a="clouddel" data-kind="${esc(r.kind)}" data-id="${esc(r.id)}">${U.CONF === ck ? t('chars.delConfirm') : t('common.deleteBtn')}</button>` : ''}</div>`;
   };
   return `<div class="cloud"><p class="lbl" style="margin:10px 0 4px">${t('cloud.title')}</p><p class="cloud-st ${esc(C.status)}">${esc(st)}</p>${C.status === 'conflict' ? `<div class="add" style="margin-top:4px"><button class="btn solid" data-a="cloudpull" data-kind="${mineK.split(':')[0]}" data-id="${esc(mineK.split(':').slice(1).join(':'))}">${t('cloud.takeOnline')}</button><button class="btn" data-a="cloudforce">${t('cloud.keepMine')}</button></div>` : ''}${rows.length ? rows.map(row).join('') : C.list ? `<p class="note">${t('cloud.empty')}</p>` : ''}<div class="add"><button class="btn sm" data-a="cloudrefresh">${t('cloud.refresh')}</button>${C.status !== 'conflict' ? `<button class="btn sm" data-a="cloudnow">${t('cloud.now')}</button>` : ''}</div><p class="note">${t('cloud.note')}</p></div>`;
+}
+
+/* ---- Zuganzeige für Spieler ---- */
+const TURN_LS = 'charbogen-turns';
+export const turnsHidden = () => { try { return localStorage.getItem(TURN_LS) === 'off'; } catch (e) { return false; } };
+export const setTurnsHidden = off => { try { if (off) localStorage.setItem(TURN_LS, 'off'); else localStorage.removeItem(TURN_LS); } catch (e) { /* Datenschutzmodus */ } };
+export function vTurn() {
+  if (L.role !== 'player' || L.status !== 'on' || turnsHidden()) return '';
+  const tr = dmTurn();
+  if (!tr) return '';
+  const who = (n, enemy) => (enemy ? t('turn.enemy') : esc(n || '?'));
+  const next = tr.next || tr.nextEnemy ? ` · ${t('turn.next', { n: who(tr.next, tr.nextEnemy) })}` : '';
+  if (myTurn()) return `<div class="turn mine" role="status"><div><b>${t('turn.mineTitle')}</b><small>${t('turn.round', { n: tr.r })}${next}</small></div><button class="btn solid" data-a="endturn">${t('turn.end')}</button></div>`;
+  return `<div class="turn" role="status"><span class="lbl">${t('turn.round', { n: tr.r })}</span><span>${t('turn.now', { n: who(tr.name, tr.enemy) })}${next}</span></div>`;
 }

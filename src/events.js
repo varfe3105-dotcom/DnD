@@ -2,7 +2,7 @@ import { pageList, curPage, setPageText, setPageTitle, addPage, delPage, pageLab
 import { uid as newUid } from './util.js';
 import { applyProposal, shrinkImage } from './live-actions.js';
 import { downloadBackup, parseBackup, loadSnap, restoreBackup, initBackup } from './backup.js';
-import { vLootCoins, vLootItems, vBakHist } from './views/live-ui.js';
+import { vLootCoins, vLootItems, vBakHist, turnsHidden, setTurnsHidden } from './views/live-ui.js';
 import { vRuleList } from './views/dm-rules.js';
 import { vPetResults } from './views/extras.js';
 import { weaponProf } from './attacks.js';
@@ -65,7 +65,10 @@ app.addEventListener('click',ev=>{
     case 'dmcdel':{const k='c'+b.dataset.id;if(dm.DU.conf!==k){dm.DU.conf=k;break}dm.DU.conf=null;dm.delCustom(b.dataset.id);dm.DU.editMon=null;dm.saveD();break}
     case 'dmcsave':{const n=v('dmc-n').trim();if(!n){toast(tr('toast.needName'));return}dm.saveCustom({n,cr:v('dmc-cr'),ac:v('dmc-ac'),hp:v('dmc-hp'),speed:v('dmc-sp'),text:v('dmc-t'),abil:Object.fromEntries(['str','dex','con','int','wis','cha'].map(k=>[k,Math.min(30,Math.max(1,+v('dmc-'+k)||10))]))},dm.DU.editMon);dm.DU.editMon=null;dm.saveD();toast(tr('toast.created',{n}));break}
     case 'dmview':dm.D.view=b.dataset.v;dm.saveD();break;
-    case 'dmstep':{const gone=dm.step(+b.dataset.d);dm.saveD();if(gone&&gone.length)toast(gone.map(x=>tr('dm.fxEnded',x)).join(' '));break}
+    case 'dmturns':dm.D.turns=!dm.D.turns;dm.saveD();live.refresh();break;
+    case 'turnshow':setTurnsHidden(!turnsHidden());break;
+    case 'endturn':if(!live.endTurn())toast(tr('turn.offline'));else toast(tr('turn.ended'));break;
+    case 'dmstep':{const gone=dm.step(+b.dataset.d);dm.saveD();live.refresh();if(gone&&gone.length)toast(gone.map(x=>tr('dm.fxEnded',x)).join(' '));break}
     case 'dmclear':if(dm.DU.conf!=='clear'){dm.DU.conf='clear';break}dm.DU.conf=null;dm.clearCombat();dm.saveD();break;
     case 'dmadd':dm.addMonster(b.dataset.m,clamp(Math.floor(+v('dm-qty'))||1,1,20));dm.saveD();break;
     case 'dmman':{const n=v('dm-mn').trim();if(!n){toast(tr('toast.needName'));return}dm.addManual(n,v('dm-mac'),v('dm-mhp'));dm.saveD();break}
@@ -279,7 +282,10 @@ const typing=()=>{const a=document.activeElement;return !!a&&app.contains(a)&&/^
 live.setPeerHook(()=>dm.syncLive(live.players()));
 live.setJoinHook(cloud.onJoin);
 cloud.setCloudListener(()=>{if(S.tab!=='dm'&&S.tab!=='setup')return;if(typing()){livePending=true;return}later()});
-live.setDmFlags(()=>({lock:!!dm.D.lootLock}));
+live.setDmFlags(()=>({lock:!!dm.D.lootLock,turn:dm.turnInfo()}));
+dm.dmHooks.live=()=>live.refresh();
+live.setEndTurnHook(key=>{const gone=dm.endTurnFrom(key);if(gone===null)return;dm.saveD();live.refresh();if(gone.length)toast(gone.map(x=>tr('dm.fxEnded',x)).join(' '));later()});
+live.setTurnHook(mine=>{if(!mine||turnsHidden())return;toast(tr('turn.yours'));try{navigator.vibrate&&navigator.vibrate([120,60,120])}catch(e){/* nicht unterstützt */}});
 live.setAckHook(m=>toast(tr(m.ok?'live.ackYes':'live.ackNo',{n:m.name})));
 initBackup(()=>{const el=$('bak-hist');if(el)el.innerHTML=vBakHist()});
 let lastLock=false;
