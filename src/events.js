@@ -13,6 +13,7 @@ import { importDraft } from './import-play5e.js';
 import { isPlay5e } from './import-play5e.js';
 import * as live from './live.js';
 import * as cloud from './cloud.js';
+import { setBright } from './bright.js';
 import { hpMaxNow } from './effects.js';
 import * as dm from './dm.js';
 import { vResults, vNoteList, vEncResults, vPlaceResults } from './views/dm.js';
@@ -208,6 +209,7 @@ app.addEventListener('change',ev=>{
   if(el.dataset.petbm!=null){const p=S.pets[+el.dataset.petbm];if(p){p.bm=el.checked;save()}later();return}
   if(el.id==='char-switch'){switchChar(el.value);render();return}
   if(el.id==='dm-on'){dm.setDmOn(el.checked);later();return}
+  if(el.id==='bright'){setBright(el.value);return}
   if(el.id==='ac-auto'){S.acMode=el.checked?'auto':'manual';save();later();return}
   if(el.dataset.dp){const p=dm.D.party[+el.dataset.i];if(p){p[el.dataset.dp]=Math.max(el.dataset.dp==='level'?1:0,Math.min(el.dataset.dp==='level'?20:99,Math.floor(+el.value)||0));dm.saveD()}later();return}
   if(el.dataset.de){const e=dm.curEnc();if(e){e.name=el.value;dm.saveD()}later();return}

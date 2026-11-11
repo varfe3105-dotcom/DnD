@@ -1,4 +1,6 @@
 import { render } from './render.js';
+import { applyBright } from './bright.js';
+applyBright();
 import './events.js';
 import { resume } from './live.js';
 

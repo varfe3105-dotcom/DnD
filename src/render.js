@@ -1,3 +1,4 @@
+/* global __BUILD__ */
 import { vNotesTab } from './views/notes.js';
 import { vInbox, vHandout, vBackupNag, vTurn } from './views/live-ui.js';
 import { $, esc } from './util.js';
@@ -44,7 +45,7 @@ export function render() {
   if (tb === 'notes') h += vNotesTab();
   if (tb === 'setup') h += vSetup();
   if (tb === 'dm') h += vDm();
-  h += `<footer><p>${t('footer.rules')}</p><details><summary>${t('footer.about')}</summary><p>${t('footer.srd')}</p><p>${t('footer.icons')}</p><p>${t('footer.fonts')}</p></details></footer>`;
+  h += `<footer><p>${t('footer.rules')}</p><details><summary>${t('footer.about')}</summary><p>${t('footer.srd')}</p><p>${t('footer.icons')}</p><p>${t('footer.fonts')}</p><p class="lbl">${t('footer.version', { v: typeof __BUILD__ !== 'undefined' ? __BUILD__ : '–' })}</p></details></footer>`;
   if (U.LU && CLASSES[S.klass]) h += vLU();
   h += vHandout();
   document.body.style.overflow = U.LU ? 'hidden' : '';

@@ -16,6 +16,7 @@ export default defineConfig(({ mode }) => {
   const web = mode === 'web';
   return {
     root: 'src',
+    define: { __BUILD__: JSON.stringify(new Date().toISOString().slice(0, 16).replace('T', ' ') + ' UTC') },
     base: './',
     publicDir: web ? 'public' : false,
     plugins: [

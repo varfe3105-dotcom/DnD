@@ -860,5 +860,10 @@
  "ammo.shoot": "Schuss −1",
  "ammo.none": "Keine {n} im Rucksack",
  "pp.more": "Motiv erkennen {i} · Nachforschungen {v}",
- "skill.reliable": "Bei Fertigkeiten, in denen du geübt bist, zählt ein W20-Wurf von 9 oder weniger als 10."
+ "skill.reliable": "Bei Fertigkeiten, in denen du geübt bist, zählt ein W20-Wurf von 9 oder weniger als 10.",
+ "bright.label": "Helligkeit",
+ "bright.dark": "Dunkel",
+ "bright.mid": "Mittel",
+ "bright.light": "Hell",
+ "footer.version": "Version: {v}"
 }

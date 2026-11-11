@@ -860,5 +860,10 @@
  "ammo.shoot": "Shot −1",
  "ammo.none": "No {n} in the backpack",
  "pp.more": "Insight {i} · Investigation {v}",
- "skill.reliable": "For skills you are proficient in, a d20 roll of 9 or lower counts as 10."
+ "skill.reliable": "For skills you are proficient in, a d20 roll of 9 or lower counts as 10.",
+ "bright.label": "Brightness",
+ "bright.dark": "Dark",
+ "bright.mid": "Medium",
+ "bright.light": "Light",
+ "footer.version": "Version: {v}"
 }
