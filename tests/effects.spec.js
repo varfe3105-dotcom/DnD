@@ -92,3 +92,26 @@ test.describe('Merkmale, die Werte ändern @new', () => {
     await expect(page.locator('.fx')).toHaveCount(0);
   });
 });
+
+test.describe('Munition, passive Werte, Reliable Talent @new', () => {
+  test('Langbogen zeigt Pfeile, „Schuss −1“ zieht einen ab, leer gibt einen Hinweis', async ({ page }) => {
+    const bow = item('w1', 'Longbow', { ref: 'item:longbow', slot: 'hand', p: 'Martial · 1d8 piercing · Ammunition (range 150/600), Heavy, Two-Handed · 50 gp' });
+    const arrows = item('a1', 'Arrows (20)', { ref: 'item:arrow', q: 2, cons: true });
+    const bag = Array(24).fill(null); bag[0] = arrows;
+    await seed(page, base4({ klass: 'Ranger', eq: { main: bow }, bag }));
+    await expect(page.locator('.ammo b')).toHaveText('2');
+    await act(page, 'shoot').click();
+    await expect(page.locator('.ammo b')).toHaveText('1');
+    await act(page, 'shoot').click();
+    await expect(page.locator('.ammo')).toContainText(/No .* in the backpack|Keine/);
+    expect((await read(page)).bag[0]).toBeNull();
+  });
+  test('passive Motiv erkennen und Nachforschungen stehen unter der passiven Wahrnehmung', async ({ page }) => {
+    await seed(page, base4({ abil: { str: 10, dex: 10, con: 10, int: 14, wis: 12, cha: 10 } }));
+    await expect(page.locator('.st', { hasText: /Passive/ }).locator('.fxsub')).toHaveText('Insight 11 · Investigation 12');
+  });
+  test('Schurke ab Stufe 11 bekommt den Hinweis zu Reliable Talent', async ({ page }) => {
+    await seed(page, base4({ klass: 'Rogue', level: 11, prof: 4 }));
+    await expect(page.locator('.fxnote', { hasText: 'Reliable Talent' })).toBeVisible();
+  });
+});

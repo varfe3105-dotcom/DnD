@@ -315,3 +315,18 @@ summary{color:var(--acc);font-family:var(--f-ui)}
 @media print{.turn{display:none}}
 .turn .foe{color:#f0a87d}.turn .ally{color:var(--bandink)}
 .sph .cant{display:block;font:600 .85rem var(--f-ui);color:var(--acc);margin-top:2px}
+.ammo{flex-basis:100%;display:flex;align-items:center;justify-content:flex-end;gap:10px;font:500 .88rem var(--f-ui);color:var(--mute)}.ammo b{color:var(--bandink)}
+.row.wrow{flex-wrap:wrap}
+
+/* Hellere Abstimmung: mehr Licht im Leder, hellere Linien und Nebentexte, schwächere Randvignette */
+@media screen{
+html:root:not([data-print]){--bg:#1b150f;--panel:#33261a;--sunk:#22180f;--mute:#cdb999;--line:#7a6142;--ink:#f3e8d2;--bandink:#faefd9}
+body{background-color:#1a140e}
+body::after{background:radial-gradient(ellipse 85% 80% at 50% 34%,transparent 50%,rgba(5,4,3,.55) 100%)}
+.card,.st,.skg,.doll,.conc{background:linear-gradient(180deg,rgba(78,54,34,.5),rgba(44,30,19,.66)),var(--leather)}
+.wl{background:linear-gradient(rgba(52,36,23,.62),rgba(36,25,16,.74)),var(--leather)}
+.turn{background:linear-gradient(rgba(52,36,23,.9),rgba(40,28,18,.92)),var(--leather)}
+.wli:hover,.wli[aria-current="true"]{filter:brightness(1.08)}
+input,select,textarea{background-color:#2a1f15}
+}
+@media screen{.cell{background:linear-gradient(#2c1f14,#3d2a1a)!important}}

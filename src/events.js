@@ -5,7 +5,7 @@ import { downloadBackup, parseBackup, loadSnap, restoreBackup, initBackup } from
 import { vLootCoins, vLootItems, vBakHist, turnsHidden, setTurnsHidden } from './views/live-ui.js';
 import { vRuleList } from './views/dm-rules.js';
 import { vPetResults } from './views/extras.js';
-import { weaponProf } from './attacks.js';
+import { weaponProf, ammoFor, ammoLeft } from './attacks.js';
 import { chargeOf, applyDawn, petFrom, petOwn, petView } from './companions.js';
 import { pickBg, applyBg, bgById, toggleStyle, applySubclass } from './backgrounds.js';
 import { isSheetFile, readSheets } from './sheet-read.js';
@@ -65,6 +65,7 @@ app.addEventListener('click',ev=>{
     case 'dmcdel':{const k='c'+b.dataset.id;if(dm.DU.conf!==k){dm.DU.conf=k;break}dm.DU.conf=null;dm.delCustom(b.dataset.id);dm.DU.editMon=null;dm.saveD();break}
     case 'dmcsave':{const n=v('dmc-n').trim();if(!n){toast(tr('toast.needName'));return}dm.saveCustom({n,cr:v('dmc-cr'),ac:v('dmc-ac'),hp:v('dmc-hp'),speed:v('dmc-sp'),text:v('dmc-t'),abil:Object.fromEntries(['str','dex','con','int','wis','cha'].map(k=>[k,Math.min(30,Math.max(1,+v('dmc-'+k)||10))]))},dm.DU.editMon);dm.DU.editMon=null;dm.saveD();toast(tr('toast.created',{n}));break}
     case 'dmview':dm.D.view=b.dataset.v;dm.saveD();break;
+    case 'shoot':{const ref=ammoFor(S.eq[b.dataset.k]||{}),{at}=ammoLeft(ref);if(!at.length)break;const i=at[0],it=S.bag[i];it.q-=1;if(it.q<=0)S.bag[i]=null;break}
     case 'dmturns':dm.D.turns=!dm.D.turns;dm.saveD();live.refresh();break;
     case 'turnshow':setTurnsHidden(!turnsHidden());break;
     case 'endturn':if(!live.endTurn())toast(tr('turn.offline'));else toast(tr('turn.ended'));break;

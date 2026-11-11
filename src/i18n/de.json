@@ -856,5 +856,9 @@
  "saveName.con": "Konstitutionsrettungswurf",
  "saveName.int": "Intelligenzrettungswurf",
  "saveName.wis": "Weisheitsrettungswurf",
- "saveName.cha": "Charismarettungswurf"
+ "saveName.cha": "Charismarettungswurf",
+ "ammo.shoot": "Schuss −1",
+ "ammo.none": "Keine {n} im Rucksack",
+ "pp.more": "Motiv erkennen {i} · Nachforschungen {v}",
+ "skill.reliable": "Bei Fertigkeiten, in denen du geübt bist, zählt ein W20-Wurf von 9 oder weniger als 10."
 }

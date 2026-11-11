@@ -1,4 +1,4 @@
-import { unarmed } from '../attacks.js';
+import { unarmed, ammoFor, ammoLeft } from '../attacks.js';
 import { vCharges, vPets } from './extras.js';
 import { castOptions } from '../game.js';
 import { prepCap, spellStats, classLevels } from '../tables.js';
@@ -8,7 +8,7 @@ import { CLN, SK, ABK, CLIC } from '../constants.js';
 import { S, U } from '../state.js';
 import { initBonus, passivePerception, featureLevel } from '../helpers.js';
 import { hdText, skv, pips, numIn, get, refs, atk, raceTraits, abName, abShort, itemView, spellView, resText } from '../helpers.js';
-import { COND, EXH, featText, byName, CLASSES } from '../catalog.js';
+import { COND, EXH, featText, byName, CLASSES, BYN } from '../catalog.js';
 import { t, loc, dice, dist, lang, nameLine, deName } from '../i18n/index.js';
 import { effects, hpMaxNow, rollState, anyEffect } from '../effects.js';
 
@@ -83,12 +83,20 @@ export function vCond() {
   const act = COND.filter(c => S.cond[c.n]);
   return `<h2>${t('cond.title')}${act.length ? `<em>${t('cond.active', { n: act.length })}</em>` : ''}</h2><div class="card"><div class="chips">${COND.map(c => `<button class="chip${S.cond[c.n] ? ' on' : ''}" data-a="cond" data-c="${c.n}" aria-pressed="${!!S.cond[c.n]}" title="${esc(c.de)}">${esc(nameLine(c.n, c.de))}</button>`).join('')}</div>${act.map(c => `<div class="row"><div class="ic">${tok(c.ic, undefined, 'cond:' + c.n)}</div><div class="nm">${c.n}${deName(c.n, c.de) ? ` <span class="lbl">${c.de}</span>` : ''}<small>${esc(loc(c.text))}</small></div></div>`).join('')}<div class="row"><div class="ic">${tok('skull')}</div><div class="nm">${t('exh.title', { n: S.exh })}<small>${S.exh ? EXH.slice(0, S.exh).map(e => `${e.level}: ${esc(loc(e.text))}`).join(' · ') : t('exh.none')}</small></div><div class="qty"><button data-a="exh" data-d="-1" aria-label="${t('exh.down')}">−</button><button data-a="exh" data-d="1" aria-label="${t('exh.up')}">+</button></div></div></div>`;
 }
+/** Munition zur Fernkampfwaffe: Anzahl im Rucksack und ein Knopf für einen Schuss. */
+function ammoRow(raw, k) {
+  const ref = ammoFor(raw);
+  if (!ref) return '';
+  const { n } = ammoLeft(ref), c = BYN[ref];
+  const name = c ? c.n.replace(/s*(d+)$/, '') : '';
+  return `<div class="ammo">${n ? `<span>${esc(name)}: <b>${n}</b></span><button class="btn sm" data-a="shoot" data-k="${k}">${t('ammo.shoot')}</button>` : `<span class="fxw dis">${t('ammo.none', { n: esc(name) })}</span>`}</div>`;
+}
 export function vAtk() {
   const fx = effects(), st = rollState(fx.atk.adv, fx.atk.dis), fxTag = st && st !== 'both' ? `<span class="lbl fxw ${st}" title="${esc([...fx.atk.adv, ...fx.atk.dis].join(', '))}">${t('fx.' + st)}</span>` : '';
   const rows = ['main', 'off'].filter(k => S.eq[k]).map(k => {
     const raw = S.eq[k], a = atk(raw, k); if (!a) return '';
     const it = itemView(raw);
-    return `<div class="row wrow"><div class="ic">${tok(it.ic, itTone(it), it.ref)}</div><div class="nm">${esc(it.n)}<small>${esc(it.p)}</small><span class="atkt"><button class="chip prf${a.prof ? ' on' : ''}" data-a="wprof" data-k="${k}" aria-pressed="${a.prof}">${t(a.prof ? 'atk.prof' : 'atk.noProf')}</button>${a.tags.map(x => `<span class="lbl">${esc(x)}</span>`).join('')}${fxTag}</span></div><div class="atk"><b>${a.hit}</b><small>${t('atk.hit')}</small></div><div class="atk"><b>${a.dmg}</b><small>${esc(a.type)}${a.vers ? ` · 2H ${a.vers}` : ''}</small></div></div>`;
+    return `<div class="row wrow"><div class="ic">${tok(it.ic, itTone(it), it.ref)}</div><div class="nm">${esc(it.n)}<small>${esc(it.p)}</small><span class="atkt"><button class="chip prf${a.prof ? ' on' : ''}" data-a="wprof" data-k="${k}" aria-pressed="${a.prof}">${t(a.prof ? 'atk.prof' : 'atk.noProf')}</button>${a.tags.map(x => `<span class="lbl">${esc(x)}</span>`).join('')}${fxTag}</span></div><div class="atk"><b>${a.hit}</b><small>${t('atk.hit')}</small></div><div class="atk"><b>${a.dmg}</b><small>${esc(a.type)}${a.vers ? ` · 2H ${a.vers}` : ''}</small></div>${ammoRow(raw, k)}</div>`;
   }).join('');
   const u = unarmed();
   const fist = `<div class="row wrow atk-un"><div class="ic">${tok('swirl')}</div><div class="nm">${t('atk.unarmed')}${u.tags.length ? `<small>${esc(u.tags.join(' · '))}</small>` : ''}${fxTag ? `<span class="atkt">${fxTag}</span>` : ''}</div><div class="atk"><b>${u.hit}</b><small>${t('atk.hit')}</small></div><div class="atk"><b>${u.dmg}</b><small>${esc(u.type)}</small></div></div>`;
@@ -154,7 +162,8 @@ export function vSkills() {
   const fx = effects(), dis = a => [...fx.checks, ...(fx.checkAb[a] || [])];
   const group = a => `<section class="skg"><h3>${abName(a)} <span>(${sg(mod(S.abil[a]))})</span>${fxMark([], dis(a))}</h3>${SK.filter(s => s[1] === a).map(([k, , de]) => `<div class="skr"><span>${k}${lang === 'de' ? `<small>${de}</small>` : ''}</span>${star(S.skills[k] || 0)}${k === 'Stealth' && !dis(a).length ? fxMark([], fx.stealth) : ''}<b>${sg(skv(k))}</b></div>`).join('')}</section>`;
   // Vier gleich hohe Spalten: Stärke und Geschicklichkeit teilen sich eine (4 Fertigkeiten), dann 5, 5, 4.
-  return `<h2>${t('skill.title')}</h2><div class="skgrid">${[['str', 'dex'], ['int'], ['wis'], ['cha']].map(c => `<div class="skcol">${c.map(group).join('')}</div>`).join('')}</div>`;
+  const rel = featureLevel('Rogue') >= 11 ? `<p class="note fxnote"><b>Reliable Talent:</b> ${t('skill.reliable')}</p>` : '';
+  return `<h2>${t('skill.title')}</h2>${rel}<div class="skgrid">${[['str', 'dex'], ['int'], ['wis'], ['cha']].map(c => `<div class="skcol">${c.map(group).join('')}</div>`).join('')}</div>`;
 }
 export function vProfs() {
   if (!S.tools.length && !S.langs.length) return '';
@@ -167,7 +176,7 @@ export function vMain() {
   const spd = fx.speed.val !== fx.speed.base ? st(t('stat.speed'), `<span class="fxw ${worse ? 'dis' : 'adv'}">${dist(fx.speed.val)}</span>`, `<small class="fxsub">${esc(dist(fx.speed.base))} · ${esc(why2)}</small>`) : st(t('stat.speed'), dist(S.speed));
   let h = '';
   if (S.conc) h += `<div class="conc"><div><small>${t('conc.title')}</small><b>${esc(S.conc)}</b><span>${t('conc.hint')}</span></div><button class="btn" data-a="concend">${t('conc.end')}</button></div>`;
-  h += `<div class="stats">${st(t('stat.ac'), S.ac)}${st(t('stat.init'), sg(initBonus()) + (featureLevel('Barbarian') >= 7 ? fxMark(['Feral Instinct'], []) : ''))}${spd}${st(t('stat.prof'), sg(S.prof))}${st(t('stat.pp'), passivePerception())}</div>`;
+  h += `<div class="stats">${st(t('stat.ac'), S.ac)}${st(t('stat.init'), sg(initBonus()) + (featureLevel('Barbarian') >= 7 ? fxMark(['Feral Instinct'], []) : ''))}${spd}${st(t('stat.prof'), sg(S.prof))}${st(t('stat.pp'), passivePerception(), `<small class="fxsub">${t('pp.more', { i: 10 + skv('Insight'), v: 10 + skv('Investigation') + (S.feats.some(f => f.n === 'Observant') ? 5 : 0) })}</small>`)}</div>`;
   h += vFx(fx);
   h += `<div class="sheet"><aside>${vAbil(false)}</aside><div class="col c1">${vHP()}${vCond()}${vAtk()}${vQuick()}${vCharges()}${vRes()}${vPets()}</div><div class="col c2">${vSpells()}${vFeats()}<div class="c2sk">${vSkills()}</div>${vProfs()}</div></div>`;
   return h;

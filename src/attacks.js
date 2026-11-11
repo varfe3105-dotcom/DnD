@@ -31,6 +31,11 @@ function classProf(raw) {
   const ok = e => !!e && ((e.g || []).includes(g) || (e.w || []).includes(id));
   return ok(CLASS_W[S.klass]) || (S.multi || []).some(m => ok(MULTI_W[m.k])) || (RACE_W[S.race] || []).includes(id) || (RACE_W[S.subrace] || []).includes(id);
 }
+// Welche Munition eine Fernkampfwaffe verbraucht (Katalogschlüssel).
+const AMMO_OF = { shortbow: 'item:arrow', longbow: 'item:arrow', 'crossbow-light': 'item:crossbow-bolt', 'crossbow-heavy': 'item:crossbow-bolt', 'crossbow-hand': 'item:crossbow-bolt', sling: 'item:sling-bullet', blowgun: 'item:blowgun-needle' };
+export const ammoFor = raw => AMMO_OF[refId(raw)] || '';
+/** Munition im Rucksack: Anzahl und Plätze der Stapel. */
+export function ammoLeft(ref) { const at = []; let n = 0; S.bag.forEach((it, i) => { if (it && it.ref === ref) { n += it.q || 0; at.push(i); } }); return { n, at }; }
 export const weaponProf = raw => (raw.prof != null ? !!raw.prof : classProf(raw));
 
 const monkLevel = () => classLevels().find(c => c.k === 'Monk')?.lvl || 0;

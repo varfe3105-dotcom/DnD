@@ -856,5 +856,9 @@
  "saveName.con": "Constitution save",
  "saveName.int": "Intelligence save",
  "saveName.wis": "Wisdom save",
- "saveName.cha": "Charisma save"
+ "saveName.cha": "Charisma save",
+ "ammo.shoot": "Shot −1",
+ "ammo.none": "No {n} in the backpack",
+ "pp.more": "Insight {i} · Investigation {v}",
+ "skill.reliable": "For skills you are proficient in, a d20 roll of 9 or lower counts as 10."
 }
