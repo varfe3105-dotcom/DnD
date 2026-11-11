@@ -22,6 +22,9 @@ const sp = load('de-full-spells-');
 for (const s of read('spells.json')) if (sp[s.n]) check('Zauber ' + s.n, s.text.en + ' ' + (s.higher?.en || ''), sp[s.n].join(' '));
 const it = load('de-full-items-');
 for (const r of [...read('magic-items.json'), ...read('potions.json'), ...read('items.json')]) if (it[r.id]) check('Gegenstand ' + r.id, r.text.en, it[r.id]);
+// Eigene Zusammenfassungen (Talente, Unterklassen außerhalb des SRD) tragen Englisch und Deutsch selbst.
+for (const f of read('feats.json')) if (f.source === 'summary') check('Talent ' + f.n, f.text.en, f.text.de);
+for (const [k, subs] of Object.entries(read('subclasses.json'))) for (const [u, lv] of Object.entries(subs)) for (const [l, list] of Object.entries(lv)) for (const f of list) if (f.source === 'summary') check(`${k} ${u} ${l} ${f.n}`, f.text.en, f.text.de);
 const tx = load('de-full-texts-');
 for (const [en, de] of Object.entries(tx)) check('Text ' + en.slice(0, 50), en, de);
 console.log(`Geprüft: ${n}, auffällig: ${bad}`);

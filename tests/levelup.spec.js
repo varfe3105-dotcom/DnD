@@ -131,7 +131,7 @@ test.describe('Unterklassen und Talente @new', () => {
     expect(s.abil.dex).toBe(15);
     const f = s.feats.find(x => x.n === 'Athlete');
     expect(f.src).toBe('Talent');
-    expect(f.p).toContain('STR or DEX');
+    expect(f.p).toContain('Strength or Dexterity');
   });
 
   test('Tough erhöht die TP rückwirkend und künftig', async ({ page }) => {

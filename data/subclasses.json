@@ -51,8 +51,8 @@
     {
      "n": "Spirit Seeker",
      "text": {
-      "en": "You can cast Beast Sense and Speak with Animals as rituals.",
-      "de": "Du kannst Beast Sense und Speak with Animals als Rituale wirken."
+      "en": "Your path seeks attunement with the natural world. You can cast Beast Sense and Speak with Animals, but only as rituals.",
+      "de": "Dein Pfad sucht den Einklang mit der Natur. Du kannst Beast Sense und Speak with Animals wirken, aber nur als Rituale."
      },
      "source": "summary",
      "verified": false
@@ -60,8 +60,8 @@
     {
      "n": "Totem Spirit",
      "text": {
-      "en": "Choose an animal. Bear: resistance to all damage except psychic while raging. Eagle: while raging and not in heavy armor, opportunity attacks against you have disadvantage and you can Dash as a bonus action. Wolf: while raging, allies have advantage on melee attacks against creatures within 5 feet of you.",
-      "de": "Wähle ein Tier. Bär: im Kampfrausch Resistenz gegen allen Schaden außer psychischem. Adler: im Kampfrausch und ohne schwere Rüstung haben Gelegenheitsangriffe gegen dich Nachteil, und du kannst Spurt als Bonusaktion nutzen. Wolf: im Kampfrausch haben Verbündete Vorteil bei Nahkampfangriffen gegen Kreaturen innerhalb von 1,5 m um dich."
+      "en": "Choose a totem animal and gain its benefit. You need a physical totem object (an amulet or similar item made from or bearing the animal) and may gain minor physical traits of it. Your choice applies while you rage:\n- Bear: You have resistance to all damage except psychic damage.\n- Eagle: While you aren't wearing heavy armor, other creatures have disadvantage on opportunity attack rolls against you, and you can use the Dash action as a bonus action on your turn.\n- Wolf: Your friends have advantage on melee attack rolls against any creature within 5 feet of you that is hostile to you.",
+      "de": "Wähle ein Totemtier und erhalte seinen Vorteil. Du brauchst einen Totemgegenstand (etwa ein Amulett aus oder mit Teilen des Tiers) und nimmst eventuell kleine körperliche Züge des Tiers an. Deine Wahl wirkt während des Kampfrauschs:\n- Bär: Du hast Resistenz gegen allen Schaden außer psychischem.\n- Adler: Solange du keine schwere Rüstung trägst, haben andere Kreaturen Nachteil bei Gelegenheitsangriffen gegen dich, und du kannst in deinem Zug Spurt als Bonusaktion nutzen.\n- Wolf: Deine Freunde haben Vorteil bei Nahkampfangriffen gegen jede dir feindliche Kreatur innerhalb von 1,5 m um dich."
      },
      "source": "summary",
      "verified": false
@@ -71,8 +71,8 @@
     {
      "n": "Aspect of the Beast",
      "text": {
-      "en": "Bear: carrying capacity doubled, advantage on Strength checks to push, pull, lift or break. Eagle: see up to 1 mile clearly, dim light is no penalty to Perception. Wolf: track at a fast pace, move stealthily at normal pace.",
-      "de": "Bär: doppelte Tragkraft, Vorteil bei Stärkewürfen zum Schieben, Ziehen, Heben oder Zerbrechen. Adler: bis 1,5 km weit klar sehen, dämmriges Licht gibt keinen Nachteil auf Perception. Wolf: Spuren bei schnellem Reisetempo lesen, bei normalem Reisetempo leise bewegen."
+      "en": "Choose a totem animal (it can differ from your earlier choice). The benefit works at all times, not only while raging:\n- Bear: Your carrying capacity (including maximum load and maximum lift) is doubled, and you have advantage on Strength checks made to push, pull, lift, or break objects.\n- Eagle: You can see up to 1 mile away with no difficulty, discerning fine details as though looking at something no more than 100 feet away. Dim light doesn't impose disadvantage on your Wisdom (Perception) checks.\n- Wolf: You can track other creatures while traveling at a fast pace, and you can move stealthily while traveling at a normal pace.",
+      "de": "Wähle ein Totemtier (es darf von deiner früheren Wahl abweichen). Der Vorteil wirkt immer, nicht nur im Kampfrausch:\n- Bär: Deine Tragkraft (auch Höchstlast und Hebekraft) verdoppelt sich, und du hast Vorteil bei Stärkewürfen, um Gegenstände zu schieben, zu ziehen, zu heben oder zu zerbrechen.\n- Adler: Du siehst bis 1,5 km weit mühelos und erkennst Einzelheiten, als wäre das Ziel höchstens 30 m entfernt. Dämmriges Licht gibt dir keinen Nachteil bei Weisheitswürfen (Perception).\n- Wolf: Du kannst bei schnellem Reisetempo Spuren verfolgen und dich bei normalem Reisetempo leise bewegen."
      },
      "source": "summary",
      "verified": false
@@ -82,8 +82,8 @@
     {
      "n": "Spirit Walker",
      "text": {
-      "en": "You can cast Commune with Nature as a ritual.",
-      "de": "Du kannst Commune with Nature als Ritual wirken."
+      "en": "You can cast Commune with Nature, but only as a ritual. A spiritual version of one of your totem animals appears and conveys the information you seek.",
+      "de": "Du kannst Commune with Nature wirken, aber nur als Ritual. Eine Geistgestalt eines deiner Totemtiere erscheint und überbringt dir die gesuchten Antworten."
      },
      "source": "summary",
      "verified": false
@@ -93,8 +93,8 @@
     {
      "n": "Totemic Attunement",
      "text": {
-      "en": "Bear: while raging, hostile creatures within 5 feet have disadvantage on attacks against others. Eagle: while raging you can fly up to your speed, falling if you end your turn in the air. Wolf: while raging, a bonus action knocks a Large or smaller creature Prone when you hit it with a melee attack.",
-      "de": "Bär: im Kampfrausch haben feindliche Kreaturen innerhalb von 1,5 m Nachteil bei Angriffen gegen andere. Adler: im Kampfrausch kannst du bis zu deinem Tempo fliegen und fällst, wenn du deinen Zug in der Luft beendest. Wolf: im Kampfrausch wirfst du mit einer Bonusaktion eine Kreatur der Größe Large oder kleiner Prone, wenn du sie mit einem Nahkampfangriff triffst."
+      "en": "Choose a totem animal (it can differ from earlier choices). The benefit works while you rage:\n- Bear: Any creature within 5 feet of you that is hostile to you has disadvantage on attack rolls against targets other than you or another character with this feature. An enemy is immune if it can't see or hear you or can't be frightened.\n- Eagle: You have a flying speed equal to your current walking speed. You fall if you end your turn in the air with nothing else holding you aloft.\n- Wolf: When you hit a Large or smaller creature with a melee attack on your turn, you can use a bonus action to knock it prone.",
+      "de": "Wähle ein Totemtier (es darf von früheren Wahlen abweichen). Der Vorteil wirkt im Kampfrausch:\n- Bär: Jede feindliche Kreatur innerhalb von 1,5 m hat Nachteil bei Angriffen gegen andere Ziele als dich oder einen anderen Charakter mit diesem Merkmal. Immun ist ein Gegner, der dich weder sehen noch hören kann oder nicht verängstigt werden kann.\n- Adler: Du hast ein Flugtempo in Höhe deines aktuellen Gehtempos. Beendest du deinen Zug in der Luft und hält dich nichts anderes oben, stürzt du.\n- Wolf: Triffst du in deinem Zug eine Kreatur der Größe Large oder kleiner mit einem Nahkampfangriff, kannst du sie mit einer Bonusaktion Prone werfen."
      },
      "source": "summary",
      "verified": false
@@ -152,8 +152,8 @@
     {
      "n": "Bonus Proficiencies",
      "text": {
-      "en": "Proficiency with medium armor, shields and martial weapons.",
-      "de": "Übung mit mittlerer Rüstung, Schilden und Kriegswaffen."
+      "en": "When you join the College of Valor, you gain proficiency with medium armor, shields, and martial weapons.",
+      "de": "Trittst du dem College of Valor bei, erhältst du Übung mit mittlerer Rüstung, Schilden und Kriegswaffen."
      },
      "source": "summary",
      "verified": false
@@ -161,8 +161,8 @@
     {
      "n": "Combat Inspiration",
      "text": {
-      "en": "A creature with your inspiration die can add it to weapon damage or, as a reaction, to its AC against one attack.",
-      "de": "Eine Kreatur mit deinem Inspirationswürfel kann ihn zum Waffenschaden addieren oder als Reaktion gegen einen Angriff zu ihrer RK."
+      "en": "A creature that has a Bardic Inspiration die from you gains two more ways to use it:\n- After it rolls damage for a weapon attack, it can roll the die and add the number to that damage roll.\n- When an attack roll is made against it, it can use its reaction to roll the die and add the number to its AC against that attack, after seeing the roll but before knowing whether it hits.",
+      "de": "Eine Kreatur mit einem Bardeninspirationswürfel von dir kann ihn auf zwei weitere Arten einsetzen:\n- Nachdem sie den Schaden eines Waffenangriffs gewürfelt hat, kann sie den Würfel werfen und das Ergebnis zu diesem Schaden addieren.\n- Wird ein Angriffswurf gegen sie gemacht, kann sie mit ihrer Reaktion den Würfel werfen und das Ergebnis gegen diesen Angriff zu ihrer RK addieren, nachdem sie den Wurf gesehen hat, aber bevor feststeht, ob er trifft."
      },
      "source": "summary",
      "verified": false
@@ -172,8 +172,8 @@
     {
      "n": "Extra Attack",
      "text": {
-      "en": "Two attacks when you take the Attack action.",
-      "de": "Zwei Angriffe, wenn du die Aktion Angriff ausführst."
+      "en": "You can attack twice, instead of once, whenever you take the Attack action on your turn.",
+      "de": "Wenn du in deinem Zug die Aktion Angriff ausführst, kannst du zweimal statt einmal angreifen."
      },
      "source": "summary",
      "verified": false
@@ -198,8 +198,8 @@
     {
      "n": "Blessings of Knowledge",
      "text": {
-      "en": "Two languages and proficiency with expertise in two of Arcana, History, Nature, Religion. Domain spells: Command, Identify; Augury, Suggestion; Nondetection, Speak with Dead; Arcane Eye, Confusion; Legend Lore, Scrying.",
-      "de": "Zwei Sprachen und Übung mit Expertise in zwei von Arcana, History, Nature und Religion. Domänenzauber: Command, Identify; Augury, Suggestion; Nondetection, Speak with Dead; Arcane Eye, Confusion; Legend Lore, Scrying."
+      "en": "You learn two languages of your choice. You also gain proficiency in two of these skills: Arcana, History, Nature, or Religion, and your proficiency bonus is doubled for any ability check using either of them.\nDomain spells (always prepared): 1st Command, Identify; 3rd Augury, Suggestion; 5th Nondetection, Speak with Dead; 7th Arcane Eye, Confusion; 9th Legend Lore, Scrying.",
+      "de": "Du lernst zwei Sprachen deiner Wahl. Außerdem erhältst du Übung in zwei dieser Fertigkeiten: Arcana, History, Nature oder Religion, und dein Übungsbonus verdoppelt sich bei jedem Attributswurf mit einer von ihnen.\nDomänenzauber (immer vorbereitet): Stufe 1 Command, Identify; Stufe 3 Augury, Suggestion; Stufe 5 Nondetection, Speak with Dead; Stufe 7 Arcane Eye, Confusion; Stufe 9 Legend Lore, Scrying."
      },
      "source": "summary",
      "verified": false
@@ -209,8 +209,8 @@
     {
      "n": "Channel Divinity: Knowledge of the Ages",
      "text": {
-      "en": "Action: proficiency with one skill or tool for 10 minutes.",
-      "de": "Aktion: 10 Minuten lang Übung in einer Fertigkeit oder einem Werkzeug."
+      "en": "As an action, you use your Channel Divinity to draw on divine knowledge. Choose one skill or tool; for 10 minutes you are proficient with it.",
+      "de": "Als Aktion nutzt du Channel Divinity, um göttliches Wissen anzuzapfen. Wähle eine Fertigkeit oder ein Werkzeug; 10 Minuten lang bist du darin geübt."
      },
      "source": "summary",
      "verified": false
@@ -220,8 +220,8 @@
     {
      "n": "Channel Divinity: Read Thoughts",
      "text": {
-      "en": "Action: Wisdom save for a creature within 60 feet; on a failure read surface thoughts for 1 minute and may cast Suggestion on it without a slot.",
-      "de": "Aktion: Weisheitsrettungswurf für eine Kreatur innerhalb von 18 m; bei Misserfolg liest du 1 Minute lang ihre oberflächlichen Gedanken und kannst Suggestion ohne Zauberplatz auf sie wirken."
+      "en": "As an action, use your Channel Divinity and choose one creature you can see within 60 feet. It makes a Wisdom saving throw. On a success you can't use this feature on it again until you finish a long rest.\nOn a failure, for 1 minute you can read its surface thoughts (what is most on its mind) while it is within 60 feet; this works even without a shared language. During that time you can use your action to end the effect and cast Suggestion on the creature without expending a spell slot. It automatically fails its saving throw against that Suggestion.",
+      "de": "Als Aktion nutzt du Channel Divinity und wählst eine Kreatur innerhalb von 18 m, die du sehen kannst. Sie legt einen Weisheitsrettungswurf ab. Bei Erfolg kannst du dieses Merkmal bis zu deiner nächsten langen Rast nicht mehr gegen sie einsetzen.\nBei Misserfolg kannst du 1 Minute lang ihre oberflächlichen Gedanken lesen (was sie gerade am meisten beschäftigt), solange sie innerhalb von 18 m ist; das klappt auch ohne gemeinsame Sprache. In dieser Zeit kannst du mit deiner Aktion den Effekt beenden und Suggestion ohne Zauberplatz auf die Kreatur wirken. Ihren Rettungswurf gegen diese Suggestion verfehlt sie automatisch."
      },
      "source": "summary",
      "verified": false
@@ -231,8 +231,8 @@
     {
      "n": "Potent Spellcasting",
      "text": {
-      "en": "Add your Wisdom modifier to cleric cantrip damage.",
-      "de": "Addiere deinen Weisheitsmodifikator zum Schaden von Kleriker-Zaubertricks."
+      "en": "You add your Wisdom modifier to the damage you deal with any cleric cantrip.",
+      "de": "Du addierst deinen Weisheitsmodifikator zum Schaden jedes Kleriker-Zaubertricks."
      },
      "source": "summary",
      "verified": false
@@ -242,8 +242,8 @@
     {
      "n": "Visions of the Past",
      "text": {
-      "en": "Meditate to learn the history of an object or area for a number of minutes up to your Wisdom score.",
-      "de": "Meditiere, um die Geschichte eines Gegenstands oder Ortes zu erfahren, höchstens so viele Minuten, wie dein Weisheitswert angibt."
+      "en": "You can meditate for at least 1 minute to receive visions of the past. You can meditate (as if concentrating on a spell) for a number of minutes up to your Wisdom score. Once you use this feature, you can't use it again until you finish a short or long rest.\n- Object Reading: Holding an object, you learn who most recently owned it, how that owner got and lost it, and the most recent significant event involving it and that owner.\n- Area Reading: You see visions of significant events in your immediate surroundings (a room, street, tunnel, clearing, or similar, up to a 50-foot cube), going back a number of days equal to your Wisdom score. Each minute of meditation shows one event, beginning with the most recent.",
+      "de": "Du kannst mindestens 1 Minute meditieren, um Visionen der Vergangenheit zu empfangen. Du meditierst (wie bei Konzentration auf einen Zauber) höchstens so viele Minuten, wie dein Weisheitswert angibt. Danach kannst du dieses Merkmal erst nach einer kurzen oder langen Rast erneut nutzen.\n- Gegenstand lesen: Hältst du einen Gegenstand, erfährst du, wem er zuletzt gehörte, wie dieser ihn bekam und verlor und welches das letzte bedeutende Ereignis mit Gegenstand und Besitzer war.\n- Ort lesen: Du siehst Visionen bedeutender Ereignisse in deiner unmittelbaren Umgebung (ein Raum, eine Straße, ein Tunnel, eine Lichtung oder Ähnliches, höchstens ein Würfel von 15 m Kantenlänge), so viele Tage zurück, wie dein Weisheitswert angibt. Jede Minute Meditation zeigt ein Ereignis, beginnend mit dem jüngsten."
      },
      "source": "summary",
      "verified": false
@@ -308,8 +308,8 @@
     {
      "n": "Supreme Healing",
      "text": {
-      "en": "Instead of rolling healing dice, use the maximum.",
-      "de": "Statt Heilwürfel zu würfeln, nimmst du den Höchstwert."
+      "en": "When you would normally roll one or more dice to restore hit points with a spell, you instead use the highest number possible for each die. For example, instead of restoring 2d6 hit points, you restore 12.",
+      "de": "Würdest du normalerweise einen oder mehrere Würfel werfen, um mit einem Zauber Trefferpunkte wiederherzustellen, nimmst du stattdessen für jeden Würfel den höchstmöglichen Wert. Statt 2W6 Trefferpunkten stellst du zum Beispiel 12 wieder her."
      },
      "source": "summary",
      "verified": false
@@ -321,8 +321,8 @@
     {
      "n": "Warding Flare",
      "text": {
-      "en": "Light cantrip. Reaction when attacked by a creature within 30 feet you can see: impose disadvantage. Uses equal to Wisdom modifier per long rest. Domain spells: Burning Hands, Faerie Fire; Flaming Sphere, Scorching Ray; Daylight, Fireball; Guardian of Faith, Wall of Fire; Flame Strike, Scrying.",
-      "de": "Zaubertrick Light. Reaktion, wenn dich eine Kreatur innerhalb von 9 m angreift, die du sehen kannst: Der Angriff hat Nachteil. So oft wie dein Weisheitsmodifikator pro langer Rast. Domänenzauber: Burning Hands, Faerie Fire; Flaming Sphere, Scorching Ray; Daylight, Fireball; Guardian of Faith, Wall of Fire; Flame Strike, Scrying."
+      "en": "You learn the Light cantrip if you don't already know it.\nWhen a creature within 30 feet of you that you can see attacks you, you can use your reaction to impose disadvantage on the attack roll by flashing light before it hits or misses. An attacker that can't be blinded is immune. You can use this feature a number of times equal to your Wisdom modifier (minimum once) and regain all uses after a long rest.\nDomain spells (always prepared): 1st Burning Hands, Faerie Fire; 3rd Flaming Sphere, Scorching Ray; 5th Daylight, Fireball; 7th Guardian of Faith, Wall of Fire; 9th Flame Strike, Scrying.",
+      "de": "Du lernst den Zaubertrick Light, falls du ihn noch nicht kennst.\nGreift dich eine Kreatur innerhalb von 9 m an, die du sehen kannst, kannst du mit deiner Reaktion einen Lichtblitz erzeugen, bevor der Angriff trifft oder verfehlt, und dem Angriffswurf Nachteil auferlegen. Ein Angreifer, der nicht geblendet werden kann, ist immun. Du kannst dieses Merkmal so oft nutzen, wie dein Weisheitsmodifikator angibt (mindestens einmal), und erhältst alle Anwendungen nach einer langen Rast zurück.\nDomänenzauber (immer vorbereitet): Stufe 1 Burning Hands, Faerie Fire; Stufe 3 Flaming Sphere, Scorching Ray; Stufe 5 Daylight, Fireball; Stufe 7 Guardian of Faith, Wall of Fire; Stufe 9 Flame Strike, Scrying."
      },
      "source": "summary",
      "verified": false
@@ -332,8 +332,8 @@
     {
      "n": "Channel Divinity: Radiance of the Dawn",
      "text": {
-      "en": "Action: dispels magical darkness within 30 feet; hostiles make a Constitution save, 2d10 + cleric level radiant, half on success.",
-      "de": "Aktion: Bannt magische Dunkelheit innerhalb von 9 m; Feinde legen einen Konstitutionsrettungswurf ab, 2W10 + Klerikerstufe gleißender Schaden, bei Erfolg die Hälfte."
+      "en": "As an action, you present your holy symbol and use your Channel Divinity. Any magical darkness within 30 feet of you is dispelled. Each hostile creature within 30 feet of you must make a Constitution saving throw, taking 2d10 + your cleric level radiant damage on a failure, or half as much on a success. A creature with total cover from you is unaffected.",
+      "de": "Als Aktion zeigst du dein heiliges Symbol und nutzt Channel Divinity. Jede magische Dunkelheit innerhalb von 9 m wird gebannt. Jede feindliche Kreatur innerhalb von 9 m muss einen Konstitutionsrettungswurf ablegen und erleidet bei Misserfolg 2W10 + deine Klerikerstufe gleißenden Schaden, bei Erfolg die Hälfte. Eine Kreatur mit vollständiger Deckung vor dir ist nicht betroffen."
      },
      "source": "summary",
      "verified": false
@@ -343,8 +343,8 @@
     {
      "n": "Improved Flare",
      "text": {
-      "en": "Warding Flare also protects allies within 30 feet.",
-      "de": "Warding Flare schützt auch Verbündete innerhalb von 9 m."
+      "en": "You can also use Warding Flare when a creature you can see within 30 feet of you attacks a creature other than you.",
+      "de": "Du kannst Warding Flare auch einsetzen, wenn eine Kreatur innerhalb von 9 m, die du sehen kannst, eine andere Kreatur als dich angreift."
      },
      "source": "summary",
      "verified": false
@@ -354,8 +354,8 @@
     {
      "n": "Potent Spellcasting",
      "text": {
-      "en": "Add your Wisdom modifier to cleric cantrip damage.",
-      "de": "Addiere deinen Weisheitsmodifikator zum Schaden von Kleriker-Zaubertricks."
+      "en": "You add your Wisdom modifier to the damage you deal with any cleric cantrip.",
+      "de": "Du addierst deinen Weisheitsmodifikator zum Schaden jedes Kleriker-Zaubertricks."
      },
      "source": "summary",
      "verified": false
@@ -365,8 +365,8 @@
     {
      "n": "Corona of Light",
      "text": {
-      "en": "Action: 60 feet bright and 30 feet dim light for 1 minute. Enemies in the bright light have disadvantage on saves against fire and radiant spells.",
-      "de": "Aktion: 1 Minute lang helles Licht in 18 m und dämmriges Licht in weiteren 9 m. Feinde im hellen Licht haben Nachteil bei Rettungswürfen gegen Feuer- und gleißende Zauber."
+      "en": "As an action, you activate an aura of sunlight that lasts for 1 minute or until you dismiss it with another action. You emit bright light in a 60-foot radius and dim light 30 feet beyond that. Your enemies in the bright light have disadvantage on saving throws against any spell that deals fire or radiant damage.",
+      "de": "Als Aktion aktivierst du eine Aura aus Sonnenlicht, die 1 Minute anhält oder bis du sie mit einer weiteren Aktion beendest. Du strahlst in einem Radius von 18 m helles Licht und weitere 9 m dämmriges Licht aus. Deine Feinde im hellen Licht haben Nachteil bei Rettungswürfen gegen jeden Zauber, der Feuer- oder gleißenden Schaden verursacht."
      },
      "source": "summary",
      "verified": false
@@ -378,8 +378,8 @@
     {
      "n": "Acolyte of Nature",
      "text": {
-      "en": "One druid cantrip and proficiency in Animal Handling, Nature or Survival. Proficiency with heavy armor. Domain spells: Animal Friendship, Speak with Animals; Barkskin, Spike Growth; Plant Growth, Wind Wall; Dominate Beast, Grasping Vine; Insect Plague, Tree Stride.",
-      "de": "Ein Druiden-Zaubertrick und Übung in Animal Handling, Nature oder Survival. Übung mit schwerer Rüstung. Domänenzauber: Animal Friendship, Speak with Animals; Barkskin, Spike Growth; Plant Growth, Wind Wall; Dominate Beast, Grasping Vine; Insect Plague, Tree Stride."
+      "en": "You learn one druid cantrip of your choice and gain proficiency in one of these skills: Animal Handling, Nature, or Survival. You also gain proficiency with heavy armor (Bonus Proficiency).\nDomain spells (always prepared): 1st Animal Friendship, Speak with Animals; 3rd Barkskin, Spike Growth; 5th Plant Growth, Wind Wall; 7th Dominate Beast, Grasping Vine; 9th Insect Plague, Tree Stride.",
+      "de": "Du lernst einen Druiden-Zaubertrick deiner Wahl und erhältst Übung in einer dieser Fertigkeiten: Animal Handling, Nature oder Survival. Außerdem erhältst du Übung mit schwerer Rüstung (Bonus Proficiency).\nDomänenzauber (immer vorbereitet): Stufe 1 Animal Friendship, Speak with Animals; Stufe 3 Barkskin, Spike Growth; Stufe 5 Plant Growth, Wind Wall; Stufe 7 Dominate Beast, Grasping Vine; Stufe 9 Insect Plague, Tree Stride."
      },
      "source": "summary",
      "verified": false
@@ -389,8 +389,8 @@
     {
      "n": "Channel Divinity: Charm Animals and Plants",
      "text": {
-      "en": "Action: beasts and plants within 30 feet make a Wisdom save or are Charmed for 1 minute.",
-      "de": "Aktion: Tiere und Pflanzen innerhalb von 9 m legen einen Weisheitsrettungswurf ab oder sind 1 Minute lang Charmed."
+      "en": "As an action, you present your holy symbol and use your Channel Divinity. Each beast or plant creature that can see you within 30 feet must make a Wisdom saving throw. On a failure it is charmed by you for 1 minute or until it takes damage. While charmed, it is friendly to you and the creatures you designate.",
+      "de": "Als Aktion zeigst du dein heiliges Symbol und nutzt Channel Divinity. Jedes Tier und jede Pflanzenkreatur innerhalb von 9 m, die dich sehen kann, muss einen Weisheitsrettungswurf ablegen. Bei Misserfolg ist sie 1 Minute lang oder bis sie Schaden erleidet von dir Charmed. Solange sie bezaubert ist, ist sie dir und den von dir bestimmten Kreaturen freundlich gesinnt."
      },
      "source": "summary",
      "verified": false
@@ -400,8 +400,8 @@
     {
      "n": "Dampen Elements",
      "text": {
-      "en": "Reaction: grant resistance against an instance of acid, cold, fire, lightning or thunder damage.",
-      "de": "Reaktion: Resistenz gegen einen einzelnen Säure-, Kälte-, Feuer-, Blitz- oder Schallschaden gewähren."
+      "en": "When you or a creature within 30 feet of you takes acid, cold, fire, lightning, or thunder damage, you can use your reaction to grant resistance to that instance of the damage.",
+      "de": "Erleidest du oder eine Kreatur innerhalb von 9 m Säure-, Kälte-, Feuer-, Blitz- oder Schallschaden, kannst du mit deiner Reaktion Resistenz gegen genau diesen Schaden gewähren."
      },
      "source": "summary",
      "verified": false
@@ -411,8 +411,8 @@
     {
      "n": "Divine Strike",
      "text": {
-      "en": "Once per turn on a weapon hit, +1d8 cold, fire or lightning (2d8 at 14).",
-      "de": "Einmal pro Zug bei einem Waffentreffer +1W8 Kälte, Feuer oder Blitz (2W8 ab Stufe 14)."
+      "en": "Once on each of your turns when you hit a creature with a weapon attack, you can deal an extra 1d8 cold, fire, or lightning damage (your choice) to the target. At 14th level the extra damage increases to 2d8.",
+      "de": "Einmal in jedem deiner Züge kannst du, wenn du eine Kreatur mit einem Waffenangriff triffst, zusätzlich 1W8 Kälte-, Feuer- oder Blitzschaden (deine Wahl) zufügen. Ab Stufe 14 steigt der Zusatzschaden auf 2W8."
      },
      "source": "summary",
      "verified": false
@@ -422,8 +422,8 @@
     {
      "n": "Master of Nature",
      "text": {
-      "en": "Bonus action command for charmed beasts and plants.",
-      "de": "Befehl als Bonusaktion für bezauberte Tiere und Pflanzen."
+      "en": "While creatures are charmed by your Charm Animals and Plants feature, you can use a bonus action on your turn to verbally command what each of them will do on its next turn.",
+      "de": "Solange Kreaturen durch dein Charm Animals and Plants bezaubert sind, kannst du in deinem Zug mit einer Bonusaktion jeder von ihnen mündlich befehlen, was sie in ihrem nächsten Zug tut."
      },
      "source": "summary",
      "verified": false
@@ -435,8 +435,8 @@
     {
      "n": "Bonus Proficiencies",
      "text": {
-      "en": "Proficiency with martial weapons and heavy armor. Domain spells: Fog Cloud, Thunderwave; Gust of Wind, Shatter; Call Lightning, Sleet Storm; Control Water, Ice Storm; Destructive Wave, Insect Plague.",
-      "de": "Übung mit Kriegswaffen und schwerer Rüstung. Domänenzauber: Fog Cloud, Thunderwave; Gust of Wind, Shatter; Call Lightning, Sleet Storm; Control Water, Ice Storm; Destructive Wave, Insect Plague."
+      "en": "You gain proficiency with martial weapons and heavy armor.\nDomain spells (always prepared): 1st Fog Cloud, Thunderwave; 3rd Gust of Wind, Shatter; 5th Call Lightning, Sleet Storm; 7th Control Water, Ice Storm; 9th Destructive Wave, Insect Plague.",
+      "de": "Du erhältst Übung mit Kriegswaffen und schwerer Rüstung.\nDomänenzauber (immer vorbereitet): Stufe 1 Fog Cloud, Thunderwave; Stufe 3 Gust of Wind, Shatter; Stufe 5 Call Lightning, Sleet Storm; Stufe 7 Control Water, Ice Storm; Stufe 9 Destructive Wave, Insect Plague."
      },
      "source": "summary",
      "verified": false
@@ -444,8 +444,8 @@
     {
      "n": "Wrath of the Storm",
      "text": {
-      "en": "Reaction when hit by a creature within 5 feet: Dexterity save, 2d8 lightning or thunder, half on success. Uses equal to Wisdom modifier per long rest.",
-      "de": "Reaktion, wenn dich eine Kreatur innerhalb von 1,5 m trifft: Geschicklichkeitsrettungswurf, 2W8 Blitz- oder Schallschaden, bei Erfolg die Hälfte. So oft wie dein Weisheitsmodifikator pro langer Rast."
+      "en": "When a creature within 5 feet of you that you can see hits you with an attack, you can use your reaction to make it make a Dexterity saving throw. It takes 2d8 lightning or thunder damage (your choice) on a failure, or half as much on a success. You can use this feature a number of times equal to your Wisdom modifier (minimum once) and regain all uses after a long rest.",
+      "de": "Trifft dich eine Kreatur innerhalb von 1,5 m, die du sehen kannst, mit einem Angriff, kannst du sie mit deiner Reaktion zu einem Geschicklichkeitsrettungswurf zwingen. Bei Misserfolg erleidet sie 2W8 Blitz- oder Schallschaden (deine Wahl), bei Erfolg die Hälfte. Du kannst dieses Merkmal so oft nutzen, wie dein Weisheitsmodifikator angibt (mindestens einmal), und erhältst alle Anwendungen nach einer langen Rast zurück."
      },
      "source": "summary",
      "verified": false
@@ -455,8 +455,8 @@
     {
      "n": "Channel Divinity: Destructive Wrath",
      "text": {
-      "en": "When you roll lightning or thunder damage, deal maximum instead.",
-      "de": "Würfelst du Blitz- oder Schallschaden, verursachst du stattdessen den Höchstschaden."
+      "en": "When you roll lightning or thunder damage, you can use your Channel Divinity to deal maximum damage instead of rolling.",
+      "de": "Würfelst du Blitz- oder Schallschaden, kannst du Channel Divinity nutzen, um statt zu würfeln den Höchstschaden zu verursachen."
      },
      "source": "summary",
      "verified": false
@@ -466,8 +466,8 @@
     {
      "n": "Thunderbolt Strike",
      "text": {
-      "en": "When you deal lightning damage to a Large or smaller creature, push it up to 10 feet.",
-      "de": "Fügst du einer Kreatur der Größe Large oder kleiner Blitzschaden zu, kannst du sie bis zu 3 m wegstoßen."
+      "en": "When you deal lightning damage to a Large or smaller creature, you can also push it up to 10 feet away from you.",
+      "de": "Fügst du einer Kreatur der Größe Large oder kleiner Blitzschaden zu, kannst du sie zusätzlich bis zu 3 m von dir wegstoßen."
      },
      "source": "summary",
      "verified": false
@@ -477,8 +477,8 @@
     {
      "n": "Divine Strike",
      "text": {
-      "en": "Once per turn on a weapon hit, +1d8 thunder (2d8 at 14).",
-      "de": "Einmal pro Zug bei einem Waffentreffer +1W8 Schall (2W8 ab Stufe 14)."
+      "en": "Once on each of your turns when you hit a creature with a weapon attack, you can deal an extra 1d8 thunder damage to the target. At 14th level the extra damage increases to 2d8.",
+      "de": "Einmal in jedem deiner Züge kannst du, wenn du eine Kreatur mit einem Waffenangriff triffst, zusätzlich 1W8 Schallschaden zufügen. Ab Stufe 14 steigt der Zusatzschaden auf 2W8."
      },
      "source": "summary",
      "verified": false
@@ -488,8 +488,8 @@
     {
      "n": "Stormborn",
      "text": {
-      "en": "Flying speed equal to walking speed outdoors, except underground.",
-      "de": "Im Freien Flugtempo in Höhe deines Gehtempos, nicht unter der Erde."
+      "en": "You have a flying speed equal to your current walking speed whenever you are not underground or indoors.",
+      "de": "Du hast ein Flugtempo in Höhe deines aktuellen Gehtempos, solange du nicht unter der Erde oder in einem Gebäude bist."
      },
      "source": "summary",
      "verified": false
@@ -501,8 +501,8 @@
     {
      "n": "Blessing of the Trickster",
      "text": {
-      "en": "Action: a willing creature has advantage on Stealth for 1 hour. Domain spells: Charm Person, Disguise Self; Mirror Image, Pass Without Trace; Blink, Dispel Magic; Dimension Door, Polymorph; Dominate Person, Modify Memory.",
-      "de": "Aktion: Eine bereitwillige Kreatur hat 1 Stunde lang Vorteil auf Stealth. Domänenzauber: Charm Person, Disguise Self; Mirror Image, Pass Without Trace; Blink, Dispel Magic; Dimension Door, Polymorph; Dominate Person, Modify Memory."
+      "en": "As an action, you touch a willing creature other than yourself. It has advantage on Dexterity (Stealth) checks for 1 hour or until you use this feature again.\nDomain spells (always prepared): 1st Charm Person, Disguise Self; 3rd Mirror Image, Pass Without Trace; 5th Blink, Dispel Magic; 7th Dimension Door, Polymorph; 9th Dominate Person, Modify Memory.",
+      "de": "Als Aktion berührst du eine bereitwillige Kreatur außer dir. Sie hat 1 Stunde lang oder bis du dieses Merkmal erneut nutzt Vorteil bei Geschicklichkeitswürfen (Stealth).\nDomänenzauber (immer vorbereitet): Stufe 1 Charm Person, Disguise Self; Stufe 3 Mirror Image, Pass Without Trace; Stufe 5 Blink, Dispel Magic; Stufe 7 Dimension Door, Polymorph; Stufe 9 Dominate Person, Modify Memory."
      },
      "source": "summary",
      "verified": false
@@ -512,8 +512,8 @@
     {
      "n": "Channel Divinity: Invoke Duplicity",
      "text": {
-      "en": "Action: illusory double for 1 minute (concentration); cast spells from its space; advantage on attacks when both of you are within 5 feet of a target.",
-      "de": "Aktion: 1 Minute lang ein illusionäres Ebenbild (Konzentration); du kannst Zauber von seinem Feld aus wirken und hast Vorteil bei Angriffen, wenn ihr beide innerhalb von 1,5 m um ein Ziel seid."
+      "en": "As an action, you use your Channel Divinity to create a perfect illusion of yourself in an unoccupied space you can see within 30 feet. It lasts for 1 minute or until you lose concentration (as if concentrating on a spell). As a bonus action on your turn, you can move it up to 30 feet to a space you can see, but it must stay within 120 feet of you.\n- You can cast spells as though you were in the illusion's space, but you must use your own senses.\n- When both you and the illusion are within 5 feet of a creature that can see the illusion, you have advantage on attack rolls against that creature.",
+      "de": "Als Aktion nutzt du Channel Divinity und erschaffst ein perfektes Abbild von dir auf einem freien Feld innerhalb von 9 m, das du sehen kannst. Es hält 1 Minute oder bis du die Konzentration verlierst (wie bei einem Zauber). Mit einer Bonusaktion in deinem Zug kannst du es bis zu 9 m weit auf ein Feld bewegen, das du sehen kannst; es muss aber innerhalb von 36 m um dich bleiben.\n- Du kannst Zauber wirken, als stündest du auf dem Feld des Abbilds, musst aber deine eigenen Sinne benutzen.\n- Sind du und das Abbild beide innerhalb von 1,5 m um eine Kreatur, die das Abbild sehen kann, hast du Vorteil bei Angriffswürfen gegen sie."
      },
      "source": "summary",
      "verified": false
@@ -523,8 +523,8 @@
     {
      "n": "Channel Divinity: Cloak of Shadows",
      "text": {
-      "en": "Action: become Invisible until the end of your next turn or until you attack or cast a spell.",
-      "de": "Aktion: Du wirst bis zum Ende deines nächsten Zuges oder bis du angreifst oder zauberst Invisible."
+      "en": "As an action, you use your Channel Divinity to become invisible until the end of your next turn. You become visible if you attack or cast a spell.",
+      "de": "Als Aktion nutzt du Channel Divinity und wirst bis zum Ende deines nächsten Zuges unsichtbar. Greifst du an oder wirkst einen Zauber, wirst du wieder sichtbar."
      },
      "source": "summary",
      "verified": false
@@ -534,8 +534,8 @@
     {
      "n": "Divine Strike",
      "text": {
-      "en": "Once per turn on a weapon hit, +1d8 poison (2d8 at 14).",
-      "de": "Einmal pro Zug bei einem Waffentreffer +1W8 Gift (2W8 ab Stufe 14)."
+      "en": "Once on each of your turns when you hit a creature with a weapon attack, you can deal an extra 1d8 poison damage to the target. At 14th level the extra damage increases to 2d8.",
+      "de": "Einmal in jedem deiner Züge kannst du, wenn du eine Kreatur mit einem Waffenangriff triffst, zusätzlich 1W8 Giftschaden zufügen. Ab Stufe 14 steigt der Zusatzschaden auf 2W8."
      },
      "source": "summary",
      "verified": false
@@ -545,8 +545,8 @@
     {
      "n": "Improved Duplicity",
      "text": {
-      "en": "Up to four duplicates, moved as one bonus action.",
-      "de": "Bis zu vier Ebenbilder, gemeinsam mit einer Bonusaktion bewegt."
+      "en": "When you use Invoke Duplicity, you can create up to four duplicates instead of one. As a bonus action on your turn, you can move any number of them up to 30 feet each, to a maximum range of 120 feet from you.",
+      "de": "Nutzt du Invoke Duplicity, kannst du bis zu vier Abbilder statt einem erschaffen. Mit einer Bonusaktion in deinem Zug kannst du beliebig viele davon je bis zu 9 m weit bewegen, höchstens 36 m von dir entfernt."
      },
      "source": "summary",
      "verified": false
@@ -558,8 +558,8 @@
     {
      "n": "War Priest",
      "text": {
-      "en": "Proficiency with martial weapons and heavy armor. Bonus action weapon attack after the Attack action, Wisdom modifier times per long rest. Domain spells: Divine Favor, Shield of Faith; Magic Weapon, Spiritual Weapon; Crusader's Mantle, Spirit Guardians; Freedom of Movement, Stoneskin; Flame Strike, Hold Monster.",
-      "de": "Übung mit Kriegswaffen und schwerer Rüstung. Waffenangriff als Bonusaktion nach der Aktion Angriff, so oft wie dein Weisheitsmodifikator pro langer Rast. Domänenzauber: Divine Favor, Shield of Faith; Magic Weapon, Spiritual Weapon; Crusader's Mantle, Spirit Guardians; Freedom of Movement, Stoneskin; Flame Strike, Hold Monster."
+      "en": "You gain proficiency with martial weapons and heavy armor (Bonus Proficiencies).\nWhen you use the Attack action, you can make one weapon attack as a bonus action. You can do this a number of times equal to your Wisdom modifier (minimum once) and regain all uses after a long rest.\nDomain spells (always prepared): 1st Divine Favor, Shield of Faith; 3rd Magic Weapon, Spiritual Weapon; 5th Crusader's Mantle, Spirit Guardians; 7th Freedom of Movement, Stoneskin; 9th Flame Strike, Hold Monster.",
+      "de": "Du erhältst Übung mit Kriegswaffen und schwerer Rüstung (Bonus Proficiencies).\nNutzt du die Aktion Angriff, kannst du als Bonusaktion einen Waffenangriff ausführen. Das geht so oft, wie dein Weisheitsmodifikator angibt (mindestens einmal); nach einer langen Rast erhältst du alle Anwendungen zurück.\nDomänenzauber (immer vorbereitet): Stufe 1 Divine Favor, Shield of Faith; Stufe 3 Magic Weapon, Spiritual Weapon; Stufe 5 Crusader's Mantle, Spirit Guardians; Stufe 7 Freedom of Movement, Stoneskin; Stufe 9 Flame Strike, Hold Monster."
      },
      "source": "summary",
      "verified": false
@@ -569,8 +569,8 @@
     {
      "n": "Channel Divinity: Guided Strike",
      "text": {
-      "en": "Gain +10 to an attack roll after seeing the roll.",
-      "de": "+10 auf einen Angriffswurf, nachdem du den Wurf gesehen hast."
+      "en": "When you make an attack roll, you can use your Channel Divinity to gain a +10 bonus to the roll. You decide after seeing the roll but before the DM says whether the attack hits or misses.",
+      "de": "Bei einem Angriffswurf kannst du Channel Divinity nutzen, um +10 auf den Wurf zu erhalten. Du entscheidest, nachdem du den Wurf gesehen hast, aber bevor die Spielleitung sagt, ob er trifft."
      },
      "source": "summary",
      "verified": false
@@ -580,8 +580,8 @@
     {
      "n": "Channel Divinity: War God's Blessing",
      "text": {
-      "en": "Reaction: grant +10 to an attack roll of a creature within 30 feet.",
-      "de": "Reaktion: +10 auf den Angriffswurf einer Kreatur innerhalb von 9 m."
+      "en": "When a creature within 30 feet of you makes an attack roll, you can use your reaction and your Channel Divinity to grant it a +10 bonus to the roll. You decide after seeing the roll but before the DM says whether it hits or misses.",
+      "de": "Macht eine Kreatur innerhalb von 9 m einen Angriffswurf, kannst du mit deiner Reaktion und Channel Divinity ihr +10 auf den Wurf geben. Du entscheidest, nachdem du den Wurf gesehen hast, aber bevor die Spielleitung sagt, ob er trifft."
      },
      "source": "summary",
      "verified": false
@@ -591,8 +591,8 @@
     {
      "n": "Divine Strike",
      "text": {
-      "en": "Once per turn on a weapon hit, +1d8 of the weapon's type (2d8 at 14).",
-      "de": "Einmal pro Zug bei einem Waffentreffer +1W8 Schaden der Art der Waffe (2W8 ab Stufe 14)."
+      "en": "Once on each of your turns when you hit a creature with a weapon attack, you can deal an extra 1d8 damage of the same type as the weapon's damage. At 14th level the extra damage increases to 2d8.",
+      "de": "Einmal in jedem deiner Züge kannst du, wenn du eine Kreatur mit einem Waffenangriff triffst, zusätzlich 1W8 Schaden derselben Art wie der Waffenschaden zufügen. Ab Stufe 14 steigt der Zusatzschaden auf 2W8."
      },
      "source": "summary",
      "verified": false
@@ -602,8 +602,8 @@
     {
      "n": "Avatar of Battle",
      "text": {
-      "en": "Resistance to bludgeoning, piercing and slashing from nonmagical weapons.",
-      "de": "Resistenz gegen Wucht-, Stich- und Hiebschaden durch nichtmagische Waffen."
+      "en": "You have resistance to bludgeoning, piercing, and slashing damage from nonmagical weapons.",
+      "de": "Du hast Resistenz gegen Wucht-, Stich- und Hiebschaden durch nichtmagische Waffen."
      },
      "source": "summary",
      "verified": false
@@ -683,8 +683,8 @@
     {
      "n": "Combat Wild Shape",
      "text": {
-      "en": "Wild Shape as a bonus action. While transformed, a bonus action spends a spell slot to heal 1d8 per slot level.",
-      "de": "Wild Shape als Bonusaktion. In Tiergestalt kannst du mit einer Bonusaktion einen Zauberplatz verbrauchen, um 1W8 pro Grad des Platzes zu heilen."
+      "en": "You can use Wild Shape as a bonus action on your turn instead of as an action.\nWhile transformed by Wild Shape, you can use a bonus action to expend one spell slot and regain 1d8 hit points per level of the expended slot.",
+      "de": "Du kannst Wild Shape in deinem Zug als Bonusaktion statt als Aktion nutzen.\nSolange du durch Wild Shape verwandelt bist, kannst du mit einer Bonusaktion einen Zauberplatz verbrauchen und 1W8 Trefferpunkte pro Grad des Platzes zurückgewinnen."
      },
      "source": "summary",
      "verified": false
@@ -692,8 +692,8 @@
     {
      "n": "Circle Forms",
      "text": {
-      "en": "Beast form up to CR 1 from level 2, CR = druid level / 3 (rounded down) from level 6.",
-      "de": "Tiergestalt bis HG 1 ab Stufe 2, ab Stufe 6 bis HG = Druidenstufe ÷ 3 (abgerundet)."
+      "en": "You can transform into more dangerous beasts. Ignore the Max. CR column of the Beast Shapes table (the swimming and flying limits still apply). From 2nd level you can transform into a beast with a challenge rating as high as 1. From 6th level the maximum challenge rating equals your druid level divided by 3, rounded down.",
+      "de": "Du kannst dich in gefährlichere Tiere verwandeln. Ignoriere die Spalte „Max. HG“ der Tabelle der Tiergestalten (die Grenzen für Schwimmen und Fliegen gelten weiter). Ab Stufe 2 kannst du dich in ein Tier mit einem Herausforderungsgrad bis 1 verwandeln. Ab Stufe 6 beträgt der höchste Herausforderungsgrad deine Druidenstufe geteilt durch 3, abgerundet."
      },
      "source": "summary",
      "verified": false
@@ -703,8 +703,8 @@
     {
      "n": "Primal Strike",
      "text": {
-      "en": "Attacks in beast form count as magical.",
-      "de": "Angriffe in Tiergestalt gelten als magisch."
+      "en": "Your attacks in beast form count as magical for the purpose of overcoming resistance and immunity to nonmagical attacks and damage.",
+      "de": "Deine Angriffe in Tiergestalt gelten als magisch, um Resistenz und Immunität gegen nichtmagische Angriffe und nichtmagischen Schaden zu überwinden."
      },
      "source": "summary",
      "verified": false
@@ -714,8 +714,8 @@
     {
      "n": "Elemental Wild Shape",
      "text": {
-      "en": "Spend two Wild Shape uses to become an air, earth, fire or water elemental.",
-      "de": "Verbrauche zwei Anwendungen von Wild Shape, um ein Luft-, Erd-, Feuer- oder Wasserelementar zu werden."
+      "en": "You can expend two uses of Wild Shape at the same time to transform into an air elemental, earth elemental, fire elemental, or water elemental.",
+      "de": "Du kannst zwei Anwendungen von Wild Shape gleichzeitig verbrauchen, um dich in ein Luft-, Erd-, Feuer- oder Wasserelementar zu verwandeln."
      },
      "source": "summary",
      "verified": false
@@ -725,8 +725,8 @@
     {
      "n": "Thousand Forms",
      "text": {
-      "en": "Cast Alter Self at will.",
-      "de": "Alter Self beliebig oft wirken."
+      "en": "You can cast Alter Self at will, without expending a spell slot.",
+      "de": "Du kannst Alter Self beliebig oft wirken, ohne einen Zauberplatz zu verbrauchen."
      },
      "source": "summary",
      "verified": false
@@ -797,8 +797,8 @@
     {
      "n": "Combat Superiority",
      "text": {
-      "en": "Four d8 superiority dice, back on a short rest. Learn 3 maneuvers (DC = 8 + proficiency + STR or DEX).",
-      "de": "Vier Überlegenheitswürfel (W8), zurück nach einer kurzen Rast. Lerne 3 Manöver (SG = 8 + Übungsbonus + Stärke- oder Geschicklichkeitsmodifikator)."
+      "en": "You learn three maneuvers and gain four superiority dice, which are d8s. Each maneuver uses one die; you regain all expended dice after a short or long rest. You learn two more maneuvers at 7th, 10th, and 15th level and can swap one known maneuver each time you learn new ones. If a maneuver calls for a saving throw, the DC is 8 + your proficiency bonus + your Strength or Dexterity modifier (your choice). Only one maneuver per attack.\nManeuvers:\n- Commander's Strike: Forgo one of your attacks of the Attack action and use a bonus action; an ally who can see or hear you can use its reaction to make one weapon attack, adding the die to its damage.\n- Disarming Attack: On a hit, add the die to damage; the target makes a Strength save or drops one held object of your choice at its feet.\n- Distracting Strike: On a hit, add the die to damage; the next attack roll against the target by someone other than you has advantage if made before the start of your next turn.\n- Evasive Footwork: When you move, add the die to your AC until you stop moving.\n- Feinting Attack: Bonus action, choose a creature within 5 feet; you have advantage on your next attack against it this turn, and add the die to damage if it hits.\n- Goading Attack: On a hit, add the die to damage; the target makes a Wisdom save or has disadvantage on attacks against targets other than you until the end of your next turn.\n- Lunging Attack: Increase the reach of one melee weapon attack by 5 feet; on a hit add the die to damage.\n- Maneuvering Attack: On a hit, add the die to damage; an ally who can see or hear you can use its reaction to move up to half its speed without provoking opportunity attacks from the target.\n- Menacing Attack: On a hit, add the die to damage; the target makes a Wisdom save or is frightened of you until the end of your next turn.\n- Parry: When another creature damages you with a melee attack, use your reaction to reduce the damage by the die + your Dexterity modifier.\n- Precision Attack: Add the die to an attack roll, before or after rolling but before any effects apply.\n- Pushing Attack: On a hit, add the die to damage; a Large or smaller target makes a Strength save or is pushed up to 15 feet away.\n- Rally: Bonus action; an ally who can see or hear you gains temporary hit points equal to the die + your Charisma modifier.\n- Riposte: When a creature misses you with a melee attack, use your reaction to make a melee weapon attack against it, adding the die to damage on a hit.\n- Sweeping Attack: On a melee hit, choose another creature within 5 feet of the target and within your reach; if your original roll would hit it, it takes damage equal to the die (same damage type).\n- Trip Attack: On a hit, add the die to damage; a Large or smaller target makes a Strength save or is knocked prone.",
+      "de": "Du lernst drei Manöver und erhältst vier Überlegenheitswürfel (W8). Jedes Manöver verbraucht einen Würfel; nach einer kurzen oder langen Rast erhältst du alle zurück. Auf Stufe 7, 10 und 15 lernst du je zwei weitere Manöver und kannst dabei jeweils ein bekanntes tauschen. Verlangt ein Manöver einen Rettungswurf, beträgt der SG 8 + dein Übungsbonus + dein Stärke- oder Geschicklichkeitsmodifikator (deine Wahl). Pro Angriff nur ein Manöver.\nManöver:\n- Commander's Strike: Verzichte auf einen Angriff deiner Aktion Angriff und nutze eine Bonusaktion; ein Verbündeter, der dich sehen oder hören kann, führt mit seiner Reaktion einen Waffenangriff aus und addiert den Würfel zum Schaden.\n- Disarming Attack: Bei einem Treffer Würfel zum Schaden; das Ziel legt einen Stärkerettungswurf ab oder lässt einen gehaltenen Gegenstand deiner Wahl fallen.\n- Distracting Strike: Bei einem Treffer Würfel zum Schaden; der nächste Angriff eines anderen als dir gegen das Ziel hat Vorteil, wenn er vor Beginn deines nächsten Zuges erfolgt.\n- Evasive Footwork: Bewegst du dich, addierst du den Würfel zu deiner RK, bis du anhältst.\n- Feinting Attack: Bonusaktion, wähle eine Kreatur innerhalb von 1,5 m; dein nächster Angriff gegen sie in diesem Zug hat Vorteil, bei einem Treffer Würfel zum Schaden.\n- Goading Attack: Bei einem Treffer Würfel zum Schaden; das Ziel legt einen Weisheitsrettungswurf ab oder hat bis zum Ende deines nächsten Zuges Nachteil bei Angriffen gegen andere Ziele als dich.\n- Lunging Attack: Erhöhe die Reichweite eines Nahkampfwaffenangriffs um 1,5 m; bei einem Treffer Würfel zum Schaden.\n- Maneuvering Attack: Bei einem Treffer Würfel zum Schaden; ein Verbündeter, der dich sehen oder hören kann, bewegt sich mit seiner Reaktion bis zu seinem halben Tempo, ohne Gelegenheitsangriffe des Ziels auszulösen.\n- Menacing Attack: Bei einem Treffer Würfel zum Schaden; das Ziel legt einen Weisheitsrettungswurf ab oder ist bis zum Ende deines nächsten Zuges vor dir Frightened.\n- Parry: Fügt dir eine Kreatur mit einem Nahkampfangriff Schaden zu, senkst du ihn mit deiner Reaktion um den Würfel + deinen Geschicklichkeitsmodifikator.\n- Precision Attack: Würfel zum Angriffswurf addieren, vor oder nach dem Wurf, aber bevor Wirkungen eintreten.\n- Pushing Attack: Bei einem Treffer Würfel zum Schaden; ein Ziel der Größe Large oder kleiner legt einen Stärkerettungswurf ab oder wird bis zu 4,5 m weggestoßen.\n- Rally: Bonusaktion; ein Verbündeter, der dich sehen oder hören kann, erhält temporäre Trefferpunkte in Höhe des Würfels + deines Charismamodifikators.\n- Riposte: Verfehlt dich eine Kreatur mit einem Nahkampfangriff, greifst du sie mit deiner Reaktion mit einer Nahkampfwaffe an; bei einem Treffer Würfel zum Schaden.\n- Sweeping Attack: Bei einem Nahkampftreffer wählst du eine andere Kreatur innerhalb von 1,5 m um das Ziel und in deiner Reichweite; würde dein ursprünglicher Wurf sie treffen, erleidet sie Schaden in Höhe des Würfels (gleiche Schadensart).\n- Trip Attack: Bei einem Treffer Würfel zum Schaden; ein Ziel der Größe Large oder kleiner legt einen Stärkerettungswurf ab oder wird Prone."
      },
      "source": "summary",
      "verified": false
@@ -806,8 +806,8 @@
     {
      "n": "Student of War",
      "text": {
-      "en": "Proficiency with one artisan's tool.",
-      "de": "Übung mit einem Handwerkszeug."
+      "en": "You gain proficiency with one type of artisan's tools of your choice.",
+      "de": "Du erhältst Übung mit einer Art Handwerkszeug deiner Wahl."
      },
      "source": "summary",
      "verified": false
@@ -817,8 +817,8 @@
     {
      "n": "Know Your Enemy",
      "text": {
-      "en": "After 1 minute of observation, learn if a creature is your equal, superior or inferior in two characteristics.",
-      "de": "Nach 1 Minute Beobachtung erfährst du, ob eine Kreatur dir in zwei Eigenschaften ebenbürtig, überlegen oder unterlegen ist."
+      "en": "If you spend at least 1 minute observing or interacting with another creature outside combat, you can learn certain information about its capabilities compared to your own. The DM tells you if the creature is your equal, superior, or inferior in two of these characteristics of your choice: Strength score, Dexterity score, Constitution score, Armor Class, current hit points, total class levels (if any), fighter class levels (if any).",
+      "de": "Beobachtest du eine andere Kreatur außerhalb eines Kampfes mindestens 1 Minute lang oder hast mit ihr zu tun, erfährst du etwas über ihre Fähigkeiten im Vergleich zu deinen. Die Spielleitung sagt dir, ob die Kreatur dir in zwei dieser Eigenschaften deiner Wahl ebenbürtig, überlegen oder unterlegen ist: Stärkewert, Geschicklichkeitswert, Konstitutionswert, Rüstungsklasse, aktuelle Trefferpunkte, Gesamtklassenstufen (falls vorhanden), Kämpferstufen (falls vorhanden)."
      },
      "source": "summary",
      "verified": false
@@ -826,8 +826,8 @@
     {
      "n": "Combat Superiority",
      "text": {
-      "en": "Two more maneuvers, one more superiority die.",
-      "de": "Zwei weitere Manöver, ein weiterer Überlegenheitswürfel."
+      "en": "You learn two additional maneuvers and gain a fifth superiority die.",
+      "de": "Du lernst zwei weitere Manöver und erhältst einen fünften Überlegenheitswürfel."
      },
      "source": "summary",
      "verified": false
@@ -837,8 +837,8 @@
     {
      "n": "Improved Combat Superiority",
      "text": {
-      "en": "Superiority dice become d10.",
-      "de": "Überlegenheitswürfel werden zu W10."
+      "en": "Your superiority dice turn into d10s.",
+      "de": "Deine Überlegenheitswürfel werden zu W10."
      },
      "source": "summary",
      "verified": false
@@ -846,8 +846,8 @@
     {
      "n": "Combat Superiority",
      "text": {
-      "en": "Two more maneuvers.",
-      "de": "Zwei weitere Manöver."
+      "en": "You learn two additional maneuvers.",
+      "de": "Du lernst zwei weitere Manöver."
      },
      "source": "summary",
      "verified": false
@@ -857,8 +857,8 @@
     {
      "n": "Relentless",
      "text": {
-      "en": "If you start initiative with no superiority dice, regain one.",
-      "de": "Hast du zu Beginn der Initiative keine Überlegenheitswürfel, erhältst du einen zurück."
+      "en": "When you roll initiative and have no superiority dice remaining, you regain one superiority die.",
+      "de": "Würfelst du Initiative und hast keine Überlegenheitswürfel mehr, erhältst du einen zurück."
      },
      "source": "summary",
      "verified": false
@@ -866,8 +866,8 @@
     {
      "n": "Combat Superiority",
      "text": {
-      "en": "One more superiority die and two more maneuvers.",
-      "de": "Ein weiterer Überlegenheitswürfel und zwei weitere Manöver."
+      "en": "You learn two additional maneuvers and gain a sixth superiority die.",
+      "de": "Du lernst zwei weitere Manöver und erhältst einen sechsten Überlegenheitswürfel."
      },
      "source": "summary",
      "verified": false
@@ -877,8 +877,8 @@
     {
      "n": "Improved Combat Superiority",
      "text": {
-      "en": "Superiority dice become d12.",
-      "de": "Überlegenheitswürfel werden zu W12."
+      "en": "Your superiority dice turn into d12s.",
+      "de": "Deine Überlegenheitswürfel werden zu W12."
      },
      "source": "summary",
      "verified": false
@@ -890,8 +890,8 @@
     {
      "n": "Spellcasting",
      "text": {
-      "en": "Cast wizard spells (Intelligence), mostly abjuration and evocation. Spell slots as one-third caster.",
-      "de": "Magierzauber wirken (Intelligenz), überwiegend Bannmagie und Hervorrufung. Zauberplätze wie ein Drittelzauberer."
+      "en": "You learn spells from the wizard spell list, using Intelligence as your spellcasting ability (spell save DC = 8 + proficiency bonus + Intelligence modifier; spell attack = proficiency bonus + Intelligence modifier).\n- Cantrips: two wizard cantrips, a third at 10th level.\n- Spells known: three 1st-level wizard spells at 3rd level, rising to 13 by 20th level. All must be abjuration or evocation spells, except the ones you learn at 3rd, 8th, 14th, and 20th level, which can come from any school.\n- Spell slots follow the Eldritch Knight table (one-third caster): two 1st-level slots at 3rd level, up to 4th-level slots at 19th level.\n- When you gain a fighter level, you can replace one known wizard spell with another of a level you have slots for, following the school limits.",
+      "de": "Du lernst Zauber von der Magier-Zauberliste und nutzt Intelligenz als Zauberattribut (Zauberrettungswurf-SG = 8 + Übungsbonus + Intelligenzmodifikator; Zauberangriff = Übungsbonus + Intelligenzmodifikator).\n- Zaubertricks: zwei Magier-Zaubertricks, ein dritter auf Stufe 10.\n- Bekannte Zauber: drei Magierzauber des 1. Grades auf Stufe 3, bis zu 13 auf Stufe 20. Alle müssen Bann- oder Hervorrufungszauber sein, außer denen, die du auf Stufe 3, 8, 14 und 20 lernst; diese dürfen aus jeder Schule stammen.\n- Zauberplätze nach der Tabelle des Eldritch Knight (Drittelzauberer): zwei Plätze des 1. Grades auf Stufe 3, bis zu Plätzen des 4. Grades auf Stufe 19.\n- Steigst du eine Kämpferstufe auf, kannst du einen bekannten Magierzauber durch einen anderen ersetzen, für dessen Grad du Plätze hast; die Schulgrenzen gelten weiter."
      },
      "source": "summary",
      "verified": false
@@ -899,8 +899,8 @@
     {
      "n": "Weapon Bond",
      "text": {
-      "en": "Ritual: bond with up to two weapons. They cannot be disarmed; summon one to your hand as a bonus action.",
-      "de": "Ritual: Bindung an bis zu zwei Waffen. Sie können dir nicht entwunden werden; mit einer Bonusaktion rufst du eine davon in deine Hand."
+      "en": "You perform a 1-hour ritual (it can be done during a short rest) to bond with one weapon within reach. You can bond with up to two weapons; bonding a third requires breaking one of the others.\n- You can't be disarmed of a bonded weapon unless you are incapacitated.\n- If it is on the same plane of existence, you can summon it as a bonus action on your turn, and it teleports instantly into your hand.",
+      "de": "Mit einem einstündigen Ritual (auch während einer kurzen Rast) bindest du dich an eine Waffe in Reichweite. Du kannst an bis zu zwei Waffen gebunden sein; für eine dritte musst du eine der Bindungen lösen.\n- Eine gebundene Waffe kann dir nicht entwunden werden, außer du bist Incapacitated.\n- Ist sie auf derselben Existenzebene, kannst du sie in deinem Zug mit einer Bonusaktion herbeirufen; sie teleportiert sich sofort in deine Hand."
      },
      "source": "summary",
      "verified": false
@@ -910,8 +910,8 @@
     {
      "n": "War Magic",
      "text": {
-      "en": "After casting a cantrip as an action, make one weapon attack as a bonus action.",
-      "de": "Nachdem du als Aktion einen Zaubertrick gewirkt hast, kannst du als Bonusaktion einen Waffenangriff ausführen."
+      "en": "When you use your action to cast a cantrip, you can make one weapon attack as a bonus action.",
+      "de": "Nutzt du deine Aktion, um einen Zaubertrick zu wirken, kannst du als Bonusaktion einen Waffenangriff ausführen."
      },
      "source": "summary",
      "verified": false
@@ -921,8 +921,8 @@
     {
      "n": "Eldritch Strike",
      "text": {
-      "en": "On a weapon hit the target has disadvantage on its next save against your spell before the end of your next turn.",
-      "de": "Bei einem Waffentreffer hat das Ziel bis zum Ende deines nächsten Zuges Nachteil bei seinem nächsten Rettungswurf gegen deinen Zauber."
+      "en": "When you hit a creature with a weapon attack, that creature has disadvantage on the next saving throw it makes against a spell you cast before the end of your next turn.",
+      "de": "Triffst du eine Kreatur mit einem Waffenangriff, hat sie Nachteil beim nächsten Rettungswurf gegen einen Zauber, den du vor dem Ende deines nächsten Zuges wirkst."
      },
      "source": "summary",
      "verified": false
@@ -932,8 +932,8 @@
     {
      "n": "Arcane Charge",
      "text": {
-      "en": "When you use Action Surge, teleport up to 30 feet.",
-      "de": "Wenn du Action Surge nutzt, teleportierst du dich bis zu 9 m weit."
+      "en": "When you use your Action Surge, you can teleport up to 30 feet to an unoccupied space you can see. You can teleport before or after the additional action.",
+      "de": "Nutzt du Action Surge, kannst du dich bis zu 9 m weit auf ein freies Feld teleportieren, das du sehen kannst. Das geht vor oder nach der zusätzlichen Aktion."
      },
      "source": "summary",
      "verified": false
@@ -943,8 +943,8 @@
     {
      "n": "Improved War Magic",
      "text": {
-      "en": "After casting a spell as an action, make one weapon attack as a bonus action.",
-      "de": "Nachdem du als Aktion einen Zauber gewirkt hast, kannst du als Bonusaktion einen Waffenangriff ausführen."
+      "en": "When you use your action to cast a spell (not only a cantrip), you can make one weapon attack as a bonus action.",
+      "de": "Nutzt du deine Aktion, um einen Zauber zu wirken (nicht nur einen Zaubertrick), kannst du als Bonusaktion einen Waffenangriff ausführen."
      },
      "source": "summary",
      "verified": false
@@ -1004,8 +1004,8 @@
     {
      "n": "Shadow Arts",
      "text": {
-      "en": "Spend 2 ki: Darkness, Darkvision, Pass Without Trace or Silence. Minor Illusion cantrip.",
-      "de": "2 Ki ausgeben: Darkness, Darkvision, Pass Without Trace oder Silence. Zaubertrick Minor Illusion."
+      "en": "As an action, you can spend 2 ki points to cast Darkness, Darkvision, Pass Without Trace, or Silence, without providing material components. You also learn the Minor Illusion cantrip if you don't already know it.",
+      "de": "Als Aktion kannst du 2 Ki-Punkte ausgeben, um Darkness, Darkvision, Pass Without Trace oder Silence ohne Materialkomponenten zu wirken. Außerdem lernst du den Zaubertrick Minor Illusion, falls du ihn noch nicht kennst."
      },
      "source": "summary",
      "verified": false
@@ -1015,8 +1015,8 @@
     {
      "n": "Shadow Step",
      "text": {
-      "en": "Bonus action: teleport from dim light or darkness up to 60 feet to another such place; advantage on your first melee attack before the end of the turn.",
-      "de": "Bonusaktion: Aus dämmrigem Licht oder Dunkelheit bis zu 18 m weit an einen anderen solchen Ort teleportieren; Vorteil bei deinem ersten Nahkampfangriff bis zum Ende des Zuges."
+      "en": "When you are in dim light or darkness, as a bonus action you can teleport up to 60 feet to an unoccupied space you can see that is also in dim light or darkness. You then have advantage on the first melee attack you make before the end of the turn.",
+      "de": "Bist du in dämmrigem Licht oder Dunkelheit, kannst du dich mit einer Bonusaktion bis zu 18 m weit auf ein freies Feld teleportieren, das du sehen kannst und das ebenfalls in dämmrigem Licht oder Dunkelheit liegt. Danach hast du Vorteil bei deinem ersten Nahkampfangriff bis zum Ende des Zuges."
      },
      "source": "summary",
      "verified": false
@@ -1026,8 +1026,8 @@
     {
      "n": "Cloak of Shadows",
      "text": {
-      "en": "Action in dim light or darkness: Invisible until you attack, cast or enter bright light.",
-      "de": "Aktion in dämmrigem Licht oder Dunkelheit: Invisible, bis du angreifst, zauberst oder helles Licht betrittst."
+      "en": "When you are in an area of dim light or darkness, you can use your action to become invisible. You remain invisible until you make an attack, cast a spell, or are in an area of bright light.",
+      "de": "Bist du in einem Bereich mit dämmrigem Licht oder Dunkelheit, kannst du mit deiner Aktion unsichtbar werden. Du bleibst unsichtbar, bis du angreifst, einen Zauber wirkst oder in hellem Licht bist."
      },
      "source": "summary",
      "verified": false
@@ -1037,8 +1037,8 @@
     {
      "n": "Opportunist",
      "text": {
-      "en": "Reaction when a creature within 5 feet is hit by another: make a melee attack against it.",
-      "de": "Reaktion, wenn eine Kreatur innerhalb von 1,5 m von jemand anderem getroffen wird: Nahkampfangriff gegen sie."
+      "en": "When a creature within 5 feet of you is hit by an attack made by a creature other than you, you can use your reaction to make a melee attack against that creature.",
+      "de": "Wird eine Kreatur innerhalb von 1,5 m von einem Angriff einer anderen Kreatur als dir getroffen, kannst du mit deiner Reaktion einen Nahkampfangriff gegen sie ausführen."
      },
      "source": "summary",
      "verified": false
@@ -1050,8 +1050,8 @@
     {
      "n": "Disciple of the Elements",
      "text": {
-      "en": "Learn Elemental Attunement and one more discipline. More disciplines at 6, 11 and 17. Discipline spells cost ki.",
-      "de": "Lerne Elemental Attunement und eine weitere Disziplin. Weitere Disziplinen auf Stufe 6, 11 und 17. Disziplin-Zauber kosten Ki."
+      "en": "You learn the Elemental Attunement discipline and one other elemental discipline of your choice. You learn one more at 6th, 11th, and 17th level, and each time you can replace one discipline you know.\nSome disciplines cast spells by spending ki. You pay the listed ki cost and can spend extra ki to raise the spell's level (each extra point raises it by one). The maximum ki for one spell is 2 at 3rd–4th level, 3 at 5th–8th, 4 at 9th–12th, 5 at 13th–16th, and 6 at 17th–20th. You need no material components. A spell's save DC is your ki save DC.",
+      "de": "Du lernst die Disziplin Elemental Attunement und eine weitere Elementardisziplin deiner Wahl. Auf Stufe 6, 11 und 17 lernst du je eine weitere und kannst jedes Mal eine bekannte Disziplin ersetzen.\nManche Disziplinen wirken Zauber gegen Ki. Du zahlst die angegebenen Ki-Kosten und kannst zusätzliches Ki ausgeben, um den Grad des Zaubers zu erhöhen (je Punkt um einen Grad). Höchstens so viel Ki pro Zauber: 2 auf Stufe 3–4, 3 auf Stufe 5–8, 4 auf Stufe 9–12, 5 auf Stufe 13–16 und 6 auf Stufe 17–20. Materialkomponenten brauchst du nicht. Der Rettungswurf-SG eines Zaubers ist dein Ki-Rettungswurf-SG."
      },
      "source": "summary",
      "verified": false
@@ -1061,8 +1061,8 @@
     {
      "n": "Extra Elemental Discipline",
      "text": {
-      "en": "Learn one more discipline.",
-      "de": "Lerne eine weitere Disziplin."
+      "en": "You learn one additional elemental discipline of your choice and can replace one discipline you already know.",
+      "de": "Du lernst eine weitere Elementardisziplin deiner Wahl und kannst eine bekannte Disziplin ersetzen."
      },
      "source": "summary",
      "verified": false
@@ -1072,8 +1072,8 @@
     {
      "n": "Extra Elemental Discipline",
      "text": {
-      "en": "Learn one more discipline.",
-      "de": "Lerne eine weitere Disziplin."
+      "en": "You learn one additional elemental discipline of your choice and can replace one discipline you already know.",
+      "de": "Du lernst eine weitere Elementardisziplin deiner Wahl und kannst eine bekannte Disziplin ersetzen."
      },
      "source": "summary",
      "verified": false
@@ -1083,8 +1083,8 @@
     {
      "n": "Extra Elemental Discipline",
      "text": {
-      "en": "Learn one more discipline.",
-      "de": "Lerne eine weitere Disziplin."
+      "en": "You learn one additional elemental discipline of your choice and can replace one discipline you already know.",
+      "de": "Du lernst eine weitere Elementardisziplin deiner Wahl und kannst eine bekannte Disziplin ersetzen."
      },
      "source": "summary",
      "verified": false
@@ -1153,8 +1153,8 @@
     {
      "n": "Channel Divinity: Nature's Wrath",
      "text": {
-      "en": "Action: spectral vines restrain a creature within 10 feet (Strength or Dexterity save, repeated).",
-      "de": "Aktion: Geisterhafte Ranken halten eine Kreatur innerhalb von 3 m fest (Stärke- oder Geschicklichkeitsrettungswurf, wiederholbar)."
+      "en": "As an action, you use your Channel Divinity to make spectral vines spring up and reach for a creature within 10 feet of you that you can see. It must succeed on a Strength or Dexterity saving throw (its choice) or be restrained. While restrained, it repeats the saving throw at the end of each of its turns, ending the effect on a success.",
+      "de": "Als Aktion nutzt du Channel Divinity, und geisterhafte Ranken greifen nach einer Kreatur innerhalb von 3 m, die du sehen kannst. Sie muss einen Stärke- oder Geschicklichkeitsrettungswurf (ihre Wahl) bestehen, sonst ist sie Restrained. Solange sie festgehalten ist, wiederholt sie den Rettungswurf am Ende jedes ihrer Züge und beendet den Effekt bei Erfolg."
      },
      "source": "summary",
      "verified": false
@@ -1162,8 +1162,8 @@
     {
      "n": "Channel Divinity: Turn the Faithless",
      "text": {
-      "en": "Action: fey and fiends within 30 feet make a Wisdom save or are turned for 1 minute.",
-      "de": "Aktion: Feenwesen und Unholde innerhalb von 9 m legen einen Weisheitsrettungswurf ab oder sind 1 Minute lang vertrieben."
+      "en": "As an action, you present your holy symbol and use your Channel Divinity. Each fey or fiend within 30 feet of you that can hear you must make a Wisdom saving throw. On a failure it is turned for 1 minute or until it takes damage: it must spend its turns moving as far from you as it can, can't willingly move within 30 feet of you, can't take reactions, and can only Dash or try to escape an effect that prevents it from moving (or Dodge if it can't move anywhere).\nIf the creature's true form is hidden by an illusion, shapechanging, or other effect, that form is revealed while it is turned.",
+      "de": "Als Aktion zeigst du dein heiliges Symbol und nutzt Channel Divinity. Jedes Feenwesen und jeder Unhold innerhalb von 9 m, der dich hören kann, muss einen Weisheitsrettungswurf ablegen. Bei Misserfolg ist er 1 Minute lang oder bis er Schaden erleidet vertrieben: Er muss sich in seinen Zügen so weit wie möglich von dir entfernen, kann sich nicht freiwillig auf 9 m an dich heranbewegen, keine Reaktionen ausführen und als Aktion nur Spurt nutzen oder versuchen, sich aus einem bewegungshemmenden Effekt zu befreien (oder Ausweichen, wenn er sich nirgendwohin bewegen kann).\nIst die wahre Gestalt der Kreatur durch Illusion, Gestaltwandel oder einen anderen Effekt verborgen, wird sie offenbart, solange die Kreatur vertrieben ist."
      },
      "source": "summary",
      "verified": false
@@ -1173,8 +1173,8 @@
     {
      "n": "Aura of Warding",
      "text": {
-      "en": "You and allies within 10 feet (30 at level 18) have resistance to damage from spells.",
-      "de": "Du und Verbündete innerhalb von 3 m (9 m ab Stufe 18) habt Resistenz gegen Schaden durch Zauber."
+      "en": "You and friendly creatures within 10 feet of you have resistance to damage from spells. At 18th level the range of this aura increases to 30 feet.",
+      "de": "Du und freundliche Kreaturen innerhalb von 3 m habt Resistenz gegen Schaden durch Zauber. Ab Stufe 18 steigt die Reichweite dieser Aura auf 9 m."
      },
      "source": "summary",
      "verified": false
@@ -1184,8 +1184,8 @@
     {
      "n": "Undying Sentinel",
      "text": {
-      "en": "When reduced to 0 HP but not killed, drop to 1 HP instead, once per long rest. No aging.",
-      "de": "Sinkst du auf 0 TP, ohne getötet zu werden, sinkst du stattdessen auf 1 TP, einmal pro langer Rast. Du alterst nicht."
+      "en": "When you are reduced to 0 hit points and aren't killed outright, you can choose to drop to 1 hit point instead. Once you use this ability, you can't use it again until you finish a long rest.\nYou also suffer none of the drawbacks of old age, and you can't be aged magically.",
+      "de": "Sinkst du auf 0 Trefferpunkte und wirst nicht sofort getötet, kannst du stattdessen auf 1 Trefferpunkt sinken. Danach erst wieder nach einer langen Rast.\nAußerdem leidest du unter keinen Nachteilen des Alters und kannst nicht magisch gealtert werden."
      },
      "source": "summary",
      "verified": false
@@ -1195,8 +1195,8 @@
     {
      "n": "Elder Champion",
      "text": {
-      "en": "Action: for 1 minute regain 10 HP at turn start, cast paladin spells of 1 action as bonus actions, enemies within 10 feet have disadvantage on saves against your spells. Once per long rest.",
-      "de": "Aktion: 1 Minute lang erhältst du zu Beginn deines Zuges 10 TP zurück, wirkst Paladinzauber mit 1 Aktion als Bonusaktion, und Feinde innerhalb von 3 m haben Nachteil bei Rettungswürfen gegen deine Zauber. Einmal pro langer Rast."
+      "en": "As an action, you take on the form of an ancient force of nature for 1 minute:\n- At the start of each of your turns, you regain 10 hit points.\n- Whenever you cast a paladin spell that has a casting time of 1 action, you can cast it using a bonus action instead.\n- Enemy creatures within 10 feet of you have disadvantage on saving throws against your paladin spells and Channel Divinity options.\nOnce you use this feature, you can't use it again until you finish a long rest.",
+      "de": "Als Aktion nimmst du für 1 Minute die Gestalt einer uralten Naturkraft an:\n- Zu Beginn jedes deiner Züge erhältst du 10 Trefferpunkte zurück.\n- Paladinzauber mit einem Zeitaufwand von 1 Aktion kannst du stattdessen als Bonusaktion wirken.\n- Feindliche Kreaturen innerhalb von 3 m haben Nachteil bei Rettungswürfen gegen deine Paladinzauber und Channel-Divinity-Optionen.\nDanach erst wieder nach einer langen Rast."
      },
      "source": "summary",
      "verified": false
@@ -1208,8 +1208,8 @@
     {
      "n": "Channel Divinity: Abjure Enemy",
      "text": {
-      "en": "Action: a creature within 60 feet makes a Wisdom save or is Frightened for 1 minute, speed 0 (fiends and undead with disadvantage).",
-      "de": "Aktion: Eine Kreatur innerhalb von 18 m legt einen Weisheitsrettungswurf ab oder ist 1 Minute lang Frightened mit Tempo 0 (Unholde und Untote mit Nachteil)."
+      "en": "As an action, you present your holy symbol, speak a prayer of denunciation, and use your Channel Divinity. Choose one creature within 60 feet of you that you can see. It must make a Wisdom saving throw, unless it is immune to being frightened; fiends and undead have disadvantage on this save.\nOn a failure, it is frightened for 1 minute or until it takes damage, and while frightened its speed is 0 and it can't benefit from any bonus to its speed. On a success, its speed is halved for 1 minute or until it takes damage.",
+      "de": "Als Aktion zeigst du dein heiliges Symbol, sprichst ein Gebet der Verdammung und nutzt Channel Divinity. Wähle eine Kreatur innerhalb von 18 m, die du sehen kannst. Sie muss einen Weisheitsrettungswurf ablegen, sofern sie nicht immun gegen Frightened ist; Unholde und Untote haben dabei Nachteil.\nBei Misserfolg ist sie 1 Minute lang oder bis sie Schaden erleidet Frightened, und solange sie verängstigt ist, beträgt ihr Tempo 0, ohne dass Tempoboni helfen. Bei Erfolg halbiert sich ihr Tempo 1 Minute lang oder bis sie Schaden erleidet."
      },
      "source": "summary",
      "verified": false
@@ -1217,8 +1217,8 @@
     {
      "n": "Channel Divinity: Vow of Enmity",
      "text": {
-      "en": "Bonus action: advantage on attacks against a creature within 10 feet for 1 minute.",
-      "de": "Bonusaktion: 1 Minute lang Vorteil bei Angriffen gegen eine Kreatur innerhalb von 3 m."
+      "en": "As a bonus action, you utter a vow of enmity against a creature you can see within 10 feet, using your Channel Divinity. You gain advantage on attack rolls against that creature for 1 minute or until it drops to 0 hit points or falls unconscious.",
+      "de": "Als Bonusaktion sprichst du mit Channel Divinity einen Schwur der Feindschaft gegen eine Kreatur innerhalb von 3 m, die du sehen kannst. 1 Minute lang oder bis sie auf 0 Trefferpunkte sinkt oder bewusstlos wird, hast du Vorteil bei Angriffswürfen gegen sie."
      },
      "source": "summary",
      "verified": false
@@ -1228,8 +1228,8 @@
     {
      "n": "Relentless Avenger",
      "text": {
-      "en": "When you hit with an opportunity attack, move up to half your speed immediately without provoking.",
-      "de": "Triffst du mit einem Gelegenheitsangriff, bewegst du dich sofort bis zu deinem halben Tempo, ohne Gelegenheitsangriffe auszulösen."
+      "en": "When you hit a creature with an opportunity attack, you can move up to half your speed immediately afterward as part of the same reaction. This movement doesn't provoke opportunity attacks.",
+      "de": "Triffst du eine Kreatur mit einem Gelegenheitsangriff, kannst du dich als Teil derselben Reaktion direkt danach bis zu deinem halben Tempo bewegen. Diese Bewegung löst keine Gelegenheitsangriffe aus."
      },
      "source": "summary",
      "verified": false
@@ -1239,8 +1239,8 @@
     {
      "n": "Soul of Vengeance",
      "text": {
-      "en": "Reaction when a creature under your Vow attacks: make a melee attack against it.",
-      "de": "Reaktion, wenn eine Kreatur unter deinem Vow of Enmity angreift: Nahkampfangriff gegen sie."
+      "en": "When a creature under the effect of your Vow of Enmity makes an attack, you can use your reaction to make a melee weapon attack against that creature if it is within range.",
+      "de": "Greift eine Kreatur unter deinem Vow of Enmity an, kannst du mit deiner Reaktion einen Nahkampfwaffenangriff gegen sie ausführen, wenn sie in Reichweite ist."
      },
      "source": "summary",
      "verified": false
@@ -1250,8 +1250,8 @@
     {
      "n": "Avenging Angel",
      "text": {
-      "en": "Action for 1 hour: wings, fly 60 feet, enemies within 30 feet make a Wisdom save or are Frightened for 1 minute. Once per long rest.",
-      "de": "Aktion für 1 Stunde: Flügel, Fliegen 18 m, Feinde innerhalb von 9 m legen einen Weisheitsrettungswurf ab oder sind 1 Minute lang Frightened. Einmal pro langer Rast."
+      "en": "As an action, you transform for 1 hour:\n- Wings sprout from your back and grant you a flying speed of 60 feet.\n- You emanate an aura of menace in a 30-foot radius. The first time an enemy enters the aura or starts its turn there during a battle, it must succeed on a Wisdom saving throw or be frightened of you for 1 minute or until it takes damage. Attack rolls against the frightened creature have advantage.\nOnce you use this feature, you can't use it again until you finish a long rest.",
+      "de": "Als Aktion verwandelst du dich für 1 Stunde:\n- Dir wachsen Flügel, die dir ein Flugtempo von 18 m geben.\n- Du strahlst eine bedrohliche Aura mit 9 m Radius aus. Betritt ein Gegner in einem Kampf die Aura zum ersten Mal oder beginnt dort seinen Zug, muss er einen Weisheitsrettungswurf bestehen, sonst ist er 1 Minute lang oder bis er Schaden erleidet vor dir Frightened. Angriffswürfe gegen die verängstigte Kreatur haben Vorteil.\nDanach erst wieder nach einer langen Rast."
      },
      "source": "summary",
      "verified": false
@@ -1311,8 +1311,8 @@
     {
      "n": "Ranger's Companion",
      "text": {
-      "en": "Gain a beast companion of CR 1/4 or lower, Medium or smaller. It acts on your initiative, takes the actions you command; add your proficiency to its AC, attacks, damage, saves and skills. Its HP equal the higher of its normal HP or 4 × ranger level.",
-      "de": "Du erhältst einen Tiergefährten mit HG 1/4 oder niedriger, Größe Medium oder kleiner. Er handelt bei deiner Initiative und führt die Aktionen aus, die du befiehlst; addiere deinen Übungsbonus zu seiner RK, seinen Angriffen, seinem Schaden, seinen Rettungswürfen und Fertigkeiten. Seine TP entsprechen dem höheren Wert aus seinen normalen TP und 4 × Waldläuferstufe."
+      "en": "You gain a beast companion of challenge rating 1/4 or lower that is no larger than Medium (for example a hawk, mastiff, or panther).\n- Add your proficiency bonus to its AC, attack rolls, and damage rolls, and to any saving throws and skills it is proficient in.\n- Its hit point maximum equals its normal maximum or four times your ranger level, whichever is higher.\n- It acts on your turn and takes no action unless you command it. On your turn you can use your action to verbally command it to Attack, Dash, Disengage, Dodge, or Help. Once you have Extra Attack, you can make one weapon attack yourself when you command it to Attack.\n- If you are incapacitated or absent, it acts on its own, focused on protecting you and itself.\n- If it dies, you can bond with another beast by spending 8 hours magically bonding with it while it isn't hostile to you.",
+      "de": "Du erhältst einen Tiergefährten mit Herausforderungsgrad 1/4 oder niedriger, höchstens Größe Medium (zum Beispiel Falke, Dogge oder Panther).\n- Addiere deinen Übungsbonus zu seiner RK, seinen Angriffs- und Schadenswürfen sowie zu Rettungswürfen und Fertigkeiten, in denen er geübt ist.\n- Sein Trefferpunktmaximum entspricht seinem normalen Maximum oder dem Vierfachen deiner Waldläuferstufe, je nachdem, was höher ist.\n- Er handelt in deinem Zug und tut nichts ohne Befehl. In deinem Zug kannst du ihm mit deiner Aktion mündlich Angriff, Spurt, Rückzug, Ausweichen oder Helfen befehlen. Hast du Extra Attack, kannst du selbst einen Waffenangriff ausführen, wenn du ihm Angriff befiehlst.\n- Bist du Incapacitated oder abwesend, handelt er selbstständig und schützt dich und sich.\n- Stirbt er, kannst du dich an ein anderes Tier binden, indem du 8 Stunden mit ihm eine magische Bindung eingehst, solange es dir nicht feindlich gesinnt ist."
      },
      "source": "summary",
      "verified": false
@@ -1322,8 +1322,8 @@
     {
      "n": "Exceptional Training",
      "text": {
-      "en": "Bonus action: your companion Dashes, Disengages or Dodges. Its attacks count as magical.",
-      "de": "Bonusaktion: Dein Gefährte nutzt Spurt, Rückzug oder Ausweichen. Seine Angriffe gelten als magisch."
+      "en": "On any of your turns when your companion doesn't attack, you can use a bonus action to command it to take the Dash, Disengage, Dodge, or Help action. Its attacks now count as magical for overcoming resistance and immunity to nonmagical attacks and damage.",
+      "de": "In jedem deiner Züge, in dem dein Gefährte nicht angreift, kannst du ihm mit einer Bonusaktion Spurt, Rückzug, Ausweichen oder Helfen befehlen. Seine Angriffe gelten jetzt als magisch, um Resistenz und Immunität gegen nichtmagische Angriffe und nichtmagischen Schaden zu überwinden."
      },
      "source": "summary",
      "verified": false
@@ -1333,8 +1333,8 @@
     {
      "n": "Bestial Fury",
      "text": {
-      "en": "Your companion makes two attacks when ordered to Attack.",
-      "de": "Dein Gefährte führt zwei Angriffe aus, wenn du ihm Angriff befiehlst."
+      "en": "When you command your companion to take the Attack action, it can make two attacks, or it can use its Multiattack action if it has one.",
+      "de": "Befiehlst du deinem Gefährten Angriff, kann er zweimal angreifen oder seinen Mehrfachangriff nutzen, falls er einen hat."
      },
      "source": "summary",
      "verified": false
@@ -1344,8 +1344,8 @@
     {
      "n": "Share Spells",
      "text": {
-      "en": "Self-targeting spells can also affect your companion within 30 feet.",
-      "de": "Zauber, die nur dich zum Ziel haben, können auch deinen Gefährten innerhalb von 9 m betreffen."
+      "en": "When you cast a spell targeting yourself, you can also affect your beast companion with the spell if it is within 30 feet of you.",
+      "de": "Wirkst du einen Zauber, der dich zum Ziel hat, kannst du ihn auch auf deinen Tiergefährten wirken lassen, wenn er innerhalb von 9 m ist."
      },
      "source": "summary",
      "verified": false
@@ -1414,8 +1414,8 @@
     {
      "n": "Bonus Proficiencies",
      "text": {
-      "en": "Proficiency with disguise and poisoner's kits.",
-      "de": "Übung mit Verkleidungsausrüstung und Giftmischerausrüstung."
+      "en": "You gain proficiency with the disguise kit and the poisoner's kit.",
+      "de": "Du erhältst Übung mit Verkleidungsausrüstung und Giftmischerausrüstung."
      },
      "source": "summary",
      "verified": false
@@ -1423,8 +1423,8 @@
     {
      "n": "Assassinate",
      "text": {
-      "en": "Advantage against creatures that haven't acted. Hits against surprised creatures are critical.",
-      "de": "Vorteil gegen Kreaturen, die noch nicht gehandelt haben. Treffer gegen überraschte Kreaturen sind kritisch."
+      "en": "You have advantage on attack rolls against any creature that hasn't taken a turn in the combat yet. In addition, any hit you score against a creature that is surprised is a critical hit.",
+      "de": "Du hast Vorteil bei Angriffswürfen gegen jede Kreatur, die in diesem Kampf noch keinen Zug hatte. Außerdem ist jeder Treffer gegen eine überraschte Kreatur ein kritischer Treffer."
      },
      "source": "summary",
      "verified": false
@@ -1434,8 +1434,8 @@
     {
      "n": "Infiltration Expertise",
      "text": {
-      "en": "7 days and 25 gp to create a false identity.",
-      "de": "7 Tage und 25 GM, um eine falsche Identität zu erschaffen."
+      "en": "You can create false identities. Spend seven days and 25 gp to establish a history, profession, and affiliations for an identity. You can't take on an identity that belongs to someone else. You might buy clothing, letters of introduction, and official-looking papers to back it up. Afterwards, others believe you are that person until given an obvious reason not to.",
+      "de": "Du kannst falsche Identitäten erschaffen. Mit sieben Tagen und 25 GM baust du Lebenslauf, Beruf und Verbindungen einer Identität auf. Die Identität einer real existierenden Person kannst du nicht übernehmen. Kleidung, Empfehlungsschreiben und amtlich wirkende Papiere stützen die Tarnung. Danach halten andere dich für diese Person, bis sie einen offensichtlichen Grund zum Zweifeln haben."
      },
      "source": "summary",
      "verified": false
@@ -1445,8 +1445,8 @@
     {
      "n": "Impostor",
      "text": {
-      "en": "After 3 hours of study, mimic speech, writing and behavior. Advantage on Deception to avoid detection.",
-      "de": "Nach 3 Stunden Studium kannst du Sprache, Schrift und Verhalten nachahmen. Vorteil auf Deception, um nicht entdeckt zu werden."
+      "en": "After studying a person's speech, writing, and behavior for at least 3 hours, you can unerringly mimic them. Casual observers can't see through the ruse. If a wary creature suspects something is wrong, you have advantage on any Charisma (Deception) check you make to avoid detection.",
+      "de": "Nach mindestens 3 Stunden Studium von Sprache, Schrift und Verhalten einer Person kannst du sie fehlerlos nachahmen. Beiläufige Beobachter durchschauen das nicht. Schöpft eine wachsame Kreatur Verdacht, hast du Vorteil bei Charismawürfen (Deception), um nicht entdeckt zu werden."
      },
      "source": "summary",
      "verified": false
@@ -1456,8 +1456,8 @@
     {
      "n": "Death Strike",
      "text": {
-      "en": "Hit a surprised creature: Constitution save or damage is doubled.",
-      "de": "Triffst du eine überraschte Kreatur: Konstitutionsrettungswurf, sonst verdoppelt sich der Schaden."
+      "en": "When you attack and hit a creature that is surprised, it must make a Constitution saving throw (DC 8 + your Dexterity modifier + your proficiency bonus). On a failure, double the damage of your attack against it.",
+      "de": "Greifst du eine überraschte Kreatur an und triffst, muss sie einen Konstitutionsrettungswurf ablegen (SG 8 + dein Geschicklichkeitsmodifikator + dein Übungsbonus). Bei Misserfolg verdoppelt sich der Schaden deines Angriffs gegen sie."
      },
      "source": "summary",
      "verified": false
@@ -1469,8 +1469,8 @@
     {
      "n": "Spellcasting",
      "text": {
-      "en": "Cast wizard spells (Intelligence), mostly enchantment and illusion. Mage Hand known. Slots as one-third caster.",
-      "de": "Magierzauber wirken (Intelligenz), überwiegend Verzauberung und Illusion. Du kennst Mage Hand. Zauberplätze wie ein Drittelzauberer."
+      "en": "You learn spells from the wizard spell list, using Intelligence as your spellcasting ability (spell save DC = 8 + proficiency bonus + Intelligence modifier; spell attack = proficiency bonus + Intelligence modifier).\n- Cantrips: Mage Hand plus two other wizard cantrips; a fourth at 10th level.\n- Spells known: three 1st-level wizard spells at 3rd level, rising to 13 by 20th level. All must be enchantment or illusion spells, except the ones you learn at 3rd, 8th, 14th, and 20th level, which can come from any school.\n- Spell slots follow the Arcane Trickster table (one-third caster): two 1st-level slots at 3rd level, up to 4th-level slots at 19th level.\n- When you gain a rogue level, you can replace one known wizard spell with another of a level you have slots for, following the school limits.",
+      "de": "Du lernst Zauber von der Magier-Zauberliste und nutzt Intelligenz als Zauberattribut (Zauberrettungswurf-SG = 8 + Übungsbonus + Intelligenzmodifikator; Zauberangriff = Übungsbonus + Intelligenzmodifikator).\n- Zaubertricks: Mage Hand und zwei weitere Magier-Zaubertricks, ein vierter auf Stufe 10.\n- Bekannte Zauber: drei Magierzauber des 1. Grades auf Stufe 3, bis zu 13 auf Stufe 20. Alle müssen Verzauberungs- oder Illusionszauber sein, außer denen, die du auf Stufe 3, 8, 14 und 20 lernst; diese dürfen aus jeder Schule stammen.\n- Zauberplätze nach der Tabelle des Arcane Trickster (Drittelzauberer): zwei Plätze des 1. Grades auf Stufe 3, bis zu Plätzen des 4. Grades auf Stufe 19.\n- Steigst du eine Schurkenstufe auf, kannst du einen bekannten Magierzauber durch einen anderen ersetzen, für dessen Grad du Plätze hast; die Schulgrenzen gelten weiter."
      },
      "source": "summary",
      "verified": false
@@ -1478,8 +1478,8 @@
     {
      "n": "Mage Hand Legerdemain",
      "text": {
-      "en": "Mage Hand is invisible; use it for Sleight of Hand and to stow or retrieve objects. Bonus action to control it.",
-      "de": "Mage Hand ist unsichtbar; damit kannst du Sleight of Hand nutzen und Gegenstände verstauen oder hervorholen. Steuern mit einer Bonusaktion."
+      "en": "When you cast Mage Hand, you can make the spectral hand invisible, and you can use it for these extra tasks:\n- Stow an object the hand is holding in a container worn or carried by another creature.\n- Retrieve an object in a container worn or carried by another creature.\n- Use thieves' tools to pick locks and disarm traps at range.\nYou can do one of these without being noticed by succeeding on a Dexterity (Sleight of Hand) check contested by the creature's Wisdom (Perception) check. You can also use the bonus action from Cunning Action to control the hand.",
+      "de": "Wirkst du Mage Hand, kannst du die Geisterhand unsichtbar machen und für diese zusätzlichen Aufgaben nutzen:\n- Einen Gegenstand, den die Hand hält, in einem Behälter verstauen, den eine andere Kreatur trägt.\n- Einen Gegenstand aus einem Behälter holen, den eine andere Kreatur trägt.\n- Mit Diebeswerkzeug aus der Entfernung Schlösser öffnen und Fallen entschärfen.\nEine dieser Aufgaben gelingt unbemerkt, wenn dein Geschicklichkeitswurf (Sleight of Hand) den Weisheitswurf (Perception) der Kreatur übertrifft. Außerdem kannst du die Hand mit der Bonusaktion von Cunning Action steuern."
      },
      "source": "summary",
      "verified": false
@@ -1489,8 +1489,8 @@
     {
      "n": "Magical Ambush",
      "text": {
-      "en": "If hidden when you cast, the target has disadvantage on its save.",
-      "de": "Bist du beim Zaubern versteckt, hat das Ziel Nachteil bei seinem Rettungswurf."
+      "en": "If you are hidden from a creature when you cast a spell on it, the creature has disadvantage on any saving throw it makes against the spell this turn.",
+      "de": "Bist du vor einer Kreatur versteckt, wenn du einen Zauber auf sie wirkst, hat sie in diesem Zug Nachteil bei jedem Rettungswurf gegen den Zauber."
      },
      "source": "summary",
      "verified": false
@@ -1500,8 +1500,8 @@
     {
      "n": "Versatile Trickster",
      "text": {
-      "en": "Bonus action: distract with Mage Hand for advantage on an attack against a creature within 5 feet of it.",
-      "de": "Bonusaktion: Mit Mage Hand ablenken und Vorteil bei einem Angriff gegen eine Kreatur innerhalb von 1,5 m um die Hand erhalten."
+      "en": "As a bonus action on your turn, you can designate a creature within 5 feet of the spectral hand created by your Mage Hand. You have advantage on attack rolls against that creature until the end of the turn.",
+      "de": "Mit einer Bonusaktion in deinem Zug bestimmst du eine Kreatur innerhalb von 1,5 m um die Geisterhand deines Mage Hand. Bis zum Ende des Zuges hast du Vorteil bei Angriffswürfen gegen sie."
      },
      "source": "summary",
      "verified": false
@@ -1511,8 +1511,8 @@
     {
      "n": "Spell Thief",
      "text": {
-      "en": "Reaction when targeted by a spell: Intelligence-based save; on a success the spell fizzles and you can cast it for 8 hours. Once per long rest.",
-      "de": "Reaktion, wenn ein Zauber dich zum Ziel hat: Rettungswurf auf Intelligenzbasis; bei Erfolg verpufft der Zauber, und du kannst ihn 8 Stunden lang wirken. Einmal pro langer Rast."
+      "en": "Immediately after a creature casts a spell that targets you or includes you in its area of effect, you can use your reaction to force it to make a saving throw with its spellcasting ability modifier against your spell save DC. On a failure, you negate the spell's effect against you, and you steal the knowledge of the spell if it is at least 1st level and of a level you can cast (it needn't be a wizard spell).\nFor the next 8 hours you know the spell and can cast it using your spell slots, and the creature can't cast it until those 8 hours have passed. Once you use this feature, you can't use it again until you finish a long rest.",
+      "de": "Direkt nachdem eine Kreatur einen Zauber gewirkt hat, der dich zum Ziel hat oder dich in seinen Wirkungsbereich einschließt, kannst du sie mit deiner Reaktion zu einem Rettungswurf mit ihrem Zauberattributsmodifikator gegen deinen Zauberrettungswurf-SG zwingen. Bei Misserfolg hebst du die Wirkung des Zaubers gegen dich auf und stiehlst das Wissen um den Zauber, sofern er mindestens vom 1. Grad ist und einen Grad hat, den du wirken kannst (er muss kein Magierzauber sein).\nDie nächsten 8 Stunden kennst du den Zauber und kannst ihn mit deinen Zauberplätzen wirken; die Kreatur kann ihn erst nach diesen 8 Stunden wieder wirken. Danach erst wieder nach einer langen Rast."
      },
      "source": "summary",
      "verified": false
@@ -1581,8 +1581,8 @@
     {
      "n": "Wild Magic Surge",
      "text": {
-      "en": "After casting a spell of 1st level or higher, the DM may have you roll a d20; on a 1, roll on the Wild Magic Surge table.",
-      "de": "Nachdem du einen Zauber des 1. Grades oder höher gewirkt hast, kann die Spielleitung dich einen W20 würfeln lassen; bei einer 1 würfelst du auf der Tabelle Wild Magic Surge."
+      "en": "Your spellcasting can unleash surges of untamed magic. Immediately after you cast a sorcerer spell of 1st level or higher, the DM can have you roll a d20. If you roll a 1, roll on the Wild Magic Surge table to create a random magical effect.",
+      "de": "Dein Zaubern kann Wellen ungezähmter Magie freisetzen. Direkt nachdem du einen Zaubererzauber des 1. Grades oder höher gewirkt hast, kann die Spielleitung dich einen W20 würfeln lassen. Bei einer 1 würfelst du auf der Tabelle Wild Magic Surge und erzeugst einen zufälligen magischen Effekt."
      },
      "source": "summary",
      "verified": false
@@ -1590,8 +1590,8 @@
     {
      "n": "Tides of Chaos",
      "text": {
-      "en": "Gain advantage on one attack, check or save. Regained after a Wild Magic Surge or long rest.",
-      "de": "Vorteil bei einem Angriffswurf, Attributswurf oder Rettungswurf. Zurück nach einem Wild Magic Surge oder einer langen Rast."
+      "en": "You can gain advantage on one attack roll, ability check, or saving throw. Once you do so, you must finish a long rest before you can use this feature again.\nAny time before you regain it, the DM can have you roll on the Wild Magic Surge table immediately after you cast a sorcerer spell of 1st level or higher. You then regain the use of this feature.",
+      "de": "Du kannst dir Vorteil bei einem Angriffswurf, Attributswurf oder Rettungswurf verschaffen. Danach musst du eine lange Rast beenden, bevor du dieses Merkmal erneut nutzen kannst.\nBis du es zurückerhältst, kann die Spielleitung dich jederzeit direkt nach dem Wirken eines Zaubererzaubers des 1. Grades oder höher auf der Tabelle Wild Magic Surge würfeln lassen. Dann erhältst du die Anwendung dieses Merkmals zurück."
      },
      "source": "summary",
      "verified": false
@@ -1601,8 +1601,8 @@
     {
      "n": "Bend Luck",
      "text": {
-      "en": "Reaction, 2 sorcery points: add or subtract 1d4 from a creature's roll.",
-      "de": "Reaktion, 2 Zaubereipunkte: 1W4 zum Wurf einer Kreatur addieren oder davon abziehen."
+      "en": "When another creature you can see makes an attack roll, an ability check, or a saving throw, you can use your reaction and spend 2 sorcery points to roll 1d4 and apply the number as a bonus or penalty (your choice) to the creature's roll. You can do so after the creature rolls but before any effects of the roll occur.",
+      "de": "Macht eine andere Kreatur, die du sehen kannst, einen Angriffswurf, Attributswurf oder Rettungswurf, kannst du mit deiner Reaktion 2 Zaubereipunkte ausgeben, 1W4 würfeln und das Ergebnis als Bonus oder Abzug (deine Wahl) auf ihren Wurf anwenden. Das geht nach ihrem Wurf, aber bevor seine Wirkungen eintreten."
      },
      "source": "summary",
      "verified": false
@@ -1612,8 +1612,8 @@
     {
      "n": "Controlled Chaos",
      "text": {
-      "en": "Roll twice on the Wild Magic table and pick.",
-      "de": "Zweimal auf der Wild-Magic-Tabelle würfeln und ein Ergebnis wählen."
+      "en": "Whenever you roll on the Wild Magic Surge table, you can roll twice and use either number.",
+      "de": "Würfelst du auf der Tabelle Wild Magic Surge, kannst du zweimal würfeln und eines der Ergebnisse verwenden."
      },
      "source": "summary",
      "verified": false
@@ -1623,8 +1623,8 @@
     {
      "n": "Spell Bombardment",
      "text": {
-      "en": "When you roll max on a damage die, roll it again and add it, once per turn.",
-      "de": "Würfelst du auf einem Schadenswürfel den Höchstwert, würfle ihn erneut und addiere das Ergebnis, einmal pro Zug."
+      "en": "When you roll damage for a spell and roll the highest number possible on any of the dice, choose one of those dice, roll it again, and add that roll to the damage. You can use this feature only once per turn.",
+      "de": "Würfelst du den Schaden eines Zaubers und zeigt einer der Würfel den Höchstwert, wählst du einen solchen Würfel, würfelst ihn erneut und addierst das Ergebnis zum Schaden. Nur einmal pro Zug."
      },
      "source": "summary",
      "verified": false
@@ -1638,8 +1638,8 @@
     {
      "n": "Fey Presence",
      "text": {
-      "en": "Action: creatures in a 10-foot cube make a Wisdom save or are Charmed or Frightened until the end of your next turn. Once per short or long rest. Expanded spells: Faerie Fire, Sleep; Calm Emotions, Phantasmal Force; Blink, Plant Growth; Dominate Beast, Greater Invisibility; Dominate Person, Seeming.",
-      "de": "Aktion: Kreaturen in einem Würfel von 3 m Kantenlänge legen einen Weisheitsrettungswurf ab oder sind bis zum Ende deines nächsten Zuges Charmed oder Frightened. Einmal pro kurzer oder langer Rast. Erweiterte Zauber: Faerie Fire, Sleep; Calm Emotions, Phantasmal Force; Blink, Plant Growth; Dominate Beast, Greater Invisibility; Dominate Person, Seeming."
+      "en": "As an action, you cause each creature in a 10-foot cube originating from you to make a Wisdom saving throw against your warlock spell save DC. Creatures that fail are all charmed or all frightened by you (your choice) until the end of your next turn. Once you use this feature, you can't use it again until you finish a short or long rest.\nExpanded spell list (warlock spells for you): 1st Faerie Fire, Sleep; 2nd Calm Emotions, Phantasmal Force; 3rd Blink, Plant Growth; 4th Dominate Beast, Greater Invisibility; 5th Dominate Person, Seeming.",
+      "de": "Als Aktion zwingst du jede Kreatur in einem Würfel von 3 m Kantenlänge, der von dir ausgeht, zu einem Weisheitsrettungswurf gegen deinen Zauberrettungswurf-SG als Hexenmeister. Wer scheitert, ist bis zum Ende deines nächsten Zuges von dir Charmed oder Frightened (deine Wahl, für alle gleich). Danach erst wieder nach einer kurzen oder langen Rast.\nErweiterte Zauberliste (für dich Hexenmeisterzauber): Grad 1 Faerie Fire, Sleep; Grad 2 Calm Emotions, Phantasmal Force; Grad 3 Blink, Plant Growth; Grad 4 Dominate Beast, Greater Invisibility; Grad 5 Dominate Person, Seeming."
      },
      "source": "summary",
      "verified": false
@@ -1649,8 +1649,8 @@
     {
      "n": "Misty Escape",
      "text": {
-      "en": "Reaction when you take damage: become Invisible and teleport up to 60 feet. Once per short or long rest.",
-      "de": "Reaktion, wenn du Schaden erleidest: Du wirst Invisible und teleportierst dich bis zu 18 m weit. Einmal pro kurzer oder langer Rast."
+      "en": "When you take damage, you can use your reaction to turn invisible and teleport up to 60 feet to an unoccupied space you can see. You remain invisible until the start of your next turn or until you attack or cast a spell. Once you use this feature, you can't use it again until you finish a short or long rest.",
+      "de": "Erleidest du Schaden, kannst du mit deiner Reaktion unsichtbar werden und dich bis zu 18 m weit auf ein freies Feld teleportieren, das du sehen kannst. Du bleibst unsichtbar bis zum Beginn deines nächsten Zuges oder bis du angreifst oder zauberst. Danach erst wieder nach einer kurzen oder langen Rast."
      },
      "source": "summary",
      "verified": false
@@ -1660,8 +1660,8 @@
     {
      "n": "Beguiling Defenses",
      "text": {
-      "en": "Immune to being Charmed; turn a charm back on the caster (Wisdom save).",
-      "de": "Immun gegen Charmed; eine Bezauberung auf den Wirker zurückwerfen (Weisheitsrettungswurf)."
+      "en": "You are immune to being charmed. When another creature attempts to charm you, you can use your reaction to try to turn the charm back on it. It must succeed on a Wisdom saving throw against your warlock spell save DC or be charmed by you for 1 minute or until it takes any damage.",
+      "de": "Du bist immun gegen Charmed. Versucht eine andere Kreatur, dich zu bezaubern, kannst du mit deiner Reaktion versuchen, die Bezauberung auf sie zurückzuwerfen. Sie muss einen Weisheitsrettungswurf gegen deinen Zauberrettungswurf-SG als Hexenmeister bestehen, sonst ist sie 1 Minute lang oder bis sie Schaden erleidet von dir Charmed."
      },
      "source": "summary",
      "verified": false
@@ -1671,8 +1671,8 @@
     {
      "n": "Dark Delirium",
      "text": {
-      "en": "Action: creature within 60 feet makes a Wisdom save or is Charmed or Frightened for 1 minute in an illusory realm. Once per short or long rest.",
-      "de": "Aktion: Eine Kreatur innerhalb von 18 m legt einen Weisheitsrettungswurf ab oder ist 1 Minute lang in einem illusionären Reich Charmed oder Frightened. Einmal pro kurzer oder langer Rast."
+      "en": "As an action, choose a creature within 60 feet that you can see. It must make a Wisdom saving throw against your warlock spell save DC. On a failure, it is charmed or frightened by you (your choice) for 1 minute or until your concentration is broken (as if concentrating on a spell). The effect also ends early if the creature takes damage.\nUntil the illusion ends, the creature thinks it is lost in a misty realm whose appearance you choose. It can see and hear only itself, you, and the illusion. Once you use this feature, you can't use it again until you finish a short or long rest.",
+      "de": "Als Aktion wählst du eine Kreatur innerhalb von 18 m, die du sehen kannst. Sie muss einen Weisheitsrettungswurf gegen deinen Zauberrettungswurf-SG als Hexenmeister ablegen. Bei Misserfolg ist sie 1 Minute lang oder bis deine Konzentration bricht (wie bei einem Zauber) von dir Charmed oder Frightened (deine Wahl). Erleidet die Kreatur Schaden, endet der Effekt vorzeitig.\nBis die Illusion endet, glaubt die Kreatur, in einem nebligen Reich verloren zu sein, dessen Aussehen du bestimmst. Sie sieht und hört nur sich selbst, dich und die Illusion. Danach erst wieder nach einer kurzen oder langen Rast."
      },
      "source": "summary",
      "verified": false
@@ -1730,8 +1730,8 @@
     {
      "n": "Awakened Mind",
      "text": {
-      "en": "Telepathy with any creature within 30 feet that knows a language. Expanded spells: Dissonant Whispers, Hideous Laughter; Detect Thoughts, Phantasmal Force; Clairvoyance, Sending; Dominate Beast, Black Tentacles; Dominate Person, Telekinesis.",
-      "de": "Telepathie mit jeder Kreatur innerhalb von 9 m, die eine Sprache beherrscht. Erweiterte Zauber: Dissonant Whispers, Hideous Laughter; Detect Thoughts, Phantasmal Force; Clairvoyance, Sending; Dominate Beast, Black Tentacles; Dominate Person, Telekinesis."
+      "en": "You can communicate telepathically with any creature you can see within 30 feet of you. You don't need to share a language, but the creature must understand at least one language.\nExpanded spell list (warlock spells for you): 1st Dissonant Whispers, Hideous Laughter; 2nd Detect Thoughts, Phantasmal Force; 3rd Clairvoyance, Sending; 4th Dominate Beast, Black Tentacles; 5th Dominate Person, Telekinesis.",
+      "de": "Du kannst telepathisch mit jeder Kreatur innerhalb von 9 m sprechen, die du sehen kannst. Ihr braucht keine gemeinsame Sprache, die Kreatur muss aber mindestens eine Sprache verstehen.\nErweiterte Zauberliste (für dich Hexenmeisterzauber): Grad 1 Dissonant Whispers, Hideous Laughter; Grad 2 Detect Thoughts, Phantasmal Force; Grad 3 Clairvoyance, Sending; Grad 4 Dominate Beast, Black Tentacles; Grad 5 Dominate Person, Telekinesis."
      },
      "source": "summary",
      "verified": false
@@ -1741,8 +1741,8 @@
     {
      "n": "Entropic Ward",
      "text": {
-      "en": "Reaction when attacked: impose disadvantage. If it misses, advantage on your next attack against it. Once per short or long rest.",
-      "de": "Reaktion, wenn du angegriffen wirst: Der Angriff hat Nachteil. Verfehlt er, hast du Vorteil bei deinem nächsten Angriff gegen den Angreifer. Einmal pro kurzer oder langer Rast."
+      "en": "When a creature makes an attack roll against you, you can use your reaction to impose disadvantage on that roll. If the attack misses, your next attack roll against that creature has advantage if you make it before the end of your next turn. Once you use this feature, you can't use it again until you finish a short or long rest.",
+      "de": "Macht eine Kreatur einen Angriffswurf gegen dich, kannst du ihm mit deiner Reaktion Nachteil auferlegen. Verfehlt der Angriff, hat dein nächster Angriffswurf gegen diese Kreatur Vorteil, wenn du ihn vor dem Ende deines nächsten Zuges machst. Danach erst wieder nach einer kurzen oder langen Rast."
      },
      "source": "summary",
      "verified": false
@@ -1752,8 +1752,8 @@
     {
      "n": "Thought Shield",
      "text": {
-      "en": "Your thoughts can't be read unless you allow it; resistance to psychic damage; reflect psychic damage to the attacker.",
-      "de": "Deine Gedanken können nur gelesen werden, wenn du es erlaubst; Resistenz gegen psychischen Schaden; psychischen Schaden auf den Angreifer zurückwerfen."
+      "en": "Your thoughts can't be read by telepathy or other means unless you allow it. You have resistance to psychic damage, and whenever a creature deals psychic damage to you, that creature takes the same amount of damage that you do.",
+      "de": "Deine Gedanken können weder telepathisch noch auf andere Weise gelesen werden, außer du erlaubst es. Du hast Resistenz gegen psychischen Schaden, und fügt dir eine Kreatur psychischen Schaden zu, erleidet sie selbst so viel Schaden wie du."
      },
      "source": "summary",
      "verified": false
@@ -1763,8 +1763,8 @@
     {
      "n": "Create Thrall",
      "text": {
-      "en": "Action: touch an incapacitated humanoid; it is Charmed until Remove Curse. Telepathy on the same plane.",
-      "de": "Aktion: Berühre einen handlungsunfähigen Humanoiden; er ist Charmed, bis Remove Curse auf ihn gewirkt wird. Telepathie auf derselben Ebene."
+      "en": "As an action, you can touch an incapacitated humanoid. That creature is charmed by you until a Remove Curse spell is cast on it, the charmed condition is removed from it, or you use this feature again. You can communicate telepathically with the charmed creature as long as you are both on the same plane of existence.",
+      "de": "Als Aktion berührst du einen Humanoiden, der Incapacitated ist. Er ist von dir Charmed, bis Remove Curse auf ihn gewirkt, der Zustand Charmed entfernt wird oder du dieses Merkmal erneut nutzt. Solange ihr auf derselben Existenzebene seid, kannst du telepathisch mit ihm sprechen."
      },
      "source": "summary",
      "verified": false
@@ -1778,8 +1778,8 @@
     {
      "n": "Abjuration Savant",
      "text": {
-      "en": "Copy abjuration spells at half gold and time.",
-      "de": "Bannzauber zum halben Preis und in der halben Zeit abschreiben."
+      "en": "The gold and time you must spend to copy an abjuration spell into your spellbook is halved.",
+      "de": "Gold und Zeit, um einen Bannzauber in dein Zauberbuch zu übertragen, halbieren sich."
      },
      "source": "summary",
      "verified": false
@@ -1787,8 +1787,8 @@
     {
      "n": "Arcane Ward",
      "text": {
-      "en": "Casting an abjuration spell creates a ward with HP 2 × wizard level + INT; it absorbs damage to you. Recharges with further abjuration spells.",
-      "de": "Wirkst du einen Bannzauber, entsteht eine Schutzaura mit 2 × Magierstufe + Intelligenzmodifikator TP; sie fängt Schaden an dir ab. Weitere Bannzauber laden sie wieder auf."
+      "en": "When you cast an abjuration spell of 1st level or higher, you can create a magical ward on yourself that lasts until you finish a long rest. You can create it only once per long rest.\n- The ward has a hit point maximum equal to twice your wizard level + your Intelligence modifier.\n- Whenever you take damage, the ward takes it instead; if the damage reduces the ward to 0 hit points, you take any remaining damage.\n- While the ward has 0 hit points it can't absorb damage, but its magic remains.\n- Whenever you cast an abjuration spell of 1st level or higher, the ward regains hit points equal to twice the spell's level.",
+      "de": "Wirkst du einen Bannzauber des 1. Grades oder höher, kannst du einen magischen Schutz auf dir erschaffen, der bis zu deiner nächsten langen Rast hält. Erschaffen kannst du ihn nur einmal pro langer Rast.\n- Der Schutz hat ein Trefferpunktmaximum in Höhe des Doppelten deiner Magierstufe + deines Intelligenzmodifikators.\n- Erleidest du Schaden, erleidet ihn stattdessen der Schutz; sinkt er dadurch auf 0 Trefferpunkte, erleidest du den Rest.\n- Mit 0 Trefferpunkten fängt der Schutz keinen Schaden ab, seine Magie bleibt aber bestehen.\n- Wirkst du einen Bannzauber des 1. Grades oder höher, erhält der Schutz Trefferpunkte in Höhe des doppelten Zaubergrads zurück."
      },
      "source": "summary",
      "verified": false
@@ -1798,8 +1798,8 @@
     {
      "n": "Projected Ward",
      "text": {
-      "en": "Reaction: your ward protects a creature within 30 feet.",
-      "de": "Reaktion: Deine Schutzaura schützt eine Kreatur innerhalb von 9 m."
+      "en": "When a creature that you can see within 30 feet of you takes damage, you can use your reaction to cause your Arcane Ward to absorb that damage. If this reduces the ward to 0 hit points, the warded creature takes any remaining damage.",
+      "de": "Erleidet eine Kreatur innerhalb von 9 m, die du sehen kannst, Schaden, kannst du mit deiner Reaktion deinen Arcane Ward diesen Schaden abfangen lassen. Sinkt der Schutz dadurch auf 0 Trefferpunkte, erleidet die geschützte Kreatur den Rest."
      },
      "source": "summary",
      "verified": false
@@ -1809,8 +1809,8 @@
     {
      "n": "Improved Abjuration",
      "text": {
-      "en": "Add your proficiency to ability checks for abjuration spells (Counterspell, Dispel Magic).",
-      "de": "Addiere deinen Übungsbonus zu Attributswürfen für Bannzauber (Counterspell, Dispel Magic)."
+      "en": "When you cast an abjuration spell that requires you to make an ability check as part of casting it (as in Counterspell and Dispel Magic), you add your proficiency bonus to that ability check.",
+      "de": "Wirkst du einen Bannzauber, bei dem du einen Attributswurf ablegen musst (wie bei Counterspell und Dispel Magic), addierst du deinen Übungsbonus zu diesem Wurf."
      },
      "source": "summary",
      "verified": false
@@ -1820,8 +1820,8 @@
     {
      "n": "Spell Resistance",
      "text": {
-      "en": "Advantage on saves against spells; resistance to spell damage.",
-      "de": "Vorteil bei Rettungswürfen gegen Zauber; Resistenz gegen Zauberschaden."
+      "en": "You have advantage on saving throws against spells. Furthermore, you have resistance against the damage of spells.",
+      "de": "Du hast Vorteil bei Rettungswürfen gegen Zauber. Außerdem hast du Resistenz gegen Schaden durch Zauber."
      },
      "source": "summary",
      "verified": false
@@ -1833,8 +1833,8 @@
     {
      "n": "Conjuration Savant",
      "text": {
-      "en": "Copy conjuration spells at half gold and time.",
-      "de": "Beschwörungszauber zum halben Preis und in der halben Zeit abschreiben."
+      "en": "The gold and time you must spend to copy a conjuration spell into your spellbook is halved.",
+      "de": "Gold und Zeit, um einen Beschwörungszauber in dein Zauberbuch zu übertragen, halbieren sich."
      },
      "source": "summary",
      "verified": false
@@ -1842,8 +1842,8 @@
     {
      "n": "Minor Conjuration",
      "text": {
-      "en": "Action: conjure a nonmagical object up to 3 feet, 10 pounds, for 1 hour.",
-      "de": "Aktion: Einen nichtmagischen Gegenstand bis 90 cm und 5 kg für 1 Stunde herbeirufen."
+      "en": "As an action, you conjure an inanimate object in your hand or on the ground in an unoccupied space within 10 feet that you can see. It can be no larger than 3 feet on a side, weigh no more than 10 pounds, and must have the form of a nonmagical object you have seen. It is visibly magical and sheds dim light out to 5 feet. It disappears after 1 hour, when you use this feature again, or if it takes or deals any damage.",
+      "de": "Als Aktion beschwörst du einen unbelebten Gegenstand in deine Hand oder auf ein freies Feld am Boden innerhalb von 3 m, das du sehen kannst. Er darf höchstens 90 cm Kantenlänge haben, höchstens 5 kg wiegen und muss die Form eines nichtmagischen Gegenstands haben, den du schon gesehen hast. Er ist sichtbar magisch und spendet 1,5 m weit dämmriges Licht. Er verschwindet nach 1 Stunde, wenn du dieses Merkmal erneut nutzt oder wenn er Schaden erleidet oder verursacht."
      },
      "source": "summary",
      "verified": false
@@ -1853,8 +1853,8 @@
     {
      "n": "Benign Transposition",
      "text": {
-      "en": "Action: teleport up to 30 feet or swap with a willing creature. Once per long rest or until you cast a conjuration spell.",
-      "de": "Aktion: Bis zu 9 m weit teleportieren oder mit einer bereitwilligen Kreatur den Platz tauschen. Einmal pro langer Rast oder bis du einen Beschwörungszauber wirkst."
+      "en": "As an action, you can teleport up to 30 feet to an unoccupied space you can see. Alternatively, you can swap places with a willing Small or Medium creature within 30 feet. Once you use this feature, you can't use it again until you finish a long rest or you cast a conjuration spell of 1st level or higher.",
+      "de": "Als Aktion kannst du dich bis zu 9 m weit auf ein freies Feld teleportieren, das du sehen kannst. Stattdessen kannst du mit einer bereitwilligen Kreatur der Größe Small oder Medium innerhalb von 9 m den Platz tauschen. Danach erst wieder nach einer langen Rast oder nachdem du einen Beschwörungszauber des 1. Grades oder höher gewirkt hast."
      },
      "source": "summary",
      "verified": false
@@ -1864,8 +1864,8 @@
     {
      "n": "Focused Conjuration",
      "text": {
-      "en": "Damage cannot break your concentration on conjuration spells.",
-      "de": "Schaden kann deine Konzentration auf Beschwörungszauber nicht brechen."
+      "en": "While you are concentrating on a conjuration spell, your concentration can't be broken as a result of taking damage.",
+      "de": "Konzentrierst du dich auf einen Beschwörungszauber, kann deine Konzentration nicht durch erlittenen Schaden brechen."
      },
      "source": "summary",
      "verified": false
@@ -1875,8 +1875,8 @@
     {
      "n": "Durable Summons",
      "text": {
-      "en": "Creatures you summon gain 30 temporary HP.",
-      "de": "Kreaturen, die du beschwörst, erhalten 30 temporäre TP."
+      "en": "Any creature that you summon or create with a conjuration spell has 30 temporary hit points.",
+      "de": "Jede Kreatur, die du mit einem Beschwörungszauber herbeirufst oder erschaffst, hat 30 temporäre Trefferpunkte."
      },
      "source": "summary",
      "verified": false
@@ -1888,8 +1888,8 @@
     {
      "n": "Divination Savant",
      "text": {
-      "en": "Copy divination spells at half gold and time.",
-      "de": "Erkenntniszauber zum halben Preis und in der halben Zeit abschreiben."
+      "en": "The gold and time you must spend to copy a divination spell into your spellbook is halved.",
+      "de": "Gold und Zeit, um einen Erkenntniszauber in dein Zauberbuch zu übertragen, halbieren sich."
      },
      "source": "summary",
      "verified": false
@@ -1897,8 +1897,8 @@
     {
      "n": "Portent",
      "text": {
-      "en": "After a long rest, roll two d20 and keep the results; replace any roll you see with one of them.",
-      "de": "Nach einer langen Rast würfelst du zwei W20 und notierst die Ergebnisse; jeden Wurf, den du siehst, kannst du durch eines davon ersetzen."
+      "en": "When you finish a long rest, roll two d20s and record the numbers. You can replace any attack roll, saving throw, or ability check made by you or a creature you can see with one of these foretelling rolls. You must choose to do so before the roll, and you can replace a roll this way only once per turn. Each foretelling roll can be used only once. Unused rolls are lost when you finish your next long rest.",
+      "de": "Nach einer langen Rast würfelst du zwei W20 und notierst die Ergebnisse. Du kannst jeden Angriffswurf, Rettungswurf oder Attributswurf von dir oder einer Kreatur, die du sehen kannst, durch eines dieser Vorhersageergebnisse ersetzen. Du musst dich vor dem Wurf entscheiden und kannst so nur einmal pro Zug einen Wurf ersetzen. Jedes Vorhersageergebnis gilt nur einmal. Ungenutzte Ergebnisse verfallen bei deiner nächsten langen Rast."
      },
      "source": "summary",
      "verified": false
@@ -1908,8 +1908,8 @@
     {
      "n": "Expert Divination",
      "text": {
-      "en": "Casting a divination spell of 2nd level or higher regains a lower slot.",
-      "de": "Wirkst du einen Erkenntniszauber des 2. Grades oder höher, erhältst du einen niedrigeren Zauberplatz zurück."
+      "en": "When you cast a divination spell of 2nd level or higher using a spell slot, you regain one expended spell slot. The regained slot must be of a lower level than the spell you cast and can't be higher than 5th level.",
+      "de": "Wirkst du einen Erkenntniszauber des 2. Grades oder höher mit einem Zauberplatz, erhältst du einen verbrauchten Zauberplatz zurück. Er muss einen niedrigeren Grad haben als der gewirkte Zauber und darf höchstens vom 5. Grad sein."
      },
      "source": "summary",
      "verified": false
@@ -1919,8 +1919,8 @@
     {
      "n": "The Third Eye",
      "text": {
-      "en": "Action, until next rest: Darkvision 60 feet, Ethereal sight 60 feet, read any language, or see Invisible within 10 feet.",
-      "de": "Aktion, bis zur nächsten Rast: Darkvision 18 m, Sicht in die Ätherebene 18 m, jede Sprache lesen oder Unsichtbares innerhalb von 3 m sehen."
+      "en": "As an action, you gain one of the following benefits until you are incapacitated or you take a short or long rest. You can't use this feature again until you finish a rest.\n- Darkvision out to 60 feet.\n- Ethereal Sight: you can see into the Ethereal Plane within 60 feet.\n- Greater Comprehension: you can read any language.\n- See Invisibility: you can see invisible creatures and objects within 10 feet that are within line of sight.",
+      "de": "Als Aktion erhältst du einen der folgenden Vorteile, bis du Incapacitated bist oder eine kurze oder lange Rast machst. Erneut nutzen kannst du dieses Merkmal erst nach einer Rast.\n- Darkvision bis 18 m.\n- Äthersicht: Du siehst bis 18 m weit in die Ätherebene.\n- Großes Verständnis: Du kannst jede Sprache lesen.\n- Unsichtbares sehen: Du siehst unsichtbare Kreaturen und Gegenstände innerhalb von 3 m in Sichtlinie."
      },
      "source": "summary",
      "verified": false
@@ -1930,8 +1930,8 @@
     {
      "n": "Greater Portent",
      "text": {
-      "en": "Roll three d20 for Portent.",
-      "de": "Für Portent würfelst du drei W20."
+      "en": "You roll three d20s for your Portent feature instead of two.",
+      "de": "Für Portent würfelst du drei W20 statt zwei."
      },
      "source": "summary",
      "verified": false
@@ -1943,8 +1943,8 @@
     {
      "n": "Enchantment Savant",
      "text": {
-      "en": "Copy enchantment spells at half gold and time.",
-      "de": "Verzauberungszauber zum halben Preis und in der halben Zeit abschreiben."
+      "en": "The gold and time you must spend to copy an enchantment spell into your spellbook is halved.",
+      "de": "Gold und Zeit, um einen Verzauberungszauber in dein Zauberbuch zu übertragen, halbieren sich."
      },
      "source": "summary",
      "verified": false
@@ -1952,8 +1952,8 @@
     {
      "n": "Hypnotic Gaze",
      "text": {
-      "en": "Action: creature within 5 feet makes a Wisdom save or is Charmed, Incapacitated and speed 0 until the end of your next turn. Renew with an action.",
-      "de": "Aktion: Eine Kreatur innerhalb von 1,5 m legt einen Weisheitsrettungswurf ab oder ist bis zum Ende deines nächsten Zuges Charmed, Incapacitated und hat Tempo 0. Mit einer Aktion verlängerbar."
+      "en": "As an action, choose one creature you can see within 5 feet of you. If it can see or hear you, it must succeed on a Wisdom saving throw against your wizard spell save DC or be charmed by you until the end of your next turn. While charmed this way, its speed drops to 0 and it is incapacitated and visibly dazed.\nOn later turns you can use your action to extend the effect until the end of your next turn. It ends if you move more than 5 feet away, if the creature can neither see nor hear you, or if it takes damage. Once the effect ends, or if the creature succeeds on its save, you can't use this feature on it again until you finish a long rest.",
+      "de": "Als Aktion wählst du eine Kreatur innerhalb von 1,5 m, die du sehen kannst. Kann sie dich sehen oder hören, muss sie einen Weisheitsrettungswurf gegen deinen Zauberrettungswurf-SG als Magier bestehen, sonst ist sie bis zum Ende deines nächsten Zuges von dir Charmed. Solange sie so bezaubert ist, beträgt ihr Tempo 0, und sie ist Incapacitated und sichtlich benommen.\nIn späteren Zügen kannst du mit deiner Aktion den Effekt bis zum Ende deines nächsten Zuges verlängern. Er endet, wenn du dich mehr als 1,5 m entfernst, die Kreatur dich weder sehen noch hören kann oder Schaden erleidet. Ist der Effekt beendet oder besteht die Kreatur den Rettungswurf, kannst du dieses Merkmal erst nach einer langen Rast wieder gegen sie einsetzen."
      },
      "source": "summary",
      "verified": false
@@ -1963,8 +1963,8 @@
     {
      "n": "Instinctive Charm",
      "text": {
-      "en": "Reaction when attacked by a creature within 30 feet: Wisdom save or it attacks another target or misses.",
-      "de": "Reaktion, wenn dich eine Kreatur innerhalb von 9 m angreift: Weisheitsrettungswurf, sonst greift sie ein anderes Ziel an oder verfehlt."
+      "en": "When a creature you can see within 30 feet of you makes an attack roll against you, you can use your reaction to divert it, provided another creature is within its range. The attacker makes a Wisdom saving throw against your wizard spell save DC. On a failure, it must target the creature closest to it, other than you or itself (if several are equally close, it chooses). On a success, you can't use this feature on it again until you finish a long rest. You must decide before you know whether the attack hits. Creatures that can't be charmed are immune.",
+      "de": "Macht eine Kreatur innerhalb von 9 m, die du sehen kannst, einen Angriffswurf gegen dich, kannst du ihn mit deiner Reaktion umlenken, sofern eine andere Kreatur in ihrer Reichweite ist. Der Angreifer legt einen Weisheitsrettungswurf gegen deinen Zauberrettungswurf-SG als Magier ab. Bei Misserfolg muss er die ihm nächste Kreatur außer dir und sich selbst angreifen (bei Gleichstand wählt er). Bei Erfolg kannst du dieses Merkmal erst nach einer langen Rast wieder gegen ihn einsetzen. Du musst dich entscheiden, bevor du weißt, ob der Angriff trifft. Kreaturen, die nicht bezaubert werden können, sind immun."
      },
      "source": "summary",
      "verified": false
@@ -1974,8 +1974,8 @@
     {
      "n": "Split Enchantment",
      "text": {
-      "en": "Single-target enchantment spells can target a second creature.",
-      "de": "Verzauberungszauber mit einem einzelnen Ziel können eine zweite Kreatur treffen."
+      "en": "When you cast an enchantment spell of 1st level or higher that targets only one creature, you can have it target a second creature.",
+      "de": "Wirkst du einen Verzauberungszauber des 1. Grades oder höher, der nur eine Kreatur zum Ziel hat, kannst du eine zweite Kreatur zum Ziel wählen."
      },
      "source": "summary",
      "verified": false
@@ -1985,8 +1985,8 @@
     {
      "n": "Alter Memories",
      "text": {
-      "en": "Charmed target forgets some of its time charmed (Intelligence save).",
-      "de": "Ein bezaubertes Ziel vergisst einen Teil der Zeit, in der es bezaubert war (Intelligenzrettungswurf)."
+      "en": "When you cast an enchantment spell to charm one or more creatures, you can make one of them unaware that it was charmed.\nAdditionally, once before the spell expires, you can use your action to try to make the chosen creature forget some of the time it spent charmed. It must succeed on an Intelligence saving throw against your wizard spell save DC or lose memories of up to 1 + your Charisma modifier hours (minimum 1), within the spell's duration.",
+      "de": "Bezauberst du mit einem Verzauberungszauber eine oder mehrere Kreaturen, kannst du eine davon nicht merken lassen, dass sie bezaubert wurde.\nAußerdem kannst du einmal vor Ablauf des Zaubers mit deiner Aktion versuchen, diese Kreatur einen Teil der bezauberten Zeit vergessen zu lassen. Sie muss einen Intelligenzrettungswurf gegen deinen Zauberrettungswurf-SG als Magier bestehen, sonst verliert sie die Erinnerung an bis zu 1 + deinen Charismamodifikator Stunden (mindestens 1) innerhalb der Wirkungsdauer."
      },
      "source": "summary",
      "verified": false
@@ -2053,8 +2053,8 @@
     {
      "n": "Illusion Savant",
      "text": {
-      "en": "Copy illusion spells at half gold and time.",
-      "de": "Illusionszauber zum halben Preis und in der halben Zeit abschreiben."
+      "en": "The gold and time you must spend to copy an illusion spell into your spellbook is halved.",
+      "de": "Gold und Zeit, um einen Illusionszauber in dein Zauberbuch zu übertragen, halbieren sich."
      },
      "source": "summary",
      "verified": false
@@ -2062,8 +2062,8 @@
     {
      "n": "Improved Minor Illusion",
      "text": {
-      "en": "Learn Minor Illusion or another cantrip; it creates both sound and image.",
-      "de": "Lerne Minor Illusion oder einen anderen Zaubertrick; er erzeugt Geräusch und Bild zugleich."
+      "en": "You learn the Minor Illusion cantrip (if you already know it, you learn another wizard cantrip of your choice; it doesn't count against your cantrips known). When you cast Minor Illusion, you can create both a sound and an image with a single casting.",
+      "de": "Du lernst den Zaubertrick Minor Illusion (kennst du ihn schon, lernst du einen anderen Magier-Zaubertrick deiner Wahl; er zählt nicht zu deinen bekannten Zaubertricks). Wirkst du Minor Illusion, kannst du mit einem Wirken zugleich ein Geräusch und ein Bild erzeugen."
      },
      "source": "summary",
      "verified": false
@@ -2073,8 +2073,8 @@
     {
      "n": "Malleable Illusions",
      "text": {
-      "en": "Action: change the nature of your active illusion.",
-      "de": "Aktion: Die Beschaffenheit deiner aktiven Illusion ändern."
+      "en": "When you cast an illusion spell that has a duration of 1 minute or longer, you can use your action to change the nature of that illusion (using the spell's normal parameters), provided you can see the illusion.",
+      "de": "Wirkst du einen Illusionszauber mit einer Wirkungsdauer von 1 Minute oder länger, kannst du mit deiner Aktion die Beschaffenheit der Illusion ändern (im normalen Rahmen des Zaubers), sofern du sie sehen kannst."
      },
      "source": "summary",
      "verified": false
@@ -2084,8 +2084,8 @@
     {
      "n": "Illusory Self",
      "text": {
-      "en": "Reaction when attacked: an illusion makes the attack miss. Once per short or long rest.",
-      "de": "Reaktion, wenn du angegriffen wirst: Eine Illusion lässt den Angriff verfehlen. Einmal pro kurzer oder langer Rast."
+      "en": "When a creature makes an attack roll against you, you can use your reaction to interpose an illusory duplicate between it and yourself. The attack automatically misses you, then the illusion dissipates. Once you use this feature, you can't use it again until you finish a short or long rest.",
+      "de": "Macht eine Kreatur einen Angriffswurf gegen dich, kannst du mit deiner Reaktion ein illusionäres Abbild zwischen sie und dich schieben. Der Angriff verfehlt dich automatisch, danach vergeht die Illusion. Danach erst wieder nach einer kurzen oder langen Rast."
      },
      "source": "summary",
      "verified": false
@@ -2095,8 +2095,8 @@
     {
      "n": "Illusory Reality",
      "text": {
-      "en": "Bonus action: make one nonmagical object in your illusion real for 1 minute.",
-      "de": "Bonusaktion: Einen nichtmagischen Gegenstand in deiner Illusion 1 Minute lang real machen."
+      "en": "When you cast an illusion spell of 1st level or higher, you can choose one inanimate, nonmagical object that is part of the illusion and make it real, using a bonus action on your turn while the spell is ongoing. The object remains real for 1 minute. It can't deal damage or otherwise directly harm anyone (for example, you can create a bridge over a chasm).",
+      "de": "Wirkst du einen Illusionszauber des 1. Grades oder höher, kannst du, solange der Zauber wirkt, mit einer Bonusaktion in deinem Zug einen unbelebten, nichtmagischen Gegenstand der Illusion real machen. Er bleibt 1 Minute lang real. Er kann keinen Schaden verursachen und niemandem direkt schaden (du kannst zum Beispiel eine Brücke über eine Schlucht erschaffen)."
      },
      "source": "summary",
      "verified": false
@@ -2108,8 +2108,8 @@
     {
      "n": "Necromancy Savant",
      "text": {
-      "en": "Copy necromancy spells at half gold and time.",
-      "de": "Nekromantiezauber zum halben Preis und in der halben Zeit abschreiben."
+      "en": "The gold and time you must spend to copy a necromancy spell into your spellbook is halved.",
+      "de": "Gold und Zeit, um einen Nekromantiezauber in dein Zauberbuch zu übertragen, halbieren sich."
      },
      "source": "summary",
      "verified": false
@@ -2117,8 +2117,8 @@
     {
      "n": "Grim Harvest",
      "text": {
-      "en": "Kill with a spell of 1st level or higher: regain 2 × spell level HP (3 × for necromancy). Not on constructs or undead.",
-      "de": "Tötest du mit einem Zauber des 1. Grades oder höher: Du erhältst 2 × Zaubergrad TP zurück (3 × bei Nekromantie). Nicht bei Konstrukten oder Untoten."
+      "en": "Once per turn when you kill one or more creatures with a spell of 1st level or higher, you regain hit points equal to twice the spell's level, or three times its level if it belongs to the School of Necromancy. You don't gain this benefit for killing constructs or undead.",
+      "de": "Einmal pro Zug, wenn du mit einem Zauber des 1. Grades oder höher eine oder mehrere Kreaturen tötest, erhältst du Trefferpunkte in Höhe des doppelten Zaubergrads zurück, bei einem Nekromantiezauber des dreifachen. Für das Töten von Konstrukten oder Untoten erhältst du nichts."
      },
      "source": "summary",
      "verified": false
@@ -2128,8 +2128,8 @@
     {
      "n": "Undead Thralls",
      "text": {
-      "en": "Animate Dead affects one more corpse. Undead you create gain your proficiency to damage and add your wizard level to their HP.",
-      "de": "Animate Dead betrifft eine Leiche mehr. Von dir erschaffene Untote addieren deinen Übungsbonus zum Schaden und deine Magierstufe zu ihren TP."
+      "en": "You add Animate Dead to your spellbook if it isn't there already. When you cast Animate Dead, you can target one additional corpse or pile of bones, creating another zombie or skeleton.\nWhenever you create an undead using a necromancy spell, it gains these benefits: its hit point maximum increases by your wizard level, and it adds your proficiency bonus to its weapon damage rolls.",
+      "de": "Du nimmst Animate Dead in dein Zauberbuch auf, falls er noch nicht darin steht. Wirkst du Animate Dead, kannst du eine zusätzliche Leiche oder einen zusätzlichen Knochenhaufen zum Ziel wählen und einen weiteren Zombie oder ein weiteres Skelett erschaffen.\nErschaffst du mit einem Nekromantiezauber einen Untoten, erhält er folgende Vorteile: Sein Trefferpunktmaximum steigt um deine Magierstufe, und er addiert deinen Übungsbonus zu seinen Waffenschadenswürfen."
      },
      "source": "summary",
      "verified": false
@@ -2139,8 +2139,8 @@
     {
      "n": "Inured to Undeath",
      "text": {
-      "en": "Resistance to necrotic; hit point maximum can't be reduced.",
-      "de": "Resistenz gegen nekrotischen Schaden; dein Trefferpunktmaximum kann nicht gesenkt werden."
+      "en": "You have resistance to necrotic damage, and your hit point maximum can't be reduced.",
+      "de": "Du hast Resistenz gegen nekrotischen Schaden, und dein Trefferpunktmaximum kann nicht gesenkt werden."
      },
      "source": "summary",
      "verified": false
@@ -2150,8 +2150,8 @@
     {
      "n": "Command Undead",
      "text": {
-      "en": "Action: undead within 60 feet makes a Charisma save or is under your control (INT 8+ advantage, repeats).",
-      "de": "Aktion: Ein Untoter innerhalb von 18 m legt einen Charismarettungswurf ab oder steht unter deiner Kontrolle (ab Intelligenz 8 mit Vorteil, wiederholbar)."
+      "en": "As an action, choose one undead that you can see within 60 feet of you. It must make a Charisma saving throw against your wizard spell save DC. On a success, you can never use this feature on it again. On a failure, it becomes friendly to you and obeys your commands until you use this feature again.\nIntelligent undead are harder to control: if the target has an Intelligence of 8 or higher, it has advantage on the save. If it fails and has an Intelligence of 12 or higher, it can repeat the save at the end of every hour until it succeeds and breaks free.",
+      "de": "Als Aktion wählst du einen Untoten innerhalb von 18 m, den du sehen kannst. Er muss einen Charismarettungswurf gegen deinen Zauberrettungswurf-SG als Magier ablegen. Bei Erfolg kannst du dieses Merkmal nie wieder gegen ihn einsetzen. Bei Misserfolg wird er dir freundlich gesinnt und gehorcht deinen Befehlen, bis du dieses Merkmal erneut nutzt.\nIntelligente Untote sind schwerer zu beherrschen: Hat das Ziel Intelligenz 8 oder höher, hat es Vorteil beim Rettungswurf. Scheitert es und hat Intelligenz 12 oder höher, kann es den Rettungswurf am Ende jeder Stunde wiederholen, bis es sich befreit."
      },
      "source": "summary",
      "verified": false
@@ -2163,8 +2163,8 @@
     {
      "n": "Transmutation Savant",
      "text": {
-      "en": "Copy transmutation spells at half gold and time.",
-      "de": "Verwandlungszauber zum halben Preis und in der halben Zeit abschreiben."
+      "en": "The gold and time you must spend to copy a transmutation spell into your spellbook is halved.",
+      "de": "Gold und Zeit, um einen Verwandlungszauber in dein Zauberbuch zu übertragen, halbieren sich."
      },
      "source": "summary",
      "verified": false
@@ -2172,8 +2172,8 @@
     {
      "n": "Minor Alchemy",
      "text": {
-      "en": "Temporarily turn a nonmagical material into another for 1 hour.",
-      "de": "Ein nichtmagisches Material für 1 Stunde in ein anderes verwandeln."
+      "en": "You can temporarily change one nonmagical object made entirely of wood, stone (but not a gemstone), iron, copper, or silver into a different one of those materials. For each 10 minutes you spend, you can transform up to 1 cubic foot of material. After 1 hour, or if you lose concentration (as if concentrating on a spell), the material reverts to its original substance.",
+      "de": "Du kannst einen nichtmagischen Gegenstand, der ganz aus Holz, Stein (aber keinem Edelstein), Eisen, Kupfer oder Silber besteht, vorübergehend in einen anderen dieser Stoffe verwandeln. Pro 10 Minuten Arbeit verwandelst du bis zu etwa 28 Liter Material (1 Kubikfuß). Nach 1 Stunde oder wenn du die Konzentration verlierst (wie bei einem Zauber), nimmt das Material wieder seinen ursprünglichen Stoff an."
      },
      "source": "summary",
      "verified": false
@@ -2183,8 +2183,8 @@
     {
      "n": "Transmuter's Stone",
      "text": {
-      "en": "Create a stone granting one benefit: Darkvision 60 feet, +10 feet speed, proficiency in Constitution saves, or resistance to one damage type.",
-      "de": "Erschaffe einen Stein mit einem Vorteil: Darkvision 18 m, +3 m Tempo, Übung in Konstitutionsrettungswürfen oder Resistenz gegen eine Schadensart."
+      "en": "You can spend 8 hours creating a transmuter's stone. You or another creature holding it gains one benefit of your choice, chosen when you create the stone:\n- Darkvision out to 60 feet.\n- An increase to speed of 10 feet while unencumbered.\n- Proficiency in Constitution saving throws.\n- Resistance to acid, cold, fire, lightning, or thunder damage (your choice).\nEach time you cast a transmutation spell of 1st level or higher, you can change the stone's effect if it is on your person. If you create a new stone, the previous one ceases to function.",
+      "de": "Du kannst 8 Stunden aufwenden, um einen Verwandlerstein zu erschaffen. Du oder eine andere Kreatur, die ihn hält, erhält einen Vorteil deiner Wahl, den du beim Erschaffen festlegst:\n- Darkvision bis 18 m.\n- +3 m Tempo, solange die Kreatur nicht belastet ist.\n- Übung in Konstitutionsrettungswürfen.\n- Resistenz gegen Säure-, Kälte-, Feuer-, Blitz- oder Schallschaden (deine Wahl).\nJedes Mal, wenn du einen Verwandlungszauber des 1. Grades oder höher wirkst, kannst du die Wirkung des Steins ändern, wenn du ihn bei dir hast. Erschaffst du einen neuen Stein, verliert der vorherige seine Wirkung."
      },
      "source": "summary",
      "verified": false
@@ -2194,8 +2194,8 @@
     {
      "n": "Shapechanger",
      "text": {
-      "en": "Polymorph on yourself at will up to a CR 1 beast, without a slot, once per short or long rest.",
-      "de": "Polymorph auf dich selbst bis zu einem Tier mit HG 1 ohne Zauberplatz, einmal pro kurzer oder langer Rast."
+      "en": "You add Polymorph to your spellbook if it isn't there already. You can cast it without expending a spell slot, but only on yourself, and only to transform into a beast whose challenge rating is 1 or lower. Once you do so, you can't cast it this way again until you finish a short or long rest, though you can still cast it normally using a spell slot.",
+      "de": "Du nimmst Polymorph in dein Zauberbuch auf, falls er noch nicht darin steht. Du kannst ihn ohne Zauberplatz wirken, aber nur auf dich selbst und nur, um dich in ein Tier mit Herausforderungsgrad 1 oder niedriger zu verwandeln. Danach geht das erst wieder nach einer kurzen oder langen Rast; normal mit einem Zauberplatz kannst du ihn weiterhin wirken."
      },
      "source": "summary",
      "verified": false
@@ -2205,8 +2205,8 @@
     {
      "n": "Master Transmuter",
      "text": {
-      "en": "Use the stone: transmute major, cure, restore life or restore youth.",
-      "de": "Den Stein nutzen: große Verwandlung, Heilung, Leben wiederherstellen oder Jugend wiederherstellen."
+      "en": "As an action, you can consume the reserve of transmutation magic in your transmuter's stone to produce one of these effects. The stone is destroyed, and you can't create a new one until you finish a long rest.\n- Major Transformation: Over 10 minutes of handling, transmute one nonmagical object no larger than a 5-foot cube into another nonmagical object of similar size and mass and of equal or lesser value.\n- Panacea: One creature you touch is cured of all curses, diseases, and poisons and regains all its hit points.\n- Restore Life: Cast Raise Dead on a creature you touch, without expending a spell slot or needing the spell in your spellbook.\n- Restore Youth: Touch a willing creature; its apparent age is reduced by 3d10 years, to a minimum of 13 years. Its lifespan is not extended.",
+      "de": "Als Aktion kannst du die Verwandlungsmagie deines Verwandlersteins aufbrauchen, um eine dieser Wirkungen zu erzeugen. Der Stein wird zerstört, und du kannst erst nach einer langen Rast einen neuen erschaffen.\n- Große Verwandlung: In 10 Minuten Arbeit verwandelst du einen nichtmagischen Gegenstand, der in einen Würfel von 1,5 m Kantenlänge passt, in einen anderen nichtmagischen Gegenstand ähnlicher Größe und Masse mit gleichem oder geringerem Wert.\n- Allheilmittel: Eine Kreatur, die du berührst, wird von allen Flüchen, Krankheiten und Giften geheilt und erhält alle Trefferpunkte zurück.\n- Leben wiederherstellen: Du wirkst Raise Dead auf eine Kreatur, die du berührst, ohne Zauberplatz und ohne dass der Zauber in deinem Zauberbuch stehen muss.\n- Jugend wiederherstellen: Du berührst eine bereitwillige Kreatur; ihr scheinbares Alter sinkt um 3W10 Jahre, höchstens bis 13 Jahre. Ihre Lebensspanne verlängert sich nicht."
      },
      "source": "summary",
      "verified": false

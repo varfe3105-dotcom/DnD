@@ -3,55 +3,55 @@
   {
    "n": "Archery",
    "text": {
-    "en": "+2 to ranged weapon attack rolls.",
-    "de": "+2 auf Angriffswürfe mit Fernkampfwaffen."
+    "en": "You gain a +2 bonus to attack rolls you make with ranged weapons.",
+    "de": "Du erhältst einen Bonus von +2 auf Angriffswürfe mit Fernkampfwaffen."
    },
-   "source": "summary",
+   "source": "srd",
    "verified": false
   },
   {
    "n": "Defense",
    "text": {
-    "en": "+1 AC while wearing armor.",
-    "de": "+1 RK, solange du Rüstung trägst."
+    "en": "While you are wearing armor, you gain a +1 bonus to AC.",
+    "de": "Solange du Rüstung trägst, erhältst du +1 auf deine RK."
    },
-   "source": "summary",
+   "source": "srd",
    "verified": false
   },
   {
    "n": "Dueling",
    "text": {
-    "en": "+2 damage with a one-handed melee weapon and no other weapon.",
-    "de": "+2 Schaden mit einer einhändigen Nahkampfwaffe und keiner weiteren Waffe."
+    "en": "When you are wielding a melee weapon in one hand and no other weapons, you gain a +2 bonus to damage rolls with that weapon.",
+    "de": "Führst du eine Nahkampfwaffe in einer Hand und keine weiteren Waffen, erhältst du +2 auf Schadenswürfe mit dieser Waffe."
    },
-   "source": "summary",
+   "source": "srd",
    "verified": false
   },
   {
    "n": "Great Weapon Fighting",
    "text": {
-    "en": "Reroll 1s and 2s on damage dice with two-handed or versatile weapons held in two hands.",
-    "de": "Einsen und Zweien auf Schadenswürfeln mit zweihändigen oder vielseitigen Waffen, die du mit beiden Händen führst, neu würfeln."
+    "en": "When you roll a 1 or 2 on a damage die for an attack you make with a melee weapon that you are wielding with two hands, you can reroll the die and must use the new roll, even if the new roll is a 1 or a 2. The weapon must have the two-handed or versatile property for you to gain this benefit.",
+    "de": "Würfelst du bei einem Angriff mit einer Nahkampfwaffe, die du mit beiden Händen führst, auf einem Schadenswürfel eine 1 oder 2, kannst du den Würfel neu werfen und musst das neue Ergebnis verwenden, auch wenn es wieder eine 1 oder 2 ist. Die Waffe muss die Eigenschaft zweihändig oder vielseitig haben, damit du diesen Vorteil erhältst."
    },
-   "source": "summary",
+   "source": "srd",
    "verified": false
   },
   {
    "n": "Protection",
    "text": {
-    "en": "Reaction with a shield: impose disadvantage on an attack against a nearby ally.",
-    "de": "Reaktion mit einem Schild: Ein Angriff gegen einen Verbündeten in der Nähe hat Nachteil."
+    "en": "When a creature you can see attacks a target other than you that is within 5 feet of you, you can use your reaction to impose disadvantage on the attack roll. You must be wielding a shield.",
+    "de": "Greift eine Kreatur, die du sehen kannst, ein anderes Ziel als dich an, das sich innerhalb von 1,5 m um dich befindet, kannst du mit deiner Reaktion dem Angriffswurf Nachteil auferlegen. Du musst einen Schild führen."
    },
-   "source": "summary",
+   "source": "srd",
    "verified": false
   },
   {
    "n": "Two-Weapon Fighting",
    "text": {
-    "en": "Add your ability modifier to the damage of the off-hand attack.",
-    "de": "Addiere deinen Attributsmodifikator zum Schaden des Angriffs mit der Nebenhand."
+    "en": "When you engage in two-weapon fighting, you can add your ability modifier to the damage of the second attack.",
+    "de": "Kämpfst du mit zwei Waffen, kannst du deinen Attributsmodifikator zum Schaden des zweiten Angriffs addieren."
    },
-   "source": "summary",
+   "source": "srd",
    "verified": false
   }
  ],
@@ -59,73 +59,73 @@
   {
    "n": "Careful Spell",
    "text": {
-    "en": "1 point: creatures choose to succeed on your spell's save.",
-    "de": "1 Punkt: Gewählte Kreaturen bestehen den Rettungswurf gegen deinen Zauber automatisch."
+    "en": "When you cast a spell that forces other creatures to make a saving throw, you can protect some of those creatures from the spell's full force. To do so, you spend 1 sorcery point and choose a number of those creatures up to your Charisma modifier (minimum of one creature). A chosen creature automatically succeeds on its saving throw against the spell.",
+    "de": "Wirkst du einen Zauber, der andere Kreaturen zu einem Rettungswurf zwingt, kannst du einige von ihnen vor der vollen Wucht des Zaubers schützen. Dazu gibst du 1 Zaubereipunkt aus und wählst bis zu so viele dieser Kreaturen, wie dein Charismamodifikator angibt (mindestens eine). Eine gewählte Kreatur besteht ihren Rettungswurf gegen den Zauber automatisch."
    },
-   "source": "summary",
+   "source": "srd",
    "verified": false
   },
   {
    "n": "Distant Spell",
    "text": {
-    "en": "1 point: double range, or touch becomes 30 feet.",
-    "de": "1 Punkt: doppelte Reichweite, oder Berührung wird zu 9 m."
+    "en": "When you cast a spell that has a range of 5 feet or greater, you can spend 1 sorcery point to double the range of the spell.\nWhen you cast a spell that has a range of touch, you can spend 1 sorcery point to make the range of the spell 30 feet.",
+    "de": "Wirkst du einen Zauber mit einer Reichweite von 1,5 m oder mehr, kannst du 1 Zaubereipunkt ausgeben, um seine Reichweite zu verdoppeln.\nWirkst du einen Zauber mit der Reichweite Berührung, kannst du 1 Zaubereipunkt ausgeben, um seine Reichweite auf 9 m zu setzen."
    },
-   "source": "summary",
+   "source": "srd",
    "verified": false
   },
   {
    "n": "Empowered Spell",
    "text": {
-    "en": "1 point: reroll up to your CHA modifier damage dice.",
-    "de": "1 Punkt: bis zu Charismamodifikator viele Schadenswürfel neu würfeln."
+    "en": "When you roll damage for a spell, you can spend 1 sorcery point to reroll a number of the damage dice up to your Charisma modifier (minimum of one). You must use the new rolls.\nYou can use Empowered Spell even if you have already used a different Metamagic option during the casting of the spell.",
+    "de": "Würfelst du den Schaden eines Zaubers, kannst du 1 Zaubereipunkt ausgeben, um bis zu so viele Schadenswürfel neu zu werfen, wie dein Charismamodifikator angibt (mindestens einen). Du musst die neuen Ergebnisse verwenden.\nDu kannst Empowered Spell auch dann nutzen, wenn du beim Wirken des Zaubers bereits eine andere Metamagie-Option eingesetzt hast."
    },
-   "source": "summary",
+   "source": "srd",
    "verified": false
   },
   {
    "n": "Extended Spell",
    "text": {
-    "en": "1 point: double duration up to 24 hours.",
-    "de": "1 Punkt: doppelte Wirkungsdauer, höchstens 24 Stunden."
+    "en": "When you cast a spell that has a duration of 1 minute or longer, you can spend 1 sorcery point to double its duration, to a maximum duration of 24 hours.",
+    "de": "Wirkst du einen Zauber mit einer Wirkungsdauer von 1 Minute oder länger, kannst du 1 Zaubereipunkt ausgeben, um die Dauer zu verdoppeln, höchstens auf 24 Stunden."
    },
-   "source": "summary",
+   "source": "srd",
    "verified": false
   },
   {
    "n": "Heightened Spell",
    "text": {
-    "en": "3 points: one target has disadvantage on its first save.",
-    "de": "3 Punkte: Ein Ziel hat Nachteil beim ersten Rettungswurf."
+    "en": "When you cast a spell that forces a creature to make a saving throw to resist its effects, you can spend 3 sorcery points to give one target of the spell disadvantage on its first saving throw made against the spell.",
+    "de": "Wirkst du einen Zauber, der eine Kreatur zu einem Rettungswurf gegen seine Wirkung zwingt, kannst du 3 Zaubereipunkte ausgeben, damit ein Ziel des Zaubers Nachteil bei seinem ersten Rettungswurf gegen den Zauber hat."
    },
-   "source": "summary",
+   "source": "srd",
    "verified": false
   },
   {
    "n": "Quickened Spell",
    "text": {
-    "en": "2 points: cast a spell of 1 action as a bonus action.",
-    "de": "2 Punkte: Einen Zauber mit 1 Aktion Zeitaufwand als Bonusaktion wirken."
+    "en": "When you cast a spell that has a casting time of 1 action, you can spend 2 sorcery points to change the casting time to 1 bonus action for this casting.",
+    "de": "Wirkst du einen Zauber mit einem Zeitaufwand von 1 Aktion, kannst du 2 Zaubereipunkte ausgeben, um den Zeitaufwand für dieses Wirken auf 1 Bonusaktion zu ändern."
    },
-   "source": "summary",
+   "source": "srd",
    "verified": false
   },
   {
    "n": "Subtle Spell",
    "text": {
-    "en": "1 point: no verbal or somatic components.",
-    "de": "1 Punkt: keine verbalen oder Gestenkomponenten."
+    "en": "When you cast a spell, you can spend 1 sorcery point to cast it without any somatic or verbal components.",
+    "de": "Wirkst du einen Zauber, kannst du 1 Zaubereipunkt ausgeben, um ihn ohne Gesten- und verbale Komponenten zu wirken."
    },
-   "source": "summary",
+   "source": "srd",
    "verified": false
   },
   {
    "n": "Twinned Spell",
    "text": {
-    "en": "Points equal to spell level: target a second creature with a single-target spell.",
-    "de": "Punkte in Höhe des Zaubergrads: Ein Zauber mit einem einzelnen Ziel trifft eine zweite Kreatur."
+    "en": "When you cast a spell that targets only one creature and doesn't have a range of self, you can spend a number of sorcery points equal to the spell's level to target a second creature in range with the same spell (1 sorcery point if the spell is a cantrip).\nTo be eligible, a spell must be incapable of targeting more than one creature at the spell's current level. For example, magic missile and scorching ray aren't eligible, but ray of frost is.",
+    "de": "Wirkst du einen Zauber, der nur eine Kreatur zum Ziel hat und nicht die Reichweite Selbst besitzt, kannst du so viele Zaubereipunkte ausgeben, wie der Grad des Zaubers angibt (1 Zaubereipunkt bei einem Zaubertrick), um mit demselben Zauber eine zweite Kreatur in Reichweite zum Ziel zu wählen.\nGeeignet ist nur ein Zauber, der auf seinem aktuellen Grad nicht mehr als eine Kreatur zum Ziel haben kann. Magic Missile und Scorching Ray sind zum Beispiel nicht geeignet, Ray of Frost schon."
    },
-   "source": "summary",
+   "source": "srd",
    "verified": false
   }
  ],
@@ -133,289 +133,289 @@
   {
    "n": "Agonizing Blast",
    "text": {
-    "en": "Add your Charisma modifier to Eldritch Blast damage.",
-    "de": "Addiere deinen Charismamodifikator zum Schaden von Eldritch Blast."
+    "en": "Prerequisite: Eldritch Blast cantrip\nWhen you cast eldritch blast, add your Charisma modifier to the damage it deals on a hit.",
+    "de": "Voraussetzung: Zaubertrick Eldritch Blast\nWirkst du Eldritch Blast, addierst du bei einem Treffer deinen Charismamodifikator zum Schaden."
    },
-   "source": "summary",
+   "source": "srd",
    "verified": false
   },
   {
    "n": "Armor of Shadows",
    "text": {
-    "en": "Cast Mage Armor on yourself at will.",
-    "de": "Mage Armor beliebig oft auf dich selbst wirken."
+    "en": "You can cast mage armor on yourself at will, without expending a spell slot or material components.",
+    "de": "Du kannst Mage Armor beliebig oft auf dich selbst wirken, ohne einen Zauberplatz oder Materialkomponenten zu verbrauchen."
    },
-   "source": "summary",
+   "source": "srd",
    "verified": false
   },
   {
    "n": "Ascendant Step",
    "text": {
-    "en": "Levitate on yourself at will (level 9).",
-    "de": "Levitate beliebig oft auf dich selbst wirken (Stufe 9)."
+    "en": "Prerequisite: 9th level\nYou can cast levitate on yourself at will, without expending a spell slot or material components.",
+    "de": "Voraussetzung: Stufe 9\nDu kannst Levitate beliebig oft auf dich selbst wirken, ohne einen Zauberplatz oder Materialkomponenten zu verbrauchen."
    },
-   "source": "summary",
+   "source": "srd",
    "verified": false
   },
   {
    "n": "Beast Speech",
    "text": {
-    "en": "Speak with Animals at will.",
-    "de": "Speak with Animals beliebig oft wirken."
+    "en": "You can cast speak with animals at will, without expending a spell slot.",
+    "de": "Du kannst Speak with Animals beliebig oft wirken, ohne einen Zauberplatz zu verbrauchen."
    },
-   "source": "summary",
+   "source": "srd",
    "verified": false
   },
   {
    "n": "Beguiling Influence",
    "text": {
-    "en": "Proficiency in Deception and Persuasion.",
-    "de": "Übung in Deception und Persuasion."
+    "en": "You gain proficiency in the Deception and Persuasion skills.",
+    "de": "Du erhältst Übung in den Fertigkeiten Deception und Persuasion."
    },
-   "source": "summary",
+   "source": "srd",
    "verified": false
   },
   {
    "n": "Bewitching Whispers",
    "text": {
-    "en": "Compulsion once per long rest using a pact slot (level 7).",
-    "de": "Compulsion einmal pro langer Rast mit einem Paktplatz (Stufe 7)."
+    "en": "Prerequisite: 7th level\nYou can cast compulsion once using a warlock spell slot. You can't do so again until you finish a long rest.",
+    "de": "Voraussetzung: Stufe 7\nDu kannst Compulsion einmal mit einem Hexenmeister-Zauberplatz wirken. Danach erst wieder nach einer langen Rast."
    },
-   "source": "summary",
+   "source": "srd",
    "verified": false
   },
   {
    "n": "Book of Ancient Secrets",
    "text": {
-    "en": "Pact of the Tome: inscribe rituals.",
-    "de": "Pakt des Folianten: Rituale ins Buch schreiben."
+    "en": "Prerequisite: Pact of the Tome\nYou can now inscribe magical rituals in your Book of Shadows. Choose two 1st-level spells that have the ritual tag from any class's spell list (the two needn't be from the same list). The spells appear in the book and don't count against the number of spells you know. With your Book of Shadows in hand, you can cast the chosen spells as rituals. You can't cast the spells except as rituals, unless you've learned them by some other means. You can also cast a warlock spell you know as a ritual if it has the ritual tag.\nOn your adventures, you can add other ritual spells to your Book of Shadows. When you find such a spell, you can add it to the book if the spell's level is equal to or less than half your warlock level (rounded up) and if you can spare the time to transcribe the spell. For each level of the spell, the transcription process takes 2 hours and costs 50 gp for the rare inks needed to inscribe it.",
+    "de": "Voraussetzung: Pact of the Tome\nDu kannst jetzt magische Rituale in dein Buch der Schatten schreiben. Wähle zwei Zauber des 1. Grades mit der Eigenschaft Ritual aus den Zauberlisten beliebiger Klassen (die beiden müssen nicht von derselben Liste stammen). Die Zauber erscheinen im Buch und zählen nicht zu deinen bekannten Zaubern. Mit dem Buch der Schatten in der Hand kannst du die gewählten Zauber als Rituale wirken. Anders als als Ritual kannst du sie nicht wirken, es sei denn, du hast sie auf anderem Weg gelernt. Außerdem kannst du einen Hexenmeisterzauber, den du kennst, als Ritual wirken, wenn er die Eigenschaft Ritual hat.\nAuf deinen Abenteuern kannst du weitere Ritualzauber in dein Buch der Schatten aufnehmen. Findest du einen solchen Zauber, kannst du ihn hinzufügen, wenn sein Grad höchstens der Hälfte deiner Hexenmeisterstufe (aufgerundet) entspricht und du die Zeit zum Abschreiben hast. Pro Grad des Zaubers dauert das Abschreiben 2 Stunden und kostet 50 GM für die seltenen Tinten."
    },
-   "source": "summary",
+   "source": "srd",
    "verified": false
   },
   {
    "n": "Chains of Carceri",
    "text": {
-    "en": "Hold Monster at will on celestials, fiends, elementals (level 15, Pact of the Chain).",
-    "de": "Hold Monster beliebig oft gegen Himmlische, Unholde und Elementare (Stufe 15, Pakt der Kette)."
+    "en": "Prerequisite: 15th level, Pact of the Chain\nYou can cast hold monster at will--targeting a celestial, fiend, or elemental--without expending a spell slot or material components. You must finish a long rest before you can use this invocation on the same creature again.",
+    "de": "Voraussetzung: Stufe 15, Pact of the Chain\nDu kannst Hold Monster beliebig oft wirken, wenn das Ziel ein Himmlischer, Unhold oder Elementar ist, ohne einen Zauberplatz oder Materialkomponenten zu verbrauchen. Gegen dieselbe Kreatur kannst du diese Anrufung erst nach einer langen Rast erneut einsetzen."
    },
-   "source": "summary",
+   "source": "srd",
    "verified": false
   },
   {
    "n": "Devil's Sight",
    "text": {
-    "en": "See normally in darkness, magical and nonmagical, 120 feet.",
-    "de": "Normale Sicht in magischer und nichtmagischer Dunkelheit bis 36 m."
+    "en": "You can see normally in darkness, both magical and nonmagical, to a distance of 120 feet.",
+    "de": "Du siehst in magischer wie nichtmagischer Dunkelheit bis 36 m weit normal."
    },
-   "source": "summary",
+   "source": "srd",
    "verified": false
   },
   {
    "n": "Dreadful Word",
    "text": {
-    "en": "Confusion once per long rest using a pact slot (level 7).",
-    "de": "Confusion einmal pro langer Rast mit einem Paktplatz (Stufe 7)."
+    "en": "Prerequisite: 7th level\nYou can cast confusion once using a warlock spell slot. You can't do so again until you finish a long rest.",
+    "de": "Voraussetzung: Stufe 7\nDu kannst Confusion einmal mit einem Hexenmeister-Zauberplatz wirken. Danach erst wieder nach einer langen Rast."
    },
-   "source": "summary",
+   "source": "srd",
    "verified": false
   },
   {
    "n": "Eldritch Sight",
    "text": {
-    "en": "Detect Magic at will.",
-    "de": "Detect Magic beliebig oft wirken."
+    "en": "You can cast detect magic at will, without expending a spell slot.",
+    "de": "Du kannst Detect Magic beliebig oft wirken, ohne einen Zauberplatz zu verbrauchen."
    },
-   "source": "summary",
+   "source": "srd",
    "verified": false
   },
   {
    "n": "Eldritch Spear",
    "text": {
-    "en": "Eldritch Blast range becomes 300 feet.",
-    "de": "Reichweite von Eldritch Blast wird 90 m."
+    "en": "Prerequisite: Eldritch Blast cantrip\nWhen you cast eldritch blast, its range is 300 feet.",
+    "de": "Voraussetzung: Zaubertrick Eldritch Blast\nWirkst du Eldritch Blast, beträgt seine Reichweite 90 m."
    },
-   "source": "summary",
+   "source": "srd",
    "verified": false
   },
   {
    "n": "Eyes of the Rune Keeper",
    "text": {
-    "en": "Read all writing.",
+    "en": "You can read all writing.",
     "de": "Du kannst jede Schrift lesen."
    },
-   "source": "summary",
+   "source": "srd",
    "verified": false
   },
   {
    "n": "Fiendish Vigor",
    "text": {
-    "en": "False Life on yourself at will (1st level).",
-    "de": "False Life beliebig oft auf dich selbst wirken (als Zauber des 1. Grades)."
+    "en": "You can cast false life on yourself at will as a 1st-level spell, without expending a spell slot or material components.",
+    "de": "Du kannst False Life beliebig oft als Zauber des 1. Grades auf dich selbst wirken, ohne einen Zauberplatz oder Materialkomponenten zu verbrauchen."
    },
-   "source": "summary",
+   "source": "srd",
    "verified": false
   },
   {
    "n": "Gaze of Two Minds",
    "text": {
-    "en": "Action: perceive through a willing humanoid's senses.",
-    "de": "Aktion: Durch die Sinne eines bereitwilligen Humanoiden wahrnehmen."
+    "en": "You can use your action to touch a willing humanoid and perceive through its senses until the end of your next turn. As long as the creature is on the same plane of existence as you, you can use your action on subsequent turns to maintain this connection, extending the duration until the end of your next turn. While perceiving through the other creature's senses, you benefit from any special senses possessed by that creature, and you are blinded and deafened to your own surroundings.",
+    "de": "Du kannst mit deiner Aktion einen bereitwilligen Humanoiden berühren und bis zum Ende deines nächsten Zuges durch seine Sinne wahrnehmen. Solange die Kreatur auf derselben Existenzebene ist wie du, kannst du in späteren Zügen mit deiner Aktion die Verbindung aufrechterhalten und die Dauer bis zum Ende deines nächsten Zuges verlängern. Während du durch die Sinne der Kreatur wahrnimmst, profitierst du von ihren besonderen Sinnen und bist für deine eigene Umgebung Blinded und Deafened."
    },
-   "source": "summary",
+   "source": "srd",
    "verified": false
   },
   {
    "n": "Lifedrinker",
    "text": {
-    "en": "Pact of the Blade: +CHA necrotic damage (level 12).",
-    "de": "Pakt der Klinge: + Charismamodifikator nekrotischer Schaden (Stufe 12)."
+    "en": "Prerequisite: 12th level, Pact of the Blade\nWhen you hit a creature with your pact weapon, the creature takes extra necrotic damage equal to your Charisma modifier (minimum 1).",
+    "de": "Voraussetzung: Stufe 12, Pact of the Blade\nTriffst du eine Kreatur mit deiner Paktwaffe, erleidet sie zusätzlich nekrotischen Schaden in Höhe deines Charismamodifikators (mindestens 1)."
    },
-   "source": "summary",
+   "source": "srd",
    "verified": false
   },
   {
    "n": "Mask of Many Faces",
    "text": {
-    "en": "Disguise Self at will.",
-    "de": "Disguise Self beliebig oft wirken."
+    "en": "You can cast disguise self at will, without expending a spell slot.",
+    "de": "Du kannst Disguise Self beliebig oft wirken, ohne einen Zauberplatz zu verbrauchen."
    },
-   "source": "summary",
+   "source": "srd",
    "verified": false
   },
   {
    "n": "Master of Myriad Forms",
    "text": {
-    "en": "Alter Self at will (level 15).",
-    "de": "Alter Self beliebig oft wirken (Stufe 15)."
+    "en": "Prerequisite: 15th level\nYou can cast alter self at will, without expending a spell slot.",
+    "de": "Voraussetzung: Stufe 15\nDu kannst Alter Self beliebig oft wirken, ohne einen Zauberplatz zu verbrauchen."
    },
-   "source": "summary",
+   "source": "srd",
    "verified": false
   },
   {
    "n": "Minions of Chaos",
    "text": {
-    "en": "Conjure Elemental once per long rest using a pact slot (level 9).",
-    "de": "Conjure Elemental einmal pro langer Rast mit einem Paktplatz (Stufe 9)."
+    "en": "Prerequisite: 9th level\nYou can cast conjure elemental once using a warlock spell slot. You can't do so again until you finish a long rest.",
+    "de": "Voraussetzung: Stufe 9\nDu kannst Conjure Elemental einmal mit einem Hexenmeister-Zauberplatz wirken. Danach erst wieder nach einer langen Rast."
    },
-   "source": "summary",
+   "source": "srd",
    "verified": false
   },
   {
    "n": "Mire the Mind",
    "text": {
-    "en": "Slow once per long rest using a pact slot (level 5).",
-    "de": "Slow einmal pro langer Rast mit einem Paktplatz (Stufe 5)."
+    "en": "Prerequisite: 5th level\nYou can cast slow once using a warlock spell slot. You can't do so again until you finish a long rest.",
+    "de": "Voraussetzung: Stufe 5\nDu kannst Slow einmal mit einem Hexenmeister-Zauberplatz wirken. Danach erst wieder nach einer langen Rast."
    },
-   "source": "summary",
+   "source": "srd",
    "verified": false
   },
   {
    "n": "Misty Visions",
    "text": {
-    "en": "Silent Image at will.",
-    "de": "Silent Image beliebig oft wirken."
+    "en": "You can cast silent image at will, without expending a spell slot or material components.",
+    "de": "Du kannst Silent Image beliebig oft wirken, ohne einen Zauberplatz oder Materialkomponenten zu verbrauchen."
    },
-   "source": "summary",
+   "source": "srd",
    "verified": false
   },
   {
    "n": "One with Shadows",
    "text": {
-    "en": "In dim light or darkness, action: Invisible until you move or act (level 5).",
-    "de": "In dämmrigem Licht oder Dunkelheit, Aktion: Invisible, bis du dich bewegst oder handelst (Stufe 5)."
+    "en": "Prerequisite: 5th level\nWhen you are in an area of dim light or darkness, you can use your action to become invisible until you move or take an action or a reaction.",
+    "de": "Voraussetzung: Stufe 5\nBist du in einem Bereich mit dämmrigem Licht oder Dunkelheit, kannst du mit deiner Aktion unsichtbar werden, bis du dich bewegst oder eine Aktion oder Reaktion ausführst."
    },
-   "source": "summary",
+   "source": "srd",
    "verified": false
   },
   {
    "n": "Otherworldly Leap",
    "text": {
-    "en": "Jump on yourself at will (level 9).",
-    "de": "Jump beliebig oft auf dich selbst wirken (Stufe 9)."
+    "en": "Prerequisite: 9th level\nYou can cast jump on yourself at will, without expending a spell slot or material components.",
+    "de": "Voraussetzung: Stufe 9\nDu kannst Jump beliebig oft auf dich selbst wirken, ohne einen Zauberplatz oder Materialkomponenten zu verbrauchen."
    },
-   "source": "summary",
+   "source": "srd",
    "verified": false
   },
   {
    "n": "Repelling Blast",
    "text": {
-    "en": "Eldritch Blast pushes the target 10 feet.",
-    "de": "Eldritch Blast stößt das Ziel 3 m weg."
+    "en": "Prerequisite: Eldritch Blast cantrip\nWhen you hit a creature with eldritch blast, you can push the creature up to 10 feet away from you in a straight line.",
+    "de": "Voraussetzung: Zaubertrick Eldritch Blast\nTriffst du eine Kreatur mit Eldritch Blast, kannst du sie in gerader Linie bis zu 3 m von dir wegstoßen."
    },
-   "source": "summary",
+   "source": "srd",
    "verified": false
   },
   {
    "n": "Sculptor of Flesh",
    "text": {
-    "en": "Polymorph once per long rest using a pact slot (level 7).",
-    "de": "Polymorph einmal pro langer Rast mit einem Paktplatz (Stufe 7)."
+    "en": "Prerequisite: 7th level\nYou can cast polymorph once using a warlock spell slot. You can't do so again until you finish a long rest.",
+    "de": "Voraussetzung: Stufe 7\nDu kannst Polymorph einmal mit einem Hexenmeister-Zauberplatz wirken. Danach erst wieder nach einer langen Rast."
    },
-   "source": "summary",
+   "source": "srd",
    "verified": false
   },
   {
    "n": "Sign of Ill Omen",
    "text": {
-    "en": "Bestow Curse once per long rest using a pact slot (level 5).",
-    "de": "Bestow Curse einmal pro langer Rast mit einem Paktplatz (Stufe 5)."
+    "en": "Prerequisite: 5th level\nYou can cast bestow curse once using a warlock spell slot. You can't do so again until you finish a long rest.",
+    "de": "Voraussetzung: Stufe 5\nDu kannst Bestow Curse einmal mit einem Hexenmeister-Zauberplatz wirken. Danach erst wieder nach einer langen Rast."
    },
-   "source": "summary",
+   "source": "srd",
    "verified": false
   },
   {
    "n": "Thief of Five Fates",
    "text": {
-    "en": "Bane once per long rest using a pact slot.",
-    "de": "Bane einmal pro langer Rast mit einem Paktplatz."
+    "en": "You can cast bane once using a warlock spell slot. You can't do so again until you finish a long rest.",
+    "de": "Du kannst Bane einmal mit einem Hexenmeister-Zauberplatz wirken. Danach erst wieder nach einer langen Rast."
    },
-   "source": "summary",
+   "source": "srd",
    "verified": false
   },
   {
    "n": "Thirsting Blade",
    "text": {
-    "en": "Pact of the Blade: attack twice (level 5).",
-    "de": "Pakt der Klinge: zweimal angreifen (Stufe 5)."
+    "en": "Prerequisite: 5th level, Pact of the Blade\nYou can attack with your pact weapon twice, instead of once, whenever you take the Attack action on your turn.",
+    "de": "Voraussetzung: Stufe 5, Pact of the Blade\nWenn du in deinem Zug die Aktion Angriff ausführst, kannst du mit deiner Paktwaffe zweimal statt einmal angreifen."
    },
-   "source": "summary",
+   "source": "srd",
    "verified": false
   },
   {
    "n": "Visions of Distant Realms",
    "text": {
-    "en": "Arcane Eye at will (level 15).",
-    "de": "Arcane Eye beliebig oft wirken (Stufe 15)."
+    "en": "Prerequisite: 15th level\nYou can cast arcane eye at will, without expending a spell slot.",
+    "de": "Voraussetzung: Stufe 15\nDu kannst Arcane Eye beliebig oft wirken, ohne einen Zauberplatz zu verbrauchen."
    },
-   "source": "summary",
+   "source": "srd",
    "verified": false
   },
   {
    "n": "Voice of the Chain Master",
    "text": {
-    "en": "Pact of the Chain: speak through your familiar on any plane.",
-    "de": "Pakt der Kette: Durch deinen Vertrauten sprechen, auf jeder Ebene."
+    "en": "Prerequisite: Pact of the Chain\nYou can communicate telepathically with your familiar and perceive through your familiar's senses as long as you are on the same plane of existence.\nAdditionally, while perceiving through your familiar's senses, you can also speak through your familiar in your own voice, even if your familiar is normally incapable of speech.",
+    "de": "Voraussetzung: Pact of the Chain\nDu kannst telepathisch mit deinem Vertrauten sprechen und durch seine Sinne wahrnehmen, solange ihr auf derselben Existenzebene seid.\nAußerdem kannst du, während du durch die Sinne deines Vertrauten wahrnimmst, mit deiner eigenen Stimme durch ihn sprechen, auch wenn er normalerweise nicht sprechen kann."
    },
-   "source": "summary",
+   "source": "srd",
    "verified": false
   },
   {
    "n": "Whispers of the Grave",
    "text": {
-    "en": "Speak with Dead at will (level 9).",
-    "de": "Speak with Dead beliebig oft wirken (Stufe 9)."
+    "en": "Prerequisite: 9th level\nYou can cast speak with dead at will, without expending a spell slot.",
+    "de": "Voraussetzung: Stufe 9\nDu kannst Speak with Dead beliebig oft wirken, ohne einen Zauberplatz zu verbrauchen."
    },
-   "source": "summary",
+   "source": "srd",
    "verified": false
   },
   {
    "n": "Witch Sight",
    "text": {
-    "en": "See true forms within 30 feet (level 15).",
-    "de": "Wahre Gestalten innerhalb von 9 m sehen (Stufe 15)."
+    "en": "Prerequisite: 15th level\nYou can see the true form of any shapechanger or creature concealed by illusion or transmutation magic while the creature is within 30 feet of you and within line of sight.",
+    "de": "Voraussetzung: Stufe 15\nDu siehst die wahre Gestalt jedes Gestaltwandlers und jeder Kreatur, die durch Illusions- oder Verwandlungsmagie verborgen ist, solange sie sich innerhalb von 9 m und in Sichtlinie befindet."
    },
-   "source": "summary",
+   "source": "srd",
    "verified": false
   }
  ]

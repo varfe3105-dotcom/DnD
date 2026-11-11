@@ -343,8 +343,18 @@ function subclasses() {
   const { feats: ft, fightingStyles, metamagic, invocations } = readTr('feats-options.json');
   const grappler = srd('Feats')[0];
   writeArr('feats.json', ft.map(([n, de, req, asi, en, deT]) => ({ n, de, ...(req ? { req } : {}), ...(asi ? { asi } : {}), text: { en: n === 'Grappler' ? descText(grappler.desc).replace(/^- /gm, '') : en, de: deT }, source: n === 'Grappler' ? 'srd' : 'summary', verified: false })));
-  const opt = a => a.map(([n, en, de]) => ({ n, text: { en, de }, source: 'summary', verified: false }));
-  writeObj('options.json', { fightingStyles: opt(fightingStyles), metamagic: opt(metamagic), invocations: opt(invocations) });
+  // Kampfstile, Metamagie und Anrufungen stehen vollständig im SRD; die eigene Kurzfassung bleibt nur als Notlösung.
+  const allF = srd('Features');
+  const ord = n => n + (['th', 'st', 'nd', 'rd'][n % 10 > 3 || [11, 12, 13].includes(n % 100) ? 0 : n % 10]);
+  const title = s => s.split('/').pop().replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase()).replace(/ (Of|The)\b/g, m => m.toLowerCase());
+  const preText = p => (p.type === 'level' ? `${ord(p.level)} level` : p.type === 'spell' ? `${title(p.spell)} cantrip` : title(p.feature));
+  const opt = (a, prefix) => a.map(([n, en, de]) => {
+    const f = allF.find(x => x.index === prefix + n.toLowerCase().replace(/'/g, '').replace(/ /g, '-'));
+    if (!f) { miss('Option ohne SRD', n); return { n, text: { en, de }, source: 'summary', verified: false }; }
+    const pre = f.prerequisites?.length ? `Prerequisite: ${f.prerequisites.map(preText).join(', ')}\n` : '';
+    return { n, text: { en: pre + descText(f.desc), de }, source: 'srd', verified: false };
+  });
+  writeObj('options.json', { fightingStyles: opt(fightingStyles, 'fighter-fighting-style-'), metamagic: opt(metamagic, 'metamagic-'), invocations: opt(invocations, 'eldritch-invocation-') });
   console.log(`Unterklassen: ${Object.values(out).reduce((a, c) => a + Object.keys(c).length, 0)}, Talente: ${ft.length}`);
 }
 
