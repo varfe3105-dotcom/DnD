@@ -6,6 +6,7 @@ import { esc, clamp, mod, sg } from '../util.js';
 import { tok, itTone } from '../icons.js';
 import { CLN, SK, ABK, CLIC } from '../constants.js';
 import { S, U } from '../state.js';
+import { initBonus, passivePerception, featureLevel } from '../helpers.js';
 import { hdText, skv, pips, numIn, get, refs, atk, raceTraits, abName, abShort, itemView, spellView, resText } from '../helpers.js';
 import { COND, EXH, featText, byName, CLASSES } from '../catalog.js';
 import { t, loc, dice, dist, lang, nameLine, deName } from '../i18n/index.js';
@@ -41,7 +42,7 @@ export function vFx(e) {
     if (s.fail.length) line(`${t('fx.saves')} ${abName(k)}`, `<b class="fxw fail">${t('fx.fail')}</b> (${esc(why(s.fail))})`);
     else if (s.dis.length) line(`${t('fx.saves')} ${abName(k)}`, fxText([], s.dis));
   });
-  if (e.speed.val !== e.speed.base) line(t('fx.speed'), `<b class="fxw dis">${dist(e.speed.val)}</b> (${esc(why([...e.speed.zero, ...e.speed.half, ...e.speed.minus]))})`);
+  if (e.speed.val !== e.speed.norm) line(t('fx.speed'), `<b class="fxw dis">${dist(e.speed.val)}</b> (${esc(why([...e.speed.zero, ...e.speed.half, ...e.speed.minus]))})`);
   if (e.hpHalf) line(t('fx.hp'), `(${esc(e.hpHalf)})`);
   if (e.noCast.length) line(t('fx.noCast'), `(${esc(why(e.noCast))})`);
   const vs = [];
@@ -162,10 +163,11 @@ export function vProfs() {
 }
 export function vMain() {
   const a = S.abil, st = (l, v, x = '') => `<div class="st"><small>${l}</small><b>${v}</b>${x}</div>`, fx = effects();
-  const spd = fx.speed.val !== fx.speed.base ? st(t('stat.speed'), `<span class="fxw dis">${dist(fx.speed.val)}</span>`, `<small class="fxsub">${esc(dist(fx.speed.base))} · ${esc([...fx.speed.zero, ...fx.speed.half, ...fx.speed.minus].join(', '))}</small>`) : st(t('stat.speed'), dist(S.speed));
+  const worse = fx.speed.val < fx.speed.norm, why2 = [...fx.speed.plus.map(x => '+ ' + x), ...fx.speed.zero, ...fx.speed.half, ...fx.speed.minus].join(', ');
+  const spd = fx.speed.val !== fx.speed.base ? st(t('stat.speed'), `<span class="fxw ${worse ? 'dis' : 'adv'}">${dist(fx.speed.val)}</span>`, `<small class="fxsub">${esc(dist(fx.speed.base))} · ${esc(why2)}</small>`) : st(t('stat.speed'), dist(S.speed));
   let h = '';
   if (S.conc) h += `<div class="conc"><div><small>${t('conc.title')}</small><b>${esc(S.conc)}</b><span>${t('conc.hint')}</span></div><button class="btn" data-a="concend">${t('conc.end')}</button></div>`;
-  h += `<div class="stats">${st(t('stat.ac'), S.ac)}${st(t('stat.init'), sg(mod(a.dex)))}${spd}${st(t('stat.prof'), sg(S.prof))}${st(t('stat.pp'), 10 + skv('Perception'))}</div>`;
+  h += `<div class="stats">${st(t('stat.ac'), S.ac)}${st(t('stat.init'), sg(initBonus()) + (featureLevel('Barbarian') >= 7 ? fxMark(['Feral Instinct'], []) : ''))}${spd}${st(t('stat.prof'), sg(S.prof))}${st(t('stat.pp'), passivePerception())}</div>`;
   h += vFx(fx);
   h += `<div class="sheet"><aside>${vAbil(false)}</aside><div class="col c1">${vHP()}${vCond()}${vAtk()}${vQuick()}${vCharges()}${vRes()}${vPets()}</div><div class="col c2">${vSpells()}${vFeats()}<div class="c2sk">${vSkills()}</div>${vProfs()}</div></div>`;
   return h;

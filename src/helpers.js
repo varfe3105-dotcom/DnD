@@ -5,7 +5,20 @@ import { RACES, BYN, CLASSES } from './catalog.js';
 import { classLevels } from './tables.js';
 import { t, tl, lang, loc, dice, nameLine } from './i18n/index.js';
 
-export const skv = k => { const s = SK.find(x => x[0] === k); return mod(S.abil[s[1]]) + S.prof * (S.skills[k] || 0); };
+const clsLvl = k => classLevels().filter(c => c.k === k).reduce((a, c) => a + (c.lvl || 0), 0);
+const champ7 = () => classLevels().some(c => c.k === 'Fighter' && c.sub === 'Champion' && c.lvl >= 7);
+/** Halber Übungsbonus für ungeübte Attributswürfe: Jack of All Trades (Barde 2, abgerundet), Remarkable Athlete (Champion 7, aufgerundet, nur STR/GES/KON). */
+export function halfProf(ab) {
+  const jack = clsLvl('Bard') >= 2 ? Math.floor(S.prof / 2) : 0;
+  const ath = champ7() && ['str', 'dex', 'con'].includes(ab) ? Math.ceil(S.prof / 2) : 0;
+  return Math.max(jack, ath);
+}
+export const skv = k => { const s = SK.find(x => x[0] === k), p = S.skills[k] || 0; return mod(S.abil[s[1]]) + (p ? S.prof * p : halfProf(s[1])); };
+export const hasFeatN = n => S.feats.some(f => f.n === n);
+/** Initiative: GES-Modifikator, Alert +5, halber Übungsbonus (Initiative ist ein Geschicklichkeitswurf). */
+export const initBonus = () => mod(S.abil.dex) + (hasFeatN('Alert') ? 5 : 0) + halfProf('dex');
+export const passivePerception = () => 10 + skv('Perception') + (hasFeatN('Observant') ? 5 : 0);
+export const featureLevel = clsLvl;
 export const pips = (max, used, attr) => Array.from({ length: max }, (_, j) => `<button class="pip ${j < max - used ? 'on' : ''}" ${attr} data-j="${j}" aria-label="${j < max - used ? t('pip.use') : t('pip.reset')}"></button>`).join('');
 export const fid = p => 'f-' + p.replace(/\./g, '-');
 export const numIn = (p, v, l, min = 0, max, step, extra = '') => `<input type="number" class="n" id="${fid(p)}" data-p="${p}" data-t="n" value="${v}" min="${min}"${max != null ? ` max="${max}"` : ''}${step ? ` step="${step}"` : ''} inputmode="decimal" aria-label="${esc(l)}" ${extra}>`;

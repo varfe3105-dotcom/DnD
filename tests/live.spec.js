@@ -74,7 +74,7 @@ test.describe('Live-Tisch @new', () => {
     await openDm(page);
     await act(page, 'livecreate').click();
     await expect(page.locator('.live-code b')).toHaveText(/^[A-HJ-NP-Z2-9]{6}$/);
-    expect(await lastSent(page)).toEqual({ role: 'dm', lock: false });
+    expect(await lastSent(page)).toEqual({ role: 'dm', lock: false, turn: null });
     await peers(page, [player({ cond: ['Poisoned'] })]);
     await expect(page.locator('.dm-row')).toContainText('Mirelle');
     await expect(page.locator('.dm-row')).toContainText('20');

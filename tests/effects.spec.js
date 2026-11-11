@@ -71,3 +71,24 @@ test.describe('Zaubertricks nach Charakterstufe @new', () => {
     await expect(page.locator('.sp .cant')).toHaveText('Dexterity save, DC 13 · Damage 1d8 radiant');
   });
 });
+
+test.describe('Merkmale, die Werte ändern @new', () => {
+  const stat = (page, re) => page.locator('.st', { hasText: re }).locator('b').first();
+  const abil = { str: 10, dex: 14, con: 12, int: 10, wis: 12, cha: 10 };
+  test('Jack of All Trades: halber Übungsbonus auf ungeübte Fertigkeiten und Initiative', async ({ page }) => {
+    await seed(page, base4({ klass: 'Bard', level: 3, prof: 2, abil, skills: { Persuasion: 1 } }));
+    await expect(page.locator('.skr', { hasText: 'Athletics' }).locator('b')).toHaveText('+1');
+    await expect(page.locator('.skr', { hasText: 'Persuasion' }).locator('b')).toHaveText('+2');
+    await expect(stat(page, /Initiative/)).toHaveText('+3');
+  });
+  test('Alert +5 auf Initiative, Observant +5 auf passive Wahrnehmung', async ({ page }) => {
+    await seed(page, base4({ klass: 'Fighter', abil, feats: [{ n: 'Alert', p: '', src: 'Talent' }, { n: 'Observant', p: '', src: 'Talent' }] }));
+    await expect(stat(page, /Initiative/)).toHaveText('+7');
+    await expect(stat(page, /Passive/)).toHaveText('16');
+  });
+  test('Mönch Stufe 6 ohne Rüstung: +15 ft Tempo', async ({ page }) => {
+    await seed(page, base4({ klass: 'Monk', level: 6, abil }));
+    await expect(page.locator('.st', { hasText: /Speed/ }).locator('b .fxw')).toHaveText('45 ft.');
+    await expect(page.locator('.fx')).toHaveCount(0);
+  });
+});

@@ -3,6 +3,7 @@
 import items from '../data/items.json';
 import { S } from './state.js';
 import { isShield } from './helpers.js';
+import { classLevels } from './tables.js';
 import { t } from './i18n/index.js';
 
 const ARMOR = Object.fromEntries(items.filter(i => i.ac && !i.ac.shield).map(i => [i.id, { cat: i.ac.cat, str: +(i.text.en.match(/STR (\d+)/) || [])[1] || 0, stealth: /Disadvantage on Stealth/.test(i.text.en) }]));
@@ -38,7 +39,7 @@ export function effects() {
   const e = {
     atk: { adv: [], dis: [] }, saves: Object.fromEntries(AB.map(a => [a, { fail: [], dis: [] }])),
     checks: [], checkAb: { str: [], dex: [] }, stealth: [], sight: [], hear: [],
-    speed: { base: S.speed, val: S.speed, zero: [], half: [], minus: [] }, hpHalf: '', noAct: [], noCast: [], vs: { adv: [], dis: [], crit: [], meleeAdv: [], rangedDis: [] },
+    speed: { base: S.speed, norm: S.speed, val: S.speed, zero: [], half: [], minus: [], plus: [] }, hpHalf: '', noAct: [], noCast: [], vs: { adv: [], dis: [], crit: [], meleeAdv: [], rangedDis: [] },
   };
   // Zustände
   all(['Blinded', 'Frightened', 'Poisoned', 'Prone', 'Restrained']).forEach(n => e.atk.dis.push(n));
@@ -73,7 +74,15 @@ export function effects() {
   if (profs != null && shield && !profs.includes('S')) noProf.push(t('fx.shieldNoProf'));
   noProf.forEach(r => { e.atk.dis.push(r); e.checkAb.str.push(r); e.checkAb.dex.push(r); e.saves.str.dis.push(r); e.saves.dex.dis.push(r); e.noCast.push(r); });
   // Tempo
-  let v = S.speed;
+  // Tempo-Boni aus Klasse und Talenten (in Metern: 10 ft = 3 m)
+  const lv = k => classLevels().filter(c => c.k === k).reduce((a, c) => a + (c.lvl || 0), 0);
+  let plus = 0;
+  const monk = lv('Monk');
+  if (monk >= 2 && !S.eq.body && !shield) { const m = monk >= 18 ? 9 : monk >= 14 ? 7.5 : monk >= 10 ? 6 : monk >= 6 ? 4.5 : 3; plus += m; e.speed.plus.push('Unarmored Movement'); }
+  if (lv('Barbarian') >= 5 && !(body && body.cat === 'Heavy')) { plus += 3; e.speed.plus.push('Fast Movement'); }
+  if (S.feats.some(f => f.n === 'Mobile')) { plus += 3; e.speed.plus.push('Mobile'); }
+  e.speed.norm = S.speed + plus;
+  let v = e.speed.norm;
   if (e.speed.minus.length) v = Math.max(0, v - 3);
   if (e.speed.half.length) v = v / 2;
   if (e.speed.zero.length) v = 0;
@@ -84,4 +93,4 @@ export function effects() {
 export const hpMaxNow = () => ((S.exh || 0) >= 4 ? Math.floor(S.hpMax / 2) : S.hpMax);
 /** Vor- und Nachteil zusammengefasst: 'adv', 'dis', 'both' oder ''. */
 export const rollState = (adv, dis) => (adv.length && dis.length ? 'both' : adv.length ? 'adv' : dis.length ? 'dis' : '');
-export const anyEffect = e => !!(e.atk.adv.length || e.atk.dis.length || e.checks.length || e.checkAb.str.length || e.stealth.length || e.sight.length || e.hear.length || e.speed.val !== e.speed.base || e.hpHalf || e.noAct.length || e.noCast.length || e.vs.adv.length || e.vs.dis.length || e.vs.meleeAdv.length || AB.some(a => e.saves[a].fail.length || e.saves[a].dis.length));
+export const anyEffect = e => !!(e.atk.adv.length || e.atk.dis.length || e.checks.length || e.checkAb.str.length || e.stealth.length || e.sight.length || e.hear.length || e.speed.val !== e.speed.norm || e.hpHalf || e.noAct.length || e.noCast.length || e.vs.adv.length || e.vs.dis.length || e.vs.meleeAdv.length || AB.some(a => e.saves[a].fail.length || e.saves[a].dis.length));
