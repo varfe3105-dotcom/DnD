@@ -351,3 +351,4 @@ html[data-bright="light"] .hd{filter:brightness(1.12)}
 .abw{gap:7px}
 }
 @media screen{.abv input.n{background:transparent!important;border:0;color:#2b1c0e;font:700 .95rem var(--f-ui);box-shadow:none}}
+.wd .ptext.stat::first-letter{font:inherit;float:none;margin:0;color:inherit}

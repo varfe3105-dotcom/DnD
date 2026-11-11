@@ -1,5 +1,7 @@
 import { lootLocked } from '../live.js';
-import { esc } from '../util.js';
+import { esc, mod, sg } from '../util.js';
+import { statText } from './dm-rules.js';
+import { xpOf } from '../dm.js';
 import { tok, itTone, rarityTone } from '../icons.js';
 import { CLN, ABK } from '../constants.js';
 import { S, U } from '../state.js';
@@ -8,7 +10,7 @@ import { CLASSES, RACES, CAT, BYN, COND, featText, SUBCLASSES, fuzzy } from '../
 import { schoolName, srcNote, restLabel, featSrc } from './sheet.js';
 import { t, loc, dice, dist, deName, nameLine } from '../i18n/index.js';
 
-export const WFS = ['all', 'mine', 'spell', 'class', 'race', 'feat', 'potion', 'magic', 'item', 'cond', 'rule'];
+export const WFS = ['all', 'mine', 'spell', 'class', 'race', 'feat', 'potion', 'magic', 'item', 'monster', 'cond', 'rule'];
 export function myEntries() {
   return [...S.spells.map(spellView).map(s => Object.assign({ k: 'spell', mine: 1, c: s.lvl ? t('spell.level', { n: s.lvl }) : t('spell.cantrips') }, s)),
     ...refs().map(r => { const it = itemView(get(r)); return { k: 'item', mine: 1, n: it.n, ic: it.ic, artKey: it.ref, tone: itTone(it), p: it.p, c: r.startsWith('eq') ? t('wiki.equipped') : t('eq.bag') }; }),
@@ -49,6 +51,9 @@ export function wDetail(e, inline) {
   } else if (e.k === 'race') {
     const R = RACES[e.n], subs = Object.entries(R.subs);
     body = `<dl class="sm"><div><dt>${t('wiki.abilities')}</dt><dd>${esc(loc(R.asi))}</dd></div><div><dt>${t('stat.speed')}</dt><dd>${dist(R.sp)}</dd></div><div><dt>${t('wiki.subraces')}</dt><dd>${subs.length || t('common.none')}</dd></div></dl><div class="lvl">${R.tr.map(f => feat(f)).join('')}${subs.map(([sn, sb]) => `<h4>${esc(nameLine(sn))}</h4><p class="cls">${esc(loc(sb.asi))}${sb.sp ? ' · ' + t('stat.speed') + ' ' + dist(sb.sp) : ''}</p>${sb.tr.map(f => feat(f)).join('')}`).join('')}</div>${srcFoot('summary')}`;
+  } else if (e.k === 'monster') {
+    const m = e.mon, ab = ABK.map(k => `<div><dt>${t('abs.' + k)}</dt><dd>${m.abil[k]} (${sg(mod(m.abil[k]))})</dd></div>`).join('');
+    body = `<dl class="sm"><div><dt>${t('stat.ac')}</dt><dd>${m.ac}</dd></div><div><dt>${t('mon.hp')}</dt><dd>${m.hp}${m.hd ? ' (' + esc(m.hd) + ')' : ''}</dd></div><div><dt>${t('stat.speed')}</dt><dd>${esc(m.speed)}</dd></div><div><dt>${t('mon.cr')}</dt><dd>${esc(e.c.split(' · ').pop())} · ${xpOf(m.cr)} XP</dd></div></dl><p class="cls">${esc([m.size, m.type].filter(Boolean).join(' '))}</p><dl class="sm mon-ab">${ab}</dl><div class="ptext stat">${statText(m.text)}</div><p class="src">${t('dm.srcMonster')}</p>`;
   } else if (e.k === 'feat') {
     body = `${e.req ? `<p class="cls">${t('wiki.prereq')}: ${esc(reqText(e.req))}</p>` : ''}<p class="ptext">${esc(dice(e.p))}</p>${srcFoot(e.source)}`;
   } else body = `${e.rarity ? `<p class="cls">${t('wiki.rarity')}: ${esc(e.rarity)}${e.att ? ' · ' + t('item.needsAttune') : ''}${e.price ? ' · ' + esc(e.price) : ''}</p>` : ''}<p class="ptext">${esc(e.p)}</p>${e.source ? srcFoot(e.source) : ''}`;

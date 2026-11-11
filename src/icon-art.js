@@ -9,6 +9,8 @@ const BY_IC = {
 };
 
 const BY_KEY = {
+  // Monster nach Kreaturtyp
+  'mt:aberration': [16, 9], 'mt:beast': [19, 10], 'mt:celestial': [21, 8], 'mt:construct': [17, 1], 'mt:dragon': [17, 9], 'mt:elemental': [3, 9], 'mt:fey': [11, 13], 'mt:fiend': [3, 14], 'mt:giant': [10, 4], 'mt:humanoid': [5, 1], 'mt:monstrosity': [3, 11], 'mt:ooze': [0, 1], 'mt:plant': [12, 5], 'mt:undead': [0, 0], 'mt:swarm': [16, 2],
   // Völker
   'race:Dwarf': [4, 4], 'race:Elf': [11, 15], 'race:Halfling': [12, 5], 'race:Human': [7, 0], 'race:Dragonborn': [17, 9], 'race:Gnome': [10, 7], 'race:Half-Elf': [11, 14], 'race:Half-Orc': [5, 13], 'race:Tiefling': [3, 14], 'race:Goliath': [17, 1],
   // Talente

@@ -140,3 +140,16 @@ test.describe('Goliath @new', () => {
     await expect(page.locator('.carryv')).toContainText('480');
   });
 });
+
+test.describe('Monster im Wiki @new', () => {
+  test('Filter Monster zeigt Werteblock mit HG, XP und Fähigkeiten', async ({ page }) => {
+    await seed(page, base4({ tab: 'wiki' }));
+    await act(page, 'wf', '[data-f="monster"]').click();
+    await page.locator('#wq').fill('Goblin');
+    await act(page, 'wsel', '[data-key="monster:goblin"]').click();
+    const pane = page.locator('.wd.pane');
+    await expect(pane).toContainText('50 XP');
+    await expect(pane).toContainText('Nimble Escape');
+    await expect(pane).toContainText(/Armor Class|Rüstungsklasse/);
+  });
+});

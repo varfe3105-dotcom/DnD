@@ -866,5 +866,10 @@
  "bright.mid": "Medium",
  "bright.light": "Light",
  "footer.version": "Version: {v}",
- "res.stone": "Reaction when damaged: reduce by {d} + CON modifier"
+ "res.stone": "Reaction when damaged: reduce by {d} + CON modifier",
+ "wf.monster": "Monsters",
+ "cat.monster": "Monster",
+ "mon.hp": "Hit points",
+ "mon.cr": "Challenge",
+ "mon.enOnly": "Monster stat blocks are English only (SRD 5.1)."
 }

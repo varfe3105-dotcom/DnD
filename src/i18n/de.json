@@ -866,5 +866,10 @@
  "bright.mid": "Mittel",
  "bright.light": "Hell",
  "footer.version": "Version: {v}",
- "res.stone": "Reaktion bei Schaden: um {d} + KON-Modifikator senken"
+ "res.stone": "Reaktion bei Schaden: um {d} + KON-Modifikator senken",
+ "wf.monster": "Monster",
+ "cat.monster": "Monster",
+ "mon.hp": "Trefferpunkte",
+ "mon.cr": "Herausforderung",
+ "mon.enOnly": "Monsterwerte gibt es nur auf Englisch (SRD 5.1)."
 }
