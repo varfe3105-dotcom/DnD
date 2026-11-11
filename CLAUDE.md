@@ -94,7 +94,7 @@ gold {pp,gp,ep,sp,cp}, cond {Blinded:true}, exh, notes, tab
 - Lange Rast senkt Exhaustion um 1 (mit Hinweis auf Essen/Trinken).
 
 **Neu in Version 4 (Speicherschlüssel `charbogen-v4`, übernimmt v3 und v2 automatisch):**
-- Mittelalter-Look: Lederband-Kopf mit Porträtmedaillon und Stufensiegel, Schrift Grenze Gotisch für Überschriften, Pergament-Körnung (SVG-Noise), Attribute als Wappenschilde, Reiter als Karteikarten.
+- Mittelalter-Look: Lederband-Kopf mit Porträtmedaillon und Stufensiegel, Schrift Grenze Gotisch für Überschriften, Pergament-Körnung (SVG-Noise), Attribute als Goldmedaillons (ursprünglich Wappenschilde, dann Runensteine), Reiter als Karteikarten.
 - Icons: eigene SVG-Strichsymbole in „Seltenheitsrahmen“ (`tok()`, Töne steel/crimson/arcane/gold/leather/verdant/shadow), magische Gegenstände leuchten violett. Platzhalter, bis echte Icon-Pakete eingebunden sind.
 - Inventar-Tooltip beim Überfahren (Name, Platz, Einstimmung, Regeltext, berechneter Angriff).
 - Wiki (vorher „Nachschlagen“): Desktop zweispaltig (Liste | Eintrag), Handy aufklappbar. Neue Kategorien Klassen und Völker.
