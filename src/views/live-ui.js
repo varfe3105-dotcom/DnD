@@ -1,6 +1,7 @@
 // Vorschläge, Handouts, Sicherung und Beute.
 import { esc } from '../util.js';
-import { U } from '../state.js';
+import { U, S } from '../state.js';
+import { C } from '../cloud.js';
 import { DU } from '../dm.js';
 import { COND, CAT, BYN } from '../catalog.js';
 import { L, players } from '../live.js';
@@ -70,4 +71,18 @@ export function vLoot() {
   <div class="coins loot-coins">${COINK.map(k => `<label class="ck">${t('coin.' + k)} <input type="number" class="n" id="lc-${k}" min="0" aria-label="${t('coin.' + k)}"></label>`).join('')}<button class="btn sm solid" data-a="lootgold"${online ? '' : ' disabled'}>${t('loot.giveCoins')}</button></div>
   <details><summary>${t('loot.own')}</summary><div class="add"><input type="text" id="lo-n" placeholder="${t('common.name')}" aria-label="${t('common.name')}"><input type="text" id="lo-p" class="wide" placeholder="${t('inv.ownText')}" aria-label="${t('inv.ownText')}"><button class="btn sm solid" data-a="lootown"${online ? '' : ' disabled'}>${t('loot.give')}</button></div></details></div>
   <h2>${t('loot.items')}</h2><div class="card"><div class="add" style="margin-top:0"><input type="search" id="dm-lq" value="${esc(DU.lq || '')}" placeholder="${t('loot.search')}" aria-label="${t('loot.search')}"><select id="dm-lrar" aria-label="${t('loot.rarity')}"><option value="">${t('loot.allFit')}</option>${raritiesFor(tier()).map(r => `<option value="${r}"${r === DU.lrar ? ' selected' : ''}>${esc(t('rar.' + r.toLowerCase().replace(' ', '')))}</option>`).join('')}</select></div><div id="dm-li">${vLootItems()}</div></div>`;
+}
+
+/* ---- Online-Speicherung im Raum ---- */
+const fmtAt = at => { try { return new Date(at).toLocaleString(lang === 'de' ? 'de-DE' : 'en-US', { dateStyle: 'short', timeStyle: 'short' }); } catch (e) { return ''; } };
+export function vCloud() {
+  if (!L.code || !L.role) return '';
+  const mineK = L.role === 'dm' ? 'dm:dm' : 'char:' + S.id;
+  const st = { saving: t('cloud.saving'), ok: C.at ? t('cloud.ok', { t: fmtAt(C.at) }) : t('cloud.ready'), conflict: t('cloud.conflict'), setup: t('cloud.setup'), error: t('cloud.error'), off: t('cloud.wait') }[C.status] || '';
+  const rows = (C.list || []).filter(r => r.kind === 'char' || L.role === 'dm');
+  const row = r => {
+    const me = r.kind + ':' + r.id === mineK, ck = 'clouddel:' + r.kind + ':' + r.id;
+    return `<div class="edrow"><span class="nm">${esc(r.kind === 'dm' ? t('cloud.dmData') : r.name || '?')}${me ? ` <span class="lbl">${t('cloud.mine')}</span>` : ''}<small>${fmtAt(r.updated_at)}</small></span><button class="btn sm" data-a="cloudpull" data-kind="${esc(r.kind)}" data-id="${esc(r.id)}">${t('cloud.load')}</button>${L.role === 'dm' ? `<button class="btn sm ${U.CONF === ck ? 'warn' : 'bad'}" data-a="clouddel" data-kind="${esc(r.kind)}" data-id="${esc(r.id)}">${U.CONF === ck ? t('chars.delConfirm') : t('common.deleteBtn')}</button>` : ''}</div>`;
+  };
+  return `<div class="cloud"><p class="lbl" style="margin:10px 0 4px">${t('cloud.title')}</p><p class="cloud-st ${esc(C.status)}">${esc(st)}</p>${C.status === 'conflict' ? `<div class="add" style="margin-top:4px"><button class="btn solid" data-a="cloudpull" data-kind="${mineK.split(':')[0]}" data-id="${esc(mineK.split(':').slice(1).join(':'))}">${t('cloud.takeOnline')}</button><button class="btn" data-a="cloudforce">${t('cloud.keepMine')}</button></div>` : ''}${rows.length ? rows.map(row).join('') : C.list ? `<p class="note">${t('cloud.empty')}</p>` : ''}<div class="add"><button class="btn sm" data-a="cloudrefresh">${t('cloud.refresh')}</button>${C.status !== 'conflict' ? `<button class="btn sm" data-a="cloudnow">${t('cloud.now')}</button>` : ''}</div><p class="note">${t('cloud.note')}</p></div>`;
 }

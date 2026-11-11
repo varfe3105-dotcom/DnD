@@ -5,8 +5,9 @@ import { uid } from './util.js';
 import { S, hooks } from './state.js';
 import { COND, BYN } from './catalog.js';
 
-const WS = 'wss://ovkxoqgqocspwjvxhige.supabase.co/realtime/v1';
-const API_KEY = 'sb_publishable__g6JJhXOVsiXLvgvqYiK0w_cE4tmXTn';
+export const SUPA = 'https://ovkxoqgqocspwjvxhige.supabase.co';
+const WS = SUPA.replace('https', 'wss') + '/realtime/v1';
+export const API_KEY = 'sb_publishable__g6JJhXOVsiXLvgvqYiK0w_cE4tmXTn';
 const LS = 'charbogen-live';
 const CODE_CHARS = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
 
@@ -19,6 +20,9 @@ let transport = null, listener = () => {}, peerHook = () => {}, ackHook = () => 
 export const setAckHook = fn => { ackHook = fn; };
 export const setLiveListener = fn => { listener = fn; };
 export const setPeerHook = fn => { peerHook = fn; };
+let joinHook = () => {};
+/** Wird nach jedem Betreten und Verlassen eines Raums aufgerufen (Online-Speicherung). */
+export const setJoinHook = fn => { joinHook = fn; };
 
 function realtime(code, key, onPeers, onStatus, onMsg) {
   const client = new RealtimeClient(WS, { params: { apikey: API_KEY } });
@@ -119,6 +123,7 @@ export function connect(code, role) {
   lastSent = '';
   push();
   listener(true);
+  joinHook();
 }
 export function disconnect() {
   clearTimeout(timer);
@@ -126,6 +131,7 @@ export function disconnect() {
   transport = null;
   L.code = ''; L.role = ''; L.status = 'off'; L.peers = []; L.inbox = []; L.handouts = [];
   store();
+  joinHook();
 }
 export function createRoom() {
   const bytes = crypto.getRandomValues(new Uint8Array(6));

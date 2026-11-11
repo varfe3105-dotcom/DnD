@@ -10,6 +10,8 @@ export const test = base.extend({
   page: async ({ page }, use) => {
     // Nur das Original lädt Google Fonts; im Test bleibt alles lokal.
     await page.route(/fonts\.(googleapis|gstatic)\.com/, r => r.abort());
+    // Online-Speicherung: im Test nie den echten Server ansprechen (eigene Tests in cloud.spec.js).
+    if (!process.env.LIVE_REAL) await page.route('**/rest/v1/rpc/*', r => r.fulfill({ status: 404, contentType: 'application/json', body: '{"code":"PGRST202"}' }));
     const errors = [];
     page.on('pageerror', e => errors.push(e.message));
     await use(page);

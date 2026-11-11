@@ -51,8 +51,8 @@ export function load(){
 export let S=load();
 export function setS(v){S=v}
 export const U={OPEN:{},SEL:null,CONF:null,WF:'all',WQ:'',WC:'',WSEL:null,EXP:'',IMP:'',LU:null,LUfocus:false,IMPREP:null,invQ:'',resetWl:false,anchor:null,SHEET:null,CASTPICK:null,SPALL:false,DAWN:false,BGPICK:null,petQ:'',NAGOFF:false,RESTORE:null,SNAPS:[]};
-export const hooks={onSave:null,beforeSave:null,afterSave:null};
-export const save=()=>{if(hooks.beforeSave)hooks.beforeSave();try{localStorage.setItem(KEY,JSON.stringify(S));localStorage.setItem(IDX,JSON.stringify(roster()))}catch(e){toast(t('toast.saveFailed'))}if(hooks.onSave)hooks.onSave();if(hooks.afterSave)hooks.afterSave()};
+export const hooks={onSave:null,beforeSave:null,afterSave:null,cloud:null};
+export const save=()=>{if(hooks.beforeSave)hooks.beforeSave();try{localStorage.setItem(KEY,JSON.stringify(S));localStorage.setItem(IDX,JSON.stringify(roster()))}catch(e){toast(t('toast.saveFailed'))}if(hooks.onSave)hooks.onSave();if(hooks.afterSave)hooks.afterSave();if(hooks.cloud)hooks.cloud()};
 
 /* Mehrere Charaktere: Der aktive liegt unter KEY, alle anderen in eigenen Schlüsseln, IDX hält die Übersicht. */
 const IDX='charbogen-index',slotKey=id=>'charbogen-char-'+id;
@@ -70,5 +70,7 @@ export function openFresh(){if(pristine()){const list=roster().filter(x=>x.id!==
 export function newChar(){if(!park())return;const list=roster();setS(def());S.tab='setup';fresh();put(IDX,list);save()}
 export function dupChar(){if(!park())return;const list=roster();const c=JSON.parse(JSON.stringify(S));c.id=uid();c.name=S.name+' (2)';setS(norm(c));fresh();put(IDX,list);save()}
 export function delChar(id){const list=roster().filter(x=>x.id!==id);drop(slotKey(id));put(IDX,list);if(id!==S.id)return;const next=list[0]&&get(slotKey(list[0].id));if(next){setS(norm(next));drop(slotKey(list[0].id))}else{setS(def());S.tab='setup'}fresh();save()}
+/** Legt einen Charakter aus einer Online-Sicherung ab: ersetzt den aktiven oder einen geparkten mit gleicher ID, sonst kommt er dazu. */
+export function storeChar(o){const c=norm(JSON.parse(JSON.stringify(o)));if(c.id===S.id){setS(c);fresh();save();return'active'}const list=roster(),i=list.findIndex(x=>x.id===c.id),me={id:c.id,name:c.name,klass:c.klass,level:c.level};if(i<0)list.push(me);else list[i]=me;if(!put(slotKey(c.id),c))return'';put(IDX,list);return i<0?'new':'updated'}
 export let tt;
 export function toast(m){const t=$('toast');t.textContent=m;t.hidden=false;clearTimeout(tt);tt=setTimeout(()=>{t.hidden=true},4600)}

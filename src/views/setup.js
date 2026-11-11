@@ -1,4 +1,4 @@
-import { vBackup } from './live-ui.js';
+import { vBackup, vCloud } from './live-ui.js';
 import { vBgField, vBgPick, vStylePicker, vPetSetup } from './extras.js';
 import { esc, sg } from '../util.js';
 import { tok, iconOpts } from '../icons.js';
@@ -88,7 +88,7 @@ function vImportReport() {
 }
 function vLiveJoin() {
   const inside = L.role === 'player';
-  return `<h2>${t('live.title')}</h2><div class="card">${inside ? `<div class="dm-bar"><div class="live-code"><small>${t('live.code')}</small><b>${esc(L.code)}</b></div>${liveState()}<span class="lbl">${dmOnline() ? t('live.dmOn') : t('live.dmOff')}</span><button class="btn bad" data-a="liveoff">${t('live.leave')}</button></div>` : `<div class="add" style="margin-top:0"><input type="text" id="live-code" maxlength="6" autocomplete="off" placeholder="${t('live.codePh')}" aria-label="${t('live.code')}"><button class="btn solid" data-a="livejoin">${t('live.join')}</button></div>`}<p class="note">${t('live.shared')}</p></div>`;
+  return `<h2>${t('live.title')}</h2><div class="card">${inside ? `<div class="dm-bar"><div class="live-code"><small>${t('live.code')}</small><b>${esc(L.code)}</b></div>${liveState()}<span class="lbl">${dmOnline() ? t('live.dmOn') : t('live.dmOff')}</span><button class="btn bad" data-a="liveoff">${t('live.leave')}</button></div>${vCloud()}` : `<div class="add" style="margin-top:0"><input type="text" id="live-code" maxlength="6" autocomplete="off" placeholder="${t('live.codePh')}" aria-label="${t('live.code')}"><button class="btn solid" data-a="livejoin">${t('live.join')}</button></div>`}<p class="note">${t('live.shared')}</p></div>`;
 }
 function vChars() {
   const list = roster();

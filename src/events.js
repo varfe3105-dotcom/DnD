@@ -12,6 +12,7 @@ import { isSheetFile, readSheets } from './sheet-read.js';
 import { importDraft } from './import-play5e.js';
 import { isPlay5e } from './import-play5e.js';
 import * as live from './live.js';
+import * as cloud from './cloud.js';
 import * as dm from './dm.js';
 import { vResults, vNoteList, vEncResults, vPlaceResults } from './views/dm.js';
 import { t as tr, setLang, distInput } from './i18n/index.js';
@@ -87,8 +88,14 @@ app.addEventListener('click',ev=>{
     case 'dmexp':dm.DU.exp=dm.exportD();break;
     case 'dmimp':{const txt=v('dm-imp').trim();if(!txt){toast(tr('toast.needImport'));return}if(!dm.importD(txt)){toast(tr('toast.badExport2'));return}dm.DU.imp='';toast(tr('dm.imported'));break}
     case 'livecreate':live.createRoom();break;
+    case 'livedmjoin':{const code=v('live-dmcode').trim().toUpperCase();if(!live.isCode(code)){toast(tr('live.badCode'));return}live.connect(code,'dm');break}
     case 'livejoin':{const code=v('live-code').trim().toUpperCase();if(!live.isCode(code)){toast(tr('live.badCode'));return}live.connect(code,'player');break}
     case 'liveoff':live.disconnect();break;
+    case 'cloudrefresh':cloud.refreshList();break;
+    case 'cloudnow':cloud.pushNow(false);break;
+    case 'cloudforce':cloud.pushNow(true);break;
+    case 'cloudpull':{const kind=b.dataset.kind,id=b.dataset.id;cloud.pull(kind,id).then(r=>{if(!r)return;toast(tr('cloud.loaded'+(r==='active'?'Active':r==='new'?'New':r==='dm'?'Dm':'')));render()});break}
+    case 'clouddel':{const ck='clouddel:'+b.dataset.kind+':'+b.dataset.id;if(U.CONF!==ck){U.CONF=ck;break}U.CONF=null;cloud.remove(b.dataset.kind,b.dataset.id);break}
     case 'liveadd':dm.addLive(live.players());dm.saveD();toast(tr('live.added'));break;
     case 'sheetcancel':U.SHEET=null;break;
     case 'sheetapply':{if(!U.SHEET.draft.klass){toast(tr('sheet.needClass'));return}const r=importDraft(U.SHEET.draft);if(r.error){toast(r.error);return}U.IMPREP=r.reports;U.SHEET=null;S.tab='setup';toast(tr('imp.done',{n:r.reports.map(x=>x.name).join(', ')}));break}
@@ -269,6 +276,8 @@ app.addEventListener('toggle',e=>{if(e.target.classList&&e.target.classList.cont
 let livePending=false;
 const typing=()=>{const a=document.activeElement;return !!a&&app.contains(a)&&/^(INPUT|TEXTAREA|SELECT)$/.test(a.tagName)};
 live.setPeerHook(()=>dm.syncLive(live.players()));
+live.setJoinHook(cloud.onJoin);
+cloud.setCloudListener(()=>{if(S.tab!=='dm'&&S.tab!=='setup')return;if(typing()){livePending=true;return}later()});
 live.setDmFlags(()=>({lock:!!dm.D.lootLock}));
 live.setAckHook(m=>toast(tr(m.ok?'live.ackYes':'live.ackNo',{n:m.name})));
 initBackup(()=>{const el=$('bak-hist');if(el)el.innerHTML=vBakHist()});

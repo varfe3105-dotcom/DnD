@@ -19,7 +19,10 @@ function normD(o) {
 }
 export let D = load();
 export const DU = { mq: '', nq: '', eq: '', conf: null, open: {}, exp: '', imp: '', editMon: null };
-export const saveD = () => { try { localStorage.setItem(KEY, JSON.stringify(D)); } catch (e) { toast(t('toast.saveFailed')); } };
+export const dmHooks = { onSave: null };
+export const saveD = () => { try { localStorage.setItem(KEY, JSON.stringify(D)); } catch (e) { toast(t('toast.saveFailed')); } if (dmHooks.onSave) dmHooks.onSave(); };
+/** Ersetzt den DM-Bereich durch einen Online-Stand. */
+export function replaceD(o) { const { kind, ...rest } = o || {}; D = normD({ ...rest, on: true }); saveD(); }
 export const setDmOn = on => { D.on = !!on; saveD(); };
 export const dmOn = () => D.on;
 

@@ -281,3 +281,9 @@ summary{color:var(--acc);font-family:var(--f-ui)}
   .wd.pane .wlead p,.wd.pane .wtrail p{margin:6px 0 0}
   .wd.pane .wlead p.cls{font-size:.95rem;line-height:1.4}
 }
+
+/* Online-Speicherung */
+.cloud{margin-top:6px;border-top:1px solid var(--line);padding-top:4px}
+.cloud-st{margin:0 0 6px;font:500 .92rem var(--f-ui);color:var(--mute)}
+.cloud-st.ok{color:var(--verd)}
+.cloud-st.conflict,.cloud-st.setup,.cloud-st.error{color:#f0a87d}
