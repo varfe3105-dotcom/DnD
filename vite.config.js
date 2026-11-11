@@ -33,6 +33,9 @@ export default defineConfig(({ mode }) => {
           globPatterns: ['**/*.{html,png}'],
           maximumFileSizeToCacheInBytes: 8 * 1024 * 1024,
           navigateFallback: 'index.html',
+          // Neue Fassungen sofort übernehmen statt zu warten, bis alle Tabs geschlossen sind.
+          skipWaiting: true,
+          clientsClaim: true,
           // Doppelte Einträge lassen die Installation scheitern; revision:null würde alte Fassungen festhalten.
           manifestTransforms: [entries => {
             const seen = new Map();
