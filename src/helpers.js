@@ -23,7 +23,7 @@ export const abShort = k => t('abs.' + k);
 /** Gegenstand für die Anzeige: Katalogeinträge folgen der Sprache, eigene bleiben, wie sie eingetragen wurden. */
 export function itemView(it) {
   const c = it.ref && BYN[it.ref];
-  return c ? { ...it, n: c.n, p: c.p } : it;
+  return c ? { ...it, n: c.n, p: c.p, price: c.price } : it;
 }
 /** Zauber für die Anzeige, eigene Einträge bleiben unverändert. */
 export function spellView(s) {

@@ -126,3 +126,23 @@ test.describe('Orte @new', () => {
     await expect(page.locator('.wli')).toContainText('Burg');
   });
 });
+
+test.describe('Preise und breites Wiki @new', () => {
+  const pick = async (page, q, key) => { await page.locator('#wq').fill(q); await act(page, 'wsel', `[data-key="${key}"]`).click(); };
+  test('magischer Gegenstand zeigt den DMG-Richtpreis, Heiltrank den PHB-Preis', async ({ page }) => {
+    await seed(page, base4({ tab: 'wiki' }));
+    await pick(page, 'Bag of Holding', 'magic:bag-of-holding');
+    await expect(page.locator('.wd.pane')).toContainText(/101–500 (GM|gp)/);
+    await pick(page, 'Potion of Healing', 'potion:potion-of-healing-common');
+    await expect(page.locator('.wd.pane')).toContainText(/\(PHB\): 50 (GM|gp)/);
+  });
+
+  test('ab 1600 px stehen die Werte neben dem Text, ohne seitliches Scrollen', async ({ page }) => {
+    await page.setViewportSize({ width: 1920, height: 1000 });
+    await seed(page, base4({ tab: 'wiki' }));
+    await pick(page, 'Bag of Holding', 'magic:bag-of-holding');
+    const main = await page.locator('.wd.pane .wmain').boundingBox(), side = await page.locator('.wd.pane .wlead').boundingBox();
+    expect(side.x).toBeGreaterThan(main.x + main.width);
+    expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(1920);
+  });
+});

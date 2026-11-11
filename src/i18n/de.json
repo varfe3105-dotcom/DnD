@@ -764,5 +764,10 @@
  "dm.kindAll": "Alle",
  "dm.placeMon": "Monster an diesem Ort",
  "dm.placeEmpty": "Noch keine Monster an diesem Ort.",
- "dm.monsterCount": "{n} Monster"
+ "dm.monsterCount": "{n} Monster",
+ "price.gp": "GM",
+ "price.phb": "Preis (PHB): {p}",
+ "price.dmg": "Richtpreis (DMG): {p}",
+ "price.from": "ab {p}",
+ "price.priceless": "Artefakt, unverkäuflich"
 }

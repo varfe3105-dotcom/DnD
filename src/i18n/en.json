@@ -764,5 +764,10 @@
  "dm.kindAll": "All",
  "dm.placeMon": "Monsters at this place",
  "dm.placeEmpty": "No monsters at this place yet.",
- "dm.monsterCount": "{n} monsters"
+ "dm.monsterCount": "{n} monsters",
+ "price.gp": "gp",
+ "price.phb": "Price (PHB): {p}",
+ "price.dmg": "Guide price (DMG): {p}",
+ "price.from": "{p} or more",
+ "price.priceless": "Artifact, priceless"
 }

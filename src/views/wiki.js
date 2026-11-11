@@ -51,9 +51,14 @@ export function wDetail(e, inline) {
     body = `<dl class="sm"><div><dt>${t('wiki.abilities')}</dt><dd>${esc(loc(R.asi))}</dd></div><div><dt>${t('stat.speed')}</dt><dd>${dist(R.sp)}</dd></div><div><dt>${t('wiki.subraces')}</dt><dd>${subs.length || t('common.none')}</dd></div></dl><div class="lvl">${R.tr.map(f => feat(f)).join('')}${subs.map(([sn, sb]) => `<h4>${esc(nameLine(sn))}</h4><p class="cls">${esc(loc(sb.asi))}${sb.sp ? ' · ' + t('stat.speed') + ' ' + dist(sb.sp) : ''}</p>${sb.tr.map(f => feat(f)).join('')}`).join('')}</div>${srcFoot('summary')}`;
   } else if (e.k === 'feat') {
     body = `${e.req ? `<p class="cls">${t('wiki.prereq')}: ${esc(reqText(e.req))}</p>` : ''}<p class="ptext">${esc(dice(e.p))}</p>${srcFoot(e.source)}`;
-  } else body = `${e.rarity ? `<p class="cls">${t('wiki.rarity')}: ${esc(e.rarity)}${e.att ? ' · ' + t('item.needsAttune') : ''}</p>` : ''}<p class="ptext">${esc(e.p)}</p>${e.source ? srcFoot(e.source) : ''}`;
+  } else body = `${e.rarity ? `<p class="cls">${t('wiki.rarity')}: ${esc(e.rarity)}${e.att ? ' · ' + t('item.needsAttune') : ''}${e.price ? ' · ' + esc(e.price) : ''}</p>` : ''}<p class="ptext">${esc(e.p)}</p>${e.source ? srcFoot(e.source) : ''}`;
   const de = (e.k === 'class' || e.k === 'race' || e.k === 'cond' || e.k === 'feat') && deName(e.n, e.de);
-  return `<article class="wd${inline ? ' inl' : ' pane'}"><div class="wdh">${tok(e.ic, e.tone || (e.magic ? rarityTone(e) : ['item', 'potion'].includes(e.k) ? 'leather' : undefined), e.artKey || e.key)}<div><h3>${esc(e.n)}</h3><small>${esc(de && e.k !== 'cond' ? de + ' · ' + e.c : wSub(e))}</small></div></div>${btn ? `<div class="add" style="margin-top:0">${btn}</div>` : ''}${body}</article>`;
+  // Werte (Tabelle, Hinweiszeilen, Quelle) am Anfang und Ende vom Fließtext trennen: auf breiten Bildschirmen stehen sie in einer Seitenleiste.
+  let lead = '', trail = '', m;
+  const META = /^(<dl class="sm">[\s\S]*?<\/dl>|<p class="cls">[^<]*(?:<(?!\/?p[ >])[^<]*)*<\/p>)/, TAIL = /(<p class="(?:cls|src)">[^<]*(?:<(?!\/?p[ >])[^<]*)*<\/p>)$/;
+  while ((m = body.match(META))) { lead += m[1]; body = body.slice(m[1].length); }
+  while ((m = body.match(TAIL))) { trail = m[1] + trail; body = body.slice(0, -m[1].length); }
+  return `<article class="wd${inline ? ' inl' : ' pane'}"><div class="wdh">${tok(e.ic, e.tone || (e.magic ? rarityTone(e) : ['item', 'potion'].includes(e.k) ? 'leather' : undefined), e.artKey || e.key)}<div><h3>${esc(e.n)}</h3><small>${esc(de && e.k !== 'cond' ? de + ' · ' + e.c : wSub(e))}</small></div></div><div class="wdb"><div class="wlead">${btn ? `<div class="add" style="margin-top:0">${btn}</div>` : ''}${lead}</div><div class="wmain">${body}</div><div class="wtrail">${trail}</div></div></article>`;
 }
 export function wikiBody() {
   const L2 = wList();

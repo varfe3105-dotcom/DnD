@@ -53,12 +53,26 @@ export const BYN = {};
 const addCat = e => { e.key = e.k + ':' + (e.id || e.n); CAT.push(e); BYN[e.key] = e; };
 const hayOf = o => [o?.en, o?.de].join(' ');
 
+// Richtpreise für magische Gegenstände nach Seltenheit (DMG, Tabelle „Magic Item Rarity“).
+// Der einfache Heiltrank hat im PHB einen festen Preis.
+const RARITY_GP = { common: [50, 100], uncommon: [101, 500], rare: [501, 5000], 'very rare': [5001, 50000], legendary: [50001, 0] };
+const FIXED_GP = { 'potion-of-healing-common': 50 };
+export function priceOf(id, rarEn) {
+  const f = n => n.toLocaleString(lang === 'de' ? 'de-DE' : 'en-US') + ' ' + t('price.gp');
+  if (FIXED_GP[id]) return t('price.phb', { p: f(FIXED_GP[id]) });
+  const r = String(rarEn || '').toLowerCase();
+  if (r === 'artifact') return t('price.priceless');
+  const g = RARITY_GP[r];
+  if (!g) return '';
+  return t('price.dmg', { p: g[1] ? `${f(g[0])}–${f(g[1])}`.replace(` ${t('price.gp')}–`, '–') : t('price.from', { p: f(g[0]) }) });
+}
+
 /** Baut den Katalog in der aktuellen Sprache neu auf (beim Start und beim Umschalten). */
 export function buildCatalog() {
   fuse = null;
   CAT.length = 0;
   Object.keys(BYN).forEach(k => delete BYN[k]);
-  [...potions, ...items, ...magicItems].forEach(i => addCat({ k: i.k, id: i.id, n: loc(i.n), ic: i.ic, p: loc(i.text), c: i.rarity ? (i.k === 'potion' ? t('cat.potion') : t('cat.magic')) : t('cat.' + i.group), group: i.group, slot: i.slot, att: i.att, cons: i.cons, q: i.q, ac: i.ac, w: i.w, rar: i.rarity?.en, magic: !!i.rarity, ch: i.rarity ? chargeInfo(i.text.en) : undefined, rarity: i.rarity ? loc(i.rarity) : '', source: i.source, hay: hayOf(i.n) }));
+  [...potions, ...items, ...magicItems].forEach(i => addCat({ k: i.k, id: i.id, n: loc(i.n), ic: i.ic, p: loc(i.text), c: i.rarity ? (i.k === 'potion' ? t('cat.potion') : t('cat.magic')) : t('cat.' + i.group), group: i.group, slot: i.slot, att: i.att, cons: i.cons, q: i.q, ac: i.ac, w: i.w, rar: i.rarity?.en, price: i.rarity ? priceOf(i.id, i.rarity.en) : '', magic: !!i.rarity, ch: i.rarity ? chargeInfo(i.text.en) : undefined, rarity: i.rarity ? loc(i.rarity) : '', source: i.source, hay: hayOf(i.n) }));
   spells.forEach(s => addCat({ k: 'spell', n: s.n, de: s.de, aka: s.aka, origin: s.origin, lvl: s.lvl, school: s.school, ic: s.ic, cls: s.cls, c: s.lvl ? t('spell.level', { n: s.lvl }) : t('spell.cantrips'), time: loc(s.time), range: loc(s.range), dur: loc(s.dur), comp: s.comp, material: s.material, conc: s.conc, ritual: s.ritual, eff: loc(s.text), higher: s.higher ? loc(s.higher) : '', source: s.source, hay: [s.de, s.aka].join(' ') }));
   COND.forEach(c => addCat({ k: 'cond', n: c.n, de: c.de, ic: c.ic, p: loc(c.text), c: t('cat.cond'), source: c.source }));
   feats.forEach(f => addCat({ k: 'feat', n: f.n, de: f.de, ic: 'star', p: loc(f.text), c: t('cat.feat'), source: f.source, req: f.req, hay: f.de }));

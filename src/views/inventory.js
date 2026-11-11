@@ -20,7 +20,7 @@ export function vSel() {
   const raw = U.SEL && get(U.SEL);
   if (!raw) return '';
   const it = itemView(raw), eqd = U.SEL.startsWith('eq');
-  return `<h2>${esc(it.n)}</h2><div class="card selp">${tok(it.ic, itTone(it), it.ref)}<div><p>${esc(it.p) || `<i>${t('item.noDesc')}</i>`}</p><p class="lbl">${eqd ? t('item.equipped', { s: slotLabel(U.SEL) }) : t('item.inBag')}${it.att ? ' · ' + t('item.needsAttune') : ''}</p>${vChargeEdit()}</div>
+  return `<h2>${esc(it.n)}</h2><div class="card selp">${tok(it.ic, itTone(it), it.ref)}<div><p>${esc(it.p) || `<i>${t('item.noDesc')}</i>`}</p><p class="lbl">${eqd ? t('item.equipped', { s: slotLabel(U.SEL) }) : t('item.inBag')}${it.att ? ' · ' + t('item.needsAttune') : ''}${it.price ? ' · ' + esc(it.price) : ''}</p>${vChargeEdit()}</div>
   <div class="acts"><div class="qty"><button data-a="qty" data-d="-1" aria-label="${t('common.less')}">−</button><span>${it.q}</span><button data-a="qty" data-d="1" aria-label="${t('common.more')}">+</button></div>
   ${it.q > 1 && !it.cons ? `<button class="btn sm" data-a="split">${t('item.split')}</button>` : ''}
   ${it.cons ? `<button class="btn sm solid" data-a="use" data-r="${U.SEL}">${t('item.use')}</button>` : ''}

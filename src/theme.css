@@ -259,3 +259,25 @@ summary{color:var(--acc);font-family:var(--f-ui)}
   .wd.pane,.wd.inl{padding:20px 18px}
 }
 }
+
+/* Wiki auf breiten Bildschirmen: Lesespalte mit ~70 Zeichen pro Zeile, Werte in einer Seitenleiste */
+@media screen and (min-width:1280px){
+  .wiki{grid-template-columns:400px minmax(0,1fr)}
+  .wli b{font-size:1.05rem}
+  .wd.pane{font-size:1.2rem;line-height:1.6;padding:34px 48px 30px}
+  .wd.pane h3{font-size:2.2rem}
+}
+@media screen and (min-width:1600px){
+  .wd.pane .wdb{display:grid;grid-template-columns:minmax(0,70ch) minmax(240px,340px);grid-template-areas:"main lead" "main trail";grid-template-rows:auto 1fr;column-gap:52px;justify-content:start;margin-top:8px}
+  .wd.pane .wmain{grid-area:main;min-width:0}
+  .wd.pane .wmain p{max-width:none}
+  .wd.pane .wlead{grid-area:lead}
+  .wd.pane .wtrail{grid-area:trail;align-self:start}
+  .wd.pane .wlead,.wd.pane .wtrail{font-size:1rem;line-height:1.45}
+  .wd.pane .wlead:not(:empty),.wd.pane .wtrail:not(:empty){border-left:1px solid var(--line);padding-left:20px}
+  .wd.pane .wlead dl.sm{grid-template-columns:1fr;gap:10px;border-block:0;padding:4px 0 8px;margin:0}
+  .wd.pane .wlead dl.sm dd{font-size:1.05rem}
+  .wd.pane .wlead .add{margin-bottom:12px}
+  .wd.pane .wlead p,.wd.pane .wtrail p{margin:6px 0 0}
+  .wd.pane .wlead p.cls{font-size:.95rem;line-height:1.4}
+}
