@@ -9,8 +9,26 @@
 @font-face{font-family:"IM Fell English";font-style:italic;font-weight:400;font-display:swap;src:url(../node_modules/@fontsource/im-fell-english/files/im-fell-english-latin-400-italic.woff2) format("woff2")}
 
 /* Layout, das auch für den Druck gilt */
-.skgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,240px),1fr));gap:10px;align-items:start}
+/* Fertigkeiten: vier Spalten (STR+GES, INT, WEI, CHA), gleich hoch; schmaler 2, am Handy 1 */
+.c2sk{container-type:inline-size}
+.skgrid{display:grid;grid-template-columns:minmax(0,1fr);gap:10px;align-items:stretch}
+.skcol{display:flex;flex-direction:column;gap:10px;min-width:0}
+.skcol>.skg:last-child{flex:1}
+@container (min-width:440px){.skgrid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@container (min-width:820px){.skgrid{grid-template-columns:repeat(4,minmax(0,1fr))}.skg{padding:6px 4px}.skr>span{font-size:.95rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.skr b{min-width:28px}}
 .skg{padding:8px 12px 10px;break-inside:avoid}
+/* Karte: Spalte 2 enthält beide Inhaltsblöcke untereinander */
+@media (min-width:780px){.sheet>aside{grid-row:1/span 2}.sheet>.c1,.sheet>.c2{grid-column:2}}
+/* Breite Bildschirme: mehr Breite, Attribute als Reihe, zwei Inhaltsspalten */
+@media screen and (min-width:1280px){
+  .wrap{max-width:min(1840px,100%)}
+  .sheet{grid-template-columns:minmax(0,1fr) minmax(0,1fr);column-gap:28px}
+  .sheet>aside{grid-row:auto;grid-column:1/-1}
+  .sheet>.c1{grid-column:1}
+  .sheet>.c2{grid-column:2;display:flex;flex-direction:column}
+  .sheet>.c2>.c2sk{order:-1}
+  .sheet .abs{grid-template-columns:repeat(6,minmax(0,1fr));gap:12px;margin-top:18px}
+}
 .skg h3{margin:0 0 6px;text-align:center;font-size:1rem}
 .skr{display:flex;align-items:center;gap:8px;padding:3px 0}
 .skr>span{flex:1;min-width:0}

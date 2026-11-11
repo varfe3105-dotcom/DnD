@@ -342,6 +342,7 @@ footer p{margin:0 0 6px}
   .card,.st{box-shadow:none;break-inside:avoid}
   .card::before,.card::after{display:none}
   .sheet{grid-template-columns:132px minmax(0,1fr)}
+  .sheet>aside{grid-row:1/span 2}.sheet>.c1,.sheet>.c2{grid-column:2}
   .abs{grid-template-columns:1fr;margin-top:8px}
   h2{break-after:avoid;margin-top:14px}
   .tok,.tok.has-spr{box-shadow:none;background:none;border:0}

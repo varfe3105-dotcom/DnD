@@ -87,7 +87,9 @@ export function vSpells() {
 }
 export function vSkills() {
   const star = p => (p ? `<i class="skstar" title="${t('skill.p' + p)}">${'★'.repeat(p)}</i>` : '');
-  return `<h2>${t('skill.title')}</h2><div class="skgrid">${ABK.filter(a => SK.some(s => s[1] === a)).map(a => `<section class="skg"><h3>${abName(a)} <span>(${sg(mod(S.abil[a]))})</span></h3>${SK.filter(s => s[1] === a).map(([k, , de]) => `<div class="skr"><span>${k}${lang === 'de' ? `<small>${de}</small>` : ''}</span>${star(S.skills[k] || 0)}<b>${sg(skv(k))}</b></div>`).join('')}</section>`).join('')}</div>`;
+  const group = a => `<section class="skg"><h3>${abName(a)} <span>(${sg(mod(S.abil[a]))})</span></h3>${SK.filter(s => s[1] === a).map(([k, , de]) => `<div class="skr"><span>${k}${lang === 'de' ? `<small>${de}</small>` : ''}</span>${star(S.skills[k] || 0)}<b>${sg(skv(k))}</b></div>`).join('')}</section>`;
+  // Vier gleich hohe Spalten: Stärke und Geschicklichkeit teilen sich eine (4 Fertigkeiten), dann 5, 5, 4.
+  return `<h2>${t('skill.title')}</h2><div class="skgrid">${[['str', 'dex'], ['int'], ['wis'], ['cha']].map(c => `<div class="skcol">${c.map(group).join('')}</div>`).join('')}</div>`;
 }
 export function vProfs() {
   if (!S.tools.length && !S.langs.length) return '';
@@ -99,6 +101,6 @@ export function vMain() {
   let h = '';
   if (S.conc) h += `<div class="conc"><div><small>${t('conc.title')}</small><b>${esc(S.conc)}</b><span>${t('conc.hint')}</span></div><button class="btn" data-a="concend">${t('conc.end')}</button></div>`;
   h += `<div class="stats">${st(t('stat.ac'), S.ac)}${st(t('stat.init'), sg(mod(a.dex)))}${st(t('stat.speed'), dist(S.speed))}${st(t('stat.prof'), sg(S.prof))}${st(t('stat.pp'), 10 + skv('Perception'))}</div>`;
-  h += `<div class="sheet"><aside>${vAbil(false)}</aside><div class="col">${vHP()}${vCond()}${vAtk()}${vQuick()}${vCharges()}${vRes()}${vPets()}${vSpells()}${vFeats()}${vSkills()}${vProfs()}</div></div>`;
+  h += `<div class="sheet"><aside>${vAbil(false)}</aside><div class="col c1">${vHP()}${vCond()}${vAtk()}${vQuick()}${vCharges()}${vRes()}${vPets()}</div><div class="col c2">${vSpells()}${vFeats()}<div class="c2sk">${vSkills()}</div>${vProfs()}</div></div>`;
   return h;
 }
