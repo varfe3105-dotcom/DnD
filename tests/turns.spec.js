@@ -31,12 +31,12 @@ test.describe('Zuganzeige @new', () => {
     expect(sent).toMatchObject({ type: 'endturn', to: 'dm', from: 'held1' });
   });
 
-  test('wer anders dran ist, steht schlicht da; Monster heißen nur „Gegner“', async ({ page }) => {
+  test('wer anders dran ist, steht schlicht da; Monster mit Herausforderungsgrad', async ({ page }) => {
     await seed(page, base4({ tab: 'main', id: 'held1' }));
     await page.evaluate(() => localStorage.setItem('charbogen-live', JSON.stringify({ code: 'ABC234', role: 'player' })));
     await page.reload();
-    await page.evaluate(p => window.__peers([p]), dmPeer({ r: 1, cur: '', name: '', enemy: true, next: 'Borin', nextEnemy: false }));
-    await expect(page.locator('.turn')).toContainText(/Enemy|Gegner/);
+    await page.evaluate(p => window.__peers([p]), dmPeer({ r: 1, cur: '', name: 'Goblin 2', enemy: true, cr: '1/4', next: 'Borin', nextEnemy: false }));
+    await expect(page.locator('.turn')).toContainText(/Goblin 2 \((CR|HG) 1\/4\)/);
     await expect(page.locator('.turn')).toContainText('Borin');
     await expect(page.locator('.turn.mine')).toHaveCount(0);
   });
@@ -54,19 +54,19 @@ test.describe('Zuganzeige @new', () => {
     await page.goto(URL_UNDER_TEST);
     const combat = { round: 1, active: 'c1', list: [
       { id: 'c1', kind: 'pc', live: 'held1', name: 'Mirelle', init: 18, hp: 20, hpMax: 20, ac: 14, cond: {} },
-      { id: 'c2', kind: 'mon', name: 'Goblin', init: 12, hp: 7, hpMax: 7, ac: 15, cond: {} },
+      { id: 'c2', kind: 'mon', mon: 'goblin', name: 'Goblin', init: 12, hp: 7, hpMax: 7, ac: 15, cond: {} },
     ] };
     await page.evaluate(([s, c]) => { localStorage.setItem('charbogen-v4', JSON.stringify(s)); localStorage.setItem('charbogen-dm', JSON.stringify({ on: true, view: 'combat', combat: c })); localStorage.setItem('charbogen-live', JSON.stringify({ code: 'ABC234', role: 'dm' })); }, [base4({ tab: 'dm' }), combat]);
     await page.reload();
     await page.locator('#app header').waitFor();
     expect(await page.evaluate(() => window.__tracked.at(-1).turn)).toBeNull();
     await act(page, 'dmturns').click();
-    await expect.poll(() => page.evaluate(() => window.__tracked.at(-1).turn)).toMatchObject({ cur: 'held1', name: 'Mirelle', nextEnemy: true, next: '' });
+    await expect.poll(() => page.evaluate(() => window.__tracked.at(-1).turn)).toMatchObject({ cur: 'held1', name: 'Mirelle', nextEnemy: true, next: 'Goblin', nextCr: '1/4' });
     // Falscher Absender ändert nichts
     await page.evaluate(() => window.__msg({ id: 'm1', type: 'endturn', to: 'dm', from: 'jemand' }));
     expect(await page.evaluate(() => JSON.parse(localStorage.getItem('charbogen-dm')).combat.active)).toBe('c1');
     await page.evaluate(() => window.__msg({ id: 'm2', type: 'endturn', to: 'dm', from: 'held1' }));
     await expect.poll(() => page.evaluate(() => JSON.parse(localStorage.getItem('charbogen-dm')).combat.active)).toBe('c2');
-    await expect.poll(() => page.evaluate(() => window.__tracked.at(-1).turn)).toMatchObject({ cur: '', name: '', enemy: true, next: 'Mirelle' });
+    await expect.poll(() => page.evaluate(() => window.__tracked.at(-1).turn)).toMatchObject({ cur: '', name: 'Goblin', enemy: true, next: 'Mirelle' });
   });
 });

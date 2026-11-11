@@ -55,13 +55,14 @@ export function addMonster(id, qty = 1) {
 export function addManual(name, ac, hp) {
   D.combat.list.push({ ...base(), kind: 'pc', name, ac: Math.max(0, Math.floor(ac) || 0), hp: Math.max(0, Math.floor(hp) || 0), hpMax: Math.max(0, Math.floor(hp) || 0) });
 }
-/** Was die Spieler über den Zug erfahren: Namen nur bei Spielercharakteren, Monster heißen nur „Gegner“. */
+/** Was die Spieler über den Zug erfahren: Name, bei Monstern dazu der Herausforderungsgrad. */
 export function turnInfo() {
   if (!D.turns || !D.combat.active) return null;
   const list = ordered().filter(c => !out(c)), i = list.findIndex(c => c.id === D.combat.active);
   if (i < 0) return null;
   const cur = list[i], nx = list.length > 1 ? list[(i + 1) % list.length] : null, pc = c => c && c.kind === 'pc';
-  return { r: D.combat.round, cur: cur.live || '', name: pc(cur) ? cur.name : '', enemy: !pc(cur), next: pc(nx) ? nx.name : '', nextEnemy: !!nx && !pc(nx) };
+  const cr = c => { const m = c && c.kind === 'mon' && findMonster(c.mon); return m ? (m.cr === 0.125 ? '1/8' : m.cr === 0.25 ? '1/4' : m.cr === 0.5 ? '1/2' : String(m.cr)) : ''; };
+  return { r: D.combat.round, cur: cur.live || '', name: cur.name, enemy: !pc(cur), cr: cr(cur), next: nx ? nx.name : '', nextEnemy: !!nx && !pc(nx), nextCr: cr(nx) };
 }
 /** Ein Spieler beendet seinen Zug. Gilt nur, wenn er wirklich gerade dran ist. */
 export function endTurnFrom(key) {

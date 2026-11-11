@@ -148,6 +148,15 @@ function spells() {
   const full = fullTr('de-full-spells-');
   out.forEach(s => { const f = full[s.n]; if (!f) return; s.text.de = f[0]; if (f[1]) s.higher = { ...(s.higher || {}), de: f[1] }; });
   console.log(`Zauber mit vollständiger deutscher Fassung: ${out.filter(s => full[s.n]).length} von ${out.length}`);
+  // Zaubertricks: Schaden nach Charakterstufe, Angriff oder Rettungswurf (SRD); Thorn Whip steht nur im PHB.
+  const srdSp = Object.fromEntries(srd('Spells').map(x => [x.name, x]));
+  const CANT_EXTRA = { 'Thorn Whip': { d: { 1: '1d6', 5: '2d6', 11: '3d6', 17: '4d6' }, type: 'piercing', atk: 'melee' } };
+  out.forEach(sp => {
+    if (sp.lvl !== 0) return;
+    const x = srdSp[sp.n], dm = x && [].concat(x.damage || [])[0];
+    if (dm?.damage_at_character_level) sp.cant = { d: dm.damage_at_character_level, type: (dm.damage_type?.index || '').toLowerCase(), ...(x.attack_type ? { atk: x.attack_type } : {}), ...(x.dc?.dc_type?.index ? { save: x.dc.dc_type.index } : {}), ...(sp.n === 'Eldritch Blast' ? { beams: { 1: 1, 5: 2, 11: 3, 17: 4 } } : {}) };
+    else if (CANT_EXTRA[sp.n]) sp.cant = CANT_EXTRA[sp.n];
+  });
   writeArr('spells.json', out);
 
   // Abgleich mit der PHB-Liste

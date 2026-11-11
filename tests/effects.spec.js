@@ -55,3 +55,19 @@ test.describe('Wirkungen von Zuständen, Erschöpfung und Rüstung @new', () => 
     await expect(page.locator('.fx')).toContainText(/without proficiency|ohne Übung/);
   });
 });
+
+test.describe('Zaubertricks nach Charakterstufe @new', () => {
+  const sp = n => ({ n, ic: 'flame', lvl: 0, time: '', range: '', dur: '', eff: '', conc: false, ritual: false, school: '', cls: '', src: 'sum' });
+  test('Fire Bolt auf Stufe 5: 2d10 und Zauberangriff', async ({ page }) => {
+    await seed(page, base4({ klass: 'Wizard', level: 5, prof: 3, abil: { str: 8, dex: 14, con: 12, int: 16, wis: 10, cha: 10 }, spells: [sp('Fire Bolt')] }));
+    await expect(page.locator('.sp .cant')).toHaveText('Spell attack +6 · Damage 2d10 fire');
+  });
+  test('Eldritch Blast auf Stufe 11 mit Agonizing Blast: drei Strahlen mit Charisma', async ({ page }) => {
+    await seed(page, base4({ klass: 'Warlock', level: 11, prof: 4, abil: { str: 8, dex: 14, con: 12, int: 10, wis: 10, cha: 18 }, feats: [{ n: 'Agonizing Blast', p: '', src: 'Klasse' }], spells: [sp('Eldritch Blast')] }));
+    await expect(page.locator('.sp .cant')).toContainText('3 beams of 1d10+4 force');
+  });
+  test('Sacred Flame zeigt Rettungswurf und SG', async ({ page }) => {
+    await seed(page, base4({ klass: 'Cleric', level: 1, prof: 2, abil: { str: 10, dex: 10, con: 12, int: 10, wis: 16, cha: 10 }, spells: [sp('Sacred Flame')] }));
+    await expect(page.locator('.sp .cant')).toHaveText('Dexterity save, DC 13 · Damage 1d8 radiant');
+  });
+});

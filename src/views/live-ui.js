@@ -95,8 +95,8 @@ export function vTurn() {
   if (L.role !== 'player' || L.status !== 'on' || turnsHidden()) return '';
   const tr = dmTurn();
   if (!tr) return '';
-  const who = (n, enemy) => (enemy ? t('turn.enemy') : esc(n || '?'));
-  const next = tr.next || tr.nextEnemy ? ` · ${t('turn.next', { n: who(tr.next, tr.nextEnemy) })}` : '';
+  const who = (n, enemy, cr) => `<b class="${enemy ? 'foe' : 'ally'}">${esc(n || (enemy ? t('turn.enemy') : '?'))}</b>${cr ? ` (${t('turn.cr', { n: esc(cr) })})` : ''}`;
+  const next = tr.next || tr.nextEnemy ? ` · ${t('turn.next', { n: who(tr.next, tr.nextEnemy, tr.nextCr) })}` : '';
   if (myTurn()) return `<div class="turn mine" role="status"><div><b>${t('turn.mineTitle')}</b><small>${t('turn.round', { n: tr.r })}${next}</small></div><button class="btn solid" data-a="endturn">${t('turn.end')}</button></div>`;
-  return `<div class="turn" role="status"><span class="lbl">${t('turn.round', { n: tr.r })}</span><span>${t('turn.now', { n: who(tr.name, tr.enemy) })}${next}</span></div>`;
+  return `<div class="turn" role="status"><span class="lbl">${t('turn.round', { n: tr.r })}</span><span>${t('turn.now', { n: who(tr.name, tr.enemy, tr.cr) })}${next}</span></div>`;
 }

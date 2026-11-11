@@ -1,13 +1,13 @@
 import { unarmed } from '../attacks.js';
 import { vCharges, vPets } from './extras.js';
 import { castOptions } from '../game.js';
-import { prepCap, spellStats } from '../tables.js';
+import { prepCap, spellStats, classLevels } from '../tables.js';
 import { esc, clamp, mod, sg } from '../util.js';
 import { tok, itTone } from '../icons.js';
 import { CLN, SK, ABK, CLIC } from '../constants.js';
 import { S, U } from '../state.js';
 import { hdText, skv, pips, numIn, get, refs, atk, raceTraits, abName, abShort, itemView, spellView, resText } from '../helpers.js';
-import { COND, EXH, featText, byName } from '../catalog.js';
+import { COND, EXH, featText, byName, CLASSES } from '../catalog.js';
 import { t, loc, dice, dist, lang, nameLine, deName } from '../i18n/index.js';
 import { effects, hpMaxNow, rollState, anyEffect } from '../effects.js';
 
@@ -109,6 +109,23 @@ export function vFeats() {
   const src = featSrc;
   return `<h2>${t('feat.title')}<em>${all.length}</em></h2><div class="card">${all.map(f => `<details class="feat"><summary>${tok(f.src === 'Talent' ? 'star' : f.race ? 'mask' : (CLIC[S.klass] || 'star'))}<span>${esc(f.n)}</span><span class="lbl">${esc(src(f))}${f.lvl ? ' · ' + t('feat.level', { n: f.lvl }) : ''}</span></summary><p>${esc(dice(featText(f)))}</p></details>`).join('')}</div>`;
 }
+/** Aktueller Schaden eines Zaubertricks nach Charakterstufe, mit Angriff oder Rettungswurf. */
+export function cantLine(s, stats) {
+  const c = s.cant;
+  if (!c || s.lvl !== 0) return '';
+  const total = classLevels().reduce((a, x) => a + (x.lvl || 0), 0) || S.level || 1;
+  const tier = total >= 17 ? 17 : total >= 11 ? 11 : total >= 5 ? 5 : 1;
+  const st = stats.find(x => (s.cls || '').includes(CLASSES[x.k]?.l)) || stats[0];
+  let bonus = 0;
+  if (s.n === 'Eldritch Blast' && S.feats.some(f => f.n === 'Agonizing Blast')) bonus += mod(S.abil.cha);
+  if ((s.cls || '').includes('C') && S.feats.some(f => f.n === 'Potent Spellcasting')) bonus += mod(S.abil.wis);
+  const d = dice(c.d[tier] + (bonus ? (bonus > 0 ? '+' : '') + bonus : '')), type = t('dmg.' + c.type), beams = c.beams?.[tier] || 0;
+  const parts = [];
+  if (st && c.atk) parts.push(t('cant.atk', { n: sg(st.atk) }));
+  if (st && c.save) parts.push(t('cant.save', { a: t('saveName.' + c.save), n: st.dc }));
+  parts.push(beams > 1 ? `${t('cant.beams', { n: beams, d })} ${type}` : t('cant.dmg', { d, t: type }));
+  return `<span class="cant" title="${esc(t('cant.byLevel'))}">${esc(parts.join(' · '))}</span>`;
+}
 export function spMeta(s) { return [s.time, s.range, s.dur].filter(Boolean).map(esc).join(' · '); }
 export function vSpells() {
   const lv = new Set(S.spells.map(s => s.lvl));
@@ -126,7 +143,7 @@ export function vSpells() {
     h += `<div class="lvh"><b>${l ? t('spell.level', { n: l }) : t('spell.cantrips')}</b><small>${l ? (sl.max ? t('spell.free', { a: sl.max - sl.used, b: sl.max }) : t('spell.noSlots')) : t('spell.atWill')}</small>${sl && sl.max ? `<div class="pips">${pips(sl.max, sl.used, `data-a="pip" data-k="slots" data-i="${l - 1}"`)}</div>` : ''}</div>`;
     S.spells.map((s, i) => [s, i]).filter(x => x[0].lvl === l && !hidden(x[0])).sort((a, b) => a[0].n.localeCompare(b[0].n)).forEach(([raw, i]) => {
       const o = U.OPEN[i], s = spellView(raw), can = cap != null && s.lvl > 0, off = can && !s.always && raw.prep === false, picking = U.CASTPICK === i;
-      h += `<div class="sp${S.conc === s.n ? ' cc' : ''}${can ? ' pr' : ''}${off ? ' off' : ''}">${can ? `<button class="prepck${off ? '' : ' on'}" data-a="prep" data-i="${i}" aria-pressed="${!off}" aria-label="${t('spell.prepared')}" title="${s.always ? t('spell.always') : t('spell.prepared')}"${s.always ? ' disabled' : ''}></button>` : ''}<button class="sph" data-a="spopen" data-i="${i}" aria-expanded="${!!o}">${tok(s.ic, undefined, s.src === 'own' ? '' : 'spell:' + s.n)}<span class="nm">${esc(s.n)}${deName(s.n, s.de) ? ` <span class="lbl">${esc(s.de)}</span>` : ''}<small>${spMeta(s) || t('spell.details')}</small></span></button>${off ? '<span></span>' : `<button class="btn sm" data-a="cast" data-i="${i}" aria-expanded="${picking}">${S.conc === s.n ? t('spell.active') : t('spell.cast')}</button>`}${picking ? `<div class="castpick"><span class="lbl">${t('spell.pickLevel')}</span>${castOptions(raw).map(c => `<button class="btn sm solid" data-a="castslot" data-i="${i}" data-l="${c}">${c === 'pact' ? t('spell.pactShort', { n: S.pact.lvl }) : t('spell.level', { n: c })}</button>`).join('')}</div>` : ''}${o ? `<div class="spb"><p class="ptext">${esc(s.eff)}</p>${s.higher ? `<p class="ptext"><b>${t('spell.higher')}:</b> ${esc(s.higher)}</p>` : ''}${s.comp ? `<p class="cls">${t('spell.comp')}: ${esc(s.comp)}${s.material ? ' (' + esc(s.material) + ')' : ''}</p>` : ''}${s.school ? `<p class="cls">${esc(schoolName(s.school))}${s.cls ? ' · ' + s.cls.split('').map(c => CLN[c]).join(', ') : ''}</p>` : ''}<p class="src">${srcNote(s.src === 'own' ? 'own' : s.source)}</p></div>` : ''}</div>`;
+      h += `<div class="sp${S.conc === s.n ? ' cc' : ''}${can ? ' pr' : ''}${off ? ' off' : ''}">${can ? `<button class="prepck${off ? '' : ' on'}" data-a="prep" data-i="${i}" aria-pressed="${!off}" aria-label="${t('spell.prepared')}" title="${s.always ? t('spell.always') : t('spell.prepared')}"${s.always ? ' disabled' : ''}></button>` : ''}<button class="sph" data-a="spopen" data-i="${i}" aria-expanded="${!!o}">${tok(s.ic, undefined, s.src === 'own' ? '' : 'spell:' + s.n)}<span class="nm">${esc(s.n)}${deName(s.n, s.de) ? ` <span class="lbl">${esc(s.de)}</span>` : ''}<small>${spMeta(s) || t('spell.details')}</small>${cantLine(s, stats)}</span></button>${off ? '<span></span>' : `<button class="btn sm" data-a="cast" data-i="${i}" aria-expanded="${picking}">${S.conc === s.n ? t('spell.active') : t('spell.cast')}</button>`}${picking ? `<div class="castpick"><span class="lbl">${t('spell.pickLevel')}</span>${castOptions(raw).map(c => `<button class="btn sm solid" data-a="castslot" data-i="${i}" data-l="${c}">${c === 'pact' ? t('spell.pactShort', { n: S.pact.lvl }) : t('spell.level', { n: c })}</button>`).join('')}</div>` : ''}${o ? `<div class="spb"><p class="ptext">${esc(s.eff)}</p>${s.higher ? `<p class="ptext"><b>${t('spell.higher')}:</b> ${esc(s.higher)}</p>` : ''}${s.comp ? `<p class="cls">${t('spell.comp')}: ${esc(s.comp)}${s.material ? ' (' + esc(s.material) + ')' : ''}</p>` : ''}${s.school ? `<p class="cls">${esc(schoolName(s.school))}${s.cls ? ' · ' + s.cls.split('').map(c => CLN[c]).join(', ') : ''}</p>` : ''}<p class="src">${srcNote(s.src === 'own' ? 'own' : s.source)}</p></div>` : ''}</div>`;
     });
   });
   return `<h2>${t('spell.title')}</h2><div class="card">${h}<p class="note">${t('spell.castNote')}</p></div>`;

@@ -313,3 +313,5 @@ summary{color:var(--acc);font-family:var(--f-ui)}
 @keyframes turnglow{50%{box-shadow:0 0 22px rgba(217,164,65,.75)}}
 @media (prefers-reduced-motion:reduce){.turn.mine{animation:none}}
 @media print{.turn{display:none}}
+.turn .foe{color:#f0a87d}.turn .ally{color:var(--bandink)}
+.sph .cant{display:block;font:600 .85rem var(--f-ui);color:var(--acc);margin-top:2px}
