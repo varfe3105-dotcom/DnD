@@ -329,4 +329,4 @@ body::after{background:radial-gradient(ellipse 85% 80% at 50% 34%,transparent 50
 .wli:hover,.wli[aria-current="true"]{filter:brightness(1.08)}
 input,select,textarea{background-color:#2a1f15}
 }
-@media screen{.cell{background:linear-gradient(#2c1f14,#3d2a1a)!important}}
+@media screen{.cell{background:radial-gradient(circle at 50% 30%,rgba(0,0,0,.18),rgba(0,0,0,.6)),var(--wood)}}
