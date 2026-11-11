@@ -9,6 +9,14 @@ const BY_IC = {
 };
 
 const BY_KEY = {
+  // Völker
+  'race:Dwarf': [4, 4], 'race:Elf': [11, 15], 'race:Halfling': [12, 5], 'race:Human': [7, 0], 'race:Dragonborn': [17, 9], 'race:Gnome': [10, 7], 'race:Half-Elf': [11, 14], 'race:Half-Orc': [5, 13], 'race:Tiefling': [3, 14],
+  // Talente
+  'feat:Alert': [10, 9], 'feat:Athlete': [1, 4], 'feat:Actor': [11, 1], 'feat:Charger': [10, 6], 'feat:Crossbow Expert': [6, 4], 'feat:Defensive Duelist': [5, 5], 'feat:Dual Wielder': [5, 9], 'feat:Dungeon Delver': [11, 9],
+  'feat:Durable': [9, 4], 'feat:Elemental Adept': [3, 9], 'feat:Grappler': [5, 15], 'feat:Great Weapon Master': [5, 2], 'feat:Healer': [11, 12], 'feat:Heavily Armored': [7, 3], 'feat:Heavy Armor Master': [7, 4], 'feat:Inspiring Leader': [11, 8],
+  'feat:Keen Mind': [1, 3], 'feat:Lightly Armored': [7, 6], 'feat:Linguist': [4, 1], 'feat:Lucky': [13, 13], 'feat:Mage Slayer': [3, 3], 'feat:Magic Initiate': [6, 8], 'feat:Martial Adept': [3, 2], 'feat:Medium Armor Master': [7, 7],
+  'feat:Mobile': [8, 3], 'feat:Moderately Armored': [6, 1], 'feat:Mounted Combatant': [19, 10], 'feat:Observant': [10, 8], 'feat:Polearm Master': [5, 10], 'feat:Resilient': [3, 5], 'feat:Ritual Caster': [4, 7], 'feat:Savage Attacker': [3, 11],
+  'feat:Sentinel': [3, 7], 'feat:Sharpshooter': [6, 3], 'feat:Shield Master': [6, 2], 'feat:Skilled': [17, 6], 'feat:Skulker': [7, 14], 'feat:Spell Sniper': [6, 9], 'feat:Tavern Brawler': [13, 15], 'feat:Tough': [1, 0], 'feat:War Caster': [6, 10], 'feat:Weapon Master': [5, 7],
   // Waffen
   'item:club': [5, 13], 'item:dagger': [5, 6], 'item:greatclub': [5, 13], 'item:handaxe': [10, 1], 'item:javelin': [10, 6], 'item:light-hammer': [10, 4], 'item:mace': [5, 13], 'item:quarterstaff': [5, 0], 'item:sickle': [5, 5], 'item:spear': [10, 6], 'item:crossbow-light': [6, 4], 'item:dart': [10, 6], 'item:shortbow': [6, 3], 'item:sling': [6, 5],
   'item:battleaxe': [5, 10], 'item:flail': [5, 12], 'item:glaive': [5, 11], 'item:greataxe': [5, 11], 'item:greatsword': [5, 2], 'item:halberd': [5, 11], 'item:lance': [10, 6], 'item:longsword': [5, 1], 'item:maul': [10, 4], 'item:morningstar': [5, 12], 'item:pike': [10, 6], 'item:rapier': [5, 3], 'item:scimitar': [5, 5], 'item:shortsword': [5, 4], 'item:trident': [5, 8], 'item:war-pick': [10, 2], 'item:warhammer': [10, 4], 'item:whip': [5, 14], 'item:blowgun': [11, 6], 'item:crossbow-hand': [6, 4], 'item:crossbow-heavy': [6, 4], 'item:longbow': [6, 3],

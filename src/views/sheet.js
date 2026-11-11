@@ -116,7 +116,7 @@ export function vFeats() {
   const all = [...raceTraits(), ...S.feats];
   if (!all.length) return '';
   const src = featSrc;
-  return `<h2>${t('feat.title')}<em>${all.length}</em></h2><div class="card">${all.map(f => `<details class="feat"><summary>${tok(f.src === 'Talent' ? 'star' : f.race ? 'mask' : (CLIC[S.klass] || 'star'))}<span>${esc(f.n)}</span><span class="lbl">${esc(src(f))}${f.lvl ? ' · ' + t('feat.level', { n: f.lvl }) : ''}</span></summary><p>${esc(dice(featText(f)))}</p></details>`).join('')}</div>`;
+  return `<h2>${t('feat.title')}<em>${all.length}</em></h2><div class="card">${all.map(f => `<details class="feat"><summary>${tok(f.src === 'Talent' ? 'star' : f.race ? 'mask' : (CLIC[S.klass] || 'star'), undefined, f.src === 'Talent' ? 'feat:' + f.n : f.race ? 'race:' + S.race : 'class:' + S.klass)}<span>${esc(f.n)}</span><span class="lbl">${esc(src(f))}${f.lvl ? ' · ' + t('feat.level', { n: f.lvl }) : ''}</span></summary><p>${esc(dice(featText(f)))}</p></details>`).join('')}</div>`;
 }
 /** Aktueller Schaden eines Zaubertricks nach Charakterstufe, mit Angriff oder Rettungswurf. */
 export function cantLine(s, stats) {
