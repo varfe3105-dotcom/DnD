@@ -11,5 +11,12 @@
 "Variant Human|Skills":"Proficiency in one skill of your choice.",
 "Variant Human|Feat":"One feat of your choice.",
 "Forest Gnome|Natural Illusionist":"Minor Illusion cantrip (Intelligence).",
-"Forest Gnome|Speak with Small Beasts":"Simple communication with small beasts."
+"Forest Gnome|Speak with Small Beasts":"Simple communication with small beasts.",
+"Goliath|Natural Athlete":"You have proficiency in the Athletics skill.",
+"Goliath|Powerful Build":"You count as one size larger when determining your carrying capacity and the weight you can push, drag, or lift. The sheet therefore doubles your carrying capacity.",
+"Goliath|Languages":"You can speak, read, and write Common and Giant. (In Monsters of the Multiverse: Common and one other language you and the DM agree on.)",
+"Volo's Guide|Stone's Endurance":"When you take damage, you can use your reaction to roll a d12, add your Constitution modifier, and reduce the damage by that total. You can do this again after a short or long rest.",
+"Volo's Guide|Mountain Born":"You are acclimated to high altitude, including elevations above 20,000 feet, and naturally adapted to cold climates, as described in chapter 5 of the DMG.",
+"Monsters of the Multiverse|Stone's Endurance":"When you take damage, you can use your reaction to roll a d12, add your Constitution modifier, and reduce the damage by that total. You can do this a number of times equal to your proficiency bonus and regain all uses after a long rest.",
+"Monsters of the Multiverse|Mountain Born":"You have resistance to cold damage. You are also acclimated to high altitude, including elevations above 20,000 feet."
 }

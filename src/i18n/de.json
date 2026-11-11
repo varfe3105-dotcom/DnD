@@ -865,5 +865,6 @@
  "bright.dark": "Dunkel",
  "bright.mid": "Mittel",
  "bright.light": "Hell",
- "footer.version": "Version: {v}"
+ "footer.version": "Version: {v}",
+ "res.stone": "Reaktion bei Schaden: um {d} + KON-Modifikator senken"
 }

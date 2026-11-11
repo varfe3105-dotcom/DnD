@@ -865,5 +865,6 @@
  "bright.dark": "Dark",
  "bright.mid": "Medium",
  "bright.light": "Light",
- "footer.version": "Version: {v}"
+ "footer.version": "Version: {v}",
+ "res.stone": "Reaction when damaged: reduce by {d} + CON modifier"
 }

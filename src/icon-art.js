@@ -10,7 +10,7 @@ const BY_IC = {
 
 const BY_KEY = {
   // Völker
-  'race:Dwarf': [4, 4], 'race:Elf': [11, 15], 'race:Halfling': [12, 5], 'race:Human': [7, 0], 'race:Dragonborn': [17, 9], 'race:Gnome': [10, 7], 'race:Half-Elf': [11, 14], 'race:Half-Orc': [5, 13], 'race:Tiefling': [3, 14],
+  'race:Dwarf': [4, 4], 'race:Elf': [11, 15], 'race:Halfling': [12, 5], 'race:Human': [7, 0], 'race:Dragonborn': [17, 9], 'race:Gnome': [10, 7], 'race:Half-Elf': [11, 14], 'race:Half-Orc': [5, 13], 'race:Tiefling': [3, 14], 'race:Goliath': [17, 1],
   // Talente
   'feat:Alert': [10, 9], 'feat:Athlete': [1, 4], 'feat:Actor': [11, 1], 'feat:Charger': [10, 6], 'feat:Crossbow Expert': [6, 4], 'feat:Defensive Duelist': [5, 5], 'feat:Dual Wielder': [5, 9], 'feat:Dungeon Delver': [11, 9],
   'feat:Durable': [9, 4], 'feat:Elemental Adept': [3, 9], 'feat:Grappler': [5, 15], 'feat:Great Weapon Master': [5, 2], 'feat:Healer': [11, 12], 'feat:Heavily Armored': [7, 3], 'feat:Heavy Armor Master': [7, 4], 'feat:Inspiring Leader': [11, 8],

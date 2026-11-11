@@ -115,3 +115,28 @@ test.describe('Munition, passive Werte, Reliable Talent @new', () => {
     await expect(page.locator('.fxnote', { hasText: 'Reliable Talent' })).toBeVisible();
   });
 });
+
+test.describe('Goliath @new', () => {
+  test('im Wiki mit Buchangabe, beide Varianten, Stone’s Endurance je nach Variante', async ({ page }) => {
+    await seed(page, base4({ tab: 'wiki' }));
+    await page.locator('#wq').fill('Goliath');
+    await act(page, 'wsel', '[data-key="race:Goliath"]').click();
+    await expect(page.locator('.wd.pane')).toContainText("Volo's Guide to Monsters / Monsters of the Multiverse");
+    await expect(page.locator('.wd.pane')).toContainText('Monsters of the Multiverse');
+    await expect(page.locator('.wd.pane')).toContainText('Natural Athlete');
+  });
+  test('Auswahl im Einrichten setzt Tempo, Fähigkeit und doppelte Tragkraft', async ({ page }) => {
+    await seed(page, base4({ tab: 'setup', prof: 3, abil: { str: 16, dex: 10, con: 14, int: 10, wis: 10, cha: 10 } }));
+    await page.locator('[data-p="race"]').selectOption('Goliath');
+    await page.locator('[data-p="subrace"]').selectOption("Volo's Guide");
+    let s = await read(page);
+    expect(s.speed).toBe(9);
+    expect(s.res.find(r => r.n === "Stone's Endurance")).toMatchObject({ max: 1, rest: 'short' });
+    await page.locator('[data-p="subrace"]').selectOption('Monsters of the Multiverse');
+    s = await read(page);
+    expect(s.res.filter(r => r.n === "Stone's Endurance")).toHaveLength(1);
+    expect(s.res.find(r => r.n === "Stone's Endurance")).toMatchObject({ max: 3, rest: 'long' });
+    await page.locator('[data-a="tab"][data-t="inv"]').click();
+    await expect(page.locator('.carryv')).toContainText('480');
+  });
+});

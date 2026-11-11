@@ -615,5 +615,101 @@
   "subs": {},
   "source": "summary",
   "verified": false
+ },
+ "Goliath": {
+  "sp": 9,
+  "asi": {
+   "en": "see variant",
+   "de": "siehe Variante"
+  },
+  "book": {
+   "en": "Volo's Guide to Monsters / Monsters of the Multiverse",
+   "de": "Volo's Guide to Monsters / Monsters of the Multiverse"
+  },
+  "tr": [
+   {
+    "n": "Natural Athlete",
+    "text": {
+     "en": "You have proficiency in the Athletics skill.",
+     "de": "Du bist in der Fertigkeit Athletics geübt."
+    },
+    "source": "summary",
+    "verified": false
+   },
+   {
+    "n": "Powerful Build",
+    "text": {
+     "en": "You count as one size larger when determining your carrying capacity and the weight you can push, drag, or lift. The sheet therefore doubles your carrying capacity.",
+     "de": "Für Tragkraft und für das Gewicht, das du schieben, ziehen oder heben kannst, zählst du als eine Größenkategorie größer. Die Tragkraft im Bogen ist deshalb verdoppelt."
+    },
+    "source": "summary",
+    "verified": false
+   },
+   {
+    "n": "Languages",
+    "text": {
+     "en": "You can speak, read, and write Common and Giant. (In Monsters of the Multiverse: Common and one other language you and the DM agree on.)",
+     "de": "Du sprichst, liest und schreibst Gemeinsprache und Riesisch. (In Monsters of the Multiverse: Gemeinsprache und eine weitere Sprache, auf die du dich mit der Spielleitung einigst.)"
+    },
+    "source": "summary",
+    "verified": false
+   }
+  ],
+  "subs": {
+   "Volo's Guide": {
+    "asi": {
+     "en": "STR +2, CON +1",
+     "de": "STR +2, KON +1"
+    },
+    "tr": [
+     {
+      "n": "Stone's Endurance",
+      "text": {
+       "en": "When you take damage, you can use your reaction to roll a d12, add your Constitution modifier, and reduce the damage by that total. You can do this again after a short or long rest.",
+       "de": "Erleidest du Schaden, kannst du mit deiner Reaktion 1W12 würfeln, deinen Konstitutionsmodifikator addieren und den Schaden um diese Summe senken. Danach erst wieder nach einer kurzen oder langen Rast."
+      },
+      "source": "summary",
+      "verified": false
+     },
+     {
+      "n": "Mountain Born",
+      "text": {
+       "en": "You are acclimated to high altitude, including elevations above 20,000 feet, and naturally adapted to cold climates, as described in chapter 5 of the DMG.",
+       "de": "Du bist an große Höhen über 6.000 m gewöhnt und an kaltes Klima angepasst, wie im Kapitel 5 des DMG beschrieben."
+      },
+      "source": "summary",
+      "verified": false
+     }
+    ]
+   },
+   "Monsters of the Multiverse": {
+    "asi": {
+     "en": "+2 to one score and +1 to another, or +1 to three scores",
+     "de": "+2 auf ein Attribut und +1 auf ein anderes, oder +1 auf drei Attribute"
+    },
+    "tr": [
+     {
+      "n": "Stone's Endurance",
+      "text": {
+       "en": "When you take damage, you can use your reaction to roll a d12, add your Constitution modifier, and reduce the damage by that total. You can do this a number of times equal to your proficiency bonus and regain all uses after a long rest.",
+       "de": "Erleidest du Schaden, kannst du mit deiner Reaktion 1W12 würfeln, deinen Konstitutionsmodifikator addieren und den Schaden um diese Summe senken. Das geht so oft, wie dein Übungsbonus angibt; nach einer langen Rast erhältst du alle Anwendungen zurück."
+      },
+      "source": "summary",
+      "verified": false
+     },
+     {
+      "n": "Mountain Born",
+      "text": {
+       "en": "You have resistance to cold damage. You are also acclimated to high altitude, including elevations above 20,000 feet.",
+       "de": "Du hast Resistenz gegen Kälteschaden. Außerdem bist du an große Höhen über 6.000 m gewöhnt."
+      },
+      "source": "summary",
+      "verified": false
+     }
+    ]
+   }
+  },
+  "source": "summary",
+  "verified": false
  }
 }

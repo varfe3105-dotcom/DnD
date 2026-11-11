@@ -60,7 +60,10 @@ export function applyRace() {
   const add = (n) => { if (!S.res.some(r => r.n === n)) { const [k, ic, rest, max] = RACE_RES[n]; S.res.push({ n, ic, max, used: 0, rest, p: t(k) }); } };
   if (S.race === 'Dragonborn') add('Breath Weapon');
   if (S.race === 'Half-Orc') add('Relentless Endurance');
-  toast(t('toast.raceBonus', { b: (sb ? loc(sb.asi) + ', ' : '') + loc(R.asi) }));
+  // Goliath: Stone's Endurance nach Volo's Guide (1 pro kurzer Rast) oder Monsters of the Multiverse (Übungsbonus pro langer Rast)
+  S.res = S.res.filter(r => r.n !== "Stone's Endurance");
+  if (S.race === 'Goliath') { const motm = S.subrace === 'Monsters of the Multiverse'; S.res.push({ n: "Stone's Endurance", ic: 'shield', max: motm ? S.prof : 1, used: 0, rest: motm ? 'long' : 'short', p: t('res.stone', { d: dice('1W12') }) }); }
+  toast(t('toast.raceBonus', { b: (sb ? loc(sb.asi) + (R.asi && /^(see|siehe)/.test(loc(R.asi)) ? '' : ', ' + loc(R.asi)) : loc(R.asi)) }));
 }
 export function resFor(k, l, tongue = lang) {
   const o = [], cha = mod(S.abil.cha), R = (n, max, rest, key, ic, params) => o.push({ n, max, rest, p: tl(tongue, key, params), ic });
@@ -142,4 +145,4 @@ hooks.beforeSave = syncAc;
 export function carried() {
   return refs().reduce((sum, r) => { const it = get(r), c = it.ref && BYN[it.ref]; return sum + (c?.w != null ? c.w / (c.q || 1) : it.w || 0) * it.q; }, 0);
 }
-export const carryMax = () => S.abil.str * 15;
+export const carryMax = () => S.abil.str * 15 * (S.race === 'Goliath' ? 2 : 1); // Powerful Build
