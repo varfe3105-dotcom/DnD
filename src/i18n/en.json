@@ -871,5 +871,16 @@
  "cat.monster": "Monster",
  "mon.hp": "Hit points",
  "mon.cr": "Challenge",
- "mon.enOnly": "Monster stat blocks are English only (SRD 5.1)."
+ "mon.enOnly": "Monster stat blocks are English only (SRD 5.1).",
+ "cond.add": "+ Condition",
+ "cond.close": "Close list",
+ "mode.label": "View",
+ "mode.all": "All",
+ "mode.combat": "Combat",
+ "mode.explore": "Exploration",
+ "mini.label": "Quick view",
+ "mini.ac": "AC",
+ "mini.slots": "Slots",
+ "mini.pact": "Pact",
+ "setup.jump": "Sections"
 }

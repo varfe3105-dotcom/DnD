@@ -871,5 +871,16 @@
  "cat.monster": "Monster",
  "mon.hp": "Trefferpunkte",
  "mon.cr": "Herausforderung",
- "mon.enOnly": "Monsterwerte gibt es nur auf Englisch (SRD 5.1)."
+ "mon.enOnly": "Monsterwerte gibt es nur auf Englisch (SRD 5.1).",
+ "cond.add": "+ Zustand",
+ "cond.close": "Liste schließen",
+ "mode.label": "Ansicht",
+ "mode.all": "Alles",
+ "mode.combat": "Kampf",
+ "mode.explore": "Erkundung",
+ "mini.label": "Kurzübersicht",
+ "mini.ac": "RK",
+ "mini.slots": "Plätze",
+ "mini.pact": "Pakt",
+ "setup.jump": "Abschnitte"
 }

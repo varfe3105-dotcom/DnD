@@ -24,7 +24,7 @@ import { EQ } from './constants.js';
 import { def, mk, spFrom, putBag, S, setS, U, save, toast, switchChar, newChar, dupChar, delChar } from './state.js';
 import { classLevels } from './tables.js';
 import { get, set, refs, fits, applyRace } from './helpers.js';
-import { spMeta } from './views/sheet.js';
+import { spMeta, setSheetMode } from './views/sheet.js';
 import { wikiBody } from './views/wiki.js';
 import { openLU, applyLU } from './views/levelup.js';
 import { app, render } from './render.js';
@@ -67,6 +67,9 @@ app.addEventListener('click',ev=>{
     case 'dmcsave':{const n=v('dmc-n').trim();if(!n){toast(tr('toast.needName'));return}dm.saveCustom({n,cr:v('dmc-cr'),ac:v('dmc-ac'),hp:v('dmc-hp'),speed:v('dmc-sp'),text:v('dmc-t'),abil:Object.fromEntries(['str','dex','con','int','wis','cha'].map(k=>[k,Math.min(30,Math.max(1,+v('dmc-'+k)||10))]))},dm.DU.editMon);dm.DU.editMon=null;dm.saveD();toast(tr('toast.created',{n}));break}
     case 'dmview':dm.D.view=b.dataset.v;dm.saveD();break;
     case 'shoot':{const ref=ammoFor(S.eq[b.dataset.k]||{}),{at}=ammoLeft(ref);if(!at.length)break;const i=at[0],it=S.bag[i];it.q-=1;if(it.q<=0)S.bag[i]=null;break}
+    case 'jump':{const el=document.getElementById(b.dataset.id);if(el)el.scrollIntoView({behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'});return}
+    case 'condopen':U.CONDOPEN=!U.CONDOPEN;break;
+    case 'sheetmode':setSheetMode(b.dataset.m);break;
     case 'dmturns':dm.D.turns=!dm.D.turns;dm.saveD();live.refresh();break;
     case 'turnshow':setTurnsHidden(!turnsHidden());break;
     case 'endturn':if(!live.endTurn())toast(tr('turn.offline'));else toast(tr('turn.ended'));break;
@@ -144,11 +147,13 @@ app.addEventListener('click',ev=>{
     case 'chardel':{const id=b.dataset.id;if(U.CONF!=='chardel:'+id){U.CONF='chardel:'+id;break}U.CONF=null;delChar(id);break}
     case 'print':S.tab='main';render();setTimeout(()=>window.print(),50);return;
     case 'lang':setLang(b.dataset.l);buildCatalog();break;
+    case 'mbtab':
     case 'tab':S.tab=b.dataset.t;U.SEL=null;window.scrollTo({top:0});break;
     case 'lu':openLU();break;
     case 'luclose':case 'luclose-bg':U.LU=null;break;
     case 'luapply':if(!applyLU())return;break;
     case 'rest':rest(b.dataset.r==='long');break;
+    case 'mbhp':
     case 'hp':{const was=S.hp;S.hp=clamp(S.hp+ +b.dataset.d,0,hpMaxNow());if(was===0&&S.hp>0){S.death={s:0,f:0};delete S.cond.Unconscious}if(was>0&&S.hp===0)S.cond.Unconscious=true;break}
     case 'dmg':case 'heal':case 'temp':{const d=Math.floor(+v('hpv'));if(!(d>0)){toast(tr('toast.needAmount'));return}
       if(a==='dmg')damage(d);else if(a==='heal')heal(d);else{if(d<=S.tmp)toast(tr('toast.tempNoStack'));else{S.tmp=d;toast(tr('toast.tempSet',{n:d}))}}break}

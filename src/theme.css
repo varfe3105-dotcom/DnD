@@ -352,3 +352,57 @@ html[data-bright="light"] .hd{filter:brightness(1.12)}
 }
 @media screen{.abv input.n{background:transparent!important;border:0;color:#2b1c0e;font:700 .95rem var(--f-ui);box-shadow:none}}
 .wd .ptext.stat::first-letter{font:inherit;float:none;margin:0;color:inherit}
+
+/* Übersichtlichkeit: Zustände einklappen, Ansichten, Kurzleiste */
+.chip.more{border-style:dashed;color:var(--acc)}
+.modes{display:flex;justify-content:center;gap:6px;margin:16px 0 0;flex-wrap:wrap}
+.modes .tg{min-width:110px}
+.minibar{position:fixed;left:50%;top:0;z-index:46;transform:translate(-50%,-110%);width:min(1840px,100%);display:flex;align-items:center;gap:18px;flex-wrap:wrap;padding:6px 16px;background:linear-gradient(rgba(70,50,32,.97),rgba(48,34,22,.97)),var(--leather);border-bottom:1px solid var(--gilt);box-shadow:0 6px 18px rgba(0,0,0,.55);transition:transform .18s ease-out}
+body.scrolled .minibar{transform:translate(-50%,0)}
+.minibar small{display:block;font:500 .7rem var(--f-ui);color:var(--mute);line-height:1}
+.minibar b{font:400 1.25rem/1.1 var(--f-title);color:var(--bandink)}
+.minibar b.down{color:#f08f7d}
+.minibar i{font-style:normal;color:var(--good);font-size:.9rem}
+.mb-hp{display:flex;align-items:center;gap:8px}
+.mb-hp .sq{width:34px;height:34px;font-size:1.2rem}
+.mb-slots b,.mb-conc b{font:600 .95rem var(--f-ui)}
+body.scrolled .turn{top:56px}
+@media (max-width:520px){.minibar{gap:12px;padding:5px 10px;flex-wrap:nowrap}.mb-conc{display:none}.mb-slots b{font-size:.85rem;white-space:nowrap}}
+@media (prefers-reduced-motion:reduce){.minibar{transition:none}}
+@media print{.minibar,.modes{display:none}}
+.jump{display:flex;flex-wrap:wrap;gap:6px;margin:12px 0 4px;padding:8px 10px;position:sticky;top:0;z-index:30;background:linear-gradient(rgba(60,43,28,.95),rgba(44,31,20,.95));border:1px solid var(--line);border-radius:4px}
+.jump .chip{font-size:.85rem;padding:3px 9px}
+h2[id^="sec-"]{scroll-margin-top:150px}
+@media (max-width:520px){.jump{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none}.jump .chip{flex:none}}
+@media print{.jump{display:none}}
+
+/* Handy: Reiter als feste Leiste am unteren Rand (mit dem Daumen erreichbar, bleibt beim Scrollen) */
+@media screen and (max-width:520px){
+  .tabs nav{position:fixed;left:0;right:0;bottom:0;z-index:50;display:grid;grid-auto-flow:column;grid-auto-columns:1fr;gap:0;flex-wrap:nowrap;padding:4px 2px calc(4px + env(safe-area-inset-bottom,0px));background:linear-gradient(rgba(52,37,24,.98),rgba(34,24,15,.99)),var(--leather);border-top:1px solid var(--gilt);box-shadow:0 -6px 16px rgba(0,0,0,.5)}
+  .tabs nav button,.tabs nav button[aria-selected="true"]{min-width:0;padding:4px 2px 5px;font-size:.68rem;clip-path:none;border-radius:6px;transform:none;background:none;box-shadow:none}
+  .tabs nav button:hover{transform:none}
+  .tabs nav button[aria-selected="true"]{background:linear-gradient(180deg,#a23327,#5c1612);color:#ffe9c9}
+  .tabs nav button span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+  .tabs nav button .spr{width:26px;height:26px}
+  .tabs{justify-content:flex-end;min-height:0}
+  body{padding-bottom:calc(72px + env(safe-area-inset-bottom,0px))}
+  #toast{bottom:calc(84px + env(safe-area-inset-bottom,0px))}
+}
+@media print{.tabs nav{position:static}}
+
+/* Ruhigeres Gesamtbild: Ornamente der Überschriften zurückhaltender, gleichmäßige Abstände */
+@media screen{
+  h2{margin:26px 0 10px;font-size:1.32rem}
+  h2::before,h2::after{flex-basis:90px;width:90px;opacity:.55}
+  .card+h2,.skgrid+h2{margin-top:24px}
+}
+/* Reiter kleben nicht mehr über dem Inhalt; beim Scrollen übernimmt die Kurzleiste mit Reiter-Symbolen */
+@media screen{
+  .tabs{position:relative;top:auto}
+  .mb-tabs{margin-left:auto;display:flex;gap:4px}
+  .mb-tabs button{width:38px;height:38px;display:grid;place-items:center;border:1px solid var(--line);border-radius:4px;background:rgba(0,0,0,.25);padding:0}
+  .mb-tabs button.on{background:linear-gradient(180deg,#a23327,#5c1612);border-color:#c0574a}
+  .mb-tabs .spr{width:26px;height:26px}
+}
+@media (max-width:520px){.mb-tabs{display:none}}
+body.scrolled .jump{top:52px}

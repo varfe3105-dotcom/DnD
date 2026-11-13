@@ -153,3 +153,48 @@ test.describe('Monster im Wiki @new', () => {
     await expect(pane).toContainText(/Armor Class|Rüstungsklasse/);
   });
 });
+
+test.describe('Übersichtlichkeit @new', () => {
+  test('Zustände: nur aktive sichtbar, „+ Zustand“ klappt die Liste auf', async ({ page }) => {
+    await seed(page, base4({ cond: { Poisoned: true } }));
+    await expect(page.locator('[data-a="cond"]')).toHaveCount(1);
+    await act(page, 'condopen').click();
+    await expect(page.locator('[data-a="cond"]')).toHaveCount(14);
+  });
+  test('Ansicht Kampf blendet Fertigkeiten aus, Erkundung die Angriffe; Wahl bleibt gespeichert', async ({ page }) => {
+    await seed(page, base4({}));
+    await act(page, 'sheetmode', '[data-m="combat"]').click();
+    await expect(page.locator('.skgrid')).toHaveCount(0);
+    await expect(page.locator('.atk-un')).toBeVisible();
+    await act(page, 'sheetmode', '[data-m="explore"]').click();
+    await expect(page.locator('.atk-un')).toHaveCount(0);
+    await expect(page.locator('.skgrid')).toBeVisible();
+    await page.reload();
+    await expect(page.locator('[data-a="sheetmode"][data-m="explore"]')).toHaveAttribute('aria-pressed', 'true');
+  });
+  test('Kurzleiste erscheint beim Scrollen und ändert TP', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 700 });
+    await seed(page, base4({ hp: 10, hpMax: 20 }));
+    await expect(page.locator('body')).not.toHaveClass(/scrolled/);
+    await page.evaluate(() => window.scrollTo(0, 1500));
+    await expect(page.locator('body')).toHaveClass(/scrolled/);
+    await act(page, 'mbhp', '[data-d="-1"]').click();
+    expect((await read(page)).hp).toBe(9);
+    await act(page, 'mbtab', '[data-t="inv"]').click();
+    await expect(page.locator('.invg')).toBeVisible();
+  });
+  test('Einrichten: Sprungleiste führt zu den Abschnitten', async ({ page }) => {
+    await seed(page, base4({ tab: 'setup' }));
+    const n = await page.locator('[data-a="jump"]').count();
+    expect(n).toBeGreaterThan(8);
+    await page.locator('[data-a="jump"]').last().click();
+    await expect(page.locator('h2[id^="sec-"]').last()).toBeInViewport();
+  });
+  test('Handy: Reiter als feste Leiste unten', async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 800 });
+    await seed(page, base4({}));
+    const box = await page.locator('.tabs nav').boundingBox();
+    expect(box.y + box.height).toBeGreaterThan(780);
+    expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(390);
+  });
+});

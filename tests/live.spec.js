@@ -46,6 +46,7 @@ test.describe('Live-Tisch @new', () => {
     await tab(page, 'main');
     await act(page, 'hp', '[data-d="-1"]').first().click();
     await expect.poll(async () => (await lastSent(page)).hp).toBe(14);
+    await act(page, 'condopen').click();
     await act(page, 'cond', '[data-c="Prone"]').click();
     await expect.poll(async () => (await lastSent(page)).cond).toEqual(['Prone']);
   });

@@ -19,6 +19,13 @@ const field = (l, c) => `<label><span class="lbl">${l}</span>${c}</label>`;
 const named = keys => keys.map(k => [k, nameLine(k)]);
 
 export function vSetup() {
+  // Sprungleiste: jede Abschnittsüberschrift bekommt eine Kennung und einen Knopf oben.
+  let n = 0;
+  const names = [];
+  const html = vSetupBody().replace(/<h2>([\s\S]*?)<\/h2>/g, (m, inner) => { const id = 'sec-' + (n++); names.push([id, inner.replace(/<em>[\s\S]*?<\/em>/g, '').replace(/<[^>]+>/g, '').trim()]); return `<h2 id="${id}">${inner}</h2>`; });
+  return `<nav class="jump" aria-label="${t('setup.jump')}">${names.map(([id, l]) => `<button class="chip" data-a="jump" data-id="${id}">${l}</button>`).join('')}</nav>${html}`;
+}
+function vSetupBody() {
   const R = RACES[S.race], C = CLASSES[S.klass];
   const bonus = R ? (R.subs[S.subrace] ? loc(R.subs[S.subrace].asi) + ', ' : '') + loc(R.asi) : '';
   return `<p class="note">${t('setup.intro')}</p>

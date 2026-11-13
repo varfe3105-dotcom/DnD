@@ -4,7 +4,7 @@ import { vInbox, vHandout, vBackupNag, vTurn } from './views/live-ui.js';
 import { $, esc } from './util.js';
 import { S, U, roster } from './state.js';
 import { classLevels } from './tables.js';
-import { vMain } from './views/sheet.js';
+import { vMain, vMiniBar } from './views/sheet.js';
 import { vInv } from './views/inventory.js';
 import { vWiki } from './views/wiki.js';
 import { vSetup } from './views/setup.js';
@@ -38,6 +38,7 @@ export function render() {
   const tb = S.tab, ae = document.activeElement, keep = ae && ae.id && app.contains(ae) ? ae.id : null;
   let h = vHead();
   h += `<div class="tabs"><nav role="tablist" aria-label="${t('head.areas')}">${tabs().map(k => `<button role="tab" aria-selected="${tb === k}" data-a="tab" data-t="${k}">${glyph(TAB_IC[k])}<span>${t('tab.' + k)}</span></button>`).join('')}</nav><div class="mini${S.hp === 0 ? ' down' : ''}">${L.status === 'on' ? `<i class="live-dot" title="${t('live.on')}"></i>` : ''}${t('head.hpShort')} <b>${S.hp}</b>/${S.hpMax}${S.tmp ? ` +${S.tmp}` : ''}</div></div>`;
+  h += vMiniBar(tabs().map(k => `<button class="${tb === k ? 'on' : ''}" data-a="mbtab" data-t="${k}" title="${t('tab.' + k)}" aria-label="${t('tab.' + k)}">${glyph(TAB_IC[k])}</button>`).join(''));
   h += vTurn() + vInbox() + vBackupNag();
   if (tb === 'main') h += vMain();
   if (tb === 'inv') h += vInv();
