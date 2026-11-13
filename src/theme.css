@@ -406,3 +406,10 @@ h2[id^="sec-"]{scroll-margin-top:150px}
 }
 @media (max-width:520px){.mb-tabs{display:none}}
 body.scrolled .jump{top:52px}
+
+/* Spielleitungsmodus */
+.dmhd .por span{font-size:2.2rem}
+.mb-party b{display:flex;gap:12px;flex-wrap:wrap;font:600 .9rem var(--f-ui)}
+.mb-p b{font:400 1.05rem var(--f-title)}
+.mb-p.down{color:#f08f7d}
+@media (max-width:520px){html[data-dm-only] .tabs nav button span{font-size:.58rem}.mb-party{display:none}}

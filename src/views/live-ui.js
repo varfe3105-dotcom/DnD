@@ -12,7 +12,7 @@ import { t, lang, dice } from '../i18n/index.js';
 
 const COINK = ['pp', 'gp', 'ep', 'sp', 'cp'];
 const coinList = c => COINK.filter(k => c[k]).map(k => `${c[k]} ${t('coin.' + k)}`).join(', ');
-const proposalText = m => (m.type === 'cond' ? t('live.pCond', { c: m.cond }) : m.type === 'item' ? t('live.pItem', { q: m.q, n: m.key && BYN[m.key] ? BYN[m.key].n : m.n }) : m.type === 'gold' ? t('live.pGold', { c: coinList(m.coins) }) : t('live.p.' + m.type, { n: m.value }));
+const proposalText = m => (m.type === 'levelup' ? t('live.pLevel') : m.type === 'cond' ? t('live.pCond', { c: m.cond }) : m.type === 'item' ? t('live.pItem', { q: m.q, n: m.key && BYN[m.key] ? BYN[m.key].n : m.n }) : m.type === 'gold' ? t('live.pGold', { c: coinList(m.coins) }) : t('live.p.' + m.type, { n: m.value }));
 
 export function vInbox() {
   if (L.role !== 'player' || !L.inbox.length) return '';

@@ -68,6 +68,7 @@ app.addEventListener('click',ev=>{
     case 'dmview':dm.D.view=b.dataset.v;dm.saveD();break;
     case 'shoot':{const ref=ammoFor(S.eq[b.dataset.k]||{}),{at}=ammoLeft(ref);if(!at.length)break;const i=at[0],it=S.bag[i];it.q-=1;if(it.q<=0)S.bag[i]=null;break}
     case 'jump':{const el=document.getElementById(b.dataset.id);if(el)el.scrollIntoView({behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'});return}
+    case 'livelevel':if(live.sendMsg({type:'levelup',to:'all'}))toast(tr('live.levelSent'));else toast(tr('turn.offline'));break;
     case 'condopen':U.CONDOPEN=!U.CONDOPEN;break;
     case 'sheetmode':setSheetMode(b.dataset.m);break;
     case 'dmturns':dm.D.turns=!dm.D.turns;dm.saveD();live.refresh();break;
@@ -110,7 +111,7 @@ app.addEventListener('click',ev=>{
     case 'sheetapply':{if(!U.SHEET.draft.klass){toast(tr('sheet.needClass'));return}const r=importDraft(U.SHEET.draft);if(r.error){toast(r.error);return}U.IMPREP=r.reports;U.SHEET=null;S.tab='setup';toast(tr('imp.done',{n:r.reports.map(x=>x.name).join(', ')}));break}
     case 'sheetspells':{const known=new Set(S.spells.map(x=>x.n));let n=0;U.SHEET.draft.spells.forEach(x=>{if(!known.has(x)&&BYN['spell:'+x]){S.spells.push(spFrom(BYN['spell:'+x]));n++}});U.SHEET=null;toast(tr('sheet.added',{n}));break}
     case 'livesend':{const to=b.dataset.k,type=b.dataset.t;if(type==='cond'){const cond=v('lv-c-'+to);if(!cond){toast(tr('live.pickCond'));return}if(live.sendMsg({type,to,cond}))toast(tr('live.sent'));return}const value=Math.floor(+v('lv-a-'+to));if(!(value>0)){toast(tr('toast.needAmount'));return}if(live.sendMsg({type,to,value}))toast(tr('live.sent'));return}
-    case 'liveyes':{const m=live.answer(b.dataset.id,true);if(m)applyProposal(m);break}
+    case 'liveyes':{const m=live.answer(b.dataset.id,true);if(m){if(m.type==='levelup')openLU();else applyProposal(m)}break}
     case 'liveno':live.answer(b.dataset.id,false);break;
     case 'hoclose':live.L.handouts.shift();break;
     case 'honote':{const m=live.L.handouts.shift();if(m){S.notes=(S.notes?S.notes+'\n\n':'')+[m.title,m.text].filter(Boolean).join('\n');toast(tr('live.noted'))}break}
@@ -215,6 +216,7 @@ app.addEventListener('change',ev=>{
   if(el.id==='char-switch'){switchChar(el.value);render();return}
   if(el.id==='dm-on'){dm.setDmOn(el.checked);later();return}
   if(el.id==='bright'){setBright(el.value);return}
+  if(el.id==='dm-only'){dm.D.on=true;dm.D.only=el.checked;dm.saveD();S.tab=el.checked?'dmcombat':'setup';later();return}
   if(el.id==='ac-auto'){S.acMode=el.checked?'auto':'manual';save();later();return}
   if(el.dataset.dp){const p=dm.D.party[+el.dataset.i];if(p){p[el.dataset.dp]=Math.max(el.dataset.dp==='level'?1:0,Math.min(el.dataset.dp==='level'?20:99,Math.floor(+el.value)||0));dm.saveD()}later();return}
   if(el.dataset.de){const e=dm.curEnc();if(e){e.name=el.value;dm.saveD()}later();return}

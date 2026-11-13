@@ -70,3 +70,41 @@ test.describe('Zuganzeige @new', () => {
     await expect.poll(() => page.evaluate(() => window.__tracked.at(-1).turn)).toMatchObject({ cur: '', name: 'Goblin', enemy: true, next: 'Mirelle' });
   });
 });
+
+test.describe('Spielleitungsmodus und Meilenstein @new', () => {
+  test.beforeEach(async ({ page }) => { await page.addInitScript(fake); });
+
+  test('Umschalten in Einrichten: eigene Reiter, kein Charakterkopf; zurück bringt die Karte wieder', async ({ page }) => {
+    await seed(page, base4({ tab: 'setup' }));
+    await page.evaluate(() => localStorage.setItem('charbogen-dm', JSON.stringify({ on: true })));
+    await page.reload();
+    await page.locator('#dm-only').click();
+    await expect(page.locator('.dmhd')).toBeVisible();
+    await expect(page.locator('[data-a="tab"][data-t="main"]')).toHaveCount(0);
+    await expect(page.locator('[data-a="tab"][data-t="dmcombat"]')).toHaveAttribute('aria-selected', 'true');
+    await page.locator('[data-a="tab"][data-t="dmnotes"]').click();
+    await expect(page.locator('h2', { hasText: /Places and notes|Orte und Notizen/ }).first()).toBeVisible();
+    await page.locator('[data-a="tab"][data-t="setup"]').click();
+    await page.locator('#dm-only').click();
+    await expect(page.locator('[data-a="tab"][data-t="main"]')).toHaveCount(1);
+    await expect(page.locator('.dmhd')).toHaveCount(0);
+  });
+
+  test('Meilenstein: Spieler bekommt Stufenaufstieg zum Annehmen, Annehmen öffnet den Dialog', async ({ page }) => {
+    await seed(page, base4({ tab: 'setup', id: 'held1', klass: 'Fighter', level: 2, hpMax: 20, hp: 20 }));
+    await joinAsPlayer(page);
+    await page.evaluate(() => window.__msg({ id: 'm1', type: 'levelup', to: 'all', from: 'dm-x' }));
+    await expect(page.locator('.inbox')).toContainText(/Level-up|Stufenaufstieg/);
+    await act(page, 'liveyes').click();
+    await expect(page.locator('.dlg')).toBeVisible();
+  });
+
+  test('Spielleitung schickt den Meilenstein an alle', async ({ page }) => {
+    await page.goto(URL_UNDER_TEST);
+    await page.evaluate(s => { localStorage.setItem('charbogen-v4', JSON.stringify(s)); localStorage.setItem('charbogen-dm', JSON.stringify({ on: true, view: 'live' })); localStorage.setItem('charbogen-live', JSON.stringify({ code: 'ABC234', role: 'dm' })); }, base4({ tab: 'dm' }));
+    await page.reload();
+    await page.evaluate(p => window.__peers([p]), { key: 'held1', role: 'player', name: 'Mirelle', klass: 'Wizard', level: 3, hp: 10, hpMax: 10, tmp: 0, ac: 12, exh: 0, conc: '', cond: [], death: { s: 0, f: 0 } });
+    await act(page, 'livelevel').click();
+    expect(await page.evaluate(() => window.__sent.at(-1))).toMatchObject({ type: 'levelup', to: 'all' });
+  });
+});

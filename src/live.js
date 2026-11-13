@@ -57,7 +57,7 @@ function clean(p) {
     turn: p.role === 'dm' && p.turn && typeof p.turn === 'object' ? { r: int(p.turn.r, 999), cur: str(p.turn.cur, 40), name: str(p.turn.name), next: str(p.turn.next), enemy: !!p.turn.enemy, nextEnemy: !!p.turn.nextEnemy, cr: str(p.turn.cr, 6), nextCr: str(p.turn.nextCr, 6) } : null,
   };
 }
-const MSG_TYPES = new Set(['dmg', 'heal', 'temp', 'cond', 'handout', 'ack', 'item', 'gold', 'endturn']);
+const MSG_TYPES = new Set(['dmg', 'heal', 'temp', 'cond', 'handout', 'ack', 'item', 'gold', 'endturn', 'levelup']);
 const COINS = ['pp', 'gp', 'ep', 'sp', 'cp'];
 const JPEG = /^data:image\/jpeg;base64,[A-Za-z0-9+/=]+$/;
 /** Nachrichten kommen von jedem mit dem Raumcode. Werte werden begrenzt, Änderungen am Bogen muss der Spieler annehmen. */
