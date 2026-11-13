@@ -39,6 +39,7 @@ function vSetupBody() {
    ${field(t('setup.class'), sel('klass', [['', t('common.choose')], ...named(Object.keys(CLASSES))], S.klass, t('setup.class')))}
    ${field(t('setup.subclass'), sel('sub', [['', C ? t('setup.subFrom', { n: C.subN, l: C.subL }) : t('common.choose')], ...(C ? C.subs : []).map(x => [x, x]), ...(S.sub && !(C && C.subs.includes(S.sub)) ? [[S.sub, S.sub]] : [])].map(([k, x]) => [esc(k), esc(x)]), esc(S.sub), t('setup.subclass')))}
    ${field(t('setup.level'), numIn('level', S.level, t('setup.level'), 0, 20))}
+   ${field(t('xp.title'), numIn('xp', S.xp || 0, t('xp.title'), 0, 999999))}
    ${vBgField()}
    ${field(t('setup.background'), txtIn('info', S.info, t('setup.backgroundLabel'), t('setup.backgroundPh')))}
   </div>${R ? `<p class="note">${t('setup.raceBonus', { b: esc(bonus) })}</p>` : ''}

@@ -9,6 +9,7 @@ export function applyProposal(m) {
   else if (m.type === 'heal') heal(m.value);
   else if (m.type === 'temp') { if (m.value <= S.tmp) toast(t('toast.tempNoStack')); else { S.tmp = m.value; toast(t('toast.tempSet', { n: m.value })); } }
   else if (m.type === 'cond') S.cond[m.cond] = true;
+  else if (m.type === 'xp') { S.xp = (+S.xp || 0) + m.value; toast(t('xp.got', { n: m.value })); }
   else if (m.type === 'item') { const c = m.key && BYN[m.key]; putBag(S, mk(c || { n: m.n, ic: 'box', p: m.p }, m.q)); toast(t('toast.toBag', { n: c ? c.n : m.n })); }
   else if (m.type === 'gold') { Object.entries(m.coins).forEach(([k, v]) => { S.gold[k] = (+S.gold[k] || 0) + v; }); toast(t('live.goldIn')); }
 }

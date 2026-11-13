@@ -12,7 +12,7 @@ import { t, lang, dice } from '../i18n/index.js';
 
 const COINK = ['pp', 'gp', 'ep', 'sp', 'cp'];
 const coinList = c => COINK.filter(k => c[k]).map(k => `${c[k]} ${t('coin.' + k)}`).join(', ');
-const proposalText = m => (m.type === 'levelup' ? t('live.pLevel') : m.type === 'cond' ? t('live.pCond', { c: m.cond }) : m.type === 'item' ? t('live.pItem', { q: m.q, n: m.key && BYN[m.key] ? BYN[m.key].n : m.n }) : m.type === 'gold' ? t('live.pGold', { c: coinList(m.coins) }) : t('live.p.' + m.type, { n: m.value }));
+const proposalText = m => (m.type === 'levelup' ? t('live.pLevel') : m.type === 'xp' ? t('live.pXp', { n: m.value }) : m.type === 'cond' ? t('live.pCond', { c: m.cond }) : m.type === 'item' ? t('live.pItem', { q: m.q, n: m.key && BYN[m.key] ? BYN[m.key].n : m.n }) : m.type === 'gold' ? t('live.pGold', { c: coinList(m.coins) }) : t('live.p.' + m.type, { n: m.value }));
 
 export function vInbox() {
   if (L.role !== 'player' || !L.inbox.length) return '';
@@ -27,7 +27,7 @@ export function vHandout() {
 
 export function vLiveSend(p) {
   const key = esc(p.key), bt = (type, cls, label) => `<button class="btn sm ${cls}" data-a="livesend" data-k="${key}" data-t="${type}">${label}</button>`;
-  return `<div class="add live-send"><input type="number" class="n" id="lv-a-${key}" min="1" placeholder="${t('hp.amount')}" aria-label="${t('hp.amount')}">${bt('dmg', 'bad', t('hp.damage'))}${bt('heal', 'good', t('hp.heal'))}${bt('temp', '', t('live.temp'))}<select id="lv-c-${key}" aria-label="${t('cond.title')}"><option value="">${t('cond.title')}</option>${COND.map(c => `<option value="${esc(c.n)}">${esc(c.n)}</option>`).join('')}</select>${bt('cond', '', t('live.sendCond'))}</div>`;
+  return `<div class="add live-send"><input type="number" class="n" id="lv-a-${key}" min="1" placeholder="${t('hp.amount')}" aria-label="${t('hp.amount')}">${bt('dmg', 'bad', t('hp.damage'))}${bt('heal', 'good', t('hp.heal'))}${bt('temp', '', t('live.temp'))}<select id="lv-c-${key}" aria-label="${t('cond.title')}"><option value="">${t('cond.title')}</option>${COND.map(c => `<option value="${esc(c.n)}">${esc(c.n)}</option>`).join('')}</select>${bt('cond', '', t('live.sendCond'))}${bt('xp', '', t('live.xpBtn'))}${bt('levelup', '', t('live.lvlBtn'))}</div>`;
 }
 
 export function vHandoutForm(list) {

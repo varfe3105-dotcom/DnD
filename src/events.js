@@ -71,6 +71,8 @@ app.addEventListener('click',ev=>{
     case 'livelevel':if(live.sendMsg({type:'levelup',to:'all'}))toast(tr('live.levelSent'));else toast(tr('turn.offline'));break;
     case 'condopen':U.CONDOPEN=!U.CONDOPEN;break;
     case 'sheetmode':setSheetMode(b.dataset.m);break;
+    case 'dmxpopen':dm.DU.xpOpen=!dm.DU.xpOpen;break;
+    case 'dmxpsend':{const total=Math.max(0,Math.floor(+v('dm-xpt'))||0),n=Math.max(1,Math.floor(+v('dm-xpn'))||1),per=Math.floor(total/n);if(!per){toast(tr('toast.needAmount'));return}if(live.sendMsg({type:'xp',to:'all',value:per}))toast(tr('xp.sent',{n:per}));else toast(tr('xp.offlineToast',{n:per}));return}
     case 'dmturns':dm.D.turns=!dm.D.turns;dm.saveD();live.refresh();break;
     case 'turnshow':setTurnsHidden(!turnsHidden());break;
     case 'endturn':if(!live.endTurn())toast(tr('turn.offline'));else toast(tr('turn.ended'));break;
@@ -84,6 +86,9 @@ app.addEventListener('click',ev=>{
     case 'dmcond':{const c=dm.find(b.dataset.id);if(c){if(c.cond[b.dataset.c])delete c.cond[b.dataset.c];else c.cond[b.dataset.c]=true;dm.saveD()}break}
     case 'dmrm':dm.removeC(b.dataset.id);dm.saveD();break;
     case 'dmnew':dm.newNote(dm.DU.nk||'npc');dm.saveD();break;
+    case 'dmnews':dm.DU.nk='';dm.newNote('session');dm.saveD();break;
+    case 'dmhere':dm.setHere(dm.D.here===b.dataset.id?null:b.dataset.id);dm.saveD();break;
+    case 'dmnewhere':dm.DU.nk='';dm.newNote('place');dm.setHere(dm.D.sel);dm.saveD();break;
     case 'dmnewp':dm.DU.nk='';dm.newNote('place');dm.saveD();break;
     case 'dmnk':dm.DU.nk=k;break;
     case 'dmpladd':dm.placeAdd(b.dataset.m);dm.saveD();break;
@@ -110,7 +115,7 @@ app.addEventListener('click',ev=>{
     case 'sheetcancel':U.SHEET=null;break;
     case 'sheetapply':{if(!U.SHEET.draft.klass){toast(tr('sheet.needClass'));return}const r=importDraft(U.SHEET.draft);if(r.error){toast(r.error);return}U.IMPREP=r.reports;U.SHEET=null;S.tab='setup';toast(tr('imp.done',{n:r.reports.map(x=>x.name).join(', ')}));break}
     case 'sheetspells':{const known=new Set(S.spells.map(x=>x.n));let n=0;U.SHEET.draft.spells.forEach(x=>{if(!known.has(x)&&BYN['spell:'+x]){S.spells.push(spFrom(BYN['spell:'+x]));n++}});U.SHEET=null;toast(tr('sheet.added',{n}));break}
-    case 'livesend':{const to=b.dataset.k,type=b.dataset.t;if(type==='cond'){const cond=v('lv-c-'+to);if(!cond){toast(tr('live.pickCond'));return}if(live.sendMsg({type,to,cond}))toast(tr('live.sent'));return}const value=Math.floor(+v('lv-a-'+to));if(!(value>0)){toast(tr('toast.needAmount'));return}if(live.sendMsg({type,to,value}))toast(tr('live.sent'));return}
+    case 'livesend':{const to=b.dataset.k,type=b.dataset.t;if(type==='levelup'){if(live.sendMsg({type,to}))toast(tr('live.sent'));return}if(type==='cond'){const cond=v('lv-c-'+to);if(!cond){toast(tr('live.pickCond'));return}if(live.sendMsg({type,to,cond}))toast(tr('live.sent'));return}const value=Math.floor(+v('lv-a-'+to));if(!(value>0)){toast(tr('toast.needAmount'));return}if(live.sendMsg({type,to,value}))toast(tr('live.sent'));return}
     case 'liveyes':{const m=live.answer(b.dataset.id,true);if(m){if(m.type==='levelup')openLU();else applyProposal(m)}break}
     case 'liveno':live.answer(b.dataset.id,false);break;
     case 'hoclose':live.L.handouts.shift();break;
@@ -216,7 +221,8 @@ app.addEventListener('change',ev=>{
   if(el.id==='char-switch'){switchChar(el.value);render();return}
   if(el.id==='dm-on'){dm.setDmOn(el.checked);later();return}
   if(el.id==='bright'){setBright(el.value);return}
-  if(el.id==='dm-only'){dm.D.on=true;dm.D.only=el.checked;dm.saveD();S.tab=el.checked?'dmcombat':'setup';later();return}
+  if(el.id==='dm-here'){dm.setHere(el.value);dm.saveD();later();return}
+  if(el.id==='dm-only'){dm.D.on=true;dm.D.only=el.checked;dm.saveD();S.tab=el.checked?'dmnotes':'setup';later();return}
   if(el.id==='ac-auto'){S.acMode=el.checked?'auto':'manual';save();later();return}
   if(el.dataset.dp){const p=dm.D.party[+el.dataset.i];if(p){p[el.dataset.dp]=Math.max(el.dataset.dp==='level'?1:0,Math.min(el.dataset.dp==='level'?20:99,Math.floor(+el.value)||0));dm.saveD()}later();return}
   if(el.dataset.de){const e=dm.curEnc();if(e){e.name=el.value;dm.saveD()}later();return}

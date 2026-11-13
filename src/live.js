@@ -57,7 +57,7 @@ function clean(p) {
     turn: p.role === 'dm' && p.turn && typeof p.turn === 'object' ? { r: int(p.turn.r, 999), cur: str(p.turn.cur, 40), name: str(p.turn.name), next: str(p.turn.next), enemy: !!p.turn.enemy, nextEnemy: !!p.turn.nextEnemy, cr: str(p.turn.cr, 6), nextCr: str(p.turn.nextCr, 6) } : null,
   };
 }
-const MSG_TYPES = new Set(['dmg', 'heal', 'temp', 'cond', 'handout', 'ack', 'item', 'gold', 'endturn', 'levelup']);
+const MSG_TYPES = new Set(['dmg', 'heal', 'temp', 'cond', 'handout', 'ack', 'item', 'gold', 'endturn', 'levelup', 'xp']);
 const COINS = ['pp', 'gp', 'ep', 'sp', 'cp'];
 const JPEG = /^data:image\/jpeg;base64,[A-Za-z0-9+/=]+$/;
 /** Nachrichten kommen von jedem mit dem Raumcode. Werte werden begrenzt, Änderungen am Bogen muss der Spieler annehmen. */
@@ -65,6 +65,7 @@ function cleanMsg(m) {
   if (!m || typeof m !== 'object' || !MSG_TYPES.has(m.type)) return null;
   const out = { id: str(m.id, 40), type: m.type, to: str(m.to, 40), from: str(m.from, 40) };
   if (['dmg', 'heal', 'temp'].includes(m.type)) { out.value = int(m.value, 999); if (!out.value) return null; }
+  if (m.type === 'xp') { out.value = int(m.value, 1000000); if (!out.value) return null; }
   if (m.type === 'cond') { if (!CONDS.has(m.cond)) return null; out.cond = m.cond; }
   if (m.type === 'handout') {
     out.title = str(m.title, 80); out.text = str(m.text, 4000);

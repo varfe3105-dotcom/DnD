@@ -34,3 +34,8 @@ export function spellStats() {
     return { k: c.k, a, dc: 8 + S.prof + m, atk: S.prof + m };
   });
 }
+
+/** XP-Schwellen nach PHB: Index = Stufe, Wert = nötige XP für diese Stufe. */
+export const XP_LEVELS = [0, 0, 300, 900, 2700, 6500, 14000, 23000, 34000, 48000, 64000, 85000, 100000, 120000, 140000, 165000, 195000, 225000, 265000, 305000, 355000];
+/** Gesamtstufe über alle Klassen. */
+export const totalLevel = () => classLevels().reduce((a, c) => a + (c.lvl || 0), 0);

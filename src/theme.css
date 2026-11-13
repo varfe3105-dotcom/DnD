@@ -413,3 +413,26 @@ body.scrolled .jump{top:52px}
 .mb-p b{font:400 1.05rem var(--f-title)}
 .mb-p.down{color:#f08f7d}
 @media (max-width:520px){html[data-dm-only] .tabs nav button span{font-size:.58rem}.mb-party{display:none}}
+
+/* XP im Kopf */
+.xpl{margin:4px 0 0;font:500 .82rem var(--f-ui);color:var(--mute);display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.xpbar{display:inline-block;width:140px;height:7px;border-radius:4px;background:rgba(0,0,0,.45);border:1px solid #6b4a1b;overflow:hidden;vertical-align:middle}
+.xpbar u{display:block;height:100%;background:linear-gradient(90deg,#b8873a,#f1d68b)}
+.xpl.ready b{color:#f1d68b}
+.xpl.ready .xpbar u{box-shadow:0 0 8px #f1d68b}
+.xpshare{margin-top:12px}.xpshare .n{width:110px}
+
+/* Notizbuch der Spielleitung */
+.here{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);gap:16px;margin:4px 0 16px}
+.here>div{position:relative;isolation:isolate;padding:18px 22px;color:#2b1c0e;font-family:var(--f-rule)}
+.here>div::before{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(rgba(120,80,30,.08),rgba(90,50,10,.2)),var(--parch);filter:url(#ragged) drop-shadow(0 6px 10px rgba(0,0,0,.6))}
+.here h3{margin:2px 0 6px;font:400 1.5rem/1.1 var(--f-title);color:#7c1f18}
+.here .lbl{color:#6d4c2a;margin:0}
+.here .ptext{white-space:pre-line;margin:0 0 8px;line-height:1.45}
+.here .note{color:#5a4330}
+.here select{max-width:240px}
+.wd.notebook{min-height:60vh}
+.wd.notebook :is(input,select,textarea){background:rgba(255,248,230,.55)!important;color:#2b1c0e;border-color:#b79a6e}
+.wd.notebook textarea{min-height:46vh;font:400 1.08rem/1.6 var(--f-rule);background-image:repeating-linear-gradient(transparent 0 1.6em,rgba(120,90,50,.18) 1.6em calc(1.6em + 1px))!important;background-attachment:local}
+.wd.notebook .lbl,.wd.notebook .note{color:#5a4330}
+@media (max-width:780px){.here{grid-template-columns:1fr}}

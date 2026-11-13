@@ -6,7 +6,7 @@ import { bright, LEVELS } from '../bright.js';
 import { t, lang } from '../i18n/index.js';
 
 /** Reiter im Spielleitungsmodus → Unteransicht des DM-Bereichs. */
-export const DM_TABS = { dmcombat: 'combat', dmenc: 'enc', dmloot: 'loot', dmnotes: 'notes', dmlive: 'live', dmcheat: 'cheat' };
+export const DM_TABS = { dmnotes: 'notes', dmcombat: 'combat', dmenc: 'enc', dmloot: 'loot', dmlive: 'live', dmcheat: 'cheat' };
 export const DM_TAB_IC = { dmcombat: 'sword', dmenc: 'skull', dmloot: 'coin', dmnotes: 'scroll', dmlive: 'dice', dmcheat: 'torch' };
 export const dmOnly = () => !!(D.on && D.only);
 

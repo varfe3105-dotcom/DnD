@@ -4,6 +4,7 @@ import { esc, mod, sg } from '../util.js';
 import { COND } from '../catalog.js';
 import { t, nameLine, dist } from '../i18n/index.js';
 import { L, players } from '../live.js';
+import { defeatedXp, hereNote, lastSession } from '../dm.js';
 import { D, DU, allMonsters, findMonster, thresholds, partySize, rate, curEnc, xpOf, ordered, searchMonsters, KINDS, curNote, linksOf, noteByTitle, backlinks, searchNotes } from '../dm.js';
 
 const ABK = ['str', 'dex', 'con', 'int', 'wis', 'cha'];
@@ -39,7 +40,7 @@ function row(c, active) {
 }
 function vCombat() {
   const c = D.combat, list = ordered();
-  return `<div class="card"><div class="dm-bar"><div class="dm-round"><small>${t('dm.round')}</small><b>${c.round}</b></div><button class="btn" data-a="dmstep" data-d="-1">${t('dm.prev')}</button><button class="btn solid" data-a="dmstep" data-d="1">${t('dm.next')}</button><button class="tg${D.turns ? ' on' : ''}" data-a="dmturns" aria-pressed="${!!D.turns}" title="${t('dm.turnsHint')}">${t('dm.turns')}</button><button class="btn ${DU.conf === 'clear' ? 'warn' : 'bad'}" data-a="dmclear">${DU.conf === 'clear' ? t('dm.clearConfirm') : t('dm.clear')}</button></div>
+  return `<div class="card"><div class="dm-bar"><div class="dm-round"><small>${t('dm.round')}</small><b>${c.round}</b></div><button class="btn" data-a="dmstep" data-d="-1">${t('dm.prev')}</button><button class="btn solid" data-a="dmstep" data-d="1">${t('dm.next')}</button><button class="btn" data-a="dmxpopen" aria-expanded="${!!DU.xpOpen}">${t('xp.share')}</button><button class="tg${D.turns ? ' on' : ''}" data-a="dmturns" aria-pressed="${!!D.turns}" title="${t('dm.turnsHint')}">${t('dm.turns')}</button><button class="btn ${DU.conf === 'clear' ? 'warn' : 'bad'}" data-a="dmclear">${DU.conf === 'clear' ? t('dm.clearConfirm') : t('dm.clear')}</button></div>${vXpShare()}
   ${list.length ? `<div class="dm-list">${list.map(x => row(x, x.id === c.active)).join('')}</div><p class="note">${t('dm.hint')}</p>` : `<div class="empty">${t('dm.empty')}</div>`}</div>
   <h2>${t('dm.addTitle')}</h2><div class="card"><div class="add"><input type="search" id="dm-mq" value="${esc(DU.mq)}" placeholder="${t('dm.search')}" aria-label="${t('dm.search')}"><input type="number" class="n" id="dm-qty" min="1" max="20" value="1" aria-label="${t('common.count')}"></div><div id="dm-results">${vResults()}</div>
   <div class="add"><input type="text" id="dm-mn" placeholder="${t('common.name')}"><input type="number" class="n" id="dm-mac" min="0" placeholder="${t('dm.acShort')}" aria-label="${t('stat.ac')}"><input type="number" class="n" id="dm-mhp" min="0" placeholder="${t('head.hpShort')}" aria-label="${t('setup.maxHp')}"><button class="btn" data-a="dmman">${t('common.add')}</button><button class="btn" data-a="dmchars">${t('dm.addChars')}</button></div></div>`;
@@ -47,7 +48,7 @@ function vCombat() {
 function noteBody(n) {
   const links = linksOf(n), back = backlinks(n);
   return `<div class="dm-edit"><div class="add" style="margin-top:0"><input type="text" id="dm-ntitle" data-dmn="title" value="${esc(n.title)}" placeholder="${t('dm.noteTitle')}" aria-label="${t('dm.noteTitle')}"><select id="dm-nkind" data-dmn="kind" aria-label="${t('dm.noteKind')}">${KINDS.map(k => `<option value="${k}"${n.kind === k ? ' selected' : ''}>${t('dm.kind.' + k)}</option>`).join('')}</select></div>
-  <textarea id="dm-nbody" data-dmn="body" placeholder="${t('dm.notePh')}" aria-label="${t('dm.noteBody')}">${esc(n.body)}</textarea>${n.kind === 'place' ? vPlace(n) : ''}
+  <textarea id="dm-nbody" data-dmn="body" placeholder="${t('dm.notePh')}" aria-label="${t('dm.noteBody')}">${esc(n.body)}</textarea>${n.kind === 'place' ? `<div class="add"><button class="btn sm${D.here === n.id ? ' solid' : ''}" data-a="dmhere" data-id="${n.id}" aria-pressed="${D.here === n.id}">${D.here === n.id ? t('dm.isHere') : t('dm.setHere')}</button></div>` + vPlace(n) : ''}
   ${links.length ? `<p class="lbl">${t('dm.links')}</p><div class="chips">${links.map(l => `<button class="chip${noteByTitle(l) ? '' : ' dm-new'}" data-a="dmlink" data-t="${esc(l)}">${esc(l)}</button>`).join('')}</div>` : ''}
   ${back.length ? `<p class="lbl">${t('dm.backlinks')}</p><div class="chips">${back.map(o => `<button class="chip" data-a="dmsel" data-id="${o.id}">${esc(o.title || t('dm.untitled'))}</button>`).join('')}</div>` : ''}
   <div class="add"><button class="btn sm ${DU.conf === 'note' ? 'warn' : 'bad'}" data-a="dmndel" data-id="${n.id}">${DU.conf === 'note' ? t('item.removeConfirm') : t('item.remove')}</button></div></div>`;
@@ -68,11 +69,26 @@ function vPlace(n) {
   ${list.length ? `<p class="dm-total">${badge(r)} <span>${t('dm.xpLine', { a: r.xp, m: r.mult, b: r.adj })}</span></p><div class="add" style="margin-top:0"><button class="btn solid" data-a="dmplstart" data-id="${n.id}">${t('dm.start')}</button></div>` : ''}
   <div class="add"><input type="search" id="dm-pq" value="${esc(DU.pq || '')}" placeholder="${t('dm.search')}" aria-label="${t('dm.search')}"></div><div id="dm-pres">${vPlaceResults()}</div></div>`;
 }
+/** Kopf des Notizbuchs: wo die Gruppe gerade ist und die letzte Sitzung. */
+function vHere() {
+  const h = hereNote(), ses = lastSession(), places = D.notes.filter(n => n.kind === 'place');
+  const excerpt = raw => { const s = (raw || '').replace(/[[([^]
+]+)]]/g, '$1'); return esc(s.slice(0, 420)) + (s.length > 420 ? ' …' : ''); };
+  const pick = `<select id="dm-here" aria-label="${t('dm.hereSet')}"><option value="">${t('dm.herePick')}</option>${places.map(p => `<option value="${p.id}"${h && h.id === p.id ? ' selected' : ''}>${esc(p.title || t('dm.untitled'))}</option>`).join('')}</select>`;
+  const links = h ? linksOf(h) : [], mons = h?.monsters || [];
+  return `<div class="here"><div class="here-place"><p class="lbl">${t('dm.here')}</p>${h ? `<h3>${esc(h.title || t('dm.untitled'))}</h3>${h.body ? `<p class="ptext">${excerpt(h.body)}</p>` : ''}${links.length ? `<div class="chips">${links.map(l => `<button class="chip${noteByTitle(l) ? '' : ' dm-new'}" data-a="dmlink" data-t="${esc(l)}">${esc(l)}</button>`).join('')}</div>` : ''}<div class="add"><button class="btn sm" data-a="dmsel" data-id="${h.id}">${t('dm.open')}</button>${mons.length ? `<button class="btn sm solid" data-a="dmplstart" data-id="${h.id}">${t('dm.startHere', { n: mons.reduce((a, m) => a + m.qty, 0) })}</button>` : ''}${pick}</div>` : `<p class="note">${places.length ? t('dm.hereNone') : t('dm.hereNoPlaces')}</p><div class="add">${places.length ? pick : ''}<button class="btn sm solid" data-a="dmnewhere">${t('dm.newPlace')}</button></div>`}</div><div class="here-session"><p class="lbl">${t('dm.lastSession')}</p>${ses ? `<h3>${esc(ses.title)}</h3>${ses.body ? `<p class="ptext">${excerpt(ses.body)}</p>` : `<p class="note">${t('dm.sessionEmpty')}</p>`}<div class="add"><button class="btn sm" data-a="dmsel" data-id="${ses.id}">${t('dm.open')}</button><button class="btn sm solid" data-a="dmnews">${t('dm.newSession')}</button></div>` : `<p class="note">${t('dm.noSession')}</p><div class="add"><button class="btn sm solid" data-a="dmnews">${t('dm.newSession')}</button></div>`}</div></div>`;
+}
 function vNotes() {
   const n = curNote();
-  return `<div class="wtools"><input type="search" id="dm-nq" value="${esc(DU.nq)}" placeholder="${t('dm.noteSearch')}" aria-label="${t('dm.noteSearch')}"><button class="btn solid" data-a="dmnew">${t('dm.newNote')}</button><button class="btn solid" data-a="dmnewp">${t('dm.newPlace')}</button></div>
+  return `${vHere()}<div class="wtools"><input type="search" id="dm-nq" value="${esc(DU.nq)}" placeholder="${t('dm.noteSearch')}" aria-label="${t('dm.noteSearch')}"><button class="btn solid" data-a="dmnew">${t('dm.newNote')}</button><button class="btn solid" data-a="dmnewp">${t('dm.newPlace')}</button><button class="btn solid" data-a="dmnews">${t('dm.newSession')}</button></div>
   <div class="chips dm-nk">${['', ...KINDS].map(k => `<button class="chip${(DU.nk || '') === k ? ' on' : ''}" data-a="dmnk" data-k="${k}" aria-pressed="${(DU.nk || '') === k}">${k ? t('dm.kind.' + k) : t('dm.kindAll')}</button>`).join('')}</div>
-  <div class="wiki"><div class="wl" id="dm-nlist">${vNoteList()}</div><div class="wd">${n ? noteBody(n) : `<p class="empty">${t('dm.noteNone')}</p>`}</div></div>`;
+  <div class="wiki"><div class="wl" id="dm-nlist">${vNoteList()}</div><div class="wd pane notebook">${n ? noteBody(n) : `<p class="empty">${t('dm.noteNone')}</p>`}</div></div>`;
+}
+/** XP verteilen: besiegte Monster zusammenzählen, durch die Spieler teilen, an alle schicken. */
+function vXpShare() {
+  if (!DU.xpOpen) return '';
+  const { list, xp } = defeatedXp(), n = players().length || D.combat.list.filter(c => c.kind === 'pc').length || 1;
+  return `<div class="card xpshare"><p class="lbl" style="margin:0 0 6px">${t('xp.share')}</p><p>${list.length ? t('xp.defeated', { m: list.map(c => esc(c.name)).join(', '), n: xp }) : t('xp.noneDefeated')}</p><div class="add"><label class="ck">${t('xp.total')} <input type="number" class="n" id="dm-xpt" min="0" value="${xp}"></label><label class="ck">${t('xp.players')} <input type="number" class="n" id="dm-xpn" min="1" value="${n}"></label><button class="btn solid" data-a="dmxpsend">${t('xp.send')}</button></div><p class="note">${L.role === 'dm' && L.status === 'on' ? t('xp.sendNote') : t('xp.offline')}</p></div>`;
 }
 function vLive() {
   if (L.role !== 'dm') return `<div class="card"><p class="note" style="margin-top:0">${t('live.dmIntro')}</p>${L.role === 'player' ? `<p class="note">${t('live.dmBusy')}</p>` : ''}<div class="add"><button class="btn solid" data-a="livecreate">${t('live.create')}</button></div><div class="add"><input type="text" id="live-dmcode" maxlength="6" autocomplete="off" placeholder="${t('live.codePh')}" aria-label="${t('live.code')}"><button class="btn" data-a="livedmjoin">${t('live.dmReopen')}</button></div><p class="note">${t('live.dmReopenHint')}</p></div>`;

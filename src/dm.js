@@ -123,6 +123,11 @@ const XP = { 0: 10, 0.125: 25, 0.25: 50, 0.5: 100, 1: 200, 2: 450, 3: 700, 4: 11
 const THRESH = [null, [25, 50, 75, 100], [50, 100, 150, 200], [75, 150, 225, 400], [125, 250, 375, 500], [250, 500, 750, 1100], [300, 600, 900, 1400], [350, 750, 1100, 1700], [450, 900, 1400, 2100], [550, 1100, 1600, 2400], [600, 1200, 1900, 2800], [800, 1600, 2400, 3600], [1000, 2000, 3000, 4500], [1100, 2200, 3400, 5100], [1250, 2500, 3800, 5700], [1400, 2800, 4300, 6400], [1600, 3200, 4800, 7200], [2000, 3900, 5900, 8800], [2100, 4200, 6300, 9500], [2400, 4900, 7300, 10900], [2800, 5700, 8500, 12700]];
 const STEPS = [0.5, 1, 1.5, 2, 2.5, 3, 4, 5];
 export const xpOf = cr => XP[cr] ?? 0;
+/** XP der besiegten Monster im laufenden Kampf (TP 0). */
+export function defeatedXp() {
+  const gone = D.combat.list.filter(c => c.kind === 'mon' && c.hp <= 0);
+  return { list: gone, xp: gone.reduce((a, c) => a + xpOf(findMonster(c.mon)?.cr), 0) };
+}
 export const partySize = () => D.party.reduce((a, p) => a + (+p.count || 0), 0);
 export const thresholds = () => D.party.reduce((t, p) => { const r = THRESH[clamp(+p.level || 1, 1, 20)]; return t.map((v, i) => v + r[i] * (+p.count || 0)); }, [0, 0, 0, 0]);
 /** Schwierigkeit nach den DMG-Regeln: Grund-XP mal Faktor nach Monsterzahl und Gruppengröße. */
@@ -183,10 +188,16 @@ export function syncLive(peers) {
 }
 
 /* ---- Notizen ---- */
-export const KINDS = ['npc', 'place', 'plot', 'other'];
+export const KINDS = ['session', 'place', 'npc', 'plot', 'other'];
+/** „Hier sind wir“: der aktuelle Ort der Gruppe. */
+export const hereNote = () => D.notes.find(n => n.id === D.here && n.kind === 'place') || null;
+export const setHere = id => { D.here = id || null; };
+export const lastSession = () => D.notes.find(n => n.kind === 'session') || null;
 export const curNote = () => D.notes.find(n => n.id === D.sel) || null;
 export function newNote(kind = 'npc') {
-  const n = { id: uid(), kind, title: '', body: '', ...(kind === 'place' ? { monsters: [] } : {}) };
+  const nr = D.notes.filter(x => x.kind === 'session').length + 1;
+  const title = kind === 'session' ? `${t('dm.sessionTitle', { n: nr })} · ${new Date().toLocaleDateString()}` : '';
+  const n = { id: uid(), kind, title, body: '', ...(kind === 'place' ? { monsters: [] } : {}) };
   D.notes.unshift(n);
   D.sel = n.id;
 }

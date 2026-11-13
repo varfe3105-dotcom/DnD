@@ -1,4 +1,4 @@
-import { test, expect, seed, act, base4, URL_UNDER_TEST } from './helpers.js';
+import { test, expect, seed, read, act, base4, URL_UNDER_TEST } from './helpers.js';
 
 // Ersatz für Supabase: zeichnet Gesendetes auf und erlaubt, Presence und Nachrichten einzuspielen.
 const fake = () => {
@@ -81,9 +81,10 @@ test.describe('Spielleitungsmodus und Meilenstein @new', () => {
     await page.locator('#dm-only').click();
     await expect(page.locator('.dmhd')).toBeVisible();
     await expect(page.locator('[data-a="tab"][data-t="main"]')).toHaveCount(0);
-    await expect(page.locator('[data-a="tab"][data-t="dmcombat"]')).toHaveAttribute('aria-selected', 'true');
+    await expect(page.locator('[data-a="tab"][data-t="dmnotes"]')).toHaveAttribute('aria-selected', 'true');
+    await expect(page.locator('.here')).toBeVisible();
     await page.locator('[data-a="tab"][data-t="dmnotes"]').click();
-    await expect(page.locator('h2', { hasText: /Places and notes|Orte und Notizen/ }).first()).toBeVisible();
+    await expect(page.locator('h2', { hasText: /Notebook|Notizbuch/ }).first()).toBeVisible();
     await page.locator('[data-a="tab"][data-t="setup"]').click();
     await page.locator('#dm-only').click();
     await expect(page.locator('[data-a="tab"][data-t="main"]')).toHaveCount(1);
@@ -106,5 +107,52 @@ test.describe('Spielleitungsmodus und Meilenstein @new', () => {
     await page.evaluate(p => window.__peers([p]), { key: 'held1', role: 'player', name: 'Mirelle', klass: 'Wizard', level: 3, hp: 10, hpMax: 10, tmp: 0, ac: 12, exh: 0, conc: '', cond: [], death: { s: 0, f: 0 } });
     await act(page, 'livelevel').click();
     expect(await page.evaluate(() => window.__sent.at(-1))).toMatchObject({ type: 'levelup', to: 'all' });
+  });
+});
+
+test.describe('XP und Notizbuch @new', () => {
+  test.beforeEach(async ({ page }) => { await page.addInitScript(fake); });
+
+  test('XP im Kopf mit Schwelle; XP-Vorschlag annehmen erhöht den Stand', async ({ page }) => {
+    await seed(page, base4({ tab: 'setup', id: 'held1', klass: 'Fighter', level: 1, xp: 250 }));
+    await expect(page.locator('.xpl')).toContainText('250 / 300');
+    await joinAsPlayer(page);
+    await page.evaluate(() => window.__msg({ id: 'x1', type: 'xp', to: 'all', from: 'dm-x', value: 75 }));
+    await expect(page.locator('.inbox')).toContainText('75');
+    await act(page, 'liveyes').click();
+    await expect(page.locator('.xpl')).toHaveClass(/ready/);
+    expect((await read(page)).xp).toBe(325);
+    expect((await read(page)).level).toBe(1);
+  });
+
+  test('Spielleitung: besiegte Monster ergeben XP, Anteil geht an alle', async ({ page }) => {
+    await page.goto(URL_UNDER_TEST);
+    const combat = { round: 3, active: 'c1', list: [
+      { id: 'c1', kind: 'pc', live: 'held1', name: 'Mirelle', init: 18, hp: 20, hpMax: 20, ac: 14, cond: {} },
+      { id: 'c2', kind: 'mon', mon: 'goblin', name: 'Goblin 1', init: 12, hp: 0, hpMax: 7, ac: 15, cond: {} },
+      { id: 'c3', kind: 'mon', mon: 'goblin', name: 'Goblin 2', init: 9, hp: 0, hpMax: 7, ac: 15, cond: {} },
+      { id: 'c4', kind: 'mon', mon: 'goblin', name: 'Goblin 3', init: 5, hp: 4, hpMax: 7, ac: 15, cond: {} },
+    ] };
+    await page.evaluate(([s, c]) => { localStorage.setItem('charbogen-v4', JSON.stringify(s)); localStorage.setItem('charbogen-dm', JSON.stringify({ on: true, view: 'combat', combat: c })); localStorage.setItem('charbogen-live', JSON.stringify({ code: 'ABC234', role: 'dm' })); }, [base4({ tab: 'dm' }), combat]);
+    await page.reload();
+    await page.evaluate(p => window.__peers([p, { ...p, key: 'held2', name: 'Borin' }]), { key: 'held1', role: 'player', name: 'Mirelle', klass: 'Wizard', level: 3, hp: 10, hpMax: 10, tmp: 0, ac: 12, exh: 0, conc: '', cond: [], death: { s: 0, f: 0 } });
+    await act(page, 'dmxpopen').click();
+    await expect(page.locator('.xpshare')).toContainText('100 XP');
+    await expect(page.locator('#dm-xpn')).toHaveValue('2');
+    await act(page, 'dmxpsend').click();
+    expect(await page.evaluate(() => window.__sent.at(-1))).toMatchObject({ type: 'xp', to: 'all', value: 50 });
+  });
+
+  test('Notizbuch: Ort als „Hier sind wir“ markieren, neue Sitzung anlegen', async ({ page }) => {
+    await seed(page, base4({ tab: 'dm' }));
+    await page.evaluate(() => localStorage.setItem('charbogen-dm', JSON.stringify({ on: true, view: 'notes', notes: [{ id: 'p1', kind: 'place', title: 'Rabenturm', body: 'Feucht und kalt. [[Wirt Haldor]]', monsters: [{ id: 'goblin', qty: 2 }] }] })));
+    await page.reload();
+    await expect(page.locator('.here-place')).toContainText(/No current place|Noch kein aktueller Ort/);
+    await page.locator('#dm-here').selectOption('p1');
+    await expect(page.locator('.here-place h3')).toHaveText('Rabenturm');
+    await expect(page.locator('.here-place')).toContainText('Wirt Haldor');
+    await expect(page.locator('.here-place [data-a="dmplstart"]')).toContainText('2');
+    await act(page, 'dmnews', ':visible').first().click();
+    await expect(page.locator('.here-session h3')).toContainText(/Session 1|Sitzung 1/);
   });
 });
