@@ -26,7 +26,7 @@ import { classLevels } from './tables.js';
 import { get, set, refs, fits, applyRace } from './helpers.js';
 import { spMeta, setSheetMode } from './views/sheet.js';
 import { wikiBody } from './views/wiki.js';
-import { openLU, applyLU } from './views/levelup.js';
+import { openLU, applyLU, vLuSpells } from './views/levelup.js';
 import { app, render } from './render.js';
 import { castAt, damage, heal, rest, cast, move, use, importText, loadPortrait, loadFigure } from './game.js';
 import { tip, hideTip, showTip } from './tooltip.js';
@@ -69,6 +69,7 @@ app.addEventListener('click',ev=>{
     case 'shoot':{const ref=ammoFor(S.eq[b.dataset.k]||{}),{at}=ammoLeft(ref);if(!at.length)break;const i=at[0],it=S.bag[i];it.q-=1;if(it.q<=0)S.bag[i]=null;break}
     case 'jump':{const el=document.getElementById(b.dataset.id);if(el)el.scrollIntoView({behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'});return}
     case 'livelevel':if(live.sendMsg({type:'levelup',to:'all'}))toast(tr('live.levelSent'));else toast(tr('turn.offline'));break;
+    case 'lupick':{if(!U.LU)break;const k=b.dataset.k,n=b.dataset.n,a=U.LU.pick[k],i=a.indexOf(n);if(i>=0)a.splice(i,1);else a.push(n);const el=$('lu-spells');if(el){el.innerHTML=vLuSpells();return}break}
     case 'condopen':U.CONDOPEN=!U.CONDOPEN;break;
     case 'sheetmode':setSheetMode(b.dataset.m);break;
     case 'dmxpopen':dm.DU.xpOpen=!dm.DU.xpOpen;break;
@@ -157,7 +158,7 @@ app.addEventListener('click',ev=>{
     case 'tab':S.tab=b.dataset.t;U.SEL=null;window.scrollTo({top:0});break;
     case 'lu':openLU();break;
     case 'luclose':case 'luclose-bg':U.LU=null;break;
-    case 'luapply':if(!applyLU())return;break;
+    case 'luapply':if(!applyLU())return;window.scrollTo({top:0});break;
     case 'rest':rest(b.dataset.r==='long');break;
     case 'mbhp':
     case 'hp':{const was=S.hp;S.hp=clamp(S.hp+ +b.dataset.d,0,hpMaxNow());if(was===0&&S.hp>0){S.death={s:0,f:0};delete S.cond.Unconscious}if(was>0&&S.hp===0)S.cond.Unconscious=true;break}
@@ -258,7 +259,7 @@ app.addEventListener('input',ev=>{
   if(el.id==='notes'){setPageText(el.value);save()}
   if(el.id==='np-title'){setPageTitle(el.value);save();const c=document.querySelector('.notepages .chip.on');if(c)c.textContent=pageLabel(pageList()[curPage()],curPage());return}
   if(el.id==='imp'){U.IMP=el.value;if(U.CONF==='imp')U.CONF=null}
-  if(el.dataset&&el.dataset.lu&&el.tagName==='INPUT'&&U.LU)U.LU[el.dataset.lu]=el.value;
+  if(el.dataset&&el.dataset.lu&&el.tagName==='INPUT'&&U.LU){U.LU[el.dataset.lu]=el.value;if(el.id==='lu-q'){const box=$('lu-spells');if(box)box.innerHTML=vLuSpells();}}
   if(el.id==='wq'){U.WQ=el.value;U.WSEL=null;$('wres').innerHTML=wikiBody()}});
 app.addEventListener('keydown',ev=>{
   const it=ev.target.closest&&ev.target.closest('[data-drag]');

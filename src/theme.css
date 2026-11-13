@@ -436,3 +436,17 @@ body.scrolled .jump{top:52px}
 .wd.notebook textarea{min-height:46vh;font:400 1.08rem/1.6 var(--f-rule);background-image:repeating-linear-gradient(transparent 0 1.6em,rgba(120,90,50,.18) 1.6em calc(1.6em + 1px))!important;background-attachment:local}
 .wd.notebook .lbl,.wd.notebook .note{color:#5a4330}
 @media (max-width:780px){.here{grid-template-columns:1fr}}
+
+/* Zauberwahl im Stufenaufstieg */
+.lup-pool{margin:6px 0 10px}
+.lup-head{margin:6px 0 4px;font-weight:600}
+.lup-head.full{color:var(--good)}
+.lup-lvl{margin:8px 0 4px;font:600 .8rem var(--f-ui);color:var(--mute)}
+.lup-list{display:flex;flex-wrap:wrap;gap:6px;max-height:260px;overflow:auto;padding:2px}
+.lup{display:flex;flex-direction:column;align-items:flex-start;text-align:left;padding:5px 10px;border:1px solid var(--line);border-radius:6px;background:rgba(255,255,255,.35);color:inherit;font:inherit;cursor:pointer;min-width:0}
+.lup b{font-size:.95rem}
+.lup small{font-size:.75rem;opacity:.75}
+.lup.on{background:#7c1f18;border-color:#7c1f18;color:#fff3dd}
+.lup:disabled{opacity:.4;cursor:not-allowed}
+/* Eingaben auf Pergament (Dialoge, Wiki, Notizbuch) bleiben hell, auch in den Helligkeitsstufen des Grimoire */
+@media screen{html:not([data-skin]):is([data-bright="mid"],[data-bright="light"]) :is(.dlg,.wd.pane,.wd.inl,.spb,.dm-stat,.here) :is(input,select,textarea){background-color:#f6ebcf;color:#2c1d0f;border-color:#b79a6e}}

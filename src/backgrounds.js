@@ -1,3 +1,4 @@
+import { resFor } from './helpers.js';
 // Hintergründe aus dem PHB: Auswahl trägt Übungen, Ausrüstung, Gold und Merkmal ein.
 import backgrounds from '../data/backgrounds.json';
 import { S, U, mk, putBag, save, toast } from './state.js';
@@ -75,6 +76,7 @@ export function toggleStyle(n) {
 }
 
 /** Trägt die Merkmale der gewählten Unterklasse bis zur aktuellen Stufe ein und nimmt die der vorherigen zurück. */
+import { syncAlwaysSpells } from './domain-spells.js';
 export function applySubclass(old) {
   const data = SUBCLASSES[S.klass];
   if (!data) return;
@@ -84,5 +86,10 @@ export function applySubclass(old) {
   Object.entries(data[S.sub] || {}).forEach(([l, fs]) => {
     if (+l > lvl) return;
     fs.forEach(f => { if (!S.feats.some(x => x.n === f.n)) S.feats.push({ n: f.n, p: loc(f.text), lvl: +l, src: 'Unterklasse' }); });
-  });
+  });  // Ressourcen der Unterklasse (z. B. Warding Flare) angleichen: alte entfernen, neue eintragen
+  const keep = new Set(resFor(S.klass, lvl, undefined, '').map(r => r.n)), now = resFor(S.klass, lvl, undefined, S.sub);
+  const oldSub = new Set(resFor(S.klass, lvl, undefined, old || '').map(r => r.n).filter(n => !keep.has(n)));
+  S.res = S.res.filter(r => !oldSub.has(r.n) || now.some(x => x.n === r.n));
+  now.forEach(r => { if (!S.res.some(x => x.n === r.n)) S.res.push({ n: r.n, ic: r.ic, max: r.max, used: 0, rest: r.rest, p: r.p }); });
+  syncAlwaysSpells();
 }

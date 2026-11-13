@@ -155,3 +155,6 @@ html[data-skin="modern"] .ovl{background:rgba(5,8,15,.7)}
   html[data-skin="modern"] .xpbar u{background:linear-gradient(90deg,#6d8bff,#a06dff)}
   html[data-skin="plain"] .wd dl.sm{border-block-color:var(--line)}
 }
+/* Dialoge: Höchsthöhe nach Bildschirm, damit lange Dialoge (Zauberwahl) scrollen statt zu schrumpfen */
+.ovl{grid-template-rows:minmax(0,1fr)}
+.dlg{max-height:calc(100vh - 32px);max-height:calc(100dvh - 32px);overflow:auto;align-self:center}

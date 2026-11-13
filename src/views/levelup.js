@@ -1,10 +1,11 @@
 import { clamp, esc, mod, sg } from '../util.js';
 import { tok } from '../icons.js';
 import { ABK, CLIC } from '../constants.js';
-import { pb, pactFor, cantripsFor, knownFor, classLevels, slotsAll, castKind, mcMet } from '../tables.js';
-import { S, U, toast } from '../state.js';
+import { pb, pactFor, cantripsFor, knownFor, classLevels, slotsAll, slotsFor, castKind, mcMet } from '../tables.js';
+import { S, U, toast, spFrom } from '../state.js';
+import { alwaysFor, syncAlwaysSpells } from '../domain-spells.js';
 import { abName, resFor } from '../helpers.js';
-import { CLASSES, SUBCLASSES, FEATS, OPTIONS, MULTICLASS } from '../catalog.js';
+import { CLASSES, SUBCLASSES, FEATS, OPTIONS, MULTICLASS, CAT, BYN } from '../catalog.js';
 import { reqText } from './wiki.js';
 import { t, loc, dice, deName, nameLine } from '../i18n/index.js';
 
@@ -12,7 +13,7 @@ export function openLU() {
   if (!CLASSES[S.klass]) { S.tab = 'setup'; toast(t('lu.needClass')); return; }
   const to = (S.level || 0) + 1;
   if (to > 20) { toast(t('lu.max')); return; }
-  U.LU = { to, hp: 'avg', roll: '', asi: 'two', a1: '', a2: '', feat: '', sub: S.sub || '', k: S.klass };
+  U.LU = { to, hp: 'avg', roll: '', asi: 'two', a1: '', a2: '', feat: '', sub: S.sub || '', k: S.klass, q: '', pick: { cant: [], sp: [] } };
   U.LUfocus = true;
 }
 export function luData() {
@@ -32,7 +33,7 @@ export function luData() {
   if (klass === 'Barbarian' && cl === 20) extra.push(t('lu.barb20'));
   const next = cur ? list.map(x => x.k === klass ? { ...x, lvl: cl, sub: chosen } : x) : [...list, { k: klass, sub: chosen, lvl: cl }];
   const lock = next.find(x => x.k === 'Warlock');
-  return { C, klass, cl, isNew, chosen, to, gain, base, avg, con, dw, feats, extra, asi: C.asi.includes(cl), profOld: S.level ? S.prof : pb(0), profNew: pb(to), slotsOld: S.slots.map(s => s.max), slotsNew: slotsAll(next), hasCaster: next.some(x => castKind(x.k, x.sub)), pact: lock ? pactFor(lock.lvl) : null, res: resFor(klass, cl), cant: [cantripsFor(klass, cl - 1), cantripsFor(klass, cl)], known: [knownFor(klass, cl - 1), knownFor(klass, cl)] };
+  return { C, klass, cl, isNew, chosen, to, gain, base, avg, con, dw, feats, extra, asi: C.asi.includes(cl), profOld: S.level ? S.prof : pb(0), profNew: pb(to), slotsOld: S.slots.map(s => s.max), slotsNew: slotsAll(next), hasCaster: next.some(x => castKind(x.k, x.sub)), pact: lock ? pactFor(lock.lvl) : null, res: resFor(klass, cl, undefined, chosen), cant: [cantripsFor(klass, cl - 1), cantripsFor(klass, cl)], known: [knownFor(klass, cl - 1), knownFor(klass, cl)] };
 }
 import { tl } from '../i18n/index.js';
 const t2 = (l, key, C, to) => tl(l, key, { subs: C.subs.join(', '), n: to });
@@ -78,6 +79,49 @@ function vClassPick(d) {
   const reqT = k => { const { any, ...all } = MULTICLASS[k].req; const fmt = o => Object.entries(o).map(([a, v]) => `${abName(a)} ${v}`); return [...fmt(all), any ? fmt(any).join(t('lu.or')) : ''].filter(Boolean).join(', '); };
   return `<h4>${t('lu.classFor')}</h4><div class="add"><select id="lu-k" data-lu="k" aria-label="${t('lu.classFor')}">${have.map(c => `<option value="${c.k}"${d.klass === c.k ? ' selected' : ''}>${esc(nameLine(c.k))} (${t('feat.level', { n: c.lvl })})</option>`).join('')}${others.map(k => `<option value="${k}"${d.klass === k ? ' selected' : ''}${allMet && mcMet(k) ? '' : ' disabled'}>${esc(nameLine(k))} (${esc(reqT(k))})</option>`).join('')}</select></div>${d.isNew ? `<p class="note">${t('lu.mcNote')}</p>` : ''}`;
 }
+/* ---- Zauberwahl beim Aufstieg ---- */
+const PREP_AB = { Cleric: 'wis', Druid: 'wis', Paladin: 'cha' };
+const THIRD_LIST = { Fighter: 'W', Rogue: 'W' };
+/** Was auf der neuen Stufe gewählt werden darf: Zaubertricks und Zauber, mit Anzahl und passender Liste. */
+export function spellPools(d) {
+  const C = d.C, letter = THIRD_LIST[d.klass] && castKind(d.klass, d.chosen) === 'third' ? 'W' : C.l;
+  const have = new Set(S.spells.map(s => s.n.toLowerCase()));
+  const always = new Set(alwaysFor([{ k: d.klass, sub: d.chosen, lvl: d.cl }]).map(n => n.toLowerCase()));
+  let max = 0;
+  if (d.klass === 'Warlock') max = pactFor(d.cl)[1];
+  else { const sl = slotsFor(d.klass, d.cl, d.chosen); sl.forEach((m, i) => { if (m) max = i + 1; }); }
+  const list = (lo, hi) => CAT.filter(e => e.k === 'spell' && e.lvl >= lo && e.lvl <= hi && (e.cls || '').includes(letter) && !have.has(e.n.toLowerCase()) && !always.has(e.n.toLowerCase())).sort((a, b) => a.lvl - b.lvl || a.n.localeCompare(b.n));
+  const pools = [];
+  const nc = (d.cant[1] || 0) - (d.cant[0] || 0);
+  if (nc > 0) pools.push({ key: 'cant', kind: 'cant', n: nc, list: list(0, 0) });
+  if (!max) return pools;
+  if (d.klass === 'Wizard') pools.push({ key: 'sp', kind: 'book', n: d.cl === 1 ? 6 : 2, list: list(1, max) });
+  else if (d.known[1] != null) { const n = d.known[1] - (d.known[0] || 0); if (n > 0) pools.push({ key: 'sp', kind: 'known', n, list: list(1, max) }); }
+  else if (PREP_AB[d.klass]) {
+    const cap = Math.max(1, mod(S.abil[PREP_AB[d.klass]]) + (d.klass === 'Paladin' ? Math.floor(d.cl / 2) : d.cl));
+    const now = S.spells.filter(s => s.lvl > 0 && !s.always && s.prep !== false).length;
+    if (cap - now > 0) pools.push({ key: 'sp', kind: 'prep', n: cap - now, list: list(1, max) });
+  }
+  return pools;
+}
+/** Liste der wählbaren Zauber (wird beim Suchen allein neu gezeichnet). */
+export function vLuSpells() {
+  if (!U.LU) return '';
+  const d = luData(), pools = spellPools(d), q = (U.LU.q || '').trim().toLowerCase();
+  if (!pools.length) return '';
+  return pools.map(p => {
+    const sel = U.LU.pick[p.key], full = sel.length >= p.n;
+    const shown = p.list.filter(e => !q || e.n.toLowerCase().includes(q) || (e.de || '').toLowerCase().includes(q) || sel.includes(e.n));
+    const byLvl = {};
+    shown.forEach(e => { (byLvl[e.lvl] = byLvl[e.lvl] || []).push(e); });
+    return `<div class="lup-pool"><p class="lbl lup-head${full ? ' full' : ''}">${t('lu.pick.' + p.kind, { a: sel.length, b: p.n })}</p>${Object.entries(byLvl).map(([l, es]) => `<p class="lup-lvl">${+l ? t('spell.level', { n: l }) : t('spell.cantrips')}</p><div class="lup-list">${es.map(e => { const on = sel.includes(e.n); return `<button class="lup${on ? ' on' : ''}" data-a="lupick" data-k="${p.key}" data-n="${esc(e.n)}" aria-pressed="${on}"${!on && full ? ' disabled' : ''} title="${esc((e.eff || '').slice(0, 220))}"><b>${esc(e.n)}</b>${e.de && e.de !== e.n ? `<small>${esc(e.de)}</small>` : ''}</button>`; }).join('')}</div>`).join('') || `<p class="note">${t('wiki.nothing')}</p>`}</div>`;
+  }).join('');
+}
+function vSpellPick(d) {
+  const pools = spellPools(d), al = alwaysFor([{ k: d.klass, sub: d.chosen, lvl: d.cl }]).filter(n => !S.spells.some(s => s.n.toLowerCase() === n.toLowerCase()));
+  if (!pools.length && !al.length) return '';
+  return `<h4>${t('lu.pickTitle')}</h4>${al.length ? `<p class="note">${t('lu.always', { n: al.map(esc).join(', ') })}</p>` : ''}${pools.length ? `<div class="add" style="margin-top:0"><input type="search" id="lu-q" data-lu="q" value="${esc(U.LU.q || '')}" placeholder="${t('lu.pickSearch')}" aria-label="${t('lu.pickSearch')}"></div><div id="lu-spells">${vLuSpells()}</div><p class="note">${t('lu.pickNote')}</p>` : ''}`;
+}
 export function vLU() {
   const d = luData(), C = d.C, abOpt = sel => `<option value="">${t('lu.ability')}</option>` + ABK.map(k => `<option value="${k}"${k === sel ? ' selected' : ''}>${abName(k)} (${S.abil[k]})</option>`).join('');
   const chg = (l, a, b) => String(a) === String(b) ? `<span>${l} ${a}</span>` : `<span class="up">${l} ${a} → ${b}</span>`;
@@ -100,7 +144,7 @@ export function vLU() {
   ${vOptions(d)}
   ${sl.length ? `<h4>${t('setup.slots')}</h4><div class="chg">${sl.map(([g, a, b]) => chg(t('spell.level', { n: g }) + ':', a, b)).join('')}</div>` : ''}
   ${d.pact ? `<h4>${t('spell.pact')}</h4><div class="chg">${chg('', t('lu.pactOf', { a: S.pact.max, b: S.pact.lvl }), t('lu.pactOf', { a: d.pact[0], b: d.pact[1] }))}</div>` : ''}
-  ${d.cant[1] || d.known[1] != null || prepared ? `<h4>${t('spell.title')}</h4><div class="chg">${d.cant[1] ? chg(t('spell.cantrips'), d.cant[0], d.cant[1]) : ''}${d.known[1] != null ? chg(t('lu.known'), d.known[0] || 0, d.known[1]) : ''}${prepared && (d.klass !== 'Paladin' || d.cl >= 2) ? `<span>${t('lu.prepared', { n: prepN })}</span>` : ''}${d.klass === 'Wizard' ? `<span class="up">${d.cl === 1 ? t('lu.book6') : t('lu.book2')}</span>` : ''}</div><p class="note">${t('lu.spellNote')}</p>` : ''}
+  ${d.cant[1] || d.known[1] != null || prepared ? `<h4>${t('spell.title')}</h4><div class="chg">${d.cant[1] ? chg(t('spell.cantrips'), d.cant[0], d.cant[1]) : ''}${d.known[1] != null ? chg(t('lu.known'), d.known[0] || 0, d.known[1]) : ''}${prepared && (d.klass !== 'Paladin' || d.cl >= 2) ? `<span>${t('lu.prepared', { n: prepN })}</span>` : ''}${d.klass === 'Wizard' ? `<span class="up">${d.cl === 1 ? t('lu.book6') : t('lu.book2')}</span>` : ''}</div>` : ''}${vSpellPick(d)}
   ${d.res.length ? `<h4>${t('res.title')}</h4><div class="chg">${d.res.map(r => chg(r.n + ':', resOld[r.n] == null ? t('lu.new') : resOld[r.n] >= 99 ? '∞' : resOld[r.n], r.max >= 99 ? '∞' : r.max)).join('')}</div>` : ''}
   <div class="dlgf"><button class="btn" data-a="luclose">${t('common.cancel')}</button><button class="btn solid" data-a="luapply">${d.to === 1 ? t('lu.apply1') : t('lu.apply')}</button></div></div></div>`;
 }
@@ -122,6 +166,8 @@ export function applyLU() {
   if (d.hasCaster) d.slotsNew.forEach((m, i) => { S.slots[i].max = m; S.slots[i].used = Math.min(S.slots[i].used, m); });
   if (d.pact) { S.pact.max = d.pact[0]; S.pact.lvl = d.pact[1]; S.pact.used = Math.min(S.pact.used, S.pact.max); }
   if (primary && cl === C.subL) S.sub = L.sub.trim();
+  // Gewählte Zauber eintragen (höchstens so viele, wie erlaubt sind)
+  spellPools(d).forEach(p => { (L.pick?.[p.key] || []).slice(0, p.n).forEach(n => { const c = BYN['spell:' + n]; if (c && !S.spells.some(s => s.n === c.n)) S.spells.push(spFrom(c)); }); });
   d.feats.forEach(f => S.feats.push({ n: f.n, p: loc(f.text), lvl: to, src: f.sub ? 'Unterklasse' : 'Klasse' }));
   optionSlots(d.klass, cl, d.chosen).forEach(s => { const o = OPTIONS[s.kind].find(x => x.n === L[s.id]); if (o) S.feats.push({ n: o.n, p: loc(o.text), lvl: to, src: 'Klasse' }); });
   if (d.asi) {
@@ -142,5 +188,6 @@ export function applyLU() {
   d.res.forEach(r => { const ex = S.res.find(x => x.n === r.n); if (ex) { ex.max = r.max; ex.rest = r.rest; ex.p = r.p; ex.used = Math.min(ex.used, r.max); } else S.res.push({ n: r.n, ic: r.ic, max: r.max, used: 0, rest: r.rest, p: r.p }); });
   U.LU = null;
   toast(d.feats.length ? t('lu.doneFeats', { n: to, g: d.gain }) : t('lu.done', { n: to, g: d.gain }));
+  syncAlwaysSpells();
   return true;
 }

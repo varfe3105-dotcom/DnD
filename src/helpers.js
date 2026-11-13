@@ -65,7 +65,7 @@ export function applyRace() {
   if (S.race === 'Goliath') { const motm = S.subrace === 'Monsters of the Multiverse'; S.res.push({ n: "Stone's Endurance", ic: 'shield', max: motm ? S.prof : 1, used: 0, rest: motm ? 'long' : 'short', p: t('res.stone', { d: dice('1W12') }) }); }
   toast(t('toast.raceBonus', { b: (sb ? loc(sb.asi) + (R.asi && /^(see|siehe)/.test(loc(R.asi)) ? '' : ', ' + loc(R.asi)) : loc(R.asi)) }));
 }
-export function resFor(k, l, tongue = lang) {
+export function resFor(k, l, tongue = lang, sub = classLevels().find(c => c.k === k)?.sub || '') {
   const o = [], cha = mod(S.abil.cha), R = (n, max, rest, key, ic, params) => o.push({ n, max, rest, p: tl(tongue, key, params), ic });
   const d = s => dice(s, tongue);
   switch (k) {
@@ -81,6 +81,28 @@ export function resFor(k, l, tongue = lang) {
     case 'Warlock': if (l >= 11) R('Mystic Arcanum', l >= 17 ? 4 : l >= 15 ? 3 : l >= 13 ? 2 : 1, 'long', 'res.arcanum', 'gem'); if (l >= 20) R('Eldritch Master', 1, 'long', 'res.master', 'eye'); break;
     case 'Wizard': R('Arcane Recovery', 1, 'long', 'res.recovery', 'book', { n: Math.ceil(l / 2) }); break;
   }
+  // Unterklassen mit eigener Anzahl an Anwendungen (PHB 2014)
+  const wis = Math.max(1, mod(S.abil.wis)), I = Math.max(1, mod(S.abil.int));
+  const SR = {
+    'Light Domain': () => R('Warding Flare', wis, 'long', 'res.sub.flare', 'shield'),
+    'Tempest Domain': () => R('Wrath of the Storm', wis, 'long', 'res.sub.wrath', 'bolt'),
+    'War Domain': () => R('War Priest', wis, 'long', 'res.sub.warPriest', 'sword'),
+    'Oath of the Ancients': () => { if (l >= 15) R('Undying Sentinel', 1, 'long', 'res.sub.undying', 'heart'); if (l >= 20) R('Elder Champion', 1, 'long', 'res.sub.capstone', 'star'); },
+    'Oath of Devotion': () => { if (l >= 20) R('Holy Nimbus', 1, 'long', 'res.sub.capstone', 'star'); },
+    'Oath of Vengeance': () => { if (l >= 20) R('Avenging Angel', 1, 'long', 'res.sub.capstone', 'star'); },
+    'Battle Master': () => { if (l >= 3) R('Superiority Dice', l >= 15 ? 6 : l >= 7 ? 5 : 4, 'short', 'res.sub.superiority', 'dice', { d: d('W' + (l >= 18 ? 12 : l >= 10 ? 10 : 8)) }); },
+    'Circle of the Land': () => { if (l >= 2) R('Natural Recovery', 1, 'long', 'res.sub.natural', 'leaf', { n: Math.ceil(l / 2) }); },
+    'Way of the Open Hand': () => { if (l >= 6) R('Wholeness of Body', 1, 'long', 'res.sub.wholeness', 'heart', { n: 3 * l }); },
+    'Wild Magic': () => R('Tides of Chaos', 1, 'long', 'res.sub.tides', 'swirl'),
+    'The Archfey': () => { R('Fey Presence', 1, 'short', 'res.sub.fey', 'star'); if (l >= 6) R('Misty Escape', 1, 'short', 'res.sub.misty', 'cloak'); if (l >= 14) R('Dark Delirium', 1, 'short', 'res.sub.delirium', 'eye'); },
+    'The Fiend': () => { if (l >= 6) R("Dark One's Own Luck", 1, 'short', 'res.sub.luck', 'star'); if (l >= 14) R('Hurl Through Hell', 1, 'long', 'res.sub.hurl', 'flame'); },
+    'The Great Old One': () => { if (l >= 6) R('Entropic Ward', 1, 'short', 'res.sub.entropic', 'shield'); },
+    'School of Divination': () => { if (l >= 2) R('Portent', l >= 14 ? 3 : 2, 'long', 'res.sub.portent', 'eye'); },
+    'School of Abjuration': () => { if (l >= 2) R('Arcane Ward', 2 * l + I, 'long', 'res.sub.ward', 'shield'); },
+    'School of Conjuration': () => { if (l >= 6) R('Benign Transposition', 1, 'long', 'res.sub.transpose', 'swirl'); },
+    'School of Illusion': () => { if (l >= 10) R('Illusory Self', 1, 'short', 'res.sub.illusory', 'eye'); },
+  };
+  if (SR[sub]) SR[sub]();
   return o;
 }
 /** Beschreibung einer Fähigkeit in der aktuellen Sprache; von Hand geänderte Texte bleiben. */
