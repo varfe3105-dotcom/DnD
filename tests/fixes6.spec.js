@@ -87,7 +87,7 @@ test.describe('Unterklasse in Einrichten @new', () => {
 test.describe('Orte @new', () => {
   const open = async (page, extra = {}) => {
     await page.goto(URL_UNDER_TEST);
-    await page.evaluate(([s, d]) => { localStorage.clear(); localStorage.setItem('charbogen-v4', JSON.stringify(s)); localStorage.setItem('charbogen-dm', JSON.stringify({ on: true, view: 'notes', party: [{ count: 4, level: 3 }], ...d })); }, [base4({ tab: 'dm' }), extra]);
+    await page.evaluate(([s, d]) => { localStorage.clear(); localStorage.setItem('charbogen-v4', JSON.stringify(s)); localStorage.setItem('charbogen-dm', JSON.stringify({ on: true, only: true, view: 'notes', party: [{ count: 4, level: 3 }], ...d })); }, [base4({ tab: 'dm' }), extra]);
     await page.reload();
     await page.locator('#app header').waitFor();
   };

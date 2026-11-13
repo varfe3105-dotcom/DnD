@@ -2,7 +2,7 @@ import { test, expect, act, base4, URL_UNDER_TEST } from './helpers.js';
 
 async function dm(page, state = {}, extra = {}) {
   await page.goto(URL_UNDER_TEST);
-  await page.evaluate(([s, d]) => { localStorage.clear(); localStorage.setItem('charbogen-v4', JSON.stringify(s)); localStorage.setItem('charbogen-dm', JSON.stringify({ on: true, ...d })); }, [base4({ tab: 'dm', ...state }), extra]);
+  await page.evaluate(([s, d]) => { localStorage.clear(); localStorage.setItem('charbogen-v4', JSON.stringify(s)); localStorage.setItem('charbogen-dm', JSON.stringify({ on: true, only: true, ...d })); }, [base4({ tab: 'dm', ...state }), extra]);
   await page.reload();
   await page.locator('#app header').waitFor();
 }

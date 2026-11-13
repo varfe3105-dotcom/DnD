@@ -10,7 +10,7 @@ import { vWiki } from './views/wiki.js';
 import { vSetup } from './views/setup.js';
 import { vLU } from './views/levelup.js';
 import { vDm } from './views/dm.js';
-import { dmOn, D } from './dm.js';
+import { D } from './dm.js';
 import { DM_TABS, DM_TAB_IC, dmOnly, vDmHead, vDmBar, vDmSetup } from './views/dm-mode.js';
 import { L } from './live.js';
 import { hideTip } from './tooltip.js';
@@ -40,12 +40,14 @@ export function vHead() {
 }
 const TAB_IC = { main: 'shield', inv: 'bag', wiki: 'book', notes: 'scroll', setup: 'tool', dm: 'dice', ...DM_TAB_IC };
 // Im Spielleitungsmodus gibt es keinen eigenen Charakter: eigene Reiter statt Karte, Inventar und Notizen.
-export const tabs = () => (dmOnly() ? [...Object.keys(DM_TABS), 'wiki', 'setup'] : ['main', 'inv', 'wiki', 'notes', 'setup', ...(dmOn() ? ['dm'] : [])]);
+export const tabs = () => (dmOnly() ? [...Object.keys(DM_TABS), 'wiki', 'setup'] : ['main', 'inv', 'wiki', 'notes', 'setup']);
 export const app = $('app');
 export function render() {
   hideTip();
   syncAc();
-  if (!tabs().includes(S.tab)) S.tab = 'main';
+  // Alter Reiter „Spielleitung“ (vor dem Spielleitungsmodus) → passender Reiter im Modus
+  if (S.tab === 'dm' && dmOnly()) S.tab = 'dm' + (D.view || 'notes');
+  if (!tabs().includes(S.tab)) S.tab = tabs()[0];
   const tb = S.tab, ae = document.activeElement, keep = ae && ae.id && app.contains(ae) ? ae.id : null;
   document.documentElement.toggleAttribute('data-dm-only', dmOnly());
   let h = dmOnly() ? vDmHead() : vHead();

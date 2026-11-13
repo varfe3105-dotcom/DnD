@@ -250,7 +250,7 @@ test.describe('Hintergründe @new', () => {
 test.describe('Spickzettel @new', () => {
   const dm = async page => {
     await page.goto((await import('./helpers.js')).URL_UNDER_TEST);
-    await page.evaluate(s => { localStorage.clear(); localStorage.setItem('charbogen-v4', JSON.stringify(s)); localStorage.setItem('charbogen-dm', JSON.stringify({ on: true, view: 'cheat' })); }, base4({ tab: 'dm' }));
+    await page.evaluate(s => { localStorage.clear(); localStorage.setItem('charbogen-v4', JSON.stringify(s)); localStorage.setItem('charbogen-dm', JSON.stringify({ on: true, only: true, view: 'cheat' })); }, base4({ tab: 'dm' }));
     await page.reload();
     await page.locator('#app header').waitFor();
   };

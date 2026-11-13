@@ -992,5 +992,6 @@
  "lu.swapOld": "Give up a known spell",
  "lu.swapNew": "Choose the new spell",
  "lu.swapNone": "Do not swap",
- "lu.swapNote": "When you gain a level you may replace one known spell with another of your class that you can cast at the new level (PHB). Cantrips are not swapped."
+ "lu.swapNote": "When you gain a level you may replace one known spell with another of your class that you can cast at the new level (PHB). Cantrips are not swapped.",
+ "dmm.offHint": "Running the game? Turn on DM mode: this device then shows only the DM dashboard, without a character of its own. Players leave it off."
 }

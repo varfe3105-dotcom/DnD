@@ -104,7 +104,7 @@ test.describe('Online-Speicherung @new', () => {
   test('Spielleitung sichert den DM-Bereich und kann ihn auf einem neuen Gerät laden', async ({ browser }) => {
     const server = fakeServer();
     const a = await device(browser, server, base4({ tab: 'dm' }));
-    await a.page.evaluate(() => { localStorage.setItem('charbogen-dm', JSON.stringify({ on: true, view: 'live', notes: [{ id: 'n1', title: 'Rabenturm', text: 'Geheimgang', kind: 'place' }] })); });
+    await a.page.evaluate(() => { localStorage.setItem('charbogen-dm', JSON.stringify({ on: true, only: true, view: 'live', notes: [{ id: 'n1', title: 'Rabenturm', text: 'Geheimgang', kind: 'place' }] })); });
     await a.page.reload();
     await act(a.page, 'livecreate').click();
     await expect(a.page.locator('.cloud-st')).toHaveClass(/ok/);
@@ -112,7 +112,7 @@ test.describe('Online-Speicherung @new', () => {
     expect(room.data.notes[0].title).toBe('Rabenturm');
 
     const b = await device(browser, server, base4({ tab: 'dm' }));
-    await b.page.evaluate(() => localStorage.setItem('charbogen-dm', JSON.stringify({ on: true, view: 'live' })));
+    await b.page.evaluate(() => localStorage.setItem('charbogen-dm', JSON.stringify({ on: true, only: true, view: 'live' })));
     await b.page.reload();
     await b.page.locator('#live-dmcode').fill(room.room.toLowerCase());
     await act(b.page, 'livedmjoin').click();

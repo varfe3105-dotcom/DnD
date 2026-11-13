@@ -15,7 +15,7 @@ const lastSent = page => page.evaluate(() => window.__liveLog.at(-1));
 const player = (o = {}) => ({ key: 'p1', role: 'player', name: 'Mirelle', klass: 'Wizard', level: 5, hp: 20, hpMax: 32, tmp: 0, ac: 13, exh: 0, conc: '', cond: [], death: { s: 0, f: 0 }, ...o });
 const openDm = async page => {
   await page.goto(URL_UNDER_TEST);
-  await page.evaluate(s => { localStorage.setItem('charbogen-v4', JSON.stringify(s)); localStorage.setItem('charbogen-dm', JSON.stringify({ on: true, view: 'live' })); }, base4({ tab: 'dm' }));
+  await page.evaluate(s => { localStorage.setItem('charbogen-v4', JSON.stringify(s)); localStorage.setItem('charbogen-dm', JSON.stringify({ on: true, only: true, view: 'live' })); }, base4({ tab: 'dm' }));
   await page.reload();
   await page.locator('#app header').waitFor();
 };
@@ -108,7 +108,7 @@ test.describe('Live-Tisch @new', () => {
     await openDm(page);
     await act(page, 'livecreate').click();
     await peers(page, [player()]);
-    await act(page, 'dmview', '[data-v="combat"]').click();
+    await page.locator('[data-a="tab"][data-t="dmcombat"]').click();
     await page.locator('#dm-mn').fill('Wache');
     await peers(page, [player({ hp: 2 })]);
     await page.waitForTimeout(100);
@@ -123,7 +123,7 @@ test.describe('Live-Tisch gegen das echte Projekt @new @real', () => {
       const c = await browser.newContext();
       const p = await c.newPage();
       await p.goto(URL_UNDER_TEST);
-      await p.evaluate(([x, d]) => { localStorage.setItem('charbogen-v4', JSON.stringify(x)); if (d) localStorage.setItem('charbogen-dm', JSON.stringify({ on: true, view: 'live' })); }, [s, dm]);
+      await p.evaluate(([x, d]) => { localStorage.setItem('charbogen-v4', JSON.stringify(x)); if (d) localStorage.setItem('charbogen-dm', JSON.stringify({ on: true, only: true, view: 'live' })); }, [s, dm]);
       await p.reload();
       await p.locator('#app header').waitFor();
       return p;

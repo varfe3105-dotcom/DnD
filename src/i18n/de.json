@@ -992,5 +992,6 @@
  "lu.swapOld": "Bekannten Zauber abgeben",
  "lu.swapNew": "Neuen Zauber wählen",
  "lu.swapNone": "Keinen Zauber tauschen",
- "lu.swapNote": "Beim Stufenaufstieg darfst du einen bekannten Zauber gegen einen anderen deiner Klasse tauschen, den du auf der neuen Stufe wirken kannst (PHB). Zaubertricks werden nicht getauscht."
+ "lu.swapNote": "Beim Stufenaufstieg darfst du einen bekannten Zauber gegen einen anderen deiner Klasse tauschen, den du auf der neuen Stufe wirken kannst (PHB). Zaubertricks werden nicht getauscht.",
+ "dmm.offHint": "Spielleitung? Dann den Spielleitungsmodus einschalten: Dieses Gerät zeigt dann nur das Dashboard der Spielleitung, ohne eigenen Charakter. Spieler lassen ihn aus."
 }

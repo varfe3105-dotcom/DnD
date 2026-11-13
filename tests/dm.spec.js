@@ -2,7 +2,7 @@ import { test, expect, seed, read, act, tab, base4, URL_UNDER_TEST } from './hel
 
 async function dm(page, state = {}, extra = {}) {
   await page.goto(URL_UNDER_TEST);
-  await page.evaluate(([s, d]) => { localStorage.clear(); localStorage.setItem('charbogen-v4', JSON.stringify(s)); localStorage.setItem('charbogen-dm', JSON.stringify({ on: true, ...d })); }, [base4({ tab: 'dm', ...state }), extra]);
+  await page.evaluate(([s, d]) => { localStorage.clear(); localStorage.setItem('charbogen-v4', JSON.stringify(s)); localStorage.setItem('charbogen-dm', JSON.stringify({ on: true, only: true, ...d })); }, [base4({ tab: 'dm', ...state }), extra]);
   await page.reload();
   await page.locator('#app header').waitFor();
 }
@@ -22,13 +22,14 @@ const initAll = async (page, values) => {
 };
 
 test.describe('DM-Bereich @new', () => {
-  test('ist standardmäßig aus und lässt sich einschalten', async ({ page }) => {
+  test('ist standardmäßig aus; Spieler haben keinen Spielleitungsreiter, der Modus bleibt nach Neuladen', async ({ page }) => {
     await seed(page, base4({ tab: 'setup' }));
-    await expect(page.locator('[data-a="tab"][data-t="dm"]')).toHaveCount(0);
-    await page.locator('#dm-on').check();
-    await expect(page.locator('[data-a="tab"][data-t="dm"]')).toBeVisible();
+    await expect(page.locator('[data-a="tab"][data-t^="dm"]')).toHaveCount(0);
+    await expect(page.locator('#dm-on')).toHaveCount(0);
+    await page.locator('#dm-only').click();
+    await expect(page.locator('[data-a="tab"][data-t="dmcombat"]')).toBeVisible();
     await page.reload();
-    await expect(page.locator('[data-a="tab"][data-t="dm"]')).toBeVisible();
+    await expect(page.locator('[data-a="tab"][data-t="dmcombat"]')).toBeVisible();
   });
 
   test('Monster mit SRD-Werten, nummeriert', async ({ page }) => {
@@ -111,12 +112,11 @@ test.describe('DM-Bereich @new', () => {
     await expect(page.locator('#dm-nlist .wli')).toHaveCount(1);
   });
 
-  test('DM-Daten überstehen Charakterwechsel und lassen sich sichern', async ({ page }) => {
+  test('DM-Daten überstehen Neuladen und lassen sich sichern', async ({ page }) => {
     await dm(page);
     await addMonster(page, 'goblin', 'goblin');
-    await tab(page, 'setup');
-    await act(page, 'charnew').click();
-    await tab(page, 'dm');
+    await page.reload();
+    await tab(page, 'dmcombat');
     await expect(page.locator('.dm-name b')).toHaveText('Goblin');
     await page.locator('.dm-backup summary').click();
     await act(page, 'dmexp').click();

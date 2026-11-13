@@ -90,11 +90,11 @@ test.describe('Beute über die Spielleitung @new', () => {
 
   test('Spielleitung verteilt an einen Spieler und stellt die Sperre', async ({ page }) => {
     await page.goto(URL_UNDER_TEST);
-    await page.evaluate(s => { localStorage.setItem('charbogen-v4', JSON.stringify(s)); localStorage.setItem('charbogen-dm', JSON.stringify({ on: true, view: 'live' })); }, base4({ tab: 'dm' }));
+    await page.evaluate(s => { localStorage.setItem('charbogen-v4', JSON.stringify(s)); localStorage.setItem('charbogen-dm', JSON.stringify({ on: true, only: true, view: 'live' })); }, base4({ tab: 'dm' }));
     await page.reload();
     await act(page, 'livecreate').click();
     await page.evaluate(() => window.__livePeers([{ key: 'p1', role: 'player', name: 'Mirelle', hp: 5, hpMax: 9, cond: [], death: { s: 0, f: 0 } }]));
-    await act(page, 'dmview', '[data-v="loot"]').click();
+    await page.locator('[data-a="tab"][data-t="dmloot"]').click();
     await page.locator('#dm-lto').selectOption('p1');
     await page.locator('#dm-lock').check();
     await expect.poll(() => page.evaluate(() => window.__tracked?.lock)).toBe(true);
@@ -111,7 +111,7 @@ test.describe('Beute über die Spielleitung @new', () => {
 test.describe('Spickzettel übersichtlich @new', () => {
   const open = async (page, l) => {
     await page.goto(URL_UNDER_TEST);
-    await page.evaluate(([s, l]) => { localStorage.setItem('charbogen-v4', JSON.stringify(s)); localStorage.setItem('charbogen-dm', JSON.stringify({ on: true, view: 'cheat' })); localStorage.setItem('charbogen-lang', l); }, [base4({ tab: 'dm' }), l]);
+    await page.evaluate(([s, l]) => { localStorage.setItem('charbogen-v4', JSON.stringify(s)); localStorage.setItem('charbogen-dm', JSON.stringify({ on: true, only: true, view: 'cheat' })); localStorage.setItem('charbogen-lang', l); }, [base4({ tab: 'dm' }), l]);
     await page.reload();
     await page.locator('#app header').waitFor();
   };
@@ -136,7 +136,7 @@ test.describe('Spickzettel übersichtlich @new', () => {
 
   test('Monsterwerte gegliedert', async ({ page }) => {
     await page.goto(URL_UNDER_TEST);
-    await page.evaluate(s => { localStorage.setItem('charbogen-v4', JSON.stringify(s)); localStorage.setItem('charbogen-dm', JSON.stringify({ on: true, view: 'combat' })); }, base4({ tab: 'dm' }));
+    await page.evaluate(s => { localStorage.setItem('charbogen-v4', JSON.stringify(s)); localStorage.setItem('charbogen-dm', JSON.stringify({ on: true, only: true, view: 'combat' })); }, base4({ tab: 'dm' }));
     await page.reload();
     await page.locator('#dm-mq').fill('wolf');
     await act(page, 'dmadd', '[data-m="wolf"]').click();

@@ -223,7 +223,6 @@ app.addEventListener('change',ev=>{
   if(el.id==='bg-sel'){pickBg(el.value);later();return}
   if(el.dataset.petbm!=null){const p=S.pets[+el.dataset.petbm];if(p){p.bm=el.checked;save()}later();return}
   if(el.id==='char-switch'){switchChar(el.value);render();return}
-  if(el.id==='dm-on'){dm.setDmOn(el.checked);later();return}
   if(el.id==='bright'){setBright(el.value);return}
   if(el.id==='skin'){setSkin(el.value);later();return}
   if(el.id==='dm-here'){dm.setHere(el.value);dm.saveD();later();return}

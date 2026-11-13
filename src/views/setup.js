@@ -6,7 +6,6 @@ import { tok, iconOpts } from '../icons.js';
 import { SK, RESTK } from '../constants.js';
 import { S, U, roster } from '../state.js';
 import { classLevels } from '../tables.js';
-import { dmOn } from '../dm.js';
 import { L, dmOnline } from '../live.js';
 import { liveState } from './dm.js';
 import { skv, fid, numIn, txtIn, computeAc } from '../helpers.js';
@@ -101,7 +100,7 @@ function vLiveJoin() {
 }
 function vChars() {
   const list = roster();
-  return `<h2>${t('chars.title')}<em>${list.length}</em></h2><div class="card">${list.map(c => `<div class="edrow"><span class="nm">${esc(c.name)}${c.id === S.id ? ` <span class="lbl">${t('chars.active')}</span>` : ''}<small>${[c.klass, c.level ? t('feat.level', { n: c.level }) : ''].filter(Boolean).join(' · ')}</small></span>${c.id === S.id ? '' : `<button class="btn sm" data-a="charsw" data-id="${esc(c.id)}">${t('chars.open')}</button>`}<button class="btn sm ${U.CONF === 'chardel:' + c.id ? 'warn' : 'bad'}" data-a="chardel" data-id="${esc(c.id)}">${U.CONF === 'chardel:' + c.id ? t('chars.delConfirm') : t('common.deleteBtn')}</button></div>`).join('')}<div class="add"><button class="btn solid" data-a="charnew">${t('chars.new')}</button><button class="btn" data-a="chardup">${t('chars.dup')}</button></div><div class="add">${skinControls(t)}</div><div class="add"><label class="ck"><input type="checkbox" id="dm-on"${dmOn() ? ' checked' : ''}> ${t('dm.enable')}</label>${dmOn() ? `<label class="ck"><input type="checkbox" id="dm-only"> ${t('dmm.toggle')}</label>` : ''}</div></div>`;
+  return `<h2>${t('chars.title')}<em>${list.length}</em></h2><div class="card">${list.map(c => `<div class="edrow"><span class="nm">${esc(c.name)}${c.id === S.id ? ` <span class="lbl">${t('chars.active')}</span>` : ''}<small>${[c.klass, c.level ? t('feat.level', { n: c.level }) : ''].filter(Boolean).join(' · ')}</small></span>${c.id === S.id ? '' : `<button class="btn sm" data-a="charsw" data-id="${esc(c.id)}">${t('chars.open')}</button>`}<button class="btn sm ${U.CONF === 'chardel:' + c.id ? 'warn' : 'bad'}" data-a="chardel" data-id="${esc(c.id)}">${U.CONF === 'chardel:' + c.id ? t('chars.delConfirm') : t('common.deleteBtn')}</button></div>`).join('')}<div class="add"><button class="btn solid" data-a="charnew">${t('chars.new')}</button><button class="btn" data-a="chardup">${t('chars.dup')}</button></div><div class="add">${skinControls(t)}</div><div class="add"><label class="ck"><input type="checkbox" id="dm-only"> ${t('dmm.toggle')}</label></div><p class="note">${t('dmm.offHint')}</p></div>`;
 }
 export function spSelect() {
   const by = {}, ls = classLevels().map(c => CLASSES[c.k]?.l).filter(Boolean), l = ls.join('');

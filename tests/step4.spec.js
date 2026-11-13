@@ -21,7 +21,7 @@ const join = async (page, s = {}) => {
 };
 const openDm = async (page, view = 'live') => {
   await page.goto(URL_UNDER_TEST);
-  await page.evaluate(([s, v]) => { localStorage.setItem('charbogen-v4', JSON.stringify(s)); localStorage.setItem('charbogen-dm', JSON.stringify({ on: true, view: v })); }, [base4({ tab: 'dm' }), view]);
+  await page.evaluate(([s, v]) => { localStorage.setItem('charbogen-v4', JSON.stringify(s)); localStorage.setItem('charbogen-dm', JSON.stringify({ on: true, only: true, view: v })); }, [base4({ tab: 'dm' }), view]);
   await page.reload();
   await page.locator('#app header').waitFor();
 };
@@ -201,10 +201,10 @@ test.describe('Beute @new', () => {
     await openDm(page, 'loot');
     await page.locator('#dm-lq').fill('Bag of Holding');
     await expect(page.locator('[data-a="lootsend"]').first()).toBeDisabled();
-    await act(page, 'dmview', '[data-v="live"]').click();
+    await page.locator('[data-a="tab"][data-t="dmlive"]').click();
     await act(page, 'livecreate').click();
     await expect(page.locator('.live-state')).toHaveClass(/on/);
-    await act(page, 'dmview', '[data-v="loot"]').click();
+    await page.locator('[data-a="tab"][data-t="dmloot"]').click();
     await act(page, 'lootsend').first().click();
     expect((await sent(page)).at(-1)).toMatchObject({ type: 'item', to: 'all', key: 'magic:bag-of-holding' });
   });
