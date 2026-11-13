@@ -975,5 +975,22 @@
  "res.sub.portent": "Vorhersage-W20 nach langer Rast",
  "res.sub.ward": "TP des arkanen Schutzes",
  "res.sub.transpose": "Teleport 9 m oder Platztausch",
- "res.sub.illusory": "Reaktion: Angriff verfehlt automatisch"
+ "res.sub.illusory": "Reaktion: Angriff verfehlt automatisch",
+ "shop.price": "Preis",
+ "shop.buy": "Kaufen",
+ "shop.sell": "Verkaufen",
+ "shop.sellPrice": "Verkaufspreis in GM",
+ "shop.sellHint": "Ein Stück verkaufen. Vorbelegt ist der halbe Listenpreis (PHB); magische Gegenstände handelt ihr mit der Spielleitung aus.",
+ "shop.ask": "mit SL aushandeln",
+ "shop.haggle": "ab {n}, aushandeln",
+ "shop.purse": "Du hast {n} GM",
+ "shop.noPrice": "Bitte zuerst einen Preis eintragen.",
+ "shop.poor": "Nicht genug Geld, du hast {n} GM.",
+ "shop.bought": "{n} gekauft für {p} GM.",
+ "shop.sold": "{n} verkauft für {p} GM.",
+ "lu.swapTitle": "Zauber tauschen (freiwillig)",
+ "lu.swapOld": "Bekannten Zauber abgeben",
+ "lu.swapNew": "Neuen Zauber wählen",
+ "lu.swapNone": "Keinen Zauber tauschen",
+ "lu.swapNote": "Beim Stufenaufstieg darfst du einen bekannten Zauber gegen einen anderen deiner Klasse tauschen, den du auf der neuen Stufe wirken kannst (PHB). Zaubertricks werden nicht getauscht."
 }

@@ -975,5 +975,22 @@
  "res.sub.portent": "Foretelling d20s after a long rest",
  "res.sub.ward": "Arcane ward hit points",
  "res.sub.transpose": "Teleport 30 ft or swap places",
- "res.sub.illusory": "Reaction: an attack automatically misses"
+ "res.sub.illusory": "Reaction: an attack automatically misses",
+ "shop.price": "Price",
+ "shop.buy": "Buy",
+ "shop.sell": "Sell",
+ "shop.sellPrice": "Sale price in gp",
+ "shop.sellHint": "Sell one piece. Prefilled with half the list price (PHB); haggle magic items with the DM.",
+ "shop.ask": "haggle with the DM",
+ "shop.haggle": "from {n}, haggle",
+ "shop.purse": "You have {n} gp",
+ "shop.noPrice": "Enter a price first.",
+ "shop.poor": "Not enough money, you have {n} gp.",
+ "shop.bought": "Bought {n} for {p} gp.",
+ "shop.sold": "Sold {n} for {p} gp.",
+ "lu.swapTitle": "Swap a spell (optional)",
+ "lu.swapOld": "Give up a known spell",
+ "lu.swapNew": "Choose the new spell",
+ "lu.swapNone": "Do not swap",
+ "lu.swapNote": "When you gain a level you may replace one known spell with another of your class that you can cast at the new level (PHB). Cantrips are not swapped."
 }

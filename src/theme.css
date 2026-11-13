@@ -450,3 +450,10 @@ body.scrolled .jump{top:52px}
 .lup:disabled{opacity:.4;cursor:not-allowed}
 /* Eingaben auf Pergament (Dialoge, Wiki, Notizbuch) bleiben hell, auch in den Helligkeitsstufen des Grimoire */
 @media screen{html:not([data-skin]):is([data-bright="mid"],[data-bright="light"]) :is(.dlg,.wd.pane,.wd.inl,.spb,.dm-stat,.here) :is(input,select,textarea){background-color:#f6ebcf;color:#2c1d0f;border-color:#b79a6e}}
+
+/* Einkaufen (Wiki) und Verkaufen (Inventar) */
+.buy{display:flex;flex-wrap:wrap;align-items:center;gap:6px 8px;margin:10px 0 4px}
+.buy .n,.sell .n{width:96px}
+.buy .note{margin:0;flex-basis:100%}
+.sell{display:inline-flex;gap:6px;align-items:center}
+.lu-swap select{flex:1 1 220px;min-width:0}

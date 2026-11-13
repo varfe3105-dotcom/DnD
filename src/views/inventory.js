@@ -6,7 +6,10 @@ import { artFor } from '../icon-art.js';
 import { EQ, SLOTK, COINK } from '../constants.js';
 import { S, U } from '../state.js';
 import { numIn, get, refs, slotLabel, slotName, itemView, atk, carried, carryMax } from '../helpers.js';
-import { CAT } from '../catalog.js';
+import { CAT, BYN } from '../catalog.js';
+import { cpToGp } from '../shop.js';
+/** Verkaufspreis pro Stück: halber Katalogpreis (PHB „Selling Treasure“), magisch: aushandeln. */
+export const sellCp = it => { const c = it.ref && BYN[it.ref]; return c && c.cp && !c.magic ? Math.floor(c.cp / (c.q || 1) / 2) : 0; };
 import { t, weight } from '../i18n/index.js';
 
 export function cell(r, label, area) {
@@ -26,6 +29,7 @@ export function vSel() {
   ${it.cons ? `<button class="btn sm solid" data-a="use" data-r="${U.SEL}">${t('item.use')}</button>` : ''}
   ${eqd ? `<button class="btn sm" data-a="unequip">${t('item.toBag')}</button>` : (it.slot ? `<button class="btn sm" data-a="equip">${t('item.equip')}</button>` : '')}
   ${it.att ? `<button class="btn sm${it.tuned ? ' solid' : ''}" data-a="tune">${it.tuned ? t('item.attuned') : t('item.attune')}</button>` : ''}
+  <span class="sell"><input type="number" class="n" id="sell-p" min="0" step="0.01" value="${sellCp(raw) ? cpToGp(sellCp(raw)) : ''}" placeholder="${t('shop.ask')}" aria-label="${t('shop.sellPrice')}"><span class="lbl">${t('price.gp')}</span><button class="btn sm" data-a="sell" title="${t('shop.sellHint')}">${t('shop.sell')}</button></span>
   <select id="sel-slot" data-p="${U.SEL.replace(':', '.')}.slot" aria-label="${t('item.slotLabel')}">${slotOptions(it.slot)}</select>
   <button class="btn sm ${U.CONF === 'rm' ? 'warn' : 'bad'}" data-a="rm">${U.CONF === 'rm' ? t('item.removeConfirm') : t('item.remove')}</button>
   <button class="btn sm" data-a="unsel">${t('common.close')}</button></div></div>`;

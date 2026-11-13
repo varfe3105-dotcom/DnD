@@ -17,6 +17,7 @@ import backgrounds from '../data/backgrounds.json';
 import multiclass from '../data/multiclass.json';
 import legacyTexts from '../data/reference/legacy-texts.json';
 import Fuse from 'fuse.js';
+import { priceCp } from './shop.js';
 import { CLIC } from './constants.js';
 import { lang, t, loc, deName, dist, dice } from './i18n/index.js';
 
@@ -73,7 +74,7 @@ export function buildCatalog() {
   fuse = null;
   CAT.length = 0;
   Object.keys(BYN).forEach(k => delete BYN[k]);
-  [...potions, ...items, ...magicItems].forEach(i => addCat({ k: i.k, id: i.id, n: loc(i.n), ic: i.ic, p: loc(i.text), c: i.rarity ? (i.k === 'potion' ? t('cat.potion') : t('cat.magic')) : t('cat.' + i.group), group: i.group, slot: i.slot, att: i.att, cons: i.cons, q: i.q, ac: i.ac, w: i.w, rar: i.rarity?.en, price: i.rarity ? priceOf(i.id, i.rarity.en) : '', magic: !!i.rarity, ch: i.rarity ? chargeInfo(i.text.en) : undefined, rarity: i.rarity ? loc(i.rarity) : '', source: i.source, hay: hayOf(i.n) }));
+  [...potions, ...items, ...magicItems].forEach(i => addCat({ k: i.k, id: i.id, n: loc(i.n), ic: i.ic, p: loc(i.text), c: i.rarity ? (i.k === 'potion' ? t('cat.potion') : t('cat.magic')) : t('cat.' + i.group), group: i.group, slot: i.slot, att: i.att, cons: i.cons, q: i.q, ac: i.ac, w: i.w, rar: i.rarity?.en, price: i.rarity ? priceOf(i.id, i.rarity.en) : '', cp: priceCp(i.text.en) || (FIXED_GP[i.id] || 0) * 100, cpMin: i.rarity ? (RARITY_GP[String(i.rarity.en).toLowerCase()]?.[0] || 0) * 100 : 0, magic: !!i.rarity, ch: i.rarity ? chargeInfo(i.text.en) : undefined, rarity: i.rarity ? loc(i.rarity) : '', source: i.source, hay: hayOf(i.n) }));
   // Monster (SRD, nur Englisch): Werteblock im Wiki, Symbol nach Kreaturtyp
   const crT = c => (c === 0.125 ? '1/8' : c === 0.25 ? '1/4' : c === 0.5 ? '1/2' : String(c));
   monsters.forEach(m => addCat({ k: 'monster', id: m.id, n: m.n, ic: 'skull', mon: m, artKey: 'mt:' + String(m.type || '').split(' ')[0], c: `${t('cat.monster')} · ${t('turn.cr', { n: crT(m.cr) })}`, hay: `${m.type} ${m.size}`, source: 'srd' }));

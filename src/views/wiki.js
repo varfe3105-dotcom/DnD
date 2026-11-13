@@ -9,6 +9,13 @@ import { get, refs, classOpts, raceTraits, abName, itemView, spellView, resText 
 import { CLASSES, RACES, CAT, BYN, COND, featText, SUBCLASSES, fuzzy } from '../catalog.js';
 import { schoolName, srcNote, restLabel, featSrc } from './sheet.js';
 import { t, loc, dice, dist, deName, nameLine } from '../i18n/index.js';
+import { cpToGp, totalCp } from '../shop.js';
+/** Kaufen beim Händler: Preis vorbelegt (PHB), bei Spannen leer zum Aushandeln. */
+export function vBuy(e) {
+  if (!['potion', 'magic', 'item'].includes(e.k) || e.mine) return '';
+  const v = e.cp ? cpToGp(e.cp) : '';
+  return `<div class="buy"><label class="lbl" for="buy-p">${t('shop.price')}</label><input type="number" class="n" id="buy-p" min="0" step="0.01" value="${v}" placeholder="${e.cpMin ? t('shop.haggle', { n: cpToGp(e.cpMin) }) : t('shop.ask')}"> <span class="lbl">${t('price.gp')}</span><button class="btn sm solid" data-a="buy" data-key="${esc(e.key)}">${t('shop.buy')}</button><span class="note">${t('shop.purse', { n: cpToGp(totalCp(S.gold)).toLocaleString() })}</span></div>`;
+}
 
 export const WFS = ['all', 'mine', 'spell', 'class', 'race', 'feat', 'potion', 'magic', 'item', 'monster', 'cond', 'rule'];
 export function myEntries() {
@@ -56,7 +63,7 @@ export function wDetail(e, inline) {
     body = `<dl class="sm"><div><dt>${t('stat.ac')}</dt><dd>${m.ac}</dd></div><div><dt>${t('mon.hp')}</dt><dd>${m.hp}${m.hd ? ' (' + esc(m.hd) + ')' : ''}</dd></div><div><dt>${t('stat.speed')}</dt><dd>${esc(m.speed)}</dd></div><div><dt>${t('mon.cr')}</dt><dd>${esc(e.c.split(' · ').pop())} · ${xpOf(m.cr)} XP</dd></div></dl><p class="cls">${esc([m.size, m.type].filter(Boolean).join(' '))}</p><dl class="sm mon-ab">${ab}</dl><div class="ptext stat">${statText(m.text)}</div><p class="src">${t('dm.srcMonster')}</p>`;
   } else if (e.k === 'feat') {
     body = `${e.req ? `<p class="cls">${t('wiki.prereq')}: ${esc(reqText(e.req))}</p>` : ''}<p class="ptext">${esc(dice(e.p))}</p>${srcFoot(e.source)}`;
-  } else body = `${e.rarity ? `<p class="cls">${t('wiki.rarity')}: ${esc(e.rarity)}${e.att ? ' · ' + t('item.needsAttune') : ''}${e.price ? ' · ' + esc(e.price) : ''}</p>` : ''}<p class="ptext">${esc(e.p)}</p>${e.source ? srcFoot(e.source) : ''}`;
+  } else body = `${e.rarity ? `<p class="cls">${t('wiki.rarity')}: ${esc(e.rarity)}${e.att ? ' · ' + t('item.needsAttune') : ''}${e.price ? ' · ' + esc(e.price) : ''}</p>` : ''}<p class="ptext">${esc(e.p)}</p>${vBuy(e)}${e.source ? srcFoot(e.source) : ''}`;
   const de = (e.k === 'class' || e.k === 'race' || e.k === 'cond' || e.k === 'feat') && deName(e.n, e.de);
   // Werte (Tabelle, Hinweiszeilen, Quelle) am Anfang und Ende vom Fließtext trennen: auf breiten Bildschirmen stehen sie in einer Seitenleiste.
   let lead = '', trail = '', m;

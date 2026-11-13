@@ -19,6 +19,7 @@ import * as dm from './dm.js';
 import { vResults, vNoteList, vEncResults, vPlaceResults } from './views/dm.js';
 import { t as tr, setLang, distInput } from './i18n/index.js';
 import { buildCatalog } from './catalog.js';
+import { payCp, addCp, totalCp, cpToGp } from './shop.js';
 import { $, clamp } from './util.js';
 import { EQ } from './constants.js';
 import { def, mk, spFrom, putBag, S, setS, U, save, toast, switchChar, newChar, dupChar, delChar } from './state.js';
@@ -175,6 +176,8 @@ app.addEventListener('click',ev=>{
     case 'concend':toast(tr('toast.concEnded',{s:S.conc}));S.conc='';break;
     case 'use':use(b.dataset.r);break;
     case 'gold':{const c2=b.dataset.c;S.gold[c2]=Math.max(0,(+S.gold[c2]||0)+ +b.dataset.d);break}
+    case 'buy':{const c2=BYN[b.dataset.key],v=parseFloat(String($('buy-p')?.value||'').replace(',','.'));if(!c2)break;if(!(v>=0)){toast(tr('shop.noPrice'));return}const cp=Math.round(v*100);if(!payCp(S.gold,cp)){toast(tr('shop.poor',{n:cpToGp(totalCp(S.gold)).toLocaleString()}));return}putBag(S,mk(c2));toast(tr('shop.bought',{n:c2.n,p:v.toLocaleString()}));break}
+    case 'sell':{const it=get(U.SEL),v=parseFloat(String($('sell-p')?.value||'').replace(',','.'));if(!it)break;if(!(v>=0)){toast(tr('shop.noPrice'));return}addCp(S.gold,Math.round(v*100));toast(tr('shop.sold',{n:it.n,p:v.toLocaleString()}));if(it.q>1)it.q--;else{set(U.SEL,null);U.SEL=null}break}
     case 'qty':{const it=get(U.SEL);if(it)it.q=Math.max(1,it.q+ +b.dataset.d);break}
     case 'equip':{const it=get(U.SEL);if(!it)break;const c2=EQ.map(e=>'eq:'+e[0]).filter(r=>fits(it,r));const t=c2.find(r=>!get(r))||c2[0];if(!t){toast(tr('toast.noSlotFit'));break}move(U.SEL,t);break}
     case 'unequip':{let j=S.bag.indexOf(null);if(j<0){j=S.bag.length;for(let x=0;x<6;x++)S.bag.push(null)}move(U.SEL,'bag:'+j);break}

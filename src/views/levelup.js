@@ -83,14 +83,35 @@ function vClassPick(d) {
 const PREP_AB = { Cleric: 'wis', Druid: 'wis', Paladin: 'cha' };
 const THIRD_LIST = { Fighter: 'W', Rogue: 'W' };
 /** Was auf der neuen Stufe gewählt werden darf: Zaubertricks und Zauber, mit Anzahl und passender Liste. */
-export function spellPools(d) {
-  const C = d.C, letter = THIRD_LIST[d.klass] && castKind(d.klass, d.chosen) === 'third' ? 'W' : C.l;
+/** Zauberliste der Klasse auf der neuen Stufe: Buchstabe, höchster Grad, Auswahl ohne bekannte und immer vorbereitete. */
+function spellCtx(d) {
+  const letter = THIRD_LIST[d.klass] && castKind(d.klass, d.chosen) === 'third' ? 'W' : d.C.l;
   const have = new Set(S.spells.map(s => s.n.toLowerCase()));
   const always = new Set(alwaysFor([{ k: d.klass, sub: d.chosen, lvl: d.cl }]).map(n => n.toLowerCase()));
   let max = 0;
   if (d.klass === 'Warlock') max = pactFor(d.cl)[1];
   else { const sl = slotsFor(d.klass, d.cl, d.chosen); sl.forEach((m, i) => { if (m) max = i + 1; }); }
   const list = (lo, hi) => CAT.filter(e => e.k === 'spell' && e.lvl >= lo && e.lvl <= hi && (e.cls || '').includes(letter) && !have.has(e.n.toLowerCase()) && !always.has(e.n.toLowerCase())).sort((a, b) => a.lvl - b.lvl || a.n.localeCompare(b.n));
+  return { letter, max, list };
+}
+/** Tausch eines bekannten Zaubers beim Aufstieg (PHB 2014: Barde, Ranger, Zauberer, Hexenmeister, EK/AT). Kein Tausch bei Zaubertricks. */
+export function swapPool(d) {
+  if (d.known[1] == null || d.isNew || d.cl < 2) return null;
+  const { letter, max, list } = spellCtx(d);
+  if (!max) return null;
+  const old = S.spells.filter(s => s.lvl > 0 && !s.always && (!s.cls || s.cls.includes(letter))).sort((a, b) => a.lvl - b.lvl || a.n.localeCompare(b.n));
+  if (!old.length) return null;
+  return { old, list: list(1, max).filter(e => !(U.LU?.pick?.sp || []).includes(e.n)) };
+}
+function vSwap(d) {
+  const p = swapPool(d);
+  if (!p) return '';
+  const o = U.LU.swapOld || '', n = U.LU.swapNew || '';
+  const opt = (es, sel) => es.map(e => `<option value="${esc(e.n)}"${e.n === sel ? ' selected' : ''}>${esc(e.n)} (${t('spell.level', { n: e.lvl })})</option>`).join('');
+  return `<h4>${t('lu.swapTitle')}</h4><div class="add lu-swap"><select id="lu-swapold" data-lu="swapOld" aria-label="${t('lu.swapOld')}"><option value="">${t('lu.swapNone')}</option>${opt(p.old, o)}</select>${o ? `<select id="lu-swapnew" data-lu="swapNew" aria-label="${t('lu.swapNew')}"><option value="">${t('lu.swapNew')}</option>${opt(p.list, n)}</select>` : ''}</div><p class="note">${t('lu.swapNote')}</p>`;
+}
+export function spellPools(d) {
+  const { max, list } = spellCtx(d);
   const pools = [];
   const nc = (d.cant[1] || 0) - (d.cant[0] || 0);
   if (nc > 0) pools.push({ key: 'cant', kind: 'cant', n: nc, list: list(0, 0) });
@@ -119,8 +140,8 @@ export function vLuSpells() {
 }
 function vSpellPick(d) {
   const pools = spellPools(d), al = alwaysFor([{ k: d.klass, sub: d.chosen, lvl: d.cl }]).filter(n => !S.spells.some(s => s.n.toLowerCase() === n.toLowerCase()));
-  if (!pools.length && !al.length) return '';
-  return `<h4>${t('lu.pickTitle')}</h4>${al.length ? `<p class="note">${t('lu.always', { n: al.map(esc).join(', ') })}</p>` : ''}${pools.length ? `<div class="add" style="margin-top:0"><input type="search" id="lu-q" data-lu="q" value="${esc(U.LU.q || '')}" placeholder="${t('lu.pickSearch')}" aria-label="${t('lu.pickSearch')}"></div><div id="lu-spells">${vLuSpells()}</div><p class="note">${t('lu.pickNote')}</p>` : ''}`;
+  if (!pools.length && !al.length && !swapPool(d)) return '';
+  return `<h4>${t('lu.pickTitle')}</h4>${al.length ? `<p class="note">${t('lu.always', { n: al.map(esc).join(', ') })}</p>` : ''}${vSwap(d)}${pools.length ? `<div class="add" style="margin-top:0"><input type="search" id="lu-q" data-lu="q" value="${esc(U.LU.q || '')}" placeholder="${t('lu.pickSearch')}" aria-label="${t('lu.pickSearch')}"></div><div id="lu-spells">${vLuSpells()}</div><p class="note">${t('lu.pickNote')}</p>` : ''}`;
 }
 export function vLU() {
   const d = luData(), C = d.C, abOpt = sel => `<option value="">${t('lu.ability')}</option>` + ABK.map(k => `<option value="${k}"${k === sel ? ' selected' : ''}>${abName(k)} (${S.abil[k]})</option>`).join('');
@@ -166,6 +187,9 @@ export function applyLU() {
   if (d.hasCaster) d.slotsNew.forEach((m, i) => { S.slots[i].max = m; S.slots[i].used = Math.min(S.slots[i].used, m); });
   if (d.pact) { S.pact.max = d.pact[0]; S.pact.lvl = d.pact[1]; S.pact.used = Math.min(S.pact.used, S.pact.max); }
   if (primary && cl === C.subL) S.sub = L.sub.trim();
+  // Zaubertausch (vor der Neuwahl, damit die Liste noch stimmt)
+  const sw = swapPool(d);
+  if (sw && L.swapOld && L.swapNew && sw.old.some(s => s.n === L.swapOld) && sw.list.some(e => e.n === L.swapNew)) { const i = S.spells.findIndex(s => s.n === L.swapOld), c = BYN['spell:' + L.swapNew]; if (i >= 0 && c) S.spells.splice(i, 1, spFrom(c)); }
   // Gewählte Zauber eintragen (höchstens so viele, wie erlaubt sind)
   spellPools(d).forEach(p => { (L.pick?.[p.key] || []).slice(0, p.n).forEach(n => { const c = BYN['spell:' + n]; if (c && !S.spells.some(s => s.n === c.n)) S.spells.push(spFrom(c)); }); });
   d.feats.forEach(f => S.feats.push({ n: f.n, p: loc(f.text), lvl: to, src: f.sub ? 'Unterklasse' : 'Klasse' }));
