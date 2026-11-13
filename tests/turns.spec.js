@@ -100,13 +100,14 @@ test.describe('Spielleitungsmodus und Meilenstein @new', () => {
     await expect(page.locator('.dlg')).toBeVisible();
   });
 
-  test('Spielleitung schickt den Meilenstein an alle', async ({ page }) => {
+  test('Spielleitung schickt einem einzelnen Spieler einen Stufenaufstieg, kein Knopf für alle mehr', async ({ page }) => {
     await page.goto(URL_UNDER_TEST);
     await page.evaluate(s => { localStorage.setItem('charbogen-v4', JSON.stringify(s)); localStorage.setItem('charbogen-dm', JSON.stringify({ on: true, view: 'live' })); localStorage.setItem('charbogen-live', JSON.stringify({ code: 'ABC234', role: 'dm' })); }, base4({ tab: 'dm' }));
     await page.reload();
     await page.evaluate(p => window.__peers([p]), { key: 'held1', role: 'player', name: 'Mirelle', klass: 'Wizard', level: 3, hp: 10, hpMax: 10, tmp: 0, ac: 12, exh: 0, conc: '', cond: [], death: { s: 0, f: 0 } });
-    await act(page, 'livelevel').click();
-    expect(await page.evaluate(() => window.__sent.at(-1))).toMatchObject({ type: 'levelup', to: 'all' });
+    await expect(page.locator('[data-a="livelevel"]')).toHaveCount(0);
+    await act(page, 'livesend', '[data-k="held1"][data-t="levelup"]').click();
+    expect(await page.evaluate(() => window.__sent.at(-1))).toMatchObject({ type: 'levelup', to: 'held1' });
   });
 });
 
@@ -155,4 +156,31 @@ test.describe('XP und Notizbuch @new', () => {
     await act(page, 'dmnews', ':visible').first().click();
     await expect(page.locator('.here-session h3')).toContainText(/Session 1|Sitzung 1/);
   });
+});
+
+test.describe('Beute an einzelne Spieler @new', () => {
+  test.beforeEach(async ({ page }) => { await page.addInitScript(fake); });
+  test('Empfänger wählen: Knopf nennt den Spieler, Gegenstand geht nur an ihn', async ({ page }) => {
+    await page.goto(URL_UNDER_TEST);
+    await page.evaluate(s => { localStorage.setItem('charbogen-v4', JSON.stringify(s)); localStorage.setItem('charbogen-dm', JSON.stringify({ on: true, view: 'loot' })); localStorage.setItem('charbogen-live', JSON.stringify({ code: 'ABC234', role: 'dm' })); }, base4({ tab: 'dm' }));
+    await page.reload();
+    const peer = { key: 'held1', role: 'player', name: 'Mirelle', klass: 'Wizard', level: 3, hp: 10, hpMax: 10, tmp: 0, ac: 12, exh: 0, conc: '', cond: [], death: { s: 0, f: 0 } };
+    await page.evaluate(ps => window.__peers(ps), [peer, { ...peer, key: 'held2', name: 'Borin' }]);
+    const first = page.locator('[data-a="lootsend"]').first();
+    await expect(first).toHaveText(/Send to everyone|An alle schicken/);
+    await page.locator('#dm-lto2').selectOption('held2');
+    await expect(page.locator('[data-a="lootsend"]').first()).toHaveText(/Send to Borin|An Borin schicken/);
+    await expect(page.locator('#dm-lto')).toHaveValue('held2');
+    await page.locator('[data-a="lootsend"]').first().click();
+    expect(await page.evaluate(() => window.__sent.at(-1))).toMatchObject({ type: 'item', to: 'held2' });
+  });
+});
+
+test('Spielleitungsmodus: neue Spieler erscheinen sofort im Live-Tisch @new', async ({ page }) => {
+  await page.addInitScript(fake);
+  await page.goto(URL_UNDER_TEST);
+  await page.evaluate(s => { localStorage.setItem('charbogen-v4', JSON.stringify(s)); localStorage.setItem('charbogen-dm', JSON.stringify({ on: true, only: true, view: 'live' })); localStorage.setItem('charbogen-live', JSON.stringify({ code: 'ABC234', role: 'dm' })); }, base4({ tab: 'dmlive' }));
+  await page.reload();
+  await page.evaluate(p => window.__peers([p]), { key: 'held1', role: 'player', name: 'Mirelle', klass: 'Wizard', level: 3, hp: 10, hpMax: 10, tmp: 0, ac: 12, exh: 0, conc: '', cond: [], death: { s: 0, f: 0 } });
+  await expect(page.locator('.dm-row')).toContainText('Mirelle');
 });

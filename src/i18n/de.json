@@ -732,7 +732,7 @@
  "loot.allFit": "Alle passenden",
  "loot.send": "An Spieler schicken",
  "loot.more": "{n} weitere, bitte Suche eingrenzen.",
- "loot.sendHint": "Der Gegenstand geht als Handout an alle im Raum.",
+ "loot.sendHint": "Der Gegenstand geht an den gewählten Empfänger, der ihn annehmen muss.",
  "loot.offline": "Zum Verteilen erst unter Live-Tisch einen Raum eröffnen.",
  "rar.common": "Gewöhnlich",
  "rar.uncommon": "Ungewöhnlich",
@@ -916,7 +916,7 @@
  "xp.got": "+{n} XP erhalten.",
  "live.pXp": "{n} Erfahrungspunkte",
  "live.xpBtn": "XP",
- "live.lvlBtn": "Stufenaufstieg",
+ "live.lvlBtn": "Stufenaufstieg schicken",
  "xp.share": "XP verteilen",
  "xp.defeated": "Besiegt: {m}. Zusammen {n} XP.",
  "xp.noneDefeated": "Noch kein Monster besiegt. Monster mit 0 TP zählen automatisch, du kannst die Summe aber auch selbst eintragen.",
@@ -941,5 +941,8 @@
  "dm.sessionEmpty": "Noch nichts notiert.",
  "dm.noSession": "Noch keine Sitzungsnotiz. Leg zu Beginn jedes Spieleabends eine an.",
  "dm.setHere": "Hier sind wir",
- "dm.isHere": "Aktueller Ort ✓"
+ "dm.isHere": "Aktueller Ort ✓",
+ "loot.sendTo": "An {n} schicken",
+ "loot.sendAll": "An alle schicken",
+ "loot.everyone": "alle"
 }

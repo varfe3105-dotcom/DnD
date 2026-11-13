@@ -732,7 +732,7 @@
  "loot.allFit": "All suitable",
  "loot.send": "Send to players",
  "loot.more": "{n} more, please narrow the search.",
- "loot.sendHint": "The item goes out as a handout to everyone in the room.",
+ "loot.sendHint": "The item goes to the chosen recipient, who has to accept it.",
  "loot.offline": "To hand out loot, open a room under Live table first.",
  "rar.common": "Common",
  "rar.uncommon": "Uncommon",
@@ -916,7 +916,7 @@
  "xp.got": "+{n} XP received.",
  "live.pXp": "{n} experience points",
  "live.xpBtn": "XP",
- "live.lvlBtn": "Level up",
+ "live.lvlBtn": "Send level-up",
  "xp.share": "Share XP",
  "xp.defeated": "Defeated: {m}. Total {n} XP.",
  "xp.noneDefeated": "No monster defeated yet. Monsters at 0 HP count automatically, but you can also enter the total yourself.",
@@ -941,5 +941,8 @@
  "dm.sessionEmpty": "Nothing noted yet.",
  "dm.noSession": "No session note yet. Create one at the start of each game night.",
  "dm.setHere": "We are here",
- "dm.isHere": "Current place ✓"
+ "dm.isHere": "Current place ✓",
+ "loot.sendTo": "Send to {n}",
+ "loot.sendAll": "Send to everyone",
+ "loot.everyone": "everyone"
 }

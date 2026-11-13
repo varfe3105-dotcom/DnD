@@ -211,7 +211,7 @@ app.addEventListener('change',ev=>{
   if(el.id==='bak-f'&&el.files&&el.files[0]){const fr=new FileReader();fr.onload=()=>{const bak=parseBackup(String(fr.result));el.value='';if(!bak){toast(tr('bak.bad'));return}U.RESTORE=bak;render()};fr.readAsText(el.files[0]);return}
   if(el.id==='ho-f'&&el.files&&el.files[0]){shrinkImage(el.files[0]).then(d=>{if(!d){toast(tr('live.hoBadImage'));return}dm.DU.hoImg=d;render()});return}
   if(el.id==='ho-to'){dm.DU.hoTo=el.value;return}
-  if(el.id==='dm-lto'){dm.DU.lto=el.value;return}
+  if(el.id==='dm-lto'||el.id==='dm-lto2'){dm.DU.lto=el.value;later();return}
   if(el.id==='dm-lock'){dm.D.lootLock=el.checked;dm.saveD();live.refresh();return}
   if(el.id==='fig-in'&&el.files&&el.files[0]){loadFigure(el.files[0]);return}
   if(el.id==='dm-lt'){dm.DU.lt=el.value;dm.DU.lrar='';later();return}
@@ -297,7 +297,7 @@ let livePending=false;
 const typing=()=>{const a=document.activeElement;return !!a&&app.contains(a)&&/^(INPUT|TEXTAREA|SELECT)$/.test(a.tagName)};
 live.setPeerHook(()=>dm.syncLive(live.players()));
 live.setJoinHook(cloud.onJoin);
-cloud.setCloudListener(()=>{if(S.tab!=='dm'&&S.tab!=='setup')return;if(typing()){livePending=true;return}later()});
+cloud.setCloudListener(()=>{if(!S.tab.startsWith('dm')&&S.tab!=='setup')return;if(typing()){livePending=true;return}later()});
 live.setDmFlags(()=>({lock:!!dm.D.lootLock,turn:dm.turnInfo()}));
 dm.dmHooks.live=()=>live.refresh();
 live.setEndTurnHook(key=>{const gone=dm.endTurnFrom(key);if(gone===null)return;dm.saveD();live.refresh();if(gone.length)toast(gone.map(x=>tr('dm.fxEnded',x)).join(' '));later()});
@@ -305,7 +305,7 @@ live.setTurnHook(mine=>{if(!mine||turnsHidden())return;toast(tr('turn.yours'));t
 live.setAckHook(m=>toast(tr(m.ok?'live.ackYes':'live.ackNo',{n:m.name})));
 initBackup(()=>{const el=$('bak-hist');if(el)el.innerHTML=vBakHist()});
 let lastLock=false;
-live.setLiveListener(force=>{const lk=live.lootLocked(),lockChanged=lk!==lastLock;lastLock=lk;if(!force&&!lockChanged&&S.tab!=='dm'&&S.tab!=='setup')return;if(typing()){livePending=true;return}later()});
+live.setLiveListener(force=>{const lk=live.lootLocked(),lockChanged=lk!==lastLock;lastLock=lk;if(!force&&!lockChanged&&!S.tab.startsWith('dm')&&S.tab!=='setup')return;if(typing()){livePending=true;return}later()});
 app.addEventListener('focusout',()=>{if(livePending)setTimeout(()=>{if(livePending&&!typing()){livePending=false;later()}},0)});
 
 /* Charakterbogen aus PDF oder Bild */
