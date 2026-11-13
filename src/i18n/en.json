@@ -944,5 +944,9 @@
  "dm.isHere": "Current place ✓",
  "loot.sendTo": "Send to {n}",
  "loot.sendAll": "Send to everyone",
- "loot.everyone": "everyone"
+ "loot.everyone": "everyone",
+ "skin.label": "Look",
+ "skin.grimoire": "Grimoire (medieval)",
+ "skin.plain": "Plain",
+ "skin.modern": "Modern"
 }

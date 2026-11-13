@@ -13,7 +13,7 @@ import { importDraft } from './import-play5e.js';
 import { isPlay5e } from './import-play5e.js';
 import * as live from './live.js';
 import * as cloud from './cloud.js';
-import { setBright } from './bright.js';
+import { setBright, setSkin } from './bright.js';
 import { hpMaxNow } from './effects.js';
 import * as dm from './dm.js';
 import { vResults, vNoteList, vEncResults, vPlaceResults } from './views/dm.js';
@@ -221,6 +221,7 @@ app.addEventListener('change',ev=>{
   if(el.id==='char-switch'){switchChar(el.value);render();return}
   if(el.id==='dm-on'){dm.setDmOn(el.checked);later();return}
   if(el.id==='bright'){setBright(el.value);return}
+  if(el.id==='skin'){setSkin(el.value);later();return}
   if(el.id==='dm-here'){dm.setHere(el.value);dm.saveD();later();return}
   if(el.id==='dm-only'){dm.D.on=true;dm.D.only=el.checked;dm.saveD();S.tab=el.checked?'dmnotes':'setup';later();return}
   if(el.id==='ac-auto'){S.acMode=el.checked?'auto':'manual';save();later();return}

@@ -198,3 +198,23 @@ test.describe('Übersichtlichkeit @new', () => {
     expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(390);
   });
 });
+
+test.describe('Darstellung und Icon @new', () => {
+  test('Darstellung wechseln: Schlicht und Modern setzen das Attribut, Grimoire entfernt es; Helligkeit nur im Grimoire', async ({ page }) => {
+    await seed(page, base4({ tab: 'setup' }));
+    await expect(page.locator('#bright')).toBeVisible();
+    await page.locator('#skin').selectOption('plain');
+    await expect(page.locator('html')).toHaveAttribute('data-skin', 'plain');
+    await expect(page.locator('#bright')).toHaveCount(0);
+    await page.reload();
+    await expect(page.locator('html')).toHaveAttribute('data-skin', 'plain');
+    await page.locator('#skin').selectOption('modern');
+    await expect(page.locator('html')).toHaveAttribute('data-skin', 'modern');
+    await page.locator('#skin').selectOption('grimoire');
+    await expect(page.locator('html')).not.toHaveAttribute('data-skin', /.+/);
+  });
+  test('Seite hat ein eigenes Icon', async ({ page }) => {
+    await seed(page, base4({}));
+    expect(await page.locator('link[rel="icon"]').getAttribute('href')).toMatch(/^data:image\/svg\+xml/);
+  });
+});

@@ -2,7 +2,7 @@
 import { esc } from '../util.js';
 import { D, ordered } from '../dm.js';
 import { L, players } from '../live.js';
-import { bright, LEVELS } from '../bright.js';
+import { skinControls } from '../bright.js';
 import { t, lang } from '../i18n/index.js';
 
 /** Reiter im Spielleitungsmodus → Unteransicht des DM-Bereichs. */
@@ -26,5 +26,5 @@ export function vDmBar(tabsHtml) {
 
 /** Einrichten im Spielleitungsmodus: nur, was die Spielleitung braucht. */
 export function vDmSetup() {
-  return `<h2>${t('dmm.setup')}</h2><div class="card"><p class="note" style="margin-top:0">${t('dmm.intro')}</p><div class="add"><label class="ck"><input type="checkbox" id="dm-only" checked> ${t('dmm.toggle')}</label></div><div class="add"><label class="ck">${t('bright.label')} <select id="bright">${LEVELS.map(l => `<option value="${l}"${bright() === l ? ' selected' : ''}>${t('bright.' + l)}</option>`).join('')}</select></label></div><p class="note">${t('dmm.hint')}</p></div>`;
+  return `<h2>${t('dmm.setup')}</h2><div class="card"><p class="note" style="margin-top:0">${t('dmm.intro')}</p><div class="add"><label class="ck"><input type="checkbox" id="dm-only" checked> ${t('dmm.toggle')}</label></div><div class="add">${skinControls(t)}</div><p class="note">${t('dmm.hint')}</p></div>`;
 }

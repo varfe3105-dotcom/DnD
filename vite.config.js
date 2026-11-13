@@ -26,7 +26,7 @@ export default defineConfig(({ mode }) => {
         registerType: 'autoUpdate',
         manifest: {
           name: 'D&D Charakterbogen', short_name: 'Charakterbogen', description: 'D&D 5e (2014) character sheet',
-          start_url: './', scope: './', display: 'standalone', background_color: '#2b1c12', theme_color: '#2b1c12',
+          start_url: './', scope: './', display: 'standalone', background_color: '#3a120e', theme_color: '#3a120e',
           icons: [{ src: 'icon-192.png', sizes: '192x192', type: 'image/png' }, { src: 'icon-512.png', sizes: '512x512', type: 'image/png', purpose: 'any' }],
         },
         includeManifestIcons: false,
