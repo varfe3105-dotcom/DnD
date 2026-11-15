@@ -1,4 +1,4 @@
-import { test, expect, seed, read, act, base4, item } from './helpers.js';
+import { test, expect, seed, read, act, base4, item , rest } from './helpers.js';
 
 const chain = () => item('a1', 'Chain Mail', { ref: 'item:chain-mail', slot: 'body' });
 const speedBox = page => page.locator('.st', { hasText: /Speed|Tempo/ });
@@ -83,10 +83,10 @@ test.describe('Merkmale, die Werte ändern @new', () => {
     await expect(page.locator('.skr', { hasText: 'Persuasion' }).locator('b')).toHaveText('+2');
     await expect(stat(page, /Initiative/)).toHaveText('+3');
   });
-  test('Alert +5 auf Initiative, Observant +5 auf passive Wahrnehmung', async ({ page }) => {
+  test('Alert (2024) gibt den Übungsbonus auf Initiative, Observant kein +5 mehr', async ({ page }) => {
     await seed(page, base4({ klass: 'Fighter', abil, feats: [{ n: 'Alert', p: '', src: 'Talent' }, { n: 'Observant', p: '', src: 'Talent' }] }));
-    await expect(stat(page, /Initiative/)).toHaveText('+7');
-    await expect(stat(page, /Passive/)).toHaveText('16');
+    await expect(stat(page, /Initiative/)).toHaveText('+4');
+    await expect(stat(page, /Passive/)).toHaveText('11');
   });
   test('Mönch Stufe 6 ohne Rüstung: +15 ft Tempo', async ({ page }) => {
     await seed(page, base4({ klass: 'Monk', level: 6, abil }));
@@ -118,28 +118,46 @@ test.describe('Munition, passive Werte, Reliable Talent @new', () => {
   });
 });
 
-test.describe('Goliath @new', () => {
-  test('im Wiki mit Buchangabe, beide Varianten, Stone’s Endurance je nach Variante', async ({ page }) => {
+test.describe('Völker 2024 @new', () => {
+  test('Goliath im Wiki: Riesenabstammung und Unterarten', async ({ page }) => {
     await seed(page, base4({ tab: 'wiki' }));
     await page.locator('#wq').fill('Goliath');
     await act(page, 'wsel', '[data-key="race:Goliath"]').click();
-    await expect(page.locator('.wd.pane')).toContainText("Volo's Guide to Monsters / Monsters of the Multiverse");
-    await expect(page.locator('.wd.pane')).toContainText('Monsters of the Multiverse');
-    await expect(page.locator('.wd.pane')).toContainText('Natural Athlete');
+    await expect(page.locator('.wd.pane')).toContainText('Large Form');
+    await expect(page.locator('.wd.pane')).toContainText('Stone Giant');
   });
-  test('Auswahl im Einrichten setzt Tempo, Fähigkeit und doppelte Tragkraft', async ({ page }) => {
-    await seed(page, base4({ tab: 'setup', prof: 3, abil: { str: 16, dex: 10, con: 14, int: 10, wis: 10, cha: 10 } }));
+  test('Goliath (Steinriese): Tempo 10,5 m, Stone’s Endurance mit Übungsbonus, doppelte Tragkraft', async ({ page }) => {
+    await seed(page, base4({ tab: 'setup', prof: 3, level: 5, abil: { str: 16, dex: 10, con: 14, int: 10, wis: 10, cha: 10 } }));
     await page.locator('[data-p="race"]').selectOption('Goliath');
-    await page.locator('[data-p="subrace"]').selectOption("Volo's Guide");
-    let s = await read(page);
-    expect(s.speed).toBe(9);
-    expect(s.res.find(r => r.n === "Stone's Endurance")).toMatchObject({ max: 1, rest: 'short' });
-    await page.locator('[data-p="subrace"]').selectOption('Monsters of the Multiverse');
-    s = await read(page);
-    expect(s.res.filter(r => r.n === "Stone's Endurance")).toHaveLength(1);
+    await page.locator('[data-p="subrace"]').selectOption('Stone Giant');
+    const s = await read(page);
+    expect(s.speed).toBe(10.5);
     expect(s.res.find(r => r.n === "Stone's Endurance")).toMatchObject({ max: 3, rest: 'long' });
+    expect(s.res.find(r => r.n === 'Large Form')).toMatchObject({ max: 1 });
     await page.locator('[data-a="tab"][data-t="inv"]').click();
     await expect(page.locator('.carryv')).toContainText('480');
+  });
+  test('Zwerg: +1 TP pro Stufe, Wechsel nimmt sie zurück; Elf (Hochelf) bekommt Prestidigitation', async ({ page }) => {
+    await seed(page, base4({ tab: 'setup', level: 3, hpMax: 24, hp: 24 }));
+    await page.locator('[data-p="race"]').selectOption('Dwarf');
+    expect((await read(page)).hpMax).toBe(27);
+    await page.locator('[data-p="race"]').selectOption('Elf');
+    await page.locator('[data-p="subrace"]').selectOption('High Elf');
+    const s = await read(page);
+    expect(s.hpMax).toBe(24);
+    expect(s.spells.map(x => x.n)).toEqual(expect.arrayContaining(['Prestidigitation', 'Detect Magic']));
+  });
+  test('Mensch: Fertigkeit und Herkunftstalent wählen, lange Rast gibt Heroic Inspiration', async ({ page }) => {
+    await seed(page, base4({ tab: 'setup' }));
+    await page.locator('[data-p="race"]').selectOption('Human');
+    await page.locator('#rc-skill').selectOption('Stealth');
+    await page.locator('#rc-feat').selectOption('Skilled');
+    let s = await read(page);
+    expect(s.skills.Stealth).toBe(1);
+    expect(s.feats.map(f => f.n)).toContain('Skilled');
+    await rest(page, 'long');
+    s = await read(page);
+    expect(s.insp).toBe(true);
   });
 });
 

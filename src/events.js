@@ -24,7 +24,7 @@ import { $, clamp } from './util.js';
 import { EQ } from './constants.js';
 import { def, mk, spFrom, putBag, S, setS, U, save, toast, switchChar, newChar, dupChar, delChar } from './state.js';
 import { classLevels } from './tables.js';
-import { get, set, refs, fits, applyRace } from './helpers.js';
+import { get, set, refs, fits, applyRace, applyRaceChoices } from './helpers.js';
 import { spMeta, setSheetMode } from './views/sheet.js';
 import { wikiBody } from './views/wiki.js';
 import { openLU, applyLU, vLuSpells } from './views/levelup.js';
@@ -143,8 +143,8 @@ app.addEventListener('click',ev=>{
     case 'pethp':{const p=S.pets[i];if(p){p.hp=clamp(petView(p).hp+ +b.dataset.d,0,petView(p).hpMax)}break}
     case 'petadd':{const m=dm.findMonster(b.dataset.m);if(!m)break;S.pets.push(petFrom(m));U.petQ='';toast(tr('toast.added',{n:m.n}));break}
     case 'petown':{const n=v('pet-n').trim();if(!n){toast(tr('toast.needName'));return}S.pets.push(petOwn(n,v('pet-ac'),v('pet-hp'),v('pet-sp').trim(),v('pet-t').trim()));toast(tr('toast.created',{n}));break}
-    case 'bgcancel':U.BGPICK=null;break;
-    case 'bgapply':{const bg=bgById(U.BGPICK);if(!bg)break;const sel=[...document.querySelectorAll('[data-bgl]')].map(x=>x.value);const tool=v('bg-tool');if(sel.some(x=>!x)||(bg.choose.tool&&!tool)){toast(tr('bg.needPick'));return}U.BGPICK=null;applyBg(bg,sel,tool);break}
+    case 'bgcancel':U.BGPICK=null;U.BGMODE=U.BGA1=U.BGA2=U.BGTOOL='';break;
+    case 'bgapply':{const bg=bgById(U.BGPICK);if(!bg)break;const mode=v('bg-mode')||'21',a2=v('bg-a2'),a1=v('bg-a1'),tool=v('bg-tool'),gear=v('bg-gear')||'A';if((mode==='21'&&(!a2||!a1||a1===a2))||(bg.tool.choose&&!tool)){toast(tr(mode==='21'&&a1&&a1===a2?'bg.needDiff':'bg.needPick'));return}const asi=mode==='21'?{[a2]:2,[a1]:1}:Object.fromEntries(bg.abil.map(k=>[k,1]));U.BGPICK=null;U.BGMODE=U.BGA1=U.BGA2=U.BGTOOL='';applyBg(bg,{asi,tool,gear});break}
     case 'insp':S.insp=!S.insp;break;
     case 'castslot':castAt(i,b.dataset.l);break;
     case 'prep':{const s=S.spells[i];if(s&&!s.always)s.prep=s.prep===false;break}
@@ -221,6 +221,10 @@ app.addEventListener('change',ev=>{
   if(el.id==='dm-lt'){dm.DU.lt=el.value;dm.DU.lrar='';later();return}
   if(el.id==='dm-lrar'){dm.DU.lrar=el.value;$('dm-li').innerHTML=vLootItems();return}
   if(el.id==='bg-sel'){pickBg(el.value);later();return}
+  if(el.id==='rc-skill'||el.id==='rc-feat'){S.raceChoice={...(S.raceChoice||{}),[el.id==='rc-skill'?'skill':'feat']:el.value};applyRaceChoices(n=>BYN['feat:'+n]?.p||'');save();later();return}
+  if(el.id==='bg-mode'){const v=id=>($(id)||{}).value||'';U.BGMODE=el.value;U.BGA1=v('bg-a1');U.BGA2=v('bg-a2');U.BGTOOL=v('bg-tool');later();return}
+  if(el.id==='bg-tool'){const v=id=>($(id)||{}).value||'';U.BGTOOL=el.value;U.BGA1=v('bg-a1');U.BGA2=v('bg-a2');later();return}
+  if(el.id==='bg-a1'||el.id==='bg-a2'){U[el.id==='bg-a1'?'BGA1':'BGA2']=el.value;return}
   if(el.dataset.petbm!=null){const p=S.pets[+el.dataset.petbm];if(p){p.bm=el.checked;save()}later();return}
   if(el.id==='char-switch'){switchChar(el.value);render();return}
   if(el.id==='bright'){setBright(el.value);return}

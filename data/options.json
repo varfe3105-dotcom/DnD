@@ -2,56 +2,102 @@
  "fightingStyles": [
   {
    "n": "Archery",
+   "de": "Bogenschießen",
    "text": {
-    "en": "You gain a +2 bonus to attack rolls you make with ranged weapons.",
-    "de": "Du erhältst einen Bonus von +2 auf Angriffswürfe mit Fernkampfwaffen."
+    "en": "You gain a +2 bonus to attack rolls you make with Ranged weapons.",
+    "de": "Du erhältst +2 auf Angriffswürfe mit Fernkampfwaffen."
    },
-   "source": "srd",
+   "source": "srd52",
+   "verified": false
+  },
+  {
+   "n": "Blind Fighting",
+   "de": "Blindkampf",
+   "text": {
+    "en": "You have Blindsight with a range of 10 feet.",
+    "de": "Du hast Blindsicht mit 3 m Reichweite."
+   },
+   "source": "summary",
    "verified": false
   },
   {
    "n": "Defense",
+   "de": "Verteidigung",
    "text": {
-    "en": "While you are wearing armor, you gain a +1 bonus to AC.",
-    "de": "Solange du Rüstung trägst, erhältst du +1 auf deine RK."
+    "en": "While you're wearing Light, Medium, or Heavy armor, you gain a +1 bonus to Armor Class.",
+    "de": "Trägst du leichte, mittlere oder schwere Rüstung, erhältst du +1 auf die RK."
    },
-   "source": "srd",
+   "source": "srd52",
    "verified": false
   },
   {
    "n": "Dueling",
+   "de": "Duellieren",
    "text": {
-    "en": "When you are wielding a melee weapon in one hand and no other weapons, you gain a +2 bonus to damage rolls with that weapon.",
-    "de": "Führst du eine Nahkampfwaffe in einer Hand und keine weiteren Waffen, erhältst du +2 auf Schadenswürfe mit dieser Waffe."
+    "en": "When you're holding a Melee weapon in one hand and no other weapons, you gain a +2 bonus to damage rolls with that weapon.",
+    "de": "Hältst du eine Nahkampfwaffe in einer Hand und keine andere Waffe, erhältst du +2 auf Schadenswürfe damit."
    },
-   "source": "srd",
+   "source": "summary",
    "verified": false
   },
   {
    "n": "Great Weapon Fighting",
+   "de": "Kampf mit großen Waffen",
    "text": {
-    "en": "When you roll a 1 or 2 on a damage die for an attack you make with a melee weapon that you are wielding with two hands, you can reroll the die and must use the new roll, even if the new roll is a 1 or a 2. The weapon must have the two-handed or versatile property for you to gain this benefit.",
-    "de": "Würfelst du bei einem Angriff mit einer Nahkampfwaffe, die du mit beiden Händen führst, auf einem Schadenswürfel eine 1 oder 2, kannst du den Würfel neu werfen und musst das neue Ergebnis verwenden, auch wenn es wieder eine 1 oder 2 ist. Die Waffe muss die Eigenschaft zweihändig oder vielseitig haben, damit du diesen Vorteil erhältst."
+    "en": "When you roll damage for an attack you make with a Melee weapon that you are holding with two hands, you can treat any 1 or 2 on a damage die as a 3. The weapon must have the Two-Handed or Versatile property to gain this benefit.",
+    "de": "Würfelst du Schaden für einen Angriff mit einer Nahkampfwaffe, die du mit beiden Händen hältst, kannst du jede 1 oder 2 auf einem Schadenswürfel als 3 werten. Die Waffe muss Zweihändig oder Vielseitig sein."
    },
-   "source": "srd",
+   "source": "srd52",
+   "verified": false
+  },
+  {
+   "n": "Interception",
+   "de": "Abfangen",
+   "text": {
+    "en": "When a creature you can see hits another creature within 5 feet of you with an attack roll, you can take a Reaction to reduce the damage dealt to the target by 1d10 plus your Proficiency Bonus. You must be holding a Shield or a Simple or Martial weapon to use this Reaction.",
+    "de": "Trifft eine Kreatur, die du siehst, eine andere Kreatur im Umkreis von 1,5 m um dich mit einem Angriffswurf, kannst du mit deiner Reaktion den Schaden um 1W10 + deinen Übungsbonus senken. Dafür musst du einen Schild oder eine einfache oder Kriegswaffe halten."
+   },
+   "source": "summary",
    "verified": false
   },
   {
    "n": "Protection",
+   "de": "Schutz",
    "text": {
-    "en": "When a creature you can see attacks a target other than you that is within 5 feet of you, you can use your reaction to impose disadvantage on the attack roll. You must be wielding a shield.",
-    "de": "Greift eine Kreatur, die du sehen kannst, ein anderes Ziel als dich an, das sich innerhalb von 1,5 m um dich befindet, kannst du mit deiner Reaktion dem Angriffswurf Nachteil auferlegen. Du musst einen Schild führen."
+    "en": "When a creature you can see attacks a target other than you that is within 5 feet of you, you can take a Reaction to interpose your Shield if you're holding one. You impose Disadvantage on the triggering attack roll and all other attack rolls against the target until the start of your next turn if you remain within 5 feet of the target.",
+    "de": "Greift eine Kreatur, die du siehst, ein anderes Ziel im Umkreis von 1,5 m um dich an, kannst du mit deiner Reaktion deinen Schild dazwischenhalten. Der auslösende Angriff und alle weiteren Angriffe gegen das Ziel haben bis zum Beginn deines nächsten Zuges Nachteil, solange du im Umkreis von 1,5 m bleibst."
    },
-   "source": "srd",
+   "source": "summary",
+   "verified": false
+  },
+  {
+   "n": "Thrown Weapon Fighting",
+   "de": "Kampf mit Wurfwaffen",
+   "text": {
+    "en": "When you hit with a ranged attack roll using a weapon that has the Thrown property, you gain a +2 bonus to the damage roll.",
+    "de": "Triffst du mit einem Fernkampf-Angriffswurf mit einer Wurfwaffe, erhältst du +2 auf den Schadenswurf."
+   },
+   "source": "summary",
    "verified": false
   },
   {
    "n": "Two-Weapon Fighting",
+   "de": "Kampf mit zwei Waffen",
    "text": {
-    "en": "When you engage in two-weapon fighting, you can add your ability modifier to the damage of the second attack.",
-    "de": "Kämpfst du mit zwei Waffen, kannst du deinen Attributsmodifikator zum Schaden des zweiten Angriffs addieren."
+    "en": "When you make an extra attack as a result of using a weapon that has the Light property, you can add your ability modifier to the damage of that attack if you aren't already adding it to the damage.",
+    "de": "Führst du den Zusatzangriff einer leichten Waffe aus, darfst du deinen Attributsmodifikator zum Schaden addieren, wenn du ihn nicht schon addierst."
    },
-   "source": "srd",
+   "source": "srd52",
+   "verified": false
+  },
+  {
+   "n": "Unarmed Fighting",
+   "de": "Waffenloser Kampf",
+   "text": {
+    "en": "When you hit with your Unarmed Strike and deal damage, you can deal Bludgeoning damage equal to 1d6 plus your Strength modifier instead of the normal damage of an Unarmed Strike. If you aren't holding any weapons or a Shield when you make the attack roll, the d6 becomes a d8.\nAt the start of each of your turns, you can deal 1d4 Bludgeoning damage to one creature Grappled by you.",
+    "de": "Triffst du mit einem waffenlosen Schlag, kannst du statt des normalen Schadens 1W6 + deinen Stärkemodifikator Wuchtschaden anrichten, 1W8 wenn du keine Waffe und keinen Schild hältst.\nZu Beginn jedes deiner Züge kannst du einer von dir gepackten Kreatur 1W4 Wuchtschaden zufügen."
+   },
+   "source": "summary",
    "verified": false
   }
  ],

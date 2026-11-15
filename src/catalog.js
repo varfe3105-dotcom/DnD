@@ -14,7 +14,6 @@ import subclasses from '../data/subclasses.json';
 import monsters from '../data/monsters.json';
 import feats from '../data/feats.json';
 import options from '../data/options.json';
-import backgrounds from '../data/backgrounds.json';
 import multiclass from '../data/multiclass.json';
 import legacyTexts from '../data/reference/legacy-texts.json';
 import Fuse from 'fuse.js';
@@ -80,7 +79,7 @@ export function buildCatalog() {
   mastery.forEach(m => addCat({ k: 'rule', id: 'mastery-' + m.id, n: m.n, ic: m.ic, p: loc(m.text), c: t('cat.mastery'), source: m.source, hay: 'mastery meisterschaft' }));
   spells.forEach(s => addCat({ k: 'spell', cant: s.cant, ed: s.ed, n: s.n, de: s.de, aka: s.aka, origin: s.origin, lvl: s.lvl, school: s.school, ic: s.ic, cls: s.cls, c: s.lvl ? t('spell.level', { n: s.lvl }) : t('spell.cantrips'), time: loc(s.time), range: loc(s.range), dur: loc(s.dur), comp: s.comp, material: s.material, conc: s.conc, ritual: s.ritual, eff: loc(s.text), higher: s.higher ? loc(s.higher) : '', source: s.source, hay: [s.de, s.aka].join(' ') }));
   COND.forEach(c => addCat({ k: 'cond', n: c.n, de: c.de, ic: c.ic, p: loc(c.text), c: t('cat.cond'), source: c.source }));
-  feats.forEach(f => addCat({ k: 'feat', n: f.n, de: f.de, ic: 'star', p: loc(f.text), c: t('cat.feat'), source: f.source, req: f.req, hay: f.de }));
+  feats.forEach(f => addCat({ k: 'feat', n: f.n, de: f.de, ic: 'star', p: loc(f.text), c: t('cat.feat') + (f.cat ? ' · ' + t('featcat.' + f.cat) : ''), cat: f.cat, asi: f.asi, source: f.source, req: f.req, hay: f.de }));
   rules.forEach(r => addCat({ k: 'rule', id: r.n.de, n: loc(r.n), ic: r.ic, p: loc(r.text), c: t('cat.rule'), source: r.source, hay: hayOf(r.n) }));
   Object.entries(CLASSES).forEach(([n, C]) => addCat({ k: 'class', n, de: deName(n), ic: CLIC[n], c: t('cat.class'), p: t('class.summary', { d: dice('W' + C.hd), l: C.subL }), hay: Object.values(C.f).flat().map(x => x.n + ' ' + hayOf(x.text)).join(' ') + ' ' + C.subs.join(' ') + ' ' + Object.values(subclasses[n] || {}).flatMap(s => Object.values(s).flat()).map(x => x.n + ' ' + hayOf(x.text)).join(' ') }));
   Object.entries(RACES).forEach(([n, R]) => addCat({ k: 'race', n, de: deName(n), ic: 'mask', c: t('cat.race') + (R.book ? ' · ' + loc(R.book) : ''), p: `${loc(R.asi)} · ${t('stat.speed')} ${dist(R.sp)}`, hay: R.tr.map(x => x.n + ' ' + hayOf(x.text)).join(' ') + ' ' + Object.keys(R.subs).join(' ') }));
@@ -111,7 +110,7 @@ Object.values(CLASSES).forEach(C => Object.values(C.f).flat().forEach(f => noteF
 Object.entries(multiclass).forEach(([k, m]) => noteFeat('Multiclass: ' + k, m.prof));
 Object.values(subclasses).forEach(c => Object.values(c).forEach(s => Object.values(s).flat().forEach(f => noteFeat(f.n, f.text))));
 feats.forEach(f => noteFeat(f.n, f.text));
-backgrounds.forEach(b => noteFeat(b.feature.n, b.feature.text));
+// 2024: Hintergründe geben ein Herkunftstalent statt eines eigenen Merkmals (Text kommt aus den Talenten).
 Object.values(options).flat().forEach(f => noteFeat(f.n, f.text));
 export const featText = f => { const m = FEATX[f.n + '|' + f.p]; return m ? loc(m) : f.p; };
 export { lang };

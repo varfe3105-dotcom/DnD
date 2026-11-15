@@ -190,7 +190,7 @@ export function vMain() {
   const spd = fx.speed.val !== fx.speed.base ? st(t('stat.speed'), `<span class="fxw ${worse ? 'dis' : 'adv'}">${dist(fx.speed.val)}</span>`, `<small class="fxsub">${esc(dist(fx.speed.base))} · ${esc(why2)}</small>`) : st(t('stat.speed'), dist(S.speed));
   let h = '';
   if (S.conc) h += `<div class="conc"><div><small>${t('conc.title')}</small><b>${esc(S.conc)}</b><span>${t('conc.hint')}</span></div><button class="btn" data-a="concend">${t('conc.end')}</button></div>`;
-  h += `<div class="stats">${st(t('stat.ac'), S.ac)}${st(t('stat.init'), sg(initBonus()) + (featureLevel('Barbarian') >= 7 ? fxMark(['Feral Instinct'], []) : ''))}${spd}${st(t('stat.prof'), sg(S.prof))}${st(t('stat.pp'), passivePerception(), `<small class="fxsub">${t('pp.more', { i: 10 + skv('Insight'), v: 10 + skv('Investigation') + (S.feats.some(f => f.n === 'Observant') ? 5 : 0) })}</small>`)}</div>`;
+  h += `<div class="stats">${st(t('stat.ac'), S.ac)}${st(t('stat.init'), sg(initBonus()) + (featureLevel('Barbarian') >= 7 ? fxMark(['Feral Instinct'], []) : ''))}${spd}${st(t('stat.prof'), sg(S.prof))}${st(t('stat.pp'), passivePerception(), `<small class="fxsub">${t('pp.more', { i: 10 + skv('Insight'), v: 10 + skv('Investigation') })}</small>`)}</div>`;
   h += vFx(fx);
   const mode = sheetMode(), show = k => mode === 'all' || (mode === 'combat' ? !['feats', 'skills', 'profs'].includes(k) : !['atk', 'charges', 'pets'].includes(k));
   h += `<div class="modes" role="group" aria-label="${t('mode.label')}">${['all', 'combat', 'explore'].map(m => `<button class="tg${mode === m ? ' on' : ''}" data-a="sheetmode" data-m="${m}" aria-pressed="${mode === m}">${t('mode.' + m)}</button>`).join('')}</div>`;

@@ -277,7 +277,76 @@ function monsters() {
   console.log(`Monster: ${out.length}`);
 }
 
-const steps = { spells, conditions, mastery, items, magic, monsters };
+/* ---- Völker (Species 2024) ---- */
+const DT_DE = { acid: 'Säure', cold: 'Kälte', fire: 'Feuer', lightning: 'Blitz', poison: 'Gift' };
+const SIZE_DE = { Medium: 'Mittelgroß', Small: 'Klein', 'Medium or Small': 'Mittelgroß oder klein' };
+const SUB_NAME = {
+  'draconic-ancestor-': s => s.name.replace('Draconic Ancestor: ', '') + ' Dragon',
+  'elven-lineage-': s => s.name.replace('Elven Lineage: ', ''),
+  'gnomish-lineage-': s => s.name.replace('Gnomish Lineage: ', ''),
+  'giant-ancestry-': s => ({ 'clouds-jaunt': 'Cloud Giant', 'fires-burn': 'Fire Giant', 'frosts-chill': 'Frost Giant', 'hills-tumble': 'Hill Giant', 'stones-endurance': 'Stone Giant', 'storms-thunder': 'Storm Giant' })[s.index.replace('giant-ancestry-', '')],
+  'fiendish-legacy-': s => cap(s.index.replace('fiendish-legacy-', '')),
+};
+// Allgemeine Merkmale, deren Inhalt bei der Unterart genauer steht, bleiben trotzdem sichtbar (Regeltext).
+function species() {
+  const de = tr('de-traits'), extra = readJson(path.join(trDir, 'species-extra.json'));
+  const traits = Object.fromEntries(srd('Traits').map(t => [t.index, t]));
+  const subsAll = srd('Subspecies');
+  const T = (idx, lvl) => {
+    const t = traits[idx];
+    const spell = idx.startsWith('lineage-spell-');
+    if (spell) {
+      const sp = t.name, cantrip = lvl === 1;
+      return { n: lvl > 1 ? `${sp} (${lvl})` : sp, lvl, text: { en: lvl > 1 ? `From character level ${lvl}: you always have ${sp} prepared and can cast it once without a spell slot per Long Rest.` : `You know the ${sp} ${cantrip ? 'cantrip' : 'spell'}.`, de: lvl > 1 ? `Ab Charakterstufe ${lvl}: Du hast ${sp} immer vorbereitet und kannst ihn einmal pro langer Rast ohne Zauberplatz wirken.` : `Du kennst den Zaubertrick ${sp}.` }, spell: sp, source: SRC, verified: false };
+    }
+    const dt = idx.match(/^draconic-(breath-weapon|damage-resistance)-(\w+)$/);
+    if (dt) { const d = de['draconic-' + dt[1]]; return { n: t.name, text: { en: clean(t.description), de: d[1].replace('{typ}', DT_DE[dt[2]]) }, source: SRC, verified: false }; }
+    const d = de[idx];
+    if (!d) missing.push('Merkmal ohne Deutsch: ' + idx);
+    return { n: t.name.replace(/^(High Elf|Wood Elf|Gnomish Lineage|Giant Ancestry): /, ''), text: { en: clean(t.description).replace(/^- /gm, ''), ...(d ? { de: d[1] } : {}) }, source: SRC, verified: false };
+  };
+  const out = {};
+  for (const s of srd('Species')) {
+    const name = s.name;
+    const size = s.size || 'Medium or Small';
+    const R = { sp: num(s.speed * 0.3).replace(',', '.') * 1, size: { en: size, de: SIZE_DE[size] || size }, asi: { en: 'None (2024: ability scores come from your background)', de: 'Keine (2024: Attributswerte kommen vom Hintergrund)' }, tr: s.traits.map(x => T(x.index)), subs: {}, source: SRC };
+    for (const ref of s.subspecies || []) {
+      const sub = subsAll.find(x => x.index === ref.index);
+      const pre = Object.keys(SUB_NAME).find(p => sub.index.startsWith(p));
+      const sn = SUB_NAME[pre](sub);
+      const tr = sub.traits.map(x => T(x.index, x.level));
+      // Drachenabstammung: Odem und Resistenz der Farbe, Typ steht in der Unterart
+      R.subs[sn] = { tr, ...(sub.traits.some(x => x.index === 'wood-elf-speed-increase') ? { sp: 10.5 } : {}) };
+    }
+    if (name === 'Dragonborn') R.tr.unshift(T('draconic-ancestry'));
+    out[name] = R;
+  }
+  for (const [name, x] of Object.entries(extra)) out[name] = { sp: num(x.ft * 0.3).replace(',', '.') * 1, size: { en: x.size, de: SIZE_DE[x.size] }, asi: out.Human.asi, tr: x.traits.map(([n, en, nDe, deT]) => ({ n, de: nDe, text: { en, de: deT }, source: 'summary', verified: false })), subs: {}, source: 'summary' };
+  const order = ['Aasimar', 'Dragonborn', 'Dwarf', 'Elf', 'Gnome', 'Goliath', 'Halfling', 'Human', 'Orc', 'Tiefling'];
+  const sorted = Object.fromEntries(order.filter(n => out[n]).map(n => [n, out[n]]));
+  fs.writeFileSync(dataFile('races.json'), JSON.stringify(sorted, null, 1) + '\n');
+  console.log(`Völker: ${Object.keys(sorted).length}, Unterarten: ${Object.values(sorted).reduce((a, r) => a + Object.keys(r.subs).length, 0)}`);
+}
+
+/* ---- Talente 2024: SRD-Texte wörtlich, übrige als eigene Zusammenfassung ---- */
+function feats() {
+  const own = ['feats-2024-a.json', 'feats-2024-b.json'].flatMap(f => readJson(path.join(trDir, f)));
+  const srdF = Object.fromEntries(srd('Feats').map(f => [f.name.replace('Two Weapon', 'Two-Weapon'), f]));
+  const out = own.map(f => {
+    const s = f.srd && srdF[f.n];
+    if (f.srd && !s) missing.push('Talent nicht im SRD: ' + f.n);
+    const en = s ? clean(s.description).replace(/^You gain the following benefits\.\n/, '') : f.en;
+    return { n: f.n, de: f.de, cat: f.cat, ...(f.req ? { req: f.req } : {}), ...(f.asi ? { asi: f.asi } : {}), text: { en, de: f.dt }, source: s ? SRC : 'summary', verified: false };
+  });
+  writeArr('feats.json', out);
+  // Kampfstile sind 2024 Talente der Art „fighting“; die Auswahl unter Einrichten nutzt sie weiter als OPTIONS.fightingStyles.
+  const opts = JSON.parse(fs.readFileSync(dataFile('options.json'), 'utf8'));
+  opts.fightingStyles = out.filter(f => f.cat === 'fighting').map(f => ({ n: f.n, de: f.de, text: f.text, source: f.source, verified: false }));
+  fs.writeFileSync(dataFile('options.json'), JSON.stringify(opts, null, 1) + '\n');
+  console.log(`Talente: ${out.length} (SRD: ${out.filter(f => f.source === SRC).length})`);
+}
+
+const steps = { spells, conditions, mastery, items, magic, monsters, species, feats };
 const only = process.argv.slice(2).filter(a => !a.startsWith('--'));
 for (const [name, fn] of Object.entries(steps)) if (!only.length || only.includes(name)) fn();
 fs.writeFileSync(path.join(root, '.cache/missing-2024.txt'), missing.join('\n') + '\n');

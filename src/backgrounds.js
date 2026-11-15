@@ -1,53 +1,63 @@
 import { resFor } from './helpers.js';
-// Hintergründe aus dem PHB: Auswahl trägt Übungen, Ausrüstung, Gold und Merkmal ein.
+// Hintergründe 2024: Attributserhöhung (+2/+1 oder +1/+1/+1 auf drei vorgegebene Attribute), Herkunftstalent,
+// zwei Fertigkeiten, ein Werkzeug und Ausrüstung A oder 50 GM. Alles wird gemerkt, damit ein Wechsel es zurücknimmt.
 import backgrounds from '../data/backgrounds.json';
 import { S, U, mk, putBag, save, toast } from './state.js';
-import { BYN, OPTIONS, SUBCLASSES } from './catalog.js';
+import { BYN, OPTIONS, SUBCLASSES, FEATS } from './catalog.js';
 import { classLevels } from './tables.js';
 import { t, loc } from './i18n/index.js';
 
 export const BACKGROUNDS = backgrounds;
 export const bgById = id => backgrounds.find(b => b.id === id);
 export const TOOL_CHOICES = {
-  artisan: ['alchemists-supplies', 'brewers-supplies', 'calligraphers-supplies', 'carpenters-tools', 'cartographers-tools', 'cobblers-tools', 'cooks-utensils', 'glassblowers-tools', 'jewelers-tools', 'leatherworkers-tools', 'masons-tools', 'painters-supplies', 'potters-tools', 'smiths-tools', 'tinkers-tools', 'weavers-tools', 'woodcarvers-tools'],
-  gaming: ['dice-set', 'playing-card-set'],
-  instrument: ['bagpipes', 'drum', 'dulcimer', 'flute', 'lute', 'lyre', 'horn', 'pan-flute', 'shawm', 'viol'],
+  artisan: ['alchemists-supplies', 'brewers-supplies', 'calligraphers-supplies', 'carpenters-tools', 'cartographer-tools', 'cobblers-tools', 'cooks-utensils', 'glassblowers-tools', 'jewelers-tools', 'leatherworkers-tools', 'masons-tools', 'painters-supplies', 'potters-tools', 'smiths-tools', 'tinkers-tools', 'weavers-tools', 'woodcarvers-tools'],
+  gaming: ['dice', 'dragonchess', 'playing-cards', 'three-dragon-ante'],
+  instrument: ['bagpipes', 'drum', 'dulcimer', 'flute', 'horn', 'lute', 'lyre', 'pan-flute', 'shawm', 'viol'],
 };
-export const LANGUAGES = ['Common', 'Dwarvish', 'Elvish', 'Giant', 'Gnomish', 'Goblin', 'Halfling', 'Orc', 'Abyssal', 'Celestial', 'Draconic', 'Deep Speech', 'Infernal', 'Primordial', 'Sylvan', 'Undercommon'];
+export const LANGUAGES = ['Common', 'Common Sign Language', 'Draconic', 'Dwarvish', 'Elvish', 'Giant', 'Gnomish', 'Goblin', 'Halfling', 'Orc', 'Abyssal', 'Celestial', 'Deep Speech', 'Druidic', 'Infernal', 'Primordial', 'Sylvan', "Thieves' Cant", 'Undercommon'];
 
 const entry = id => BYN['item:' + id];
-const needsChoice = b => !!(b.choose.lang || b.choose.tool);
+export const featByName = n => FEATS.find(f => f.n === n);
+/** Name des Herkunftstalents mit Zusatz (z. B. Magic Initiate (Cleric)). */
+export const bgFeatName = b => b.feat.n + (b.feat.note ? ` (${b.feat.note})` : '');
 
-/** Nimmt nur zurück, was der Hintergrund selbst gesetzt hat und was nicht weiter ausgebaut wurde. */
+/** Nimmt zurück, was der Hintergrund gesetzt hat (Fertigkeiten, Talent, Attributserhöhung). */
 export function clearBg() {
   const o = S.bg;
   if (!o) return;
-  o.skills.forEach(k => { if (S.skills[k] === 1) delete S.skills[k]; });
+  (o.skills || []).forEach(k => { if (S.skills[k] === 1) delete S.skills[k]; });
+  Object.entries(o.asi || {}).forEach(([k, v]) => { S.abil[k] = Math.max(1, S.abil[k] - v); });
+  if (o.hp) { S.hpMax = Math.max(1, S.hpMax - o.hp); S.hp = Math.min(S.hp, S.hpMax); }
   S.feats = S.feats.filter(f => !f.bg);
   S.bg = null;
 }
 
-function addGear(g) {
+function addGear(g, tool) {
+  if (g === '$tool') { if (tool && entry(tool)) putBag(S, mk(entry(tool))); return; }
   if (typeof g === 'string') { const c = entry(g); if (c) putBag(S, mk(c)); return; }
-  if (g.id) { const c = entry(g.id); if (c) putBag(S, mk(c, g.q)); return; }
+  if (g.id) { const c = entry(g.id); if (c) { const it = mk(c, g.q); if (g.n) it.n = loc(g.n); putBag(S, it); } return; }
   putBag(S, mk({ n: loc(g), ic: 'box', p: '' }));
 }
 
-export function applyBg(b, langs = [], tool = '') {
+/** asi: { str: 2, dex: 1 } – kommt aus dem Dialog. gear: 'A' oder 'B'. */
+export function applyBg(b, { asi = {}, tool = '', gear = 'A' } = {}) {
   const old = S.bg && bgById(S.bg.id);
   clearBg();
   const added = [];
   let dup = 0;
   b.skills.forEach(k => { if (S.skills[k]) dup++; else { S.skills[k] = 1; added.push(k); } });
-  const addTool = x => { if (x && !S.tools.includes(x)) S.tools.push(x); };
-  b.tools.forEach(e => addTool(typeof e === 'string' ? entry(e)?.n : loc(e)));
-  if (tool) addTool(entry(tool)?.n);
-  langs.filter(Boolean).forEach(l => { if (!S.langs.includes(l)) S.langs.push(l); });
-  b.gear.forEach(addGear);
-  if (b.gearChosen && tool) addGear(tool);
-  S.gold.gp = (+S.gold.gp || 0) + b.gold;
-  S.feats.push({ n: b.feature.n, p: loc(b.feature.text), lvl: 0, src: 'Hintergrund', bg: true, source: b.source });
-  S.bg = { id: b.id, skills: added };
+  const toolId = typeof b.tool === 'string' ? b.tool : tool;
+  const toolName = toolId && entry(toolId)?.n;
+  if (toolName && !S.tools.includes(toolName)) S.tools.push(toolName);
+  const got = {};
+  Object.entries(asi).forEach(([k, v]) => { const before = S.abil[k]; S.abil[k] = Math.min(20, before + v); got[k] = S.abil[k] - before; });
+  if (gear === 'B') S.gold.gp = (+S.gold.gp || 0) + 50;
+  else { b.gear.forEach(g => addGear(g, toolId)); S.gold.gp = (+S.gold.gp || 0) + b.gold; }
+  const f = featByName(b.feat.n);
+  S.feats.push({ n: bgFeatName(b), p: f ? loc(f.text) : '', lvl: 0, src: 'Hintergrund', bg: true, source: f?.source || b.source });
+  const hp = b.feat.n === 'Tough' ? 2 * (S.level || 0) : 0;
+  if (hp) { S.hpMax += hp; S.hp += hp; }
+  S.bg = { id: b.id, skills: added, asi: got, hp };
   const name = loc(b.n);
   if (!S.info.trim() || (old && S.info === loc(old.n))) S.info = name;
   let msg = t('bg.applied', { n: name });
@@ -56,16 +66,12 @@ export function applyBg(b, langs = [], tool = '') {
   toast(msg);
 }
 
-/** Reaktion auf die Auswahl. Wahlmöglichkeiten öffnen den kleinen Dialog. */
+/** Reaktion auf die Auswahl: 2024 braucht immer die Attributswahl, also immer den kleinen Dialog. */
 export function pickBg(id) {
   if (!id) { clearBg(); U.BGPICK = null; save(); return; }
   if (S.bg?.id === id) { U.BGPICK = null; return; }
-  const b = bgById(id);
-  if (!b) return;
-  if (needsChoice(b)) { U.BGPICK = id; return; }
-  U.BGPICK = null;
-  applyBg(b);
-  save();
+  if (!bgById(id)) return;
+  U.BGPICK = id;
 }
 
 export function toggleStyle(n) {

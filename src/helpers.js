@@ -15,9 +15,9 @@ export function halfProf(ab) {
 }
 export const skv = k => { const s = SK.find(x => x[0] === k), p = S.skills[k] || 0; return mod(S.abil[s[1]]) + (p ? S.prof * p : halfProf(s[1])); };
 export const hasFeatN = n => S.feats.some(f => f.n === n);
-/** Initiative: GES-Modifikator, Alert +5, halber Übungsbonus (Initiative ist ein Geschicklichkeitswurf). */
-export const initBonus = () => mod(S.abil.dex) + (hasFeatN('Alert') ? 5 : 0) + halfProf('dex');
-export const passivePerception = () => 10 + skv('Perception') + (hasFeatN('Observant') ? 5 : 0);
+/** Initiative: GES-Modifikator, Alert (2024) + Übungsbonus, sonst halber Übungsbonus (Jack of All Trades). */
+export const initBonus = () => mod(S.abil.dex) + (hasFeatN('Alert') ? S.prof : halfProf('dex'));
+export const passivePerception = () => 10 + skv('Perception');
 export const featureLevel = clsLvl;
 export const pips = (max, used, attr) => Array.from({ length: max }, (_, j) => `<button class="pip ${j < max - used ? 'on' : ''}" ${attr} data-j="${j}" aria-label="${j < max - used ? t('pip.use') : t('pip.reset')}"></button>`).join('');
 export const fid = p => 'f-' + p.replace(/\./g, '-');
@@ -51,19 +51,51 @@ export function raceTraits() {
   const sb = R.subs[S.subrace];
   return [...R.tr, ...(sb ? sb.tr : [])].map(f => ({ n: f.n, p: loc(f.text), src: S.subrace || S.race, race: true }));
 }
-const RACE_RES = { 'Breath Weapon': ['res.breath', 'flame', 'short', 1], 'Relentless Endurance': ['res.relentless', 'heart', 'long', 1] };
+// Volksmerkmale 2024 mit Anwendungen: [Name, Textschlüssel, Symbol, Rast, Anzahl (pb = Übungsbonus), ab Charakterstufe]
+const RACE_RES = {
+  Dragonborn: [['Breath Weapon', 'res.r.breath', 'flame', 'long', 'pb', 1], ['Draconic Flight', 'res.r.flight', 'wing', 'long', 1, 5]],
+  Dwarf: [['Stonecunning', 'res.r.stone', 'eye', 'long', 'pb', 1]],
+  Goliath: [['Large Form', 'res.r.large', 'shield', 'long', 1, 5]],
+  Orc: [['Adrenaline Rush', 'res.r.adrenaline', 'bolt', 'short', 'pb', 1], ['Relentless Endurance', 'res.r.relentless', 'heart', 'long', 1, 1]],
+  Aasimar: [['Healing Hands', 'res.r.hands', 'heart', 'long', 1, 1], ['Celestial Revelation', 'res.r.revelation', 'star', 'long', 1, 3]],
+  'Forest Gnome': [['Speak with Animals', 'res.r.animals', 'leaf', 'long', 'pb', 1]],
+  'Cloud Giant': [["Cloud's Jaunt", 'res.r.cloud', 'swirl', 'long', 'pb', 1]], 'Fire Giant': [["Fire's Burn", 'res.r.fire', 'flame', 'long', 'pb', 1]], 'Frost Giant': [["Frost's Chill", 'res.r.frost', 'snow', 'long', 'pb', 1]],
+  'Hill Giant': [["Hill's Tumble", 'res.r.hill', 'hammer', 'long', 'pb', 1]], 'Stone Giant': [["Stone's Endurance", 'res.r.stoneEnd', 'shield', 'long', 'pb', 1]], 'Storm Giant': [["Storm's Thunder", 'res.r.storm', 'bolt', 'long', 'pb', 1]],
+};
+/** Ressourcen, die zum Volk gehören (für Rasten und Stufenaufstieg); bereits verbrauchte Anwendungen bleiben erhalten. */
+export function syncRaceRes() {
+  const lvl = S.level || 0, pb = S.prof || 2;
+  const want = [...(RACE_RES[S.race] || []), ...(RACE_RES[S.subrace] || [])].filter(x => lvl >= x[5] || lvl === 0 && x[5] === 1);
+  const old = S.res.filter(r => r.race);
+  S.res = S.res.filter(r => !r.race);
+  want.forEach(([n, k, ic, rest, max]) => { const m = max === 'pb' ? pb : max, o = old.find(r => r.n === n); S.res.push({ n, ic, max: m, used: Math.min(o?.used || 0, m), rest, p: t(k, { d: dice('1W12') }), race: true }); });
+}
+/** Wahlen beim Volk (2024): Mensch Skillful (Fertigkeit) und Versatile (Herkunftstalent), Elf Keen Senses (Fertigkeit).
+ *  Gemerkt in S.raceChoice, damit ein Wechsel sie zurücknimmt. */
+export function applyRaceChoices(featText = () => '') {
+  const c = S.raceChoice || (S.raceChoice = {});
+  if (c.setSkill && S.skills[c.setSkill] === 1) delete S.skills[c.setSkill];
+  c.setSkill = '';
+  S.feats = S.feats.filter(f => !f.raceFeat);
+  const canSkill = S.race === 'Human' || S.race === 'Elf';
+  if (canSkill && c.skill && !S.skills[c.skill]) { S.skills[c.skill] = 1; c.setSkill = c.skill; }
+  if (S.race === 'Human' && c.feat) S.feats.push({ n: c.feat, p: featText(c.feat), lvl: 0, src: 'Volk', raceFeat: true });
+}
+/** Zwergische Zähigkeit: +1 TP pro Stufe; gemerkt in S.raceHp, damit Wechsel sauber bleiben. */
+export function syncRaceHp() {
+  const want = S.race === 'Dwarf' ? (S.level || 0) : 0, had = S.raceHp || 0;
+  if (want !== had) { S.hpMax = Math.max(1, S.hpMax + want - had); S.hp = Math.min(S.hpMax, Math.max(0, S.hp + want - had)); S.raceHp = want; }
+}
 export function applyRace() {
   const R = RACES[S.race];
   if (!R) return;
   const sb = R.subs[S.subrace];
   S.speed = (sb && sb.sp) || R.sp;
-  const add = (n) => { if (!S.res.some(r => r.n === n)) { const [k, ic, rest, max] = RACE_RES[n]; S.res.push({ n, ic, max, used: 0, rest, p: t(k) }); } };
-  if (S.race === 'Dragonborn') add('Breath Weapon');
-  if (S.race === 'Half-Orc') add('Relentless Endurance');
-  // Goliath: Stone's Endurance nach Volo's Guide (1 pro kurzer Rast) oder Monsters of the Multiverse (Übungsbonus pro langer Rast)
-  S.res = S.res.filter(r => r.n !== "Stone's Endurance");
-  if (S.race === 'Goliath') { const motm = S.subrace === 'Monsters of the Multiverse'; S.res.push({ n: "Stone's Endurance", ic: 'shield', max: motm ? S.prof : 1, used: 0, rest: motm ? 'long' : 'short', p: t('res.stone', { d: dice('1W12') }) }); }
-  toast(t('toast.raceBonus', { b: (sb ? loc(sb.asi) + (R.asi && /^(see|siehe)/.test(loc(R.asi)) ? '' : ', ' + loc(R.asi)) : loc(R.asi)) }));
+  syncRaceRes();
+  syncRaceHp();
+  if (S.raceChoice) applyRaceChoices(n => BYN['feat:' + n]?.p || '');
+  hooks.raceSpells?.();
+  toast(t('toast.race24'));
 }
 export function resFor(k, l, tongue = lang, sub = classLevels().find(c => c.k === k)?.sub || '') {
   const o = [], cha = mod(S.abil.cha), R = (n, max, rest, key, ic, params) => o.push({ n, max, rest, p: tl(tongue, key, params), ic });

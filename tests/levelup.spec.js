@@ -122,7 +122,8 @@ test.describe('Unterklassen und Talente @new', () => {
     await act(page, 'lu').click();
     await page.locator('#lu-asi').selectOption('feat');
     await expect(page.locator('#lu-feat')).toBeVisible();
-    await expect(page.locator('#lu-feat option[value="Grappler"]')).toBeDisabled();
+    await expect(page.locator('#lu-feat option[value="Actor"]')).toBeDisabled(); // Charisma 13 nötig
+    await expect(page.locator('#lu-feat option[value="Boon of Truesight"]')).toBeDisabled(); // erst ab Stufe 19
     await page.locator('#lu-feat').selectOption('Athlete');
     await page.locator('#lu-featab').selectOption('dex');
     await act(page, 'luapply').click();

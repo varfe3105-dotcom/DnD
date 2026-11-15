@@ -43,7 +43,7 @@ export const wSub = e => e.k === 'spell' ? `${deName(e.n, e.de) ? e.de + ' · ' 
 const CASTK = { full: 'cast.full', half: 'cast.half', pact: 'cast.pact', '': 'cast.none' };
 const feat = (f, x) => `<p><b>${esc(f.n)}.</b> ${esc(dice(loc(f.text)))}</p>${x || ''}`;
 const srcFoot = s => `<p class="src">${srcNote(s)}</p>`;
-export const reqText = r => [...Object.entries(r.abil || {}).map(([k, v]) => `${abName(k)} ${v}`), r.prof || '', r.spell ? t('wiki.reqSpell') : ''].filter(Boolean).join(', ');
+export const reqText = r => [r.lvl ? t('feat.level', { n: r.lvl }) + '+' : '', ...Object.entries(r.abil || {}).map(([k, v]) => `${abName(k)} ${v}`), r.abilAny ? Object.entries(r.abilAny).map(([k, v]) => `${abName(k)} ${v}`).join(t('lu.or')) : '', r.prof ? t('req.prof', { p: t('req.p.' + r.prof.replace(/\s+/g, '')) }) : '', r.spell ? t('wiki.reqSpell') : '', r.feature ? t('req.style') : ''].filter(Boolean).join(', ');
 export function wDetail(e, inline) {
   if (!e) return `<p class="empty">${t('wiki.pick')}</p>`;
   const known = new Set(S.spells.map(s => s.n));

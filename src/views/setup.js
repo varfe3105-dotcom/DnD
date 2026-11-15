@@ -9,13 +9,23 @@ import { classLevels } from '../tables.js';
 import { L, dmOnline } from '../live.js';
 import { liveState } from './dm.js';
 import { skv, fid, numIn, txtIn, computeAc } from '../helpers.js';
-import { CLASSES, RACES, CAT } from '../catalog.js';
+import { CLASSES, RACES, CAT, FEATS } from '../catalog.js';
 import { vAbil, restLabel, featSrc } from './sheet.js';
 import { t, loc, lang, dice, distValue, nameLine } from '../i18n/index.js';
 
 const sel = (p, opts, v, l) => `<select id="${fid(p)}" data-p="${p}" aria-label="${l}">${opts.map(([k, x]) => `<option value="${k}"${String(k) === String(v) ? ' selected' : ''}>${x}</option>`).join('')}</select>`;
 const field = (l, c) => `<label><span class="lbl">${l}</span>${c}</label>`;
 const named = keys => keys.map(k => [k, nameLine(k)]);
+
+/** Wahlen beim Volk 2024: Mensch (Fertigkeit, Herkunftstalent), Elf (Fertigkeit aus drei). */
+function vRaceChoice() {
+  if (S.race !== 'Human' && S.race !== 'Elf') return '';
+  const c = S.raceChoice || {};
+  const skills = S.race === 'Elf' ? ['Insight', 'Perception', 'Survival'] : SK.map(x => x[0]);
+  const skillSel = `<label><span class="lbl">${t('setup.rcSkill')}</span><select id="rc-skill" aria-label="${t('setup.rcSkill')}"><option value="">${t('common.choose')}</option>${skills.map(k => `<option value="${k}"${c.skill === k ? ' selected' : ''}>${esc(k)}</option>`).join('')}</select></label>`;
+  const featSel = S.race === 'Human' ? `<label><span class="lbl">${t('setup.rcFeat')}</span><select id="rc-feat" aria-label="${t('setup.rcFeat')}"><option value="">${t('common.choose')}</option>${FEATS.filter(f => f.cat === 'origin').map(f => `<option value="${esc(f.n)}"${c.feat === f.n ? ' selected' : ''}>${esc(nameLine(f.n, f.de))}</option>`).join('')}</select></label>` : '';
+  return `<div class="form" style="margin-top:8px">${skillSel}${featSel}</div><p class="note">${t('setup.rcNote')}</p>`;
+}
 
 export function vSetup() {
   // Sprungleiste: jede Abschnittsüberschrift bekommt eine Kennung und einen Knopf oben.
@@ -26,14 +36,14 @@ export function vSetup() {
 }
 function vSetupBody() {
   const R = RACES[S.race], C = CLASSES[S.klass];
-  const bonus = R ? (R.subs[S.subrace] ? loc(R.subs[S.subrace].asi) + ', ' : '') + loc(R.asi) : '';
+  const bonus = R ? `${loc(R.size || { en: '', de: '' })}${R.size ? ' · ' : ''}${loc(R.asi)}` : '';
   return `<p class="note">${t('setup.intro')}</p>
   ${vChars()}
   ${vLiveJoin()}
   <h2>${t('setup.char')}</h2><div class="card"><div class="porsetup"><label class="por" for="img-in2" title="${t('setup.portrait')}">${S.img ? `<img src="${S.img}" alt="">` : `<span>${esc((S.name || '?').trim()[0] || '?')}</span>`}</label><input type="file" id="img-in2" accept="image/*" hidden><div class="add" style="margin:0"><label class="btn sm" for="img-in2">${t('setup.portrait')}</label>${S.img ? `<button class="btn sm bad" data-a="imgdel">${t('setup.portraitDel')}</button>` : ''}${S.fig ? `<button class="btn sm bad" data-a="figdel">${t('setup.figDel')}</button>` : ''}</div></div>
   <div class="form" style="margin-top:12px">
    ${field(t('common.name'), txtIn('name', S.name, t('common.name')))}
-   ${field(t('setup.race'), sel('race', [['', t('common.choose')], ...named(Object.keys(RACES))], S.race, t('setup.race')))}
+   ${field(t('setup.race'), sel('race', [['', t('common.choose')], ...named(Object.keys(RACES)), ...(S.race && !RACES[S.race] ? [[S.race, S.race + ' (2014)']] : [])], S.race, t('setup.race')))}
    ${R && Object.keys(R.subs).length ? field(t('setup.subrace'), sel('subrace', [['', t('common.noneOpt')], ...named(Object.keys(R.subs))], S.subrace, t('setup.subrace'))) : ''}
    ${field(t('setup.class'), sel('klass', [['', t('common.choose')], ...named(Object.keys(CLASSES))], S.klass, t('setup.class')))}
    ${field(t('setup.subclass'), sel('sub', [['', C ? t('setup.subFrom', { n: C.subN, l: C.subL }) : t('common.choose')], ...(C ? C.subs : []).map(x => [x, x]), ...(S.sub && !(C && C.subs.includes(S.sub)) ? [[S.sub, S.sub]] : [])].map(([k, x]) => [esc(k), esc(x)]), esc(S.sub), t('setup.subclass')))}
@@ -41,7 +51,7 @@ function vSetupBody() {
    ${field(t('xp.title'), numIn('xp', S.xp || 0, t('xp.title'), 0, 999999))}
    ${vBgField()}
    ${field(t('setup.background'), txtIn('info', S.info, t('setup.backgroundLabel'), t('setup.backgroundPh')))}
-  </div>${R ? `<p class="note">${t('setup.raceBonus', { b: esc(bonus) })}</p>` : ''}
+  </div>${vRaceChoice()}${R ? `<p class="note">${t('setup.raceBonus', { b: esc(bonus) })}</p>` : ''}
   <p class="note">${S.level ? t('setup.hintLevel') : t('setup.hintStart')}</p>${vBgPick()}</div>
   <h2>${t('setup.values')}</h2><div class="card"><div class="form">
    ${field(t('stat.ac'), numIn('ac', S.ac, t('stat.ac'), 0, null, null, S.acMode === 'auto' ? 'disabled' : ''))}

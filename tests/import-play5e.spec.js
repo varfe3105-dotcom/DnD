@@ -40,7 +40,7 @@ test.describe('Import aus dem anderen Tool @new', () => {
     await seed(page, base4({ name: '', level: 0, tab: 'setup', klass: '' }));
     await doImport(page, backup(character()));
     const s = await read(page);
-    expect(s.spells.map(x => x.n).sort()).toEqual(['Charm Person', 'Guidance']);
+    expect(s.spells.map(x => x.n)).toEqual(expect.arrayContaining(['Charm Person', 'Guidance'])); // dazu Volks- und Domänenzauber 2024
     expect(s.notes).toContain('Word Of Radiance');
     expect(s.tools).toEqual(["Poisoner's kit"]);
     expect(s.notes).toContain('Sie floh aus dem Tempel.');

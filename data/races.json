@@ -1,715 +1,1087 @@
 {
- "Dwarf": {
-  "sp": 7.5,
+ "Aasimar": {
+  "sp": 9,
+  "size": {
+   "en": "Medium or Small",
+   "de": "Mittelgroß oder klein"
+  },
   "asi": {
-   "en": "CON +2",
-   "de": "KON +2"
+   "en": "None (2024: ability scores come from your background)",
+   "de": "Keine (2024: Attributswerte kommen vom Hintergrund)"
   },
   "tr": [
+   {
+    "n": "Celestial Resistance",
+    "de": "Himmlische Resistenz",
+    "text": {
+     "en": "You have Resistance to Necrotic and Radiant damage.",
+     "de": "Du hast Resistenz gegen nekrotischen und gleißenden Schaden."
+    },
+    "source": "summary",
+    "verified": false
+   },
    {
     "n": "Darkvision",
+    "de": "Dunkelsicht (18 m)",
     "text": {
-     "en": "You have superior vision in dark and dim conditions. You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You cannot discern color in darkness, only shades of gray.",
-     "de": "Du siehst in Dunkelheit und Dämmerlicht besonders gut. Innerhalb von 18 m siehst du in dämmrigem Licht, als wäre es helles Licht, und in Dunkelheit, als wäre es dämmriges Licht. In der Dunkelheit kannst du keine Farben unterscheiden, nur Grautöne."
+     "en": "You have Darkvision with a range of 60 feet.",
+     "de": "Du hast Dunkelsicht mit 18 m Reichweite."
     },
-    "source": "srd",
+    "source": "summary",
     "verified": false
    },
    {
-    "n": "Dwarven Resilience",
+    "n": "Healing Hands",
+    "de": "Heilende Hände",
     "text": {
-     "en": "You have advantage on saving throws against poison, and you have resistance against poison damage.",
-     "de": "Du hast Vorteil bei Rettungswürfen gegen Gift und Resistenz gegen Giftschaden."
+     "en": "As a Magic action, you touch a creature and roll a number of d4s equal to your Proficiency Bonus. The creature regains Hit Points equal to the total. Once used, you can't use this trait again until you finish a Long Rest.",
+     "de": "Mit einer Magieaktion berührst du eine Kreatur und würfelst so viele W4 wie dein Übungsbonus; sie erhält die Summe als Trefferpunkte zurück. Danach erst wieder nach einer langen Rast."
     },
-    "source": "srd",
+    "source": "summary",
     "verified": false
    },
    {
-    "n": "Dwarven Combat Training",
+    "n": "Light Bearer",
+    "de": "Lichtträger",
     "text": {
-     "en": "You have proficiency with the battleaxe, handaxe, light hammer, and warhammer.",
-     "de": "Du bist im Umgang mit Streitaxt, Handaxt, leichtem Hammer und Kriegshammer geübt."
+     "en": "You know the Light cantrip. Charisma is your spellcasting ability for it.",
+     "de": "Du kennst den Zaubertrick Light; dein Zauberattribut dafür ist Charisma."
     },
-    "source": "srd",
+    "source": "summary",
     "verified": false
    },
    {
-    "n": "Stonecunning",
+    "n": "Celestial Revelation",
+    "de": "Himmlische Offenbarung",
     "text": {
-     "en": "Whenever you make an Intelligence (History) check related to the origin of stonework, you are considered proficient in the History skill and add double your proficiency bonus to the check, instead of your normal proficiency bonus.",
-     "de": "Wann immer du einen Intelligenzwurf (History) zur Herkunft von Steinarbeiten ablegst, giltst du als in der Fertigkeit History geübt und addierst statt deines normalen Übungsbonus den doppelten Übungsbonus zum Wurf."
+     "en": "From character level 3, you can transform as a Bonus Action for 1 minute or until you end it (no action required). Choose one option each time. Once per turn while transformed, you can deal extra damage equal to your Proficiency Bonus to one target of an attack or spell (Necrotic for Necrotic Shroud, otherwise Radiant). Once used, you can't use it again until you finish a Long Rest.\nHeavenly Wings: spectral wings give you a Fly Speed equal to your Speed.\nInner Radiance: you shed Bright Light in a 10-foot radius and Dim Light for another 10 feet; at the end of each of your turns, each creature within 10 feet of you takes Radiant damage equal to your Proficiency Bonus.\nNecrotic Shroud: each creature of your choice within 10 feet must succeed on a Charisma saving throw (DC 8 + your Charisma modifier + Proficiency Bonus) or have the Frightened condition until the end of your next turn.",
+     "de": "Ab Charakterstufe 3 kannst du dich als Bonusaktion für 1 Minute verwandeln oder bis du es beendest (keine Aktion). Wähle jedes Mal eine Form. Einmal pro Zug kannst du in Verwandlung einem Ziel eines Angriffs oder Zaubers zusätzlich Schaden in Höhe deines Übungsbonus zufügen (nekrotisch beim Totenschleier, sonst gleißend). Danach erst wieder nach einer langen Rast.\nHimmelsschwingen: Geisterhafte Flügel geben dir ein Flugtempo in Höhe deines Tempos.\nInneres Strahlen: Du spendest helles Licht in 3 m Radius und dämmriges Licht für weitere 3 m; am Ende jedes deiner Züge erleidet jede Kreatur im Umkreis von 3 m gleißenden Schaden in Höhe deines Übungsbonus.\nTotenschleier: Jede Kreatur deiner Wahl im Umkreis von 3 m muss einen Charismarettungswurf bestehen (SG 8 + dein Charismamodifikator + Übungsbonus), sonst ist sie bis zum Ende deines nächsten Zuges Frightened."
     },
-    "source": "srd",
+    "source": "summary",
     "verified": false
    }
   ],
-  "subs": {
-   "Hill Dwarf": {
-    "asi": {
-     "en": "WIS +1",
-     "de": "WEI +1"
-    },
-    "tr": [
-     {
-      "n": "Dwarven Toughness",
-      "text": {
-       "en": "Your hit point maximum increases by 1, and it increases by 1 every time you gain a level.",
-       "de": "Dein Trefferpunktmaximum steigt um 1 und jedes Mal, wenn du eine Stufe aufsteigst, um weitere 1."
-      },
-      "source": "srd",
-      "verified": false
-     }
-    ]
-   },
-   "Mountain Dwarf": {
-    "asi": {
-     "en": "STR +2",
-     "de": "STR +2"
-    },
-    "tr": [
-     {
-      "n": "Dwarven Armor Training",
-      "text": {
-       "en": "Proficiency with light and medium armor.",
-       "de": "Übung mit leichter und mittlerer Rüstung."
-      },
-      "source": "summary",
-      "verified": false
-     }
-    ]
-   }
-  },
-  "source": "summary",
-  "verified": false
- },
- "Elf": {
-  "sp": 9,
-  "asi": {
-   "en": "DEX +2",
-   "de": "GES +2"
-  },
-  "tr": [
-   {
-    "n": "Darkvision",
-    "text": {
-     "en": "You have superior vision in dark and dim conditions. You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You cannot discern color in darkness, only shades of gray.",
-     "de": "Du siehst in Dunkelheit und Dämmerlicht besonders gut. Innerhalb von 18 m siehst du in dämmrigem Licht, als wäre es helles Licht, und in Dunkelheit, als wäre es dämmriges Licht. In der Dunkelheit kannst du keine Farben unterscheiden, nur Grautöne."
-    },
-    "source": "srd",
-    "verified": false
-   },
-   {
-    "n": "Keen Senses",
-    "text": {
-     "en": "You have proficiency in the Perception skill.",
-     "de": "Du bist in der Fertigkeit Perception geübt."
-    },
-    "source": "srd",
-    "verified": false
-   },
-   {
-    "n": "Fey Ancestry",
-    "text": {
-     "en": "You have advantage on saving throws against being charmed, and magic cannot put you to sleep.",
-     "de": "Du hast Vorteil bei Rettungswürfen gegen den Zustand Charmed, und Magie kann dich nicht in Schlaf versetzen."
-    },
-    "source": "srd",
-    "verified": false
-   },
-   {
-    "n": "Trance",
-    "text": {
-     "en": "Elves do not need to sleep. Instead, they meditate deeply, remaining semiconscious, for 4 hours a day. (The Common word for such meditation is \"trance.\") While meditating, you can dream after a fashion; such dreams are actually mental exercises that have become reflexive through years of practice. After resting this way, you gain the same benefit that a human does from 8 hours of sleep.",
-     "de": "Elfen müssen nicht schlafen. Stattdessen meditieren sie täglich 4 Stunden lang tief und bleiben dabei halb bei Bewusstsein. (In der Gemeinsprache heißt diese Meditation „Trance“.) Während der Meditation kannst du gewissermaßen träumen; solche Träume sind in Wahrheit geistige Übungen, die durch jahrelange Praxis zum Reflex geworden sind. Nach einer solchen Rast hast du denselben Nutzen wie ein Mensch nach 8 Stunden Schlaf."
-    },
-    "source": "srd",
-    "verified": false
-   }
-  ],
-  "subs": {
-   "High Elf": {
-    "asi": {
-     "en": "INT +1",
-     "de": "INT +1"
-    },
-    "tr": [
-     {
-      "n": "Elf Weapon Training",
-      "text": {
-       "en": "You have proficiency with the longsword, shortsword, shortbow, and longbow.",
-       "de": "Du bist im Umgang mit Langschwert, Kurzschwert, Kurzbogen und Langbogen geübt."
-      },
-      "source": "srd",
-      "verified": false
-     },
-     {
-      "n": "Cantrip",
-      "text": {
-       "en": "One cantrip from the wizard list; Intelligence is its casting ability.",
-       "de": "Ein Zaubertrick aus der Liste des Magiers; Intelligenz ist das Zauberattribut dafür."
-      },
-      "source": "summary",
-      "verified": false
-     },
-     {
-      "n": "Extra Language",
-      "text": {
-       "en": "You can speak, read, and write one extra language of your choice.",
-       "de": "Du kannst eine zusätzliche Sprache deiner Wahl sprechen, lesen und schreiben."
-      },
-      "source": "srd",
-      "verified": false
-     }
-    ]
-   },
-   "Wood Elf": {
-    "asi": {
-     "en": "WIS +1",
-     "de": "WEI +1"
-    },
-    "sp": 10.5,
-    "tr": [
-     {
-      "n": "Elf Weapon Training",
-      "text": {
-       "en": "You have proficiency with the longsword, shortsword, shortbow, and longbow.",
-       "de": "Du bist im Umgang mit Langschwert, Kurzschwert, Kurzbogen und Langbogen geübt."
-      },
-      "source": "srd",
-      "verified": false
-     },
-     {
-      "n": "Fleet of Foot",
-      "text": {
-       "en": "Base walking speed is 35 feet.",
-       "de": "Dein Grund-Gehtempo beträgt 10,5 m."
-      },
-      "source": "summary",
-      "verified": false
-     },
-     {
-      "n": "Mask of the Wild",
-      "text": {
-       "en": "You can try to hide when only lightly obscured by natural phenomena such as foliage, rain or mist.",
-       "de": "Du kannst versuchen, dich zu verstecken, auch wenn du nur durch natürliche Erscheinungen wie Laub, Regen oder Nebel leicht verschleiert bist."
-      },
-      "source": "summary",
-      "verified": false
-     }
-    ]
-   },
-   "Drow": {
-    "asi": {
-     "en": "CHA +1",
-     "de": "CHA +1"
-    },
-    "tr": [
-     {
-      "n": "Superior Darkvision",
-      "text": {
-       "en": "Darkvision out to 120 feet.",
-       "de": "Darkvision bis 36 m."
-      },
-      "source": "summary",
-      "verified": false
-     },
-     {
-      "n": "Sunlight Sensitivity",
-      "text": {
-       "en": "Disadvantage on attack rolls and on sight-based Perception checks in direct sunlight.",
-       "de": "Nachteil bei Angriffswürfen und bei Würfen auf Perception, die auf Sicht beruhen, wenn du in direktem Sonnenlicht bist."
-      },
-      "source": "summary",
-      "verified": false
-     },
-     {
-      "n": "Drow Magic",
-      "text": {
-       "en": "Dancing Lights cantrip; Faerie Fire from 3rd level and Darkness from 5th level, each once per long rest (Charisma).",
-       "de": "Zaubertrick Dancing Lights; ab Stufe 3 Faerie Fire und ab Stufe 5 Darkness, jeweils einmal pro langer Rast (Charisma)."
-      },
-      "source": "summary",
-      "verified": false
-     },
-     {
-      "n": "Drow Weapon Training",
-      "text": {
-       "en": "Proficiency with rapiers, shortswords and hand crossbows.",
-       "de": "Übung mit Rapieren, Kurzschwertern und Handarmbrüsten."
-      },
-      "source": "summary",
-      "verified": false
-     }
-    ]
-   }
-  },
-  "source": "summary",
-  "verified": false
- },
- "Halfling": {
-  "sp": 7.5,
-  "asi": {
-   "en": "DEX +2",
-   "de": "GES +2"
-  },
-  "tr": [
-   {
-    "n": "Lucky",
-    "text": {
-     "en": "When you roll a 1 on the d20 for an attack roll, ability check, or saving throw, you can reroll the die and must use the new roll.",
-     "de": "Würfelst du bei einem Angriffswurf, Attributswurf oder Rettungswurf mit dem W20 eine 1, kannst du neu würfeln und musst das neue Ergebnis verwenden."
-    },
-    "source": "srd",
-    "verified": false
-   },
-   {
-    "n": "Brave",
-    "text": {
-     "en": "You have advantage on saving throw against being frightened.",
-     "de": "Du hast Vorteil bei Rettungswürfen gegen den Zustand Frightened."
-    },
-    "source": "srd",
-    "verified": false
-   },
-   {
-    "n": "Halfling Nimbleness",
-    "text": {
-     "en": "You can move through the space of any creature that is of a size larger than yours.",
-     "de": "Du kannst dich durch das Feld jeder Kreatur bewegen, die größer ist als du."
-    },
-    "source": "srd",
-    "verified": false
-   }
-  ],
-  "subs": {
-   "Lightfoot": {
-    "asi": {
-     "en": "CHA +1",
-     "de": "CHA +1"
-    },
-    "tr": [
-     {
-      "n": "Naturally Stealthy",
-      "text": {
-       "en": "You can attempt to hide even when you are obscured only by a creature that is at least one size larger than you.",
-       "de": "Du kannst versuchen, dich zu verstecken, selbst wenn du nur durch eine Kreatur verdeckt bist, die mindestens eine Größenkategorie größer ist als du."
-      },
-      "source": "srd",
-      "verified": false
-     }
-    ]
-   },
-   "Stout": {
-    "asi": {
-     "en": "CON +1",
-     "de": "KON +1"
-    },
-    "tr": [
-     {
-      "n": "Stout Resilience",
-      "text": {
-       "en": "Advantage on saves against poison and resistance to poison damage.",
-       "de": "Vorteil bei Rettungswürfen gegen Gift und Resistenz gegen Giftschaden."
-      },
-      "source": "summary",
-      "verified": false
-     }
-    ]
-   }
-  },
-  "source": "summary",
-  "verified": false
- },
- "Human": {
-  "sp": 9,
-  "asi": {
-   "en": "all abilities +1",
-   "de": "alle Attribute +1"
-  },
-  "tr": [
-   {
-    "n": "Extra Language",
-    "text": {
-     "en": "You can speak, read, and write one extra language of your choice.",
-     "de": "Du kannst eine zusätzliche Sprache deiner Wahl sprechen, lesen und schreiben."
-    },
-    "source": "srd",
-    "verified": false
-   }
-  ],
-  "subs": {
-   "Variant Human": {
-    "asi": {
-     "en": "two abilities +1 (instead of all)",
-     "de": "zwei Attribute +1 (statt alle)"
-    },
-    "tr": [
-     {
-      "n": "Skills",
-      "text": {
-       "en": "Proficiency in one skill of your choice.",
-       "de": "Übung in einer Fertigkeit deiner Wahl."
-      },
-      "source": "summary",
-      "verified": false
-     },
-     {
-      "n": "Feat",
-      "text": {
-       "en": "One feat of your choice.",
-       "de": "Ein Talent deiner Wahl."
-      },
-      "source": "summary",
-      "verified": false
-     }
-    ]
-   }
-  },
-  "source": "summary",
-  "verified": false
+  "subs": {},
+  "source": "summary"
  },
  "Dragonborn": {
   "sp": 9,
+  "size": {
+   "en": "Medium",
+   "de": "Mittelgroß"
+  },
   "asi": {
-   "en": "STR +2, CHA +1",
-   "de": "STR +2, CHA +1"
+   "en": "None (2024: ability scores come from your background)",
+   "de": "Keine (2024: Attributswerte kommen vom Hintergrund)"
   },
   "tr": [
    {
     "n": "Draconic Ancestry",
     "text": {
-     "en": "You have draconic ancestry. Choose one type of dragon from the Draconic Ancestry table. Your breath weapon and damage resistance are determined by the dragon type, as shown in the table.",
-     "de": "Du hast drachische Vorfahren. Wähle eine Drachenart aus der Tabelle der drachischen Abstammung. Deine Odemwaffe und deine Schadensresistenz hängen von dieser Drachenart ab, wie in der Tabelle angegeben."
+     "en": "Your lineage stems from a dragon progenitor. Choose the kind of dragon from the Draconic Ancestors table. Your choice affects your Breath Weapon and Damage Resistance traits as well as your appearance.\nDraconic Ancestors\nDragon / Damage Type\nBlack / Acid\nBlue / Lightning\nBrass / Fire\nBronze / Lightning\nCopper / Acid\nGreen / Poison\nGold / Fire\nRed / Fire\nSilver / Cold\nWhite / Cold",
+     "de": "Deine Abstammung geht auf einen Drachen zurück. Wähle die Drachenart; sie bestimmt Odemwaffe, Schadensresistenz und dein Aussehen: Schwarz Säure, Blau Blitz, Messing Feuer, Bronze Blitz, Kupfer Säure, Grün Gift, Gold Feuer, Rot Feuer, Silber Kälte, Weiß Kälte."
     },
-    "source": "srd",
+    "source": "srd52",
     "verified": false
    },
    {
-    "n": "Breath Weapon",
+    "n": "Darkvision (60 ft.)",
     "text": {
-     "en": "You can use your action to exhale destructive energy. Your draconic ancestry determines the size, shape, and damage type of the exhalation.\nWhen you use your breath weapon, each creature in the area of the exhalation must make a saving throw, the type of which is determined by your draconic ancestry. The DC for this saving throw equals 8 + your Constitution modifier + your proficiency bonus. A creature takes 2d6 damage on a failed save, and half as much damage on a successful one. The damage increases to 3d6 at 6th level, 4d6 at 11th level, and 5d6 at 16th level.\nAfter you use your breath weapon, you cannot use it again until you complete a short or long rest.",
-     "de": "Mit deiner Aktion kannst du zerstörerische Energie ausatmen. Deine drachische Abstammung bestimmt Größe, Form und Schadensart des Atems.\nWenn du deine Odemwaffe benutzt, muss jede Kreatur im Bereich des Atems einen Rettungswurf ablegen, dessen Art von deiner drachischen Abstammung abhängt. Der SG beträgt 8 + dein Konstitutionsmodifikator + dein Übungsbonus. Bei Misserfolg erleidet eine Kreatur 2W6 Schaden, bei Erfolg die Hälfte. Der Schaden steigt auf 3W6 ab Stufe 6, auf 4W6 ab Stufe 11 und auf 5W6 ab Stufe 16.\nNachdem du deine Odemwaffe benutzt hast, kannst du sie erst nach einer kurzen oder langen Rast wieder benutzen."
+     "en": "You have Darkvision with a range of 60 feet.",
+     "de": "Du hast Dunkelsicht mit 18 m Reichweite."
     },
-    "source": "srd",
+    "source": "srd52",
     "verified": false
    },
    {
-    "n": "Damage Resistance",
+    "n": "Draconic Flight",
     "text": {
-     "en": "You have resistance to the damage type associated with your draconic ancestry.",
-     "de": "Du hast Resistenz gegen die Schadensart deiner drachischen Abstammung."
+     "en": "When you reach character level 5, you can channel draconic magic to give yourself temporary flight. As a Bonus Action, you sprout spectral wings on your back that last for 10 minutes or until you retract the wings (no action required) or have the Incapacitated condition. During that time, you have a Fly Speed equal to your Speed. Your wings appear to be made of the same energy as your Breath Weapon. Once you use this trait, you can't use it again until you finish a Long Rest.",
+     "de": "Ab Charakterstufe 5 kannst du dir mit drakonischer Magie vorübergehend Flügel verleihen. Als Bonusaktion wachsen dir geisterhafte Flügel, die 10 Minuten halten oder bis du sie einziehst (keine Aktion) oder den Zustand Incapacitated hast. So lange hast du ein Flugtempo in Höhe deines Tempos. Die Flügel scheinen aus derselben Energie wie deine Odemwaffe zu bestehen. Danach erst wieder nach einer langen Rast."
     },
-    "source": "srd",
-    "verified": false
-   }
-  ],
-  "subs": {},
-  "source": "summary",
-  "verified": false
- },
- "Gnome": {
-  "sp": 7.5,
-  "asi": {
-   "en": "INT +2",
-   "de": "INT +2"
-  },
-  "tr": [
-   {
-    "n": "Darkvision",
-    "text": {
-     "en": "You have superior vision in dark and dim conditions. You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You cannot discern color in darkness, only shades of gray.",
-     "de": "Du siehst in Dunkelheit und Dämmerlicht besonders gut. Innerhalb von 18 m siehst du in dämmrigem Licht, als wäre es helles Licht, und in Dunkelheit, als wäre es dämmriges Licht. In der Dunkelheit kannst du keine Farben unterscheiden, nur Grautöne."
-    },
-    "source": "srd",
-    "verified": false
-   },
-   {
-    "n": "Gnome Cunning",
-    "text": {
-     "en": "You have advantage on all Intelligence, Wisdom, and Charisma saving throws against magic.",
-     "de": "Du hast Vorteil bei allen Intelligenz-, Weisheits- und Charismarettungswürfen gegen Magie."
-    },
-    "source": "srd",
+    "source": "srd52",
     "verified": false
    }
   ],
   "subs": {
-   "Forest Gnome": {
-    "asi": {
-     "en": "DEX +1",
-     "de": "GES +1"
-    },
+   "Black Dragon": {
     "tr": [
      {
-      "n": "Natural Illusionist",
+      "n": "Breath Weapon: Acid",
       "text": {
-       "en": "Minor Illusion cantrip (Intelligence).",
-       "de": "Zaubertrick Minor Illusion (Intelligenz)."
+       "en": "When you take the Attack action on your turn, you can replace one of your attacks with an exhalation of magical energy in either a 15-foot Cone or a 30-foot Line that is 5 feet wide (choose the shape each time). Each creature in that area must make a Dexterity saving throw (DC 8 plus your Constitution modifier and Proficiency Bonus). On a failed save, a creature takes 1d10 acid damage. On a successful save, a creature takes half as much damage. This damage increases by 1d10 when you reach character levels 5 (2d10), 11 (3d10), and 17 (4d10).\nYou can use this Breath Weapon a number of times equal to your Proficiency Bonus, and you regain all expended uses when you finish a Long Rest.",
+       "de": "Wenn du in deinem Zug die Angriffsaktion ausführst, kannst du einen Angriff durch einen Stoß magischer Energie ersetzen, als Kegel von 4,5 m oder als Linie von 9 m Länge und 1,5 m Breite (jedes Mal wählbar). Jede Kreatur im Bereich legt einen Geschicklichkeitsrettungswurf ab (SG 8 + dein Konstitutionsmodifikator + Übungsbonus). Bei Misserfolg erleidet sie 1W10 Säureschaden, bei Erfolg die Hälfte. Der Schaden steigt auf 2W10 ab Charakterstufe 5, 3W10 ab 11 und 4W10 ab 17.\nDu kannst die Odemwaffe so oft wie dein Übungsbonus nutzen und erhältst alle Anwendungen nach einer langen Rast zurück."
       },
-      "source": "summary",
+      "source": "srd52",
       "verified": false
      },
      {
-      "n": "Speak with Small Beasts",
+      "n": "Damage Resistance: Acid",
       "text": {
-       "en": "Simple communication with small beasts.",
-       "de": "Einfache Verständigung mit kleinen Tieren."
+       "en": "You have Resistance to acid damage, as determined by your Draconic Ancestry trait.",
+       "de": "Du hast Resistenz gegen Säureschaden, bestimmt durch deine Drachenabstammung."
       },
-      "source": "summary",
+      "source": "srd52",
       "verified": false
      }
     ]
    },
-   "Rock Gnome": {
-    "asi": {
-     "en": "CON +1",
-     "de": "KON +1"
-    },
+   "Blue Dragon": {
     "tr": [
      {
-      "n": "Artificer's Lore",
+      "n": "Breath Weapon: Lightning",
       "text": {
-       "en": "Whenever you make an Intelligence (History) check related to magic items, alchemical objects, or technological devices, you can add twice your proficiency bonus, instead of any proficiency bonus you normally apply.",
-       "de": "Wann immer du einen Intelligenzwurf (History) zu magischen Gegenständen, alchemistischen Objekten oder technischen Geräten ablegst, kannst du statt eines normalen Übungsbonus den doppelten Übungsbonus addieren."
+       "en": "When you take the Attack action on your turn, you can replace one of your attacks with an exhalation of magical energy in either a 15-foot Cone or a 30-foot Line that is 5 feet wide (choose the shape each time). Each creature in that area must make a Dexterity saving throw (DC 8 plus your Constitution modifier and Proficiency Bonus). On a failed save, a creature takes 1d10 lightning damage. On a successful save, a creature takes half as much damage. This damage increases by 1d10 when you reach character levels 5 (2d10), 11 (3d10), and 17 (4d10).\nYou can use this Breath Weapon a number of times equal to your Proficiency Bonus, and you regain all expended uses when you finish a Long Rest.",
+       "de": "Wenn du in deinem Zug die Angriffsaktion ausführst, kannst du einen Angriff durch einen Stoß magischer Energie ersetzen, als Kegel von 4,5 m oder als Linie von 9 m Länge und 1,5 m Breite (jedes Mal wählbar). Jede Kreatur im Bereich legt einen Geschicklichkeitsrettungswurf ab (SG 8 + dein Konstitutionsmodifikator + Übungsbonus). Bei Misserfolg erleidet sie 1W10 Blitzschaden, bei Erfolg die Hälfte. Der Schaden steigt auf 2W10 ab Charakterstufe 5, 3W10 ab 11 und 4W10 ab 17.\nDu kannst die Odemwaffe so oft wie dein Übungsbonus nutzen und erhältst alle Anwendungen nach einer langen Rast zurück."
       },
-      "source": "srd",
+      "source": "srd52",
       "verified": false
      },
      {
-      "n": "Tinker",
+      "n": "Damage Resistance: Lightning",
       "text": {
-       "en": "You have proficiency with artisan's tools (tinker's tools). Using those tools, you can spend 1 hour and 10 gp worth of materials to construct a Tiny clockwork device (AC 5, 1 hp). The device ceases to function after 24 hours (unless you spend 1 hour repairing it to keep the device functioning), or when you use your action to dismantle it; at that time, you can reclaim the materials used to create it. You can have up to three such devices active at a time.\nWhen you create a device, choose one of the following options:\nClockwork Toy: This toy is a clockwork animal, monster, or person, such as a frog, mouse, bird, dragon, or soldier. When placed on the ground, the toy moves 5 feet across the ground on each of your turns in a random direction. It makes noises as appropriate to the creature it represents.\nFire Starter: The device produces a miniature flame, which you can use to light a candle, torch, or campfire. Using the device requires your action.\nMusic Box: When opened, this music box plays a single song at a moderate volume. The box stops playing when it reaches the song's end or when it is closed.",
-       "de": "Du bist mit Handwerkszeug (Bastlerwerkzeug) geübt. Damit kannst du 1 Stunde und Material im Wert von 10 GM aufwenden, um ein winziges Uhrwerkgerät zu bauen (RK 5, 1 TP). Das Gerät hört nach 24 Stunden auf zu funktionieren (sofern du nicht 1 Stunde aufwendest, um es instand zu halten) oder wenn du es mit deiner Aktion zerlegst; dann kannst du das verwendete Material zurückgewinnen. Du kannst bis zu drei solcher Geräte gleichzeitig in Betrieb haben.\nWähle beim Bau eines Geräts eine der folgenden Optionen:\nUhrwerkspielzeug: Dieses Spielzeug ist ein Uhrwerktier, -monster oder eine Uhrwerkperson, etwa ein Frosch, eine Maus, ein Vogel, ein Drache oder ein Soldat. Auf den Boden gestellt, bewegt es sich in jedem deiner Züge 1,5 m in eine zufällige Richtung. Es macht Geräusche, die zur dargestellten Kreatur passen.\nFeuermacher: Das Gerät erzeugt eine winzige Flamme, mit der du eine Kerze, eine Fackel oder ein Lagerfeuer anzünden kannst. Das Gerät zu benutzen, erfordert deine Aktion.\nSpieluhr: Geöffnet spielt diese Spieluhr in mäßiger Lautstärke ein einzelnes Lied. Sie hört auf, wenn das Lied zu Ende ist oder sie geschlossen wird."
+       "en": "You have Resistance to lightning damage, as determined by your Draconic Ancestry trait.",
+       "de": "Du hast Resistenz gegen Blitzschaden, bestimmt durch deine Drachenabstammung."
       },
-      "source": "srd",
+      "source": "srd52",
+      "verified": false
+     }
+    ]
+   },
+   "Brass Dragon": {
+    "tr": [
+     {
+      "n": "Breath Weapon: Fire",
+      "text": {
+       "en": "When you take the Attack action on your turn, you can replace one of your attacks with an exhalation of magical energy in either a 15-foot Cone or a 30-foot Line that is 5 feet wide (choose the shape each time). Each creature in that area must make a Dexterity saving throw (DC 8 plus your Constitution modifier and Proficiency Bonus). On a failed save, a creature takes 1d10 fire damage. On a successful save, a creature takes half as much damage. This damage increases by 1d10 when you reach character levels 5 (2d10), 11 (3d10), and 17 (4d10).\nYou can use this Breath Weapon a number of times equal to your Proficiency Bonus, and you regain all expended uses when you finish a Long Rest.",
+       "de": "Wenn du in deinem Zug die Angriffsaktion ausführst, kannst du einen Angriff durch einen Stoß magischer Energie ersetzen, als Kegel von 4,5 m oder als Linie von 9 m Länge und 1,5 m Breite (jedes Mal wählbar). Jede Kreatur im Bereich legt einen Geschicklichkeitsrettungswurf ab (SG 8 + dein Konstitutionsmodifikator + Übungsbonus). Bei Misserfolg erleidet sie 1W10 Feuerschaden, bei Erfolg die Hälfte. Der Schaden steigt auf 2W10 ab Charakterstufe 5, 3W10 ab 11 und 4W10 ab 17.\nDu kannst die Odemwaffe so oft wie dein Übungsbonus nutzen und erhältst alle Anwendungen nach einer langen Rast zurück."
+      },
+      "source": "srd52",
+      "verified": false
+     },
+     {
+      "n": "Damage Resistance: Fire",
+      "text": {
+       "en": "You have Resistance to fire damage, as determined by your Draconic Ancestry trait.",
+       "de": "Du hast Resistenz gegen Feuerschaden, bestimmt durch deine Drachenabstammung."
+      },
+      "source": "srd52",
+      "verified": false
+     }
+    ]
+   },
+   "Bronze Dragon": {
+    "tr": [
+     {
+      "n": "Breath Weapon: Lightning",
+      "text": {
+       "en": "When you take the Attack action on your turn, you can replace one of your attacks with an exhalation of magical energy in either a 15-foot Cone or a 30-foot Line that is 5 feet wide (choose the shape each time). Each creature in that area must make a Dexterity saving throw (DC 8 plus your Constitution modifier and Proficiency Bonus). On a failed save, a creature takes 1d10 lightning damage. On a successful save, a creature takes half as much damage. This damage increases by 1d10 when you reach character levels 5 (2d10), 11 (3d10), and 17 (4d10).\nYou can use this Breath Weapon a number of times equal to your Proficiency Bonus, and you regain all expended uses when you finish a Long Rest.",
+       "de": "Wenn du in deinem Zug die Angriffsaktion ausführst, kannst du einen Angriff durch einen Stoß magischer Energie ersetzen, als Kegel von 4,5 m oder als Linie von 9 m Länge und 1,5 m Breite (jedes Mal wählbar). Jede Kreatur im Bereich legt einen Geschicklichkeitsrettungswurf ab (SG 8 + dein Konstitutionsmodifikator + Übungsbonus). Bei Misserfolg erleidet sie 1W10 Blitzschaden, bei Erfolg die Hälfte. Der Schaden steigt auf 2W10 ab Charakterstufe 5, 3W10 ab 11 und 4W10 ab 17.\nDu kannst die Odemwaffe so oft wie dein Übungsbonus nutzen und erhältst alle Anwendungen nach einer langen Rast zurück."
+      },
+      "source": "srd52",
+      "verified": false
+     },
+     {
+      "n": "Damage Resistance: Lightning",
+      "text": {
+       "en": "You have Resistance to lightning damage, as determined by your Draconic Ancestry trait.",
+       "de": "Du hast Resistenz gegen Blitzschaden, bestimmt durch deine Drachenabstammung."
+      },
+      "source": "srd52",
+      "verified": false
+     }
+    ]
+   },
+   "Copper Dragon": {
+    "tr": [
+     {
+      "n": "Breath Weapon: Acid",
+      "text": {
+       "en": "When you take the Attack action on your turn, you can replace one of your attacks with an exhalation of magical energy in either a 15-foot Cone or a 30-foot Line that is 5 feet wide (choose the shape each time). Each creature in that area must make a Dexterity saving throw (DC 8 plus your Constitution modifier and Proficiency Bonus). On a failed save, a creature takes 1d10 acid damage. On a successful save, a creature takes half as much damage. This damage increases by 1d10 when you reach character levels 5 (2d10), 11 (3d10), and 17 (4d10).\nYou can use this Breath Weapon a number of times equal to your Proficiency Bonus, and you regain all expended uses when you finish a Long Rest.",
+       "de": "Wenn du in deinem Zug die Angriffsaktion ausführst, kannst du einen Angriff durch einen Stoß magischer Energie ersetzen, als Kegel von 4,5 m oder als Linie von 9 m Länge und 1,5 m Breite (jedes Mal wählbar). Jede Kreatur im Bereich legt einen Geschicklichkeitsrettungswurf ab (SG 8 + dein Konstitutionsmodifikator + Übungsbonus). Bei Misserfolg erleidet sie 1W10 Säureschaden, bei Erfolg die Hälfte. Der Schaden steigt auf 2W10 ab Charakterstufe 5, 3W10 ab 11 und 4W10 ab 17.\nDu kannst die Odemwaffe so oft wie dein Übungsbonus nutzen und erhältst alle Anwendungen nach einer langen Rast zurück."
+      },
+      "source": "srd52",
+      "verified": false
+     },
+     {
+      "n": "Damage Resistance: Acid",
+      "text": {
+       "en": "You have Resistance to acid damage, as determined by your Draconic Ancestry trait.",
+       "de": "Du hast Resistenz gegen Säureschaden, bestimmt durch deine Drachenabstammung."
+      },
+      "source": "srd52",
+      "verified": false
+     }
+    ]
+   },
+   "Gold Dragon": {
+    "tr": [
+     {
+      "n": "Breath Weapon: Fire",
+      "text": {
+       "en": "When you take the Attack action on your turn, you can replace one of your attacks with an exhalation of magical energy in either a 15-foot Cone or a 30-foot Line that is 5 feet wide (choose the shape each time). Each creature in that area must make a Dexterity saving throw (DC 8 plus your Constitution modifier and Proficiency Bonus). On a failed save, a creature takes 1d10 fire damage. On a successful save, a creature takes half as much damage. This damage increases by 1d10 when you reach character levels 5 (2d10), 11 (3d10), and 17 (4d10).\nYou can use this Breath Weapon a number of times equal to your Proficiency Bonus, and you regain all expended uses when you finish a Long Rest.",
+       "de": "Wenn du in deinem Zug die Angriffsaktion ausführst, kannst du einen Angriff durch einen Stoß magischer Energie ersetzen, als Kegel von 4,5 m oder als Linie von 9 m Länge und 1,5 m Breite (jedes Mal wählbar). Jede Kreatur im Bereich legt einen Geschicklichkeitsrettungswurf ab (SG 8 + dein Konstitutionsmodifikator + Übungsbonus). Bei Misserfolg erleidet sie 1W10 Feuerschaden, bei Erfolg die Hälfte. Der Schaden steigt auf 2W10 ab Charakterstufe 5, 3W10 ab 11 und 4W10 ab 17.\nDu kannst die Odemwaffe so oft wie dein Übungsbonus nutzen und erhältst alle Anwendungen nach einer langen Rast zurück."
+      },
+      "source": "srd52",
+      "verified": false
+     },
+     {
+      "n": "Damage Resistance: Fire",
+      "text": {
+       "en": "You have Resistance to fire damage, as determined by your Draconic Ancestry trait.",
+       "de": "Du hast Resistenz gegen Feuerschaden, bestimmt durch deine Drachenabstammung."
+      },
+      "source": "srd52",
+      "verified": false
+     }
+    ]
+   },
+   "Green Dragon": {
+    "tr": [
+     {
+      "n": "Breath Weapon: Poison",
+      "text": {
+       "en": "When you take the Attack action on your turn, you can replace one of your attacks with an exhalation of magical energy in either a 15-foot Cone or a 30-foot Line that is 5 feet wide (choose the shape each time). Each creature in that area must make a Dexterity saving throw (DC 8 plus your Constitution modifier and Proficiency Bonus). On a failed save, a creature takes 1d10 poison damage. On a successful save, a creature takes half as much damage. This damage increases by 1d10 when you reach character levels 5 (2d10), 11 (3d10), and 17 (4d10).\nYou can use this Breath Weapon a number of times equal to your Proficiency Bonus, and you regain all expended uses when you finish a Long Rest.",
+       "de": "Wenn du in deinem Zug die Angriffsaktion ausführst, kannst du einen Angriff durch einen Stoß magischer Energie ersetzen, als Kegel von 4,5 m oder als Linie von 9 m Länge und 1,5 m Breite (jedes Mal wählbar). Jede Kreatur im Bereich legt einen Geschicklichkeitsrettungswurf ab (SG 8 + dein Konstitutionsmodifikator + Übungsbonus). Bei Misserfolg erleidet sie 1W10 Giftschaden, bei Erfolg die Hälfte. Der Schaden steigt auf 2W10 ab Charakterstufe 5, 3W10 ab 11 und 4W10 ab 17.\nDu kannst die Odemwaffe so oft wie dein Übungsbonus nutzen und erhältst alle Anwendungen nach einer langen Rast zurück."
+      },
+      "source": "srd52",
+      "verified": false
+     },
+     {
+      "n": "Damage Resistance: Poison",
+      "text": {
+       "en": "You have Resistance to poison damage, as determined by your Draconic Ancestry trait.",
+       "de": "Du hast Resistenz gegen Giftschaden, bestimmt durch deine Drachenabstammung."
+      },
+      "source": "srd52",
+      "verified": false
+     }
+    ]
+   },
+   "Red Dragon": {
+    "tr": [
+     {
+      "n": "Breath Weapon: Fire",
+      "text": {
+       "en": "When you take the Attack action on your turn, you can replace one of your attacks with an exhalation of magical energy in either a 15-foot Cone or a 30-foot Line that is 5 feet wide (choose the shape each time). Each creature in that area must make a Dexterity saving throw (DC 8 plus your Constitution modifier and Proficiency Bonus). On a failed save, a creature takes 1d10 fire damage. On a successful save, a creature takes half as much damage. This damage increases by 1d10 when you reach character levels 5 (2d10), 11 (3d10), and 17 (4d10).\nYou can use this Breath Weapon a number of times equal to your Proficiency Bonus, and you regain all expended uses when you finish a Long Rest.",
+       "de": "Wenn du in deinem Zug die Angriffsaktion ausführst, kannst du einen Angriff durch einen Stoß magischer Energie ersetzen, als Kegel von 4,5 m oder als Linie von 9 m Länge und 1,5 m Breite (jedes Mal wählbar). Jede Kreatur im Bereich legt einen Geschicklichkeitsrettungswurf ab (SG 8 + dein Konstitutionsmodifikator + Übungsbonus). Bei Misserfolg erleidet sie 1W10 Feuerschaden, bei Erfolg die Hälfte. Der Schaden steigt auf 2W10 ab Charakterstufe 5, 3W10 ab 11 und 4W10 ab 17.\nDu kannst die Odemwaffe so oft wie dein Übungsbonus nutzen und erhältst alle Anwendungen nach einer langen Rast zurück."
+      },
+      "source": "srd52",
+      "verified": false
+     },
+     {
+      "n": "Damage Resistance: Fire",
+      "text": {
+       "en": "You have Resistance to fire damage, as determined by your Draconic Ancestry trait.",
+       "de": "Du hast Resistenz gegen Feuerschaden, bestimmt durch deine Drachenabstammung."
+      },
+      "source": "srd52",
+      "verified": false
+     }
+    ]
+   },
+   "Silver Dragon": {
+    "tr": [
+     {
+      "n": "Breath Weapon: Cold",
+      "text": {
+       "en": "When you take the Attack action on your turn, you can replace one of your attacks with an exhalation of magical energy in either a 15-foot Cone or a 30-foot Line that is 5 feet wide (choose the shape each time). Each creature in that area must make a Dexterity saving throw (DC 8 plus your Constitution modifier and Proficiency Bonus). On a failed save, a creature takes 1d10 cold damage. On a successful save, a creature takes half as much damage. This damage increases by 1d10 when you reach character levels 5 (2d10), 11 (3d10), and 17 (4d10).\nYou can use this Breath Weapon a number of times equal to your Proficiency Bonus, and you regain all expended uses when you finish a Long Rest.",
+       "de": "Wenn du in deinem Zug die Angriffsaktion ausführst, kannst du einen Angriff durch einen Stoß magischer Energie ersetzen, als Kegel von 4,5 m oder als Linie von 9 m Länge und 1,5 m Breite (jedes Mal wählbar). Jede Kreatur im Bereich legt einen Geschicklichkeitsrettungswurf ab (SG 8 + dein Konstitutionsmodifikator + Übungsbonus). Bei Misserfolg erleidet sie 1W10 Kälteschaden, bei Erfolg die Hälfte. Der Schaden steigt auf 2W10 ab Charakterstufe 5, 3W10 ab 11 und 4W10 ab 17.\nDu kannst die Odemwaffe so oft wie dein Übungsbonus nutzen und erhältst alle Anwendungen nach einer langen Rast zurück."
+      },
+      "source": "srd52",
+      "verified": false
+     },
+     {
+      "n": "Damage Resistance: Cold",
+      "text": {
+       "en": "You have Resistance to cold damage, as determined by your Draconic Ancestry trait.",
+       "de": "Du hast Resistenz gegen Kälteschaden, bestimmt durch deine Drachenabstammung."
+      },
+      "source": "srd52",
+      "verified": false
+     }
+    ]
+   },
+   "White Dragon": {
+    "tr": [
+     {
+      "n": "Breath Weapon: Cold",
+      "text": {
+       "en": "When you take the Attack action on your turn, you can replace one of your attacks with an exhalation of magical energy in either a 15-foot Cone or a 30-foot Line that is 5 feet wide (choose the shape each time). Each creature in that area must make a Dexterity saving throw (DC 8 plus your Constitution modifier and Proficiency Bonus). On a failed save, a creature takes 1d10 cold damage. On a successful save, a creature takes half as much damage. This damage increases by 1d10 when you reach character levels 5 (2d10), 11 (3d10), and 17 (4d10).\nYou can use this Breath Weapon a number of times equal to your Proficiency Bonus, and you regain all expended uses when you finish a Long Rest.",
+       "de": "Wenn du in deinem Zug die Angriffsaktion ausführst, kannst du einen Angriff durch einen Stoß magischer Energie ersetzen, als Kegel von 4,5 m oder als Linie von 9 m Länge und 1,5 m Breite (jedes Mal wählbar). Jede Kreatur im Bereich legt einen Geschicklichkeitsrettungswurf ab (SG 8 + dein Konstitutionsmodifikator + Übungsbonus). Bei Misserfolg erleidet sie 1W10 Kälteschaden, bei Erfolg die Hälfte. Der Schaden steigt auf 2W10 ab Charakterstufe 5, 3W10 ab 11 und 4W10 ab 17.\nDu kannst die Odemwaffe so oft wie dein Übungsbonus nutzen und erhältst alle Anwendungen nach einer langen Rast zurück."
+      },
+      "source": "srd52",
+      "verified": false
+     },
+     {
+      "n": "Damage Resistance: Cold",
+      "text": {
+       "en": "You have Resistance to cold damage, as determined by your Draconic Ancestry trait.",
+       "de": "Du hast Resistenz gegen Kälteschaden, bestimmt durch deine Drachenabstammung."
+      },
+      "source": "srd52",
       "verified": false
      }
     ]
    }
   },
-  "source": "summary",
-  "verified": false
+  "source": "srd52"
  },
- "Half-Elf": {
+ "Dwarf": {
   "sp": 9,
+  "size": {
+   "en": "Medium",
+   "de": "Mittelgroß"
+  },
   "asi": {
-   "en": "CHA +2, two other abilities +1",
-   "de": "CHA +2, zwei andere Attribute +1"
+   "en": "None (2024: ability scores come from your background)",
+   "de": "Keine (2024: Attributswerte kommen vom Hintergrund)"
   },
   "tr": [
    {
-    "n": "Darkvision",
+    "n": "Darkvision (120 ft.)",
     "text": {
-     "en": "You have superior vision in dark and dim conditions. You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You cannot discern color in darkness, only shades of gray.",
-     "de": "Du siehst in Dunkelheit und Dämmerlicht besonders gut. Innerhalb von 18 m siehst du in dämmrigem Licht, als wäre es helles Licht, und in Dunkelheit, als wäre es dämmriges Licht. In der Dunkelheit kannst du keine Farben unterscheiden, nur Grautöne."
+     "en": "You have Darkvision with a range of 120 feet.",
+     "de": "Du hast Dunkelsicht mit 36 m Reichweite."
     },
-    "source": "srd",
+    "source": "srd52",
+    "verified": false
+   },
+   {
+    "n": "Dwarven Resilience",
+    "text": {
+     "en": "You have Resistance to Poison damage. You also have Advantage on saving throws you make to avoid or end the Poisoned condition.",
+     "de": "Du hast Resistenz gegen Giftschaden und Vorteil bei Rettungswürfen, um den Zustand Poisoned zu vermeiden oder zu beenden."
+    },
+    "source": "srd52",
+    "verified": false
+   },
+   {
+    "n": "Dwarven Toughness",
+    "text": {
+     "en": "Your Hit Point maximum increases by 1, and it increases by 1 again whenever you gain a level.",
+     "de": "Dein Trefferpunktmaximum steigt um 1 und mit jeder weiteren Stufe erneut um 1."
+    },
+    "source": "srd52",
+    "verified": false
+   },
+   {
+    "n": "Stonecunning",
+    "text": {
+     "en": "As a Bonus Action, you gain Tremorsense with a range of 60 feet for 10 minutes. You must be on a stone surface or touching a stone surface to use this Tremorsense. The stone can be natural or worked.\nYou can use this Bonus Action a number of times equal to your Proficiency Bonus, and you regain all expended uses when you finish a Long Rest.",
+     "de": "Als Bonusaktion erhältst du 10 Minuten lang Erschütterungssinn mit 18 m Reichweite. Dafür musst du auf Stein stehen oder Stein berühren, natürlich oder bearbeitet.\nDu kannst das so oft wie dein Übungsbonus nutzen und erhältst alle Anwendungen nach einer langen Rast zurück."
+    },
+    "source": "srd52",
+    "verified": false
+   }
+  ],
+  "subs": {},
+  "source": "srd52"
+ },
+ "Elf": {
+  "sp": 9,
+  "size": {
+   "en": "Medium",
+   "de": "Mittelgroß"
+  },
+  "asi": {
+   "en": "None (2024: ability scores come from your background)",
+   "de": "Keine (2024: Attributswerte kommen vom Hintergrund)"
+  },
+  "tr": [
+   {
+    "n": "Darkvision (60 ft.)",
+    "text": {
+     "en": "You have Darkvision with a range of 60 feet.",
+     "de": "Du hast Dunkelsicht mit 18 m Reichweite."
+    },
+    "source": "srd52",
+    "verified": false
+   },
+   {
+    "n": "Elven Lineage",
+    "text": {
+     "en": "You are part of a lineage that grants you supernatural abilities. Choose a lineage from the Elven Lineages table. You gain the level 1 benefit of that lineage.\nWhen you reach character levels 3 and 5, you learn a higher-level spell, as shown on the table.\nYou always have that spell prepared. You can cast it once without a spell slot, and you regain the ability to cast it in that way when you finish a Long Rest. You can also cast the spell using any spell slots you have of the appropriate level.\nElven Lineages\nDrow\nLevel 1. The range of your Darkvision increases to 120 feet. You also know the Dancing Lights cantrip.\nLevel 3. Faerie Fire\nLevel 5. Darkness\nHigh Elf\nLevel 1. You know the Prestidigitation cantrip. Whenever you finish a Long Rest, you can replace that cantrip with a different cantrip from the Wizard spell list.\nLevel 3. Detect Magic\nLevel 5. Misty Step\nWood Elf\nLevel 1. Your Speed increases to 35 feet. You also know the Druidcraft cantrip.\nLevel 3. Longstrider\nLevel 5. Pass without Trace\nIntelligence, Wisdom, or Charisma is your spellcasting ability for the spells you cast with this trait (choose the ability when you select the lineage).",
+     "de": "Du gehörst einer Abstammungslinie mit übernatürlichen Fähigkeiten an. Wähle sie; du erhältst ihren Vorteil der Stufe 1. Auf Charakterstufe 3 und 5 lernst du einen weiteren Zauber.\nDiesen Zauber hast du immer vorbereitet. Du kannst ihn einmal ohne Zauberplatz wirken und erhältst das nach einer langen Rast zurück; mit passenden Zauberplätzen kannst du ihn auch normal wirken.\nDrow: Stufe 1 Dunkelsicht 36 m und der Zaubertrick Dancing Lights; Stufe 3 Faerie Fire; Stufe 5 Darkness.\nHochelf: Stufe 1 der Zaubertrick Prestidigitation, den du nach jeder langen Rast gegen einen anderen Magier-Zaubertrick tauschen kannst; Stufe 3 Detect Magic; Stufe 5 Misty Step.\nWaldelf: Stufe 1 Tempo 10,5 m und der Zaubertrick Druidcraft; Stufe 3 Longstrider; Stufe 5 Pass without Trace.\nDein Zauberattribut für diese Zauber ist Intelligenz, Weisheit oder Charisma (Wahl beim Festlegen der Abstammung)."
+    },
+    "source": "srd52",
     "verified": false
    },
    {
     "n": "Fey Ancestry",
     "text": {
-     "en": "You have advantage on saving throws against being charmed, and magic cannot put you to sleep.",
-     "de": "Du hast Vorteil bei Rettungswürfen gegen den Zustand Charmed, und Magie kann dich nicht in Schlaf versetzen."
+     "en": "You have Advantage on saving throws you make to avoid or end the Charmed condition.",
+     "de": "Du hast Vorteil bei Rettungswürfen, um den Zustand Charmed zu vermeiden oder zu beenden."
     },
-    "source": "srd",
+    "source": "srd52",
     "verified": false
    },
    {
-    "n": "Skill Versatility",
+    "n": "Keen Senses",
     "text": {
-     "en": "You gain proficiency in two skills of your choice.",
-     "de": "Du erhältst Übung in zwei Fertigkeiten deiner Wahl."
+     "en": "You have proficiency in the Insight, Perception, or Survival skill.",
+     "de": "Du bist in einer dieser Fertigkeiten geübt: Motiv erkennen, Wahrnehmung oder Überleben."
     },
-    "source": "srd",
+    "source": "srd52",
+    "verified": false
+   },
+   {
+    "n": "Trance",
+    "text": {
+     "en": "You don't need to sleep, and magic can't put you to sleep. You can finish a Long Rest in 4 hours if you spend those hours in a trancelike meditation, during which you retain consciousness.",
+     "de": "Du musst nicht schlafen, und Magie kann dich nicht einschläfern. Eine lange Rast kannst du in 4 Stunden beenden, wenn du sie in tranceartiger Meditation verbringst, in der du bei Bewusstsein bleibst."
+    },
+    "source": "srd52",
     "verified": false
    }
   ],
-  "subs": {},
-  "source": "summary",
-  "verified": false
+  "subs": {
+   "Drow": {
+    "tr": [
+     {
+      "n": "Darkvision (120 ft.)",
+      "text": {
+       "en": "You have Darkvision with a range of 120 feet.",
+       "de": "Du hast Dunkelsicht mit 36 m Reichweite."
+      },
+      "source": "srd52",
+      "verified": false
+     },
+     {
+      "n": "Dancing Lights",
+      "lvl": 1,
+      "text": {
+       "en": "You know the Dancing Lights cantrip.",
+       "de": "Du kennst den Zaubertrick Dancing Lights."
+      },
+      "spell": "Dancing Lights",
+      "source": "srd52",
+      "verified": false
+     },
+     {
+      "n": "Faerie Fire (3)",
+      "lvl": 3,
+      "text": {
+       "en": "From character level 3: you always have Faerie Fire prepared and can cast it once without a spell slot per Long Rest.",
+       "de": "Ab Charakterstufe 3: Du hast Faerie Fire immer vorbereitet und kannst ihn einmal pro langer Rast ohne Zauberplatz wirken."
+      },
+      "spell": "Faerie Fire",
+      "source": "srd52",
+      "verified": false
+     },
+     {
+      "n": "Darkness (5)",
+      "lvl": 5,
+      "text": {
+       "en": "From character level 5: you always have Darkness prepared and can cast it once without a spell slot per Long Rest.",
+       "de": "Ab Charakterstufe 5: Du hast Darkness immer vorbereitet und kannst ihn einmal pro langer Rast ohne Zauberplatz wirken."
+      },
+      "spell": "Darkness",
+      "source": "srd52",
+      "verified": false
+     }
+    ]
+   },
+   "High Elf": {
+    "tr": [
+     {
+      "n": "Cantrip Versatility",
+      "text": {
+       "en": "You know the Prestidigitation cantrip. Whenever you finish a Long Rest, you can replace that cantrip with a different cantrip from the Wizard spell list.",
+       "de": "Du kennst den Zaubertrick Prestidigitation. Nach jeder langen Rast kannst du ihn gegen einen anderen Zaubertrick der Magier-Zauberliste tauschen."
+      },
+      "source": "srd52",
+      "verified": false
+     },
+     {
+      "n": "Detect Magic (3)",
+      "lvl": 3,
+      "text": {
+       "en": "From character level 3: you always have Detect Magic prepared and can cast it once without a spell slot per Long Rest.",
+       "de": "Ab Charakterstufe 3: Du hast Detect Magic immer vorbereitet und kannst ihn einmal pro langer Rast ohne Zauberplatz wirken."
+      },
+      "spell": "Detect Magic",
+      "source": "srd52",
+      "verified": false
+     },
+     {
+      "n": "Misty Step (5)",
+      "lvl": 5,
+      "text": {
+       "en": "From character level 5: you always have Misty Step prepared and can cast it once without a spell slot per Long Rest.",
+       "de": "Ab Charakterstufe 5: Du hast Misty Step immer vorbereitet und kannst ihn einmal pro langer Rast ohne Zauberplatz wirken."
+      },
+      "spell": "Misty Step",
+      "source": "srd52",
+      "verified": false
+     }
+    ]
+   },
+   "Wood Elf": {
+    "tr": [
+     {
+      "n": "Movement Speed Increase",
+      "text": {
+       "en": "Your Movement Speed increases to 35 feet.",
+       "de": "Dein Tempo steigt auf 10,5 m."
+      },
+      "source": "srd52",
+      "verified": false
+     },
+     {
+      "n": "Longstrider (3)",
+      "lvl": 3,
+      "text": {
+       "en": "From character level 3: you always have Longstrider prepared and can cast it once without a spell slot per Long Rest.",
+       "de": "Ab Charakterstufe 3: Du hast Longstrider immer vorbereitet und kannst ihn einmal pro langer Rast ohne Zauberplatz wirken."
+      },
+      "spell": "Longstrider",
+      "source": "srd52",
+      "verified": false
+     },
+     {
+      "n": "Pass without Trace (5)",
+      "lvl": 5,
+      "text": {
+       "en": "From character level 5: you always have Pass without Trace prepared and can cast it once without a spell slot per Long Rest.",
+       "de": "Ab Charakterstufe 5: Du hast Pass without Trace immer vorbereitet und kannst ihn einmal pro langer Rast ohne Zauberplatz wirken."
+      },
+      "spell": "Pass without Trace",
+      "source": "srd52",
+      "verified": false
+     }
+    ],
+    "sp": 10.5
+   }
+  },
+  "source": "srd52"
  },
- "Half-Orc": {
+ "Gnome": {
   "sp": 9,
+  "size": {
+   "en": "Small",
+   "de": "Klein"
+  },
   "asi": {
-   "en": "STR +2, CON +1",
-   "de": "STR +2, KON +1"
+   "en": "None (2024: ability scores come from your background)",
+   "de": "Keine (2024: Attributswerte kommen vom Hintergrund)"
   },
   "tr": [
    {
-    "n": "Darkvision",
+    "n": "Darkvision (60 ft.)",
     "text": {
-     "en": "You have superior vision in dark and dim conditions. You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You cannot discern color in darkness, only shades of gray.",
-     "de": "Du siehst in Dunkelheit und Dämmerlicht besonders gut. Innerhalb von 18 m siehst du in dämmrigem Licht, als wäre es helles Licht, und in Dunkelheit, als wäre es dämmriges Licht. In der Dunkelheit kannst du keine Farben unterscheiden, nur Grautöne."
+     "en": "You have Darkvision with a range of 60 feet.",
+     "de": "Du hast Dunkelsicht mit 18 m Reichweite."
     },
-    "source": "srd",
+    "source": "srd52",
     "verified": false
    },
    {
-    "n": "Menacing",
+    "n": "Gnomish Cunning",
     "text": {
-     "en": "You gain proficiency in the Intimidation skill.",
-     "de": "Du erhältst Übung in der Fertigkeit Intimidation."
+     "en": "You have Advantage on Intelligence, Wisdom, and Charisma saving throws.",
+     "de": "Du hast Vorteil bei Intelligenz-, Weisheits- und Charismarettungswürfen."
     },
-    "source": "srd",
+    "source": "srd52",
     "verified": false
    },
    {
-    "n": "Relentless Endurance",
+    "n": "Gnomish Lineage",
     "text": {
-     "en": "When you are reduced to 0 hit points but not killed outright, you can drop to 1 hit point instead. you cannot use this feature again until you finish a long rest.",
-     "de": "Sinkst du auf 0 Trefferpunkte, ohne sofort getötet zu werden, kannst du stattdessen auf 1 Trefferpunkt sinken. Du kannst dieses Merkmal erst nach einer langen Rast wieder nutzen."
+     "en": "You are part of a lineage that grants you supernatural abilities. Choose one of the following options; whichever one you choose, Intelligence, Wisdom, or Charisma is your spellcasting ability for the spells you cast with this trait (choose the ability when you select the lineage):\nForest Gnome. You know the Minor Illusion cantrip. You also always have the Speak with Animals spell prepared. You can cast it without a spell slot a number of times equal to your Proficiency Bonus, and you regain all expended uses when you finish a Long Rest. You can also use any spell slots you have to cast the spell.\nRock Gnome. You know the Mending and Prestidigitation cantrips. In addition, you can spend 10 minutes casting Prestidigitation to create a Tiny clockwork device (AC 5, 1 HP), such as a toy, fire starter, or music box. When you create the device, you determine its function by choosing one effect from Prestidigitation; the device produces that effect whenever you or another creature takes a Bonus Action to activate it with a touch. If the chosen effect has options within it, you choose one of those options for the device when you create it.\nFor example, if you choose the spell's ignite-extinguish effect, you determine whether the device ignites or extinguishes fire; the device doesn't do both. You can have three such devices in existence at a time, and each falls apart 8 hours after its creation or when you dismantle it with a touch as a Utilize action.",
+     "de": "Du gehörst einer Abstammungslinie mit übernatürlichen Fähigkeiten an; dein Zauberattribut dafür ist Intelligenz, Weisheit oder Charisma (Wahl beim Festlegen).\nWaldgnom: Du kennst den Zaubertrick Minor Illusion und hast Speak with Animals immer vorbereitet. Du kannst ihn so oft wie dein Übungsbonus ohne Zauberplatz wirken, alle Anwendungen nach einer langen Rast zurück, und auch mit Zauberplätzen.\nFelsgnom: Du kennst die Zaubertricks Mending und Prestidigitation. Außerdem kannst du in 10 Minuten Wirkzeit mit Prestidigitation ein winziges Uhrwerkgerät bauen (RK 5, 1 TP), etwa ein Spielzeug, einen Feueranzünder oder eine Spieldose. Dabei legst du einen Effekt von Prestidigitation fest; das Gerät erzeugt ihn, wenn du oder jemand anderes es mit einer Bonusaktion berührt. Bei Effekten mit Wahl legst du eine Variante fest (etwa nur Anzünden oder nur Löschen). Bis zu drei Geräte können gleichzeitig bestehen; jedes zerfällt nach 8 Stunden oder wenn du es mit der Aktion Benutzen zerlegst."
     },
-    "source": "srd",
-    "verified": false
-   },
-   {
-    "n": "Savage Attacks",
-    "text": {
-     "en": "When you score a critical hit with a melee weapon attack, you can roll one of the weapon's damage dice one additional time and add it to the extra damage of the critical hit.",
-     "de": "Erzielst du mit einem Nahkampf-Waffenangriff einen kritischen Treffer, kannst du einen der Schadenswürfel der Waffe ein weiteres Mal würfeln und zum Zusatzschaden des kritischen Treffers addieren."
-    },
-    "source": "srd",
+    "source": "srd52",
     "verified": false
    }
   ],
-  "subs": {},
-  "source": "summary",
-  "verified": false
- },
- "Tiefling": {
-  "sp": 9,
-  "asi": {
-   "en": "CHA +2, INT +1",
-   "de": "CHA +2, INT +1"
+  "subs": {
+   "Forest Gnome": {
+    "tr": [
+     {
+      "n": "Forest Gnome",
+      "text": {
+       "en": "You always have the Speak with Animals spell prepared. You can cast it without a spell slot a number of times equal to your Proficiency Bonus, and you regain all expended uses when you finish a Long Rest. You can also use any spell slots you have to cast the spell.",
+       "de": "Du kennst den Zaubertrick Minor Illusion und hast Speak with Animals immer vorbereitet. Du kannst ihn so oft wie dein Übungsbonus ohne Zauberplatz wirken, alle Anwendungen nach einer langen Rast zurück, und auch mit Zauberplätzen."
+      },
+      "source": "srd52",
+      "verified": false
+     },
+     {
+      "n": "Minor Illusion",
+      "lvl": 1,
+      "text": {
+       "en": "You know the Minor Illusion cantrip.",
+       "de": "Du kennst den Zaubertrick Minor Illusion."
+      },
+      "spell": "Minor Illusion",
+      "source": "srd52",
+      "verified": false
+     }
+    ]
+   },
+   "Rock Gnome": {
+    "tr": [
+     {
+      "n": "Rock Gnome",
+      "text": {
+       "en": "You know the Prestidigitation cantrip. In addition, you can spend 10 minutes casting Prestidigitation to create a Tiny clockwork device (AC 5, 1 HP), such as a toy, fire starter, or music box. When you create the device, you determine its function by choosing one effect from Prestidigitation; the device produces that effect whenever you or another creature takes a Bonus Action to activate it with a touch. If the chosen effect has options within it, you choose one of those options for the device when you create it. For example, if you choose the spell’s ignite-extinguish effect, you determine whether the device ignites or extinguishes fire; the device doesn’t do both. You can have three such devices in existence at a time, and each falls apart 8 hours after its creation or when you dismantle it with a touch as a Utilize action.",
+       "de": "Du kennst die Zaubertricks Mending und Prestidigitation. Außerdem kannst du in 10 Minuten Wirkzeit mit Prestidigitation ein winziges Uhrwerkgerät bauen (RK 5, 1 TP), etwa ein Spielzeug, einen Feueranzünder oder eine Spieldose. Dabei legst du einen Effekt von Prestidigitation fest; das Gerät erzeugt ihn, wenn du oder jemand anderes es mit einer Bonusaktion berührt. Bei Effekten mit Wahl legst du eine Variante fest. Bis zu drei Geräte können gleichzeitig bestehen; jedes zerfällt nach 8 Stunden oder wenn du es mit der Aktion Benutzen zerlegst."
+      },
+      "source": "srd52",
+      "verified": false
+     },
+     {
+      "n": "Mending",
+      "lvl": 1,
+      "text": {
+       "en": "You know the Mending cantrip.",
+       "de": "Du kennst den Zaubertrick Mending."
+      },
+      "spell": "Mending",
+      "source": "srd52",
+      "verified": false
+     }
+    ]
+   }
   },
-  "tr": [
-   {
-    "n": "Darkvision",
-    "text": {
-     "en": "You have superior vision in dark and dim conditions. You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You cannot discern color in darkness, only shades of gray.",
-     "de": "Du siehst in Dunkelheit und Dämmerlicht besonders gut. Innerhalb von 18 m siehst du in dämmrigem Licht, als wäre es helles Licht, und in Dunkelheit, als wäre es dämmriges Licht. In der Dunkelheit kannst du keine Farben unterscheiden, nur Grautöne."
-    },
-    "source": "srd",
-    "verified": false
-   },
-   {
-    "n": "Hellish Resistance",
-    "text": {
-     "en": "You have resistance to fire damage.",
-     "de": "Du hast Resistenz gegen Feuerschaden."
-    },
-    "source": "srd",
-    "verified": false
-   },
-   {
-    "n": "Infernal Legacy",
-    "text": {
-     "en": "You know the thaumaturgy cantrip. When you reach 3rd level, you can cast the hellish rebuke spell as a 2nd-level spell once with this trait and regain the ability to do so when you finish a long rest. When you reach 5th level, you can cast the darkness spell once with this trait and regain the ability to do so when you finish a long rest. Charisma is your spellcasting ability for these spells.",
-     "de": "Du kennst den Zaubertrick Thaumaturgy. Ab Stufe 3 kannst du mit diesem Merkmal einmal den Zauber Hellish Rebuke als Zauber des 2. Grades wirken und erhältst diese Möglichkeit nach einer langen Rast zurück. Ab Stufe 5 kannst du mit diesem Merkmal einmal den Zauber Darkness wirken und erhältst diese Möglichkeit nach einer langen Rast zurück. Charisma ist dein Zauberattribut für diese Zauber."
-    },
-    "source": "srd",
-    "verified": false
-   }
-  ],
-  "subs": {},
-  "source": "summary",
-  "verified": false
+  "source": "srd52"
  },
  "Goliath": {
-  "sp": 9,
-  "asi": {
-   "en": "see variant",
-   "de": "siehe Variante"
+  "sp": 10.5,
+  "size": {
+   "en": "Medium",
+   "de": "Mittelgroß"
   },
-  "book": {
-   "en": "Volo's Guide to Monsters / Monsters of the Multiverse",
-   "de": "Volo's Guide to Monsters / Monsters of the Multiverse"
+  "asi": {
+   "en": "None (2024: ability scores come from your background)",
+   "de": "Keine (2024: Attributswerte kommen vom Hintergrund)"
   },
   "tr": [
    {
-    "n": "Natural Athlete",
+    "n": "Giant Ancestry",
     "text": {
-     "en": "You have proficiency in the Athletics skill.",
-     "de": "Du bist in der Fertigkeit Athletics geübt."
+     "en": "You are descended from Giants. Choose one of the following benefits-a supernatural boon from your ancestry; you can use the chosen benefit a number of times equal to your Proficiency Bonus, and you regain all expended uses when you finish a Long Rest:\nCloud's Jaunt (Cloud Giant). As a Bonus Action, you magically teleport up to 30 feet to an unoccupied space you can see.\nFire's Burn (Fire Giant). When you hit a target with an attack roll and deal damage to it, you can also deal 1d10 Fire damage to that target.\nFrost's Chill (Frost Giant). When you hit a target with an attack roll and deal damage to it, you can also deal 1d6 Cold damage to that target and reduce its Speed by 10 feet until the start of your next turn.\nHill's Tumble (Hill Giant). When you hit a Large or smaller creature with an attack roll and deal damage to it, you can give that target the Prone condition.\nStone's Endurance (Stone Giant). When you take damage, you can take a Reaction to roll 1d12. Add your Constitution modifier to the number rolled and reduce the damage by that total.\nStorm's Thunder (Storm Giant). When you take damage from a creature within 60 feet of you, you can take a Reaction to deal 1d8 Thunder damage to that creature.",
+     "de": "Du stammst von Riesen ab. Wähle einen dieser übernatürlichen Vorteile; du kannst ihn so oft wie dein Übungsbonus nutzen und erhältst alle Anwendungen nach einer langen Rast zurück:\nWolkensprung (Wolkenriese). Als Bonusaktion teleportierst du dich bis zu 9 m an einen freien Platz, den du sehen kannst.\nFeuerglut (Feuerriese). Triffst du ein Ziel mit einem Angriffswurf und fügst ihm Schaden zu, kannst du ihm zusätzlich 1W10 Feuerschaden zufügen.\nFrostkälte (Frostriese). Triffst du ein Ziel mit einem Angriffswurf und fügst ihm Schaden zu, kannst du ihm zusätzlich 1W6 Kälteschaden zufügen und sein Tempo bis zum Beginn deines nächsten Zuges um 3 m senken.\nHügelsturz (Hügelriese). Triffst du eine Kreatur der Größe Large oder kleiner mit einem Angriffswurf und fügst ihr Schaden zu, kannst du ihr den Zustand Prone geben.\nSteinausdauer (Steinriese). Erleidest du Schaden, kannst du mit deiner Reaktion 1W12 würfeln, deinen Konstitutionsmodifikator addieren und den Schaden um diese Summe senken.\nSturmdonner (Sturmriese). Fügt dir eine Kreatur im Umkreis von 18 m Schaden zu, kannst du ihr mit deiner Reaktion 1W8 Schallschaden zufügen."
     },
-    "source": "summary",
+    "source": "srd52",
+    "verified": false
+   },
+   {
+    "n": "Large Form",
+    "text": {
+     "en": "Starting at character level 5, you can change your size to Large as a Bonus Action if you're in a big enough space. This transformation lasts for 10 minutes or until you end it (no action required). For that duration, you have Advantage on Strength checks, and your Speed increases by 10 feet. Once you use this trait, you can't use it again until you finish a Long Rest.",
+     "de": "Ab Charakterstufe 5 kannst du als Bonusaktion die Größe Large annehmen, wenn genug Platz ist. Das hält 10 Minuten oder bis du es beendest (keine Aktion). So lange hast du Vorteil bei Stärkewürfen, und dein Tempo steigt um 3 m. Danach erst wieder nach einer langen Rast."
+    },
+    "source": "srd52",
     "verified": false
    },
    {
     "n": "Powerful Build",
     "text": {
-     "en": "You count as one size larger when determining your carrying capacity and the weight you can push, drag, or lift. The sheet therefore doubles your carrying capacity.",
-     "de": "Für Tragkraft und für das Gewicht, das du schieben, ziehen oder heben kannst, zählst du als eine Größenkategorie größer. Die Tragkraft im Bogen ist deshalb verdoppelt."
+     "en": "You have Advantage on any ability check you make to end the Grappled condition. You also count as one size larger when determining your carrying capacity.",
+     "de": "Du hast Vorteil bei Attributswürfen, um den Zustand Grappled zu beenden. Für deine Tragkraft zählst du als eine Größe größer."
     },
-    "source": "summary",
-    "verified": false
-   },
-   {
-    "n": "Languages",
-    "text": {
-     "en": "You can speak, read, and write Common and Giant. (In Monsters of the Multiverse: Common and one other language you and the DM agree on.)",
-     "de": "Du sprichst, liest und schreibst Gemeinsprache und Riesisch. (In Monsters of the Multiverse: Gemeinsprache und eine weitere Sprache, auf die du dich mit der Spielleitung einigst.)"
-    },
-    "source": "summary",
+    "source": "srd52",
     "verified": false
    }
   ],
   "subs": {
-   "Volo's Guide": {
-    "asi": {
-     "en": "STR +2, CON +1",
-     "de": "STR +2, KON +1"
-    },
+   "Cloud Giant": {
     "tr": [
      {
-      "n": "Stone's Endurance",
+      "n": "Cloud's Jaunt",
       "text": {
-       "en": "When you take damage, you can use your reaction to roll a d12, add your Constitution modifier, and reduce the damage by that total. You can do this again after a short or long rest.",
-       "de": "Erleidest du Schaden, kannst du mit deiner Reaktion 1W12 würfeln, deinen Konstitutionsmodifikator addieren und den Schaden um diese Summe senken. Danach erst wieder nach einer kurzen oder langen Rast."
+       "en": "As a Bonus Action, you magically teleport up to 30 feet to an unoccupied space you can see.",
+       "de": "Als Bonusaktion teleportierst du dich magisch bis zu 9 m an einen freien Platz, den du sehen kannst. So oft wie dein Übungsbonus, alle Anwendungen nach einer langen Rast zurück."
       },
-      "source": "summary",
-      "verified": false
-     },
-     {
-      "n": "Mountain Born",
-      "text": {
-       "en": "You are acclimated to high altitude, including elevations above 20,000 feet, and naturally adapted to cold climates, as described in chapter 5 of the DMG.",
-       "de": "Du bist an große Höhen über 6.000 m gewöhnt und an kaltes Klima angepasst, wie im Kapitel 5 des DMG beschrieben."
-      },
-      "source": "summary",
+      "source": "srd52",
       "verified": false
      }
     ]
    },
-   "Monsters of the Multiverse": {
-    "asi": {
-     "en": "+2 to one score and +1 to another, or +1 to three scores",
-     "de": "+2 auf ein Attribut und +1 auf ein anderes, oder +1 auf drei Attribute"
-    },
+   "Fire Giant": {
+    "tr": [
+     {
+      "n": "Fire's Burn",
+      "text": {
+       "en": "When you hit a target with an attack roll and deal damage to it, you can also deal 1d10 Fire damage to that target.",
+       "de": "Triffst du ein Ziel mit einem Angriffswurf und fügst ihm Schaden zu, kannst du ihm zusätzlich 1W10 Feuerschaden zufügen. So oft wie dein Übungsbonus, alle Anwendungen nach einer langen Rast zurück."
+      },
+      "source": "srd52",
+      "verified": false
+     }
+    ]
+   },
+   "Frost Giant": {
+    "tr": [
+     {
+      "n": "Frost's Chill",
+      "text": {
+       "en": "When you hit a target with an attack roll and deal damage to it, you can also deal 1d6 Cold damage to that target and reduce its Speed by 10 feet until the start of your next turn.",
+       "de": "Triffst du ein Ziel mit einem Angriffswurf und fügst ihm Schaden zu, kannst du ihm zusätzlich 1W6 Kälteschaden zufügen und sein Tempo bis zum Beginn deines nächsten Zuges um 3 m senken. So oft wie dein Übungsbonus, alle Anwendungen nach einer langen Rast zurück."
+      },
+      "source": "srd52",
+      "verified": false
+     }
+    ]
+   },
+   "Hill Giant": {
+    "tr": [
+     {
+      "n": "Hill's Tumble",
+      "text": {
+       "en": "When you hit a Large or smaller creature with an attack roll and deal damage to it, you can give that target the Prone condition.",
+       "de": "Triffst du eine Kreatur der Größe Large oder kleiner mit einem Angriffswurf und fügst ihr Schaden zu, kannst du ihr den Zustand Prone geben. So oft wie dein Übungsbonus, alle Anwendungen nach einer langen Rast zurück."
+      },
+      "source": "srd52",
+      "verified": false
+     }
+    ]
+   },
+   "Stone Giant": {
     "tr": [
      {
       "n": "Stone's Endurance",
       "text": {
-       "en": "When you take damage, you can use your reaction to roll a d12, add your Constitution modifier, and reduce the damage by that total. You can do this a number of times equal to your proficiency bonus and regain all uses after a long rest.",
-       "de": "Erleidest du Schaden, kannst du mit deiner Reaktion 1W12 würfeln, deinen Konstitutionsmodifikator addieren und den Schaden um diese Summe senken. Das geht so oft, wie dein Übungsbonus angibt; nach einer langen Rast erhältst du alle Anwendungen zurück."
+       "en": "When you take damage, you can take a Reaction to roll 1d12. Add your Constitution modifier to the number rolled and reduce the damage by that total.",
+       "de": "Erleidest du Schaden, kannst du mit deiner Reaktion 1W12 würfeln, deinen Konstitutionsmodifikator addieren und den Schaden um diese Summe senken. So oft wie dein Übungsbonus, alle Anwendungen nach einer langen Rast zurück."
       },
-      "source": "summary",
+      "source": "srd52",
       "verified": false
-     },
+     }
+    ]
+   },
+   "Storm Giant": {
+    "tr": [
      {
-      "n": "Mountain Born",
+      "n": "Storm's Thunder",
       "text": {
-       "en": "You have resistance to cold damage. You are also acclimated to high altitude, including elevations above 20,000 feet.",
-       "de": "Du hast Resistenz gegen Kälteschaden. Außerdem bist du an große Höhen über 6.000 m gewöhnt."
+       "en": "When you take damage from a creature within 60 feet of you, you can take a Reaction to deal 1d8 Thunder damage to that creature.",
+       "de": "Fügt dir eine Kreatur im Umkreis von 18 m Schaden zu, kannst du ihr mit deiner Reaktion 1W8 Schallschaden zufügen. So oft wie dein Übungsbonus, alle Anwendungen nach einer langen Rast zurück."
       },
-      "source": "summary",
+      "source": "srd52",
       "verified": false
      }
     ]
    }
   },
-  "source": "summary",
-  "verified": false
+  "source": "srd52"
+ },
+ "Halfling": {
+  "sp": 9,
+  "size": {
+   "en": "Small",
+   "de": "Klein"
+  },
+  "asi": {
+   "en": "None (2024: ability scores come from your background)",
+   "de": "Keine (2024: Attributswerte kommen vom Hintergrund)"
+  },
+  "tr": [
+   {
+    "n": "Brave",
+    "text": {
+     "en": "You have Advantage on saving throws you make to avoid or end the Frightened condition.",
+     "de": "Du hast Vorteil bei Rettungswürfen, um den Zustand Frightened zu vermeiden oder zu beenden."
+    },
+    "source": "srd52",
+    "verified": false
+   },
+   {
+    "n": "Halfling Nimbleness",
+    "text": {
+     "en": "You can move through the space of any creature that is a size larger than you, but you can't stop in the same space.",
+     "de": "Du kannst dich durch den Platz jeder Kreatur bewegen, die mindestens eine Größe größer ist als du, darfst dort aber nicht anhalten."
+    },
+    "source": "srd52",
+    "verified": false
+   },
+   {
+    "n": "Luck",
+    "text": {
+     "en": "When you roll a 1 on the d20 of a D20 Test, you can reroll the die, and you must use the new roll.",
+     "de": "Würfelst du bei einem W20-Test auf dem W20 eine 1, kannst du neu würfeln und musst das neue Ergebnis nehmen."
+    },
+    "source": "srd52",
+    "verified": false
+   },
+   {
+    "n": "Naturally Stealthy",
+    "text": {
+     "en": "You can take the Hide action even when you are obscured only by a creature that is at least one size larger than you.",
+     "de": "Du kannst die Aktion Verstecken auch ausführen, wenn dich nur eine Kreatur verdeckt, die mindestens eine Größe größer ist als du."
+    },
+    "source": "srd52",
+    "verified": false
+   }
+  ],
+  "subs": {},
+  "source": "srd52"
+ },
+ "Human": {
+  "sp": 9,
+  "size": {
+   "en": "Medium",
+   "de": "Mittelgroß"
+  },
+  "asi": {
+   "en": "None (2024: ability scores come from your background)",
+   "de": "Keine (2024: Attributswerte kommen vom Hintergrund)"
+  },
+  "tr": [
+   {
+    "n": "Resourceful",
+    "text": {
+     "en": "You gain Heroic Inspiration whenever you finish a Long Rest.",
+     "de": "Nach jeder langen Rast erhältst du Heroic Inspiration."
+    },
+    "source": "srd52",
+    "verified": false
+   },
+   {
+    "n": "Skillful",
+    "text": {
+     "en": "You gain proficiency in one skill of your choice.",
+     "de": "Du bist in einer Fertigkeit deiner Wahl geübt."
+    },
+    "source": "srd52",
+    "verified": false
+   },
+   {
+    "n": "Versatile",
+    "text": {
+     "en": "You gain an Origin feat of your choice (see \"Feats\"). Skilled is recommended.",
+     "de": "Du erhältst ein Herkunftstalent deiner Wahl. Empfohlen ist Skilled."
+    },
+    "source": "srd52",
+    "verified": false
+   }
+  ],
+  "subs": {},
+  "source": "srd52"
+ },
+ "Orc": {
+  "sp": 9,
+  "size": {
+   "en": "Medium",
+   "de": "Mittelgroß"
+  },
+  "asi": {
+   "en": "None (2024: ability scores come from your background)",
+   "de": "Keine (2024: Attributswerte kommen vom Hintergrund)"
+  },
+  "tr": [
+   {
+    "n": "Adrenaline Rush",
+    "text": {
+     "en": "You can take the Dash action as a Bonus Action. When you do so, you gain a number of Temporary Hit Points equal to your Proficiency Bonus.\nYou can use this trait a number of times equal to your Proficiency Bonus, and you regain all expended uses when you finish a Short or Long Rest.",
+     "de": "Du kannst die Aktion Spurten als Bonusaktion ausführen. Dann erhältst du temporäre Trefferpunkte in Höhe deines Übungsbonus.\nDu kannst das so oft wie dein Übungsbonus nutzen und erhältst alle Anwendungen nach einer kurzen oder langen Rast zurück."
+    },
+    "source": "srd52",
+    "verified": false
+   },
+   {
+    "n": "Darkvision (120 ft.)",
+    "text": {
+     "en": "You have Darkvision with a range of 120 feet.",
+     "de": "Du hast Dunkelsicht mit 36 m Reichweite."
+    },
+    "source": "srd52",
+    "verified": false
+   },
+   {
+    "n": "Relentless Endurance",
+    "text": {
+     "en": "When you are reduced to 0 Hit Points but not killed outright, you can drop to 1 Hit Point instead. Once you use this trait, you can't do so again until you finish a Long Rest.",
+     "de": "Sinkst du auf 0 Trefferpunkte, ohne sofort zu sterben, kannst du stattdessen auf 1 Trefferpunkt sinken. Danach erst wieder nach einer langen Rast."
+    },
+    "source": "srd52",
+    "verified": false
+   }
+  ],
+  "subs": {},
+  "source": "srd52"
+ },
+ "Tiefling": {
+  "sp": 9,
+  "size": {
+   "en": "Medium or Small",
+   "de": "Mittelgroß oder klein"
+  },
+  "asi": {
+   "en": "None (2024: ability scores come from your background)",
+   "de": "Keine (2024: Attributswerte kommen vom Hintergrund)"
+  },
+  "tr": [
+   {
+    "n": "Darkvision (60 ft.)",
+    "text": {
+     "en": "You have Darkvision with a range of 60 feet.",
+     "de": "Du hast Dunkelsicht mit 18 m Reichweite."
+    },
+    "source": "srd52",
+    "verified": false
+   },
+   {
+    "n": "Fiendish Legacy",
+    "text": {
+     "en": "You are the recipient of a legacy that grants you supernatural abilities. Choose a legacy from the Fiendish Legacies table. You gain the level 1 benefit of the chosen legacy.\nWhen you reach character levels 3 and 5, you learn a higher-level spell, as shown on the table.\nYou always have that spell prepared. You can cast it once without a spell slot, and you regain the ability to cast it in that way when you finish a Long Rest. You can also cast the spell using any spell slots you have of the appropriate level.\nIntelligence, Wisdom, or Charisma is your spell-casting ability for the spells you cast with this trait (choose the ability when you select the legacy).\nFiendish Legacies\nAbyssal.\nLevel 1. You have Resistance to Poison damage. You also know the Poison Spray cantrip.\nLevel 3. Ray of Sickness\nLevel 5. Hold Person\nChthonic.\nLevel 1. You have Resistance to Necrotic damage. You also know the Chill Touch cantrip.\nLevel 3. False Life\nLevel 5. Ray of Enfeeblement\nInfernal.\nLevel 1. You have Resistance to Fire damage. You also know the Fire Bolt cantrip.\nLevel 3. Hellish Rebuke\nLevel 5. Darkness",
+     "de": "Du trägst ein Erbe mit übernatürlichen Fähigkeiten. Wähle es; du erhältst seinen Vorteil der Stufe 1. Auf Charakterstufe 3 und 5 lernst du einen weiteren Zauber.\nDiesen Zauber hast du immer vorbereitet. Du kannst ihn einmal ohne Zauberplatz wirken und erhältst das nach einer langen Rast zurück; mit passenden Zauberplätzen kannst du ihn auch normal wirken.\nDein Zauberattribut für diese Zauber ist Intelligenz, Weisheit oder Charisma (Wahl beim Festlegen des Erbes).\nAbyssisch: Stufe 1 Resistenz gegen Giftschaden und der Zaubertrick Poison Spray; Stufe 3 Ray of Sickness; Stufe 5 Hold Person.\nChthonisch: Stufe 1 Resistenz gegen nekrotischen Schaden und der Zaubertrick Chill Touch; Stufe 3 False Life; Stufe 5 Ray of Enfeeblement.\nInfernalisch: Stufe 1 Resistenz gegen Feuerschaden und der Zaubertrick Fire Bolt; Stufe 3 Hellish Rebuke; Stufe 5 Darkness."
+    },
+    "source": "srd52",
+    "verified": false
+   },
+   {
+    "n": "Otherworldly Presence",
+    "text": {
+     "en": "You know the Thaumaturgy cantrip. When you cast it with this trait, the spell uses the same spellcasting ability you use for your Fiendish Legacy trait.",
+     "de": "Du kennst den Zaubertrick Thaumaturgy. Wirkst du ihn so, nutzt er dasselbe Zauberattribut wie dein Unholdisches Erbe."
+    },
+    "source": "srd52",
+    "verified": false
+   }
+  ],
+  "subs": {
+   "Abyssal": {
+    "tr": [
+     {
+      "n": "Damage Resistance: Poison",
+      "text": {
+       "en": "You have Resistance to Poison damage.",
+       "de": "Du hast Resistenz gegen Giftschaden."
+      },
+      "source": "srd52",
+      "verified": false
+     },
+     {
+      "n": "Poison Spray",
+      "lvl": 1,
+      "text": {
+       "en": "You know the Poison Spray cantrip.",
+       "de": "Du kennst den Zaubertrick Poison Spray."
+      },
+      "spell": "Poison Spray",
+      "source": "srd52",
+      "verified": false
+     },
+     {
+      "n": "Ray of Sickness (3)",
+      "lvl": 3,
+      "text": {
+       "en": "From character level 3: you always have Ray of Sickness prepared and can cast it once without a spell slot per Long Rest.",
+       "de": "Ab Charakterstufe 3: Du hast Ray of Sickness immer vorbereitet und kannst ihn einmal pro langer Rast ohne Zauberplatz wirken."
+      },
+      "spell": "Ray of Sickness",
+      "source": "srd52",
+      "verified": false
+     },
+     {
+      "n": "Hold Person (5)",
+      "lvl": 5,
+      "text": {
+       "en": "From character level 5: you always have Hold Person prepared and can cast it once without a spell slot per Long Rest.",
+       "de": "Ab Charakterstufe 5: Du hast Hold Person immer vorbereitet und kannst ihn einmal pro langer Rast ohne Zauberplatz wirken."
+      },
+      "spell": "Hold Person",
+      "source": "srd52",
+      "verified": false
+     }
+    ]
+   },
+   "Chthonic": {
+    "tr": [
+     {
+      "n": "Damage Resistance: Necrotic",
+      "text": {
+       "en": "You have Resistance to Necrotic damage.",
+       "de": "Du hast Resistenz gegen nekrotischen Schaden."
+      },
+      "source": "srd52",
+      "verified": false
+     },
+     {
+      "n": "Chill Touch",
+      "lvl": 1,
+      "text": {
+       "en": "You know the Chill Touch cantrip.",
+       "de": "Du kennst den Zaubertrick Chill Touch."
+      },
+      "spell": "Chill Touch",
+      "source": "srd52",
+      "verified": false
+     },
+     {
+      "n": "False Life (3)",
+      "lvl": 3,
+      "text": {
+       "en": "From character level 3: you always have False Life prepared and can cast it once without a spell slot per Long Rest.",
+       "de": "Ab Charakterstufe 3: Du hast False Life immer vorbereitet und kannst ihn einmal pro langer Rast ohne Zauberplatz wirken."
+      },
+      "spell": "False Life",
+      "source": "srd52",
+      "verified": false
+     },
+     {
+      "n": "Ray of Enfeeblement (5)",
+      "lvl": 5,
+      "text": {
+       "en": "From character level 5: you always have Ray of Enfeeblement prepared and can cast it once without a spell slot per Long Rest.",
+       "de": "Ab Charakterstufe 5: Du hast Ray of Enfeeblement immer vorbereitet und kannst ihn einmal pro langer Rast ohne Zauberplatz wirken."
+      },
+      "spell": "Ray of Enfeeblement",
+      "source": "srd52",
+      "verified": false
+     }
+    ]
+   },
+   "Infernal": {
+    "tr": [
+     {
+      "n": "Damage Resistance: Fire",
+      "text": {
+       "en": "You have Resistance to Fire damage.",
+       "de": "Du hast Resistenz gegen Feuerschaden."
+      },
+      "source": "srd52",
+      "verified": false
+     },
+     {
+      "n": "Fire Bolt",
+      "lvl": 1,
+      "text": {
+       "en": "You know the Fire Bolt cantrip.",
+       "de": "Du kennst den Zaubertrick Fire Bolt."
+      },
+      "spell": "Fire Bolt",
+      "source": "srd52",
+      "verified": false
+     },
+     {
+      "n": "Hellish Rebuke (3)",
+      "lvl": 3,
+      "text": {
+       "en": "From character level 3: you always have Hellish Rebuke prepared and can cast it once without a spell slot per Long Rest.",
+       "de": "Ab Charakterstufe 3: Du hast Hellish Rebuke immer vorbereitet und kannst ihn einmal pro langer Rast ohne Zauberplatz wirken."
+      },
+      "spell": "Hellish Rebuke",
+      "source": "srd52",
+      "verified": false
+     },
+     {
+      "n": "Darkness (5)",
+      "lvl": 5,
+      "text": {
+       "en": "From character level 5: you always have Darkness prepared and can cast it once without a spell slot per Long Rest.",
+       "de": "Ab Charakterstufe 5: Du hast Darkness immer vorbereitet und kannst ihn einmal pro langer Rast ohne Zauberplatz wirken."
+      },
+      "spell": "Darkness",
+      "source": "srd52",
+      "verified": false
+     }
+    ]
+   }
+  },
+  "source": "srd52"
  }
 }

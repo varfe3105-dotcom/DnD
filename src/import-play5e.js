@@ -1,4 +1,5 @@
 // Importer für Sicherungen aus dem externen Charakter-Tool ("kind": "dnd-backup").
+import RACE_ASI_2014 from '../data/race-asi-2014.json';
 // Was sich nicht zuordnen lässt, landet in den Notizen. Eigene Regeln werden nicht geraten.
 import { z } from 'zod';
 import { S, def, mk, spFrom, putBag, norm, setS, save, openFresh } from './state.js';
@@ -57,19 +58,19 @@ function findSub(klass, id) {
   if (!part) return '';
   return (CLASSES[klass]?.subs || []).find(s => slug(s) === slug(part) || slug(s).split('-').includes(part) || slug(s).includes(part)) || '';
 }
-function findSubrace(race, id) {
+function findSubrace(race, id, table = RACES) {
   const part = String(id || '').split('/').pop();
-  if (!part || !RACES[race]) return '';
-  const subs = Object.keys(RACES[race].subs);
+  if (!part || !table[race]) return '';
+  const subs = Object.keys(table[race].subs);
   return (SUBRACE_ALIAS[part] && subs.includes(SUBRACE_ALIAS[part]) && SUBRACE_ALIAS[part]) || subs.find(s => slug(s) === part || slug(s).startsWith(part + '-') || part.startsWith(slug(s))) || '';
 }
 const ABIL_DE = { STR: 'str', GES: 'dex', KON: 'con', INT: 'int', WEI: 'wis', CHA: 'cha' };
-/** Volksboni aus den Katalogtexten; freie Wahl kommt aus der Datei. */
+/** Volksboni nach den Regeln 2014 (die Fremddatei stammt aus einem 2014-Werkzeug); freie Wahl kommt aus der Datei. */
 function raceBonus(race, sub, choice) {
   const out = { str: 0, dex: 0, con: 0, int: 0, wis: 0, cha: 0 };
-  const R = RACES[race];
+  const R = RACE_ASI_2014[race];
   if (!R) return out;
-  const texts = [R.asi?.de, R.subs[sub]?.asi?.de].filter(Boolean);
+  const texts = [R.asi, R.subs[sub] || ''].filter(Boolean);
   const variant = sub === 'Variant Human';
   for (const s of texts) {
     if (/alle Attribute \+1/.test(s) && !variant) Object.keys(out).forEach(k => { out[k] += 1; });
@@ -115,14 +116,16 @@ function build(c) {
   const list = c.classes.map(x => { const k = findKey(Object.keys(CLASSES), x.classId); return { k, lvl: x.level, sub: findSub(k, x.subclassId), raw: x }; });
   const first = list[0];
   c.classes.forEach((x, i) => { if (x.subclassId && !list[i].sub) toNotes.push(`${t('setup.subclass')}: ${titled(String(x.subclassId).split('/').pop())}`); });
-  const race = findKey(Object.keys(RACES), c.raceId);
+  const race = findKey(Object.keys(RACES), c.raceId) || findKey(Object.keys(RACE_ASI_2014), c.raceId);
   const subrace = race ? findSubrace(race, c.subraceId) : '';
+  // Volksboni nach 2014 (Untervolk aus der 2014-Liste, z. B. Hill Dwarf)
+  const sub14 = race ? findSubrace(race, c.subraceId, RACE_ASI_2014) : '';
   if (c.raceId && !race) toNotes.push(`${t('setup.race')}: ${c.raceId}`);
-  if (c.subraceId && !subrace) toNotes.push(`${t('setup.subrace')}: ${titled(String(c.subraceId).split('/').pop())}`);
-  const bonus = c.scoresFinal ? { str: 0, dex: 0, con: 0, int: 0, wis: 0, cha: 0 } : raceBonus(race, subrace, c.raceAsiChoice);
+  if (c.subraceId && !subrace && !sub14) toNotes.push(`${t('setup.subrace')}: ${titled(String(c.subraceId).split('/').pop())}`);
+  const bonus = c.scoresFinal ? { str: 0, dex: 0, con: 0, int: 0, wis: 0, cha: 0 } : raceBonus(race, sub14, c.raceAsiChoice);
   const abil = Object.fromEntries(Object.entries(c.abilities).map(([k, v]) => [k, Math.min(30, v + bonus[k])]));
   const level = list.reduce((a, x) => a + x.lvl, 0);
-  const con = mod(abil.con), perLevel = subrace === 'Hill Dwarf' ? 1 : 0;
+  const con = mod(abil.con), perLevel = sub14 === 'Hill Dwarf' ? 1 : 0;
   let hpMax = c.hitPoints.bonusMax;
   list.forEach((x, ci) => {
     const die = CLASSES[x.k].hd;
@@ -148,6 +151,7 @@ function build(c) {
     multi: list.slice(1).map(x => ({ k: x.k, sub: x.sub, lvl: x.lvl })), hpMax, hp: Math.min(hpMax, Math.max(0, c.hitPoints.current)), tmp: Math.max(0, c.hitPoints.temporary),
     ac: 10 + mod(abil.dex), prof: pb(level), abil, saves, skills, cond, exh: c.exhaustion, conc: c.concentratingOn || '', death: { s: c.deathSaves.successes, f: c.deathSaves.failures },
     hd: { max: level, used: Math.min(level, Object.values(c.hitDiceSpent).reduce((a, n) => a + n, 0)), die: 'W' + CLASSES[first.k].hd },
+    raceHp: race === 'Dwarf' ? level : 0, // TP aus der Datei enthalten die Zwergen-TP schon
     acMode: 'auto', tools: c.toolProficiencies, langs: c.languages, gold: { pp: c.currency.pp, gp: c.currency.gp, ep: c.currency.ep, sp: c.currency.sp, cp: c.currency.cp }, tab: 'setup',
   }));
   if (typeof c.details.portrait === 'string' && /^data:image\/(png|jpe?g|webp);base64,/.test(c.details.portrait)) S.img = c.details.portrait;

@@ -144,7 +144,7 @@ test.describe('Rasten', () => {
     expect(s.hd.used).toBe(4);
   });
 
-  test('lange Rast: TP, Plätze, halbe Trefferwürfel, Exhaustion -1, Zustände bleiben', async ({ page }) => {
+  test('lange Rast (2024): TP, Plätze, alle Trefferwürfel, Exhaustion -1, Zustände bleiben @new', async ({ page }) => {
     await seed(page, worn());
     await rest(page, 'long');
     const s = await read(page);
@@ -153,7 +153,7 @@ test.describe('Rasten', () => {
     expect(s.conc).toBe('');
     expect(s.slots[0].used).toBe(0);
     expect(s.res.map(r => r.used)).toEqual([0, 0, 1]);
-    expect(s.hd.used).toBe(2);
+    expect(s.hd.used).toBe(0);
     expect(s.exh).toBe(1);
     expect(s.cond.Blinded).toBe(true);
   });

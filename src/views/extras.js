@@ -8,7 +8,8 @@ import { classLevels } from '../tables.js';
 import { BYN, OPTIONS } from '../catalog.js';
 import { searchMonsters } from '../dm.js';
 import { chargeOf, chargeRefs, petView } from '../companions.js';
-import { BACKGROUNDS, TOOL_CHOICES, LANGUAGES, bgById } from '../backgrounds.js';
+import { BACKGROUNDS, TOOL_CHOICES, bgById, bgFeatName, featByName } from '../backgrounds.js';
+import { abName } from '../helpers.js';
 import { t, loc, dice, dist, nameLine, lang } from '../i18n/index.js';
 import { srcNote } from './sheet.js';
 
@@ -81,13 +82,27 @@ export function vStylePicker() {
   return `<h2>${t('setup.styles')}</h2><div class="card"><div class="chips">${OPTIONS.fightingStyles.map(o => `<button class="chip${on(o.n) ? ' on' : ''}" data-a="style" data-n="${esc(o.n)}" aria-pressed="${on(o.n)}" title="${esc(loc(o.text))}">${esc(o.n)}</button>`).join('')}</div><p class="note">${t('setup.stylesHint')}</p></div>`;
 }
 
+const gearText = (b, tool) => b.gear.map(g => g === '$tool' ? (tool ? nameLine(BYN['item:' + tool]?.n || tool) : t('bg.tool.' + b.tool.choose)) : typeof g === 'string' ? (BYN['item:' + g]?.n || g) : g.id ? (g.q > 1 ? g.q + '× ' : '') + (g.n ? loc(g.n) : BYN['item:' + g.id]?.n || g.id) : loc(g)).join(', ') + ', ' + b.gold + ' ' + t('price.gp');
+/** Kurzinfo zum gewählten Hintergrund bzw. der Dialog mit Attributen, Werkzeug und Ausrüstung. */
 export function vBgPick() {
   const b = U.BGPICK && bgById(U.BGPICK);
   if (!b) {
     const cur = S.bg && bgById(S.bg.id);
-    return cur ? `<p class="note"><b>${esc(cur.feature.n)}.</b> ${esc(loc(cur.feature.text))} ${srcNote(cur.source)}</p>` : '';
+    if (!cur) return '';
+    const asi = Object.entries(S.bg.asi || {}).filter(([, v]) => v).map(([k, v]) => abName(k) + ' +' + v).join(', ');
+    return `<p class="note">${t('bg.summary', { f: esc(bgFeatName(cur)), s: cur.skills.map(esc).join(', '), a: asi || '–' })} ${srcNote(cur.source)}</p>`;
   }
-  const langSel = i => `<label><span class="lbl">${t('bg.language', { n: i + 1 })}</span><select data-bgl="${i}" aria-label="${t('bg.language', { n: i + 1 })}"><option value="">${t('common.choose')}</option>${LANGUAGES.filter(l => !S.langs.includes(l)).map(l => `<option value="${l}">${l}</option>`).join('')}</select></label>`;
-  const toolSel = b.choose.tool ? `<label><span class="lbl">${t('bg.tool.' + b.choose.tool)}</span><select id="bg-tool" aria-label="${t('bg.tool.' + b.choose.tool)}"><option value="">${t('common.choose')}</option>${TOOL_CHOICES[b.choose.tool].map(id => `<option value="${id}">${esc(nameLine(BYN['item:' + id]?.n || id))}</option>`).join('')}</select></label>` : '';
-  return `<div class="bgpick"><p class="lbl" style="margin:0 0 8px">${t('bg.dialog', { n: esc(loc(b.n)) })}</p><div class="form">${toolSel}${Array.from({ length: b.choose.lang || 0 }, (_, i) => langSel(i)).join('')}</div><div class="add"><button class="btn solid" data-a="bgapply">${t('bg.applyBtn')}</button><button class="btn" data-a="bgcancel">${t('common.cancel')}</button></div></div>`;
+  const mode = U.BGMODE || '21';
+  const abOpt = (id, sel) => `<select id="${id}" aria-label="${t('bg.' + id)}"><option value="">${t('common.choose')}</option>${b.abil.map(k => `<option value="${k}"${sel === k ? ' selected' : ''}>${abName(k)} (${S.abil[k]})</option>`).join('')}</select>`;
+  const toolSel = b.tool.choose ? `<label><span class="lbl">${t('bg.tool.' + b.tool.choose)}</span><select id="bg-tool" aria-label="${t('bg.tool.' + b.tool.choose)}"><option value="">${t('common.choose')}</option>${TOOL_CHOICES[b.tool.choose].map(id => `<option value="${id}"${U.BGTOOL === id ? ' selected' : ''}>${esc(nameLine(BYN['item:' + id]?.n || id))}</option>`).join('')}</select></label>` : '';
+  const f = featByName(b.feat.n);
+  return `<div class="bgpick"><p class="lbl" style="margin:0 0 8px">${t('bg.dialog', { n: esc(loc(b.n)) })}</p>
+  <p class="note" style="margin-top:0">${t('bg.info', { a: b.abil.map(abName).join(', '), s: b.skills.map(esc).join(', '), f: esc(bgFeatName(b)) })}</p>
+  <div class="form"><label><span class="lbl">${t('bg.asiMode')}</span><select id="bg-mode" aria-label="${t('bg.asiMode')}"><option value="21"${mode === '21' ? ' selected' : ''}>${t('bg.mode21')}</option><option value="111"${mode === '111' ? ' selected' : ''}>${t('bg.mode111', { a: b.abil.map(abName).join(', ') })}</option></select></label>
+  ${mode === '21' ? `<label><span class="lbl">${t('bg.bg-a2')}</span>${abOpt('bg-a2', U.BGA2)}</label><label><span class="lbl">${t('bg.bg-a1')}</span>${abOpt('bg-a1', U.BGA1)}</label>` : ''}
+  ${toolSel}
+  <label><span class="lbl">${t('bg.gear')}</span><select id="bg-gear" aria-label="${t('bg.gear')}"><option value="A">${t('bg.gearA')}</option><option value="B">${t('bg.gearB')}</option></select></label></div>
+  <p class="note">${t('bg.gearAList', { g: esc(gearText(b, U.BGTOOL)) })}</p>
+  ${f ? `<details class="bgfeat"><summary>${esc(nameLine(f.n, f.de))}</summary><p class="note">${esc(dice(loc(f.text)))}</p></details>` : ''}
+  <div class="add"><button class="btn solid" data-a="bgapply">${t('bg.applyBtn')}</button><button class="btn" data-a="bgcancel">${t('common.cancel')}</button></div></div>`;
 }

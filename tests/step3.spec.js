@@ -190,60 +190,75 @@ test.describe('Hintergründe @new', () => {
   const page0 = () => current;
   const open = async (page, s = {}) => { current = page; await start(base4({ tab: 'setup', ...s })); };
 
-  test('ohne Wahl: alles wird sofort eingetragen', async ({ page }) => {
+  const pick = async (page, id, { mode = '21', a2, a1, tool, gear = 'A' } = {}) => {
+    await page.locator('#bg-sel').selectOption(id);
+    if (mode !== '21') await page.locator('#bg-mode').selectOption(mode);
+    if (a2) await page.locator('#bg-a2').selectOption(a2);
+    if (a1) await page.locator('#bg-a1').selectOption(a1);
+    if (tool) await page.locator('#bg-tool').selectOption(tool);
+    if (gear !== 'A') await page.locator('#bg-gear').selectOption(gear);
+    await act(page, 'bgapply').click();
+  };
+
+  test('2024: Attribute +2/+1, Fertigkeiten, Werkzeug, Herkunftstalent, Ausrüstung A', async ({ page }) => {
     await open(page);
-    await page.locator('#bg-sel').selectOption('sailor');
+    await pick(page, 'sailor', { a2: 'dex', a1: 'wis' });
     await expect.poll(async () => (await read(page)).bg?.id).toBe('sailor');
     const s = await read(page);
-    expect(s.skills).toMatchObject({ Athletics: 1, Perception: 1 });
-    expect(s.gold.gp).toBe(10);
-    expect(s.tools.length).toBe(2);
-    expect(s.bag.filter(Boolean).length).toBe(4); // 2024 ohne „Clothes, common“ (Hintergründe folgen in Etappe 2)
-    expect(s.feats[0]).toMatchObject({ n: "Ship's Passage", bg: true });
+    expect(s.abil).toMatchObject({ dex: 18, wis: 11 });
+    expect(s.skills).toMatchObject({ Acrobatics: 1, Perception: 1 });
+    expect(s.gold.gp).toBe(20);
+    expect(s.tools.length).toBe(1);
+    expect(s.bag.filter(Boolean).map(x => x.ref)).toEqual(expect.arrayContaining(['item:dagger', 'item:navigators-tools', 'item:rope']));
+    expect(s.feats[0]).toMatchObject({ n: 'Tavern Brawler', bg: true });
   });
 
-  test('mit Wahl: Dialog verlangt alle Angaben', async ({ page }) => {
+  test('Dialog verlangt verschiedene Attribute und das Spielset; +1/+1/+1 und 50 GM gehen auch', async ({ page }) => {
     await open(page);
     await page.locator('#bg-sel').selectOption('noble');
+    await page.locator('#bg-a2').selectOption('str');
+    await page.locator('#bg-a1').selectOption('str');
     await act(page, 'bgapply').click();
     expect((await read(page)).bg).toBeFalsy();
-    await page.locator('#bg-tool').selectOption('dice-set');
-    await page.locator('[data-bgl="0"]').selectOption('Elvish');
+    await page.locator('#bg-mode').selectOption('111');
+    await page.locator('#bg-tool').selectOption('dice');
+    await page.locator('#bg-gear').selectOption('B');
     await act(page, 'bgapply').click();
     const s = await read(page);
     expect(s.bg.id).toBe('noble');
-    expect(s.langs).toEqual(['Elvish']);
-    expect(s.gold.gp).toBe(25);
+    expect(s.abil).toMatchObject({ str: 15, int: 11, cha: 11 });
+    expect(s.gold.gp).toBe(50);
+    expect((s.bag || []).filter(Boolean)).toHaveLength(0);
   });
 
   test('gewähltes Instrument landet im Rucksack', async ({ page }) => {
     await open(page);
-    await page.locator('#bg-sel').selectOption('entertainer');
-    await page.locator('#bg-tool').selectOption('lute');
-    await act(page, 'bgapply').click();
+    await pick(page, 'entertainer', { a2: 'cha', a1: 'dex', tool: 'lute' });
     const s = await read(page);
     expect(s.bag.filter(Boolean).map(x => x.ref)).toContain('item:lute');
   });
 
-  test('Wechsel nimmt nur Fertigkeiten und Merkmal zurück', async ({ page }) => {
+  test('Wechsel nimmt Fertigkeiten, Attributserhöhung und Talent zurück', async ({ page }) => {
     await open(page, { skills: { Insight: 2 } });
-    await page.locator('#bg-sel').selectOption('sailor');
+    await pick(page, 'sailor', { a2: 'dex', a1: 'wis' });
     await expect.poll(async () => (await read(page)).bg?.id).toBe('sailor');
-    await page.locator('#bg-sel').selectOption('urchin');
-    await expect.poll(async () => (await read(page)).bg?.id).toBe('urchin');
+    await pick(page, 'criminal', { a2: 'dex', a1: 'int' });
+    await expect.poll(async () => (await read(page)).bg?.id).toBe('criminal');
     const s = await read(page);
     expect(s.skills).toEqual({ Insight: 2, 'Sleight of Hand': 1, Stealth: 1 });
-    expect(s.gold.gp).toBe(20);
-    expect(s.feats.map(f => f.n)).toEqual(['City Secrets']);
+    expect(s.abil).toMatchObject({ dex: 18, wis: 10, int: 11 });
+    expect(s.feats.map(f => f.n)).toEqual(['Alert']);
   });
 
   test('schon geübte Fertigkeit bleibt beim Wechsel', async ({ page }) => {
-    await open(page, { skills: { Athletics: 1 } });
-    await page.locator('#bg-sel').selectOption('sailor');
+    await open(page, { skills: { Acrobatics: 1 } });
+    await pick(page, 'sailor', { a2: 'str', a1: 'dex' });
     await expect.poll(async () => (await read(page)).bg?.skills).toEqual(['Perception']);
     await page.locator('#bg-sel').selectOption('');
     await expect.poll(async () => (await read(page)).bg).toBeNull();
-    expect((await read(page)).skills).toEqual({ Athletics: 1 });
+    const s = await read(page);
+    expect(s.skills).toEqual({ Acrobatics: 1 });
+    expect(s.abil).toMatchObject({ str: 14, dex: 16 });
   });
 });
 

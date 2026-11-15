@@ -37,13 +37,15 @@ export function rest(long) {
   S.res.forEach(r => { if (r.rest === 'short' || (long && r.rest === 'long')) r.used = 0; });
   S.pact.used = 0;
   if (!long) { toast(S.pact.max ? t('toast.shortPact') : t('toast.short')); return; }
-  const back = Math.max(1, Math.floor(S.hd.max / 2));
+  // Regeln 2024: Eine lange Rast gibt alle ausgegebenen Trefferwürfel zurück.
+  const back = S.hd.used;
   S.hd.used = Math.max(0, S.hd.used - back);
   S.slots.forEach(s => { s.used = 0; });
   S.pets.forEach(p => { p.hp = petView(p).hpMax; });
   S.hp = hpMaxNow(); S.tmp = 0; S.death = { s: 0, f: 0 }; S.conc = '';
   delete S.cond.Unconscious;
   let m = t('toast.long', { n: back });
+  if (S.race === 'Human' && !S.insp) { S.insp = true; m += ' ' + t('toast.resourceful'); }
   if (S.exh > 0) { S.exh--; S.hp = hpMaxNow(); m += ' ' + t('toast.exhDown'); }
   const left = COND.filter(c => S.cond[c.n]).map(c => c.n);
   if (left.length) m += ' ' + t('toast.condStay', { s: left.join(', ') });

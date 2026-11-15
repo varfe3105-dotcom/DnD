@@ -1,7 +1,8 @@
 import { render } from './render.js';
 import { syncAlwaysSpells } from './domain-spells.js';
-import { save } from './state.js';
+import { save, hooks } from './state.js';
 // Domänen- und Eidzauber bestehender Bögen ergänzen
+hooks.raceSpells = syncAlwaysSpells;
 if (syncAlwaysSpells()) save();
 import { applyBright, applySkin } from './bright.js';
 applyBright();

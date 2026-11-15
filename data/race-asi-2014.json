@@ -1,0 +1,60 @@
+{
+ "Dwarf": {
+  "asi": "KON +2",
+  "subs": {
+   "Hill Dwarf": "WEI +1",
+   "Mountain Dwarf": "STR +2"
+  }
+ },
+ "Elf": {
+  "asi": "GES +2",
+  "subs": {
+   "High Elf": "INT +1",
+   "Wood Elf": "WEI +1",
+   "Drow": "CHA +1"
+  }
+ },
+ "Halfling": {
+  "asi": "GES +2",
+  "subs": {
+   "Lightfoot": "CHA +1",
+   "Stout": "KON +1"
+  }
+ },
+ "Human": {
+  "asi": "alle Attribute +1",
+  "subs": {
+   "Variant Human": "zwei Attribute +1 (statt alle)"
+  }
+ },
+ "Dragonborn": {
+  "asi": "STR +2, CHA +1",
+  "subs": {}
+ },
+ "Gnome": {
+  "asi": "INT +2",
+  "subs": {
+   "Forest Gnome": "GES +1",
+   "Rock Gnome": "KON +1"
+  }
+ },
+ "Half-Elf": {
+  "asi": "CHA +2, zwei andere Attribute +1",
+  "subs": {}
+ },
+ "Half-Orc": {
+  "asi": "STR +2, KON +1",
+  "subs": {}
+ },
+ "Tiefling": {
+  "asi": "CHA +2, INT +1",
+  "subs": {}
+ },
+ "Goliath": {
+  "asi": "siehe Variante",
+  "subs": {
+   "Volo's Guide": "STR +2, KON +1",
+   "Monsters of the Multiverse": "+2 auf ein Attribut und +1 auf ein anderes, oder +1 auf drei Attribute"
+  }
+ }
+}

@@ -19,6 +19,23 @@ const PALADIN = {
   'Oath of Vengeance': { 3: ['Bane', "Hunter's Mark"], 5: ['Hold Person', 'Misty Step'], 9: ['Haste', 'Protection from Energy'], 13: ['Banishment', 'Dimension Door'], 17: ['Hold Monster', 'Scrying'] },
 };
 export const ALWAYS = { Cleric: CLERIC, Paladin: PALADIN };
+// Zauber aus Volk und Abstammung (Regeln 2024), Schlüssel = Charakterstufe.
+export const SPECIES = {
+  Aasimar: { 1: ['Light'] },
+  Drow: { 1: ['Dancing Lights'], 3: ['Faerie Fire'], 5: ['Darkness'] },
+  'High Elf': { 1: ['Prestidigitation'], 3: ['Detect Magic'], 5: ['Misty Step'] },
+  'Wood Elf': { 1: ['Druidcraft'], 3: ['Longstrider'], 5: ['Pass without Trace'] },
+  'Forest Gnome': { 1: ['Minor Illusion', 'Speak with Animals'] },
+  'Rock Gnome': { 1: ['Mending', 'Prestidigitation'] },
+  Abyssal: { 1: ['Poison Spray', 'Thaumaturgy'], 3: ['Ray of Sickness'], 5: ['Hold Person'] },
+  Chthonic: { 1: ['Chill Touch', 'Thaumaturgy'], 3: ['False Life'], 5: ['Ray of Enfeeblement'] },
+  Infernal: { 1: ['Fire Bolt', 'Thaumaturgy'], 3: ['Hellish Rebuke'], 5: ['Darkness'] },
+};
+export function speciesSpells() {
+  const lvl = Math.max(1, S.level || 0), out = [];
+  [S.race, S.subrace].forEach(k => Object.entries(SPECIES[k] || {}).forEach(([l, ns]) => { if (lvl >= +l) out.push(...ns); }));
+  return [...new Set(out)];
+}
 
 const byLower = () => { const m = {}; Object.values(BYN).forEach(e => { if (e.k === 'spell') m[e.n.toLowerCase()] = e; }); return m; };
 /** Alle immer vorbereiteten Zauber, die der Charakter auf seiner Stufe haben müsste. */
@@ -30,9 +47,15 @@ export function alwaysFor(list = classLevels()) {
 /** Trägt fehlende Domänen- und Eidzauber als „immer vorbereitet“ ein. Liefert die Zahl der Änderungen. */
 export function syncAlwaysSpells() {
   const names = alwaysFor();
-  if (!names.length) return 0;
   const cat = byLower();
   let changed = 0;
+  // Volkszauber: fehlende eintragen, nicht mehr passende (Volk gewechselt) wieder entfernen
+  const sp = speciesSpells().map(n => n.toLowerCase());
+  const before = S.spells.length;
+  S.spells = S.spells.filter(s => !s.race || sp.includes(s.n.toLowerCase()));
+  changed += before - S.spells.length;
+  sp.forEach(n => { if (!S.spells.some(s => s.n.toLowerCase() === n)) { const c = cat[n]; if (c) { S.spells.push({ ...spFrom(c), always: true, race: true }); changed++; } } });
+  if (!names.length) return changed;
   names.forEach(n => {
     const have = S.spells.find(s => s.n.toLowerCase() === n.toLowerCase());
     if (have) { if (!have.always) { have.always = true; changed++; } return; }

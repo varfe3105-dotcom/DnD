@@ -4,7 +4,7 @@ import { ABK, CLIC } from '../constants.js';
 import { pb, pactFor, cantripsFor, knownFor, classLevels, slotsAll, slotsFor, castKind, mcMet } from '../tables.js';
 import { S, U, toast, spFrom } from '../state.js';
 import { alwaysFor, syncAlwaysSpells } from '../domain-spells.js';
-import { abName, resFor } from '../helpers.js';
+import { abName, resFor , syncRaceRes } from '../helpers.js';
 import { CLASSES, SUBCLASSES, FEATS, OPTIONS, MULTICLASS, CAT, BYN } from '../catalog.js';
 import { reqText } from './wiki.js';
 import { t, loc, dice, deName, nameLine } from '../i18n/index.js';
@@ -18,7 +18,7 @@ export function openLU() {
 }
 export function luData() {
   const klass = U.LU.k || S.klass, C = CLASSES[klass], to = U.LU.to, list = classLevels(), cur = list.find(x => x.k === klass), cl = (cur ? cur.lvl : 0) + 1, isNew = !cur;
-  const con = mod(S.abil.con), dw = (S.subrace === 'Hill Dwarf' ? 1 : 0) + (S.feats.some(f => f.n === 'Tough' && f.src === 'Talent') ? 2 : 0), avg = C.hd / 2 + 1;
+  const con = mod(S.abil.con), dw = (S.race === 'Dwarf' ? 1 : 0) + (S.feats.some(f => /^Tough\b/.test(f.n)) ? 2 : 0), avg = C.hd / 2 + 1;
   const base = to === 1 ? C.hd : (U.LU.hp === 'roll' ? clamp(Math.floor(+U.LU.roll) || 0, 1, C.hd) : avg);
   const gain = Math.max(1, base + con) + dw;
   const feats = (C.f[cl] || []).map(f => ({ n: f.n, text: f.text }));
@@ -63,13 +63,26 @@ function vOptions(d) {
     return `<h4>${t('lu.opt.' + s.kind)}</h4><div class="add"><select id="lu-${s.id}" data-lu="${s.id}" aria-label="${t('lu.opt.' + s.kind)}"><option value="">${t('common.choose')}</option>${list.map(o => `<option value="${esc(o.n)}"${U.LU[s.id] === o.n ? ' selected' : ''}>${esc(o.n)}</option>`).join('')}</select></div>${cur ? `<p class="note">${esc(dice(loc(cur.text)))}</p>` : ''}`;
   }).join('');
 }
-const featMet = f => { const r = f.req; if (!r) return true; if (r.abil && Object.entries(r.abil).some(([k, v]) => S.abil[k] < v)) return false; if (r.spell && !CLASSES[S.klass]?.cast) return false; return true; };
+// Talente 2024: Stufe (Allgemein ab 4, Epische Gabe ab 19), Attribute (alle oder eines davon), Zauberwirken, Kampfstil-Merkmal.
+const STYLE_K = ['Fighter', 'Paladin', 'Ranger'];
+const featMet = f => {
+  const r = f.req; if (!r) return true;
+  const to = U.LU?.to || S.level;
+  if (r.lvl && to < r.lvl) return false;
+  if (r.abil && Object.entries(r.abil).some(([k, v]) => S.abil[k] < v)) return false;
+  if (r.abilAny && !Object.entries(r.abilAny).some(([k, v]) => S.abil[k] >= v)) return false;
+  if (r.spell && !classLevels().some(c => CLASSES[c.k]?.cast)) return false;
+  if (r.feature === 'Fighting Style' && !classLevels().some(c => STYLE_K.includes(c.k))) return false;
+  return true;
+};
+// Bei Attributserhöhung steht „Ability Score Improvement“ schon als eigene Wahl oben; die Liste zeigt die übrigen Talente.
+const LU_FEATS = () => FEATS.filter(f => f.n !== 'Ability Score Improvement');
 function vFeatPick() {
   const cur = FEATS.find(f => f.n === U.LU.feat);
   const own = U.LU.feat === '__own';
   const needAb = cur?.asi?.any || cur?.asi?.anyAbil;
   const abs = cur?.asi?.any || ABK;
-  return `<select id="lu-feat" data-lu="feat" aria-label="${t('feat.feat')}"><option value="">${t('lu.featChoose')}</option>${FEATS.map(f => { const ok = featMet(f); return `<option value="${esc(f.n)}"${f.n === U.LU.feat ? ' selected' : ''}${ok ? '' : ' disabled'}>${esc(nameLine(f.n, f.de))}${f.req ? ' (' + esc(reqText(f.req)) + ')' : ''}</option>`; }).join('')}<option value="__own"${own ? ' selected' : ''}>${t('lu.featOwn')}</option></select>${needAb ? `<select id="lu-featab" data-lu="featab" aria-label="${t('lu.ability')}"><option value="">${t('lu.ability')}</option>${abs.map(k => `<option value="${k}"${U.LU.featab === k ? ' selected' : ''}>${abName(k)} (${S.abil[k]})</option>`).join('')}</select>` : ''}${own ? `<input type="text" id="lu-featown" data-lu="featown" value="${esc(U.LU.featown || '')}" placeholder="${t('lu.featPh')}" aria-label="${t('feat.feat')}">` : ''}</div>${cur ? `<p class="note">${esc(dice(loc(cur.text)))}</p>` : ''}<div>`;
+  return `<select id="lu-feat" data-lu="feat" aria-label="${t('feat.feat')}"><option value="">${t('lu.featChoose')}</option>${['general', 'origin', 'fighting', 'epic'].map(cat => `<optgroup label="${t('featcat.' + cat)}">${LU_FEATS().filter(f => (f.cat || 'general') === cat).map(f => { const ok = featMet(f); return `<option value="${esc(f.n)}"${f.n === U.LU.feat ? ' selected' : ''}${ok ? '' : ' disabled'}>${esc(nameLine(f.n, f.de))}${f.req ? ' (' + esc(reqText(f.req)) + ')' : ''}</option>`; }).join('')}</optgroup>`).join('')}<option value="__own"${own ? ' selected' : ''}>${t('lu.featOwn')}</option></select>${needAb ? `<select id="lu-featab" data-lu="featab" aria-label="${t('lu.ability')}"><option value="">${t('lu.ability')}</option>${abs.map(k => `<option value="${k}"${U.LU.featab === k ? ' selected' : ''}>${abName(k)} (${S.abil[k]})</option>`).join('')}</select>` : ''}${own ? `<input type="text" id="lu-featown" data-lu="featown" value="${esc(U.LU.featown || '')}" placeholder="${t('lu.featPh')}" aria-label="${t('feat.feat')}">` : ''}</div>${cur ? `<p class="note">${esc(dice(loc(cur.text)))}</p>` : ''}<div>`;
 }
 function vClassPick(d) {
   if (!S.level) return '';
@@ -200,16 +213,19 @@ export function applyLU() {
       if (!f) S.feats.push({ n: L.featown.trim(), p: t('lu.featText'), lvl: to, src: 'Talent' });
       else {
         S.feats.push({ n: f.n, p: loc(f.text), lvl: to, src: 'Talent' });
-        const bump = (k, v) => { S.abil[k] = Math.min(20, S.abil[k] + v); };
+        const bump = (k, v) => { S.abil[k] = Math.min(f.asi?.max || 20, S.abil[k] + v); };
         if (f.asi?.fixed) Object.entries(f.asi.fixed).forEach(([k, v]) => bump(k, v));
         if (f.asi?.any || f.asi?.anyAbil) bump(L.featab, 1);
         if (f.n === 'Resilient') S.saves[L.featab] = true;
         if (f.n === 'Tough') { S.hpMax += 2 * to; S.hp += 2 * to; }
+        if (f.n === 'Boon of Fortitude') { S.hpMax += 40; S.hp += 40; }
       }
     } else { const add = (k, v) => { S.abil[k] = Math.min(20, Math.max(S.abil[k], S.abil[k] + v)); }; if (L.asi === 'one') add(L.a1, 2); else { add(L.a1, 1); add(L.a2, 1); } }
   }
   if (d.klass === 'Barbarian' && cl === 20) { S.abil.str = Math.min(24, S.abil.str + 4); S.abil.con = Math.min(24, S.abil.con + 4); }
   d.res.forEach(r => { const ex = S.res.find(x => x.n === r.n); if (ex) { ex.max = r.max; ex.rest = r.rest; ex.p = r.p; ex.used = Math.min(ex.used, r.max); } else S.res.push({ n: r.n, ic: r.ic, max: r.max, used: 0, rest: r.rest, p: r.p }); });
+  if (S.race === 'Dwarf') S.raceHp = (S.raceHp || 0) + 1; // in d.gain schon enthalten
+  syncRaceRes();
   U.LU = null;
   toast(d.feats.length ? t('lu.doneFeats', { n: to, g: d.gain }) : t('lu.done', { n: to, g: d.gain }));
   syncAlwaysSpells();
