@@ -5,12 +5,12 @@ import items from '../data/items.json' with { type: 'json' };
 import magic from '../data/magic-items.json' with { type: 'json' };
 import potions from '../data/potions.json' with { type: 'json' };
 
-const SOURCES = ['srd', 'summary', 'own'];
+const SOURCES = ['srd52', 'srd', 'summary', 'own'];
 const setLang = (page, l) => page.locator(`[data-a="lang"][data-l="${l}"]`).click();
 
 test.describe('Katalogdaten @new', () => {
-  test('alle 361 PHB-Zauber sind vorhanden, kein Name doppelt', () => {
-    expect(spells.filter(s => !s.origin).length).toBe(361);
+  test('alle 339 Zauber aus dem SRD 5.2 sind vorhanden, kein Name doppelt', () => {
+    expect(spells.filter(s => s.source === 'srd52').length).toBe(339);
     expect(new Set(spells.map(s => s.n)).size).toBe(spells.length);
   });
 
@@ -21,6 +21,7 @@ test.describe('Katalogdaten @new', () => {
       expect(s.comp, s.n).toBeTruthy();
       expect(s.cls, s.n).toBeTruthy();
       for (const f of ['time', 'range', 'dur', 'text']) { expect(s[f].en, `${s.n} ${f} en`).toBeTruthy(); expect(s[f].de, `${s.n} ${f} de`).toBeTruthy(); }
+      expect(s.de, s.n).toBeTruthy();
       expect(typeof s.conc).toBe('boolean');
       expect(typeof s.ritual).toBe('boolean');
     }
@@ -44,9 +45,9 @@ test.describe('Katalogdaten @new', () => {
     expect(ids.filter((x, i) => ids.indexOf(x) !== i)).toEqual([]);
   });
 
-  test('Abgleich mit dem SRD wurde dokumentiert', () => {
-    const doc = fs.readFileSync('docs/srd-gaps.md', 'utf8');
-    expect(doc).toContain('Noch fehlend im Katalog (0)');
+  test('SRD-5.2-Zauber und SRD-Zustände tragen die neue Quelle', () => {
+    expect(spells.find(s => s.n === 'Cure Wounds')).toMatchObject({ source: 'srd52', text: { en: expect.stringContaining('2d8') } });
+    expect(fs.existsSync('scripts/import-2024.mjs')).toBe(true);
   });
 });
 
@@ -66,9 +67,10 @@ test.describe('Katalog in der Oberfläche @new', () => {
 
   test('Hinweis bei Zusammenfassungen ist sichtbar', async ({ page }) => {
     await seed(page, base4({ tab: 'wiki' }));
-    await page.locator('#wq').fill('Hex');
-    await act(page, 'wsel', '[data-key="spell:Hex"]').click();
+    await page.locator('#wq').fill('Hail of Thorns');
+    await act(page, 'wsel', '[data-key="spell:Hail of Thorns"]').click();
     await expect(page.locator('.wd.pane .src')).toContainText('Summary');
+    await expect(page.locator('.wd.pane')).toContainText('2014');
     await setLang(page, 'de');
     await expect(page.locator('.wd.pane .src')).toHaveText('Zusammenfassung, bei Unklarheit im Buch prüfen.');
   });

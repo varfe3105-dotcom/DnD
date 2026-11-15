@@ -30,7 +30,12 @@ function fxText(adv, dis) {
 export function vFx(e) {
   if (!anyEffect(e)) return '';
   const L = [], line = (k, v) => L.push(`<li><span class="lbl">${k}</span> ${v}</li>`);
+  if (e.dead) line(t('fx.dead'), `(${esc(e.dead)})`);
   if (e.noAct.length) line(t('fx.noAct'), `(${esc(why(e.noAct))})`);
+  if (e.d20) line(t('fx.d20'), `<b class="fxw dis">−${e.d20}</b> (${esc(e.d20Why)})`);
+  if (e.noConc.length) line(t('fx.noConc'), `(${esc(why(e.noConc))})`);
+  if (e.grapAtk.length) line(t('fx.atk'), `${t('fx.grapAtk')} (${esc(why(e.grapAtk))})`);
+  { const i = fxText(e.init.adv, e.init.dis); if (i) line(t('fx.init'), i); }
   const a = fxText(e.atk.adv, e.atk.dis); if (a) line(t('fx.atk'), a);
   if (e.checks.length) line(t('fx.checks'), fxText([], e.checks));
   if (e.checkAb.str.length) line(t('fx.checkStrDex'), fxText([], e.checkAb.str));
@@ -55,7 +60,7 @@ export function vFx(e) {
 }
 
 export const schoolName =s => { const k = { Hervorrufung: 'evocation', Bannmagie: 'abjuration', Beschwörung: 'conjuration', Wahrsagung: 'divination', Verzauberung: 'enchantment', Illusion: 'illusion', Nekromantie: 'necromancy', Verwandlung: 'transmutation' }[s] || String(s || '').toLowerCase(); return k ? t('school.' + k) : ''; };
-export const srcNote = s => s === 'own' ? t('src.own') : s === 'srd' ? t('src.srd') : t('src.summary');
+export const srcNote = s => s === 'own' ? t('src.own') : s === 'srd52' ? t('src.srd52') : s === 'srd' ? t('src.srd') : t('src.summary');
 export const restLabel = r => t('rest.' + (['short', 'long', 'none'].includes(r) ? r : 'long'));
 
 const RUNES = { str: 'M6 2v16M6 3l8 5-8 5', dex: 'M5 2l10 16M15 2L5 18', con: 'M10 2v16M4 6l6 4 6-4', int: 'M4 18V2l12 16V2', wis: 'M10 2l6 8-6 8-6-8z', cha: 'M4 4l6 6 6-6M10 10v8' };

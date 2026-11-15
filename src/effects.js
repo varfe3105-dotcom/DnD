@@ -39,7 +39,7 @@ export function effects() {
   const e = {
     atk: { adv: [], dis: [] }, saves: Object.fromEntries(AB.map(a => [a, { fail: [], dis: [] }])),
     checks: [], checkAb: { str: [], dex: [] }, stealth: [], sight: [], hear: [],
-    speed: { base: S.speed, norm: S.speed, val: S.speed, zero: [], half: [], minus: [], plus: [] }, hpHalf: '', noAct: [], noCast: [], vs: { adv: [], dis: [], crit: [], meleeAdv: [], rangedDis: [] },
+    speed: { base: S.speed, norm: S.speed, val: S.speed, zero: [], half: [], minus: [], plus: [] }, d20: 0, d20Why: '', grapAtk: [], init: { adv: [], dis: [] }, noConc: [], dead: '', hpHalf: '', noAct: [], noCast: [], vs: { adv: [], dis: [], crit: [], meleeAdv: [], rangedDis: [] },
   };
   // Zustände
   all(['Blinded', 'Frightened', 'Poisoned', 'Prone', 'Restrained']).forEach(n => e.atk.dis.push(n));
@@ -55,12 +55,14 @@ export function effects() {
   if (on('Invisible')) e.vs.dis.push('Invisible');
   all(['Paralyzed', 'Unconscious']).forEach(n => e.vs.crit.push(n));
   if (on('Prone')) { e.vs.meleeAdv.push('Prone'); e.vs.rangedDis.push('Prone'); }
-  // Erschöpfung wirkt kumulativ
-  if (ex >= 1) e.checks.push(X(1));
-  if (ex >= 2) e.speed.half.push(X(2));
-  if (ex >= 3) { e.atk.dis.push(X(3)); AB.forEach(a => e.saves[a].dis.push(X(3))); }
-  if (ex >= 4) e.hpHalf = X(4);
-  if (ex >= 5) e.speed.zero.push(X(5));
+  // Regeln 2024: Grappled gibt Nachteil gegen alle außer den Packenden, Incapacitated beendet Konzentration
+  // und gibt Nachteil bei Initiative, Invisible gibt Vorteil bei Initiative.
+  if (on('Grappled')) e.grapAtk.push('Grappled');
+  all(INCAP).forEach(n => { e.noConc.push(n); e.init.dis.push(n); });
+  if (on('Invisible')) e.init.adv.push('Invisible');
+  // Erschöpfung 2024: −2 pro Stufe auf jeden W20-Test, −1,5 m Tempo pro Stufe, Stufe 6 ist der Tod
+  if (ex >= 1) { e.d20 = 2 * Math.min(ex, 6); e.d20Why = X(ex); e.speed.minus.push(X(ex)); }
+  if (ex >= 6) e.dead = X(6);
   // Rüstung
   const body = armorOf(S.eq.body), shield = isShield(S.eq.off), profs = armorProfs();
   if (body) {
@@ -83,14 +85,15 @@ export function effects() {
   if (S.feats.some(f => f.n === 'Mobile')) { plus += 3; e.speed.plus.push('Mobile'); }
   e.speed.norm = S.speed + plus;
   let v = e.speed.norm;
-  if (e.speed.minus.length) v = Math.max(0, v - 3);
+  if (ex >= 1) v = Math.max(0, v - 1.5 * Math.min(ex, 6));
+  if (e.speed.minus.some(m => m !== X(ex))) v = Math.max(0, v - 3);
   if (e.speed.half.length) v = v / 2;
   if (e.speed.zero.length) v = 0;
   e.speed.val = v;
   return e;
 }
 /** Wirksames Trefferpunktmaximum (Erschöpfung 4 halbiert es). */
-export const hpMaxNow = () => ((S.exh || 0) >= 4 ? Math.floor(S.hpMax / 2) : S.hpMax);
+export const hpMaxNow = () => S.hpMax; // 2024: Erschöpfung senkt das TP-Maximum nicht mehr
 /** Vor- und Nachteil zusammengefasst: 'adv', 'dis', 'both' oder ''. */
 export const rollState = (adv, dis) => (adv.length && dis.length ? 'both' : adv.length ? 'adv' : dis.length ? 'dis' : '');
-export const anyEffect = e => !!(e.atk.adv.length || e.atk.dis.length || e.checks.length || e.checkAb.str.length || e.stealth.length || e.sight.length || e.hear.length || e.speed.val !== e.speed.norm || e.hpHalf || e.noAct.length || e.noCast.length || e.vs.adv.length || e.vs.dis.length || e.vs.meleeAdv.length || AB.some(a => e.saves[a].fail.length || e.saves[a].dis.length));
+export const anyEffect = e => !!(e.atk.adv.length || e.atk.dis.length || e.d20 || e.grapAtk.length || e.init.adv.length || e.init.dis.length || e.noConc.length || e.dead || e.checks.length || e.checkAb.str.length || e.stealth.length || e.sight.length || e.hear.length || e.speed.val !== e.speed.norm || e.hpHalf || e.noAct.length || e.noCast.length || e.vs.adv.length || e.vs.dis.length || e.vs.meleeAdv.length || AB.some(a => e.saves[a].fail.length || e.saves[a].dis.length));

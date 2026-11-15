@@ -32,7 +32,7 @@ test.describe('Begegnungen @new', () => {
   const cases = [
     ['ein Ogre', [{ id: 'ogre', qty: 1 }], 'Easy', 450],
     ['drei Ogres mit Faktor 2', [{ id: 'ogre', qty: 3 }], 'Deadly', 2700],
-    ['vier Goblins mit Faktor 2', [{ id: 'goblin', qty: 4 }], 'Easy', 400],
+    ['vier Goblins mit Faktor 2', [{ id: 'goblin-warrior', qty: 4 }], 'Easy', 400],
   ];
   for (const [name, monsters, label, adj] of cases) {
     test(`Rechner: ${name}`, async ({ page }) => {
@@ -43,7 +43,7 @@ test.describe('Begegnungen @new', () => {
   }
 
   test('kleine und große Gruppen verschieben den Faktor', async ({ page }) => {
-    await open(page, { party: [{ count: 2, level: 3 }], encounters: [enc([{ id: 'goblin', qty: 1 }])], encSel: 'e1' });
+    await open(page, { party: [{ count: 2, level: 3 }], encounters: [enc([{ id: 'goblin-warrior', qty: 1 }])], encSel: 'e1' });
     await expect(page.locator('.dm-total')).toContainText('× 1.5');
     await page.locator('#dmp-c0').fill('6');
     await page.locator('#dmp-c0').blur();
@@ -55,15 +55,15 @@ test.describe('Begegnungen @new', () => {
     await act(page, 'dmenew').click();
     await page.locator('#dme-n').fill('Bruecke');
     await page.locator('#dme-n').blur();
-    await page.locator('#dm-eq').fill('goblin');
-    await act(page, 'dmeadd', '[data-m="goblin"]').click();
-    await act(page, 'dmeqty', '[data-m="goblin"][data-d="1"]').click();
+    await page.locator('#dm-eq').fill('goblin warrior');
+    await act(page, 'dmeadd', '[data-m="goblin-warrior"]').click();
+    await act(page, 'dmeqty', '[data-m="goblin-warrior"][data-d="1"]').click();
     await act(page, 'dmestart').click();
     const d = await dmData(page);
     expect(d.view).toBe('combat');
     expect(d.combat.round).toBe(1);
-    expect(d.combat.list.map(c => c.name).sort()).toEqual(['Goblin 1', 'Goblin 2', 'Held']);
-    expect(d.encounters[0]).toMatchObject({ name: 'Bruecke', monsters: [{ id: 'goblin', qty: 2 }] });
+    expect(d.combat.list.map(c => c.name).sort()).toEqual(['Goblin Warrior 1', 'Goblin Warrior 2', 'Held']);
+    expect(d.encounters[0]).toMatchObject({ name: 'Bruecke', monsters: [{ id: 'goblin-warrior', qty: 2 }] });
   });
 
   test('eigenes Monster: anlegen, zählt im Rechner, bearbeiten, löschen', async ({ page }) => {
@@ -136,7 +136,7 @@ test.describe('Effekte und Legendary Actions @new', () => {
   test('Legendary Actions füllen sich im eigenen Zug wieder auf', async ({ page }) => {
     await dm(page);
     await addMonster(page, 'adult red', 'adult-red-dragon');
-    await addMonster(page, 'goblin', 'goblin');
+    await addMonster(page, 'goblin warrior', 'goblin-warrior');
     for (const [i, v] of [[0, 20], [1, 10]]) { const el = page.locator('.dm-init').nth(i); await el.fill(String(v)); await el.blur(); await page.waitForTimeout(30); }
     await expect(page.locator('.dm-la .pip')).toHaveCount(3);
     await act(page, 'dmstep', '[data-d="1"]').click();
@@ -149,11 +149,11 @@ test.describe('Effekte und Legendary Actions @new', () => {
     expect(await used()).toBe(0);
   });
 
-  test('Monster-Zauberplätze aus dem Text', async ({ page }) => {
+  test('Monster-Zauber pro Tag aus dem Text (2024)', async ({ page }) => {
     await dm(page);
     await addMonster(page, 'mage', 'mage');
     await act(page, 'dmopen').click();
-    expect((await dmData(page)).combat.list[0].slots[0]).toEqual({ lvl: 1, max: 4, used: 0 });
+    expect((await dmData(page)).combat.list[0].slots[0]).toEqual({ lbl: 'Fireball', max: 2, used: 0 });
     await act(page, 'dmslot', '[data-k="0"][data-j="0"]').click();
     expect((await dmData(page)).combat.list[0].slots[0].used).toBe(1);
   });

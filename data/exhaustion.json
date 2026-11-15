@@ -1,8 +1,8 @@
 [
-  {"level":1,"text":{"en":"Disadvantage on ability checks","de":"Nachteil bei Attributswürfen"},"source":"srd","verified":false},
-  {"level":2,"text":{"en":"Speed halved","de":"Tempo halbiert"},"source":"srd","verified":false},
-  {"level":3,"text":{"en":"Disadvantage on attack rolls and saving throws","de":"Nachteil bei Angriffswürfen und Rettungswürfen"},"source":"srd","verified":false},
-  {"level":4,"text":{"en":"Hit point maximum halved","de":"Trefferpunktmaximum halbiert"},"source":"srd","verified":false},
-  {"level":5,"text":{"en":"Speed reduced to 0","de":"Tempo auf 0 gesenkt"},"source":"srd","verified":false},
-  {"level":6,"text":{"en":"Death","de":"Tod"},"source":"srd","verified":false}
+  {"level":1,"text":{"en":"D20 Tests −2 · Speed −5 ft.","de":"W20-Tests −2 · Tempo −1,5 m"},"source":"srd52","verified":false,"rule":{"en":"While you have the Exhaustion condition, you experience the following effects.\nExhaustion Levels. This condition is cumulative. Each time you receive it, you gain 1 Exhaustion level. You die if your Exhaustion level is 6.\nD20 Tests Affected. When you make a D20 Test, the roll is reduced by 2 times your Exhaustion level.\nSpeed Reduced. Your Speed is reduced by a number of feet equal to 5 times your Exhaustion level.\nRemoving Exhaustion Levels. Finishing a Long Rest removes 1 of your Exhaustion levels. When your Exhaustion level reaches 0, the condition ends.","de":"Solange du den Zustand Exhaustion hast, gilt Folgendes.\nErschöpfungsstufen. Der Zustand ist kumulativ. Jedes Mal, wenn du ihn erhältst, bekommst du 1 Erschöpfungsstufe. Bei Erschöpfungsstufe 6 stirbst du.\nW20-Tests betroffen. Bei jedem W20-Test (Attributswurf, Angriffswurf, Rettungswurf) sinkt das Ergebnis um 2 × deine Erschöpfungsstufe.\nTempo verringert. Dein Tempo sinkt um 1,5 m × deine Erschöpfungsstufe.\nStufen abbauen. Eine beendete lange Rast entfernt 1 Erschöpfungsstufe. Bei Stufe 0 endet der Zustand."}},
+  {"level":2,"text":{"en":"D20 Tests −4 · Speed −10 ft.","de":"W20-Tests −4 · Tempo −3 m"},"source":"srd52","verified":false},
+  {"level":3,"text":{"en":"D20 Tests −6 · Speed −15 ft.","de":"W20-Tests −6 · Tempo −4,5 m"},"source":"srd52","verified":false},
+  {"level":4,"text":{"en":"D20 Tests −8 · Speed −20 ft.","de":"W20-Tests −8 · Tempo −6 m"},"source":"srd52","verified":false},
+  {"level":5,"text":{"en":"D20 Tests −10 · Speed −25 ft.","de":"W20-Tests −10 · Tempo −7,5 m"},"source":"srd52","verified":false},
+  {"level":6,"text":{"en":"You die.","de":"Du stirbst."},"source":"srd52","verified":false}
 ]

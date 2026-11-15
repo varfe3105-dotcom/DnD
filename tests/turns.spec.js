@@ -54,7 +54,7 @@ test.describe('Zuganzeige @new', () => {
     await page.goto(URL_UNDER_TEST);
     const combat = { round: 1, active: 'c1', list: [
       { id: 'c1', kind: 'pc', live: 'held1', name: 'Mirelle', init: 18, hp: 20, hpMax: 20, ac: 14, cond: {} },
-      { id: 'c2', kind: 'mon', mon: 'goblin', name: 'Goblin', init: 12, hp: 7, hpMax: 7, ac: 15, cond: {} },
+      { id: 'c2', kind: 'mon', mon: 'goblin-warrior', name: 'Goblin', init: 12, hp: 7, hpMax: 7, ac: 15, cond: {} },
     ] };
     await page.evaluate(([s, c]) => { localStorage.setItem('charbogen-v4', JSON.stringify(s)); localStorage.setItem('charbogen-dm', JSON.stringify({ on: true, only: true, view: 'combat', combat: c })); localStorage.setItem('charbogen-live', JSON.stringify({ code: 'ABC234', role: 'dm' })); }, [base4({ tab: 'dm' }), combat]);
     await page.reload();
@@ -130,9 +130,9 @@ test.describe('XP und Notizbuch @new', () => {
     await page.goto(URL_UNDER_TEST);
     const combat = { round: 3, active: 'c1', list: [
       { id: 'c1', kind: 'pc', live: 'held1', name: 'Mirelle', init: 18, hp: 20, hpMax: 20, ac: 14, cond: {} },
-      { id: 'c2', kind: 'mon', mon: 'goblin', name: 'Goblin 1', init: 12, hp: 0, hpMax: 7, ac: 15, cond: {} },
-      { id: 'c3', kind: 'mon', mon: 'goblin', name: 'Goblin 2', init: 9, hp: 0, hpMax: 7, ac: 15, cond: {} },
-      { id: 'c4', kind: 'mon', mon: 'goblin', name: 'Goblin 3', init: 5, hp: 4, hpMax: 7, ac: 15, cond: {} },
+      { id: 'c2', kind: 'mon', mon: 'goblin-warrior', name: 'Goblin 1', init: 12, hp: 0, hpMax: 7, ac: 15, cond: {} },
+      { id: 'c3', kind: 'mon', mon: 'goblin-warrior', name: 'Goblin 2', init: 9, hp: 0, hpMax: 7, ac: 15, cond: {} },
+      { id: 'c4', kind: 'mon', mon: 'goblin-warrior', name: 'Goblin 3', init: 5, hp: 4, hpMax: 7, ac: 15, cond: {} },
     ] };
     await page.evaluate(([s, c]) => { localStorage.setItem('charbogen-v4', JSON.stringify(s)); localStorage.setItem('charbogen-dm', JSON.stringify({ on: true, only: true, view: 'combat', combat: c })); localStorage.setItem('charbogen-live', JSON.stringify({ code: 'ABC234', role: 'dm' })); }, [base4({ tab: 'dm' }), combat]);
     await page.reload();
@@ -146,7 +146,7 @@ test.describe('XP und Notizbuch @new', () => {
 
   test('Notizbuch: Ort als „Hier sind wir“ markieren, neue Sitzung anlegen', async ({ page }) => {
     await seed(page, base4({ tab: 'dm' }));
-    await page.evaluate(() => localStorage.setItem('charbogen-dm', JSON.stringify({ on: true, only: true, view: 'notes', notes: [{ id: 'p1', kind: 'place', title: 'Rabenturm', body: 'Feucht und kalt. [[Wirt Haldor]]', monsters: [{ id: 'goblin', qty: 2 }] }] })));
+    await page.evaluate(() => localStorage.setItem('charbogen-dm', JSON.stringify({ on: true, only: true, view: 'notes', notes: [{ id: 'p1', kind: 'place', title: 'Rabenturm', body: 'Feucht und kalt. [[Wirt Haldor]]', monsters: [{ id: 'goblin-warrior', qty: 2 }] }] })));
     await page.reload();
     await expect(page.locator('.here-place')).toContainText(/No current place|Noch kein aktueller Ort/);
     await page.locator('#dm-here').selectOption('p1');

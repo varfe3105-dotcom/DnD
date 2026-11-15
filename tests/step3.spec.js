@@ -149,7 +149,7 @@ test.describe('Begleiter @new', () => {
     await expect(page.locator('.pethp')).toHaveText('11/11');
     await expect(page.locator('.petatk')).toContainText('Bite');
     await expect(page.locator('.petatk b').first()).toHaveText('+4');
-    await expect(page.locator('.petatk b').nth(1)).toHaveText(/2[dW]4\+2/);
+    await expect(page.locator('.petatk b').nth(1)).toHaveText(/1[dW]6\+2/);
   });
 
   test('TP ändern, 0 TP als gefallen, lange Rast heilt', async ({ page }) => {
@@ -167,7 +167,7 @@ test.describe('Begleiter @new', () => {
     await tab(page, 'main');
     await expect(page.locator('.pethp')).toHaveText('11/20');
     await expect(page.locator('.petatk b').first()).toHaveText('+7');
-    await expect(page.locator('.petatk b').nth(1)).toHaveText(/2[dW]4\+5/);
+    await expect(page.locator('.petatk b').nth(1)).toHaveText(/1[dW]6\+5/);
   });
 
   test('eigener Begleiter und alte Bögen', async ({ page }) => {
@@ -198,7 +198,7 @@ test.describe('Hintergründe @new', () => {
     expect(s.skills).toMatchObject({ Athletics: 1, Perception: 1 });
     expect(s.gold.gp).toBe(10);
     expect(s.tools.length).toBe(2);
-    expect(s.bag.filter(Boolean).length).toBe(5);
+    expect(s.bag.filter(Boolean).length).toBe(4); // 2024 ohne „Clothes, common“ (Hintergründe folgen in Etappe 2)
     expect(s.feats[0]).toMatchObject({ n: "Ship's Passage", bg: true });
   });
 

@@ -8,8 +8,8 @@ import { S, U } from '../state.js';
 import { numIn, get, refs, slotLabel, slotName, itemView, atk, carried, carryMax } from '../helpers.js';
 import { CAT, BYN } from '../catalog.js';
 import { cpToGp } from '../shop.js';
-/** Verkaufspreis pro Stück: halber Katalogpreis (PHB „Selling Treasure“), magisch: aushandeln. */
-export const sellCp = it => { const c = it.ref && BYN[it.ref]; return c && c.cp && !c.magic ? Math.floor(c.cp / (c.q || 1) / 2) : 0; };
+/** Verkaufspreis pro Stück: halber Katalogpreis (Regeln 2024, auch für magische Gegenstände). */
+export const sellCp = it => { const c = it.ref && BYN[it.ref]; return c && c.cp ? Math.floor(c.cp / (c.q || 1) / 2) : 0; };
 import { t, weight } from '../i18n/index.js';
 
 export function cell(r, label, area) {

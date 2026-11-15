@@ -33,7 +33,7 @@ function row(c, active) {
     ${open ? `<div class="dm-more"><div class="chips">${COND.map(x => `<button class="chip${c.cond[x.n] ? ' on' : ''}" data-a="dmcond" data-id="${c.id}" data-c="${x.n}" aria-pressed="${!!c.cond[x.n]}">${esc(nameLine(x.n, x.de))}</button>`).join('')}</div>
       <input type="text" class="wide" id="dm-note-${c.id}" data-dm="note" data-id="${c.id}" value="${esc(c.note)}" placeholder="${t('dm.rowNote')}" aria-label="${t('dm.rowNote')}">
       <div class="add" style="margin:0"><input type="text" id="dm-fxn-${c.id}" placeholder="${t('dm.fxName')}" aria-label="${t('dm.fxName')}"><input type="number" class="n" id="dm-fxr-${c.id}" min="1" value="10" aria-label="${t('dm.fxRounds')}" title="${t('dm.fxRounds')}"><button class="btn sm" data-a="dmfx" data-id="${c.id}">${t('dm.fxAdd')}</button></div>
-      ${(c.slots || []).map((s, k) => `<div class="lvh" style="padding:2px 0;border:0"><small>${t('spell.level', { n: s.lvl })}</small><div class="pips">${pipsOf(s, `data-a="dmslot" data-id="${c.id}" data-k="${k}"`)}</div></div>`).join('')}
+      ${(c.slots || []).map((s, k) => `<div class="lvh" style="padding:2px 0;border:0"><small>${s.lbl ? esc(s.lbl) : t('spell.level', { n: s.lvl })}</small><div class="pips">${pipsOf(s, `data-a="dmslot" data-id="${c.id}" data-k="${k}"`)}</div></div>`).join('')}
       ${statBlock(c)}
       <button class="btn sm bad" data-a="dmrm" data-id="${c.id}">${t('item.remove')}</button></div>` : ''}
   </div>`;

@@ -45,8 +45,8 @@ test.describe('Bogen aus PDF @new', () => {
     expect(s.gold.gp).toBe(37);
     expect(s.spells.map(x => x.n).sort()).toEqual(['Animal Friendship', 'Ensnaring Strike', 'Entangle', "Hunter's Mark", 'Speak with Animals']);
     const refs = s.bag.filter(Boolean).map(x => x.ref);
-    expect(refs).toEqual(expect.arrayContaining(['item:breastplate', 'item:greatsword', 'item:crossbow-heavy', 'item:arrow', 'item:quiver', 'item:sprig-of-mistletoe', 'item:explorers-pack', 'item:sickle', 'item:carpenters-tools', 'item:healers-kit', 'item:pot-iron', 'item:shovel', 'item:clothes-travelers']));
-    expect(s.bag.filter(Boolean).find(x => x.ref === 'item:arrow').q).toBe(20);
+    expect(refs).toEqual(expect.arrayContaining(['item:breastplate', 'item:greatsword', 'item:heavy-crossbow', 'item:arrows', 'item:quiver', 'item:sprig-of-mistletoe', 'item:explorers-pack', 'item:sickle', 'item:carpenters-tools', 'item:healers-kit', 'item:pot-iron', 'item:shovel', 'item:clothes-travelers']));
+    expect(s.bag.filter(Boolean).find(x => x.ref === 'item:arrows').q).toBe(20);
     expect(s.tools).toEqual(["Carpenter's Tools"]);
     expect(s.langs).toEqual(['Common', 'Giant', 'Druidic']);
     expect(s.race).toBe('Goliath');

@@ -142,6 +142,6 @@ test.describe('Spickzettel übersichtlich @new', () => {
     await act(page, 'dmadd', '[data-m="wolf"]').click();
     await act(page, 'dmopen').click();
     await expect(page.locator('.dm-stat h5').first()).toHaveText('Traits');
-    await expect(page.locator('.dm-stat .stat b').first()).toHaveText('Keen Hearing and Smell.');
+    await expect(page.locator('.dm-stat .stat b').first()).toHaveText('Pack Tactics.');
   });
 });

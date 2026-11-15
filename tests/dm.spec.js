@@ -34,37 +34,37 @@ test.describe('DM-Bereich @new', () => {
 
   test('Monster mit SRD-Werten, nummeriert', async ({ page }) => {
     await dm(page);
-    await addMonster(page, 'goblin', 'goblin', 2);
+    await addMonster(page, 'goblin warrior', 'goblin-warrior', 2);
     const d = await dmData(page);
-    expect(d.combat.list.map(c => c.name)).toEqual(['Goblin 1', 'Goblin 2']);
-    expect(d.combat.list[0]).toMatchObject({ ac: 15, hp: 7, hpMax: 7 });
+    expect(d.combat.list.map(c => c.name)).toEqual(['Goblin Warrior 1', 'Goblin Warrior 2']);
+    expect(d.combat.list[0]).toMatchObject({ ac: 15, hp: 10, hpMax: 10 });
   });
 
   test('Reihenfolge nach Initiative, Runden zählen, Besiegte werden übersprungen', async ({ page }) => {
     await dm(page);
-    await addMonster(page, 'goblin', 'goblin', 3);
+    await addMonster(page, 'goblin warrior', 'goblin-warrior', 3);
     await initAll(page, [5, 20, 10]);
     const names = async () => page.locator('.dm-name b').allTextContents();
-    await expect.poll(names).toEqual(['Goblin 2', 'Goblin 3', 'Goblin 1']);
+    await expect.poll(names).toEqual(['Goblin Warrior 2', 'Goblin Warrior 3', 'Goblin Warrior 1']);
     const next = () => act(page, 'dmstep', '[data-d="1"]').click();
     const active = () => page.locator('.dm-row.on .dm-name b');
     await next();
-    await expect(active()).toHaveText('Goblin 2');
-    const goblin3 = page.locator('.dm-row', { hasText: 'Goblin 3' });
-    await goblin3.locator('input[id^="dm-amt"]').fill('7');
+    await expect(active()).toHaveText('Goblin Warrior 2');
+    const goblin3 = page.locator('.dm-row', { hasText: 'Goblin Warrior 3' });
+    await goblin3.locator('input[id^="dm-amt"]').fill('10');
     await goblin3.locator('[data-a="dmhp"][data-d="-1"]').click();
-    await expect(page.locator('.dm-row', { hasText: 'Goblin 3' })).toHaveClass(/down/);
+    await expect(page.locator('.dm-row', { hasText: 'Goblin Warrior 3' })).toHaveClass(/down/);
     await next();
-    await expect(active()).toHaveText('Goblin 1');
+    await expect(active()).toHaveText('Goblin Warrior 1');
     expect((await dmData(page)).combat.round).toBe(1);
     await next();
-    await expect(active()).toHaveText('Goblin 2');
+    await expect(active()).toHaveText('Goblin Warrior 2');
     expect((await dmData(page)).combat.round).toBe(2);
   });
 
   test('Zustände und Werteblock je Figur', async ({ page }) => {
     await dm(page);
-    await addMonster(page, 'goblin', 'goblin');
+    await addMonster(page, 'goblin warrior', 'goblin-warrior');
     await act(page, 'dmopen').click();
     await act(page, 'dmcond', '[data-c="Poisoned"]').click();
     await expect(page.locator('.dm-name small')).toContainText('Poisoned');
@@ -92,7 +92,7 @@ test.describe('DM-Bereich @new', () => {
 
   test('Kampf beenden braucht Bestätigung', async ({ page }) => {
     await dm(page);
-    await addMonster(page, 'goblin', 'goblin');
+    await addMonster(page, 'goblin warrior', 'goblin-warrior');
     await act(page, 'dmclear').click();
     expect((await dmData(page)).combat.list.length).toBe(1);
     await act(page, 'dmclear').click();
@@ -114,10 +114,10 @@ test.describe('DM-Bereich @new', () => {
 
   test('DM-Daten überstehen Neuladen und lassen sich sichern', async ({ page }) => {
     await dm(page);
-    await addMonster(page, 'goblin', 'goblin');
+    await addMonster(page, 'goblin warrior', 'goblin-warrior');
     await page.reload();
     await tab(page, 'dmcombat');
-    await expect(page.locator('.dm-name b')).toHaveText('Goblin');
+    await expect(page.locator('.dm-name b')).toHaveText('Goblin Warrior');
     await page.locator('.dm-backup summary').click();
     await act(page, 'dmexp').click();
     const text = await page.locator('#dm-exp').inputValue();
@@ -127,13 +127,13 @@ test.describe('DM-Bereich @new', () => {
     await page.locator('.dm-backup summary').click();
     await page.locator('#dm-imp').fill(text);
     await act(page, 'dmimp').click();
-    await expect(page.locator('.dm-name b')).toHaveText('Goblin');
+    await expect(page.locator('.dm-name b')).toHaveText('Goblin Warrior');
   });
 
   for (const v of ['combat', 'notes']) {
     test(`Handybreite ohne Querscrollen: ${v}`, async ({ page }) => {
       await page.setViewportSize({ width: 390, height: 800 });
-      await dm(page, {}, { view: v, combat: { round: 1, active: null, list: [{ id: 'a', kind: 'mon', mon: 'goblin', name: 'Goblin', init: 12, ac: 15, hp: 7, hpMax: 7, cond: {}, note: '' }] } });
+      await dm(page, {}, { view: v, combat: { round: 1, active: null, list: [{ id: 'a', kind: 'mon', mon: 'goblin-warrior', name: 'Goblin', init: 12, ac: 15, hp: 7, hpMax: 7, cond: {}, note: '' }] } });
       const over = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
       expect(over).toBeLessThanOrEqual(0);
     });

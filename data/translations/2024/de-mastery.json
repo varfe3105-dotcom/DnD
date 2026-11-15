@@ -1,0 +1,10 @@
+{
+ "cleave": "Triffst du eine Kreatur mit einem Nahkampf-Angriffswurf mit dieser Waffe, kannst du einen weiteren Nahkampf-Angriffswurf mit der Waffe gegen eine zweite Kreatur ausführen, die höchstens 1,5 m von der ersten entfernt und in deiner Reichweite ist. Bei einem Treffer erleidet die zweite Kreatur den Waffenschaden, du addierst deinen Attributsmodifikator aber nur, wenn er negativ ist. Diesen Zusatzangriff kannst du nur einmal pro Zug ausführen.",
+ "graze": "Verfehlt dein Angriffswurf mit dieser Waffe eine Kreatur, kannst du ihr trotzdem Schaden in Höhe des Attributsmodifikators zufügen, den du für den Angriffswurf genutzt hast. Der Schaden hat die Schadensart der Waffe und lässt sich nur über einen höheren Attributsmodifikator steigern.",
+ "nick": "Den Zusatzangriff der Eigenschaft Leicht kannst du als Teil der Angriffsaktion statt als Bonusaktion ausführen. Diesen Zusatzangriff kannst du nur einmal pro Zug ausführen.",
+ "push": "Triffst du eine Kreatur mit dieser Waffe, kannst du sie bis zu 3 m in gerader Linie von dir wegstoßen, wenn sie Large oder kleiner ist.",
+ "sap": "Triffst du eine Kreatur mit dieser Waffe, hat sie Nachteil bei ihrem nächsten Angriffswurf vor Beginn deines nächsten Zuges.",
+ "slow": "Triffst du eine Kreatur mit dieser Waffe und fügst ihr Schaden zu, kannst du ihr Tempo bis zum Beginn deines nächsten Zuges um 3 m senken. Wird sie mehrmals von Waffen mit dieser Eigenschaft getroffen, sinkt ihr Tempo trotzdem höchstens um 3 m.",
+ "topple": "Triffst du eine Kreatur mit dieser Waffe, kannst du sie zu einem Konstitutionsrettungswurf zwingen (SG 8 + der Attributsmodifikator des Angriffswurfs + dein Übungsbonus). Misslingt er, hat sie den Zustand Prone.",
+ "vex": "Triffst du eine Kreatur mit dieser Waffe und fügst ihr Schaden zu, hast du Vorteil bei deinem nächsten Angriffswurf gegen diese Kreatur vor dem Ende deines nächsten Zuges."
+}

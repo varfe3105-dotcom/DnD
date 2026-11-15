@@ -2,13 +2,14 @@
 import { S } from './state.js';
 import { mod, sg } from './util.js';
 import { BYN } from './catalog.js';
+import { REF_ALIAS } from './ref-alias.js';
 import { classLevels } from './tables.js';
 import { t, dice } from './i18n/index.js';
 import { itemView, isShield } from './helpers.js';
 
 const SIMPLE = ['simple'], ALL = ['simple', 'martial'];
-const ROGUE_W = ['crossbow-hand', 'longsword', 'rapier', 'shortsword'];
-const CASTER_W = ['dagger', 'dart', 'sling', 'quarterstaff', 'crossbow-light'];
+const ROGUE_W = ['hand-crossbow', 'longsword', 'rapier', 'shortsword'];
+const CASTER_W = ['dagger', 'dart', 'sling', 'quarterstaff', 'light-crossbow'];
 const CLASS_W = {
   Barbarian: { g: ALL }, Bard: { g: SIMPLE, w: ROGUE_W }, Cleric: { g: SIMPLE },
   Druid: { w: ['club', 'dagger', 'dart', 'javelin', 'mace', 'quarterstaff', 'scimitar', 'sickle', 'sling', 'spear'] },
@@ -18,9 +19,10 @@ const CLASS_W = {
 // Beim Multiclassing bringt eine weitere Klasse weniger Übungen mit als als Startklasse.
 const MULTI_W = { Barbarian: { g: ALL }, Fighter: { g: ALL }, Paladin: { g: ALL }, Ranger: { g: ALL }, Monk: { g: SIMPLE, w: ['shortsword'] }, Warlock: { g: SIMPLE } };
 const ELF_W = ['longsword', 'shortsword', 'shortbow', 'longbow'];
-const RACE_W = { Dwarf: ['battleaxe', 'handaxe', 'light-hammer', 'warhammer'], 'High Elf': ELF_W, 'Wood Elf': ELF_W, Drow: ['rapier', 'shortsword', 'crossbow-hand'] };
+const RACE_W = { Dwarf: ['battleaxe', 'handaxe', 'light-hammer', 'warhammer'], 'High Elf': ELF_W, 'Wood Elf': ELF_W, Drow: ['rapier', 'shortsword', 'hand-crossbow'] };
 
-const refId = raw => (raw.ref && raw.ref.startsWith('item:') ? raw.ref.slice(5) : '');
+const refOf = r => REF_ALIAS[r] || r;
+const refId = raw => { const r = raw.ref && refOf(raw.ref); return r && r.startsWith('item:') ? r.slice(5) : ''; };
 const groupOf = raw => (raw.ref ? BYN[raw.ref]?.group : undefined);
 const styled = n => S.feats.some(f => f.n === n);
 
@@ -32,10 +34,10 @@ function classProf(raw) {
   return ok(CLASS_W[S.klass]) || (S.multi || []).some(m => ok(MULTI_W[m.k])) || (RACE_W[S.race] || []).includes(id) || (RACE_W[S.subrace] || []).includes(id);
 }
 // Welche Munition eine Fernkampfwaffe verbraucht (Katalogschlüssel).
-const AMMO_OF = { shortbow: 'item:arrow', longbow: 'item:arrow', 'crossbow-light': 'item:crossbow-bolt', 'crossbow-heavy': 'item:crossbow-bolt', 'crossbow-hand': 'item:crossbow-bolt', sling: 'item:sling-bullet', blowgun: 'item:blowgun-needle' };
+const AMMO_OF = { shortbow: 'item:arrows', longbow: 'item:arrows', 'light-crossbow': 'item:bolts', 'heavy-crossbow': 'item:bolts', 'hand-crossbow': 'item:bolts', sling: 'item:bullets-sling', blowgun: 'item:needles', musket: 'item:bullets-firearm', pistol: 'item:bullets-firearm' };
 export const ammoFor = raw => AMMO_OF[refId(raw)] || '';
 /** Munition im Rucksack: Anzahl und Plätze der Stapel. */
-export function ammoLeft(ref) { const at = []; let n = 0; S.bag.forEach((it, i) => { if (it && it.ref === ref) { n += it.q || 0; at.push(i); } }); return { n, at }; }
+export function ammoLeft(ref) { const at = []; let n = 0; S.bag.forEach((it, i) => { if (it && it.ref && refOf(it.ref) === ref) { n += it.q || 0; at.push(i); } }); return { n, at }; }
 export const weaponProf = raw => (raw.prof != null ? !!raw.prof : classProf(raw));
 
 const monkLevel = () => classLevels().find(c => c.k === 'Monk')?.lvl || 0;

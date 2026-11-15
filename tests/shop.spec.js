@@ -7,8 +7,8 @@ test.describe('Einkaufen und Verkaufen @new', () => {
   test('Kaufen im Wiki: Preis aus dem PHB, Wechselgeld, Gegenstand im Rucksack', async ({ page }) => {
     await seed(page, base4({ tab: 'wiki', gold: gold({ pp: 10 }) }));
     await page.locator('#wq').fill('Component pouch');
-    await expect(page.locator('#buy-p')).toHaveValue('25');
-    await act(page, 'buy').click();
+    await expect(page.locator('.buy-p').first()).toHaveValue('25');
+    await act(page, 'buy').first().click();
     const s = await read(page);
     expect(s.gold).toMatchObject({ pp: 7, gp: 5 });
     expect(s.bag.filter(Boolean).map(x => x.ref)).toContain('item:component-pouch');
@@ -17,7 +17,7 @@ test.describe('Einkaufen und Verkaufen @new', () => {
   test('Zu wenig Geld: nichts passiert', async ({ page }) => {
     await seed(page, base4({ tab: 'wiki', gold: gold({ gp: 3 }) }));
     await page.locator('#wq').fill('Component pouch');
-    await act(page, 'buy').click();
+    await act(page, 'buy').first().click();
     await expect(page.locator('#toast')).toContainText(/3/);
     const s = await read(page);
     expect(s.gold.gp).toBe(3);

@@ -4,6 +4,8 @@ Dieses Dokument fasst zusammen, was in einem Chat zu einem digitalen D&D-Charakt
 
 ## 0. Projektstand (aktuell, geht den Abschnitten unten vor)
 
+**Umstellung auf die Regeln 2024 (Wunsch der Gruppe, Stand 15.11.2026):** Die ganze Seite wechselt auf D&D 2024 (PHB/DMG/MM 2024), ohne Schalter zwischen den Editionen. Etappen: 1 Daten aus SRD 5.2 mit deutschen Texten (**fertig**), 2 Charakterbau (Attributsboni und Herkunftstalent über den Hintergrund, Talentarten, Völker 2024), 3 Klassen der Gruppe (Ranger, Cleric, Paladin: Unterklasse auf Stufe 3, feste Zahl vorbereiteter Zauber, Domänen-/Eidzauber 2024, fehlende PHB-2024-Zauber als eigene Zusammenfassung), 4 Weapon Mastery in den Angriffen, 5 Spielleitung (XP-Budget DMG 2024, Spickzettel). Import: `scripts/import-2024.mjs` liest `.cache/5e-database/src/2024/en`, deutsche Texte in `data/translations/2024/` (Schlüssel = SRD-Index: `de-spells-*`, `de-magic-*`, `de-items`, `de-conditions`, `de-mastery`; `names-2014.json` sind die alten deutschen Namen). Quelle `srd52`. Datenfehler im Paket werden im Import korrigiert (`PRICE_FIX`, Komponenten im Feld Reichweite, verdoppelte Zustandszeilen). 32 Zauber aus dem PHB 2024, die nicht im SRD 5.2 stehen, sind vorerst die alten 2014-Zusammenfassungen mit `ed: 2014` und Hinweis im Wiki (`KEEP_2014`). Alte Gegenstandskennungen leitet `src/ref-alias.js` auf die neuen um (BYN-Alias, Munition). Erschöpfung 2024 in `effects.js` (−2 je Stufe auf W20-Tests, −1,5 m Tempo, Stufe 6 Tod, kein halbiertes TP-Maximum mehr), Grappled/Incapacitated/Invisible nach 2024. Magische Gegenstände: feste DMG-2024-Preise (`priceOf`), Verkauf zum halben Preis. Monster 2024: Zauber „N/Day each“ und Fähigkeiten „(N/Day)“ werden zu Zählern (`monsterExtras`), Goblin heißt jetzt Goblin Warrior. Waffenmeisterschaften in `data/mastery.json`, im Wiki unter Regeln, Waffen tragen `mastery`. Der alte Import `scripts/import-srd.mjs` (2014) bleibt nur als Referenz; Klassen, Völker, Hintergründe, Talente, Unterklassen und Spickzettel sind noch 2014-Stand.
+
 **Bauen und prüfen:** `npm run build` erzeugt `dist/charakterbogen.html` (eine Datei, läuft per Doppelklick). `npm test` baut und testet mit Playwright. `npm run test:legacy` lässt dieselben Tests gegen das Original laufen. `npm run lint` findet fehlende Importe. `npm run screens` legt Screenshots in `screenshots/` ab.
 
 **Aufbau:**
@@ -46,7 +48,7 @@ Dieses Dokument fasst zusammen, was in einem Chat zu einem digitalen D&D-Charakt
 
 ## 1. Ziel
 
-Ein digitaler Charakterbogen für **D&D 5e, Edition 2014** (nur Player's Handbook und Dungeon Master's Guide, **kein Homebrew-Regelwerk**), der beim Spielen am Laptop statt Stift und Papier genutzt wird. D&D Beyond ist für den Charakter hinter einer Paywall, deshalb der Eigenbau.
+Ein digitaler Charakterbogen für **D&D, Regeln 2024** (seit November 2026; vorher Edition 2014; nur Player's Handbook, Dungeon Master's Guide und Monster Manual, **kein Homebrew-Regelwerk**), der beim Spielen am Laptop statt Stift und Papier genutzt wird. D&D Beyond ist für den Charakter hinter einer Paywall, deshalb der Eigenbau.
 
 Der Bogen soll auch an Freunde aus der Spielgruppe weitergegeben werden (privater Kreis, nicht öffentlich beworben). Manche nutzen vielleicht weiter Papier, andere wollen ihn digital und mit Speicherung.
 
@@ -119,7 +121,7 @@ gold {pp,gp,ep,sp,cp}, cond {Blinded:true}, exh, notes, tab
 Entscheidung aus dem Gespräch, so beibehalten:
 
 - Der vollständige PHB/DMG-Text ist urheberrechtlich geschützt und **nirgends legal als freie Datenquelle** erhältlich.
-- Frei verfügbar ist der **SRD 5.1 unter CC-BY 4.0** (Namensnennung nötig; Open5e und dnd5eapi.co spiegeln ihn, z. B. als JSON im GitHub-Repo `5e-bits/5e-database`). Daraus die Basis laden und **die Quelle im Bogen nennen**.
+- Frei verfügbar ist der **SRD 5.2 (Regeln 2024) unter CC-BY 4.0**, früher der SRD 5.1 (Namensnennung nötig; Open5e und dnd5eapi.co spiegeln ihn, z. B. als JSON im GitHub-Repo `5e-bits/5e-database`). Daraus die Basis laden und **die Quelle im Bogen nennen**.
 - Der SRD enthält nur einen Teil: nach Wissen des Assistenten nur eine Unterklasse pro Klasse, wenige Völker/Untervölker (z. B. kein Wood Elf), kaum Hintergründe und Talente, etwa 320 von etwa 360 PHB-Zaubern, nicht alle magischen Gegenstände. **Das beim Import prüfen und nicht blind glauben.**
 - Alles **außerhalb des SRD** wird als **Zusammenfassung in eigenen Worten** geschrieben: Spielmechanik ist nicht geschützt, Formulierungen schon. **Keine wörtlichen Buchtexte.** Kein Scrapen inoffizieller Sammlungen (z. B. 5e.tools).
 - Die Nutzerin/der Nutzer hat ausdrücklich zugestimmt: Zusammenfassungen sind in Ordnung, **solange alle spielrelevanten Werte drinstehen** (Zeit, Reichweite, Dauer, Schaden, Rettungswurf, Höherstufung, Konzentration, Ritual, Komponenten wenn relevant).

@@ -28,7 +28,7 @@ export function applyDawn(entries) {
 export const petFrom = m => ({ id: uid(), n: m.n, mon: m.id, ac: m.ac, hp: m.hp, hpMax: m.hp, speed: m.speed || '', text: m.text || '', source: m.source || 'srd', bm: /beast/i.test(S.sub || '') });
 export const petOwn = (n, ac, hp, speed, text) => ({ id: uid(), n, ac: Math.max(0, Math.floor(+ac) || 10), hp: Math.max(1, Math.floor(+hp) || 1), hpMax: Math.max(1, Math.floor(+hp) || 1), speed, text, source: 'own', bm: false });
 
-const ATTACK = /^([^.\n]+)\.\s+(?:Melee or Ranged|Melee|Ranged)\s+(?:Weapon\s+|Spell\s+)?Attack:\s*\+(\d+)\s+to hit.*?Hit:\s*(?:\d+\s+\(([^)]+)\)|(\d+))\s+([a-z]+)\s+damage/i;
+const ATTACK = /^([^.\n]+)\.\s+(?:Melee or Ranged|Melee|Ranged)\s+(?:Weapon\s+|Spell\s+)?Attack(?: Roll)?:\s*\+(\d+)(?:\s+to hit)?.*?Hit:\s*(?:\d+\s+\(([^)]+)\)|(\d+))\s+([a-z]+)\s+damage/i;
 function addFlat(expr, b) {
   const m = String(expr).replace(/\s+/g, '').match(/^(\d+d\d+)([+-]\d+)?$/i);
   if (!m) return String(+expr + b);

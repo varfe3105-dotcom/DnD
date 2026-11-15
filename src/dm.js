@@ -41,7 +41,11 @@ const base = () => ({ id: uid(), init: 0, cond: {}, note: '' });
 function monsterExtras(m) {
   const out = {};
   if (/(^|\n)Legendary Actions(\n|$)/.test(m.text || '')) out.la = { max: 3, used: 0 };
-  const slots = [...(m.text || '').matchAll(/(\d)(?:st|nd|rd|th) level \((\d+) slots?\)/g)].map(x => ({ lvl: +x[1], max: +x[2], used: 0 }));
+  // 2024: Zauber „N/Day each“, je Zauber ein Zähler (ältere Werteblöcke: Plätze pro Grad)
+  const perDay = [...(m.text || '').matchAll(/(?:^|\n)(\d)\/Day each: ([^\n]+)/g)].flatMap(x => x[2].split(', ').map(n => ({ lbl: n.trim(), max: +x[1], used: 0 })));
+  // Fähigkeiten mit „(3/Day)“ im Namen, z. B. Misty Step (3/Day)
+  perDay.push(...[...(m.text || '').matchAll(/(?:^|\n)([^\n.(]+?) \((\d)\/Day\)\./g)].map(x => ({ lbl: x[1].trim(), max: +x[2], used: 0 })));
+  const slots = [...perDay, ...[...(m.text || '').matchAll(/(\d)(?:st|nd|rd|th) level \((\d+) slots?\)/g)].map(x => ({ lvl: +x[1], max: +x[2], used: 0 }))];
   if (slots.length) out.slots = slots;
   return out;
 }

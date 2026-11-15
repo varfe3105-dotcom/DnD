@@ -25,14 +25,16 @@ test.describe('Wirkungen von Zuständen, Erschöpfung und Rüstung @new', () => 
     await expect(page.locator('.fx')).toContainText(/critical|kritisch/);
   });
 
-  test('Erschöpfung 2 halbiert das Tempo, 4 das TP-Maximum, Heilen hört dort auf', async ({ page }) => {
+  test('Erschöpfung 2024: je Stufe −2 auf W20-Tests und −1,5 m Tempo, TP-Maximum bleibt', async ({ page }) => {
     await seed(page, base4({ exh: 2 }));
-    await expect(speedBox(page).locator('b')).toHaveText('15 ft.');
+    await expect(speedBox(page).locator('b')).toHaveText('20 ft.');
+    await expect(page.locator('.fx')).toContainText(/D20 Tests −4|W20-Tests −4/);
     await seed(page, base4({ exh: 4, hp: 5, hpMax: 20 }));
-    await expect(page.locator('.hpn small')).toContainText('/ 10');
+    await expect(page.locator('.hpn small')).toContainText('/ 20');
+    await expect(page.locator('.fx')).toContainText('−8');
     await page.locator('#hpv').fill('30');
     await act(page, 'heal').click();
-    expect((await read(page)).hp).toBe(10);
+    expect((await read(page)).hp).toBe(20);
   });
 
   test('Kettenhemd: Stealth-Nachteil, zu wenig Stärke kostet 3 m Tempo', async ({ page }) => {
@@ -145,8 +147,8 @@ test.describe('Monster im Wiki @new', () => {
   test('Filter Monster zeigt Werteblock mit HG, XP und Fähigkeiten', async ({ page }) => {
     await seed(page, base4({ tab: 'wiki' }));
     await act(page, 'wf', '[data-f="monster"]').click();
-    await page.locator('#wq').fill('Goblin');
-    await act(page, 'wsel', '[data-key="monster:goblin"]').click();
+    await page.locator('#wq').fill('Goblin Warrior');
+    await act(page, 'wsel', '[data-key="monster:goblin-warrior"]').click();
     const pane = page.locator('.wd.pane');
     await expect(pane).toContainText('50 XP');
     await expect(pane).toContainText('Nimble Escape');

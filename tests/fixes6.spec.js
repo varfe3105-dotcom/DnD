@@ -98,17 +98,17 @@ test.describe('Orte @new', () => {
     await act(page, 'dmnewp').click();
     await page.locator('#dm-ntitle').fill('Goblinhöhle');
     await page.locator('#dm-ntitle').blur();
-    await page.locator('#dm-pq').fill('goblin');
-    await act(page, 'dmpladd', '[data-m="goblin"]').click();
-    await act(page, 'dmplqty', '[data-m="goblin"][data-d="1"]').click();
+    await page.locator('#dm-pq').fill('goblin warrior');
+    await act(page, 'dmpladd', '[data-m="goblin-warrior"]').click();
+    await act(page, 'dmplqty', '[data-m="goblin-warrior"][data-d="1"]').click();
     let d = await dmData(page);
-    expect(d.notes[0]).toMatchObject({ kind: 'place', title: 'Goblinhöhle', monsters: [{ id: 'goblin', qty: 2 }] });
+    expect(d.notes[0]).toMatchObject({ kind: 'place', title: 'Goblinhöhle', monsters: [{ id: 'goblin-warrior', qty: 2 }] });
     await expect(page.locator('.dm-place .dm-total')).toContainText('XP');
     await expect(page.locator('.wli small').first()).toContainText('2');
     await act(page, 'dmplstart').click();
     d = await dmData(page);
     expect(d.view).toBe('combat');
-    expect(d.combat.list.map(c => c.name).sort()).toEqual(['Goblin 1', 'Goblin 2', 'Held']);
+    expect(d.combat.list.map(c => c.name).sort()).toEqual(['Goblin Warrior 1', 'Goblin Warrior 2', 'Held']);
   });
 
   test('Anzahl auf 0 entfernt das Monster', async ({ page }) => {
@@ -129,12 +129,12 @@ test.describe('Orte @new', () => {
 
 test.describe('Preise und breites Wiki @new', () => {
   const pick = async (page, q, key) => { await page.locator('#wq').fill(q); await act(page, 'wsel', `[data-key="${key}"]`).click(); };
-  test('magischer Gegenstand zeigt den DMG-Richtpreis, Heiltrank den PHB-Preis', async ({ page }) => {
+  test('magischer Gegenstand zeigt den DMG-2024-Preis, Heiltrank den Ausrüstungspreis', async ({ page }) => {
     await seed(page, base4({ tab: 'wiki' }));
     await pick(page, 'Bag of Holding', 'magic:bag-of-holding');
-    await expect(page.locator('.wd.pane')).toContainText(/101–500 (GM|gp)/);
-    await pick(page, 'Potion of Healing', 'potion:potion-of-healing-common');
-    await expect(page.locator('.wd.pane')).toContainText(/\(PHB\): 50 (GM|gp)/);
+    await expect(page.locator('.wd.pane')).toContainText(/\(DMG 2024\): 400 (GM|gp)/);
+    await pick(page, 'Potion of Healing', 'potion:potion-of-healing');
+    await expect(page.locator('.buy-p').first()).toHaveValue('50');
   });
 
   test('ab 1600 px stehen die Werte neben dem Text, ohne seitliches Scrollen', async ({ page }) => {

@@ -5,6 +5,7 @@ import magicItems from '../data/magic-items.json';
 import spells from '../data/spells.json';
 import conditions from '../data/conditions.json';
 import exhaustion from '../data/exhaustion.json';
+import mastery from '../data/mastery.json';
 import rules from '../data/rules.json';
 import classes from '../data/classes.json';
 import races from '../data/races.json';
@@ -18,6 +19,7 @@ import multiclass from '../data/multiclass.json';
 import legacyTexts from '../data/reference/legacy-texts.json';
 import Fuse from 'fuse.js';
 import { priceCp } from './shop.js';
+import { REF_ALIAS } from './ref-alias.js';
 import { CLIC } from './constants.js';
 import { lang, t, loc, deName, dist, dice } from './i18n/index.js';
 
@@ -55,18 +57,15 @@ export const BYN = {};
 const addCat = e => { e.key = e.k + ':' + (e.id || e.n); CAT.push(e); BYN[e.key] = e; };
 const hayOf = o => [o?.en, o?.de].join(' ');
 
-// Richtpreise für magische Gegenstände nach Seltenheit (DMG, Tabelle „Magic Item Rarity“).
-// Der einfache Heiltrank hat im PHB einen festen Preis.
-const RARITY_GP = { common: [50, 100], uncommon: [101, 500], rare: [501, 5000], 'very rare': [5001, 50000], legendary: [50001, 0] };
-const FIXED_GP = { 'potion-of-healing-common': 50 };
-export function priceOf(id, rarEn) {
+// Preise magischer Gegenstände nach Seltenheit (DMG 2024: feste Preise, Verbrauchsgegenstände wie Tränke
+// und Schriftrollen die Hälfte). Zauberschriftrollen und Heiltränke stehen mit eigenem Preis in der Ausrüstung.
+const RARITY_GP = { common: 100, uncommon: 400, rare: 4000, 'very rare': 40000, legendary: 200000 };
+const gpOf = (rarEn, cons) => { const g = RARITY_GP[String(rarEn || '').toLowerCase()]; return g ? (cons ? g / 2 : g) : 0; };
+export function priceOf(rarEn, cons) {
   const f = n => n.toLocaleString(lang === 'de' ? 'de-DE' : 'en-US') + ' ' + t('price.gp');
-  if (FIXED_GP[id]) return t('price.phb', { p: f(FIXED_GP[id]) });
-  const r = String(rarEn || '').toLowerCase();
-  if (r === 'artifact') return t('price.priceless');
-  const g = RARITY_GP[r];
-  if (!g) return '';
-  return t('price.dmg', { p: g[1] ? `${f(g[0])}–${f(g[1])}`.replace(` ${t('price.gp')}–`, '–') : t('price.from', { p: f(g[0]) }) });
+  if (String(rarEn || '').toLowerCase() === 'artifact') return t('price.priceless');
+  const g = gpOf(rarEn, cons);
+  return g ? t('price.dmg', { p: f(g) }) : '';
 }
 
 /** Baut den Katalog in der aktuellen Sprache neu auf (beim Start und beim Umschalten). */
@@ -74,16 +73,19 @@ export function buildCatalog() {
   fuse = null;
   CAT.length = 0;
   Object.keys(BYN).forEach(k => delete BYN[k]);
-  [...potions, ...items, ...magicItems].forEach(i => addCat({ k: i.k, id: i.id, n: loc(i.n), ic: i.ic, p: loc(i.text), c: i.rarity ? (i.k === 'potion' ? t('cat.potion') : t('cat.magic')) : t('cat.' + i.group), group: i.group, slot: i.slot, att: i.att, cons: i.cons, q: i.q, ac: i.ac, w: i.w, rar: i.rarity?.en, price: i.rarity ? priceOf(i.id, i.rarity.en) : '', cp: priceCp(i.text.en) || (FIXED_GP[i.id] || 0) * 100, cpMin: i.rarity ? (RARITY_GP[String(i.rarity.en).toLowerCase()]?.[0] || 0) * 100 : 0, magic: !!i.rarity, ch: i.rarity ? chargeInfo(i.text.en) : undefined, rarity: i.rarity ? loc(i.rarity) : '', source: i.source, hay: hayOf(i.n) }));
+  [...potions, ...items, ...magicItems].forEach(i => addCat({ k: i.k, id: i.id, n: loc(i.n), ic: i.ic, p: loc(i.text), c: i.rarity ? (i.k === 'potion' ? t('cat.potion') : t('cat.magic')) : t('cat.' + i.group), group: i.group, slot: i.slot, att: i.att, cons: i.cons, q: i.q, ac: i.ac, w: i.w, rar: i.rarity?.en, price: i.rarity ? priceOf(i.rarity.en, i.cons) : '', cp: priceCp(i.text.en) || gpOf(i.rarity?.en, i.cons) * 100, mastery: i.mastery, magic: !!i.rarity, ch: i.rarity ? chargeInfo(i.text.en) : undefined, rarity: i.rarity ? loc(i.rarity) : '', source: i.source, hay: hayOf(i.n) }));
   // Monster (SRD, nur Englisch): Werteblock im Wiki, Symbol nach Kreaturtyp
   const crT = c => (c === 0.125 ? '1/8' : c === 0.25 ? '1/4' : c === 0.5 ? '1/2' : String(c));
   monsters.forEach(m => addCat({ k: 'monster', id: m.id, n: m.n, ic: 'skull', mon: m, artKey: 'mt:' + String(m.type || '').split(' ')[0], c: `${t('cat.monster')} · ${t('turn.cr', { n: crT(m.cr) })}`, hay: `${m.type} ${m.size}`, source: 'srd' }));
-  spells.forEach(s => addCat({ k: 'spell', cant: s.cant, n: s.n, de: s.de, aka: s.aka, origin: s.origin, lvl: s.lvl, school: s.school, ic: s.ic, cls: s.cls, c: s.lvl ? t('spell.level', { n: s.lvl }) : t('spell.cantrips'), time: loc(s.time), range: loc(s.range), dur: loc(s.dur), comp: s.comp, material: s.material, conc: s.conc, ritual: s.ritual, eff: loc(s.text), higher: s.higher ? loc(s.higher) : '', source: s.source, hay: [s.de, s.aka].join(' ') }));
+  mastery.forEach(m => addCat({ k: 'rule', id: 'mastery-' + m.id, n: m.n, ic: m.ic, p: loc(m.text), c: t('cat.mastery'), source: m.source, hay: 'mastery meisterschaft' }));
+  spells.forEach(s => addCat({ k: 'spell', cant: s.cant, ed: s.ed, n: s.n, de: s.de, aka: s.aka, origin: s.origin, lvl: s.lvl, school: s.school, ic: s.ic, cls: s.cls, c: s.lvl ? t('spell.level', { n: s.lvl }) : t('spell.cantrips'), time: loc(s.time), range: loc(s.range), dur: loc(s.dur), comp: s.comp, material: s.material, conc: s.conc, ritual: s.ritual, eff: loc(s.text), higher: s.higher ? loc(s.higher) : '', source: s.source, hay: [s.de, s.aka].join(' ') }));
   COND.forEach(c => addCat({ k: 'cond', n: c.n, de: c.de, ic: c.ic, p: loc(c.text), c: t('cat.cond'), source: c.source }));
   feats.forEach(f => addCat({ k: 'feat', n: f.n, de: f.de, ic: 'star', p: loc(f.text), c: t('cat.feat'), source: f.source, req: f.req, hay: f.de }));
   rules.forEach(r => addCat({ k: 'rule', id: r.n.de, n: loc(r.n), ic: r.ic, p: loc(r.text), c: t('cat.rule'), source: r.source, hay: hayOf(r.n) }));
   Object.entries(CLASSES).forEach(([n, C]) => addCat({ k: 'class', n, de: deName(n), ic: CLIC[n], c: t('cat.class'), p: t('class.summary', { d: dice('W' + C.hd), l: C.subL }), hay: Object.values(C.f).flat().map(x => x.n + ' ' + hayOf(x.text)).join(' ') + ' ' + C.subs.join(' ') + ' ' + Object.values(subclasses[n] || {}).flatMap(s => Object.values(s).flat()).map(x => x.n + ' ' + hayOf(x.text)).join(' ') }));
   Object.entries(RACES).forEach(([n, R]) => addCat({ k: 'race', n, de: deName(n), ic: 'mask', c: t('cat.race') + (R.book ? ' · ' + loc(R.book) : ''), p: `${loc(R.asi)} · ${t('stat.speed')} ${dist(R.sp)}`, hay: R.tr.map(x => x.n + ' ' + hayOf(x.text)).join(' ') + ' ' + Object.keys(R.subs).join(' ') }));
+  // Alte Kennungen (2014) zeigen auf die neuen Einträge, damit gespeicherte Gegenstände ihren Text behalten
+  Object.entries(REF_ALIAS).forEach(([o, n]) => { if (BYN[n] && !BYN[o]) BYN[o] = BYN[n]; });
 }
 buildCatalog();
 
