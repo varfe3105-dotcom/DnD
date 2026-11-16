@@ -40,7 +40,7 @@ import { get, set, refs, fits, applyRace, applyRaceChoices } from './helpers.js'
 import { spMeta, setSheetMode } from './views/sheet.js';
 import { wikiBody } from './views/wiki.js';
 import { openLU, applyLU, vLuSpells } from './views/levelup.js';
-import { app, render, updateDock } from './render.js';
+import { app, render, updateDock, renderHooks } from './render.js';
 import { castAt, damage, heal, rest, cast, move, use, importText, loadPortrait, loadFigure } from './game.js';
 import { tip, hideTip, showTip } from './tooltip.js';
 import { BYN, CLASSES } from './catalog.js';
@@ -480,3 +480,30 @@ function dmCampMeta(){const c=U.CAMP&&camp.campaignById(U.CAMP);return c&&c.role
 function syncCampFromDm(){const m=live.dmCamp(),c=U.CAMP&&camp.campaignById(U.CAMP);if(!m||!c||c.role!=='player'||c.room!==live.L.code)return false;const up={};if(m.c!==c.chapter)up.chapter=m.c;if(m.p!==c.plan)up.plan=m.p;if(m.x!==c.next)up.next=m.x;const h=live.dmHere();if(h&&h!==c.place)up.place=h;if(!Object.keys(up).length)return false;camp.saveCampaign({...c,...up});return true}
 /** Import vom Dashboard: in Einrichten wechseln und die Dateiauswahl öffnen (dort liegen Prüfansicht und Übernahme). */
 function hubImport(){enterPlay('setup');render();const f=$('impf');if(f){f.scrollIntoView({block:'center'});f.click()}}
+
+/* ---- Zurück-Taste ----
+   Jede Ansicht (Bereich der Startseite, Kampagne, Reiter, geladener Charakter) ist ein Eintrag in der Browser-Historie.
+   Zurück und Vorwärts führen so innerhalb von RealmCraft eine Ansicht zurück, statt die Seite zu verlassen.
+   Ist ein Dialog offen, schließt Zurück zuerst ihn. Erst vor der ersten Ansicht verlässt Zurück die Seite. */
+const locNow=()=>U.HUB?{hub:U.HUB}:{camp:U.CAMP||'',tab:S.tab,id:S.id};
+const locKey=l=>l?(l.hub?'h:'+l.hub:'p:'+l.camp+':'+(l.camp?'':l.id)+':'+l.tab):'';
+let histKey='',restoring=false;
+function syncHistory(){if(restoring)return;const l=locNow(),k=locKey(l);if(k===histKey)return;try{if(!histKey)window.history.replaceState({rc:l},'');else window.history.pushState({rc:l},'')}catch(e){/* Historie nicht verfügbar */}histKey=k}
+/** Offene Dialoge, die Zurück zuerst schließt. */
+function closeOverlay(){if(U.LU){U.LU=null;return true}if(U.MIGRATE){U.MIGRATE=null;return true}if(dm.DU.peek){dm.DU.peek=null;return true}if(Object.values(dm.DU.open||{}).some(Boolean)){dm.DU.open={};return true}if(U.TARGET){U.TARGET=null;return true}return false}
+window.addEventListener('popstate',ev=>{
+  const l=ev.state&&ev.state.rc;
+  if(closeOverlay()){try{window.history.pushState({rc:locNow()},'')}catch(e){/* egal */}render();return}
+  if(!l)return;
+  restoring=true;
+  try{
+    if(l.hub){leavePlay();U.HUB=l.hub;U.CAMPED=null}
+    else if(l.camp){if(U.CAMP!==l.camp||U.HUB){if(!openCamp(l.camp,l.tab)){U.HUB='home'}}else S.tab=l.tab}
+    else{if(l.id&&l.id!==S.id)switchChar(l.id);else if(S.camp&&l.id===S.id)switchChar(S.id);U.CAMP=null;enterPlay(l.tab)}
+    U.SEL=null;window.scrollTo(0,0);render();
+  }finally{restoring=false}
+  histKey=locKey(locNow());
+  // Landet die Wiederherstellung woanders (z. B. Übernahme-Dialog), wird dieser Stand der aktuelle Eintrag
+  if(histKey!==locKey(l))try{window.history.replaceState({rc:locNow()},'')}catch(e){/* egal */}
+});
+renderHooks.after=syncHistory;

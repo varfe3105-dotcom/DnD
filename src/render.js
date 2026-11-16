@@ -46,6 +46,8 @@ const TAB_IC = { main: 'sword', inv: 'bag', wiki: 'book', notes: 'scroll', setup
 // Reiter je Ebene (Kampagne oder Charakter) kommen aus views/nav.js. Im Spielleitungsmodus gibt es keinen eigenen Charakter.
 export const tabs = navTabs;
 export const app = $('app');
+/** Wird nach jedem Zeichnen aufgerufen (Browser-Historie in events.js). */
+export const renderHooks = { after: null };
 export function render() {
   hideTip();
   syncAc();
@@ -84,6 +86,7 @@ export function render() {
   const wl = document.querySelector('.wl'), wlTop = wl && !U.resetWl ? wl.scrollTop : 0, pageY = window.scrollY;
   app.innerHTML = h;
   syncMapLayer();
+  if (renderHooks.after) renderHooks.after();
   U.resetWl = false;
   const wl2 = document.querySelector('.wl');
   if (wl2) wl2.scrollTop = wlTop;
