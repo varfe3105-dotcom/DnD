@@ -1,4 +1,4 @@
-# Neugestaltung „Roll & Tale“ (ab 16.11.2026)
+# Neugestaltung „RealmCraft“ (zuerst „Roll & Tale“) (ab 16.11.2026)
 
 Ziel: eigenständige Fantasy-Plattform mit Startseite (Dashboard) und überarbeitetem Spielbereich. Architektur bleibt: HTML, CSS, JavaScript-Module, Vite, Einzeldatei und Offline-Fassung. Keine Migration zu React, Next.js oder TypeScript.
 
@@ -43,6 +43,19 @@ Hauptreferenz: Dashboard-Bild der Nutzerin bzw. des Nutzers (Seitenleiste mit W�
 - Spielbereich: Knopf „Übersicht“ im Kopf (auch im Spielleitungsmodus) führt zurück.
 - Tests: `tests/hub.spec.js` (8 Tests). Bestehende Tests starten über die Option `hub` im Test-Fixture direkt im Spielbereich. Gesamt 371 von 371 bestanden.
 - Nebenbei behoben: „Entfernen“ in der Gruppenkasse verlor seine Bestätigung, weil jeder Klick sie zurücksetzte.
+
+## RealmCraft: Originalgrafiken (16.11.2026)
+
+- Quelle:  (nicht im Repository, Originale bleiben dort). Übernahme mit  nach  (branding, campaigns, dashboard, textures, ornaments). Ablage unter  statt , weil Vite nur so die Bilder in die Einzeldatei einbettet. Alle als WebP; Transparenz bei Branding, Ornamenten und Pergament.
+- Branding: Monogramm „RC“ (Seitenleiste oben, am Handy im Kopf) und Schriftzug „RealmCraft“ (darunter; Text für Screenreader im h1). Beide Originale sind schwarz auf weiß, das Skript macht Weiß transparent und färbt in Messing.
+- Kampagnen: sechs Illustrationen (castle-sunset, castle-valley, fortress-storm, river-city, dungeon-vault, forest-ruins), im Kampagnenformular wählbar (Feld  0–5).
+- Dashboard: Willkommensbild = castle-sunset (größer), Seitenleiste = Ausschnitt aus river-city.
+- Textur: Pergamentblatt mit Rissrand als border-image (Ecken unverzerrt) für Willkommensbereich und Schnellzugriff.
+- Ornamente: vier goldene Trennlinien (Seitenleiste, Willkommensbereich, Zitat).
+- Nicht verwendet: Bannerband und „Aktive Gruppe“-Entwurf aus Ornaments (Porträts dort sind Beispielfiguren, Ordner Characters ist leer). Die Gruppenübersicht ist mit echten Daten nachgebaut (Porträt, Klasse, Stufe, TP aus dem gespeicherten Bogen).
+- Ersetzt und entfernt: die selbst erzeugten hero.jpg, camp-0…2.jpg, side-night.jpg, logo.svg.
+- Startseite: „Deine Gruppe“ statt großer Charakterkarten; Schnellzugriff Charaktere, Regelwerk, Inventar, Notizen, Kampagne erstellen, Import, Live-Tisch. Eine Weltkarte gibt es nicht.
+- Tests: 371 von 371 bestanden. Einzeldatei 6,2 MB (vorher 5,0 MB).
 
 ## Offen
 

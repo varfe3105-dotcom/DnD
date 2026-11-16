@@ -13,3 +13,6 @@ import/*
 !import/.gitkeep
 # Rohdaten der Importskripte werden bei Bedarf neu geladen
 .cache/
+
+# Entwurfsablage mit Originalgrafiken (groß, nicht veröffentlichen; Übernahme per scripts/import-realmcraft.py)
+RealmCraft/

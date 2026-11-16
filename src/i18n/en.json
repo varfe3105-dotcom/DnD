@@ -1452,5 +1452,13 @@
  "camp.joined": "Joined live room {c}.",
  "camp.emptyTitle": "No campaign yet",
  "camp.emptyTxt": "Create a campaign, assign your characters and plan the next game night.",
- "camp.onlyArchived": "Only archived campaigns. See them all under “My campaigns”."
+ "camp.onlyArchived": "Only archived campaigns. See them all under “My campaigns”.",
+ "hub.group": "Your party",
+ "hub.groupEmpty": "No characters yet. Create one or import a sheet (JSON or PDF).",
+ "hub.hp": "Hit points",
+ "hub.hpShort": "HP",
+ "hub.q.chars": "Characters",
+ "hub.q.notes": "Open notes",
+ "camp.art": "Image",
+ "camp.artN": "Image {n}"
 }

@@ -1,4 +1,6 @@
-// Grafiken des Designsystems 2026 (Dark Fantasy: Anthrazit, Aubergine, Pergament, Messing). Alles selbst erzeugt.
+// Grafiken des Designsystems 2026 (Hintergrund, Kartenfläche, Rahmen, Ornament). Landschaften, Logo und Pergament
+// kommen seit RealmCraft aus den Originalgrafiken (scripts/import-realmcraft.py); scene() bleibt nur als Vorrat.
+// (Dark Fantasy: Anthrazit, Aubergine, Pergament, Messing). Alles selbst erzeugt.
 // Aufruf: node scripts/make-art-2.mjs  → schreibt nach src/assets/
 import { chromium } from '@playwright/test';
 import fs from 'node:fs';
@@ -107,13 +109,7 @@ async function shoot(svg, w, h, name, q) {
 }
 fs.writeFileSync(out + 'frame-brass.svg', frame);
 fs.writeFileSync(out + 'flourish-gold.svg', flourish);
-fs.writeFileSync(out + 'logo.svg', logo);
 await shoot(bg(1600, 1000), 1600, 1000, 'bg-dark.jpg', 70);
 await shoot(slate, 320, 320, 'slate.jpg', 72);
-await shoot(scene(1400, 520, DUSK, { seed: 11, cliff: true, castleX: 0.5, sunX: 0.55 }), 1400, 520, 'hero.jpg', 74);
-await shoot(scene(640, 280, RUIN, { seed: 21, castleX: 0.6, castleS: 0.85 }), 640, 280, 'camp-0.jpg', 70);
-await shoot(scene(640, 280, GROVE, { seed: 31, castleX: 0.5, castleS: 0.7 }), 640, 280, 'camp-1.jpg', 70);
-await shoot(scene(640, 280, HARBOR, { seed: 41, castleX: 0.62, castleS: 0.8, lake: true }), 640, 280, 'camp-2.jpg', 70);
-await shoot(scene(280, 340, NIGHT, { seed: 51, castleX: 0.45, castleS: 0.8, horizon: 0.66, moon: [0.72, 0.28, 0.09], sunX: 0.72 }), 280, 340, 'side-night.jpg', 70);
 await b.close();
 console.log('ok');

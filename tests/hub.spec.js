@@ -14,18 +14,20 @@ const camps = page => page.evaluate(() => JSON.parse(localStorage.getItem('charb
 test.describe('Dashboard @new', () => {
   test('ohne Daten: Startseite mit Einladung, keine erfundenen Inhalte', async ({ page }) => {
     await start(page);
-    await expect(page.locator('.hub-hero h1')).toHaveText(/Welcome|Willkommen/);
+    await expect(page.locator('.hub-hero-h')).toHaveText(/Welcome|Willkommen/);
     await expect(page.locator('.hub-camp')).toHaveCount(0);
     await expect(page.locator('.hub-empty')).toBeVisible();
     await expect(page.locator('.hub-next')).toContainText(/No date|Noch kein Termin/);
-    await expect(page.locator('.hub-char:not(.add)')).toHaveCount(0);
+    await expect(page.locator('.hub-gm')).toHaveCount(0);
+    await expect(page.locator('.hub-group')).toContainText(/No characters|Noch keine Charaktere/);
+    await expect(page.locator('.hub-word')).toHaveText('RealmCraft');
     await expect(page.locator('.hub-ql')).not.toContainText([/dice|Würfel/i]);
   });
 
   test('zeigt vorhandene Charaktere, öffnet Borin im Spielbereich, Übersicht führt zurück', async ({ page }) => {
     await start(page, chars);
-    await expect(page.locator('.hub-char:not(.add) h3')).toHaveText(['Mirelle', 'Borin']);
-    await page.locator('.hub-char', { hasText: 'Borin' }).locator('[data-a="hubplay"]').click();
+    await expect(page.locator('.hub-gm-t b')).toHaveText(['Mirelle', 'Borin']);
+    await page.locator('.hub-gm', { hasText: 'Borin' }).click();
     await expect(page.locator('#app header.hd h1')).toHaveText('Borin');
     expect(await page.evaluate(() => sessionStorage.getItem('charbogen-view'))).toBe('play');
     // Neuladen mitten im Spiel bleibt im Spielbereich
@@ -33,7 +35,7 @@ test.describe('Dashboard @new', () => {
     await expect(page.locator('#app header.hd h1')).toHaveText('Borin');
     await page.locator('[data-a="hubhome"]').click();
     await expect(page.locator('.hub')).toBeVisible();
-    await expect(page.locator('.hub-char.cur h3')).toHaveText('Borin');
+    await expect(page.locator('.hub-gm.cur .hub-gm-t b')).toHaveText('Borin');
   });
 
   test('Kampagne anlegen, Charaktere zuordnen, Termin erscheint als nächste Session, Session zählen', async ({ page }) => {
@@ -45,13 +47,16 @@ test.describe('Dashboard @new', () => {
     const d = new Date(Date.now() + 3 * 86400000).toISOString().slice(0, 10);
     await page.locator('#cf-next').fill(d + 'T19:00');
     await page.locator('[data-a="campchar"]', { hasText: 'Borin' }).click();
+    await page.locator('[data-a="campart"][data-i="4"]').click();
+    await expect(page.locator('#cf-name')).toHaveValue('Die letzte Bastion');
     await page.locator('[data-a="campsave"]').click();
     let c = await camps(page);
     expect(c).toHaveLength(1);
-    expect(c[0]).toMatchObject({ name: 'Die letzte Bastion', chars: ['c2'], planned: 8, done: 0, status: 'active', next: d + 'T19:00' });
+    expect(c[0]).toMatchObject({ name: 'Die letzte Bastion', art: 4, chars: ['c2'], planned: 8, done: 0, status: 'active', next: d + 'T19:00' });
     await page.locator('.hub-side [data-a="hubgo"][data-s="home"]').click();
     await expect(page.locator('.hub-next h4')).toHaveText('Die letzte Bastion');
-    await expect(page.locator('.hub-char', { hasText: 'Borin' })).toContainText('Die letzte Bastion');
+    await expect(page.locator('.hub-gm', { hasText: 'Borin' })).toContainText('Die letzte Bastion');
+    await expect(page.locator('.hub-camp .hub-camp-art')).toHaveClass(/a4/);
     await page.locator('.hub-camp [data-a="campdone"]').click();
     c = await camps(page);
     expect(c[0]).toMatchObject({ done: 1, next: '' });
@@ -110,9 +115,10 @@ test.describe('Dashboard @new', () => {
     expect(Object.keys(b.data)).toContain('charbogen-campaigns');
   });
 
-  test('Schnellzugriff „Charakter erstellen“ legt einen neuen an und startet den Assistenten', async ({ page }) => {
+  test('Schnellzugriff Charaktere → „Neuer Charakter“ legt einen neuen an und startet den Assistenten', async ({ page }) => {
     await start(page, chars);
-    await page.locator('.hub-ql[data-k="newchar"]').click();
+    await page.locator('.hub-ql[data-k="chars"]').click();
+    await page.locator('.hub-addc[data-a="hubnewchar"]').click();
     await expect(page.locator('.wiz')).toBeVisible();
     expect(await page.evaluate(() => JSON.parse(localStorage.getItem('charbogen-index')).length)).toBe(3);
   });

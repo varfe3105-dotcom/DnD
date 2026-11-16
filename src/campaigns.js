@@ -4,7 +4,8 @@
 import { uid } from './util.js';
 
 export const CAMP_KEY = 'charbogen-campaigns';
-const ART = 3;
+/** Anzahl der Kampagnenbilder (src/assets/realmcraft/campaigns, Klassen .hub-camp-art.a0 … a5 in areas.css). */
+export const ART = 6;
 const clean = c => ({
   id: String(c.id || uid()), name: String(c.name || '').slice(0, 80), desc: String(c.desc || '').slice(0, 400),
   status: c.status === 'archived' ? 'archived' : 'active', chars: Array.isArray(c.chars) ? c.chars.map(String).slice(0, 12) : [],
@@ -20,7 +21,7 @@ export const campaignById = id => campaigns().find(c => c.id === id) || null;
 /** Neu anlegen oder ändern. Liefert die gespeicherte Kampagne oder null. */
 export function saveCampaign(c) {
   const list = campaigns(), i = list.findIndex(x => x.id === c.id);
-  const art = i >= 0 ? list[i].art : list.length % ART;
+  const art = Number.isInteger(c.art) ? c.art : i >= 0 ? list[i].art : list.length % ART;
   const v = clean({ ...(i >= 0 ? list[i] : {}), ...c, art });
   if (!v.name) return null;
   if (i >= 0) list[i] = v; else list.push(v);

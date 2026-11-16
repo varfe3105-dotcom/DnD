@@ -1452,5 +1452,13 @@
  "camp.joined": "Live-Raum {c} betreten.",
  "camp.emptyTitle": "Noch keine Kampagne",
  "camp.emptyTxt": "Lege eine Kampagne an, ordne deine Charaktere zu und plane den nächsten Spielabend.",
- "camp.onlyArchived": "Nur archivierte Kampagnen. Alle siehst du unter „Meine Kampagnen“."
+ "camp.onlyArchived": "Nur archivierte Kampagnen. Alle siehst du unter „Meine Kampagnen“.",
+ "hub.group": "Deine Gruppe",
+ "hub.groupEmpty": "Noch keine Charaktere. Erstelle einen oder importiere einen Bogen (JSON oder PDF).",
+ "hub.hp": "Trefferpunkte",
+ "hub.hpShort": "TP",
+ "hub.q.chars": "Charaktere",
+ "hub.q.notes": "Notizen öffnen",
+ "camp.art": "Bild",
+ "camp.artN": "Bild {n}"
 }

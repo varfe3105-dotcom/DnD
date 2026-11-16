@@ -3,7 +3,7 @@
 import { esc } from '../util.js';
 import { S, U, roster, charSnapshot } from '../state.js';
 import { CAT } from '../catalog.js';
-import { campaigns, campaignsOf, nextSession, campaignById } from '../campaigns.js';
+import { campaigns, campaignsOf, nextSession, campaignById, ART } from '../campaigns.js';
 import { dmOnly } from './dm-mode.js';
 import { vWiki } from './wiki.js';
 import { vBackup } from './live-ui.js';
@@ -26,6 +26,7 @@ const SVG = {
   d20: '<path d="M12 2.5 20.5 7.5v9L12 21.5 3.5 16.5v-9z"/><path d="M12 2.5 7.5 14h9z M3.5 7.5 7.5 14 M20.5 7.5 16.5 14 M7.5 14 12 21.5 16.5 14"/>',
   plus: '<path d="M12 5v14M5 12h14"/>', upload: '<path d="M12 16V4M7 9l5-5 5 5"/><path d="M4 16v4h16v-4"/>', bag: '<path d="M8 7V6a4 4 0 0 1 8 0v1"/><path d="M4.5 8h15l-1.2 12.5H5.7z"/>', wand: '<path d="M4 20 15 9"/><path d="M17 3v3M17 9v1M14 6h-1M21 6h-3"/>', crown: '<path d="M3 18h18M4 16 3 7l5 4 4-7 4 7 5-4-1 9z"/>',
   star: '<path d="M12 3l2.2 6.6H21l-5.5 4 2.1 6.6L12 16.3 6.4 20.2l2.1-6.6L3 9.6h6.8z"/>',
+  scroll: '<path d="M8 4h10a2 2 0 0 1 0 4h-1v10a2.5 2.5 0 0 1-2.5 2.5h-9a2 2 0 0 1 0-4H7V5.5A1.5 1.5 0 0 1 8 4"/><path d="M10 9h4.5M10 12.5h4.5"/>',
 };
 const ico = (k, cls = '') => `<svg class="hi${cls ? ' ' + cls : ''}" viewBox="0 0 24 24" aria-hidden="true">${SVG[k]}</svg>`;
 const ornament = () => `<div class="hub-orn" aria-hidden="true"><i></i>${ico('d20')}<i></i></div>`;
@@ -46,7 +47,7 @@ const portrait = (c, cls = 'hub-por') => `<span class="${cls}">${c.img ? `<img s
 
 function vSide() {
   const nav = HUB_SECTIONS.map(s => `<button data-a="hubgo" data-s="${s}" aria-current="${U.HUB === s ? 'page' : 'false'}">${ico(HUB_IC[s])}<span>${t('hub.nav.' + s)}</span></button>`).join('');
-  return `<aside class="hub-side"><div class="hub-brand"><i class="hub-mark" aria-hidden="true"></i><b>Roll &amp; Tale</b><small>${t('hub.tagline')}</small></div>${ornament()}<nav aria-label="${t('hub.navLabel')}">${nav}</nav><div class="hub-sideart" aria-hidden="true"></div>
+  return `<aside class="hub-side"><div class="hub-brand"><i class="hub-mark" aria-hidden="true"></i><h1 class="hub-word">RealmCraft</h1><small>${t('hub.tagline')}</small></div><i class="hub-div d1" aria-hidden="true"></i><nav aria-label="${t('hub.navLabel')}">${nav}</nav><div class="hub-sideart" aria-hidden="true"></div>
   <div class="hub-sidefoot"><button data-a="hubgo" data-s="settings" aria-current="${U.HUB === 'settings' ? 'page' : 'false'}">${ico('gear')}<span>${t('hub.nav.settings')}</span></button></div></aside>`;
 }
 function vTop() {
@@ -67,7 +68,7 @@ export function vHubResults() {
 
 function vHero() {
   const list = chars().filter(real), cont = real({ id: S.id, klass: S.klass, level: S.level });
-  return `<section class="hub-hero"><div class="hub-hero-txt"><h1>${t('hub.welcome')}</h1><p>${t('hub.welcomeTxt')}</p>${ornament()}<div class="hub-cta"><button class="hbtn pri" data-a="campnew">${t('hub.newCamp')} ${ico('arrow')}</button>${cont ? `<button class="hbtn" data-a="hubplay">${t('hub.continue', { n: esc(S.name) })} ${ico('arrow')}</button>` : list.length ? '' : `<button class="hbtn" data-a="hubnewchar">${t('hub.firstChar')} ${ico('arrow')}</button>`}</div></div><div class="hub-hero-art" aria-hidden="true"></div></section>`;
+  return `<section class="hub-hero"><div class="hub-hero-txt"><h2 class="hub-hero-h">${t('hub.welcome')}</h2><p>${t('hub.welcomeTxt')}</p><i class="hub-div d3" aria-hidden="true"></i><div class="hub-cta"><button class="hbtn pri" data-a="campnew">${t('hub.newCamp')} ${ico('arrow')}</button>${cont ? `<button class="hbtn" data-a="hubplay">${t('hub.continue', { n: esc(S.name) })} ${ico('arrow')}</button>` : list.length ? '' : `<button class="hbtn" data-a="hubnewchar">${t('hub.firstChar')} ${ico('arrow')}</button>`}</div></div><div class="hub-hero-art" aria-hidden="true"></div></section>`;
 }
 function campCard(c, all) {
   const own = all.filter(x => c.chars.includes(x.id));
@@ -91,6 +92,7 @@ function vCampForm() {
   ${f(t('camp.doneN'), `<input type="number" class="n" id="cf-done" min="0" max="999" value="${c.done}">`)}
   ${f(t('camp.planned'), `<input type="number" class="n" id="cf-planned" min="0" max="999" value="${c.planned || ''}" placeholder="–">`)}
   </div>${f(t('camp.desc'), `<textarea id="cf-desc" rows="2" maxlength="400">${esc(c.desc)}</textarea>`)}
+  <p class="lbl">${t('camp.art')}</p><div class="hub-artpick">${Array.from({ length: ART }, (_, i) => `<button class="hub-camp-art a${i}${(U.CAMPART ?? c.art ?? 0) === i ? ' on' : ''}" data-a="campart" data-i="${i}" aria-pressed="${(U.CAMPART ?? c.art ?? 0) === i}" aria-label="${t('camp.artN', { n: i + 1 })}"></button>`).join('')}</div>
   <p class="lbl">${t('camp.chars')}</p><div class="chips">${all.map(x => `<button class="chip${sel.has(x.id) ? ' on' : ''}" data-a="campchar" data-id="${esc(x.id)}" aria-pressed="${sel.has(x.id)}">${esc(x.name)}</button>`).join('') || `<span class="note">${t('camp.noChars')}</span>`}</div>
   <div class="dlgf"><button class="hbtn" data-a="campcancel">${t('common.cancel')}</button>${id !== 'new' ? `<button class="hbtn bad" data-a="campdel" data-id="${esc(id)}">${U.CONF === 'campdel:' + id ? t('chars.delConfirm') : t('common.deleteBtn')}</button>` : ''}<button class="hbtn pri" data-a="campsave">${t('camp.save')}</button></div><p class="note">${t('camp.localNote')}</p></section>`;
 }
@@ -109,6 +111,17 @@ function vChars(limit) {
   const add = `<article class="hub-char add"><button class="hub-addc" data-a="hubnewchar">${ico('plus')}<span>${t('hub.newChar')}</span></button><button class="hub-addc" data-a="hubimport">${ico('upload')}<span>${t('hub.importChar')}</span></button></article>`;
   return `${head}<div class="hub-chars">${shown.map(card).join('')}${limit && shown.length >= limit ? '' : add}</div>`;
 }
+/** Eigene Gruppe kompakt: Porträt, Name, Klasse und Stufe, TP aus dem gespeicherten Bogen, Kampagne. */
+function vGroup() {
+  const list = chars().filter(real);
+  const head = `<div class="hub-h">${ico('person', 'big')}<h2>${t('hub.group')}</h2><button class="hub-more" data-a="hubgo" data-s="chars">${t('hub.all')} ${ico('arrow')}</button></div>`;
+  if (!list.length) return head + `<section class="hub-panel hub-group"><p class="note">${t('hub.groupEmpty')}</p><div class="hub-cta"><button class="hbtn pri" data-a="hubnewchar">${t('hub.firstChar')} ${ico('arrow')}</button><button class="hbtn" data-a="hubimport">${t('hub.importChar')}</button></div></section>`;
+  const row = c => {
+    const o = c.id === S.id ? S : charSnapshot(c.id) || {}, max = +o.hpMax || 0, hp = Math.max(0, Math.min(max, +o.hp || 0)), pct = max ? hp / max * 100 : 0;
+    return `<button class="hub-gm${c.id === S.id ? ' cur' : ''}" data-a="hubplay" data-id="${esc(c.id)}">${portrait(c, 'hub-por md')}<span class="hub-gm-t"><b>${esc(c.name)}</b><small>${esc([c.klass, c.level ? t('feat.level', { n: c.level }) : ''].filter(Boolean).join(' · ') || t('hub.noClass'))}</small>${max ? `<span class="hub-hp" title="${t('hub.hp')} ${hp}/${max}"><em>${t('hub.hpShort')}</em><i><u style="width:${pct}%"></u></i><small>${hp}/${max}</small></span>` : ''}${c.camps.length ? `<small class="hub-gm-c">${c.camps.map(x => esc(x.name)).join(', ')}</small>` : ''}</span></button>`;
+  };
+  return head + `<section class="hub-panel hub-group"><div class="hub-gms">${list.slice(0, 6).map(row).join('')}</div></section>`;
+}
 function vNext() {
   const n = nextSession(), all = chars();
   if (!n) return `<section class="hub-panel hub-next">${ico('cal', 'big')}<h3>${t('hub.nextTitle')}</h3><p class="note">${t('hub.noNext')}</p><button class="hbtn wide" data-a="hubgo" data-s="plan">${t('hub.planSession')} ${ico('arrow')}</button></section>`;
@@ -118,8 +131,9 @@ function vNext() {
 function vQuick() {
   const has = real({ id: S.id, klass: S.klass, level: S.level });
   const L = [
-    ['wiki', 'book', t('hub.q.rules')], ['newchar', 'person', t('hub.q.newChar')], ['import', 'upload', t('hub.q.import')], ['campnew', 'swords', t('hub.q.newCamp')],
-    ...(has && !dmOnly() ? [['inv', 'bag', t('hub.q.inv')]] : []), ...(dmOnly() ? [['dm', 'crown', t('hub.q.dm')]] : [['live', 'star', t('hub.q.live')]]),
+    ['chars', 'person', t('hub.q.chars')], ['wiki', 'book', t('hub.q.rules')],
+    ...(has && !dmOnly() ? [['inv', 'bag', t('hub.q.inv')], ['notes', 'scroll', t('hub.q.notes')]] : []), ['campnew', 'swords', t('hub.q.newCamp')], ['import', 'upload', t('hub.q.import')],
+    ...(dmOnly() ? [['dm', 'crown', t('hub.q.dm')]] : [['live', 'star', t('hub.q.live')]]),
   ];
   return `<section class="hub-parch hub-quick"><div class="hub-h sm">${ico('star', 'big')}<h3>${t('hub.quick')}</h3></div>${L.map(([k, ic, l]) => `<button class="hub-ql" data-a="hubq" data-k="${k}">${ico(ic)}<span>${l}</span></button>`).join('')}</section>`;
 }
@@ -136,7 +150,7 @@ function vSettings() {
 export function vHub() {
   const s = U.HUB === 'settings' || HUB_SECTIONS.includes(U.HUB) ? U.HUB : 'home';
   let main = '';
-  if (s === 'home') main = `<div class="hub-grid"><div class="hub-col">${vHero()}${vCamps(3)}${vChars(4)}</div><div class="hub-col side">${vNext()}${vQuick()}<blockquote class="hub-quote">${ornament()}<p>${t('hub.quote')}</p></blockquote></div></div>`;
+  if (s === 'home') main = `<div class="hub-grid"><div class="hub-col">${vHero()}${vCamps(3)}${vGroup()}</div><div class="hub-col side">${vNext()}${vQuick()}<blockquote class="hub-quote"><i class="hub-div d2" aria-hidden="true"></i><p>${t('hub.quote')}</p><i class="hub-div d4" aria-hidden="true"></i></blockquote></div></div>`;
   if (s === 'camps') main = vCamps(0);
   if (s === 'chars') main = vChars(0);
   if (s === 'wiki') main = vWiki();
