@@ -5,6 +5,7 @@ import { uid } from './util.js';
 import { S, hooks } from './state.js';
 import { COND, BYN } from './catalog.js';
 import { acNow, acBonus, fxOut, activeOut, BUFFS } from './buffs.js';
+import { condRoundsOut } from './cond-rounds.js';
 
 export const SUPA = 'https://ovkxoqgqocspwjvxhige.supabase.co';
 const WS = SUPA.replace('https', 'wss') + '/realtime/v1';
@@ -24,6 +25,11 @@ export const setPeerHook = fn => { peerHook = fn; };
 let joinHook = () => {}, endTurnHook = () => {}, turnHook = () => {}, lastTurn = '';
 /** Spielleitung: ein Spieler hat „Zug beenden“ gedrückt. */
 export const setEndTurnHook = fn => { endTurnHook = fn; };
+let dmMsgHook = () => {};
+/** Spielleitung: Einzahlung in die Gruppenkasse oder Wunsch eines Spielers. */
+export const setDmMsgHook = fn => { dmMsgHook = fn; };
+/** Spieler: Gruppenkasse aus der Presence der Spielleitung. */
+export const dmStash = () => L.peers.find(p => p.role === 'dm' && p.stash)?.stash || null;
 /** Spieler: die Zuganzeige hat sich geändert (mine = jetzt am Zug). */
 export const setTurnHook = fn => { turnHook = fn; };
 /** Zugstand der Spielleitung, falls sie ihn sendet. */
@@ -54,16 +60,17 @@ function clean(p) {
   return {
     key: str(p.key, 40), role: p.role === 'dm' ? 'dm' : 'player', name: str(p.name), klass: str(p.klass, 30), level: int(p.level, 20),
     insp: !!p.insp, lock: !!p.lock, hp: int(p.hp), hpMax: int(p.hpMax), tmp: int(p.tmp), ac: int(p.ac, 99), exh: int(p.exh, 6), conc: str(p.conc),
-    cond: Array.isArray(p.cond) ? p.cond.filter(c => CONDS.has(c)) : [], death: { s: int(p.death?.s, 3), f: int(p.death?.f, 3) },
+    cond: Array.isArray(p.cond) ? p.cond.filter(c => CONDS.has(c)) : [], cr: p.cr && typeof p.cr === 'object' ? Object.fromEntries(Object.entries(p.cr).filter(([c]) => CONDS.has(c)).map(([c, n]) => [c, int(n, 99)])) : {}, death: { s: int(p.death?.s, 3), f: int(p.death?.f, 3) },
     acB: int(p.acB, 20), fx: Array.isArray(p.fx) ? p.fx.slice(0, 6).filter(x => x && BUFFS[x.s]).map(x => ({ s: x.s, by: str(x.by), good: !!x.good })) : [],
     buffs: Array.isArray(p.buffs) ? p.buffs.slice(0, 8).filter(b => b && BUFFS[b.s]).map(b => ({ id: str(b.id, 40), s: b.s, to: Array.isArray(b.to) ? b.to.slice(0, 6).map(k => str(k, 40)) : [], v: int(b.v, 99) })) : [],
     pets: Array.isArray(p.pets) ? p.pets.slice(0, 3).map(x => ({ id: str(x?.id, 40), n: str(x?.n), hp: int(x?.hp), hpMax: int(x?.hpMax), ac: int(x?.ac, 99) })).filter(x => x.id) : [],
+    stash: p.role === 'dm' && p.stash && typeof p.stash === 'object' ? { g: Object.fromEntries(COINS.map(k => [k, int(p.stash.g?.[k], 9999999)])), it: Array.isArray(p.stash.it) ? p.stash.it.slice(0, 40).map(x => ({ id: str(x?.id, 40), n: str(x?.n, 80), q: Math.max(1, int(x?.q, 999)), w: int(x?.w, 9) })).filter(x => x.id && x.n) : [], got: Array.isArray(p.stash.got) ? p.stash.got.slice(-40).map(x => str(x, 40)) : [] } : null,
     turn: p.role === 'dm' && p.turn && typeof p.turn === 'object' ? { r: int(p.turn.r, 999), cur: str(p.turn.cur, 40), name: str(p.turn.name), next: str(p.turn.next), enemy: !!p.turn.enemy, nextEnemy: !!p.turn.nextEnemy, cr: str(p.turn.cr, 6), nextCr: str(p.turn.nextCr, 6) } : null,
   };
 }
-const MSG_TYPES = new Set(['dmg', 'heal', 'temp', 'cond', 'handout', 'ack', 'rcv', 'item', 'gold', 'endturn', 'levelup', 'xp']);
+const MSG_TYPES = new Set(['dmg', 'heal', 'temp', 'cond', 'handout', 'ack', 'rcv', 'item', 'gold', 'endturn', 'levelup', 'xp', 'insp', 'stash', 'want']);
 // Nachrichten der Spielleitung, die bis zur Empfangsbestätigung erneut gesendet werden
-const RELIABLE = new Set(['dmg', 'heal', 'temp', 'cond', 'handout', 'item', 'gold', 'levelup', 'xp']);
+const RELIABLE = new Set(['dmg', 'heal', 'temp', 'cond', 'handout', 'item', 'gold', 'levelup', 'xp', 'insp']);
 const COINS = ['pp', 'gp', 'ep', 'sp', 'cp'];
 const JPEG = /^data:image\/jpeg;base64,[A-Za-z0-9+/=]+$/;
 /** Nachrichten kommen von jedem mit dem Raumcode. Werte werden begrenzt, Änderungen am Bogen muss der Spieler annehmen. */
@@ -74,14 +81,17 @@ function cleanMsg(m) {
   if (m.pet) out.pet = str(m.pet, 40);
   if (['dmg', 'heal', 'temp'].includes(m.type)) { out.value = int(m.value, 999); if (!out.value) return null; }
   if (m.type === 'xp') { out.value = int(m.value, 1000000); if (!out.value) return null; }
-  if (m.type === 'cond') { if (!CONDS.has(m.cond)) return null; out.cond = m.cond; out.off = !!m.off; }
+  if (m.type === 'cond') { if (!CONDS.has(m.cond)) return null; out.cond = m.cond; out.off = !!m.off; out.r = int(m.r, 99); }
   if (m.type === 'handout') {
     out.title = str(m.title, 80); out.text = str(m.text, 4000);
     out.img = typeof m.img === 'string' && m.img.length < 300000 && JPEG.test(m.img) ? m.img : '';
     if (!out.title && !out.text && !out.img) return null;
   }
   if (m.type === 'ack') { out.name = str(m.name); out.ok = !!m.ok; }
-  if (m.type === 'item') {
+  if (m.type === 'want') { out.iid = str(m.iid, 40); out.name = str(m.name); if (!out.iid) return null; }
+  if (m.type === 'stash') { out.dep = str(m.dep, 40); out.name = str(m.name); if (!out.dep) return null; }
+  if (m.type === 'stash' && m.coins) { out.coins = {}; COINS.forEach(k => { out.coins[k] = int(m.coins?.[k], 99999); }); if (!COINS.some(k => out.coins[k])) return null; }
+  else if (m.type === 'item' || m.type === 'stash') {
     out.q = Math.max(1, int(m.q, 99));
     if (typeof m.key === 'string' && BYN[m.key] && ['item', 'potion', 'magic'].includes(BYN[m.key].k)) out.key = m.key;
     else { out.n = str(m.n, 80); out.p = str(m.p, 600); if (!out.n) return null; }
@@ -96,9 +106,10 @@ function onMessage(raw) {
     if ((m.type === 'ack' || m.type === 'rcv') && m.to === 'dm') settle(m.ref, m.from);
     if (m.type === 'ack' && m.to === 'dm') ackHook(m);
     if (m.type === 'endturn' && m.to === 'dm') endTurnHook(m.from);
+    if ((m.type === 'stash' || m.type === 'want') && m.to === 'dm') dmMsgHook(m);
     return;
   }
-  if (m.type === 'endturn' || m.type === 'ack' || m.type === 'rcv' || (m.to !== myKey && m.to !== 'all')) return;
+  if (m.type === 'endturn' || m.type === 'ack' || m.type === 'rcv' || m.type === 'stash' || m.type === 'want' || (m.to !== myKey && m.to !== 'all')) return;
   // Empfang immer bestätigen, auch bei Doppelten: dann hört die Spielleitung auf zu senden.
   if (transport && transport.send) transport.send({ id: uid(), from: myKey, type: 'rcv', to: 'dm', ref: m.id });
   if (seen.has(m.id)) return;
@@ -198,7 +209,7 @@ export const refresh = () => push();
 let petSource = () => [];
 /** Begleiter (Ranger-Begleiter, Vertrauter …) mit ihren Spielwerten, gesetzt in events.js. */
 export const setPetSource = fn => { petSource = fn; };
-const payload = () => (L.role === 'dm' ? { role: 'dm', lock: !!dmFlags().lock, turn: dmFlags().turn || null, buffs: (dmFlags().buffs || []).slice(0, 8) } : { role: 'player', insp: !!S.insp, name: S.name, klass: S.klass, level: S.level, hp: S.hp, hpMax: S.hpMax, tmp: S.tmp, ac: acNow(), acB: acBonus().v, fx: fxOut(), buffs: activeOut().slice(0, 4).map(b => ({ id: b.id, s: b.s, to: b.to.slice(0, 6), v: b.v || 0 })), exh: S.exh, conc: S.conc, cond: Object.keys(S.cond).filter(c => S.cond[c]), death: S.death, pets: petSource().slice(0, 3).map(p => ({ id: p.id, n: p.n, hp: p.hp, hpMax: p.hpMax, ac: p.ac })) });
+const payload = () => (L.role === 'dm' ? { role: 'dm', lock: !!dmFlags().lock, turn: dmFlags().turn || null, stash: dmFlags().stash || null, buffs: (dmFlags().buffs || []).slice(0, 8) } : { role: 'player', insp: !!S.insp, name: S.name, klass: S.klass, level: S.level, hp: S.hp, hpMax: S.hpMax, tmp: S.tmp, ac: acNow(), acB: acBonus().v, fx: fxOut(), buffs: activeOut().slice(-6).map(b => ({ id: b.id, s: b.s, to: b.to.slice(0, 6), v: b.v || 0 })), exh: S.exh, conc: S.conc, cond: Object.keys(S.cond).filter(c => S.cond[c]), cr: condRoundsOut(), death: S.death, pets: petSource().slice(0, 3).map(p => ({ id: p.id, n: p.n, hp: p.hp, hpMax: p.hpMax, ac: p.ac })) });
 function push() {
   if (!transport) return;
   const p = payload(), j = JSON.stringify(p);

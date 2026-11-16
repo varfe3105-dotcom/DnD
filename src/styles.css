@@ -515,3 +515,19 @@ label.fig:hover .figedit,label.fig:focus-visible .figedit{opacity:1}
 .dm-diff.moderate{background:#7b6a22;color:#fff5cc}
 .dm-diff.high{background:#9a5420;color:#ffeeda}
 .dm-diff.over{background:#8f2a22;color:#ffe6dc}
+
+/* Zustände mit Runden, Gruppenkasse, Charakter-Assistent */
+.qty.cr span{min-width:6.5em;text-align:center;font-size:.85em}
+.stash{margin-top:10px;border-top:1px dashed var(--line);padding-top:6px}
+.stash .coins input.n{width:4.2em}
+b.want{color:var(--accent)}
+.wiz-steps{margin-bottom:8px}
+.wiz h3{margin:6px 0}
+.wiz-abil{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:8px;margin:8px 0}
+.wiz-abil label,.wiz-buy{display:flex;flex-direction:column;gap:4px;align-items:flex-start}
+.wiz-abil b{font-size:1.1em}
+.wiz-abil select.bad{outline:2px solid var(--accent)}
+.note.bad{color:var(--accent)}
+.row:has(> .qty.cr){flex-wrap:wrap}
+.row:has(> .qty.cr) > .nm{flex:1 1 220px;min-width:0}
+@media (max-width:600px){.qty.cr{flex-basis:100%;justify-content:flex-end}}

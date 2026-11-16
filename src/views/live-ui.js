@@ -4,18 +4,22 @@ import { U, S } from '../state.js';
 import { C } from '../cloud.js';
 import { DU } from '../dm.js';
 import { COND, CAT, BYN } from '../catalog.js';
-import { L, players, dmTurn, myTurn, pendingCount } from '../live.js';
+import { L, players, dmTurn, myTurn, pendingCount, dmStash, dmOnline } from '../live.js';
+import { stash, itemName, pending } from '../stash.js';
+import { itemView } from '../helpers.js';
 import { D } from '../dm.js';
 import { lastBackup, needsBackup, charCount } from '../backup.js';
 import { TIERS, COINS, raritiesFor, coinRow } from '../loot.js';
 import { t, lang, dice } from '../i18n/index.js';
-import { BUFFS, maxTargets } from '../buffs.js';
+import { BUFFS, maxTargets, DM_BUFFS, biDie } from '../buffs.js';
+import { classLevels } from '../tables.js';
 import { dmBuffsFor } from '../dm.js';
 
 const COINK = ['pp', 'gp', 'ep', 'sp', 'cp'];
+export { COINK as COIN_KEYS };
 const coinList = c => COINK.filter(k => c[k]).map(k => `${c[k]} ${t('coin.' + k)}`).join(', ');
 export const proposalText = m => { const base = proposalBase(m), pet = m.pet && S.pets.find(x => x.id === m.pet); return pet ? t('live.pPet', { p: pet.n, t: base }) : base; };
-const proposalBase = m => (m.type === 'levelup' ? t('live.pLevel') : m.type === 'xp' ? t('live.pXp', { n: m.value }) : m.type === 'cond' ? t(m.off ? 'live.pCondOff' : 'live.pCond', { c: m.cond }) : m.type === 'item' ? t('live.pItem', { q: m.q, n: m.key && BYN[m.key] ? BYN[m.key].n : m.n }) : m.type === 'gold' ? t('live.pGold', { c: coinList(m.coins) }) : t('live.p.' + m.type, { n: m.value }));
+const proposalBase = m => (m.type === 'levelup' ? t('live.pLevel') : m.type === 'xp' ? t('live.pXp', { n: m.value }) : m.type === 'insp' ? t('live.pInsp') : m.type === 'cond' ? t(m.off ? 'live.pCondOff' : 'live.pCond', { c: m.cond }) + (m.r && !m.off ? ' · ' + t('cond.rounds', { n: m.r }) : '') : m.type === 'item' ? t('live.pItem', { q: m.q, n: m.key && BYN[m.key] ? BYN[m.key].n : m.n }) : m.type === 'gold' ? t('live.pGold', { c: coinList(m.coins) }) : t('live.p.' + m.type, { n: m.value }));
 
 /** Feste Live-Leiste: Ampel, Zug und Vorschläge. Enthält keine Eingabefelder und darf deshalb jederzeit neu gezeichnet werden. */
 export function vDock() {
@@ -41,7 +45,7 @@ export function vHandout() {
 
 export function vLiveSend(p) {
   const key = esc(p.key), bt = (type, cls, label) => `<button class="btn sm ${cls}" data-a="livesend" data-k="${key}" data-t="${type}">${label}</button>`;
-  return `<div class="add live-send"><input type="number" class="n" id="lv-a-${key}" min="1" placeholder="${t('hp.amount')}" aria-label="${t('hp.amount')}">${bt('dmg', 'bad', t('hp.damage'))}${bt('heal', 'good', t('hp.heal'))}${bt('temp', '', t('live.temp'))}<select id="lv-c-${key}" aria-label="${t('cond.title')}"><option value="">${t('cond.title')}</option>${COND.map(c => `<option value="${esc(c.n)}">${esc(c.n)}</option>`).join('')}</select>${bt('cond', '', t('live.sendCond'))}${bt('xp', '', t('live.xpBtn'))}${bt('levelup', '', t('live.lvlBtn'))}<select id="lv-b-${key}" aria-label="${t('buff.dmPick')}"><option value="">${t('buff.dmPick')}</option>${Object.keys(BUFFS).map(n => `<option value="${esc(n)}">${esc(n)}</option>`).join('')}</select><button class="btn sm" data-a="dmbuff" data-k="${key}">${t('buff.dmSend')}</button>${dmBuffsFor(p.key).map(b => `<button class="chip ${BUFFS[b.s]?.good ? 'buff' : 'debuff'}" data-a="dmbuffrm" data-id="${esc(b.id)}" title="${t('buff.remove')}">${esc(b.s)} ✕</button>`).join('')}</div>`;
+  return `<div class="add live-send"><input type="number" class="n" id="lv-a-${key}" min="1" placeholder="${t('hp.amount')}" aria-label="${t('hp.amount')}">${bt('dmg', 'bad', t('hp.damage'))}${bt('heal', 'good', t('hp.heal'))}${bt('temp', '', t('live.temp'))}<select id="lv-c-${key}" aria-label="${t('cond.title')}"><option value="">${t('cond.title')}</option>${COND.map(c => `<option value="${esc(c.n)}">${esc(c.n)}</option>`).join('')}</select><input type="number" class="n" id="lv-r-${key}" min="1" max="99" placeholder="${t('cond.roundsPh')}" aria-label="${t('cond.roundsPh')}">${bt('cond', '', t('live.sendCond'))}${bt('insp', '', t('insp.give'))}${bt('xp', '', t('live.xpBtn'))}${bt('levelup', '', t('live.lvlBtn'))}<select id="lv-b-${key}" aria-label="${t('buff.dmPick')}"><option value="">${t('buff.dmPick')}</option>${DM_BUFFS.map(n => `<option value="${esc(n)}">${esc(n)}</option>`).join('')}</select><button class="btn sm" data-a="dmbuff" data-k="${key}">${t('buff.dmSend')}</button>${dmBuffsFor(p.key).map(b => `<button class="chip ${BUFFS[b.s]?.good ? 'buff' : 'debuff'}" data-a="dmbuffrm" data-id="${esc(b.id)}" title="${t('buff.remove')}">${esc(b.s)} ✕</button>`).join('')}</div>`;
 }
 
 export function vHandoutForm(list) {
@@ -80,14 +84,21 @@ export function vLootItems() {
   const q = (DU.lq || '').trim().toLowerCase(), allowed = DU.lrar ? [DU.lrar] : raritiesFor(tier());
   const hits = CAT.filter(e => e.k === 'magic' && allowed.some(r => r.toLowerCase() === String(e.rar).toLowerCase()) && (!q || e.n.toLowerCase().includes(q) || (e.hay || '').toLowerCase().includes(q)));
   const online = L.role === 'dm' && L.status === 'on';
-  return hits.slice(0, 30).map(e => `<div class="row"><div class="nm">${esc(e.n)}<small>${esc(e.rarity)}</small></div><button class="btn sm solid" data-a="lootsend" data-key="${esc(e.key)}"${online ? '' : ' disabled'}>${sendLabel()}</button></div>`).join('') + (hits.length > 30 ? `<p class="note">${t('loot.more', { n: hits.length - 30 })}</p>` : '') + (hits.length ? '' : `<p class="empty">${t('wiki.nothing')}</p>`);
+  return hits.slice(0, 30).map(e => `<div class="row"><div class="nm">${esc(e.n)}<small>${esc(e.rarity)}</small></div><button class="btn sm solid" data-a="lootsend" data-key="${esc(e.key)}"${online ? '' : ' disabled'}>${sendLabel()}</button><button class="btn sm" data-a="stin" data-key="${esc(e.key)}">${t('stash.toStash')}</button></div>`).join('') + (hits.length > 30 ? `<p class="note">${t('loot.more', { n: hits.length - 30 })}</p>` : '') + (hits.length ? '' : `<p class="empty">${t('wiki.nothing')}</p>`);
+}
+/** Gruppenkasse der Spielleitung: Münzen aufteilen, Gegenstände an den gewählten Empfänger geben. */
+export function vStashDm() {
+  const s = stash(), online = L.role === 'dm' && L.status === 'on', n = players().length, to = lootTo();
+  const coins = coinList(s.gold);
+  return `<h2>${t('stash.title')}</h2><div class="card"><div class="add" style="margin-top:0">${toSelect('dm-lto3')}</div><p class="note">${coins ? esc(coins) : t('stash.noCoinsIn')}</p><div class="add"><button class="btn sm solid" data-a="stsplit"${online && n && coins ? '' : ' disabled'}>${t('stash.splitBtn', { n })}</button></div>${s.items.map(x => { const w = s.wants[x.id] || []; return `<div class="row"><div class="nm">${esc(itemName(x))} <span class="lbl">× ${x.q}</span><small>${x.by ? t('stash.by', { n: esc(x.by) }) : ''}${w.length ? `${x.by ? ' · ' : ''}<b class="want">${t('stash.wants', { n: esc(w.join(', ')) })}</b>` : ''}</small></div><button class="btn sm solid" data-a="stgive" data-id="${esc(x.id)}"${online && to ? '' : ' disabled'}>${to ? t('loot.sendTo', { n: esc(to.name) }) : t('stash.pickTo')}</button>${x.q > 1 ? `<button class="btn sm" data-a="stgive" data-all="1" data-id="${esc(x.id)}"${online && to ? '' : ' disabled'}>${t('stash.all')}</button>` : ''}<button class="btn sm ${U.CONF === 'st:' + x.id ? 'warn' : 'bad'}" data-a="stdrop" data-id="${esc(x.id)}">${U.CONF === 'st:' + x.id ? t('chars.delConfirm') : t('item.remove')}</button></div>`; }).join('') || `<p class="note">${t('stash.empty')}</p>`}<p class="note">${t('stash.dmHint')}</p></div>`;
 }
 export function vLoot() {
   const online = L.role === 'dm' && L.status === 'on';
   return `<div class="card"><div class="add" style="margin-top:0"><label class="ck">${t('loot.tier')} <select id="dm-lt" aria-label="${t('loot.tier')}">${TIERS.map(x => `<option value="${x}"${x === tier() ? ' selected' : ''}>CR ${x}</option>`).join('')}</select></label><label class="ck">${t('loot.roll')} <input type="number" class="n" id="dm-lr" min="1" max="100" value="${esc(DU.lr || '')}" aria-label="${t('loot.roll')}"></label></div><div class="rs-t rs"><table class="loot"><tbody id="dm-lc">${vLootCoins()}</tbody></table></div><p class="note">${t('loot.coinHint')} ${t('src.summary')}</p></div>
+  ${vStashDm()}
   <h2>${t('loot.give')}</h2><div class="card"><div class="add" style="margin-top:0">${toSelect('dm-lto')}</div><label class="ck"><input type="checkbox" id="dm-lock"${D.lootLock ? ' checked' : ''}> ${t('loot.lock')}</label><p class="note">${online ? t('loot.lockHint') : t('loot.offline')}</p>
-  <div class="coins loot-coins">${COINK.map(k => `<label class="ck">${t('coin.' + k)} <input type="number" class="n" id="lc-${k}" min="0" aria-label="${t('coin.' + k)}"></label>`).join('')}<button class="btn sm solid" data-a="lootgold"${online ? '' : ' disabled'}>${t('loot.giveCoins')} · ${lootTo() ? esc(lootTo().name) : t('loot.everyone')}</button></div>
-  <details><summary>${t('loot.own')}</summary><div class="add"><input type="text" id="lo-n" placeholder="${t('common.name')}" aria-label="${t('common.name')}"><input type="text" id="lo-p" class="wide" placeholder="${t('inv.ownText')}" aria-label="${t('inv.ownText')}"><button class="btn sm solid" data-a="lootown"${online ? '' : ' disabled'}>${t('loot.give')}</button></div></details></div>
+  <div class="coins loot-coins">${COINK.map(k => `<label class="ck">${t('coin.' + k)} <input type="number" class="n" id="lc-${k}" min="0" aria-label="${t('coin.' + k)}"></label>`).join('')}<button class="btn sm solid" data-a="lootgold"${online ? '' : ' disabled'}>${t('loot.giveCoins')} · ${lootTo() ? esc(lootTo().name) : t('loot.everyone')}</button><button class="btn sm" data-a="stincoins">${t('stash.toStash')}</button></div>
+  <details><summary>${t('loot.own')}</summary><div class="add"><input type="text" id="lo-n" placeholder="${t('common.name')}" aria-label="${t('common.name')}"><input type="text" id="lo-p" class="wide" placeholder="${t('inv.ownText')}" aria-label="${t('inv.ownText')}"><button class="btn sm solid" data-a="lootown"${online ? '' : ' disabled'}>${t('loot.give')}</button><button class="btn sm" data-a="stinown">${t('stash.toStash')}</button></div></details></div>
   <h2>${t('loot.items')}</h2><div class="card"><div class="add" style="margin-top:0">${toSelect('dm-lto2')}</div><div class="add"><input type="search" id="dm-lq" value="${esc(DU.lq || '')}" placeholder="${t('loot.search')}" aria-label="${t('loot.search')}"><select id="dm-lrar" aria-label="${t('loot.rarity')}"><option value="">${t('loot.allFit')}</option>${raritiesFor(tier()).map(r => `<option value="${r}"${r === DU.lrar ? ' selected' : ''}>${esc(t('rar.' + r.toLowerCase().replace(' ', '')))}</option>`).join('')}</select></div><div id="dm-li">${vLootItems()}</div></div>`;
 }
 
@@ -125,14 +136,14 @@ export function vTarget() {
   if (!g || !BUFFS[g.n]) return '';
   const n = maxTargets(g.n, g.lvl), others = L.role === 'player' ? players().filter(p => p.key !== S.id) : [];
   const opt = (key, label) => `<button class="chip${g.to.includes(key) ? ' on' : ''}" data-a="tgt" data-k="${esc(key)}" aria-pressed="${g.to.includes(key)}">${label}</button>`;
-  return `<div class="ovl"><div class="dlg" role="dialog" aria-modal="true" aria-labelledby="tg-h"><h3 id="tg-h">${t('buff.title', { s: esc(g.n) })}</h3><p class="note">${t(BUFFS[g.n].conc ? 'buff.upTo' : 'buff.upToNc', { n })}</p><div class="chips tgts">${opt(S.id, t('buff.me', { n: esc(S.name || '?') }))}${others.map(p => opt(p.key, esc(p.name || '?'))).join('')}</div>${others.length ? '' : `<p class="note">${t('buff.noPeers')}</p>`}<div class="dlgf"><button class="btn" data-a="tgtskip">${t('buff.skip')}</button><button class="btn solid" data-a="tgtok"${g.to.length ? '' : ' disabled'}>${t('buff.cast')}</button></div></div></div>`;
+  return `<div class="ovl"><div class="dlg" role="dialog" aria-modal="true" aria-labelledby="tg-h"><h3 id="tg-h">${t('buff.title', { s: esc(g.n) })}</h3><p class="note">${BUFFS[g.n].bi ? t('buff.biHint', { n: biDie(classLevels().find(c => c.k === 'Bard')?.lvl || S.level || 1) }) : t(BUFFS[g.n].conc ? 'buff.upTo' : 'buff.upToNc', { n })}</p><div class="chips tgts">${BUFFS[g.n].noSelf ? '' : opt(S.id, t('buff.me', { n: esc(S.name || '?') }))}${others.map(p => opt(p.key, esc(p.name || '?'))).join('')}</div>${others.length ? '' : `<p class="note">${t('buff.noPeers')}</p>`}<div class="dlgf"><button class="btn" data-a="tgtskip">${t('buff.skip')}</button><button class="btn solid" data-a="tgtok"${g.to.length ? '' : ' disabled'}>${t('buff.cast')}</button></div></div></div>`;
 }
 const fxChips = p => (p.fx || []).map(x => `<span class="chip ${x.good ? 'buff' : 'debuff'}" title="${esc(t('buff.from', { s: x.s, n: x.by }))}">${esc(x.s)}</span>`).join('');
 /** Eine Zeile der Gruppenansicht (auch im Kampf-Tracker der Spielleitung nutzbar). */
 export function partyRow(p, compact) {
   const pct = p.hpMax ? Math.min(100, p.hp / p.hpMax * 100) : 0, down = p.hp === 0;
   const ac = p.acB ? `<span class="${p.acB > 0 ? 'buff' : 'debuff'}" title="${esc((p.fx || []).map(x => t('buff.from', { s: x.s, n: x.by })).join('; '))}">${p.ac}</span>` : p.ac;
-  const extra = [...p.cond.map(c => `<span class="chip on">${esc(c)}</span>`), p.exh ? `<span class="chip">${t('exh.title', { n: p.exh })}</span>` : '', fxChips(p)].join('');
+  const extra = [p.insp ? `<span class="chip buff" title="Heroic Inspiration">${t('insp.short')}</span>` : '', ...p.cond.map(c => `<span class="chip on">${esc(c)}${p.cr?.[c] ? ' · ' + p.cr[c] : ''}</span>`), p.exh ? `<span class="chip">${t('exh.title', { n: p.exh })}</span>` : '', fxChips(p)].join('');
   return `<div class="prow${down ? ' down' : ''}${compact ? ' sm' : ''}"><div class="prow-h"><b>${esc(p.name || '?')}</b><small>${compact ? '' : esc(p.klass) + (p.level ? ' ' + p.level : '') + ' · '}${t('dm.acShort')} ${ac}${p.conc ? ' · <span class="dm-conc">' + t('live.concShort', { n: esc(p.conc) }) + '</span>' : ''}</small><span class="dm-hpv"><b>${p.hp}</b>/${p.hpMax}${p.tmp ? ' +' + p.tmp : ''}</span></div><div class="bar" aria-hidden="true"><i style="width:${pct}%"></i></div>${extra ? `<div class="chips">${extra}</div>` : ''}${down ? `<p class="lbl">${t('party.down')} · ${t('death.s')} ${p.death.s} · ${t('death.f')} ${p.death.f}</p>` : ''}${(p.pets || []).map(x => `<div class="prow-pet"><span>${esc(x.n)}</span><small>${t('dm.acShort')} ${x.ac}</small><span class="dm-hpv"><b>${x.hp}</b>/${x.hpMax}</span></div>`).join('')}</div>`;
 }
 export const partyPeers = () => (L.role === 'player' ? players().filter(p => p.key !== S.id) : []);
@@ -140,5 +151,14 @@ export const partyPeers = () => (L.role === 'player' ? players().filter(p => p.k
 export function vParty() {
   if (L.role !== 'player' || !L.code) return '';
   const list = partyPeers();
-  return `<details class="party card"${U.PARTYCARD === false ? '' : ' open'}><summary>${t('party.title')} <small>${list.length}</small></summary>${list.length ? list.map(p => partyRow(p)).join('') : `<p class="note">${t('party.none')}</p>`}</details>`;
+  return `<details class="party card"${U.PARTYCARD === false ? '' : ' open'}><summary>${t('party.title')} <small>${list.length}</small></summary>${list.length ? list.map(p => partyRow(p)).join('') : `<p class="note">${t('party.none')}</p>`}${vStashPlayer()}</details>`;
+}
+/** Gruppenkasse für Spieler: ansehen, Wunsch äußern, einzahlen. */
+export function vStashPlayer() {
+  const st = dmStash() || (L.status === 'on' && dmOnline() ? { g: {}, it: [], got: [] } : null), pend = pending();
+  if (!st && !pend.length) return '';
+  const coins = st ? coinList(st.g) : '';
+  const bag = S.bag.map((it, i) => [it, i]).filter(([it]) => it);
+  const on = L.status === 'on' && dmOnline();
+  return `<div class="stash"><p class="lbl">${t('stash.title')}</p>${st ? `<p class="note" style="margin-top:0">${coins ? esc(coins) : t('stash.noCoinsIn')}</p>${st.it.map(x => `<div class="row"><div class="nm">${esc(x.n)} <span class="lbl">× ${x.q}</span></div><button class="btn sm" data-a="stwant" data-id="${esc(x.id)}"${on ? '' : ' disabled'}>${t('stash.want')}</button></div>`).join('') || `<p class="note">${t('stash.empty')}</p>`}` : ''}${pend.map(m => `<div class="row"><div class="nm">${esc(m.coins ? coinList(m.coins) : m.back?.n || m.n || '?')}<small>${t('stash.waiting')}</small></div><button class="btn sm" data-a="stback" data-id="${esc(m.dep)}">${t('stash.back')}</button></div>`).join('')}${st ? `<div class="add"><select id="st-item" aria-label="${t('stash.item')}"><option value="">${t('stash.item')}</option>${bag.map(([it, i]) => `<option value="${i}">${esc(itemView(it).n)}${it.q > 1 ? ' (' + it.q + ')' : ''}</option>`).join('')}</select><button class="btn sm" data-a="stdep"${on ? '' : ' disabled'}>${t('stash.put')}</button></div><div class="add coins">${COINK.map(k => `<input type="number" class="n" id="stc-${k}" min="0" placeholder="${t('coin.' + k)}" aria-label="${t('coin.' + k)}">`).join('')}<button class="btn sm" data-a="stdepc"${on ? '' : ' disabled'}>${t('stash.putCoins')}</button></div>` : ''}</div>`;
 }

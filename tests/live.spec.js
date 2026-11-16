@@ -36,7 +36,7 @@ test.describe('Live-Tisch @new', () => {
     expect((await page.evaluate(() => window.__liveInfo)).code).toBe('ABC234');
     const p = await lastSent(page);
     expect(p.hp).toBe(15);
-    expect(Object.keys(p).sort()).toEqual(['ac', 'acB', 'buffs', 'conc', 'cond', 'death', 'exh', 'fx', 'hp', 'hpMax', 'insp', 'klass', 'level', 'name', 'pets', 'role', 'tmp']);
+    expect(Object.keys(p).sort()).toEqual(['ac', 'acB', 'buffs', 'conc', 'cond', 'cr', 'death', 'exh', 'fx', 'hp', 'hpMax', 'insp', 'klass', 'level', 'name', 'pets', 'role', 'tmp']);
   });
 
   test('Änderungen gehen automatisch hinaus', async ({ page }) => {
@@ -75,7 +75,7 @@ test.describe('Live-Tisch @new', () => {
     await openDm(page);
     await act(page, 'livecreate').click();
     await expect(page.locator('.live-code b')).toHaveText(/^[A-HJ-NP-Z2-9]{6}$/);
-    expect(await lastSent(page)).toEqual({ role: 'dm', lock: false, turn: null, buffs: [] });
+    expect(await lastSent(page)).toEqual({ role: 'dm', lock: false, turn: null, stash: null, buffs: [] });
     await peers(page, [player({ cond: ['Poisoned'] })]);
     await expect(page.locator('.dm-prow')).toContainText('Mirelle');
     await expect(page.locator('.dm-prow')).toContainText('20');

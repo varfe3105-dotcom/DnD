@@ -369,6 +369,17 @@ function classes() {
     const subLv = ls.filter(l => l.features.some(x => /Subclass$/.test(x.name))).map(l => l.level);
     C[k] = { ...old, ed: 2024, hd: c.hit_die, sv: c.saving_throws.map(x => x.index), subL: 3, subs: SUBS_24[k], sl: subLv, asi: [4, 8, 12, 16, 19],
       prep: ls.map(l => l.spellcasting?.prepared_spells || 0), cant: CANT_FIX[idx] || ls.map(l => l.spellcasting?.cantrips_known || 0), f };
+    // Startausrüstung 2024: Pakete A/B … oder nur Gold (für den Charakter-Assistenten)
+    C[k].gear = (c.starting_equipment_options?.[0]?.from?.options || []).map(o => {
+      if (o.option_type === 'money') return { gp: o.count, items: [] };
+      const list = (o.items || []).filter(i => i.option_type === 'counted_reference').map(i => ({ id: i.of.index === 'holy-symbols' ? 'amulet' : i.of.index, q: i.count }));
+      const gp = (o.items || []).filter(i => i.option_type === 'money').reduce((a, i) => a + i.count, 0);
+      const free = (o.items || []).filter(i => i.option_type === 'choice').map(i => i.desc || i.choice?.desc || '').filter(Boolean);
+      return { gp, items: list, ...(free.length ? { free } : {}) };
+    });
+    const pc = (c.proficiency_choices || []).find(p => (p.from?.options || []).some(o => /^Skill: /.test(o.item?.name || '')));
+    if (pc) C[k].skillPick = { n: pc.choose, from: pc.from.options.map(o => o.item.name.replace('Skill: ', '')) };
+    C[k].gearText =c.starting_equipment_options?.[0]?.desc || '';
     if (!C[k].prep.some(Boolean)) delete C[k].prep;
     if (!C[k].cant.some(Boolean)) delete C[k].cant;
     // Unterklassen: SRD wörtlich, übrige aus den Zusammenfassungen

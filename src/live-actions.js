@@ -1,3 +1,5 @@
+import { endCond, setRounds } from './cond-rounds.js';
+import { dmTurn } from './live.js';
 // Was bei Vorschlägen der Spielleitung auf dem eigenen Bogen passiert, und Bilder für Handouts.
 import { S, toast, putBag, mk } from './state.js';
 import { BYN } from './catalog.js';
@@ -16,7 +18,8 @@ export function applyProposal(m) {
   if (m.type === 'dmg') damage(m.value);
   else if (m.type === 'heal') heal(m.value);
   else if (m.type === 'temp') { if (m.value <= S.tmp) toast(t('toast.tempNoStack')); else { S.tmp = m.value; toast(t('toast.tempSet', { n: m.value })); } }
-  else if (m.type === 'cond') { if (m.off) delete S.cond[m.cond]; else S.cond[m.cond] = true; }
+  else if (m.type === 'cond') { if (m.off) endCond(m.cond); else { S.cond[m.cond] = true; setRounds(m.cond, m.r || 0); if (m.r) S.condAt = dmTurn()?.r || S.condAt || 0; } }
+  else if (m.type === 'insp') { if (S.insp) toast(t('insp.already')); else { S.insp = true; toast(t('insp.got')); } }
   else if (m.type === 'xp') { S.xp = (+S.xp || 0) + m.value; toast(t('xp.got', { n: m.value })); }
   else if (m.type === 'item') { const c = m.key && BYN[m.key]; putBag(S, mk(c || { n: m.n, ic: 'box', p: m.p }, m.q)); toast(t('toast.toBag', { n: c ? c.n : m.n })); }
   else if (m.type === 'gold') { Object.entries(m.coins).forEach(([k, v]) => { S.gold[k] = (+S.gold[k] || 0) + v; }); toast(t('live.goldIn')); }

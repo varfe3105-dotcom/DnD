@@ -15,6 +15,9 @@ import * as live from './live.js';
 import * as cloud from './cloud.js';
 import { setBright, setSkin } from './bright.js';
 import { hpMaxNow } from './effects.js';
+import { endCond, stepRounds, seeRound } from './cond-rounds.js';
+import { openWizard, applyAbil, suggest, buyStep, toggleClassSkill } from './views/wizard.js';
+import { stashPut, stashTake, stashDrop, want, splitCoins, stashOut, depositItem, depositCoins, cancelDeposit, msgOf, syncDeposits, COINK } from './stash.js';
 import { syncBuffs, castOn, dropBuff, maxTargets, heroTemp } from './buffs.js';
 import { masteryCount } from './views/turn.js';
 import { syncAc } from './helpers.js';
@@ -121,7 +124,7 @@ app.addEventListener('click',ev=>{
     case 'sheetcancel':U.SHEET=null;break;
     case 'sheetapply':{if(!U.SHEET.draft.klass){toast(tr('sheet.needClass'));return}const r=importDraft(U.SHEET.draft);if(r.error){toast(r.error);return}U.IMPREP=r.reports;U.SHEET=null;S.tab='setup';toast(tr('imp.done',{n:r.reports.map(x=>x.name).join(', ')}));break}
     case 'sheetspells':{const known=new Set(S.spells.map(x=>x.n));let n=0;U.SHEET.draft.spells.forEach(x=>{if(!known.has(x)&&BYN['spell:'+x]){S.spells.push(spFrom(BYN['spell:'+x]));n++}});U.SHEET=null;toast(tr('sheet.added',{n}));break}
-    case 'livesend':{const to=b.dataset.k,type=b.dataset.t;if(type==='levelup'){if(live.sendMsg({type,to}))toast(tr('live.sent'));return}if(type==='cond'){const cond=v('lv-c-'+to);if(!cond){toast(tr('live.pickCond'));return}if(live.sendMsg({type,to,cond}))toast(tr('live.sent'));return}const value=Math.floor(+v('lv-a-'+to));if(!(value>0)){toast(tr('toast.needAmount'));return}if(live.sendMsg({type,to,value}))toast(tr('live.sent'));return}
+    case 'livesend':{const to=b.dataset.k,type=b.dataset.t;if(type==='levelup'||type==='insp'){if(live.sendMsg({type,to}))toast(tr('live.sent'));return}if(type==='cond'){const cond=v('lv-c-'+to);if(!cond){toast(tr('live.pickCond'));return}const r=Math.max(0,Math.min(99,Math.floor(+v('lv-r-'+to))||0));if(live.sendMsg({type,to,cond,r}))toast(tr('live.sent'));return}const value=Math.floor(+v('lv-a-'+to));if(!(value>0)){toast(tr('toast.needAmount'));return}if(live.sendMsg({type,to,value}))toast(tr('live.sent'));return}
     case 'liveyes':{const m=live.answer(b.dataset.id,true);if(m){if(m.type==='levelup')openLU();else applyProposal(m)}break}
     case 'liveno':live.answer(b.dataset.id,false);break;
     case 'hoclose':live.dropHandout();break;
@@ -153,11 +156,31 @@ app.addEventListener('click',ev=>{
     case 'insp':S.insp=!S.insp;break;
     case 'castslot':castAt(i,b.dataset.l);break;
     case 'tgt':{const g=U.TARGET;if(!g)break;const k=b.dataset.k;if(g.to.includes(k))g.to=g.to.filter(x=>x!==k);else if(g.to.length>=maxTargets(g.n,g.lvl)){toast(tr('buff.tooMany',{n:maxTargets(g.n,g.lvl)}));return}else g.to.push(k);render();return}
-    case 'tgtok':{const g=U.TARGET;U.TARGET=null;if(!g||!g.to.length)break;castOn(g.n,g.lvl,g.to);const names=g.to.map(k=>k===S.id?S.name:(live.players().find(p=>p.key===k)||{}).name||'?');toast(tr('buff.sent',{s:g.n,n:names.join(', ')}));break}
+    case 'tgtok':{const g=U.TARGET;U.TARGET=null;if(!g||!g.to.length)break;if(g.res!=null){const r=S.res[g.res];if(!r||r.used>=r.max){toast(tr('buff.biNone'));break}r.used++}castOn(g.n,g.lvl,g.to);const names=g.to.map(k=>k===S.id?S.name:(live.players().find(p=>p.key===k)||{}).name||'?');toast(tr('buff.sent',{s:g.n,n:names.join(', ')}));break}
     case 'tgtskip':U.TARGET=null;break;
     case 'wmast':{const w=b.dataset.w,on=S.mastery.includes(w);if(on)S.mastery=S.mastery.filter(x=>x!==w);else{const n=masteryCount();if(S.mastery.length>=n){toast(tr('mast.full',{n}));return}S.mastery.push(w)}break}
     case 'dmbuff':{const k=b.dataset.k,s=v('lv-b-'+k);if(!s){toast(tr('buff.dmPick'));return}dm.dmBuff(s,k);dm.saveD();live.refresh();toast(tr('buff.dmSent',{s,n:(live.players().find(p=>p.key===k)||{}).name||'?'}));break}
     case 'dmbuffrm':dm.dmBuffDrop(b.dataset.id);dm.saveD();live.refresh();break;
+    case 'bigive':{const r=S.res[+b.dataset.i];if(!r||r.used>=r.max){toast(tr('buff.biNone'));return}U.TARGET={n:'Bardic Inspiration',lvl:0,to:[],res:+b.dataset.i};render();return}
+    case 'stdep':{const i=+v('st-item');const m=i>=0&&v('st-item')!==''?depositItem(i):null;if(!m){toast(tr('stash.pick'));return}m.at=Date.now();live.sendMsg({...msgOf(m),name:S.name});toast(tr('stash.sent'));break}
+    case 'stdepc':{const coins={};COINK.forEach(k=>{coins[k]=Math.max(0,Math.floor(+v('stc-'+k))||0)});const m=depositCoins(coins);if(!m){toast(tr('stash.noCoins'));return}m.at=Date.now();live.sendMsg({...msgOf(m),name:S.name});toast(tr('stash.sent'));break}
+    case 'stback':cancelDeposit(b.dataset.id);break;
+    case 'stwant':if(live.sendMsg({type:'want',to:'dm',iid:b.dataset.id,name:S.name}))toast(tr('stash.wantSent'));return;
+    case 'stgive':{const to=dm.DU.lto;if(!to||to==='all'){toast(tr('stash.pickTo'));return}const m=stashTake(b.dataset.id,b.dataset.all==='1');if(m&&live.sendMsg({...m,to})){dm.saveD();toast(tr('live.sent'))}break}
+    case 'stdrop':if(U.CONF!=='st:'+b.dataset.id){U.CONF='st:'+b.dataset.id;render();return}U.CONF=null;stashDrop(b.dataset.id);dm.saveD();break;
+    case 'stsplit':{const ps=live.players();const each=splitCoins(ps.length);if(!each){toast(tr('stash.nothing'));return}ps.forEach(p=>live.sendMsg({type:'gold',to:p.key,coins:each}));dm.saveD();toast(tr('stash.split',{n:ps.length}));break}
+    case 'stin':{const c=BYN[b.dataset.key];if(!c)return;stashPut({key:c.key,q:1});dm.saveD();toast(tr('stash.added',{n:c.n}));break}
+    case 'stinown':{const n=v('lo-n').trim();if(!n){toast(tr('toast.needName'));return}stashPut({n,p:v('lo-p').trim(),q:1});dm.saveD();toast(tr('stash.added',{n}));break}
+    case 'stincoins':{const coins={};COINK.forEach(k=>{coins[k]=Math.max(0,Math.floor(+v('lc-'+k))||0)});if(!COINK.some(k=>coins[k])){toast(tr('toast.needAmount'));return}stashPut({coins});dm.saveD();toast(tr('stash.coinsIn'));break}
+    case 'wizopen':openWizard();window.scrollTo(0,0);break;
+    case 'wizclose':U.WIZ=null;break;
+    case 'wizgo':if(U.WIZ){U.WIZ.step=Math.max(0,Math.min(5,+b.dataset.s));window.scrollTo(0,0)}break;
+    case 'wizm':if(U.WIZ){U.WIZ.method=b.dataset.m;applyAbil();syncAc()}break;
+    case 'wizsug':suggest();syncAc();break;
+    case 'wizb':{const e=buyStep(b.dataset.k,+b.dataset.d);if(e){toast(tr(e==='budget'?'wiz.noPoints':'wiz.range'));return}syncAc();break}
+    case 'wizsk':{const e=toggleClassSkill(b.dataset.k);if(e){toast(tr(e==='full'?'wiz.skillFull':'wiz.skillHave'));return}break}
+    case 'wizgear':{const C=CLASSES[S.klass],g=C&&C.gear&&C.gear[+b.dataset.i];if(!g||S.classGear)return;g.items.forEach(i=>{const c=BYN['item:'+i.id];if(c)putBag(S,mk(c,i.q))});S.gold.gp=(+S.gold.gp||0)+(g.gp||0);S.classGear=true;toast(tr('wiz.gearIn'));break}
+    case 'wizdone':{U.WIZ=null;if(!S.level&&S.klass){save();openLU();render();return}break}
     case 'buffrm':dropBuff(b.dataset.id);break;
     case 'peek':{const id=b.dataset.k,name=b.dataset.n;dm.DU.peek={name,loading:true};cloud.peek(id).then(r=>{if(!dm.DU.peek||dm.DU.peek.name!==name)return;dm.DU.peek={name,...(r||{data:null})};render()});break}
     case 'peekclose':dm.DU.peek=null;break;
@@ -185,7 +208,8 @@ app.addEventListener('click',ev=>{
       if(S.death.s>=3)toast(tr('toast.stable'));if(S.death.f>=3)toast(tr('toast.dead'));break}
     case 'pip':{const o=k==='hd'?S.hd:k==='pact'?S.pact:S[k][i];o.used=clamp(+b.dataset.j<o.max-o.used?o.used+1:o.used-1,0,o.max);break}
     case 'resd':{const r=S.res[i];if(r&&r.max<99)r.used=clamp(r.used+ +b.dataset.d,0,r.max);break}
-    case 'cond':S.cond[b.dataset.c]=!S.cond[b.dataset.c];if(!S.cond[b.dataset.c])delete S.cond[b.dataset.c];break;
+    case 'cond':if(S.cond[b.dataset.c])endCond(b.dataset.c);else S.cond[b.dataset.c]=true;break;
+    case 'condr':{const g=stepRounds(b.dataset.c,+b.dataset.d);if(+b.dataset.d>0&&live.dmTurn())S.condAt=live.dmTurn().r;if(g)toast(tr('cond.ended',{c:g}));break}
     case 'exh':S.exh=clamp(S.exh+ +b.dataset.d,0,6);break;
     case 'cast':cast(i);break;
     case 'spopen':U.OPEN[i]=!U.OPEN[i];break;
@@ -231,11 +255,12 @@ app.addEventListener('change',ev=>{
   if(el.id==='bak-f'&&el.files&&el.files[0]){const fr=new FileReader();fr.onload=()=>{const bak=parseBackup(String(fr.result));el.value='';if(!bak){toast(tr('bak.bad'));return}U.RESTORE=bak;render()};fr.readAsText(el.files[0]);return}
   if(el.id==='ho-f'&&el.files&&el.files[0]){shrinkImage(el.files[0]).then(d=>{if(!d){toast(tr('live.hoBadImage'));return}dm.DU.hoImg=d;render()});return}
   if(el.id==='ho-to'){dm.DU.hoTo=el.value;return}
-  if(el.id==='dm-lto'||el.id==='dm-lto2'){dm.DU.lto=el.value;later();return}
+  if(el.id==='dm-lto'||el.id==='dm-lto2'||el.id==='dm-lto3'){dm.DU.lto=el.value;later();return}
   if(el.id==='dm-lock'){dm.D.lootLock=el.checked;dm.saveD();live.refresh();return}
   if(el.id==='fig-in'&&el.files&&el.files[0]){loadFigure(el.files[0]);return}
   if(el.id==='dm-lt'){dm.DU.lt=el.value;dm.DU.lrar='';later();return}
   if(el.id==='dm-lrar'){dm.DU.lrar=el.value;$('dm-li').innerHTML=vLootItems();return}
+  if(el.id&&el.id.startsWith('wz-a-')&&U.WIZ){U.WIZ.arr[el.id.slice(5)]=el.value;applyAbil();syncAc();save();later();return}
   if(el.id==='bg-sel'){pickBg(el.value);later();return}
   if(el.id==='rc-skill'||el.id==='rc-feat'){S.raceChoice={...(S.raceChoice||{}),[el.id==='rc-skill'?'skill':'feat']:el.value};applyRaceChoices(n=>BYN['feat:'+n]?.p||'');save();later();return}
   if(el.id==='bg-mode'){const v=id=>($(id)||{}).value||'';U.BGMODE=el.value;U.BGA1=v('bg-a1');U.BGA2=v('bg-a2');U.BGTOOL=v('bg-tool');later();return}
@@ -320,14 +345,15 @@ app.addEventListener('toggle',e=>{if(e.target.classList&&e.target.classList.cont
 /* Live-Tisch: Beim Tippen nicht neu zeichnen, damit Eingaben nicht verloren gehen */
 let livePending=false;
 const typing=()=>{const a=document.activeElement;return !!a&&app.contains(a)&&/^(INPUT|TEXTAREA|SELECT)$/.test(a.tagName)};
-live.setPeerHook(()=>{dm.syncLive(live.players());if(live.L.role==='player'&&syncBuffs(live.L.peers)){save();later()}});
+live.setPeerHook(()=>{dm.syncLive(live.players());if(live.L.role!=='player')return;let ch=syncBuffs(live.L.peers);if(syncDeposits(live.dmStash(),m=>live.sendMsg({...m,name:S.name})))ch=true;const tr0=live.dmTurn();if(tr0&&tr0.r!==S.condAt){const gone=seeRound(tr0.r);ch=true;if(gone.length)toast(tr('cond.ended',{c:gone.join(', ')}))}if(ch){save();later()}});
 // Vor jedem Speichern: Wirkungen abgleichen (Konzentration beendet → Wirkung weg), dann RK neu berechnen
 hooks.beforeSave=()=>{syncBuffs(live.L.role==='player'?live.L.peers:[]);syncAc()};
 live.setPetSource(()=>S.pets.map(petView));
 live.setJoinHook(cloud.onJoin);
 cloud.setCloudListener(()=>{if(!S.tab.startsWith('dm')&&S.tab!=='setup')return;if(typing()){livePending=true;return}later()});
-live.setDmFlags(()=>({lock:!!dm.D.lootLock,turn:dm.turnInfo(),buffs:(dm.D.buffsOut||[]).map(b=>({id:b.id,s:b.s,to:b.to,v:b.v||0}))}));
+live.setDmFlags(()=>({lock:!!dm.D.lootLock,turn:dm.turnInfo(),stash:stashOut(),buffs:(dm.D.buffsOut||[]).map(b=>({id:b.id,s:b.s,to:b.to,v:b.v||0}))}));
 dm.dmHooks.live=()=>live.refresh();
+live.setDmMsgHook(m=>{const who=(live.players().find(p=>p.key===m.from)||{}).name||m.name||'?';if(m.type==='want'){want(m.iid,who);dm.saveD();later();return}if(stashPut(m,who)){dm.saveD();toast(tr('stash.in',{n:who}));later()}else live.refresh()});
 live.setEndTurnHook(key=>{const gone=dm.endTurnFrom(key);if(gone===null)return;dm.saveD();live.refresh();if(gone.length)toast(gone.map(x=>tr('dm.fxEnded',x)).join(' '));later()});
 live.setTurnHook(mine=>{if(mine){const n=heroTemp();if(n){save();toast(tr('buff.heroTemp',{n}));later()}}if(!mine||turnsHidden())return;toast(tr('turn.yours'));try{navigator.vibrate&&navigator.vibrate([120,60,120])}catch(e){/* nicht unterstützt */}});
 live.setAckHook(m=>toast(tr(m.ok?'live.ackYes':'live.ackNo',{n:m.name})));

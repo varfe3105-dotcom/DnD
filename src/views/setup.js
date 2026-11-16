@@ -1,4 +1,5 @@
 import { vBackup, vCloud, turnsHidden } from './live-ui.js';
+import { vWizard, vWizardStart } from './wizard.js';
 import { skinControls } from '../bright.js';
 import { vBgField, vBgPick, vStylePicker, vPetSetup } from './extras.js';
 import { esc, sg } from '../util.js';
@@ -18,7 +19,7 @@ const field = (l, c) => `<label><span class="lbl">${l}</span>${c}</label>`;
 const named = keys => keys.map(k => [k, nameLine(k)]);
 
 /** Wahlen beim Volk 2024: Mensch (Fertigkeit, Herkunftstalent), Elf (Fertigkeit aus drei). */
-function vRaceChoice() {
+export function vRaceChoice() {
   if (S.race !== 'Human' && S.race !== 'Elf') return '';
   const c = S.raceChoice || {};
   const skills = S.race === 'Elf' ? ['Insight', 'Perception', 'Survival'] : SK.map(x => x[0]);
@@ -28,6 +29,7 @@ function vRaceChoice() {
 }
 
 export function vSetup() {
+  if (U.WIZ) return vWizard();
   // Sprungleiste: jede Abschnittsüberschrift bekommt eine Kennung und einen Knopf oben.
   let n = 0;
   const names = [];
@@ -38,6 +40,7 @@ function vSetupBody() {
   const R = RACES[S.race], C = CLASSES[S.klass];
   const bonus = R ? `${loc(R.size || { en: '', de: '' })}${R.size ? ' · ' : ''}${loc(R.asi)}` : '';
   return `<p class="note">${t('setup.intro')}</p>
+  ${vWizardStart()}
   ${vChars()}
   ${vLiveJoin()}
   <h2>${t('setup.char')}</h2><div class="card"><div class="porsetup"><label class="por" for="img-in2" title="${t('setup.portrait')}">${S.img ? `<img src="${S.img}" alt="">` : `<span>${esc((S.name || '?').trim()[0] || '?')}</span>`}</label><input type="file" id="img-in2" accept="image/*" hidden><div class="add" style="margin:0"><label class="btn sm" for="img-in2">${t('setup.portrait')}</label>${S.img ? `<button class="btn sm bad" data-a="imgdel">${t('setup.portraitDel')}</button>` : ''}${S.fig ? `<button class="btn sm bad" data-a="figdel">${t('setup.figDel')}</button>` : ''}</div></div>

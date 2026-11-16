@@ -3,7 +3,7 @@
 // (Konzentration beendet, lange Rast). Ist der Wirker nicht verbunden, bleibt die Wirkung stehen und lässt sich von Hand entfernen.
 import { S } from './state.js';
 import { uid } from './util.js';
-import { spellStats } from './tables.js';
+import { spellStats, classLevels } from './tables.js';
 import { t } from './i18n/index.js';
 
 /** Feste Werte. base = Grad des Zaubers, max = Ziele auf diesem Grad, up = weitere Ziele je höherem Grad. */
@@ -15,11 +15,19 @@ export const BUFFS = {
   Aid: { base: 2, max: 3, aid: true, good: true, conc: false },
   Heroism: { base: 1, max: 1, up: 1, hero: true, good: true, conc: true },
   'Protection from Evil and Good': { base: 1, max: 1, good: true, conc: true },
+  // Klassenmerkmal, kein Zauber: kostet eine Anwendung, nur auf andere, mehrere gleichzeitig unterwegs, hält 1 Stunde
+  'Bardic Inspiration': { base: 0, max: 1, good: true, conc: false, bi: true, multi: true, noSelf: true },
 };
+/** Wirkungen, die die Spielleitung vergeben kann (ohne Klassenmerkmale). */
+export const DM_BUFFS = Object.keys(BUFFS).filter(n => !BUFFS[n].bi);
+/** Würfel der Bardic Inspiration nach Bardenstufe (2024: W6, W8 ab 5, W10 ab 10, W12 ab 15). */
+export const biDie = l => (l >= 15 ? 12 : l >= 10 ? 10 : l >= 5 ? 8 : 6);
+const HOUR = 60 * 60 * 1000;
 export const isBuff = n => !!BUFFS[n];
 export const maxTargets = (n, lvl) => { const b = BUFFS[n]; return b ? b.max + (b.up || 0) * Math.max(0, lvl - b.base) : 0; };
 /** Wert, den das Ziel braucht: Aid = TP, Heroism = Zaubermodifikator des Wirkers. */
 function valueFor(n, lvl) {
+  if (n === 'Bardic Inspiration') return biDie(classLevels().find(c => c.k === 'Bard')?.lvl || S.level || 1);
   if (n === 'Aid') return 5 * Math.max(1, lvl - 1);
   if (n === 'Heroism') { const st = spellStats()[0]; return st ? Math.max(0, st.atk - S.prof) : 0; }
   return 0;
@@ -29,12 +37,12 @@ const arr = k => { if (!Array.isArray(S[k])) S[k] = []; return S[k]; };
 /** Nach dem Wirken: Ziele (Schlüssel der Spieler, eigener Schlüssel = S.id) eintragen. */
 export function castOn(n, lvl, to) {
   if (!BUFFS[n] || !to.length) return;
-  const out = arr('buffsOut').filter(b => b.s !== n); // derselbe Zauber neu gewirkt ersetzt den alten
-  out.push({ id: uid(), s: n, lvl, to: to.slice(0, maxTargets(n, lvl)), v: valueFor(n, lvl) });
+  const out = BUFFS[n].multi ? arr('buffsOut') : arr('buffsOut').filter(b => b.s !== n); // derselbe Zauber neu gewirkt ersetzt den alten
+  out.push({ id: uid(), s: n, lvl, to: to.slice(0, maxTargets(n, lvl)), v: valueFor(n, lvl), at: Date.now() });
   S.buffsOut = out;
 }
 /** Was der Wirker gerade aussendet: Konzentrationszauber nur, solange die Konzentration hält. */
-export const activeOut = () => arr('buffsOut').filter(b => BUFFS[b.s] && (!BUFFS[b.s].conc || S.conc === b.s));
+export const activeOut = () => arr('buffsOut').filter(b => BUFFS[b.s] && (!BUFFS[b.s].conc || S.conc === b.s) && !(BUFFS[b.s].bi && Date.now() - (b.at || 0) > HOUR));
 
 function apply(x) { if (BUFFS[x.s]?.aid && x.v) { S.hpMax += x.v; S.hp += x.v; } }
 function revert(x) { if (BUFFS[x.s]?.aid && x.v) { S.hpMax = Math.max(1, S.hpMax - x.v); S.hp = Math.min(S.hp, S.hpMax); } }
@@ -91,6 +99,7 @@ export const hasted = () => myBuffs().some(x => BUFFS[x.s].haste);
 /** Kurzbeschreibung der Wirkung für „Wirkt gerade“. */
 export function buffText(x) {
   const b = BUFFS[x.s];
+  if (b.bi) return t('buff.bi', { n: x.v || 6 });
   if (b.d4) return t(b.d4 > 0 ? 'buff.bless' : 'buff.bane');
   if (b.haste) return t('buff.haste');
   if (b.aid) return t('buff.aid', { n: x.v });

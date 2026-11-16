@@ -240,7 +240,42 @@
   },
   "source": "summary",
   "verified": false,
-  "ed": 2024
+  "ed": 2024,
+  "gear": [
+   {
+    "gp": 15,
+    "items": [
+     {
+      "id": "greataxe",
+      "q": 1
+     },
+     {
+      "id": "handaxe",
+      "q": 4
+     },
+     {
+      "id": "explorers-pack",
+      "q": 1
+     }
+    ]
+   },
+   {
+    "gp": 75,
+    "items": []
+   }
+  ],
+  "gearText": "(a) Greataxe, 4 Handaxes, Explorer's Pack, and 15 GP or (b) 75 GP",
+  "skillPick": {
+   "n": 2,
+   "from": [
+    "Animal Handling",
+    "Athletics",
+    "Intimidation",
+    "Nature",
+    "Perception",
+    "Survival"
+   ]
+  }
  },
  "Bard": {
   "l": "B",
@@ -447,7 +482,54 @@
    4,
    4,
    4
-  ]
+  ],
+  "gear": [
+   {
+    "gp": 19,
+    "items": [
+     {
+      "id": "leather-armor",
+      "q": 1
+     },
+     {
+      "id": "dagger",
+      "q": 2
+     },
+     {
+      "id": "entertainers-pack",
+      "q": 1
+     }
+    ]
+   },
+   {
+    "gp": 90,
+    "items": []
+   }
+  ],
+  "gearText": "(a) Leather Armor, 2 Daggers, Musical Instrument of your choice, Entertainer’s Pack, and 19 GP; or (b) 90 GP",
+  "skillPick": {
+   "n": 3,
+   "from": [
+    "Acrobatics",
+    "Animal Handling",
+    "Arcana",
+    "Athletics",
+    "Deception",
+    "History",
+    "Insight",
+    "Intimidation",
+    "Investigation",
+    "Medicine",
+    "Nature",
+    "Perception",
+    "Performance",
+    "Persuasion",
+    "Religion",
+    "Sleight of Hand",
+    "Stealth",
+    "Survival"
+   ]
+  }
  },
  "Cleric": {
   "l": "C",
@@ -645,7 +727,49 @@
    5,
    5,
    5
-  ]
+  ],
+  "gear": [
+   {
+    "gp": 7,
+    "items": [
+     {
+      "id": "chain-shirt",
+      "q": 1
+     },
+     {
+      "id": "shield",
+      "q": 1
+     },
+     {
+      "id": "mace",
+      "q": 1
+     },
+     {
+      "id": "amulet",
+      "q": 1
+     },
+     {
+      "id": "priests-pack",
+      "q": 1
+     }
+    ]
+   },
+   {
+    "gp": 110,
+    "items": []
+   }
+  ],
+  "gearText": "(a) Chain Shirt, Shield, Mace, Holy Symbol, Priest's Pack, and 7 GP; or (b) 110 GP",
+  "skillPick": {
+   "n": 2,
+   "from": [
+    "History",
+    "Insight",
+    "Medicine",
+    "Persuasion",
+    "Religion"
+   ]
+  }
  },
  "Druid": {
   "l": "D",
@@ -862,7 +986,56 @@
    4,
    4,
    4
-  ]
+  ],
+  "gear": [
+   {
+    "gp": 9,
+    "items": [
+     {
+      "id": "leather-armor",
+      "q": 1
+     },
+     {
+      "id": "shield",
+      "q": 1
+     },
+     {
+      "id": "sickle",
+      "q": 1
+     },
+     {
+      "id": "quarterstaff",
+      "q": 1
+     },
+     {
+      "id": "explorers-pack",
+      "q": 1
+     },
+     {
+      "id": "herbalism-kit",
+      "q": 1
+     }
+    ]
+   },
+   {
+    "gp": 50,
+    "items": []
+   }
+  ],
+  "gearText": "(a) Leather Armor, Shield, Sickle, Druidic Focus (Quarterstaff), Explorer's Pack, Herbalism Kit, and 9 GP; or (a) 50 GP",
+  "skillPick": {
+   "n": 2,
+   "from": [
+    "Arcana",
+    "Animal Handling",
+    "Insight",
+    "Medicine",
+    "Nature",
+    "Perception",
+    "Religion",
+    "Survival"
+   ]
+  }
  },
  "Fighter": {
   "l": "",
@@ -1053,7 +1226,85 @@
   },
   "source": "summary",
   "verified": false,
-  "ed": 2024
+  "ed": 2024,
+  "gear": [
+   {
+    "gp": 4,
+    "items": [
+     {
+      "id": "chain-mail",
+      "q": 1
+     },
+     {
+      "id": "greatsword",
+      "q": 1
+     },
+     {
+      "id": "flail",
+      "q": 1
+     },
+     {
+      "id": "javelin",
+      "q": 8
+     },
+     {
+      "id": "dungeoneer-pack",
+      "q": 1
+     }
+    ]
+   },
+   {
+    "gp": 11,
+    "items": [
+     {
+      "id": "studded-leather-armor",
+      "q": 1
+     },
+     {
+      "id": "scimitar",
+      "q": 1
+     },
+     {
+      "id": "shortsword",
+      "q": 1
+     },
+     {
+      "id": "longbow",
+      "q": 1
+     },
+     {
+      "id": "arrows",
+      "q": 20
+     },
+     {
+      "id": "quiver",
+      "q": 1
+     },
+     {
+      "id": "dungeoneer-pack",
+      "q": 1
+     }
+    ]
+   },
+   {
+    "gp": 155,
+    "items": []
+   }
+  ],
+  "gearText": "(a) Chain Mail, Greatsword, Flail, 8 Javelins, Dungeoneer’s Pack, and 4 GP; (b) Studded Leather Armor, Scimitar, Shortsword, Longbow, 20 Arrows, Quiver, Dungeoneer’s Pack, and 11 GP; or (c) 155 GP",
+  "skillPick": {
+   "n": 2,
+   "from": [
+    "Acrobatics",
+    "Animal Handling",
+    "Athletics",
+    "History",
+    "Insight",
+    "Intimidation",
+    "Perception",
+    "Survival"
+   ]
+  }
  },
  "Monk": {
   "l": "",
@@ -1316,7 +1567,45 @@
   },
   "source": "summary",
   "verified": false,
-  "ed": 2024
+  "ed": 2024,
+  "gear": [
+   {
+    "gp": 11,
+    "items": [
+     {
+      "id": "spear",
+      "q": 1
+     },
+     {
+      "id": "dagger",
+      "q": 5
+     },
+     {
+      "id": "explorers-pack",
+      "q": 1
+     }
+    ],
+    "free": [
+     "Artisan’s Tools or Musical Instrument"
+    ]
+   },
+   {
+    "gp": 50,
+    "items": []
+   }
+  ],
+  "gearText": "(a) Spear, 5 Daggers, Artisan’s Tools or Musical Instrument chosen for the tool proficiency above, Explorer’s Pack, and 11 GP; or (b) 50 GP",
+  "skillPick": {
+   "n": 2,
+   "from": [
+    "Acrobatics",
+    "Athletics",
+    "History",
+    "Insight",
+    "Religion",
+    "Stealth"
+   ]
+  }
  },
  "Paladin": {
   "l": "P",
@@ -1551,7 +1840,54 @@
    14,
    15,
    15
-  ]
+  ],
+  "gear": [
+   {
+    "gp": 9,
+    "items": [
+     {
+      "id": "chain-mail",
+      "q": 1
+     },
+     {
+      "id": "shield",
+      "q": 1
+     },
+     {
+      "id": "longsword",
+      "q": 1
+     },
+     {
+      "id": "javelin",
+      "q": 6
+     },
+     {
+      "id": "amulet",
+      "q": 1
+     },
+     {
+      "id": "priests-pack",
+      "q": 1
+     }
+    ]
+   },
+   {
+    "gp": 150,
+    "items": []
+   }
+  ],
+  "gearText": "(a) Chain Mail, Shield, Longsword, 6 Javelins, Holy Symbol, Priest’s Pack, and 9 GP; or (b) 150 GP",
+  "skillPick": {
+   "n": 2,
+   "from": [
+    "Athletics",
+    "Insight",
+    "Intimidation",
+    "Medicine",
+    "Persuasion",
+    "Religion"
+   ]
+  }
  },
  "Ranger": {
   "l": "R",
@@ -1790,7 +2126,64 @@
    14,
    15,
    15
-  ]
+  ],
+  "gear": [
+   {
+    "gp": 7,
+    "items": [
+     {
+      "id": "studded-leather-armor",
+      "q": 1
+     },
+     {
+      "id": "scimitar",
+      "q": 1
+     },
+     {
+      "id": "shortsword",
+      "q": 1
+     },
+     {
+      "id": "longbow",
+      "q": 1
+     },
+     {
+      "id": "arrows",
+      "q": 20
+     },
+     {
+      "id": "quiver",
+      "q": 1
+     },
+     {
+      "id": "sprig-of-mistletoe",
+      "q": 1
+     },
+     {
+      "id": "explorers-pack",
+      "q": 1
+     }
+    ]
+   },
+   {
+    "gp": 150,
+    "items": []
+   }
+  ],
+  "gearText": "(a) Studded Leather Armor, Scimitar, Shortsword, Longbow, 20 Arrows, Quiver, Druidic Focus (sprig of mistletoe), Explorer's Pack, and 7 GP; or (b) 150 GP",
+  "skillPick": {
+   "n": 3,
+   "from": [
+    "Animal Handling",
+    "Athletics",
+    "Insight",
+    "Investigation",
+    "Nature",
+    "Perception",
+    "Stealth",
+    "Survival"
+   ]
+  }
  },
  "Rogue": {
   "l": "",
@@ -2011,7 +2404,67 @@
   },
   "source": "summary",
   "verified": false,
-  "ed": 2024
+  "ed": 2024,
+  "gear": [
+   {
+    "gp": 8,
+    "items": [
+     {
+      "id": "leather-armor",
+      "q": 1
+     },
+     {
+      "id": "dagger",
+      "q": 2
+     },
+     {
+      "id": "shortsword",
+      "q": 1
+     },
+     {
+      "id": "shortbow",
+      "q": 1
+     },
+     {
+      "id": "arrows",
+      "q": 20
+     },
+     {
+      "id": "quiver",
+      "q": 1
+     },
+     {
+      "id": "thieves-tools",
+      "q": 1
+     },
+     {
+      "id": "burglars-pack",
+      "q": 1
+     }
+    ]
+   },
+   {
+    "gp": 100,
+    "items": []
+   }
+  ],
+  "gearText": "(a) Leather Armor, 2 Daggers, Shortsword, Shortbow, 20 Arrows, Quiver, Thieves’ Tools, Burglar’s Pack, and 8 GP; (b) 100 GP",
+  "skillPick": {
+   "n": 4,
+   "from": [
+    "Acrobatics",
+    "Athletics",
+    "Deception",
+    "Insight",
+    "Intimidation",
+    "Investigation",
+    "Perception",
+    "Performance",
+    "Persuasion",
+    "Sleight of Hand",
+    "Stealth"
+   ]
+  }
  },
  "Sorcerer": {
   "l": "S",
@@ -2197,7 +2650,46 @@
    6,
    6,
    6
-  ]
+  ],
+  "gear": [
+   {
+    "gp": 28,
+    "items": [
+     {
+      "id": "leather-armor",
+      "q": 1
+     },
+     {
+      "id": "dagger",
+      "q": 2
+     },
+     {
+      "id": "crystal",
+      "q": 1
+     },
+     {
+      "id": "dungeoneer-pack",
+      "q": 1
+     }
+    ]
+   },
+   {
+    "gp": 50,
+    "items": []
+   }
+  ],
+  "gearText": "(a) Spear, 2 Daggers, Arcane Focus (crystal), Dungeoneer’s Pack, and 28 GP; or (b) 50 GP",
+  "skillPick": {
+   "n": 2,
+   "from": [
+    "Arcana",
+    "Deception",
+    "Insight",
+    "Intimidation",
+    "Persuasion",
+    "Religion"
+   ]
+  }
  },
  "Warlock": {
   "l": "K",
@@ -2374,7 +2866,55 @@
    4,
    4,
    4
-  ]
+  ],
+  "gear": [
+   {
+    "gp": 15,
+    "items": [
+     {
+      "id": "leather-armor",
+      "q": 1
+     },
+     {
+      "id": "sickle",
+      "q": 1
+     },
+     {
+      "id": "dagger",
+      "q": 2
+     },
+     {
+      "id": "orb",
+      "q": 1
+     },
+     {
+      "id": "book",
+      "q": 1
+     },
+     {
+      "id": "scholars-pack",
+      "q": 1
+     }
+    ]
+   },
+   {
+    "gp": 100,
+    "items": []
+   }
+  ],
+  "gearText": "(a) Leather Armor, Sickle, 2 Daggers, Arcane Focus (orb), Book, Scholar’s Pack, and 15 GP; or (b) 100 GP",
+  "skillPick": {
+   "n": 2,
+   "from": [
+    "Arcana",
+    "Deception",
+    "History",
+    "Intimidation",
+    "Investigation",
+    "Nature",
+    "Religion"
+   ]
+  }
  },
  "Wizard": {
   "l": "W",
@@ -2560,6 +3100,49 @@
    5,
    5,
    5
-  ]
+  ],
+  "gear": [
+   {
+    "gp": 5,
+    "items": [
+     {
+      "id": "dagger",
+      "q": 2
+     },
+     {
+      "id": "quarterstaff",
+      "q": 1
+     },
+     {
+      "id": "robe",
+      "q": 1
+     },
+     {
+      "id": "spellbook",
+      "q": 1
+     },
+     {
+      "id": "scholars-pack",
+      "q": 1
+     }
+    ]
+   },
+   {
+    "gp": 55,
+    "items": []
+   }
+  ],
+  "gearText": "(a) 2 Daggers, Arcane Focus (Quarterstaff), Robe, Spellbook, Scholar’s Pack, and 5 GP; or (b) 55 GP",
+  "skillPick": {
+   "n": 2,
+   "from": [
+    "Arcana",
+    "History",
+    "Insight",
+    "Investigation",
+    "Medicine",
+    "Religion"
+   ]
+  }
  }
 }
