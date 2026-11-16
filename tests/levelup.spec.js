@@ -164,6 +164,7 @@ test.describe('Unterklassen und Talente @new', () => {
     await seed(page, start('Wizard'));
     for (let l = 1; l <= 3; l++) await levelUp(page, 'Evoker');
     await page.locator('[data-a="lang"][data-l="de"]').click();
+    await page.locator('[data-a="tab"][data-t="stats"]').click();
     await page.locator('.feat', { hasText: 'Potent Cantrip' }).locator('summary').click();
     await expect(page.locator('.feat', { hasText: 'Potent Cantrip' })).toContainText('halben Schaden');
   });

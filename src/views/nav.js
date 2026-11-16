@@ -5,13 +5,15 @@
 import { esc } from '../util.js';
 import { S, U } from '../state.js';
 import { D, hereNote, lastSession } from '../dm.js';
-import { L, players, dmOnline, dmHere } from '../live.js';
+import { L, players, dmOnline, dmHere, dmTurn, myTurn } from '../live.js';
 import { campaignById, campaigns, campaignsOf } from '../campaigns.js';
 import { COINK } from '../constants.js';
 import { dmOnly } from './dm-mode.js';
 import { liveState, vHere } from './dm.js';
 import { partyRow, partyPeers, vStashPlayer } from './live-ui.js';
-import { statsRow, concBanner, vFx, vAbil, vSkills, vFeats, vProfs, vSpells } from './sheet.js';
+import { statsRow, concBanner, vFx, vAbil, vSkills, vFeats, vProfs, vSpells, vMain, vHP, acHtml } from './sheet.js';
+import { ABK } from '../constants.js';
+import { mod, sg } from '../util.js';
 import { effects } from '../effects.js';
 import { hpMaxNow } from '../effects.js';
 import { t } from '../i18n/index.js';
@@ -26,21 +28,21 @@ export const CHAR_T = ['prof', 'stats', 'inv', 'spells', 'notes', 'setup'];
 export const CHAR_STYLE = ['main', 'prof', 'stats', 'spells'];
 
 export const curCamp = () => (U.CAMP && campaignById(U.CAMP)) || null;
-/** Charakterebene: eigene Reiter des Charakters. Ohne Kampagne gehört auch die Spielansicht dazu. */
+/** Charakterebene: eigene Reiter des Charakters. Ohne Kampagne gehört auch der Kampfmodus dazu (eigener Reiter am Ende). */
 export const charLevel = () => !dmOnly() && (CHAR_T.includes(S.tab) || (!curCamp() && ['main', 'wiki'].includes(S.tab)));
 export function navTabs() {
   if (dmOnly()) return CAMP_DM;
-  if (!curCamp()) return ['main', ...CHAR_T];
+  if (!curCamp()) return [...CHAR_T, 'main'];
   return CHAR_T.includes(S.tab) ? CHAR_T : CAMP_P;
 }
 export function validTabs() {
   if (dmOnly()) return [...CAMP_DM, ...DM_MORE];
   return [...(curCamp() ? CAMP_P : ['main']), ...CHAR_T, 'wiki'];
 }
-export const fallbackTab = () => (curCamp() ? 'cover' : dmOnly() ? 'dmnotes' : 'main');
+export const fallbackTab = () => (curCamp() ? 'cover' : dmOnly() ? 'dmnotes' : 'prof');
 
-const LBL = { cover: 'nav.cover', party: 'nav.party', explore: 'nav.explore', trade: 'nav.trade', chron: 'nav.chron', prof: 'nav.prof', stats: 'nav.stats', spells: 'nav.spells', dmlive: 'nav.party', dmcombat: 'nav.fight', dmloot: 'nav.trade', dmnotes: 'nav.chron' };
-export const tabLabel = k => t(k === 'main' ? (curCamp() ? 'nav.fight' : 'tab.main') : LBL[k] || 'tab.' + k);
+const LBL = { cover: 'nav.cover', party: 'nav.party', explore: 'nav.explore', trade: 'nav.trade', chron: 'nav.chron', prof: 'nav.charHome', setup: 'nav.edit', stats: 'nav.stats', spells: 'nav.spells', dmlive: 'nav.party', dmcombat: 'nav.fight', dmloot: 'nav.trade', dmnotes: 'nav.chron' };
+export const tabLabel = k => t(k === 'main' ? 'nav.fight' : LBL[k] || 'tab.' + k);
 export const NAV_IC = { cover: 'shield', party: 'mask', explore: 'eye', trade: 'coin', chron: 'book', prof: 'star', stats: 'gem', spells: 'wand', dmlive: 'mask', dmcombat: 'sword', dmloot: 'coin', dmnotes: 'book' };
 
 /** Brotkrumen: Ebene, Weg und Rückweg. Eigene Aktion „crumb“, damit Reiterknöpfe eindeutig bleiben. */
@@ -138,17 +140,44 @@ export function vDmSub() {
 }
 
 /* ---- Charakterebene ---- */
+/** Charakterübersicht: nur das Wichtigste. Alles Weitere liegt auf den eigenen Unterseiten. */
 function vProfile() {
   const line = [S.subrace || S.race, S.klass, S.sub].filter(Boolean).join(' · ');
-  const camps = campaignsOf(S.id);
-  const body = `<div class="prof-top"><span class="por lg">${S.img ? `<img src="${S.img}" alt="">` : `<span>${esc((S.name || '?').trim()[0] || '?')}</span>`}</span><div><h3>${esc(S.name)}</h3><p>${esc(line || t('head.pickRace'))}${S.level ? ' · ' + t('feat.level', { n: S.level }) : ''}</p>${S.info ? `<p class="ptext">${esc(S.info)}</p>` : ''}</div></div>`;
-  const tail = `<p class="lbl">${t('hub.nav.camps')}</p><p>${camps.length ? camps.map(x => esc(x.name)).join(', ') : `<span class="note">${t('nav.noCamps')}</span>`}</p><div class="add"><button class="btn sm solid" data-a="crumb" data-t="setup">${t('nav.edit')}</button></div>`;
-  return `${card(t('nav.prof'), body + tail)}${statsRow()}`;
+  const camps = campaignsOf(S.id), act = Object.keys(S.cond).filter(c => S.cond[c]), max = hpMaxNow(), pct = max ? Math.min(100, S.hp / max * 100) : 0;
+  // Porträt, Name, Volk, Klasse und Stufe stehen im Kopf darüber; hier nur die kurze Beschreibung.
+  const head = `<h3 class="ov-name">${esc(S.name)}</h3><p class="ov-line">${esc(line || t('head.pickRace'))}${S.level ? ' · ' + t('feat.level', { n: S.level }) : ''}</p>${S.info ? `<p class="ptext">${esc(S.info.slice(0, 240))}</p>` : ''}`;
+  const vitals = `<div class="ov-vitals"><div class="ov-hp${S.hp === 0 ? ' down' : ''}"><small>${t('hp.title')}</small><b>${S.hp}<i>/${max}</i></b>${S.tmp ? `<em>+${S.tmp} ${t('hp.temp')}</em>` : ''}<span class="bar"><u style="width:${pct}%"></u></span></div><div class="ov-ac"><small>${t('stat.ac')}</small><b>${acHtml()}</b></div></div>`;
+  const abil = `<div class="ov-abil">${ABK.map(k => `<div><small>${t('abs.' + k)}</small><b>${sg(mod(S.abil[k]))}</b><span>${S.abil[k]}</span></div>`).join('')}</div>`;
+  const more = [S.conc ? `<span class="chip on">${t('conc.title')}: ${esc(S.conc)}</span>` : '', ...act.map(c => `<span class="chip on">${esc(c)}</span>`), S.exh ? `<span class="chip">${t('exh.title', { n: S.exh })}</span>` : '', S.insp ? `<span class="chip buff">${t('insp.short')}</span>` : ''].join('');
+  const tail = `${more ? `<div class="chips ov-state">${more}</div>` : ''}<p class="lbl">${t('hub.nav.camps')}</p><p style="margin-top:2px">${camps.length ? camps.map(x => esc(x.name)).join(', ') : `<span class="note">${t('nav.noCamps')}</span>`}</p>`;
+  return `<div class="card ov">${head}${vitals}${abil}${tail}</div>${statsRow(true)}`;
 }
 function vStats() {
   return `${statsRow()}${vFx(effects())}<div class="sheet"><aside>${vAbil(false)}</aside><div class="col c1"><div class="c2sk">${vSkills()}</div></div><div class="col c2">${vFeats()}${vProfs()}</div></div>`;
 }
 const vSpellTab = () => `${concBanner()}<div class="sheet solo">${vSpells()}</div>`;
 
+/** Kampfmodus der Spieler: Zustand (Vorbereitung oder laufender Kampf), Reihenfolge aus der Presence der Spielleitung,
+ * darunter alles, was der eigene Charakter im Kampf braucht. Gilt mit und ohne Kampagne. */
+const HP_WORD = { ok: 'fight.sOk', hurt: 'fight.sHurt', bad: 'fight.sBad', down: 'fight.sDown' };
+export function vFight() {
+  const tr = dmTurn(), local = !tr && S.turn?.on, peers = L.role === 'player' ? players() : [];
+  let head;
+  if (tr) {
+    const order = (tr.order || []).map(o => {
+      const p = o.k && peers.find(x => x.key === o.k), me = o.k && o.k === S.id;
+      const hp = p ? `<span class="dm-hpv"><b>${p.hp}</b>/${p.hpMax}</span>` : o.s ? `<span class="fo-s ${o.s}">${t(HP_WORD[o.s])}</span>` : '';
+      return `<li class="${o.cur ? 'cur' : ''}${o.pc ? ' pc' : ' foe'}${me ? ' me' : ''}"><span>${esc(o.n)}${me ? ` <small>(${t('nav.me')})</small>` : ''}</span>${(p?.cond || []).map(c => `<span class="chip on">${esc(c)}</span>`).join('')}${p?.conc ? `<span class="dm-conc">${t('live.concShort', { n: esc(p.conc) })}</span>` : ''}${hp}</li>`;
+    }).join('');
+    head = `<div class="fight-state on"><div class="fs-top"><span class="fs-badge">${t('fight.active')}</span><b>${t('turn.round', { n: tr.r })}</b><span>${myTurn() ? `<b class="fs-mine">${t('turn.mineTitle')}</b>` : t('turn.now', { n: esc(tr.name || '?') })}${tr.next ? ' · ' + t('turn.next', { n: esc(tr.next) }) : ''}</span></div>${order ? `<ol class="fight-order">${order}</ol>` : ''}</div>`;
+  } else if (local) {
+    head = `<div class="fight-state on"><div class="fs-top"><span class="fs-badge">${t('fight.active')}</span><span>${t('fight.local')}</span></div></div>`;
+  } else {
+    const room = L.role === 'player' && L.code;
+    head = `<div class="fight-state"><div class="fs-top"><span class="fs-badge">${t('fight.prep')}</span><span>${t(room ? 'fight.prepRoom' : 'fight.prepSolo')}</span>${room ? '' : `<button class="btn sm solid" data-a="tstart">${t('fight.startSolo')}</button>`}</div></div>`;
+  }
+  return head + vMain({ mode: 'combat' });
+}
 export const CAMP_PAGES = { cover: vCover, party: vPartyP, explore: vExplore, trade: vTrade, chron: vChron };
 export const CHAR_PAGES = { prof: vProfile, stats: vStats, spells: vSpellTab };
+export { vHP };

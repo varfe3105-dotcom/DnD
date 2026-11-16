@@ -69,12 +69,12 @@ function clean(p) {
     pets: Array.isArray(p.pets) ? p.pets.slice(0, 3).map(x => ({ id: str(x?.id, 40), n: str(x?.n), hp: int(x?.hp), hpMax: int(x?.hpMax), ac: int(x?.ac, 99) })).filter(x => x.id) : [],
     stash: p.role === 'dm' && p.stash && typeof p.stash === 'object' ? { g: Object.fromEntries(COINS.map(k => [k, int(p.stash.g?.[k], 9999999)])), it: Array.isArray(p.stash.it) ? p.stash.it.slice(0, 40).map(x => ({ id: str(x?.id, 40), n: str(x?.n, 80), q: Math.max(1, int(x?.q, 999)), w: int(x?.w, 9) })).filter(x => x.id && x.n) : [], got: Array.isArray(p.stash.got) ? p.stash.got.slice(-40).map(x => str(x, 40)) : [] } : null,
     camp: p.role === 'dm' && p.camp && typeof p.camp === 'object' ? { n: str(p.camp.n, 80), d: str(p.camp.d, 200) } : null, here: p.role === 'dm' ? str(p.here, 80) : '',
-    turn: p.role === 'dm' && p.turn && typeof p.turn === 'object' ? { r: int(p.turn.r, 999), cur: str(p.turn.cur, 40), name: str(p.turn.name), next: str(p.turn.next), enemy: !!p.turn.enemy, nextEnemy: !!p.turn.nextEnemy, cr: str(p.turn.cr, 6), nextCr: str(p.turn.nextCr, 6) } : null,
+    turn: p.role === 'dm' && p.turn && typeof p.turn === 'object' ? { r: int(p.turn.r, 999), cur: str(p.turn.cur, 40), name: str(p.turn.name), next: str(p.turn.next), enemy: !!p.turn.enemy, nextEnemy: !!p.turn.nextEnemy, cr: str(p.turn.cr, 6), nextCr: str(p.turn.nextCr, 6), order: Array.isArray(p.turn.order) ? p.turn.order.slice(0, 24).map(o => ({ n: str(o?.n, 40), pc: !!o?.pc, k: str(o?.k, 40), s: ['ok', 'hurt', 'bad', 'down'].includes(o?.s) ? o.s : '', cur: !!o?.cur })) : [] } : null,
   };
 }
-const MSG_TYPES = new Set(['dmg', 'heal', 'temp', 'cond', 'handout', 'ack', 'rcv', 'item', 'gold', 'endturn', 'levelup', 'xp', 'insp', 'stash', 'want']);
+const MSG_TYPES = new Set(['dmg', 'heal', 'temp', 'cond', 'handout', 'ack', 'rcv', 'item', 'gold', 'endturn', 'levelup', 'xp', 'insp', 'stash', 'want', 'conc']);
 // Nachrichten der Spielleitung, die bis zur Empfangsbestätigung erneut gesendet werden
-const RELIABLE = new Set(['dmg', 'heal', 'temp', 'cond', 'handout', 'item', 'gold', 'levelup', 'xp', 'insp']);
+const RELIABLE = new Set(['dmg', 'heal', 'temp', 'cond', 'handout', 'item', 'gold', 'levelup', 'xp', 'insp', 'conc']);
 const COINS = ['pp', 'gp', 'ep', 'sp', 'cp'];
 const JPEG = /^data:image\/jpeg;base64,[A-Za-z0-9+/=]+$/;
 /** Nachrichten kommen von jedem mit dem Raumcode. Werte werden begrenzt, Änderungen am Bogen muss der Spieler annehmen. */

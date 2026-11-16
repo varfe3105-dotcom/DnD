@@ -343,3 +343,53 @@ html[data-area="char"] .lvh b{font:600 .95rem var(--f-cap);letter-spacing:.08em;
 .camp-map{height:min(70vh,640px)}
 @media screen and (max-width:520px){.crumb-role{margin-left:0}.camp-me{padding-right:8px}}
 @media print{.crumbs{display:none}}
+/* Charakterebene: Navigation seitlich (ab Tabletbreite), Inhalt daneben. Am Handy bleibt die feste Leiste unten. */
+@media screen and (min-width:900px){
+  .charlayout{display:grid;grid-template-columns:200px minmax(0,1fr);gap:26px;align-items:start;margin-top:16px}
+  .charlayout>.tabs.side{position:sticky;top:12px;margin:0;padding:0;display:block;border:0}
+  .tabs.side nav{display:flex;flex-direction:column;gap:4px;overflow:visible;padding:10px;border:12px solid transparent;border-image:var(--frame);background:var(--surface-card) padding-box}
+  html .tabs.side nav button,html .tabs.side nav button[aria-selected="true"]{flex-direction:row;justify-content:flex-start;gap:10px;min-width:0;width:100%;padding:9px 12px;transform:none;top:0;border:0;border-radius:0;font:600 .98rem var(--f-ui);text-align:left;background:none;color:var(--c-cream-2)}
+  html .tabs.side nav button:hover{transform:none;background:rgba(201,162,90,.08)}
+  html .tabs.side nav button[aria-selected="true"]{background:var(--grad-pri);color:var(--c-cream);box-shadow:inset 3px 0 0 var(--c-brass)}
+  .tabs.side nav button.tab-fight{margin-top:10px;border-top:1px solid var(--c-brass-soft)}
+  .tabs.side nav button .spr,.tabs.side nav button svg{width:24px;height:24px;flex:none}
+  .tabs.side nav button::after,.tabs.side nav button::before{display:none}
+  .tabs.side .mini{display:block;margin:10px 0 0;text-align:center}
+  .charmain>h2:first-child,.charmain>.card:first-child{margin-top:0}
+}
+/* Charakterübersicht */
+.ov .prof-top{margin-bottom:14px}
+.ov-vitals{display:grid;grid-template-columns:minmax(0,2fr) minmax(0,1fr);gap:12px;margin:6px 0 14px}
+.ov-vitals>div{padding:10px 14px;border:1px solid var(--c-brass-soft);background:rgba(10,8,10,.35)}
+.ov-vitals small,.ov-abil small{display:block;font:600 .68rem var(--f-cap);letter-spacing:.1em;text-transform:uppercase;color:var(--c-cream-mute)}
+.ov-vitals b{font:700 2.6rem/1.05 var(--f-title);color:var(--c-cream)}
+.ov-vitals b i{font-style:normal;font-size:1.3rem;color:var(--c-cream-mute)}
+.ov-vitals em{display:block;font-size:.8rem;color:var(--c-good)}
+.ov-hp .bar{display:block;height:6px;margin-top:6px;background:rgba(255,255,255,.08)}
+.ov-hp .bar u{display:block;height:100%;background:var(--grad-gold)}
+.ov-hp.down b{color:var(--c-bad)}
+.ov-ac{text-align:center;background:var(--grad-pri)!important}
+.ov-ac b{color:var(--c-brass-lt)}
+.ov-abil{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:8px}
+.ov-abil>div{text-align:center;padding:8px 2px;border:1px solid var(--c-brass-soft)}
+.ov-abil b{display:block;font:700 1.6rem/1.1 var(--f-title);color:var(--c-cream)}
+.ov-abil span{font-size:.8rem;color:var(--c-cream-mute)}
+.ov-state{margin-top:12px}
+@media (max-width:520px){.ov-abil{grid-template-columns:repeat(3,minmax(0,1fr))}.ov-vitals b{font-size:2.1rem}}
+/* Kampfmodus: Zustand Vorbereitung / laufender Kampf und Reihenfolge */
+.fight-state{margin:14px 0 10px;padding:10px 14px;border:1px solid var(--c-brass-soft);background:rgba(10,8,10,.4)}
+.fight-state.on{border-color:var(--c-brass);background:linear-gradient(90deg,rgba(77,48,83,.65),rgba(10,8,10,.4))}
+.fs-top{display:flex;flex-wrap:wrap;align-items:center;gap:6px 14px}
+.fs-badge{font:600 .68rem var(--f-cap);letter-spacing:.12em;text-transform:uppercase;padding:3px 9px;border:1px solid var(--c-brass-a);color:var(--c-brass-lt)}
+.fight-state.on .fs-badge{background:var(--c-bad);border-color:var(--c-bad);color:#fff}
+.fs-mine{color:var(--c-brass-lt)}
+.fight-order{list-style:none;margin:10px 0 0;padding:0;display:grid;gap:4px}
+.fight-order li{display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px;padding:5px 10px;border-left:3px solid transparent;background:rgba(255,255,255,.03)}
+.fight-order li>span:first-child{flex:1;min-width:8em}
+.fight-order li.cur{border-left-color:var(--c-brass);background:rgba(201,162,90,.14);font-weight:700}
+.fight-order li.foe>span:first-child{color:#e3a99a}
+.fight-order li.me>span:first-child{color:var(--c-brass-lt)}
+.fo-s{font-size:.8rem;color:var(--c-cream-mute)}
+.fo-s.bad{color:var(--c-warn)}.fo-s.down{color:var(--c-bad)}
+.ov-name{font:700 1.5rem var(--f-title);margin:0}
+.ov-line{margin:2px 0 6px;color:var(--c-brass-lt)}

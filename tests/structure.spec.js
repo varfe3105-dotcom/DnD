@@ -112,12 +112,13 @@ test.describe('Ebenen und Rollen @new', () => {
   test('Ohne Kampagne: Charakterebene mit Spielansicht, Regeln über den Kopf', async ({ page }) => {
     await start(page, chars);
     await page.locator('.hub-gm', { hasText: 'Mirelle' }).click();
-    expect(await navKeys(page)).toEqual(['main', 'prof', 'stats', 'inv', 'spells', 'notes', 'setup']);
-    await expect(page.locator('.modes')).toBeVisible();
+    expect(await navKeys(page)).toEqual(['prof', 'stats', 'inv', 'spells', 'notes', 'setup', 'main']);
+    await expect(page.locator('.ov-abil > div')).toHaveCount(6);
+    await expect(page.locator('.tabs.side')).toBeVisible();
     await page.locator('[data-a="tab"][data-t="wiki"]').click();
     await expect(page.locator('#wq')).toBeVisible();
     await page.locator('[data-a="tab"][data-t="prof"]').click();
-    await expect(page.locator('.prof-top h3')).toHaveText('Mirelle');
+    await expect(page.locator('.ov-name')).toHaveText('Mirelle');
   });
 
   test('Handybreite: Kampagnenübersicht und Charakterebene ohne Querscrollen', async ({ page }) => {

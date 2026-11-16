@@ -54,8 +54,8 @@ app.addEventListener('click',ev=>{
   const b=ev.target.closest('[data-a]');if(!b)return;
   const a=b.dataset.a,i=+b.dataset.i,k=b.dataset.k,v=id=>($(id)||{}).value||'';
   if(a==='luclose-bg'&&ev.target!==b)return;
-  if(a!=='rm'&&a!=='imp'&&a!=='reset'&&a!=='chardel'&&a!=='npdel'&&a!=='campdel'&&a!=='stdrop')U.CONF=null;
-  if(!['dmclear','dmndel','dmedel','dmcdel'].includes(a))dm.DU.conf=null;
+  if(a!=='rm'&&a!=='imp'&&a!=='reset'&&a!=='chardel'&&a!=='npdel'&&a!=='campdel'&&a!=='stdrop'&&a!=='spdel')U.CONF=null;
+  if(!['dmclear','dmfightend','dmndel','dmedel','dmcdel'].includes(a))dm.DU.conf=null;
   if(a!=='cast'&&a!=='castslot')U.CASTPICK=null;
   pend=false;
   switch(a){
@@ -88,6 +88,7 @@ app.addEventListener('click',ev=>{
     case 'turnshow':setTurnsHidden(!turnsHidden());break;
     case 'endturn':if(!live.endTurn())toast(tr('turn.offline'));else toast(tr('turn.ended'));break;
     case 'dmstep':{const gone=dm.step(+b.dataset.d);dm.saveD();live.refresh();if(gone&&gone.length)toast(gone.map(x=>tr('dm.fxEnded',x)).join(' '));break}
+    case 'dmfightend':if(dm.DU.conf!=='end'){dm.DU.conf='end';break}dm.DU.conf=null;dm.endFight();dm.saveD();live.refresh();toast(tr('fight.ended'));break;
     case 'dmclear':if(dm.DU.conf!=='clear'){dm.DU.conf='clear';break}dm.DU.conf=null;dm.clearCombat();dm.saveD();break;
     case 'dmadd':dm.addMonster(b.dataset.m,clamp(Math.floor(+v('dm-qty'))||1,1,20));dm.saveD();break;
     case 'dmman':{const n=v('dm-mn').trim();if(!n){toast(tr('toast.needName'));return}dm.addManual(n,v('dm-mac'),v('dm-mhp'));dm.saveD();break}
@@ -127,7 +128,7 @@ app.addEventListener('click',ev=>{
     case 'sheetcancel':U.SHEET=null;break;
     case 'sheetapply':{if(!U.SHEET.draft.klass){toast(tr('sheet.needClass'));return}const r=importDraft(U.SHEET.draft);if(r.error){toast(r.error);return}U.IMPREP=r.reports;U.SHEET=null;S.tab='setup';toast(tr('imp.done',{n:r.reports.map(x=>x.name).join(', ')}));break}
     case 'sheetspells':{const known=new Set(S.spells.map(x=>x.n));let n=0;U.SHEET.draft.spells.forEach(x=>{if(!known.has(x)&&BYN['spell:'+x]){S.spells.push(spFrom(BYN['spell:'+x]));n++}});U.SHEET=null;toast(tr('sheet.added',{n}));break}
-    case 'livesend':{const to=b.dataset.k,type=b.dataset.t;if(type==='levelup'||type==='insp'){if(live.sendMsg({type,to}))toast(tr('live.sent'));return}if(type==='cond'){const cond=v('lv-c-'+to);if(!cond){toast(tr('live.pickCond'));return}const r=Math.max(0,Math.min(99,Math.floor(+v('lv-r-'+to))||0));if(live.sendMsg({type,to,cond,r}))toast(tr('live.sent'));return}const value=Math.floor(+v('lv-a-'+to));if(!(value>0)){toast(tr('toast.needAmount'));return}if(live.sendMsg({type,to,value}))toast(tr('live.sent'));return}
+    case 'livesend':{const to=b.dataset.k,type=b.dataset.t;if(type==='levelup'||type==='insp'||type==='conc'){if(live.sendMsg({type,to}))toast(tr('live.sent'));return}if(type==='cond'){const cond=v('lv-c-'+to);if(!cond){toast(tr('live.pickCond'));return}const r=Math.max(0,Math.min(99,Math.floor(+v('lv-r-'+to))||0));if(live.sendMsg({type,to,cond,r}))toast(tr('live.sent'));return}const value=Math.floor(+v('lv-a-'+to));if(!(value>0)){toast(tr('toast.needAmount'));return}if(live.sendMsg({type,to,value}))toast(tr('live.sent'));return}
     case 'liveyes':{const m=live.answer(b.dataset.id,true);if(m){if(m.type==='levelup')openLU();else applyProposal(m)}break}
     case 'liveno':live.answer(b.dataset.id,false);break;
     case 'hoclose':live.dropHandout();break;
@@ -192,7 +193,8 @@ app.addEventListener('click',ev=>{
     case 'tmove':{const e=moveBy(+b.dataset.m);if(e){toast(tr('turn.no.'+e));return}break}
     case 'tobj':{const e=doObj();if(e){toast(tr('turn.no.'+e));return}break}
     case 'tsurge':{const r=S.res[+b.dataset.i];if(!r||r.used>=r.max){toast(tr('turn.no.uses'));return}r.used++;actionSurge();toast(tr('turn.surged'));break}
-    case 'tnew':newTurn();break;
+    case 'tnew':
+    case 'tstart':newTurn();break;
     case 'tend':endCombat();break;
     case 'hubgo':leavePlay();U.HUB=b.dataset.s;U.HUBQ='';U.CAMPED=null;U.CAMPROLE=null;window.scrollTo(0,0);break;
     case 'crumbhome':
@@ -209,7 +211,7 @@ app.addEventListener('click',ev=>{
     case 'joinconn':{const code=v('join-code').trim().toUpperCase();if(!live.isCode(code)){toast(tr('live.badCode'));return}const ch=v('join-char');if(ch==='new')newChar();else if(ch&&ch!==S.id&&!switchChar(ch)){toast(tr('toast.saveFailed'));return}if(dm.D.only){dm.D.only=false;dm.saveD()}U.JOIN={code,isNew:ch==='new'};live.connect(code,'player');break}
     case 'joincancel':if(U.JOIN&&live.L.code===U.JOIN.code&&!camp.campaignByRoom(U.JOIN.code))live.disconnect();U.JOIN=null;break;
     case 'joinok':{const j=U.JOIN;if(!j)return;const meta=live.dmCamp(),old=camp.campaignByRoom(j.code);const r=camp.saveCampaign(old?{...old,role:'player',chars:[...new Set([...old.chars,S.id])]}:{name:meta?.n||tr('join.defName',{c:j.code}),desc:meta?.d||'',room:j.code,role:'player',chars:[S.id]});if(!r){toast(tr('toast.saveFailed'));return}U.JOIN=null;toast(tr('join.done',{n:r.name}));if(j.isNew)openWizard();openCamp(r.id,j.isNew?'setup':'cover');break}
-    case 'hubplay':{U.CAMP=null;const id=b.dataset.id;if(id&&id!==S.id&&!switchChar(id)){toast(tr('toast.saveFailed'));return}enterPlay(b.dataset.t);break}
+    case 'hubplay':{U.CAMP=null;const id=b.dataset.id;if(id&&id!==S.id&&!switchChar(id)){toast(tr('toast.saveFailed'));return}enterPlay(b.dataset.t||'prof');break}
     case 'hubwiki':U.HUB='wiki';U.HUBQ='';U.WSEL=b.dataset.key;U.WF='all';U.WQ='';window.scrollTo(0,0);break;
     case 'hubnewchar':newChar();openWizard();enterPlay('setup');break;
     case 'hubimport':hubImport();return;
@@ -279,6 +281,7 @@ app.addEventListener('click',ev=>{
     case 'addres':{const n=v('res-n').trim();if(!n){toast(tr('toast.needName'));return}S.res.push({n,ic:v('res-ic')||'star',max:Math.max(1,Math.floor(+v('res-m'))||1),used:0,rest:v('res-r')||'long',p:v('res-p').trim()});break}
     case 'addsp':{const n=v('sp-sel');if(!n){toast(tr('toast.pickSpell'));return}if(S.spells.some(s=>s.n===n)){toast(tr('toast.alreadySpell',{n}));return}S.spells.push(spFrom(BYN['spell:'+n]));toast(tr('toast.added',{n}));break}
     case 'addspown':{const n=v('osp-n').trim();if(!n){toast(tr('toast.needName'));return}S.spells.push({n,ic:'star',lvl:clamp(Math.floor(+v('osp-l'))||0,0,9),time:v('osp-t').trim(),range:v('osp-r').trim(),dur:v('osp-d').trim(),eff:v('osp-e').trim(),conc:$('osp-c').checked,ritual:$('osp-ri').checked,school:'',cls:'',src:'own'});toast(tr('toast.created',{n}));break}
+    case 'spdel':{if(U.CONF!=='spdel:'+i){U.CONF='spdel:'+i;break}U.CONF=null;const it=S.spells[i];if(!it)break;U.OPEN={};if(S.conc===it.n)S.conc='';S.spells.splice(i,1);toast(tr('spell.deleted',{n:it.n}));break}
     case 'del':{const it=S[k][i];if(k==='spells'){U.OPEN={};if(it&&S.conc===it.n)S.conc=''}S[k].splice(i,1);break}
     case 'exp':{const o=JSON.parse(JSON.stringify(S));o.tab='main';U.EXP=JSON.stringify(o);break}
     case 'copy':{const ta=$('exp');const p=navigator.clipboard&&navigator.clipboard.writeText?navigator.clipboard.writeText(U.EXP):Promise.reject();p.then(()=>toast(tr('toast.copied'))).catch(()=>{if(ta){ta.focus();ta.select()}toast(tr('toast.selected'))});return}
@@ -391,7 +394,8 @@ app.addEventListener('toggle',e=>{if(e.target.classList&&e.target.classList.cont
 /* Live-Tisch: Beim Tippen nicht neu zeichnen, damit Eingaben nicht verloren gehen */
 let livePending=false;
 const typing=()=>{const a=document.activeElement;return !!a&&app.contains(a)&&/^(INPUT|TEXTAREA|SELECT)$/.test(a.tagName)};
-live.setPeerHook(()=>{dm.syncLive(live.players());if(live.L.role!=='player')return;let ch=syncBuffs(live.L.peers);if(syncDeposits(live.dmStash(),m=>live.sendMsg({...m,name:S.name})))ch=true;const tr0=live.dmTurn();if(tr0&&tr0.r!==S.condAt){const gone=seeRound(tr0.r);ch=true;if(gone.length)toast(tr('cond.ended',{c:gone.join(', ')}))}if(ch){save();later()}});
+let hadTurn=false;
+live.setPeerHook(()=>{dm.syncLive(live.players());if(live.L.role!=='player')return;let ch=syncBuffs(live.L.peers);if(syncDeposits(live.dmStash(),m=>live.sendMsg({...m,name:S.name})))ch=true;const tr0=live.dmTurn();if(!tr0&&hadTurn&&S.turn?.on){endCombat();ch=true}hadTurn=!!tr0;if(tr0&&tr0.r!==S.condAt){const gone=seeRound(tr0.r);ch=true;if(gone.length)toast(tr('cond.ended',{c:gone.join(', ')}))}if(ch){save();later()}});
 // Vor jedem Speichern: Wirkungen abgleichen (Konzentration beendet → Wirkung weg), dann RK neu berechnen
 hooks.beforeSave=()=>{syncBuffs(live.L.role==='player'?live.L.peers:[]);syncAc()};
 live.setPetSource(()=>S.pets.map(petView));

@@ -40,14 +40,25 @@ Kampagnenebene
 └─ Chronik             Spieler: eigene Kampagnen-Aufzeichnungen | Spielleitung: Notizbuch (privat)
 
 Charakterebene (über Gruppe → eigener Charakter, oder ohne Kampagne direkt)
-├─ (Spielansicht)      nur ohne Kampagne; in einer Kampagne ist das der Bereich „Kampf“
-├─ Profil              Porträt, Name, Volk, Klasse, Stufe, Hintergrund, Kampagnen, Kernwerte
+├─ Übersicht           kompakt: TP, RK, sechs Attribute, Zustände, Konzentration, Kampagnen (seitliche Navigation ab 900 px)
 ├─ Werte & Fähigkeiten Attribute, Rettungswürfe, Fertigkeiten, passive Werte, Merkmale, Übungen
 ├─ Inventar            Ausrüstungsplätze, Rucksack, Münzen, Traglast
 ├─ Zauber              Zauberplätze, Zauber nach Grad, Konzentration
 ├─ Notizen             Charakternotizen mit Seiten
-└─ Bearbeiten          Einrichten (Werte, Ressourcen, Zauberliste, Sicherung) und Charakter-Assistent
+├─ Bearbeiten          Einrichten (Werte, Ressourcen, Zauberliste mit Entfernen nur nach Bestätigung, Sicherung), Assistent
+└─ Kampf               nur ohne Kampagne; in einer Kampagne ist der Kampf ein Bereich der Kampagne
 ```
+
+**Kampfmodus (seit 16.11.2026, zweiter Schritt):** Es gibt zwei sichtbare Zustände, „Vorbereitung“ und „Kampf läuft“.
+- **Spielleitung:**
+  - In der Vorbereitung lädt sie Begegnungen, fügt Gegner und Spieler hinzu, trägt die Initiative ein und klickt „Kampf starten“.
+  - Im laufenden Kampf sieht sie Runde, wer am Zug ist und wer danach kommt. Dazu gehören: Zurück und Nächster Zug, Schaden und Heilung, Zustände, Effekte mit Runden, Konzentration der Gegner, Vorschläge und Wirkungen an verbundene Spieler direkt in deren Zeile, „Konzentration beenden“, XP verteilen und „Kampf beenden“ (Gegner raus, Spieler bleiben).
+- **Spieler:**
+  - Sie sehen dieselben zwei Zustände.
+  - Im laufenden Kampf sehen sie Runde und Reihenfolge aus der Presence (`turn.order`). Mitspieler stehen mit TP, Zuständen und Konzentration darin, Gegner nur mit grobem Zustand (unverletzt, angeschlagen, schwer verletzt, besiegt).
+  - Darunter folgen eigene TP, Zustände, Wirkungen, Angriffe mit Aktionszählung, Ressourcen und Zauber.
+  - Ohne Spielleitung können sie die Zählung selbst beginnen und beenden.
+- **Meldungen:** „Du bist am Zug“ (Toast und Vibration). Vorschläge wie Schaden oder Konzentrationsende erscheinen als Toast und im Posteingang zum Annehmen. Bei einer neuen Wirkung kommt „Shield of Faith wurde auf dich gewirkt (Mira)“.
 
 **Abweichungen vom Vorschlag und warum**
 
@@ -78,6 +89,8 @@ Charakterebene (über Gruppe → eigener Charakter, oder ohne Kampagne direkt)
 **Gemeinsam genutzte Daten:** Charakter `S` (Gruppe, Kampf, Charakterseiten), Kampagnen `charbogen-campaigns` (Startseite, Kampagnenebene), Spielleitung `D` (Kampf, Erkundung, Chronik, Handel), Presence im Raum (Gruppe, Kampf, Übersicht, Beitreten).
 
 **Neu gebaut:** Rolle, Chronik (`log`) und „zuletzt geöffnet“ (`seen`) je Kampagne. Spielleiterbereich mit Code erzeugen und kopieren. Ablauf „Beitreten“ (Code und Charakter, dann verbinden, Kampagne der Spielleitung ansehen, bestätigen). Die Presence der Spielleitung trägt Name und Beschreibung der geöffneten Kampagne (`camp`) und den Titel des aktuellen Orts (`here`), nie den Notiztext. Dazu Brotkrumen mit Ebene und Rolle.
+
+**Spielleitungsdaten je Kampagne:** Vorschlag mit Migration in `docs/dm-daten-je-kampagne.md`, noch nicht umgesetzt.
 
 **Fehlt noch (bewusst nicht gebaut, Kandidaten für später):**
 - Händler mit eigenem Sortiment der Spielleitung (heute: Einkauf zum Listenpreis im Katalog)

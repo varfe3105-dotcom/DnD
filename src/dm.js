@@ -65,14 +65,26 @@ export function addMonster(id, qty = 1) {
 export function addManual(name, ac, hp) {
   D.combat.list.push({ ...base(), kind: 'pc', name, ac: Math.max(0, Math.floor(ac) || 0), hp: Math.max(0, Math.floor(hp) || 0), hpMax: Math.max(0, Math.floor(hp) || 0) });
 }
-/** Was die Spieler über den Zug erfahren: Name, bei Monstern dazu der Herausforderungsgrad. */
+/** Zustand eines Gegners für die Spieler: nur grob (unverletzt, angeschlagen, schwer verletzt, besiegt), nie die TP. */
+const hpWord = c => (c.hp <= 0 ? 'down' : c.hp < c.hpMax / 2 ? 'bad' : c.hp < c.hpMax ? 'hurt' : 'ok');
+/** Läuft ein Kampf? Vorbereitung = Liste ohne aktiven Zug. */
+export const fighting = () => !!D.combat.active && D.combat.list.some(c => c.id === D.combat.active);
+/** Wer ist dran, wer kommt als Nächstes (für die Anzeige der Spielleitung, unabhängig vom Senden an Spieler). */
+export function nowNext() {
+  const list = ordered().filter(c => !out(c)), i = list.findIndex(c => c.id === D.combat.active);
+  return i < 0 ? { cur: null, next: null } : { cur: list[i], next: list.length > 1 ? list[(i + 1) % list.length] : null };
+}
+/** Kampf beenden: Gegner raus, Spieler und Begleiter bleiben für den nächsten Kampf in der Liste. */
+export function endFight() { D.combat.list = D.combat.list.filter(c => c.kind !== 'mon'); D.combat.round = 1; D.combat.active = null; DU.open = {}; }
+/** Was die Spieler über den Zug erfahren: Name, bei Monstern dazu der Herausforderungsgrad, die Reihenfolge. */
 export function turnInfo() {
   if (D.turns === false || !D.combat.active) return null;
   const list = ordered().filter(c => !out(c)), i = list.findIndex(c => c.id === D.combat.active);
   if (i < 0) return null;
   const cur = list[i], nx = list.length > 1 ? list[(i + 1) % list.length] : null, pc = c => c && c.kind === 'pc';
   const cr = c => { const m = c && c.kind === 'mon' && findMonster(c.mon); return m ? (m.cr === 0.125 ? '1/8' : m.cr === 0.25 ? '1/4' : m.cr === 0.5 ? '1/2' : String(m.cr)) : ''; };
-  return { r: D.combat.round, cur: cur.live || '', name: cur.name, enemy: !pc(cur), cr: cr(cur), next: nx ? nx.name : '', nextEnemy: !!nx && !pc(nx), nextCr: cr(nx) };
+  const order = ordered().slice(0, 24).map(c => ({ n: c.name, pc: c.kind !== 'mon', k: c.kind === 'pc' ? c.live || '' : '', s: c.kind === 'mon' ? hpWord(c) : '', cur: c.id === cur.id }));
+  return { r: D.combat.round, cur: cur.live || '', name: cur.name, enemy: !pc(cur), cr: cr(cur), next: nx ? nx.name : '', nextEnemy: !!nx && !pc(nx), nextCr: cr(nx), order };
 }
 /** Ein Spieler beendet seinen Zug. Gilt nur, wenn er wirklich gerade dran ist. */
 export function endTurnFrom(key) {

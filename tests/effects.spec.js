@@ -14,6 +14,7 @@ test.describe('Wirkungen von Zuständen, Erschöpfung und Rüstung @new', () => 
     await seed(page, base4({ cond: { Poisoned: true } }));
     await expect(page.locator('.fx')).toContainText('Poisoned');
     await expect(page.locator('.atk-un .fxw.dis')).toBeVisible();
+    await page.locator('[data-a="tab"][data-t="stats"]').click();
     await expect(page.locator('.skg h3 .fxm.dis')).toHaveCount(5);
     await expect(page.locator('.sv .fxm')).toHaveCount(0);
   });
@@ -39,8 +40,10 @@ test.describe('Wirkungen von Zuständen, Erschöpfung und Rüstung @new', () => 
 
   test('Kettenhemd: Stealth-Nachteil, zu wenig Stärke kostet 3 m Tempo', async ({ page }) => {
     await seed(page, base4({ klass: 'Fighter', abil: { str: 10, dex: 14, con: 12, int: 10, wis: 10, cha: 10 }, eq: { body: chain() } }));
-    await expect(page.locator('.skr', { hasText: 'Stealth' }).locator('.fxm.dis')).toBeVisible();
     await expect(speedBox(page).locator('b')).toHaveText('6 m');
+    await expect(page.locator('.atk-un .fxw')).toHaveCount(0);
+    await page.locator('[data-a="tab"][data-t="stats"]').click();
+    await expect(page.locator('.skr', { hasText: 'Stealth' }).locator('.fxm.dis')).toBeVisible();
     await expect(page.locator('.atk-un .fxw')).toHaveCount(0);
   });
 
@@ -78,7 +81,7 @@ test.describe('Merkmale, die Werte ändern @new', () => {
   const stat = (page, re) => page.locator('.st', { hasText: re }).locator('b').first();
   const abil = { str: 10, dex: 14, con: 12, int: 10, wis: 12, cha: 10 };
   test('Jack of All Trades: halber Übungsbonus auf ungeübte Fertigkeiten und Initiative', async ({ page }) => {
-    await seed(page, base4({ klass: 'Bard', level: 3, prof: 2, abil, skills: { Persuasion: 1 } }));
+    await seed(page, base4({ klass: 'Bard', level: 3, prof: 2, abil, skills: { Persuasion: 1 }, tab: 'stats' }));
     await expect(page.locator('.skr', { hasText: 'Athletics' }).locator('b')).toHaveText('+1');
     await expect(page.locator('.skr', { hasText: 'Persuasion' }).locator('b')).toHaveText('+2');
     await expect(stat(page, /Initiative/)).toHaveText('+3');
@@ -113,7 +116,7 @@ test.describe('Munition, passive Werte, Reliable Talent @new', () => {
     await expect(page.locator('.st', { hasText: /Passive/ }).locator('.fxsub')).toHaveText('Insight 11 · Investigation 12');
   });
   test('Schurke ab Stufe 11 bekommt den Hinweis zu Reliable Talent', async ({ page }) => {
-    await seed(page, base4({ klass: 'Rogue', level: 11, prof: 4 }));
+    await seed(page, base4({ klass: 'Rogue', level: 11, prof: 4, tab: 'stats' }));
     await expect(page.locator('.fxnote', { hasText: 'Reliable Talent' })).toBeVisible();
   });
 });
@@ -181,22 +184,19 @@ test.describe('Übersichtlichkeit @new', () => {
     await act(page, 'condopen').click();
     await expect(page.locator('[data-a="cond"]')).toHaveCount(14);
   });
-  test('Ansicht Kampf blendet Fertigkeiten aus, Erkundung die Angriffe; Wahl bleibt gespeichert', async ({ page }) => {
+  test('Kampf und Werte sind getrennte Seiten: Kampf ohne Fertigkeiten, Werte ohne Angriffe', async ({ page }) => {
     await seed(page, base4({}));
-    await act(page, 'sheetmode', '[data-m="combat"]').click();
     await expect(page.locator('.skgrid')).toHaveCount(0);
-    await expect(page.locator('.atk-un')).toBeVisible();
-    await act(page, 'sheetmode', '[data-m="explore"]').click();
-    await expect(page.locator('.atk-un')).toHaveCount(0);
+    await expect(page.locator('.modes')).toHaveCount(0);
+    await page.locator('[data-a="tab"][data-t="stats"]').click();
     await expect(page.locator('.skgrid')).toBeVisible();
-    await page.reload();
-    await expect(page.locator('[data-a="sheetmode"][data-m="explore"]')).toHaveAttribute('aria-pressed', 'true');
+    await expect(page.locator('[data-a="cast"], .atk-un')).toHaveCount(0);
   });
   test('Kurzleiste erscheint beim Scrollen und ändert TP', async ({ page }) => {
-    await page.setViewportSize({ width: 1280, height: 700 });
-    await seed(page, base4({ hp: 10, hpMax: 20 }));
+    await page.setViewportSize({ width: 1280, height: 500 });
+    await seed(page, base4({ hp: 10, hpMax: 20, tab: 'stats' }));
     await expect(page.locator('body')).not.toHaveClass(/scrolled/);
-    await page.evaluate(() => window.scrollTo(0, 1500));
+    await page.evaluate(() => window.scrollTo(0, 900));
     await expect(page.locator('body')).toHaveClass(/scrolled/);
     await act(page, 'mbhp', '[data-d="-1"]').click();
     expect((await read(page)).hp).toBe(9);

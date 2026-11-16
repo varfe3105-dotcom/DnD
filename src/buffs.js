@@ -1,7 +1,7 @@
 // Zauber auf Mitspieler (Regeln 2024): Wer wirkt, trägt die Wirkung in S.buffsOut ein und teilt sie über die Presence.
 // Das Ziel übernimmt sie in S.buffs und entfernt sie wieder, sobald der Wirker sie nicht mehr meldet
 // (Konzentration beendet, lange Rast). Ist der Wirker nicht verbunden, bleibt die Wirkung stehen und lässt sich von Hand entfernen.
-import { S } from './state.js';
+import { S, toast } from './state.js';
 import { uid } from './util.js';
 import { spellStats, classLevels } from './tables.js';
 import { t } from './i18n/index.js';
@@ -62,6 +62,7 @@ export function syncBuffs(peers = []) {
     if (old) { revert(old); mine.splice(mine.indexOf(old), 1); }
     const x = { id: b.id, s: b.s, by: src.self ? '' : src.name, byKey: src.key, v: +b.v || 0 };
     apply(x); mine.push(x); changed = true;
+    if (!src.self) toast(t('buff.gotNow', { s: b.s, n: src.name || '?' }));
   }));
   S.buffs = mine.filter(x => {
     const src = x.byKey === me ? self : peers.find(p => p.key === x.byKey);

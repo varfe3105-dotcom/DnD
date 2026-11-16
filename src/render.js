@@ -4,7 +4,7 @@ import { vHandout, vBackupNag, vDock, vTarget, vParty } from './views/live-ui.js
 import { $, esc } from './util.js';
 import { S, U, roster } from './state.js';
 import { classLevels, XP_LEVELS, totalLevel } from './tables.js';
-import { vMain, vMiniBar } from './views/sheet.js';
+import { vMiniBar } from './views/sheet.js';
 import { vInv } from './views/inventory.js';
 import { vWiki } from './views/wiki.js';
 import { vSetup } from './views/setup.js';
@@ -19,7 +19,7 @@ import { hideTip } from './tooltip.js';
 import { glyph } from './icons.js';
 import { syncAc } from './helpers.js';
 import { CLASSES } from './catalog.js';
-import { navTabs, validTabs, fallbackTab, tabLabel, NAV_IC, vCrumbs, vCampHead, charLevel, curCamp, CAMP_PAGES, CHAR_PAGES, CHAR_STYLE, vDmSub } from './views/nav.js';
+import { navTabs, validTabs, fallbackTab, tabLabel, NAV_IC, vCrumbs, vCampHead, charLevel, curCamp, CAMP_PAGES, CHAR_PAGES, CHAR_STYLE, vDmSub, vFight } from './views/nav.js';
 import { t, lang, units } from './i18n/index.js';
 
 /** XP-Stand mit Balken bis zur nächsten Stufe. Wann aufgestiegen wird, entscheidet die Spielleitung. */
@@ -58,19 +58,22 @@ export function render() {
   if (U.HUB) h = vHub() + vDock() + vHandout() + vTarget();
   else {
   h = vCrumbs() + (dmOnly() ? vDmHead() : charLevel() || !curCamp() ? vHead() : vCampHead());
-  h += `<div class="tabs"><nav role="tablist" aria-label="${t('head.areas')}">${tabs().map(k => `<button role="tab" aria-selected="${tb === k}" data-a="tab" data-t="${k}">${glyph(TAB_IC[k])}<span>${tabLabel(k)}</span></button>`).join('')}</nav>${dmOnly() ? '' : `<div class="mini${S.hp === 0 ? ' down' : ''}">${L.status === 'on' ? `<i class="live-dot" title="${t('live.on')}"></i>` : ''}${t('head.hpShort')} <b>${S.hp}</b>/${S.hpMax}${S.tmp ? ` +${S.tmp}` : ''}</div>`}</div>`;
-  h += (dmOnly() ? vDmBar : vMiniBar)(tabs().map(k => `<button class="${tb === k ? 'on' : ''}" data-a="mbtab" data-t="${k}" title="${tabLabel(k)}" aria-label="${tabLabel(k)}">${glyph(TAB_IC[k])}</button>`).join(''));
-  h += vDock() + vBackupNag();
-  if (tb === 'main') h += vParty() + vMain(curCamp() ? { mode: 'combat' } : {});
-  if (CAMP_PAGES[tb]) h += CAMP_PAGES[tb]();
-  if (CHAR_PAGES[tb]) h += CHAR_PAGES[tb]();
-  if (['dmcombat', 'dmenc', 'dmcheat'].includes(tb)) h += vDmSub();
-  if (tb === 'inv') h += vInv();
-  if (tb === 'wiki') h += vWiki();
-  if (tb === 'notes') h += vNotesTab();
-  if (tb === 'setup') h += dmOnly() ? vDmSetup() : vSetup();
-  if (DM_TABS[tb]) { D.view = DM_TABS[tb]; h += vDm(true); }
-  if (tb === 'dm') h += vDm();
+  // Charakterebene: Navigation seitlich (Desktop), Inhalt daneben; sonst Reiter oben. Am Handy immer die feste Leiste unten.
+  const side = charLevel();
+  const tabsHtml = `<div class="tabs${side ? ' side' : ''}"><nav role="tablist" aria-label="${t('head.areas')}"${side ? ' aria-orientation="vertical"' : ''}>${tabs().map(k => `<button role="tab" aria-selected="${tb === k}" data-a="tab" data-t="${k}"${k === 'main' ? ' class="tab-fight"' : ''}>${glyph(TAB_IC[k])}<span>${tabLabel(k)}</span></button>`).join('')}</nav>${dmOnly() ? '' : `<div class="mini${S.hp === 0 ? ' down' : ''}">${L.status === 'on' ? `<i class="live-dot" title="${t('live.on')}"></i>` : ''}${t('head.hpShort')} <b>${S.hp}</b>/${S.hpMax}${S.tmp ? ` +${S.tmp}` : ''}</div>`}</div>`;
+  const mini = (dmOnly() ? vDmBar : vMiniBar)(tabs().map(k => `<button class="${tb === k ? 'on' : ''}" data-a="mbtab" data-t="${k}" title="${tabLabel(k)}" aria-label="${tabLabel(k)}">${glyph(TAB_IC[k])}</button>`).join(''));
+  let body = '';
+  if (tb === 'main') body += vFight() + vParty();
+  if (CAMP_PAGES[tb]) body += CAMP_PAGES[tb]();
+  if (CHAR_PAGES[tb]) body += CHAR_PAGES[tb]();
+  if (['dmcombat', 'dmenc', 'dmcheat'].includes(tb)) body += vDmSub();
+  if (tb === 'inv') body += vInv();
+  if (tb === 'wiki') body += vWiki();
+  if (tb === 'notes') body += vNotesTab();
+  if (tb === 'setup') body += dmOnly() ? vDmSetup() : vSetup();
+  if (DM_TABS[tb]) { D.view = DM_TABS[tb]; body += vDm(true); }
+  if (tb === 'dm') body += vDm();
+  h += side ? mini + vDock() + vBackupNag() + `<div class="charlayout">${tabsHtml}<div class="charmain">${body}</div></div>` : tabsHtml + mini + vDock() + vBackupNag() + body;
   h += `<footer><p>${t('footer.rules')}</p><details><summary>${t('footer.about')}</summary><p>${t('footer.srd')}</p><p>${t('footer.icons')}</p><p>${t('footer.fonts')}</p><p class="lbl">${t('footer.version', { v: typeof __BUILD__ !== 'undefined' ? __BUILD__ : '–' })}</p></details></footer>`;
   if (U.LU && CLASSES[S.klass]) h += vLU();
   h += vHandout() + vTarget() + vPeek();

@@ -67,6 +67,7 @@ test.describe('Vorbereitete Zauber @new', () => {
   test('immer vorbereitete zählen nicht und sind gesperrt', async ({ page }) => {
     await seed(page, cleric({ spells: [spell('Bless', 1), spell('Charm Person', 1, { always: true })] }));
     await expect(page.locator('.spprep')).toContainText('Prepared 1 of 9');
+    await act(page, 'spall').click();
     await expect(page.locator('.sp', { hasText: 'Charm Person' }).locator('[data-a="prep"]')).toBeDisabled();
   });
   test('Klassen ohne Zauberwirken sehen nichts davon (Zauber aus anderer Quelle)', async ({ page }) => {

@@ -92,7 +92,7 @@ test.describe('Werkzeuge und Sprachen @new', () => {
     await page.locator('#f-langs').blur();
     await expect.poll(async () => (await read(page)).tools).toEqual(["Poisoner's Kit", 'Forgery Kit']);
     expect((await read(page)).langs).toEqual(['Common', 'Elvish']);
-    await tab(page, 'main');
+    await tab(page, 'stats');
     await expect(page.locator('.chip', { hasText: 'Forgery Kit' })).toBeVisible();
     await expect(page.locator('.chip', { hasText: 'Elvish' })).toBeVisible();
   });
@@ -133,7 +133,7 @@ test.describe('Inventar und Fertigkeiten @new', () => {
     await expect(page.locator('.dstat')).toContainText('1d4+3');
   });
   test('Fertigkeiten nach Attribut mit Stern', async ({ page }) => {
-    await seed(page, base4({ skills: { Stealth: 2, Arcana: 1 } }));
+    await seed(page, base4({ skills: { Stealth: 2, Arcana: 1 }, tab: 'stats' }));
     const dex = page.locator('.skg', { hasText: 'Dexterity' });
     await expect(dex).toContainText('Stealth');
     await expect(dex.locator('.skr', { hasText: 'Stealth' }).locator('.skstar')).toHaveText('★★');
