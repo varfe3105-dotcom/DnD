@@ -46,9 +46,9 @@ Hauptreferenz: Dashboard-Bild der Nutzerin bzw. des Nutzers (Seitenleiste mit W�
 
 ## RealmCraft: Originalgrafiken (16.11.2026)
 
-- Quelle:  (nicht im Repository, Originale bleiben dort). Übernahme mit  nach  (branding, campaigns, dashboard, textures, ornaments). Ablage unter  statt , weil Vite nur so die Bilder in die Einzeldatei einbettet. Alle als WebP; Transparenz bei Branding, Ornamenten und Pergament.
+- Quelle: `RealmCraft/Design-inbox` (nicht im Repository, steht in `.gitignore`; Originale bleiben dort). Übernahme mit `python -I scripts/import-realmcraft.py` nach `src/assets/realmcraft/` (branding, campaigns, dashboard, textures, ornaments). Ablage unter `src/` statt `public/`, weil Vite nur so die Bilder in die Einzeldatei einbettet. Alle als WebP; Transparenz bei Branding, Ornamenten und Pergament.
 - Branding: Monogramm „RC“ (Seitenleiste oben, am Handy im Kopf) und Schriftzug „RealmCraft“ (darunter; Text für Screenreader im h1). Beide Originale sind schwarz auf weiß, das Skript macht Weiß transparent und färbt in Messing.
-- Kampagnen: sechs Illustrationen (castle-sunset, castle-valley, fortress-storm, river-city, dungeon-vault, forest-ruins), im Kampagnenformular wählbar (Feld  0–5).
+- Kampagnen: sechs Illustrationen (castle-sunset, castle-valley, fortress-storm, river-city, dungeon-vault, forest-ruins), im Kampagnenformular wählbar (Feld `art` 0–5).
 - Dashboard: Willkommensbild = castle-sunset (größer), Seitenleiste = Ausschnitt aus river-city.
 - Textur: Pergamentblatt mit Rissrand als border-image (Ecken unverzerrt) für Willkommensbereich und Schnellzugriff.
 - Ornamente: vier goldene Trennlinien (Seitenleiste, Willkommensbereich, Zitat).
