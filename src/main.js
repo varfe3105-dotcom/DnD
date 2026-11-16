@@ -25,3 +25,5 @@ try {
 const onScroll = () => { const t = document.querySelector('.tabs'); document.body.classList.toggle('scrolled', !!t && t.getBoundingClientRect().bottom < 0); };
 window.addEventListener('scroll', onScroll, { passive: true });
 window.addEventListener('resize', onScroll);
+import { syncMapLayer } from './views/hub.js';
+window.addEventListener('resize', syncMapLayer);

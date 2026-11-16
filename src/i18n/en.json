@@ -1460,5 +1460,10 @@
  "hub.q.chars": "Characters",
  "hub.q.notes": "Open notes",
  "camp.art": "Image",
- "camp.artN": "Image {n}"
+ "camp.artN": "Image {n}",
+ "hub.nav.map": "World map",
+ "hub.q.map": "Open the world map",
+ "map.newTab": "Open in new tab",
+ "map.source": "Interactive map of Faerûn by aidedd.org (map: Mike Schley). Loaded only here and only when online; your own markers are stored by aidedd.org in your browser, not in the sheet.",
+ "map.offline": "No internet connection: the world map comes from aidedd.org and cannot be shown offline."
 }

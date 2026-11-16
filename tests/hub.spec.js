@@ -131,4 +131,19 @@ test.describe('Dashboard @new', () => {
     expect(bg.startsWith('url("data:image/webp')).toBe(true);
     await expect(page.locator('.hub-camp')).toBeVisible();
   });
+
+  test('Weltkarte: eigener Bereich, iframe von aidedd.org, bleibt beim Wechsel geladen', async ({ page }) => {
+    await page.route('**/aidedd.org/**', r => r.fulfill({ status: 200, contentType: 'text/html', body: '<p>Karte</p>' }));
+    await start(page, chars);
+    await page.locator('.hub-ql[data-k="map"]').click();
+    await expect(page.locator('#hub-map-slot')).toBeVisible();
+    const fr = page.locator('#map-layer iframe');
+    await expect(fr).toHaveAttribute('src', 'https://www.aidedd.org/atlas/faerun');
+    await expect(page.locator('.hub-body a[target="_blank"]')).toHaveAttribute('href', 'https://www.aidedd.org/atlas/faerun');
+    await page.locator('.hub-side [data-a="hubgo"][data-s="home"]').click();
+    await expect(page.locator('#map-layer')).toBeHidden();
+    await page.locator('.hub-side [data-a="hubgo"][data-s="map"]').click();
+    await expect(page.locator('#map-layer')).toBeVisible();
+    expect(await page.locator('#map-layer iframe').count()).toBe(1);
+  });
 });

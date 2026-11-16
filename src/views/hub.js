@@ -10,8 +10,9 @@ import { vBackup } from './live-ui.js';
 import { skinControls } from '../bright.js';
 import { t, lang, units, nameLine } from '../i18n/index.js';
 
-export const HUB_SECTIONS = ['home', 'camps', 'chars', 'wiki', 'plan'];
-const HUB_IC = { home: 'shield', camps: 'swords', chars: 'person', wiki: 'book', plan: 'cal', settings: 'gear' };
+export const HUB_SECTIONS = ['home', 'camps', 'chars', 'wiki', 'map', 'plan'];
+export const MAP_URL = 'https://www.aidedd.org/atlas/faerun';
+const HUB_IC = { home: 'shield', camps: 'swords', chars: 'person', wiki: 'book', map: 'map', plan: 'cal', settings: 'gear' };
 /** Eigene Strich-Icons der Seitenleiste (gleicher Stil wie icons.js). */
 const SVG = {
   shield: '<path d="M3 11 12 4l9 7"/><path d="M5 10v10h14V10"/><path d="M10 20v-6h4v6"/>',
@@ -26,6 +27,8 @@ const SVG = {
   d20: '<path d="M12 2.5 20.5 7.5v9L12 21.5 3.5 16.5v-9z"/><path d="M12 2.5 7.5 14h9z M3.5 7.5 7.5 14 M20.5 7.5 16.5 14 M7.5 14 12 21.5 16.5 14"/>',
   plus: '<path d="M12 5v14M5 12h14"/>', check: '<path d="M4 12.5 9.5 18 20 6.5"/>', pen: '<path d="M4 20l1-4L16 5l3 3L8 19z"/><path d="M14 7l3 3"/>', upload: '<path d="M12 16V4M7 9l5-5 5 5"/><path d="M4 16v4h16v-4"/>', bag: '<path d="M8 7V6a4 4 0 0 1 8 0v1"/><path d="M4.5 8h15l-1.2 12.5H5.7z"/>', wand: '<path d="M4 20 15 9"/><path d="M17 3v3M17 9v1M14 6h-1M21 6h-3"/>', crown: '<path d="M3 18h18M4 16 3 7l5 4 4-7 4 7 5-4-1 9z"/>',
   star: '<path d="M12 3l2.2 6.6H21l-5.5 4 2.1 6.6L12 16.3 6.4 20.2l2.1-6.6L3 9.6h6.8z"/>',
+  map: '<path d="M3 6.5 9 4l6 2.5L21 4v13.5L15 20l-6-2.5L3 20z"/><path d="M9 4v13.5M15 6.5V20"/>',
+  ext: '<path d="M14 4h6v6M20 4l-9 9"/><path d="M18 14v6H4V6h6"/>',
   scroll: '<path d="M8 4h10a2 2 0 0 1 0 4h-1v10a2.5 2.5 0 0 1-2.5 2.5h-9a2 2 0 0 1 0-4H7V5.5A1.5 1.5 0 0 1 8 4"/><path d="M10 9h4.5M10 12.5h4.5"/>',
 };
 const ico = (k, cls = '') => `<svg class="hi${cls ? ' ' + cls : ''}" viewBox="0 0 24 24" aria-hidden="true">${SVG[k]}</svg>`;
@@ -131,7 +134,7 @@ function vNext() {
 function vQuick() {
   const has = real({ id: S.id, klass: S.klass, level: S.level });
   const L = [
-    ['chars', 'person', t('hub.q.chars')], ['wiki', 'book', t('hub.q.rules')],
+    ['chars', 'person', t('hub.q.chars')], ['wiki', 'book', t('hub.q.rules')], ['map', 'map', t('hub.q.map')],
     ...(has && !dmOnly() ? [['inv', 'bag', t('hub.q.inv')], ['notes', 'scroll', t('hub.q.notes')]] : []), ['campnew', 'swords', t('hub.q.newCamp')], ['import', 'upload', t('hub.q.import')],
     ...(dmOnly() ? [['dm', 'crown', t('hub.q.dm')]] : [['live', 'star', t('hub.q.live')]]),
   ];
@@ -140,6 +143,27 @@ function vQuick() {
 function vPlan() {
   const list = campaigns().filter(c => c.status === 'active');
   return `<div class="hub-h">${ico('cal', 'big')}<h2>${t('hub.nav.plan')}</h2></div><section class="hub-doc">${list.length ? list.sort((a, b) => (a.next || '9').localeCompare(b.next || '9')).map(c => `<div class="row hub-planrow"><div class="nm">${esc(c.name)}<small>${c.next ? esc(fmtDate(c.next)) : t('hub.noDate')}</small></div><input type="datetime-local" id="plan-${esc(c.id)}" value="${esc(c.next && c.next.length === 10 ? c.next + 'T19:00' : c.next)}" aria-label="${t('camp.next')} ${esc(c.name)}">${c.next ? `<button class="hbtn sm" data-a="plandel" data-id="${esc(c.id)}">${t('hub.noDateBtn')}</button>` : ''}</div>`).join('') + `<p class="note">${t('hub.planNote')}</p>` : `<p class="note">${t('hub.planEmpty')}</p><button class="hbtn pri" data-a="campnew">${t('hub.newCamp')} ${ico('arrow')}</button>`}</section>`;
+}
+/** Weltkarte: Platzhalter im Inhalt, die Karte selbst setzt syncMapLayer() darüber. */
+function vMap() {
+  const on = typeof navigator === 'undefined' || navigator.onLine !== false;
+  return `<div class="hub-h">${ico('map', 'big')}<h2>${t('hub.nav.map')}</h2><a class="hub-more" href="${MAP_URL}" target="_blank" rel="noopener noreferrer">${t('map.newTab')} ${ico('ext')}</a></div>
+  <p class="note hub-mapnote">${t('map.source')}</p>${on ? '<div id="hub-map-slot" class="hub-mapslot" aria-hidden="true"></div>' : `<section class="hub-panel"><p class="note">${t('map.offline')}</p></section>`}`;
+}
+/** Legt die Karte über ihren Platzhalter. Ohne Platzhalter (anderer Bereich) bleibt sie versteckt geladen. */
+export function syncMapLayer() {
+  const slot = document.getElementById('hub-map-slot');
+  let layer = document.getElementById('map-layer');
+  if (!slot) { if (layer) layer.hidden = true; return; }
+  if (!layer) {
+    layer = document.createElement('div');
+    layer.id = 'map-layer';
+    layer.innerHTML = `<iframe src="${MAP_URL}" title="${t('hub.nav.map')}" referrerpolicy="no-referrer" allow="fullscreen" loading="eager"></iframe>`;
+    document.body.appendChild(layer);
+  }
+  const r = slot.getBoundingClientRect();
+  layer.hidden = false;
+  Object.assign(layer.style, { left: r.left + window.scrollX + 'px', top: r.top + window.scrollY + 'px', width: r.width + 'px', height: r.height + 'px' });
 }
 function vSettings() {
   const langBtn = l => `<button class="chip${lang === l ? ' on' : ''}" data-a="lang" data-l="${l}" aria-pressed="${lang === l}">${l === 'de' ? 'Deutsch' : 'English'}</button>`;
@@ -155,6 +179,7 @@ export function vHub() {
   if (s === 'chars') main = vChars(0);
   if (s === 'wiki') main = vWiki();
   if (s === 'plan') main = vPlan();
+  if (s === 'map') main = vMap();
   if (s === 'settings') main = vSettings();
   return `<div class="hub" data-sec="${s}">${vSide()}<div class="hub-main">${vTop()}<main class="hub-body">${main}</main><input type="file" id="impf" accept=".json,application/json,text/plain,application/pdf,image/*" multiple hidden></div></div>`;
 }

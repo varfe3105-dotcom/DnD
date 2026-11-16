@@ -10,7 +10,7 @@ import { vWiki } from './views/wiki.js';
 import { vSetup } from './views/setup.js';
 import { vLU } from './views/levelup.js';
 import { vDm, vPeek } from './views/dm.js';
-import { vHub } from './views/hub.js';
+import { vHub, syncMapLayer } from './views/hub.js';
 import { D } from './dm.js';
 import { DM_TABS, DM_TAB_IC, dmOnly, vDmHead, vDmBar, vDmSetup } from './views/dm-mode.js';
 import { L } from './live.js';
@@ -73,6 +73,7 @@ export function render() {
   document.body.style.overflow = U.LU ? 'hidden' : '';
   const wl = document.querySelector('.wl'), wlTop = wl && !U.resetWl ? wl.scrollTop : 0, pageY = window.scrollY;
   app.innerHTML = h;
+  syncMapLayer();
   U.resetWl = false;
   const wl2 = document.querySelector('.wl');
   if (wl2) wl2.scrollTop = wlTop;

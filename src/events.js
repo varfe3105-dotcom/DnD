@@ -200,7 +200,7 @@ app.addEventListener('click',ev=>{
     case 'hubwiki':U.HUB='wiki';U.HUBQ='';U.WSEL=b.dataset.key;U.WF='all';U.WQ='';window.scrollTo(0,0);break;
     case 'hubnewchar':newChar();openWizard();enterPlay('setup');break;
     case 'hubimport':hubImport();return;
-    case 'hubq':{const k=b.dataset.k;if(k==='wiki'){U.HUB='wiki';break}if(k==='newchar'){newChar();openWizard();enterPlay('setup');break}if(k==='import'){hubImport();return}if(k==='campnew'){U.CAMPART=null;U.HUB='camps';U.CAMPED='new';U.CAMPCH=null;break}if(k==='inv'){enterPlay('inv');break}if(k==='notes'){enterPlay('notes');break}if(k==='chars'){U.HUB='chars';window.scrollTo(0,0);break}if(k==='live'){enterPlay('setup');U.SCROLLTO='live-code';break}if(k==='dm'){enterPlay();break}break}
+    case 'hubq':{const k=b.dataset.k;if(k==='wiki'){U.HUB='wiki';break}if(k==='map'){U.HUB='map';window.scrollTo(0,0);break}if(k==='newchar'){newChar();openWizard();enterPlay('setup');break}if(k==='import'){hubImport();return}if(k==='campnew'){U.CAMPART=null;U.HUB='camps';U.CAMPED='new';U.CAMPCH=null;break}if(k==='inv'){enterPlay('inv');break}if(k==='notes'){enterPlay('notes');break}if(k==='chars'){U.HUB='chars';window.scrollTo(0,0);break}if(k==='live'){enterPlay('setup');U.SCROLLTO='live-code';break}if(k==='dm'){enterPlay();break}break}
     case 'campart':{const i=+b.dataset.i;U.CAMPART=i;document.querySelectorAll('.hub-artpick button').forEach(x=>{const on=+x.dataset.i===i;x.classList.toggle('on',on);x.setAttribute('aria-pressed',on)});return}
     case 'campnew':U.CAMPART=null;U.HUB='camps';U.CAMPED='new';U.CAMPCH=null;window.scrollTo(0,0);break;
     case 'campedit':U.CAMPART=null;U.HUB='camps';U.CAMPED=b.dataset.id;U.CAMPCH=null;U.HUBQ='';window.scrollTo(0,0);break;
