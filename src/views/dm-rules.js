@@ -2,7 +2,7 @@
 import sections from '../../data/rule-sections.json';
 import { esc } from '../util.js';
 import { DU } from '../dm.js';
-import { t, lang, dice } from '../i18n/index.js';
+import { t, lang, dice, convUnits } from '../i18n/index.js';
 
 const GROUPS = ['combat', 'adventuring', 'using-ability-scores', 'spellcasting', 'equipment', 'appendix'];
 const nameOf = s => (lang === 'de' && s.n.de) || s.n.en;
@@ -97,7 +97,7 @@ export function vCheat() {
 const STAT_HEAD = /^(Traits|Actions|Reactions|Legendary Actions)$/;
 /** Monsterwerte gegliedert: Abschnittstitel und fette Fähigkeitsnamen statt eines Textblocks. */
 export function statText(text) {
-  return String(text || '').split('\n').filter(l => l.trim()).map(l => {
+  return convUnits(String(text || '')).split('\n').filter(l => l.trim()).map(l => {
     if (STAT_HEAD.test(l.trim())) return `<h5>${esc(l.trim())}</h5>`;
     const m = l.match(/^([^.:\n]{2,60}?)\.\s+(.+)$/);
     return m ? `<p><b>${esc(m[1])}.</b> ${esc(m[2])}</p>` : `<p>${esc(l)}</p>`;

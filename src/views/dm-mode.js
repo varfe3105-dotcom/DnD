@@ -3,7 +3,7 @@ import { esc } from '../util.js';
 import { D, ordered } from '../dm.js';
 import { L, players } from '../live.js';
 import { skinControls } from '../bright.js';
-import { t, lang } from '../i18n/index.js';
+import { t, lang, units } from '../i18n/index.js';
 
 /** Reiter im Spielleitungsmodus → Unteransicht des DM-Bereichs. */
 export const DM_TABS = { dmnotes: 'notes', dmcombat: 'combat', dmenc: 'enc', dmloot: 'loot', dmlive: 'live', dmcheat: 'cheat' };
@@ -14,7 +14,7 @@ export function vDmHead() {
   const langBtn = l => `<button data-a="lang" data-l="${l}" aria-pressed="${lang === l}" lang="${l}">${l.toUpperCase()}</button>`;
   const ps = players();
   const status = L.role === 'dm' && L.code ? t('dmm.room', { c: esc(L.code), n: ps.length }) : t('dmm.noRoom');
-  return `<header class="hd dmhd"><span class="por" aria-hidden="true"><span>⚔</span></span><div class="who"><h1>${t('dmm.title')}</h1><p>${status}</p>${D.combat.list.length ? `<p class="sub2">${t('dmm.combatLine', { r: D.combat.round, n: D.combat.list.length })}</p>` : ''}</div><div class="hacts"><div class="langs" role="group" aria-label="${t('head.language')}">${langBtn('en')}${langBtn('de')}</div></div></header>`;
+  return `<header class="hd dmhd"><span class="por" aria-hidden="true"><span>⚔</span></span><div class="who"><h1>${t('dmm.title')}</h1><p>${status}</p>${D.combat.list.length ? `<p class="sub2">${t('dmm.combatLine', { r: D.combat.round, n: D.combat.list.length })}</p>` : ''}</div><div class="hacts"><div class="langs" role="group" aria-label="${t('head.language')}">${langBtn('en')}${langBtn('de')}</div><div class="langs units" role="group" aria-label="${t('head.units')}">${['m', 'ft'].map(u => `<button data-a="units" data-u="${u}" aria-pressed="${units === u}" title="${t('units.' + u)}">${u}</button>`).join('')}</div></div></header>`;
 }
 
 /** Kurzleiste beim Scrollen: Runde, wer dran ist, TP der verbundenen Spieler. */

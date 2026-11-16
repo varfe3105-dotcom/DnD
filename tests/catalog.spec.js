@@ -57,7 +57,8 @@ test.describe('Katalog in der Oberfläche @new', () => {
     await page.locator('#wq').fill('Fireball');
     await act(page, 'wsel', '[data-key="spell:Fireball"]').click();
     const pane = page.locator('.wd.pane');
-    await expect(pane).toContainText('150 feet');
+    await expect(pane).toContainText('45 m');
+    await expect(pane).toContainText('6-meter-radius');
     await expect(pane).toContainText('8d6');
     await setLang(page, 'de');
     await expect(pane).toContainText('45 m');

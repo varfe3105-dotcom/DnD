@@ -25,7 +25,7 @@ export function norm(o){
   if(!Array.isArray(s.slots)||s.slots.length!==9)s.slots=def().slots;
   ['saves','skills','cond','eq'].forEach(k=>{if(!s[k]||typeof s[k]!=='object'||Array.isArray(s[k]))s[k]={}});
   s.acMode=o.acMode==='auto'?'auto':'manual';s.insp=!!o.insp;
-  ['res','spells','feats','multi','tools','langs','pets','notePages','buffs','buffsOut','buffsGone'].forEach(k=>{if(!Array.isArray(s[k]))s[k]=[]});
+  ['res','spells','feats','multi','tools','langs','pets','notePages','buffs','buffsOut','buffsGone','mastery'].forEach(k=>{if(!Array.isArray(s[k]))s[k]=[]});
   if(!Array.isArray(s.bag))s.bag=[];while(s.bag.length<24)s.bag.push(null);
   ['hp','hpMax','tmp','ac','speed','prof','exh','level'].forEach(k=>{s[k]=+s[k]||0});
   s.notePages=s.notePages.filter(p=>p&&typeof p==='object').map(p=>({id:p.id||uid(),title:String(p.title||''),text:String(p.text||'')}));s.noteTitle=String(s.noteTitle||'');s.notePage=Math.max(0,Math.floor(+s.notePage)||0);

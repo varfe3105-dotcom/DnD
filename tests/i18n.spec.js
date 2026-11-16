@@ -65,16 +65,21 @@ test.describe('Umschalten @new', () => {
     await expect(page.locator('.selp')).toContainText('Eigener Text bleibt');
   });
 
-  test('Einheiten: ft. auf Englisch, m auf Deutsch, intern Meter', async ({ page }) => {
+  test('Einheiten: Standard Meter auch auf Englisch, Schalter auf Fuß, intern Meter', async ({ page }) => {
     await seed(page, base4({ speed: 9 }));
+    await expect(page.locator('.st').nth(2).locator('b')).toHaveText('9 m');
+    await page.locator('[data-a="units"][data-u="ft"]').click();
     await expect(page.locator('.st').nth(2).locator('b')).toHaveText('30 ft.');
     await setLang('de')(page);
+    await expect(page.locator('.st').nth(2).locator('b')).toHaveText('30 Fuß');
+    await page.locator('[data-a="units"][data-u="m"]').click();
     await expect(page.locator('.st').nth(2).locator('b')).toHaveText('9 m');
     expect((await read(page)).speed).toBe(9);
   });
 
-  test('Tempo eingeben: Englisch in Fuß, gespeichert in Metern', async ({ page }) => {
+  test('Tempo eingeben: mit Fuß-Einheit in Fuß, gespeichert in Metern', async ({ page }) => {
     await seed(page, base4({ tab: 'setup' }));
+    await page.locator('[data-a="units"][data-u="ft"]').click();
     await page.locator('#f-speed').fill('35');
     await page.locator('#f-speed').blur();
     await expect.poll(async () => (await read(page)).speed).toBe(10.5);

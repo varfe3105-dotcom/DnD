@@ -1,4 +1,5 @@
 // Baut aus den JSON-Dateien in data/ den durchsuchbaren Katalog in der aktuellen Sprache.
+import { AKA } from './book-names.js';
 import potions from '../data/potions.json';
 import items from '../data/items.json';
 import magicItems from '../data/magic-items.json';
@@ -77,7 +78,7 @@ export function buildCatalog() {
   const crT = c => (c === 0.125 ? '1/8' : c === 0.25 ? '1/4' : c === 0.5 ? '1/2' : String(c));
   monsters.forEach(m => addCat({ k: 'monster', id: m.id, n: m.n, ic: 'skull', mon: m, artKey: 'mt:' + String(m.type || '').split(' ')[0], c: `${t('cat.monster')} · ${t('turn.cr', { n: crT(m.cr) })}`, hay: `${m.type} ${m.size}`, source: 'srd' }));
   mastery.forEach(m => addCat({ k: 'rule', id: 'mastery-' + m.id, n: m.n, ic: m.ic, p: loc(m.text), c: t('cat.mastery'), source: m.source, hay: 'mastery meisterschaft' }));
-  spells.forEach(s => addCat({ k: 'spell', cant: s.cant, ed: s.ed, n: s.n, de: s.de, aka: s.aka, origin: s.origin, lvl: s.lvl, school: s.school, ic: s.ic, cls: s.cls, c: s.lvl ? t('spell.level', { n: s.lvl }) : t('spell.cantrips'), time: loc(s.time), range: loc(s.range), dur: loc(s.dur), comp: s.comp, material: s.material, conc: s.conc, ritual: s.ritual, eff: loc(s.text), higher: s.higher ? loc(s.higher) : '', source: s.source, hay: [s.de, s.aka].join(' ') }));
+  spells.forEach(s => addCat({ k: 'spell', cant: s.cant, ed: s.ed, n: s.n, de: s.de, aka: s.aka || AKA[s.n], origin: s.origin, lvl: s.lvl, school: s.school, ic: s.ic, cls: s.cls, c: s.lvl ? t('spell.level', { n: s.lvl }) : t('spell.cantrips'), time: loc(s.time), range: loc(s.range), dur: loc(s.dur), comp: s.comp, material: s.material, conc: s.conc, ritual: s.ritual, eff: loc(s.text), higher: s.higher ? loc(s.higher) : '', source: s.source, hay: [s.de, s.aka || AKA[s.n]].join(' ') }));
   COND.forEach(c => addCat({ k: 'cond', n: c.n, de: c.de, ic: c.ic, p: loc(c.text), c: t('cat.cond'), source: c.source }));
   feats.forEach(f => addCat({ k: 'feat', n: f.n, de: f.de, ic: 'star', p: loc(f.text), c: t('cat.feat') + (f.cat ? ' · ' + t('featcat.' + f.cat) : ''), cat: f.cat, asi: f.asi, source: f.source, req: f.req, hay: f.de }));
   rules.forEach(r => addCat({ k: 'rule', id: r.n.de, n: loc(r.n), ic: r.ic, p: loc(r.text), c: t('cat.rule'), source: r.source, hay: hayOf(r.n) }));

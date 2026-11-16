@@ -24,7 +24,7 @@ const fill = (s, p) => (p ? s.replace(/\{(\w+)\}/g, (m, k) => (p[k] != null ? p[
 export function tl(l, key, params) {
   let s = DICT[l][key];
   if (s == null) { missing.add(`${l}:${key}`); s = DICT[l === 'en' ? 'de' : 'en'][key] ?? key; }
-  return fill(s, params);
+  return convUnits(fill(s, params));
 }
 export const t = (key, params) => tl(lang, key, params);
 
@@ -33,9 +33,9 @@ export function loc(v, l = lang) {
   if (v == null) return '';
   if (typeof v !== 'object') return v;
   const other = l === 'en' ? 'de' : 'en';
-  if (v[l]) return v[l];
+  if (v[l]) return convUnits(v[l]);
   if (v[other]) missing.add(`${l}:${v[other].slice(0, 40)}`);
-  return v[other] || '';
+  return convUnits(v[other] || '');
 }
 
 /** „Blinded · Blind“: Auf Deutsch die deutsche Bezeichnung als Zusatz. */
@@ -48,8 +48,27 @@ export const dice = (s, l = lang) => String(s ?? '').replace(/(^|[^\p{L}])(\d*)[
 /** Strecken werden intern in Metern geführt: 1,5 m entsprechen 5 ft. */
 export const metersToFeet = m => Math.round(m * 10 / 3);
 export const feetToMeters = f => Math.round(f * 0.3 * 2) / 2;
-export const dist = m => (lang === 'en' ? `${metersToFeet(m)} ft.` : `${String(m).replace('.', ',')} m`);
-/** Gewicht intern in Pfund, deutsch in Kilogramm. */
-export const weight = lb => (lang === 'en' ? `${Math.round(lb * 10) / 10} lb` : `${String(Math.round(lb * 0.45 * 10) / 10).replace('.', ',')} kg`);
-export const distValue = m => (lang === 'en' ? metersToFeet(m) : m);
-export const distInput = v => (lang === 'en' ? feetToMeters(v) : v);
+/* Einheiten: Meter (Standard) oder Fuß, unabhängig von der Sprache. Gespeichert pro Gerät. */
+const ULS = 'charbogen-units';
+export let units = (() => { try { return localStorage.getItem(ULS) === 'ft' ? 'ft' : 'm'; } catch (e) { return 'm'; } })();
+export function setUnits(u) { units = u === 'ft' ? 'ft' : 'm'; try { localStorage.setItem(ULS, units); } catch (e) { /* gilt bis zum Neuladen */ } }
+const num = v => (lang === 'de' ? String(v).replace('.', ',') : String(v));
+const ftWord = () => (lang === 'de' ? 'Fuß' : 'ft.');
+export const dist = m => (units === 'ft' ? `${metersToFeet(m)} ${ftWord()}` : `${num(m)} m`);
+/** Gewicht intern in Pfund; mit Metern in Kilogramm. */
+export const weight = lb => (units === 'ft' ? `${num(Math.round(lb * 10) / 10)} lb` : `${num(Math.round(lb * 0.45 * 10) / 10)} kg`);
+export const distValue = m => (units === 'ft' ? metersToFeet(m) : m);
+export const distInput = v => (units === 'ft' ? feetToMeters(v) : v);
+/** Strecken in Texten umrechnen: englische Fuß-Angaben in Meter oder deutsche Meter-Angaben in Fuß. */
+export function convUnits(s) {
+  if (typeof s !== 'string' || !s) return s;
+  if (units === 'm') {
+    return s.replace(/(\d[\d,]*)( |-)(feet|foot|ft\.?)(?![a-z])/gi, (x, n, sep, w) => {
+      const m = num(feetToMeters(+n.replace(/,/g, '')));
+      // „a 20-foot radius“ → „a 6-meter radius“, „60 feet“/„30 ft.“ → „18 m“/„9 m“
+      if (sep === '-' && /^f(oo|ee)t/i.test(w)) return `${m}-meter`;
+      return `${m} m`;
+    });
+  }
+  return s.replace(/(\d+(?:,\d+)?)( ?|-)m(?![\p{L}\d])/gu, (x, n, sep) => `${metersToFeet(+n.replace(',', '.'))}${sep === '-' ? '-' : ' '}${lang === 'de' ? 'Fuß' : 'ft.'}`);
+}

@@ -145,7 +145,7 @@ export function vLuSpells() {
   if (!pools.length) return '';
   return pools.map(p => {
     const sel = U.LU.pick[p.key], full = sel.length >= p.n;
-    const shown = p.list.filter(e => !q || e.n.toLowerCase().includes(q) || (e.de || '').toLowerCase().includes(q) || sel.includes(e.n));
+    const shown = p.list.filter(e => !q || e.n.toLowerCase().includes(q) || (e.de || '').toLowerCase().includes(q) || (e.aka || '').toLowerCase().includes(q) || sel.includes(e.n));
     const byLvl = {};
     shown.forEach(e => { (byLvl[e.lvl] = byLvl[e.lvl] || []).push(e); });
     return `<div class="lup-pool"><p class="lbl lup-head${full ? ' full' : ''}">${t('lu.pick.' + p.kind, { a: sel.length, b: p.n })}</p>${Object.entries(byLvl).map(([l, es]) => `<p class="lup-lvl">${+l ? t('spell.level', { n: l }) : t('spell.cantrips')}</p><div class="lup-list">${es.map(e => { const on = sel.includes(e.n); return `<button class="lup${on ? ' on' : ''}" data-a="lupick" data-k="${p.key}" data-n="${esc(e.n)}" aria-pressed="${on}"${!on && full ? ' disabled' : ''} title="${esc((e.eff || '').slice(0, 220))}"><b>${esc(e.n)}</b>${e.de && e.de !== e.n ? `<small>${esc(e.de)}</small>` : ''}</button>`; }).join('')}</div>`).join('') || `<p class="note">${t('wiki.nothing')}</p>`}</div>`;

@@ -12,6 +12,15 @@ import { COND, EXH, featText, byName, CLASSES, BYN } from '../catalog.js';
 import { t, loc, dice, dist, lang, nameLine, deName } from '../i18n/index.js';
 import { effects, hpMaxNow, rollState, anyEffect } from '../effects.js';
 import { acBonus, buffText, origin, BUFFS } from '../buffs.js';
+import { vTurnHelp, masteryCount, masteryOf, masteryText } from './turn.js';
+/** Meisterschaft einer Waffe: gewählt (aktiv), wählbar oder ohne das Merkmal nur als Hinweis. */
+function mastChip(raw) {
+  const e = raw && raw.ref && BYN[raw.ref], m = e && e.mastery && masteryOf(e.mastery);
+  if (!m) return '';
+  const n = masteryCount(), on = (S.mastery || []).includes(raw.ref), tip = esc(masteryText(m.id));
+  if (!n) return `<span class="chip mast dim" title="${tip}">${t('mast.none', { n: esc(m.n) })}</span>`;
+  return `<button class="chip mast${on ? ' on' : ''}" data-a="wmast" data-w="${esc(raw.ref)}" aria-pressed="${on}" title="${tip}${on ? '' : ' · ' + esc(t('mast.hint', { a: (S.mastery || []).length, b: n }))}">${on ? t('mast.label', { n: esc(m.n) }) : t('mast.off', { n: esc(m.n) })}</button>`;
+}
 /** RK mit Wirkungen von Mitspielern: verändert = farbig, Herkunft im Tooltip. */
 export const acHtml = () => { const b = acBonus(); return b.v ? `<span class="${b.v > 0 ? 'buff' : 'debuff'}" title="${esc(b.why)}">${S.ac + b.v}</span>` : String(S.ac); };
 
@@ -105,7 +114,7 @@ export function vAtk() {
   const rows = ['main', 'off'].filter(k => S.eq[k]).map(k => {
     const raw = S.eq[k], a = atk(raw, k); if (!a) return '';
     const it = itemView(raw);
-    return `<div class="row wrow"><div class="ic">${tok(it.ic, itTone(it), it.ref)}</div><div class="nm">${esc(it.n)}<small>${esc(it.p)}</small><span class="atkt"><button class="chip prf${a.prof ? ' on' : ''}" data-a="wprof" data-k="${k}" aria-pressed="${a.prof}">${t(a.prof ? 'atk.prof' : 'atk.noProf')}</button>${a.tags.map(x => `<span class="lbl">${esc(x)}</span>`).join('')}${fxTag}</span></div><div class="atk"><b>${a.hit}</b><small>${t('atk.hit')}</small></div><div class="atk"><b>${a.dmg}</b><small>${esc(a.type)}${a.vers ? ` · 2H ${a.vers}` : ''}</small></div>${ammoRow(raw, k)}</div>`;
+    return `<div class="row wrow"><div class="ic">${tok(it.ic, itTone(it), it.ref)}</div><div class="nm">${esc(it.n)}<small>${esc(it.p)}</small><span class="atkt"><button class="chip prf${a.prof ? ' on' : ''}" data-a="wprof" data-k="${k}" aria-pressed="${a.prof}">${t(a.prof ? 'atk.prof' : 'atk.noProf')}</button>${a.tags.map(x => `<span class="lbl">${esc(x)}</span>`).join('')}${fxTag}${mastChip(raw)}</span>${(S.mastery || []).includes(raw.ref) && BYN[raw.ref]?.mastery ? `<small class="mast-t">${esc(masteryText(BYN[raw.ref].mastery))}</small>` : ''}</div><div class="atk"><b>${a.hit}</b><small>${t('atk.hit')}</small></div><div class="atk"><b>${a.dmg}</b><small>${esc(a.type)}${a.vers ? ` · 2H ${a.vers}` : ''}</small></div>${ammoRow(raw, k)}</div>`;
   }).join('');
   const u = unarmed();
   const fist = `<div class="row wrow atk-un"><div class="ic">${tok('swirl')}</div><div class="nm">${t('atk.unarmed')}${u.tags.length ? `<small>${esc(u.tags.join(' · '))}</small>` : ''}${fxTag ? `<span class="atkt">${fxTag}</span>` : ''}</div><div class="atk"><b>${u.hit}</b><small>${t('atk.hit')}</small></div><div class="atk"><b>${u.dmg}</b><small>${esc(u.type)}</small></div></div>`;
@@ -198,6 +207,6 @@ export function vMain() {
   h += vFx(fx);
   const mode = sheetMode(), show = k => mode === 'all' || (mode === 'combat' ? !['feats', 'skills', 'profs'].includes(k) : !['atk', 'charges', 'pets'].includes(k));
   h += `<div class="modes" role="group" aria-label="${t('mode.label')}">${['all', 'combat', 'explore'].map(m => `<button class="tg${mode === m ? ' on' : ''}" data-a="sheetmode" data-m="${m}" aria-pressed="${mode === m}">${t('mode.' + m)}</button>`).join('')}</div>`;
-  h += `<div class="sheet"><aside>${vAbil(false)}</aside><div class="col c1">${vHP()}${vCond()}${show('atk') ? vAtk() : ''}${vQuick()}${show('charges') ? vCharges() : ''}${vRes()}${show('pets') ? vPets() : ''}</div><div class="col c2">${vSpells()}${show('feats') ? vFeats() : ''}${show('skills') ? `<div class="c2sk">${vSkills()}</div>` : ''}${show('profs') ? vProfs() : ''}</div></div>`;
+  h += `<div class="sheet"><aside>${vAbil(false)}</aside><div class="col c1">${vHP()}${vCond()}${show('atk') ? vAtk() + vTurnHelp() : ''}${vQuick()}${show('charges') ? vCharges() : ''}${vRes()}${show('pets') ? vPets() : ''}</div><div class="col c2">${vSpells()}${show('feats') ? vFeats() : ''}${show('skills') ? `<div class="c2sk">${vSkills()}</div>` : ''}${show('profs') ? vProfs() : ''}</div></div>`;
   return h;
 }

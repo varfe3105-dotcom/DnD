@@ -542,3 +542,17 @@ body:has(#live-dock.full) #toast{bottom:auto;top:calc(12px + env(safe-area-inset
 @media screen and (max-width:520px){.pk-abil{grid-template-columns:repeat(3,1fr)}.pk-stats{grid-template-columns:repeat(2,1fr)}}
 .dlg .tgts .chip:not(.on){background:rgba(60,40,20,.08);color:#2b2118;border:1px solid #8a6d4a;text-shadow:none}
 .dlg .tgts .chip{font-size:.95rem;padding:6px 12px}
+
+/* Waffenmeisterschaft */
+.chip.mast{font-size:.72rem}
+.chip.mast.on{border-color:#4f9a5a;color:#9be0a4;background:rgba(79,154,90,.15)}
+.chip.mast.dim{opacity:.6;cursor:help}
+.mast-t{display:block;margin-top:3px;color:#9be0a4;font-size:.8rem}
+/* Zugübersicht */
+.turnov>summary{cursor:pointer;font:400 1.15rem var(--f-title);letter-spacing:.03em}
+.tv-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:10px 18px;margin-top:8px}
+.tv-sec h4{margin:4px 0 4px;font:600 .85rem var(--f-ui);letter-spacing:.08em;text-transform:uppercase;color:var(--gilt)}
+.tv-sec ul{margin:0;padding-left:16px}
+.tv-sec li{margin:3px 0;line-height:1.35}
+.tv-sec li span{color:var(--mute);font-size:.88rem}
+.tv-own{margin:6px 0 0;font-size:.9rem}

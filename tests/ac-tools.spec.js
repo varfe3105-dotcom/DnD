@@ -111,11 +111,13 @@ test.describe('Inventar und Fertigkeiten @new', () => {
     await expect(page.locator('[data-drag="bag:0"]')).toHaveClass(/t-rare/);
     await expect(page.locator('[data-drag="bag:1"]')).not.toHaveClass(/t-(uncommon|rare|veryrare|legendary|arcane)/);
   });
-  test('Traglast rechnet Gewicht und Stärke, Sprache wechselt die Einheit', async ({ page }) => {
+  test('Traglast rechnet Gewicht und Stärke, Einheitenschalter wechselt kg/lb', async ({ page }) => {
     await seed(page, base4({ tab: 'inv', abil: { ...abil, str: 10 }, bag: bagOf(item('d', 'Dagger', { ref: 'item:dagger', slot: 'hand', q: 2 }), item('a', 'Arrows', { ref: 'item:arrow', q: 20 })) }));
-    await expect(page.locator('.carryv')).toHaveText('3 lb / 150 lb');
+    await expect(page.locator('.carryv')).toHaveText('1.4 kg / 67.5 kg');
     await page.locator('[data-a="lang"][data-l="de"]').click();
     await expect(page.locator('.carryv')).toHaveText('1,4 kg / 67,5 kg');
+    await page.locator('[data-a="units"][data-u="ft"]').click();
+    await expect(page.locator('.carryv')).toHaveText('3 lb / 150 lb');
   });
   test('Filter blendet Unpassendes ab, Eingabe bleibt', async ({ page }) => {
     await seed(page, base4({ tab: 'inv', bag: bagOf(item('a', 'Seil'), item('b', 'Fackel')) }));

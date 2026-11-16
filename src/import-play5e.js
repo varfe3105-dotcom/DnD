@@ -175,7 +175,9 @@ function build(c) {
   if (c.asiChoices.length) toNotes.push(t('imp.asiNote'));
 
   // Zauber
-  const spellByslug = Object.fromEntries(Object.values(BYN).filter(e => e.k === 'spell').map(e => [slug(e.n), e]));
+  const spellList = Object.values(BYN).filter(e => e.k === 'spell');
+  // Auch PHB-Namen wie „Tasha's Hideous Laughter“ finden
+  const spellByslug = Object.fromEntries([...spellList.filter(e => e.aka).map(e => [slug(e.aka), e]), ...spellList.map(e => [slug(e.n), e])]);
   const missingSpells = [];
   c.spells.forEach(s => {
     const e = spellByslug[slug(s.spellId)];

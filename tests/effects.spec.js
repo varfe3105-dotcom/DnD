@@ -21,13 +21,13 @@ test.describe('Wirkungen von Zuständen, Erschöpfung und Rüstung @new', () => 
   test('Paralyzed: Stärke- und Geschicklichkeitsrettungswürfe scheitern, Tempo 0', async ({ page }) => {
     await seed(page, base4({ cond: { Paralyzed: true } }));
     await expect(page.locator('.sv .fxm.fail')).toHaveCount(2);
-    await expect(speedBox(page).locator('b')).toHaveText('0 ft.');
+    await expect(speedBox(page).locator('b')).toHaveText('0 m');
     await expect(page.locator('.fx')).toContainText(/critical|kritisch/);
   });
 
   test('Erschöpfung 2024: je Stufe −2 auf W20-Tests und −1,5 m Tempo, TP-Maximum bleibt', async ({ page }) => {
     await seed(page, base4({ exh: 2 }));
-    await expect(speedBox(page).locator('b')).toHaveText('20 ft.');
+    await expect(speedBox(page).locator('b')).toHaveText('6 m');
     await expect(page.locator('.fx')).toContainText(/D20 Tests −4|W20-Tests −4/);
     await seed(page, base4({ exh: 4, hp: 5, hpMax: 20 }));
     await expect(page.locator('.hpn small')).toContainText('/ 20');
@@ -40,7 +40,7 @@ test.describe('Wirkungen von Zuständen, Erschöpfung und Rüstung @new', () => 
   test('Kettenhemd: Stealth-Nachteil, zu wenig Stärke kostet 3 m Tempo', async ({ page }) => {
     await seed(page, base4({ klass: 'Fighter', abil: { str: 10, dex: 14, con: 12, int: 10, wis: 10, cha: 10 }, eq: { body: chain() } }));
     await expect(page.locator('.skr', { hasText: 'Stealth' }).locator('.fxm.dis')).toBeVisible();
-    await expect(speedBox(page).locator('b')).toHaveText('20 ft.');
+    await expect(speedBox(page).locator('b')).toHaveText('6 m');
     await expect(page.locator('.atk-un .fxw')).toHaveCount(0);
   });
 
@@ -53,7 +53,7 @@ test.describe('Wirkungen von Zuständen, Erschöpfung und Rüstung @new', () => 
 
   test('Bergzwerg darf mittlere Rüstung, Zwerge verlieren kein Tempo', async ({ page }) => {
     await seed(page, base4({ klass: 'Wizard', race: 'Dwarf', subrace: 'Mountain Dwarf', speed: 7.5, abil: { str: 10, dex: 14, con: 12, int: 16, wis: 10, cha: 10 }, eq: { body: chain() } }));
-    await expect(speedBox(page).locator('b')).toHaveText('25 ft.');
+    await expect(speedBox(page).locator('b')).toHaveText('7.5 m');
     await expect(page.locator('.fx')).toContainText(/without proficiency|ohne Übung/);
   });
 });
@@ -88,9 +88,9 @@ test.describe('Merkmale, die Werte ändern @new', () => {
     await expect(stat(page, /Initiative/)).toHaveText('+4');
     await expect(stat(page, /Passive/)).toHaveText('11');
   });
-  test('Mönch Stufe 6 ohne Rüstung: +15 ft Tempo', async ({ page }) => {
+  test('Mönch Stufe 6 ohne Rüstung: +4,5 m Tempo', async ({ page }) => {
     await seed(page, base4({ klass: 'Monk', level: 6, abil }));
-    await expect(page.locator('.st', { hasText: /Speed/ }).locator('b .fxw')).toHaveText('45 ft.');
+    await expect(page.locator('.st', { hasText: /Speed/ }).locator('b .fxw')).toHaveText('13.5 m');
     await expect(page.locator('.fx')).toHaveCount(0);
   });
 });
@@ -135,7 +135,7 @@ test.describe('Völker 2024 @new', () => {
     expect(s.res.find(r => r.n === "Stone's Endurance")).toMatchObject({ max: 3, rest: 'long' });
     expect(s.res.find(r => r.n === 'Large Form')).toMatchObject({ max: 1 });
     await page.locator('[data-a="tab"][data-t="inv"]').click();
-    await expect(page.locator('.carryv')).toContainText('480');
+    await expect(page.locator('.carryv')).toContainText('216');
   });
   test('Zwerg: +1 TP pro Stufe, Wechsel nimmt sie zurück; Elf (Hochelf) bekommt Prestidigitation', async ({ page }) => {
     await seed(page, base4({ tab: 'setup', level: 3, hpMax: 24, hp: 24 }));

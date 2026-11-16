@@ -16,10 +16,11 @@ import * as cloud from './cloud.js';
 import { setBright, setSkin } from './bright.js';
 import { hpMaxNow } from './effects.js';
 import { syncBuffs, castOn, dropBuff, maxTargets } from './buffs.js';
+import { masteryCount } from './views/turn.js';
 import { syncAc } from './helpers.js';
 import * as dm from './dm.js';
 import { vResults, vNoteList, vEncResults, vPlaceResults } from './views/dm.js';
-import { t as tr, setLang, distInput } from './i18n/index.js';
+import { t as tr, setLang, setUnits, distInput } from './i18n/index.js';
 import { buildCatalog } from './catalog.js';
 import { payCp, addCp, totalCp, cpToGp } from './shop.js';
 import { $, clamp } from './util.js';
@@ -153,6 +154,7 @@ app.addEventListener('click',ev=>{
     case 'tgt':{const g=U.TARGET;if(!g)break;const k=b.dataset.k;if(g.to.includes(k))g.to=g.to.filter(x=>x!==k);else if(g.to.length>=maxTargets(g.n,g.lvl)){toast(tr('buff.tooMany',{n:maxTargets(g.n,g.lvl)}));return}else g.to.push(k);render();return}
     case 'tgtok':{const g=U.TARGET;U.TARGET=null;if(!g||!g.to.length)break;castOn(g.n,g.lvl,g.to);const names=g.to.map(k=>k===S.id?S.name:(live.players().find(p=>p.key===k)||{}).name||'?');toast(tr('buff.sent',{s:g.n,n:names.join(', ')}));break}
     case 'tgtskip':U.TARGET=null;break;
+    case 'wmast':{const w=b.dataset.w,on=S.mastery.includes(w);if(on)S.mastery=S.mastery.filter(x=>x!==w);else{const n=masteryCount();if(S.mastery.length>=n){toast(tr('mast.full',{n}));return}S.mastery.push(w)}break}
     case 'buffrm':dropBuff(b.dataset.id);break;
     case 'peek':{const id=b.dataset.k,name=b.dataset.n;dm.DU.peek={name,loading:true};cloud.peek(id).then(r=>{if(!dm.DU.peek||dm.DU.peek.name!==name)return;dm.DU.peek={name,...(r||{data:null})};render()});break}
     case 'peekclose':dm.DU.peek=null;break;
@@ -165,6 +167,7 @@ app.addEventListener('click',ev=>{
     case 'chardel':{const id=b.dataset.id;if(U.CONF!=='chardel:'+id){U.CONF='chardel:'+id;break}U.CONF=null;delChar(id);break}
     case 'print':S.tab='main';render();setTimeout(()=>window.print(),50);return;
     case 'lang':setLang(b.dataset.l);buildCatalog();break;
+    case 'units':setUnits(b.dataset.u);buildCatalog();break;
     case 'mbtab':
     case 'tab':S.tab=b.dataset.t;U.SEL=null;window.scrollTo({top:0});break;
     case 'lu':openLU();break;
@@ -308,7 +311,7 @@ window.addEventListener('pointerup',e=>{
   save();render()});
 window.addEventListener('pointercancel',()=>{if(!drag)return;clearOver();if(drag.g)drag.g.remove();drag=null;render()});
 
-app.addEventListener('toggle',e=>{if(e.target.classList&&e.target.classList.contains('party'))U.PARTYCARD=e.target.open;if(e.target.classList&&e.target.classList.contains('dm-custom'))dm.DU.customOpen=e.target.open;if(e.target.dataset&&e.target.dataset.rid){dm.DU.ropen=dm.DU.ropen||{};dm.DU.ropen[e.target.dataset.rid]=e.target.open}},true);
+app.addEventListener('toggle',e=>{if(e.target.classList&&e.target.classList.contains('turnov'))U.TURNOV=e.target.open;if(e.target.classList&&e.target.classList.contains('party'))U.PARTYCARD=e.target.open;if(e.target.classList&&e.target.classList.contains('dm-custom'))dm.DU.customOpen=e.target.open;if(e.target.dataset&&e.target.dataset.rid){dm.DU.ropen=dm.DU.ropen||{};dm.DU.ropen[e.target.dataset.rid]=e.target.open}},true);
 
 /* Live-Tisch: Beim Tippen nicht neu zeichnen, damit Eingaben nicht verloren gehen */
 let livePending=false;
