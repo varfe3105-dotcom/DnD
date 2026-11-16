@@ -53,6 +53,9 @@ Bereichskennung am `html`-Element (gesetzt in `render.js`): `data-hub` auf der S
 | Werte-Kachel | `.stats .st`, hervorgehoben `.st.ac`; Beschriftung in Cinzel-Kapitälchen, Zahl in Cormorant | |
 | Status | `.hub-status` (Punkt + Text), Fortschritt `.hub-prog`, TP-Balken `.hub-hp` / `.hub-stats .hp` | |
 | Porträt | `.hub-por` (`.md`, `.lg`, `.xl`), Messingring; ohne Bild Initiale | nur echte Porträts aus dem Bogen |
+| Statusmarke | `.tag.t-bad / .t-good / .t-conc / .t-res` (Tokens `--st-*`) | schädlicher Zustand rot, Wirkung grün, Konzentration blau, Ressource Messing |
+| TP-Balken | `.hpbar` (`hpBar()` in `views/char.js`), `.mid`/`.low` färben | Übersicht, später Gruppe und Kampf |
+| Seitenraster | `.page-2`, Charakter `.charlayout`, Inventar `.inv3`, Tagebuch `.diary` | feste Umbrüche statt bloßem Stapeln |
 | Eingabefelder | auf dunkel: Grimoire-Regeln in `theme.css`; auf Pergament: `.hub-doc :is(input,select,textarea)` | |
 
 ## Regeln
@@ -62,3 +65,6 @@ Bereichskennung am `html`-Element (gesetzt in `render.js`): `data-hub` auf der S
 - Aubergine ist Akzent, die Grundfläche bleibt Anthrazit.
 - Zahlen, die im Spiel zählen (TP, RK, Modifikatoren), stehen in `--f-title` und groß. Beschriftungen stehen klein in Kapitälchen.
 - Keine erfundenen Inhalte: Bilder von Personen nur aus echten Bögen.
+
+- Statusfarben nur über `--st-*` und `.tag`, nie als Einzelfarbe in einer Seite.
+- Klickflächen im Spiel mindestens `--hit` (44 px).

@@ -1,4 +1,5 @@
-import { pageList, curPage, setPageText, setPageTitle, addPage, delPage, pageLabel } from './views/notes.js';
+import { pageList, curPage, setPageText, setPageTitle, addPage, delPage, pageLabel, addTemplate } from './views/notes.js';
+import { setInvView } from './views/inventory.js';
 import { uid as newUid } from './util.js';
 import { applyProposal, shrinkImage } from './live-actions.js';
 import { downloadBackup, parseBackup, loadSnap, restoreBackup, initBackup } from './backup.js';
@@ -199,6 +200,11 @@ app.addEventListener('click',ev=>{
     case 'hubgo':leavePlay();U.HUB=b.dataset.s;U.HUBQ='';U.CAMPED=null;U.CAMPROLE=null;window.scrollTo(0,0);break;
     case 'crumbhome':
     case 'hubhome':leavePlay();U.HUB='home';window.scrollTo(0,0);break;
+    case 'ovedit':U.OVEDIT=!U.OVEDIT;break;
+    case 'isel':U.SEL=b.dataset.r;U.CONF=null;break;
+    case 'invf':U.INVF=b.dataset.f;break;
+    case 'invview':setInvView(b.dataset.v);break;
+    case 'nptpl':addTemplate(b.dataset.k);break;
     case 'crumb':S.tab=b.dataset.t;U.SEL=null;window.scrollTo({top:0});break;
     case 'campopen':if(!openCamp(b.dataset.id))return;break;
     case 'camproom':{const c=camp.campaignById(b.dataset.id);if(!c)return;if(dm.D.only){if(c.room)live.connect(c.room,'dm');else{live.createRoom();camp.saveCampaign({...c,room:live.L.code})}}else if(c.room){live.connect(c.room,'player');toast(tr('camp.joined',{c:c.room}))}break}
@@ -340,6 +346,7 @@ app.addEventListener('input',ev=>{
   if(ev.target.id==='hub-q'){U.HUBQ=ev.target.value;const r=$('hub-res');if(r)r.innerHTML=vHubResults();return}
   const el=ev.target;
   if(el.id==='inv-filter'){U.invQ=el.value;later();return}
+  if(el.id==='inv-sort'){U.INVS=el.value;later();return}
   if(el.id==='camp-log'){const c=U.CAMP&&camp.campaignById(U.CAMP);if(c)camp.saveCampaign({...c,log:el.value});return}
   if(el.id==='ho-t'){dm.DU.hoT=el.value;return}
   if(el.id==='ho-x'){dm.DU.hoX=el.value;return}

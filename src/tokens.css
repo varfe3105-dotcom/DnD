@@ -51,4 +51,8 @@
   --grad-pri:linear-gradient(180deg,#56355c,#33203a);--grad-pri-h:linear-gradient(180deg,#68426f,#3d2645);
   --grad-gold:linear-gradient(180deg,#ecd294,#b48a46);
   --bar-hp:linear-gradient(180deg,#d9654f 0,#9b2f25 50%,#5b1712 100%);--bar-temp:linear-gradient(180deg,#a6d6ac,#4c8a5c);
+  /* Status (gedämpft): schädlicher Zustand, positive Wirkung, Konzentration/Magie, Ressource */
+  --st-bad:#c7695a;--st-bad-bg:rgba(199,105,90,.14);--st-good:#7fae7c;--st-good-bg:rgba(127,174,124,.13);
+  --st-conc:#7b9fcc;--st-conc-bg:rgba(123,159,204,.15);--st-res:#d4b06a;--st-res-bg:rgba(212,176,106,.12);
+  --hit:44px;
 }

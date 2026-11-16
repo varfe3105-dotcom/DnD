@@ -118,7 +118,8 @@ test.describe('Ebenen und Rollen @new', () => {
     await page.locator('[data-a="tab"][data-t="wiki"]').click();
     await expect(page.locator('#wq')).toBeVisible();
     await page.locator('[data-a="tab"][data-t="prof"]').click();
-    await expect(page.locator('.ov-name')).toHaveText('Mirelle');
+    await expect(page.locator('#app header.hd h1')).toHaveText('Mirelle');
+    await expect(page.locator('.ov-vit')).toBeVisible();
   });
 
   test('Handybreite: Kampagnenübersicht und Charakterebene ohne Querscrollen', async ({ page }) => {

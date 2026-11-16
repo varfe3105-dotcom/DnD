@@ -11,10 +11,8 @@ import { COINK } from '../constants.js';
 import { dmOnly } from './dm-mode.js';
 import { liveState, vHere } from './dm.js';
 import { partyRow, partyPeers, vStashPlayer } from './live-ui.js';
-import { statsRow, concBanner, vFx, vAbil, vSkills, vFeats, vProfs, vSpells, vMain, vHP, acHtml } from './sheet.js';
-import { ABK } from '../constants.js';
-import { mod, sg } from '../util.js';
-import { effects } from '../effects.js';
+import { vMain, vHP } from './sheet.js';
+import { vProfile, vStats, vSpellBook } from './char.js';
 import { hpMaxNow } from '../effects.js';
 import { t } from '../i18n/index.js';
 
@@ -139,24 +137,7 @@ export function vDmSub() {
   return `<div class="chips subnav">${b('dmcombat', t('nav.fightNow'))}${b('dmenc', t('tab.dmenc'))}${b('dmcheat', t('tab.dmcheat'))}</div>`;
 }
 
-/* ---- Charakterebene ---- */
-/** Charakterübersicht: nur das Wichtigste. Alles Weitere liegt auf den eigenen Unterseiten. */
-function vProfile() {
-  const line = [S.subrace || S.race, S.klass, S.sub].filter(Boolean).join(' · ');
-  const camps = campaignsOf(S.id), act = Object.keys(S.cond).filter(c => S.cond[c]), max = hpMaxNow(), pct = max ? Math.min(100, S.hp / max * 100) : 0;
-  // Porträt, Name, Volk, Klasse und Stufe stehen im Kopf darüber; hier nur die kurze Beschreibung.
-  const head = `<h3 class="ov-name">${esc(S.name)}</h3><p class="ov-line">${esc(line || t('head.pickRace'))}${S.level ? ' · ' + t('feat.level', { n: S.level }) : ''}</p>${S.info ? `<p class="ptext">${esc(S.info.slice(0, 240))}</p>` : ''}`;
-  const vitals = `<div class="ov-vitals"><div class="ov-hp${S.hp === 0 ? ' down' : ''}"><small>${t('hp.title')}</small><b>${S.hp}<i>/${max}</i></b>${S.tmp ? `<em>+${S.tmp} ${t('hp.temp')}</em>` : ''}<span class="bar"><u style="width:${pct}%"></u></span></div><div class="ov-ac"><small>${t('stat.ac')}</small><b>${acHtml()}</b></div></div>`;
-  const abil = `<div class="ov-abil">${ABK.map(k => `<div><small>${t('abs.' + k)}</small><b>${sg(mod(S.abil[k]))}</b><span>${S.abil[k]}</span></div>`).join('')}</div>`;
-  const more = [S.conc ? `<span class="chip on">${t('conc.title')}: ${esc(S.conc)}</span>` : '', ...act.map(c => `<span class="chip on">${esc(c)}</span>`), S.exh ? `<span class="chip">${t('exh.title', { n: S.exh })}</span>` : '', S.insp ? `<span class="chip buff">${t('insp.short')}</span>` : ''].join('');
-  const tail = `${more ? `<div class="chips ov-state">${more}</div>` : ''}<p class="lbl">${t('hub.nav.camps')}</p><p style="margin-top:2px">${camps.length ? camps.map(x => esc(x.name)).join(', ') : `<span class="note">${t('nav.noCamps')}</span>`}</p>`;
-  return `<div class="card ov">${head}${vitals}${abil}${tail}</div>${statsRow(true)}`;
-}
-function vStats() {
-  return `${statsRow()}${vFx(effects())}<div class="sheet"><aside>${vAbil(false)}</aside><div class="col c1"><div class="c2sk">${vSkills()}</div></div><div class="col c2">${vFeats()}${vProfs()}</div></div>`;
-}
-const vSpellTab = () => `${concBanner()}<div class="sheet solo">${vSpells()}</div>`;
-
+/* ---- Charakterebene: Seiten in views/char.js ---- */
 /** Kampfmodus der Spieler: Zustand (Vorbereitung oder laufender Kampf), Reihenfolge aus der Presence der Spielleitung,
  * darunter alles, was der eigene Charakter im Kampf braucht. Gilt mit und ohne Kampagne. */
 const HP_WORD = { ok: 'fight.sOk', hurt: 'fight.sHurt', bad: 'fight.sBad', down: 'fight.sDown' };
@@ -179,5 +160,5 @@ export function vFight() {
   return head + vMain({ mode: 'combat' });
 }
 export const CAMP_PAGES = { cover: vCover, party: vPartyP, explore: vExplore, trade: vTrade, chron: vChron };
-export const CHAR_PAGES = { prof: vProfile, stats: vStats, spells: vSpellTab };
+export const CHAR_PAGES = { prof: vProfile, stats: vStats, spells: vSpellBook };
 export { vHP };

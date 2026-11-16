@@ -84,7 +84,7 @@ test.describe('Merkmale, die Werte ändern @new', () => {
     await seed(page, base4({ klass: 'Bard', level: 3, prof: 2, abil, skills: { Persuasion: 1 }, tab: 'stats' }));
     await expect(page.locator('.skr', { hasText: 'Athletics' }).locator('b')).toHaveText('+1');
     await expect(page.locator('.skr', { hasText: 'Persuasion' }).locator('b')).toHaveText('+2');
-    await expect(stat(page, /Initiative/)).toHaveText('+3');
+    await expect(page.locator('.sv-row', { hasText: /Initiative/ }).locator('b')).toHaveText('+3');
   });
   test('Alert (2024) gibt den Übungsbonus auf Initiative, Observant kein +5 mehr', async ({ page }) => {
     await seed(page, base4({ klass: 'Fighter', abil, feats: [{ n: 'Alert', p: '', src: 'Talent' }, { n: 'Observant', p: '', src: 'Talent' }] }));

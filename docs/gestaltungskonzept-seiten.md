@@ -140,3 +140,29 @@ Doppelte Datenhaltung entsteht nicht: TP, Zustände, Konzentration und Ressource
 5. **Nach Freigabe von D1 und D2:** Spielleitungsdaten je Kampagne, dann Erkundung, Chronik, Inventar & Handel mit Händlern (D3).
 
 Nach jeder Stufe: `npm test`, beide Builds, Screenshots für Desktop, Tablet (1024 × 768) und Handy, Prüfung auf der echten Seite, Bericht, und erst nach deiner Abnahme die nächste Stufe.
+
+## Entscheidungen des Nutzers (16.11.2026)
+
+- **Kampf:**
+  - Keine Vibration voraussetzen. Der aktive Zug wird mit dezenter Animation und goldener Hervorhebung gekennzeichnet.
+  - Ein akustisches Signal ist optional und abschaltbar.
+- **Charakter-Übersicht:** „Jetzt“ und „Gerüstet“ zeigen nur das Wichtigste; die Details stehen auf den Unterseiten.
+- **Kampagnenübersicht:**
+  - Die letzten Ereignisse kommen automatisch aus der Chronik.
+  - Offene Aufgaben haben keine eigene Datenhaltung.
+- **D4:**
+  - Kapitel und Sitzungsplanung werden dauerhaft an der Kampagne gespeichert.
+  - Die Presence trägt sie nur vorübergehend weiter.
+- **D1:** Wird vor weiteren kampagnenbezogenen Funktionen der Spielleitung gelöst. Mehrere Kampagnen auf einem Gerät haben vollständig getrennte Daten.
+- **D2:**
+  - Es kommt eine richtige gemeinsame Chronik mit SQL-Erweiterung.
+  - Vorher erkläre ich genau, welche Datenbankregel sich ändert und wie private Notizen der Spielleitung ausgeschlossen bleiben.
+  - Ohne Freigabe wird nichts an Supabase geändert.
+- **D6:** zurückgestellt; Initialen reichen.
+- **D7 und D9:** wie vorgeschlagen.
+
+## Stand
+
+- Stufe 1 (Bausteine) und Stufe 2 (Charakterbereich) sind umgesetzt.
+- Abnahme durch den Nutzer steht aus.
+- Tests: `tests/charpages.spec.js`. Ältere Inventartests laufen mit der Fixture-Option `invGrid` in der Rasteransicht.

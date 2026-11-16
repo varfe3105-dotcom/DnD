@@ -48,13 +48,39 @@ function vFigure() {
   const main = S.eq.main && atk(S.eq.main);
   return `<label class="fig" for="fig-in" style="grid-area:fig" title="${t('inv.figPick')}">${S.fig || S.img ? `<img src="${S.fig || S.img}" alt="">` : `<span>${esc((S.name || '?').trim()[0] || '?')}</span>`}<i class="figedit">${t('inv.figPickShort')}</i><div class="acb"><small>${t('dm.acShort')}</small><b>${acHtml()}</b></div></label><input type="file" id="fig-in" accept="image/*" hidden><div class="dstat" style="grid-area:st">${main ? `<div><b>${main.hit}</b><small>${t('atk.hit')}</small></div><div><b>${main.dmg}</b><small>${esc(main.type)}</small></div>` : `<small>${t('inv.noWeapon')}</small>`}</div>`;
 }
+const INV_LS = 'charbogen-invview';
+export const invView = () => { try { return localStorage.getItem(INV_LS) === 'grid' ? 'grid' : 'list'; } catch (e) { return 'list'; } };
+export const setInvView = v => { try { localStorage.setItem(INV_LS, v); } catch (e) { /* Datenschutzmodus */ } };
+/** Art eines Gegenstands für Filter: Waffe, Rüstung/Schild, Verbrauch, Magie, Sonstiges. */
+export function kindOf(it) {
+  const c = it.ref && BYN[it.ref];
+  if (it.cons) return 'cons';
+  if (c?.k === 'magic' || it.att) return 'magic';
+  if (it.slot === 'body' || it.slot === 'off' || /shield/i.test(it.ref || '')) return it.slot === 'hand' ? 'weapon' : 'armor';
+  if (it.slot === 'hand' || c?.dmg) return 'weapon';
+  return 'other';
+}
+const wOf = it => { const c = it.ref && BYN[it.ref]; return (c?.w != null ? c.w / (c.q || 1) : it.w || 0) * (it.q || 1); };
+const valOf = it => { const c = it.ref && BYN[it.ref]; return (c?.cp || 0) * (it.q || 1); };
+/** Gegenstandsliste: Ausgerüstetes zuerst und abgesetzt, dann der Rucksack. Antippen öffnet die Detailseite. */
+function vItemList() {
+  const f = U.INVF || 'all', q = U.invQ.trim().toLowerCase(), s = U.INVS || 'name';
+  const all = refs().map(r => ({ r, raw: get(r), it: itemView(get(r)) })).filter(x => (f === 'all' || kindOf(x.raw) === f) && (!q || x.it.n.toLowerCase().includes(q)));
+  const sort = list => list.sort((a, b) => (s === 'weight' ? wOf(b.raw) - wOf(a.raw) : s === 'value' ? valOf(b.raw) - valOf(a.raw) : 0) || a.it.n.localeCompare(b.it.n));
+  const row = x => `<button class="ilr${U.SEL === x.r ? ' on' : ''}" data-a="isel" data-r="${x.r}">${tok(x.it.ic, itTone(x.it), x.it.ref)}<span class="nm">${esc(x.it.n)}${x.it.q > 1 ? ` <small>× ${x.it.q}</small>` : ''}<small>${x.r.startsWith('eq') ? esc(slotLabel(x.r)) : t('kind.' + kindOf(x.raw))}${x.raw.tuned ? ' · ' + t('item.attuned') : ''}</small></span><span class="ilw">${wOf(x.raw) ? esc(weight(wOf(x.raw))) : ''}</span></button>`;
+  const eq = sort(all.filter(x => x.r.startsWith('eq'))), bag = sort(all.filter(x => x.r.startsWith('bag')));
+  return `${eq.length ? `<p class="il-h">${t('inv.equipped')}</p><div class="il eqd">${eq.map(row).join('')}</div>` : ''}<p class="il-h">${t('inv.bag')}</p><div class="il">${bag.map(row).join('') || `<p class="note">${t('inv.empty')}</p>`}</div>`;
+}
 export function vInv() {
   const tuned = refs().filter(r => get(r).tuned).length, n = Math.ceil(S.bag.length / 6) * 6;
   while (S.bag.length < n) S.bag.push(null);
-  return `<h2>${t('inv.money')}</h2><div class="card"><div class="coins">${COINK.map(c => { const l = t('coin.' + c); return `<div class="coin"><small class="lbl">${l}</small><div class="qty"><button data-a="gold" data-c="${c}" data-d="-1" aria-label="${t('coin.less', { c: l })}">−</button>${numIn('gold.' + c, S.gold[c], l)}<button data-a="gold" data-c="${c}" data-d="1" aria-label="${t('coin.more', { c: l })}">+</button></div></div>`; }).join('')}</div></div>
-  <div class="invg"><div><h2>${t('inv.equipment')}<em>${t('inv.attune', { n: tuned })}</em></h2><div class="doll">${EQ.map(([k]) => cell('eq:' + k, t('eq.' + k), k)).join('')}${vFigure()}</div></div>
-  <div><h2>${t('inv.bag')}</h2><input type="search" id="inv-filter" class="inv-filter" value="${esc(U.invQ)}" placeholder="${t('inv.filter')}" aria-label="${t('inv.filter')}"><div class="bag">${S.bag.map((_, i) => cell('bag:' + i)).join('')}</div>${vCarry()}<p class="note">${t('inv.help')}</p></div></div>
-  ${vSel()}
-  <h2>${t('inv.found')}</h2>${lootLocked() ? `<div class="card"><p class="note" style="margin:0">${t('inv.locked')}</p></div>` : ''}<div class="card"${lootLocked() ? ' hidden' : ''}><div class="add">${catSelect('inv-sel', ['potion', 'magic', 'item'])}<input type="number" class="n" id="inv-q" min="1" placeholder="${t('common.count')}" aria-label="${t('common.count')}"><button class="btn solid" data-a="addinv">${t('inv.add')}</button></div><p class="hint" id="inv-sel-h"></p>
+  const view = invView(), F = ['all', 'weapon', 'armor', 'cons', 'magic', 'other'];
+  const tools = `<div class="inv-tools"><div class="seg" role="group" aria-label="${t('inv.view')}">${['list', 'grid'].map(v => `<button class="tg${view === v ? ' on' : ''}" data-a="invview" data-v="${v}" aria-pressed="${view === v}">${t('inv.view.' + v)}</button>`).join('')}</div><input type="search" id="inv-filter" class="inv-filter" value="${esc(U.invQ)}" placeholder="${t('inv.filter')}" aria-label="${t('inv.filter')}">${view === 'list' ? `<select id="inv-sort" aria-label="${t('inv.sort')}">${['name', 'weight', 'value'].map(k => `<option value="${k}"${(U.INVS || 'name') === k ? ' selected' : ''}>${t('inv.sort.' + k)}</option>`).join('')}</select>` : ''}</div>${view === 'list' ? `<div class="chips inv-f">${F.map(k => `<button class="chip${(U.INVF || 'all') === k ? ' on' : ''}" data-a="invf" data-f="${k}" aria-pressed="${(U.INVF || 'all') === k}">${t('kind.' + k)}</button>`).join('')}</div>` : ''}`;
+  const middle = view === 'list' ? vItemList() : `<div class="bag">${S.bag.map((_, i) => cell('bag:' + i)).join('')}</div><p class="note">${t('inv.help')}</p>`;
+  const found = `<h2>${t('inv.found')}</h2>${lootLocked() ? `<div class="card"><p class="note" style="margin:0">${t('inv.locked')}</p></div>` : ''}<div class="card"${lootLocked() ? ' hidden' : ''}><div class="add">${catSelect('inv-sel', ['potion', 'magic', 'item'])}<input type="number" class="n" id="inv-q" min="1" placeholder="${t('common.count')}" aria-label="${t('common.count')}"><button class="btn solid" data-a="addinv">${t('inv.add')}</button></div><p class="hint" id="inv-sel-h"></p>
   <details><summary>${t('inv.ownSummary')}</summary><div class="add"><input type="text" id="own-n" placeholder="${t('common.name')}"><select id="own-ic" aria-label="${t('common.icon')}">${iconOpts('box')}</select><select id="own-slot" aria-label="${t('item.slotLabel')}">${slotOptions('')}</select></div><div class="add"><input type="text" id="own-p" class="wide" placeholder="${t('inv.ownText')}"></div><div class="add"><label class="ck"><input type="checkbox" id="own-c"> ${t('inv.consumable')}</label><label class="ck"><input type="checkbox" id="own-a"> ${t('inv.magicAttune')}</label><input type="number" class="n" id="own-q" min="1" value="1" aria-label="${t('common.count')}"><button class="btn solid" data-a="addown">${t('common.create')}</button></div></details></div>`;
+  const coins = `<div class="card inv-coins"><div class="coins">${COINK.map(c => { const l = t('coin.' + c); return `<div class="coin"><small class="lbl">${l}</small><div class="qty"><button data-a="gold" data-c="${c}" data-d="-1" aria-label="${t('coin.less', { c: l })}">−</button>${numIn('gold.' + c, S.gold[c], l)}<button data-a="gold" data-c="${c}" data-d="1" aria-label="${t('coin.more', { c: l })}">+</button></div></div>`; }).join('')}</div>${vCarry()}</div>`;
+  return `<div class="inv3 invg"><aside class="inv-l"><h2>${t('inv.money')}</h2>${coins}<h2>${t('inv.equipment')}<em>${t('inv.attune', { n: tuned })}</em></h2><div class="doll">${EQ.map(([k]) => cell('eq:' + k, t('eq.' + k), k)).join('')}${vFigure()}</div></aside>
+  <section class="inv-m"><h2>${t('inv.items')}</h2>${tools}${middle}${found}</section>
+  <aside class="inv-r">${vSel() || `<h2>${t('inv.detail')}</h2><div class="card"><p class="note" style="margin:0">${t('inv.pick')}</p></div>`}</aside></div>`;
 }

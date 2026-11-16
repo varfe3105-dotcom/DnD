@@ -9,8 +9,11 @@ export const KEY = 'charbogen-v4';
 export const test = base.extend({
   // Ohne hub: true starten Tests wie früher direkt im Spielbereich (Dashboard hat eigene Tests in hub.spec.js).
   hub: [false, { option: true }],
-  page: async ({ page, hub }, use) => {
+  invGrid: [true, { option: true }],
+  page: async ({ page, hub, invGrid }, use) => {
     if (!hub) await page.addInitScript(() => { try { sessionStorage.setItem('charbogen-view', 'play'); } catch (e) { /* egal */ } });
+    // Ältere Tests prüfen das Rucksack-Raster; die neue Listenansicht testet tests/charpages.spec.js.
+    if (invGrid) await page.addInitScript(() => { try { localStorage.setItem('charbogen-invview', 'grid'); } catch (e) { /* egal */ } });
     // Nur das Original lädt Google Fonts; im Test bleibt alles lokal.
     await page.route(/fonts\.(googleapis|gstatic)\.com/, r => r.abort());
     // Online-Speicherung: im Test nie den echten Server ansprechen (eigene Tests in cloud.spec.js).
