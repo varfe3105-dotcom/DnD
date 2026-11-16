@@ -29,8 +29,14 @@ export const dmOn = () => D.on;
 /* ---- Kampf ---- */
 export const allMonsters = () => [...D.custom, ...monsters];
 export const findMonster = id => allMonsters().find(m => m.id === id);
-export const ordered = () => [...D.combat.list].sort((a, b) => (+b.init || 0) - (+a.init || 0));
-const out = c => c.kind === 'mon' && c.hp <= 0;
+/** Reihenfolge nach Initiative. Begleiter stehen direkt unter ihrem Spieler und handeln in dessen Zug. */
+export const ordered = () => {
+  const list = D.combat.list, owner = c => c.kind === 'pet' && list.find(x => x.kind === 'pc' && x.live && x.live === c.live);
+  const main = list.filter(c => !owner(c)).sort((a, b) => (+b.init || 0) - (+a.init || 0));
+  return main.flatMap(c => [c, ...(c.kind === 'pc' && c.live ? list.filter(p => p.kind === 'pet' && p.live === c.live) : [])]);
+};
+// Besiegte Monster und Begleiter (eigener Zug fällt weg) werden beim Weiterschalten übersprungen.
+const out = c => (c.kind === 'mon' && c.hp <= 0) || c.kind === 'pet';
 export function searchMonsters(q) {
   const s = q.trim().toLowerCase();
   if (!s) return [];
@@ -61,7 +67,7 @@ export function addManual(name, ac, hp) {
 }
 /** Was die Spieler über den Zug erfahren: Name, bei Monstern dazu der Herausforderungsgrad. */
 export function turnInfo() {
-  if (!D.turns || !D.combat.active) return null;
+  if (D.turns === false || !D.combat.active) return null;
   const list = ordered().filter(c => !out(c)), i = list.findIndex(c => c.id === D.combat.active);
   if (i < 0) return null;
   const cur = list[i], nx = list.length > 1 ? list[(i + 1) % list.length] : null, pc = c => c && c.kind === 'pc';
@@ -71,7 +77,7 @@ export function turnInfo() {
 /** Ein Spieler beendet seinen Zug. Gilt nur, wenn er wirklich gerade dran ist. */
 export function endTurnFrom(key) {
   const c = D.combat.active && find(D.combat.active);
-  if (!D.turns || !c || !key || c.live !== key) return null;
+  if (D.turns === false || !c || !key || c.live !== key) return null;
   return step(1);
 }
 export function addChars() {
@@ -110,7 +116,8 @@ export function changeHp(id, delta) {
   if (c) c.hp = clamp(c.hp + delta, 0, Math.max(c.hpMax, c.hp));
 }
 export function removeC(id) {
-  D.combat.list = D.combat.list.filter(c => c.id !== id);
+  const c = find(id);
+  D.combat.list = D.combat.list.filter(x => x.id !== id && !(c && c.kind === 'pc' && c.live && x.kind === 'pet' && x.live === c.live));
   if (D.combat.active === id) D.combat.active = null;
 }
 export function clearCombat() { D.combat = { round: 1, active: null, list: [] }; DU.open = {}; }
@@ -175,18 +182,34 @@ export function saveCustom(f, editId) {
 export function delCustom(id) { D.custom = D.custom.filter(m => m.id !== id); }
 
 /* ---- Live-Tisch ---- */
-export function addLive(peers) {
-  const have = new Set(D.combat.list.map(c => c.live));
-  peers.filter(p => !have.has(p.key)).forEach(p => D.combat.list.push({ ...base(), kind: 'pc', live: p.key, name: p.name, ac: p.ac, hp: p.hp, hpMax: p.hpMax, cond: Object.fromEntries(p.cond.map(c => [c, true])) }));
+const petRow = (p, x) => ({ ...base(), kind: 'pet', live: p.key, pet: x.id, owner: p.name, name: x.n, ac: x.ac, hp: x.hp, hpMax: x.hpMax });
+/** Verbundene Spieler (alle oder nur einen) mit ihren Begleitern in den Kampf holen. */
+export function addLive(peers, key) {
+  const have = new Set(D.combat.list.filter(c => c.kind === 'pc').map(c => c.live));
+  peers.filter(p => !have.has(p.key) && (!key || p.key === key)).forEach(p => {
+    D.combat.list.push({ ...base(), kind: 'pc', live: p.key, name: p.name, ac: p.ac, hp: p.hp, hpMax: p.hpMax, tmp: p.tmp, conc: p.conc, cond: Object.fromEntries(p.cond.map(c => [c, true])) });
+    (p.pets || []).forEach(x => D.combat.list.push(petRow(p, x)));
+  });
 }
+export const inCombat = key => D.combat.list.some(c => c.kind === 'pc' && c.live === key);
 /** Hält verknüpfte Spieler im Tracker aktuell. */
 export function syncLive(peers) {
   let changed = false;
   D.combat.list.forEach(c => {
     const p = c.live && peers.find(x => x.key === c.live);
     if (!p) return;
+    if (c.kind === 'pet') {
+      const x = (p.pets || []).find(y => y.id === c.pet);
+      if (x && (c.hp !== x.hp || c.hpMax !== x.hpMax || c.ac !== x.ac || c.name !== x.n)) { Object.assign(c, { hp: x.hp, hpMax: x.hpMax, ac: x.ac, name: x.n }); changed = true; }
+      return;
+    }
     const cond = Object.fromEntries(p.cond.map(x => [x, true]));
-    if (c.hp !== p.hp || c.hpMax !== p.hpMax || c.ac !== p.ac || JSON.stringify(c.cond) !== JSON.stringify(cond)) { Object.assign(c, { hp: p.hp, hpMax: p.hpMax, ac: p.ac, cond }); changed = true; }
+    if (c.hp !== p.hp || c.hpMax !== p.hpMax || c.ac !== p.ac || c.tmp !== p.tmp || c.conc !== p.conc || JSON.stringify(c.cond) !== JSON.stringify(cond)) { Object.assign(c, { hp: p.hp, hpMax: p.hpMax, ac: p.ac, tmp: p.tmp, conc: p.conc, cond }); changed = true; }
+  });
+  // Neue Begleiter eines Spielers, der schon im Kampf ist, kommen dazu.
+  peers.forEach(p => {
+    if (!D.combat.list.some(c => c.kind === 'pc' && c.live === p.key)) return;
+    (p.pets || []).forEach(x => { if (!D.combat.list.some(c => c.kind === 'pet' && c.live === p.key && c.pet === x.id)) { D.combat.list.push(petRow(p, x)); changed = true; } });
   });
   if (changed) saveD();
 }

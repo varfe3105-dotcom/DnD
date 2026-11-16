@@ -50,7 +50,7 @@ test.describe('Zuganzeige @new', () => {
     await expect(page.locator('.turn')).toHaveCount(0);
   });
 
-  test('Spielleitung: ohne Schalter kein Zug gesendet, mit Schalter Zug des Spielers, „Zug beenden“ geht weiter', async ({ page }) => {
+  test('Spielleitung: Zug geht standardmäßig an die Spieler, Schalter schaltet ab, „Zug beenden“ geht weiter', async ({ page }) => {
     await page.goto(URL_UNDER_TEST);
     const combat = { round: 1, active: 'c1', list: [
       { id: 'c1', kind: 'pc', live: 'held1', name: 'Mirelle', init: 18, hp: 20, hpMax: 20, ac: 14, cond: {} },
@@ -59,9 +59,11 @@ test.describe('Zuganzeige @new', () => {
     await page.evaluate(([s, c]) => { localStorage.setItem('charbogen-v4', JSON.stringify(s)); localStorage.setItem('charbogen-dm', JSON.stringify({ on: true, only: true, view: 'combat', combat: c })); localStorage.setItem('charbogen-live', JSON.stringify({ code: 'ABC234', role: 'dm' })); }, [base4({ tab: 'dm' }), combat]);
     await page.reload();
     await page.locator('#app header').waitFor();
-    expect(await page.evaluate(() => window.__tracked.at(-1).turn)).toBeNull();
-    await act(page, 'dmturns').click();
     await expect.poll(() => page.evaluate(() => window.__tracked.at(-1).turn)).toMatchObject({ cur: 'held1', name: 'Mirelle', nextEnemy: true, next: 'Goblin', nextCr: '1/4' });
+    await act(page, 'dmturns').click();
+    await expect.poll(() => page.evaluate(() => window.__tracked.at(-1).turn)).toBeNull();
+    await act(page, 'dmturns').click();
+    await expect.poll(() => page.evaluate(() => window.__tracked.at(-1).turn)).toMatchObject({ cur: 'held1' });
     // Falscher Absender ändert nichts
     await page.evaluate(() => window.__msg({ id: 'm1', type: 'endturn', to: 'dm', from: 'jemand' }));
     expect(await page.evaluate(() => JSON.parse(localStorage.getItem('charbogen-dm')).combat.active)).toBe('c1');

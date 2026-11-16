@@ -4,7 +4,7 @@ import { U, S } from '../state.js';
 import { C } from '../cloud.js';
 import { DU } from '../dm.js';
 import { COND, CAT, BYN } from '../catalog.js';
-import { L, players, dmTurn, myTurn } from '../live.js';
+import { L, players, dmTurn, myTurn, pendingCount } from '../live.js';
 import { D } from '../dm.js';
 import { lastBackup, needsBackup, charCount } from '../backup.js';
 import { TIERS, COINS, raritiesFor, coinRow } from '../loot.js';
@@ -12,8 +12,18 @@ import { t, lang, dice } from '../i18n/index.js';
 
 const COINK = ['pp', 'gp', 'ep', 'sp', 'cp'];
 const coinList = c => COINK.filter(k => c[k]).map(k => `${c[k]} ${t('coin.' + k)}`).join(', ');
-const proposalText = m => (m.type === 'levelup' ? t('live.pLevel') : m.type === 'xp' ? t('live.pXp', { n: m.value }) : m.type === 'cond' ? t('live.pCond', { c: m.cond }) : m.type === 'item' ? t('live.pItem', { q: m.q, n: m.key && BYN[m.key] ? BYN[m.key].n : m.n }) : m.type === 'gold' ? t('live.pGold', { c: coinList(m.coins) }) : t('live.p.' + m.type, { n: m.value }));
+export const proposalText = m => { const base = proposalBase(m), pet = m.pet && S.pets.find(x => x.id === m.pet); return pet ? t('live.pPet', { p: pet.n, t: base }) : base; };
+const proposalBase = m => (m.type === 'levelup' ? t('live.pLevel') : m.type === 'xp' ? t('live.pXp', { n: m.value }) : m.type === 'cond' ? t(m.off ? 'live.pCondOff' : 'live.pCond', { c: m.cond }) : m.type === 'item' ? t('live.pItem', { q: m.q, n: m.key && BYN[m.key] ? BYN[m.key].n : m.n }) : m.type === 'gold' ? t('live.pGold', { c: coinList(m.coins) }) : t('live.p.' + m.type, { n: m.value }));
 
+/** Feste Live-Leiste: Ampel, Zug und Vorschläge. Enthält keine Eingabefelder und darf deshalb jederzeit neu gezeichnet werden. */
+export function vDock() {
+  if (!L.code || !L.role) return '<div id="live-dock" hidden></div>';
+  const st = L.status === 'on' ? 'on' : L.status === 'error' ? 'error' : 'connecting';
+  const pend = L.role === 'dm' ? pendingCount() : 0;
+  const light = `<span class="dock-st st-${st}" role="status"><i></i>${t(st === 'on' ? 'live.stOn' : st === 'error' ? 'live.stError' : 'live.stConnecting')}${pend ? ` · ${t('live.pending', { n: pend })}` : ''}</span>`;
+  const body = vTurn() + vInbox();
+  return `<div id="live-dock" class="${body ? 'full' : 'mini'}">${light}${body}</div>`;
+}
 export function vInbox() {
   if (L.role !== 'player' || !L.inbox.length) return '';
   return `<div class="card inbox" role="status">${L.inbox.map(m => `<div class="row wrow"><div class="nm">${t('live.fromDm')}<small>${esc(proposalText(m))}</small></div><button class="btn sm solid" data-a="liveyes" data-id="${esc(m.id)}">${t('live.accept')}</button><button class="btn sm" data-a="liveno" data-id="${esc(m.id)}">${t('live.decline')}</button></div>`).join('')}</div>`;

@@ -1,6 +1,6 @@
 /* global __BUILD__ */
 import { vNotesTab } from './views/notes.js';
-import { vInbox, vHandout, vBackupNag, vTurn } from './views/live-ui.js';
+import { vHandout, vBackupNag, vDock } from './views/live-ui.js';
 import { $, esc } from './util.js';
 import { S, U, roster } from './state.js';
 import { classLevels, XP_LEVELS, totalLevel } from './tables.js';
@@ -53,7 +53,7 @@ export function render() {
   let h = dmOnly() ? vDmHead() : vHead();
   h += `<div class="tabs"><nav role="tablist" aria-label="${t('head.areas')}">${tabs().map(k => `<button role="tab" aria-selected="${tb === k}" data-a="tab" data-t="${k}">${glyph(TAB_IC[k])}<span>${t('tab.' + k)}</span></button>`).join('')}</nav>${dmOnly() ? '' : `<div class="mini${S.hp === 0 ? ' down' : ''}">${L.status === 'on' ? `<i class="live-dot" title="${t('live.on')}"></i>` : ''}${t('head.hpShort')} <b>${S.hp}</b>/${S.hpMax}${S.tmp ? ` +${S.tmp}` : ''}</div>`}</div>`;
   h += (dmOnly() ? vDmBar : vMiniBar)(tabs().map(k => `<button class="${tb === k ? 'on' : ''}" data-a="mbtab" data-t="${k}" title="${t('tab.' + k)}" aria-label="${t('tab.' + k)}">${glyph(TAB_IC[k])}</button>`).join(''));
-  h += vTurn() + vInbox() + vBackupNag();
+  h += vDock() + vBackupNag();
   if (tb === 'main') h += vMain();
   if (tb === 'inv') h += vInv();
   if (tb === 'wiki') h += vWiki();
@@ -78,4 +78,13 @@ export function render() {
   }
   if (U.LU && U.LUfocus) { U.LUfocus = false; const f = $('lu-h'); if (f) f.focus(); }
   else if (keep) { const el = $(keep); if (el) el.focus({ preventScroll: true }); }
+}
+
+/** Nur die Live-Leiste neu zeichnen (geht auch, während jemand tippt). */
+export function updateDock() {
+  const el = document.getElementById('live-dock');
+  if (!el) return;
+  const tmp = document.createElement('div');
+  tmp.innerHTML = vDock();
+  el.replaceWith(tmp.firstChild);
 }

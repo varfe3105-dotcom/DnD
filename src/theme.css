@@ -457,3 +457,47 @@ body.scrolled .jump{top:52px}
 .buy .note{margin:0;flex-basis:100%}
 .sell{display:inline-flex;gap:6px;align-items:center}
 .lu-swap select{flex:1 1 220px;min-width:0}
+
+/* Live-Leiste: fest am unteren Rand (Handy: über den Reitern), zeigt Verbindung, Zug und Vorschläge */
+#live-dock{position:fixed;right:16px;bottom:calc(12px + env(safe-area-inset-bottom,0px));z-index:48;max-width:min(560px,calc(100% - 32px));max-height:45vh;overflow:auto;display:flex;flex-direction:column;gap:6px;padding:6px 10px;background:linear-gradient(rgba(34,24,15,.97),rgba(24,17,11,.98)),var(--leather);border:1px solid var(--gilt);border-radius:6px;box-shadow:0 8px 22px rgba(0,0,0,.6);color:var(--bandink)}
+#live-dock.full{left:auto;width:min(560px,calc(100% - 32px))}
+#live-dock .turn{position:static;margin:0;box-shadow:none}
+#live-dock .inbox{margin:0;padding:6px 8px}
+#live-dock .inbox .row{padding:4px 0}
+.dock-st{display:flex;align-items:center;gap:6px;font:600 .78rem var(--f-ui);letter-spacing:.03em;color:var(--mute)}
+.dock-st i{width:9px;height:9px;border-radius:50%;background:#d9a441;box-shadow:0 0 6px currentColor}
+.dock-st.st-on i{background:#5fbf6a}
+.dock-st.st-error i{background:#e0503c}
+.dock-st.st-connecting i{animation:dockblink 1s ease-in-out infinite}
+@keyframes dockblink{50%{opacity:.3}}
+@media (prefers-reduced-motion:reduce){.dock-st.st-connecting i{animation:none}}
+body:has(#live-dock.full){padding-bottom:180px}
+body:has(#live-dock.full) #toast{bottom:auto;top:calc(12px + env(safe-area-inset-top,0px))}
+@media screen and (max-width:520px){
+  #live-dock{left:8px;right:8px;max-width:none;width:auto;bottom:calc(64px + env(safe-area-inset-bottom,0px));padding:5px 8px}
+  #live-dock.mini{left:auto;right:8px}
+  #live-dock.full{width:auto}
+  body:has(#live-dock.full){padding-bottom:calc(240px + env(safe-area-inset-bottom,0px))}
+  #live-dock .turn.mine{padding:8px 10px}
+  #live-dock .turn.mine b{font-size:1.3rem}
+}
+@media print{#live-dock{display:none}}
+
+/* Kampf-Tracker: Begleiter eingerückt unter ihrem Spieler, Konzentration und offene Zustellung sichtbar */
+.dm-row.pet{margin-left:28px;border-left:3px solid var(--gilt)}
+.dm-row.pet .dm-init{visibility:hidden}
+.dm-conc{color:#8fc7ff;font-weight:600}
+.dm-wait{color:#e6b450;font-style:italic}
+@media screen and (max-width:520px){.dm-row.pet{margin-left:14px}}
+/* Live-Leiste kompakt: nur „Dein Zug“ groß, Vorschläge einzeilig */
+#live-dock .turn.mine small b{display:inline;font:600 .85rem var(--f-ui)}
+#live-dock .turn.mine{padding:8px 12px}
+#live-dock .turn.mine>div>b{font-size:1.35rem}
+#live-dock .inbox .row{display:flex;align-items:center;gap:8px;flex-wrap:nowrap}
+#live-dock .inbox .row .nm{flex:1;min-width:0;font-size:.85rem}
+#live-dock .inbox .row .btn{flex:none;padding:4px 10px}
+@media screen and (max-width:520px){
+  #live-dock{max-height:38vh}
+  #live-dock .turn.mine>div>b{font-size:1.15rem}
+  #live-dock .turn.mine .btn{font-size:.9rem;padding:6px 10px}
+}

@@ -1043,5 +1043,20 @@
  "req.p.Lightarmor": "leichte Rüstung",
  "req.p.Shields": "Schilde",
  "req.style": "Merkmal Kampfstil",
- "toast.resourceful": "Einfallsreich: Du hast Heroic Inspiration."
+ "toast.resourceful": "Einfallsreich: Du hast Heroic Inspiration.",
+ "live.stOn": "Live",
+ "live.stConnecting": "Verbinde …",
+ "live.stError": "Getrennt, verbinde neu …",
+ "live.pending": "{n} noch nicht zugestellt",
+ "live.newMsg": "Neu von der Spielleitung: {t}",
+ "live.newHandout": "Neues Handout von der Spielleitung",
+ "live.addOne": "In den Kampf",
+ "live.inCombat": "im Kampf",
+ "live.addPlayers": "Verbundene Spieler",
+ "live.waitAck": "wartet auf Bestätigung",
+ "live.pCondOff": "Zustand entfernen: {c}",
+ "live.pPet": "{p} – {t}",
+ "live.petTag": "Begleiter von {n}",
+ "live.proposed": "An {n} geschickt. Ändert sich, sobald angenommen.",
+ "live.concShort": "Konz.: {n}"
 }

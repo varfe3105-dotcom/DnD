@@ -2,7 +2,7 @@ import { pageList, curPage, setPageText, setPageTitle, addPage, delPage, pageLab
 import { uid as newUid } from './util.js';
 import { applyProposal, shrinkImage } from './live-actions.js';
 import { downloadBackup, parseBackup, loadSnap, restoreBackup, initBackup } from './backup.js';
-import { vLootCoins, vLootItems, vBakHist, turnsHidden, setTurnsHidden } from './views/live-ui.js';
+import { vLootCoins, vLootItems, vBakHist, turnsHidden, setTurnsHidden, proposalText } from './views/live-ui.js';
 import { vRuleList } from './views/dm-rules.js';
 import { vPetResults } from './views/extras.js';
 import { weaponProf, ammoFor, ammoLeft } from './attacks.js';
@@ -28,7 +28,7 @@ import { get, set, refs, fits, applyRace, applyRaceChoices } from './helpers.js'
 import { spMeta, setSheetMode } from './views/sheet.js';
 import { wikiBody } from './views/wiki.js';
 import { openLU, applyLU, vLuSpells } from './views/levelup.js';
-import { app, render } from './render.js';
+import { app, render, updateDock } from './render.js';
 import { castAt, damage, heal, rest, cast, move, use, importText, loadPortrait, loadFigure } from './game.js';
 import { tip, hideTip, showTip } from './tooltip.js';
 import { BYN, CLASSES } from './catalog.js';
@@ -75,7 +75,7 @@ app.addEventListener('click',ev=>{
     case 'sheetmode':setSheetMode(b.dataset.m);break;
     case 'dmxpopen':dm.DU.xpOpen=!dm.DU.xpOpen;break;
     case 'dmxpsend':{const total=Math.max(0,Math.floor(+v('dm-xpt'))||0),n=Math.max(1,Math.floor(+v('dm-xpn'))||1),per=Math.floor(total/n);if(!per){toast(tr('toast.needAmount'));return}if(live.sendMsg({type:'xp',to:'all',value:per}))toast(tr('xp.sent',{n:per}));else toast(tr('xp.offlineToast',{n:per}));return}
-    case 'dmturns':dm.D.turns=!dm.D.turns;dm.saveD();live.refresh();break;
+    case 'dmturns':dm.D.turns=dm.D.turns===false;dm.saveD();live.refresh();break;
     case 'turnshow':setTurnsHidden(!turnsHidden());break;
     case 'endturn':if(!live.endTurn())toast(tr('turn.offline'));else toast(tr('turn.ended'));break;
     case 'dmstep':{const gone=dm.step(+b.dataset.d);dm.saveD();live.refresh();if(gone&&gone.length)toast(gone.map(x=>tr('dm.fxEnded',x)).join(' '));break}
@@ -84,8 +84,8 @@ app.addEventListener('click',ev=>{
     case 'dmman':{const n=v('dm-mn').trim();if(!n){toast(tr('toast.needName'));return}dm.addManual(n,v('dm-mac'),v('dm-mhp'));dm.saveD();break}
     case 'dmchars':dm.addChars();dm.saveD();break;
     case 'dmopen':dm.DU.open[b.dataset.id]=!dm.DU.open[b.dataset.id];break;
-    case 'dmhp':{const amt=Math.floor(+v('dm-amt-'+b.dataset.id))||1;dm.changeHp(b.dataset.id,amt*+b.dataset.d);dm.saveD();break}
-    case 'dmcond':{const c=dm.find(b.dataset.id);if(c){if(c.cond[b.dataset.c])delete c.cond[b.dataset.c];else c.cond[b.dataset.c]=true;dm.saveD()}break}
+    case 'dmhp':{const amt=Math.floor(+v('dm-amt-'+b.dataset.id))||1,c=dm.find(b.dataset.id);if(c&&c.live&&live.L.role==='dm'){live.sendMsg({type:+b.dataset.d<0?'dmg':'heal',to:c.live,value:amt,...(c.pet?{pet:c.pet}:{})});toast(tr('live.proposed',{n:c.kind==='pet'?c.owner:c.name}));break}dm.changeHp(b.dataset.id,amt*+b.dataset.d);dm.saveD();break}
+    case 'dmcond':{const c=dm.find(b.dataset.id);if(c&&c.live&&c.kind==='pc'&&live.L.role==='dm'){live.sendMsg({type:'cond',to:c.live,cond:b.dataset.c,off:!!c.cond[b.dataset.c]});toast(tr('live.proposed',{n:c.name}));break}if(c){if(c.cond[b.dataset.c])delete c.cond[b.dataset.c];else c.cond[b.dataset.c]=true;dm.saveD()}break}
     case 'dmrm':dm.removeC(b.dataset.id);dm.saveD();break;
     case 'dmnew':dm.newNote(dm.DU.nk||'npc');dm.saveD();break;
     case 'dmnews':dm.DU.nk='';dm.newNote('session');dm.saveD();break;
@@ -114,14 +114,15 @@ app.addEventListener('click',ev=>{
     case 'cloudpull':{const kind=b.dataset.kind,id=b.dataset.id;cloud.pull(kind,id).then(r=>{if(!r)return;toast(tr('cloud.loaded'+(r==='active'?'Active':r==='new'?'New':r==='dm'?'Dm':'')));render()});break}
     case 'clouddel':{const ck='clouddel:'+b.dataset.kind+':'+b.dataset.id;if(U.CONF!==ck){U.CONF=ck;break}U.CONF=null;cloud.remove(b.dataset.kind,b.dataset.id);break}
     case 'liveadd':dm.addLive(live.players());dm.saveD();toast(tr('live.added'));break;
+    case 'liveadd1':dm.addLive(live.players(),b.dataset.k);dm.saveD();live.refresh();toast(tr('live.added'));break;
     case 'sheetcancel':U.SHEET=null;break;
     case 'sheetapply':{if(!U.SHEET.draft.klass){toast(tr('sheet.needClass'));return}const r=importDraft(U.SHEET.draft);if(r.error){toast(r.error);return}U.IMPREP=r.reports;U.SHEET=null;S.tab='setup';toast(tr('imp.done',{n:r.reports.map(x=>x.name).join(', ')}));break}
     case 'sheetspells':{const known=new Set(S.spells.map(x=>x.n));let n=0;U.SHEET.draft.spells.forEach(x=>{if(!known.has(x)&&BYN['spell:'+x]){S.spells.push(spFrom(BYN['spell:'+x]));n++}});U.SHEET=null;toast(tr('sheet.added',{n}));break}
     case 'livesend':{const to=b.dataset.k,type=b.dataset.t;if(type==='levelup'){if(live.sendMsg({type,to}))toast(tr('live.sent'));return}if(type==='cond'){const cond=v('lv-c-'+to);if(!cond){toast(tr('live.pickCond'));return}if(live.sendMsg({type,to,cond}))toast(tr('live.sent'));return}const value=Math.floor(+v('lv-a-'+to));if(!(value>0)){toast(tr('toast.needAmount'));return}if(live.sendMsg({type,to,value}))toast(tr('live.sent'));return}
     case 'liveyes':{const m=live.answer(b.dataset.id,true);if(m){if(m.type==='levelup')openLU();else applyProposal(m)}break}
     case 'liveno':live.answer(b.dataset.id,false);break;
-    case 'hoclose':live.L.handouts.shift();break;
-    case 'honote':{const m=live.L.handouts.shift();if(m){S.notes=(S.notes?S.notes+'\n\n':'')+[m.title,m.text].filter(Boolean).join('\n');toast(tr('live.noted'))}break}
+    case 'hoclose':live.dropHandout();break;
+    case 'honote':{const m=live.L.handouts[0];live.dropHandout();if(m){S.notes=(S.notes?S.notes+'\n\n':'')+[m.title,m.text].filter(Boolean).join('\n');toast(tr('live.noted'))}break}
     case 'hoimgdel':dm.DU.hoImg='';break;
     case 'hosend':{const D=dm.DU,title=(D.hoT||'').trim(),text=(D.hoX||'').trim();if(!title&&!text&&!D.hoImg){toast(tr('live.hoEmpty'));return}if(!live.sendMsg({type:'handout',to:D.hoTo||'all',title,text,img:D.hoImg||''})){toast(tr('live.notOn'));return}D.hoT='';D.hoX='';D.hoImg='';toast(tr('live.sent'));break}
     case 'lootsend':{const c=BYN[b.dataset.key];if(c&&live.sendMsg({type:'item',to:dm.DU.lto||'all',key:c.key,q:1}))toast(tr('live.sent'));return}
@@ -304,6 +305,7 @@ app.addEventListener('toggle',e=>{if(e.target.classList&&e.target.classList.cont
 let livePending=false;
 const typing=()=>{const a=document.activeElement;return !!a&&app.contains(a)&&/^(INPUT|TEXTAREA|SELECT)$/.test(a.tagName)};
 live.setPeerHook(()=>dm.syncLive(live.players()));
+live.setPetSource(()=>S.pets.map(petView));
 live.setJoinHook(cloud.onJoin);
 cloud.setCloudListener(()=>{if(!S.tab.startsWith('dm')&&S.tab!=='setup')return;if(typing()){livePending=true;return}later()});
 live.setDmFlags(()=>({lock:!!dm.D.lootLock,turn:dm.turnInfo()}));
@@ -313,7 +315,8 @@ live.setTurnHook(mine=>{if(!mine||turnsHidden())return;toast(tr('turn.yours'));t
 live.setAckHook(m=>toast(tr(m.ok?'live.ackYes':'live.ackNo',{n:m.name})));
 initBackup(()=>{const el=$('bak-hist');if(el)el.innerHTML=vBakHist()});
 let lastLock=false;
-live.setLiveListener(force=>{const lk=live.lootLocked(),lockChanged=lk!==lastLock;lastLock=lk;if(!force&&!lockChanged&&!S.tab.startsWith('dm')&&S.tab!=='setup')return;if(typing()){livePending=true;return}later()});
+live.setNewMsgHook(m=>{toast(m.type==='handout'?tr('live.newHandout'):tr('live.newMsg',{t:proposalText(m)}));try{navigator.vibrate&&navigator.vibrate([90,50,90])}catch(e){/* nicht unterstützt */}});
+live.setLiveListener(force=>{updateDock();const lk=live.lootLocked(),lockChanged=lk!==lastLock;lastLock=lk;if(!force&&!lockChanged&&!S.tab.startsWith('dm')&&S.tab!=='setup')return;if(typing()){livePending=true;return}later()});
 app.addEventListener('focusout',()=>{if(livePending)setTimeout(()=>{if(livePending&&!typing()){livePending=false;later()}},0)});
 
 /* Charakterbogen aus PDF oder Bild */

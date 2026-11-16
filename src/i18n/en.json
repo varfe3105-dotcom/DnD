@@ -1043,5 +1043,20 @@
  "req.p.Lightarmor": "Light armor",
  "req.p.Shields": "Shields",
  "req.style": "Fighting Style feature",
- "toast.resourceful": "Resourceful: you have Heroic Inspiration."
+ "toast.resourceful": "Resourceful: you have Heroic Inspiration.",
+ "live.stOn": "Live",
+ "live.stConnecting": "Connecting …",
+ "live.stError": "Disconnected, reconnecting …",
+ "live.pending": "{n} not delivered yet",
+ "live.newMsg": "New from the DM: {t}",
+ "live.newHandout": "New handout from the DM",
+ "live.addOne": "Add to combat",
+ "live.inCombat": "in combat",
+ "live.addPlayers": "Connected players",
+ "live.waitAck": "waiting for confirmation",
+ "live.pCondOff": "Remove condition: {c}",
+ "live.pPet": "{p} – {t}",
+ "live.petTag": "{n}'s companion",
+ "live.proposed": "Sent to {n}. Changes once accepted.",
+ "live.concShort": "Conc.: {n}"
 }
