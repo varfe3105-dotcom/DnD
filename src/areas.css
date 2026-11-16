@@ -61,7 +61,8 @@ html[data-hub] footer{display:none}
 
 /* Inhalt */
 .hub-body{padding:26px 32px 60px}
-.hub-grid{display:grid;grid-template-columns:minmax(0,1fr) 330px;gap:26px;align-items:start}
+.hub-grid{display:grid;grid-template-columns:minmax(0,1fr) 330px;gap:26px;align-items:start;max-width:1600px}
+@media (min-width:1900px){.hub-body{padding-inline:48px}.hub-grid{grid-template-columns:minmax(0,1fr) 370px;gap:34px}.hub-body>*{max-width:1600px;margin-inline:auto}.hub-top{padding-inline:max(48px,calc((100% - 1600px) / 2))}}
 .hub-col{display:flex;flex-direction:column;gap:22px;min-width:0}
 .hub-h{display:flex;align-items:center;gap:14px;margin:8px 0 -4px}
 .hub-h::after{content:"";order:2;flex:1;height:1px;min-width:20px;background:linear-gradient(90deg,var(--c-brass-a),rgba(196,154,82,.08))}
