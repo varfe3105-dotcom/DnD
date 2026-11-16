@@ -25,6 +25,7 @@ const live = () => {
 async function device(browser, server, state, { setup = true } = {}) {
   const ctx = await browser.newContext();
   await ctx.addInitScript(live);
+  await ctx.addInitScript(() => sessionStorage.setItem('charbogen-view', 'play'));
   await ctx.route('**/rest/v1/rpc/*', async route => {
     if (!setup) return route.fulfill({ status: 404, contentType: 'application/json', body: '{"code":"PGRST202","message":"Could not find the function public.charbogen_put"}' });
     const fn = route.request().url().split('/').pop();

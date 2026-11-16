@@ -18,6 +18,8 @@ import { hpMaxNow } from './effects.js';
 import { endCond, stepRounds, seeRound } from './cond-rounds.js';
 import { doAction, attackOnce, doBonus, doReact, doObj, moveBy, actionSurge, newTurn, endCombat, speedMax } from './turn-state.js';
 import { openWizard, applyAbil, suggest, buyStep, toggleClassSkill } from './views/wizard.js';
+import * as camp from './campaigns.js';
+import { vHubResults } from './views/hub.js';
 import { stashPut, stashTake, stashDrop, want, splitCoins, stashOut, depositItem, depositCoins, cancelDeposit, msgOf, syncDeposits, COINK } from './stash.js';
 import { syncBuffs, castOn, dropBuff, maxTargets, heroTemp } from './buffs.js';
 import { masteryCount } from './views/turn.js';
@@ -29,7 +31,7 @@ import { buildCatalog } from './catalog.js';
 import { payCp, addCp, totalCp, cpToGp } from './shop.js';
 import { $, clamp } from './util.js';
 import { EQ } from './constants.js';
-import { hooks, def, mk, spFrom, putBag, S, setS, U, save, toast, switchChar, newChar, dupChar, delChar } from './state.js';
+import { hooks, def, mk, spFrom, putBag, S, setS, U, save, toast, switchChar, newChar, dupChar, delChar, roster } from './state.js';
 import { classLevels } from './tables.js';
 import { get, set, refs, fits, applyRace, applyRaceChoices } from './helpers.js';
 import { spMeta, setSheetMode } from './views/sheet.js';
@@ -52,7 +54,7 @@ app.addEventListener('click',ev=>{
   const b=ev.target.closest('[data-a]');if(!b)return;
   const a=b.dataset.a,i=+b.dataset.i,k=b.dataset.k,v=id=>($(id)||{}).value||'';
   if(a==='luclose-bg'&&ev.target!==b)return;
-  if(a!=='rm'&&a!=='imp'&&a!=='reset'&&a!=='chardel'&&a!=='npdel')U.CONF=null;
+  if(a!=='rm'&&a!=='imp'&&a!=='reset'&&a!=='chardel'&&a!=='npdel'&&a!=='campdel'&&a!=='stdrop')U.CONF=null;
   if(!['dmclear','dmndel','dmedel','dmcdel'].includes(a))dm.DU.conf=null;
   if(a!=='cast'&&a!=='castslot')U.CASTPICK=null;
   pend=false;
@@ -192,6 +194,22 @@ app.addEventListener('click',ev=>{
     case 'tsurge':{const r=S.res[+b.dataset.i];if(!r||r.used>=r.max){toast(tr('turn.no.uses'));return}r.used++;actionSurge();toast(tr('turn.surged'));break}
     case 'tnew':newTurn();break;
     case 'tend':endCombat();break;
+    case 'hubgo':U.HUB=b.dataset.s;U.HUBQ='';U.CAMPED=null;window.scrollTo(0,0);break;
+    case 'hubhome':U.HUB='home';try{sessionStorage.removeItem('charbogen-view')}catch(e){/* Datenschutzmodus */}window.scrollTo(0,0);break;
+    case 'hubplay':{const id=b.dataset.id;if(id&&id!==S.id&&!switchChar(id)){toast(tr('toast.saveFailed'));return}enterPlay(b.dataset.t);break}
+    case 'hubwiki':U.HUB='wiki';U.HUBQ='';U.WSEL=b.dataset.key;U.WF='all';U.WQ='';window.scrollTo(0,0);break;
+    case 'hubnewchar':newChar();openWizard();enterPlay('setup');break;
+    case 'hubimport':hubImport();return;
+    case 'hubq':{const k=b.dataset.k;if(k==='wiki'){U.HUB='wiki';break}if(k==='newchar'){newChar();openWizard();enterPlay('setup');break}if(k==='import'){hubImport();return}if(k==='campnew'){U.HUB='camps';U.CAMPED='new';U.CAMPCH=null;break}if(k==='inv'){enterPlay('inv');break}if(k==='live'){enterPlay('setup');U.SCROLLTO='live-code';break}if(k==='dm'){enterPlay();break}break}
+    case 'campnew':U.HUB='camps';U.CAMPED='new';U.CAMPCH=null;window.scrollTo(0,0);break;
+    case 'campedit':U.HUB='camps';U.CAMPED=b.dataset.id;U.CAMPCH=null;U.HUBQ='';window.scrollTo(0,0);break;
+    case 'campcancel':U.CAMPED=null;U.CAMPCH=null;U.CONF=null;break;
+    case 'campchar':{const c=U.CAMPED==='new'?null:camp.campaignById(U.CAMPED);const set=new Set(U.CAMPCH||(c?c.chars:[]));const id=b.dataset.id;if(set.has(id))set.delete(id);else set.add(id);U.CAMPCH=[...set];b.classList.toggle('on',set.has(id));b.setAttribute('aria-pressed',set.has(id));return}
+    case 'campsave':{const name=v('cf-name').trim();if(!name){toast(tr('toast.needName'));return}const room=v('cf-room').trim().toUpperCase();if(room&&!live.isCode(room)){toast(tr('live.badCode'));return}const old=U.CAMPED==='new'?null:camp.campaignById(U.CAMPED);const r=camp.saveCampaign({...(old||{}),id:old?old.id:undefined,name,desc:v('cf-desc').trim(),status:v('cf-status'),next:v('cf-next'),room,done:v('cf-done'),planned:v('cf-planned'),chars:U.CAMPCH||(old?old.chars:[])});if(!r){toast(tr('toast.saveFailed'));return}U.CAMPED=null;U.CAMPCH=null;toast(tr('camp.saved',{n:r.name}));break}
+    case 'campdel':{const id=b.dataset.id;if(U.CONF!=='campdel:'+id){U.CONF='campdel:'+id;break}U.CONF=null;camp.deleteCampaign(id);U.CAMPED=null;toast(tr('camp.deleted'));break}
+    case 'campdone':{camp.sessionDone(b.dataset.id);toast(tr('camp.doneToast'));break}
+    case 'campplay':{const c=camp.campaignById(b.dataset.id);if(!c)return;const own=c.chars.find(id=>roster().some(x=>x.id===id));if(own&&own!==S.id&&!switchChar(own)){toast(tr('toast.saveFailed'));return}enterPlay('main');if(c.room&&!dm.D.only&&(live.L.code!==c.room||live.L.role!=='player')){live.connect(c.room,'player');toast(tr('camp.joined',{c:c.room}))}break}
+    case 'plandel':{const c=camp.campaignById(b.dataset.id);if(c)camp.saveCampaign({...c,next:''});break}
     case 'buffrm':dropBuff(b.dataset.id);break;
     case 'peek':{const id=b.dataset.k,name=b.dataset.n;dm.DU.peek={name,loading:true};cloud.peek(id).then(r=>{if(!dm.DU.peek||dm.DU.peek.name!==name)return;dm.DU.peek={name,...(r||{data:null})};render()});break}
     case 'peekclose':dm.DU.peek=null;break;
@@ -201,7 +219,7 @@ app.addEventListener('click',ev=>{
     case 'charsw':switchChar(b.dataset.id);break;
     case 'charnew':newChar();toast(tr('toast.charNew'));break;
     case 'chardup':dupChar();toast(tr('toast.charDup'));break;
-    case 'chardel':{const id=b.dataset.id;if(U.CONF!=='chardel:'+id){U.CONF='chardel:'+id;break}U.CONF=null;delChar(id);break}
+    case 'chardel':{const id=b.dataset.id;if(U.CONF!=='chardel:'+id){U.CONF='chardel:'+id;break}U.CONF=null;delChar(id);camp.dropChar(id);break}
     case 'print':S.tab='main';render();setTimeout(()=>window.print(),50);return;
     case 'lang':setLang(b.dataset.l);buildCatalog();break;
     case 'units':setUnits(b.dataset.u);buildCatalog();break;
@@ -272,6 +290,7 @@ app.addEventListener('change',ev=>{
   if(el.id==='dm-lt'){dm.DU.lt=el.value;dm.DU.lrar='';later();return}
   if(el.id==='dm-lrar'){dm.DU.lrar=el.value;$('dm-li').innerHTML=vLootItems();return}
   if(el.id&&el.id.startsWith('wz-a-')&&U.WIZ){U.WIZ.arr[el.id.slice(5)]=el.value;applyAbil();syncAc();save();later();return}
+  if(el.id&&el.id.startsWith('plan-')){const c=camp.campaignById(el.id.slice(5));if(c){camp.saveCampaign({...c,next:el.value});toast(tr('camp.saved',{n:c.name}));later()}return}
   if(el.id==='bg-sel'){pickBg(el.value);later();return}
   if(el.id==='rc-skill'||el.id==='rc-feat'){S.raceChoice={...(S.raceChoice||{}),[el.id==='rc-skill'?'skill':'feat']:el.value};applyRaceChoices(n=>BYN['feat:'+n]?.p||'');save();later();return}
   if(el.id==='bg-mode'){const v=id=>($(id)||{}).value||'';U.BGMODE=el.value;U.BGA1=v('bg-a1');U.BGA2=v('bg-a2');U.BGTOOL=v('bg-tool');later();return}
@@ -301,6 +320,7 @@ app.addEventListener('change',ev=>{
   if(p==='klass'){const C=CLASSES[S.klass];S.cls=C?C.l:'';if(C){S.hd.die='W'+C.hd;if(!C.subs.includes(S.sub))S.sub=''}}
   save();later()});
 app.addEventListener('input',ev=>{
+  if(ev.target.id==='hub-q'){U.HUBQ=ev.target.value;const r=$('hub-res');if(r)r.innerHTML=vHubResults();return}
   const el=ev.target;
   if(el.id==='inv-filter'){U.invQ=el.value;later();return}
   if(el.id==='ho-t'){dm.DU.hoT=el.value;return}
@@ -394,3 +414,8 @@ function setDraft(el){
   if(f.includes('.')){const [a,b]=f.split('.');d[a][b]=v;return}
   d[f]=list||v;
 }
+
+/** Vom Dashboard in den Spielbereich (optional mit Reiter). In dieser Browsersitzung bleibt man dort auch nach dem Neuladen. */
+function enterPlay(tab){U.HUB=null;U.HUBQ='';U.CAMPED=null;try{sessionStorage.setItem('charbogen-view','play')}catch(e){/* Datenschutzmodus */}if(tab)S.tab=tab;save();window.scrollTo(0,0)}
+/** Import vom Dashboard: in Einrichten wechseln und die Dateiauswahl öffnen (dort liegen Prüfansicht und Übernahme). */
+function hubImport(){enterPlay('setup');render();const f=$('impf');if(f){f.scrollIntoView({block:'center'});f.click()}}
