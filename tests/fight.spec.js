@@ -33,12 +33,15 @@ test.describe('Kampfmodus @new', () => {
     await expect(page.locator('.fight-state.on')).toContainText(/Round 1|Runde 1/);
     await expect(page.locator('.fight-state.on')).toContainText('Goblin Warrior');
     await page.locator('.dm-row [data-a="dmhp"][data-d="-1"]').click();
-    await expect.poll(() => page.evaluate(() => window.__sent.at(-1)?.turn?.order)).toEqual([{ n: 'Goblin Warrior', pc: false, k: '', s: 'hurt', cur: true }]);
+    await expect.poll(() => page.evaluate(() => window.__sent.at(-1)?.turn?.order)).toEqual([{ n: 'Goblin Warrior', pc: false, k: '', s: 'hurt', cur: true, i: '0', nx: false }]);
     // Konzentration eines Gegners eintragen
     await page.locator('.dm-name').click();
     await page.locator('[data-dm="conc"]').fill('Hold Person');
     await page.locator('[data-dm="conc"]').blur();
     await expect(page.locator('.dm-name small')).toContainText('Hold Person');
+    await page.locator('[data-a="dmclose"]').click();
+    // Initiativeleiste: aktiver Zug golden markiert
+    await expect(page.locator('.ibar .ib.cur')).toContainText('Goblin Warrior');
     await page.locator('[data-a="dmfightend"]').click();
     await page.locator('[data-a="dmfightend"]').click();
     await expect(page.locator('.fight-state')).not.toHaveClass(/on/);
@@ -56,9 +59,43 @@ test.describe('Kampfmodus @new', () => {
     await expect(page.locator('.fight-state.on')).toContainText(/Round 2|Runde 2/);
     await expect(page.locator('.fight-order li.cur')).toContainText('Goblin');
     await expect(page.locator('.fight-order li.cur .fo-s')).toHaveText(/bloodied|schwer verletzt/);
-    await expect(page.locator('.fight-order li.me .dm-hpv')).toContainText('20');
+    await expect(page.locator('.fight-order li.me .ib-hp')).toContainText('20');
     await page.locator('[data-a="liveyes"][data-id="m1"]').click();
     expect((await read(page)).conc).toBe('');
+  });
+
+  test('Spieler: eigener Zug golden hervorgehoben, Meldungsstreifen für Zug und Schaden, Ton nur auf Wunsch', async ({ page }) => {
+    await fake(page, { key: 'dm-x', role: 'dm', turn: { r: 1, cur: '$KEY', name: 'Test', next: 'Ork', order: [{ n: 'Test', pc: true, k: '$KEY', cur: true, i: '15' }, { n: 'Ork', pc: false, s: 'ok', i: '8', nx: true }] } }, [{ id: 'm1', type: 'dmg', to: '$KEY', from: 'dm-x', value: 8 }]);
+    await seed(page, base4({ tab: 'setup' }));
+    await page.locator('#live-code').fill('ABC234');
+    await page.locator('[data-a="livejoin"]').click();
+    await tab(page, 'main');
+    await expect(page.locator('.fight-state.mine')).toBeVisible();
+    await expect(page.locator('.ibar .ib.cur .ib-i')).toHaveText('15');
+    await expect(page.locator('.ibar .ib.next')).toContainText('Ork');
+    await expect(page.locator('.feed li.turn')).toBeVisible();
+    await expect(page.locator('.feed li.bad')).toContainText('8');
+    await expect(page.locator('[data-a="soundtg"]')).toHaveAttribute('aria-pressed', 'false');
+    await page.locator('[data-a="soundtg"]').click();
+    expect(await page.evaluate(() => localStorage.getItem('charbogen-sound'))).toBe('on');
+  });
+
+  test('Spielleitung am Tablet: Gruppe und Gegner als Reiter, Kompaktdialog über die Initiativeleiste', async ({ page }) => {
+    await page.setViewportSize({ width: 900, height: 1100 });
+    await dmPage(page);
+    await page.locator('#dm-mq').fill('goblin warrior');
+    await page.locator('#dm-qty').fill('2');
+    await page.locator('[data-a="dmadd"][data-m="goblin-warrior"]').click();
+    await expect(page.locator('.prep3 .prep-go [data-a="dmstep"]')).toBeEnabled();
+    await page.locator('[data-a="dmstep"][data-d="1"]').click();
+    await expect(page.locator('.fight-col.foes')).toBeHidden();
+    await page.locator('[data-a="fside"][data-k="foes"]').click();
+    await expect(page.locator('.fight-col.foes .dm-row')).toHaveCount(2);
+    await page.locator('.ibar [data-a="dmfocus"]').nth(1).click();
+    await expect(page.locator('.dm-dlg')).toBeVisible();
+    await page.locator('.dm-dlg [data-a="dmcond"][data-c="Prone"]').click();
+    await expect(page.locator('.fight-col.foes .dm-row').nth(1).locator('.tag.t-bad')).toHaveText('Prone');
+    expect(await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth)).toBeLessThanOrEqual(0);
   });
 
   test('Ohne Spielleitung: Vorbereitung, Kampf selbst beginnen und beenden', async ({ page }) => {

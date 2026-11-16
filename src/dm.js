@@ -117,7 +117,7 @@ export function turnInfo() {
   if (i < 0) return null;
   const cur = list[i], nx = list.length > 1 ? list[(i + 1) % list.length] : null, pc = c => c && c.kind === 'pc';
   const cr = c => { const m = c && c.kind === 'mon' && findMonster(c.mon); return m ? (m.cr === 0.125 ? '1/8' : m.cr === 0.25 ? '1/4' : m.cr === 0.5 ? '1/2' : String(m.cr)) : ''; };
-  const order = ordered().slice(0, 24).map(c => ({ n: c.name, pc: c.kind !== 'mon', k: c.kind === 'pc' ? c.live || '' : '', s: c.kind === 'mon' ? hpWord(c) : '', cur: c.id === cur.id }));
+  const order = ordered().slice(0, 24).map(c => ({ n: c.name, pc: c.kind !== 'mon', k: c.kind === 'pc' ? c.live || '' : '', s: c.kind === 'mon' ? hpWord(c) : '', cur: c.id === cur.id, i: c.kind === 'pet' ? '' : String(c.init ?? ''), nx: !!nx && c.id === nx.id }));
   return { r: D.combat.round, cur: cur.live || '', name: cur.name, enemy: !pc(cur), cr: cr(cur), next: nx ? nx.name : '', nextEnemy: !!nx && !pc(nx), nextCr: cr(nx), order };
 }
 /** Ein Spieler beendet seinen Zug. Gilt nur, wenn er wirklich gerade dran ist. */

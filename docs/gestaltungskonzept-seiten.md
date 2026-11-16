@@ -196,3 +196,28 @@ Nach jeder Stufe: `npm test`, beide Builds, Screenshots für Desktop, Tablet (10
 - Die Spielleitung sieht dieselben Karten mit ihren Werkzeugen darunter.
 
 Tests: `tests/campaign.spec.js`. Abnahme durch den Nutzer steht aus.
+
+## Stand Stufe 4 – Kampfbereich (16.11.2026)
+
+**Spielleitung, Vorbereitung** (drei Spalten):
+- Begegnungen mit Schwierigkeit und „Laden“
+- Aufstellung: verbundene Spieler hinzufügen, Zeilen mit Initiative, RK und TP, Gegner suchen mit Anzahl, eigene Einträge
+- großer Knopf „Kampf starten“ mit Zählung, Zuganzeige, XP und „Liste leeren“
+
+**Spielleitung, laufender Kampf**
+- Waagrechte Initiativeleiste: Kreatursymbol bzw. Initiale, Initiative, TP-Balken. Der aktive Zug ist golden mit sanftem Leuchten, der nächste gestrichelt mit „als Nächstes“. Darunter der Fortschritt in der Runde.
+- Runde, Zurück und Nächster Zug stehen oben.
+- Darunter Gruppe und Gegner getrennt. Am Tablet unter 1000 px gibt es dafür zwei Reiter.
+- Schaden und Heilung direkt auf jeder Karte. Zustände als rote, Wirkungen als grüne und Konzentration als blaue Marken.
+- Kompaktdialog über Name oder Leiste: Zustände, Konzentration, Notiz, Effekte mit Runden, Plätze, Werteblock, Vorschläge an Spieler, Entfernen.
+- Aktionsbereich „Am Zug“: Werteblock des Gegners bzw. Vorschläge an den Spieler.
+- Steuerleiste: Züge senden, XP, Kampf beenden, Liste leeren, hinzufügen.
+
+**Spieler**
+- Dieselbe Initiativeleiste aus der Presence (`turn.order` mit Initiative `i` und nächstem `nx`).
+- Eigener Zug: goldene Hervorhebung mit Animation. Die Animation entfällt bei „reduzierte Bewegung“.
+- Meldungsstreifen mit den letzten drei Meldungen (`src/feed.js`): Zug, Vorschläge (Schaden rot, Heilung grün, Konzentration blau) und neue Wirkungen.
+- Keine Vibration beim Zug. Ein leiser Ton ist optional, abschaltbar in den Einstellungen und auf der Kampfseite (`charbogen-sound`).
+- Darunter die Kampfansicht des eigenen Charakters.
+
+Tests: `tests/fight.spec.js`.

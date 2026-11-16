@@ -16,6 +16,7 @@ import { vProfile, vStats, vSpellBook } from './char.js';
 import { vCover, vPartyP } from './campaign.js';
 import { hpMaxNow } from '../effects.js';
 import { t } from '../i18n/index.js';
+import { soundOn } from '../feed.js';
 
 /** Kampagnenebene: Spieler und Spielleitung sehen dieselben Bereiche, die Spielleitung mit ihren Werkzeugen. */
 export const CAMP_P = ['cover', 'party', 'main', 'explore', 'trade', 'chron'];
@@ -109,23 +110,27 @@ export function vDmSub() {
  * darunter alles, was der eigene Charakter im Kampf braucht. Gilt mit und ohne Kampagne. */
 const HP_WORD = { ok: 'fight.sOk', hurt: 'fight.sHurt', bad: 'fight.sBad', down: 'fight.sDown' };
 export function vFight() {
-  const tr = dmTurn(), local = !tr && S.turn?.on, peers = L.role === 'player' ? players() : [];
+  const tr = dmTurn(), local = !tr && S.turn?.on, peers = L.role === 'player' ? players() : [], mine = myTurn();
+  const feedHtml = (U.FEED || []).length ? `<ul class="feed" aria-live="polite">${U.FEED.map(f => `<li class="${f.kind}">${esc(f.text)}</li>`).join('')}</ul>` : '';
+  const sound = `<button class="tg sm${soundOn() ? ' on' : ''}" data-a="soundtg" aria-pressed="${soundOn()}" title="${t('fight.soundHint')}">${t('fight.sound')}</button>`;
   let head;
   if (tr) {
     const order = (tr.order || []).map(o => {
       const p = o.k && peers.find(x => x.key === o.k), me = o.k && o.k === S.id;
-      const hp = p ? `<span class="dm-hpv"><b>${p.hp}</b>/${p.hpMax}</span>` : o.s ? `<span class="fo-s ${o.s}">${t(HP_WORD[o.s])}</span>` : '';
-      return `<li class="${o.cur ? 'cur' : ''}${o.pc ? ' pc' : ' foe'}${me ? ' me' : ''}"><span>${esc(o.n)}${me ? ` <small>(${t('nav.me')})</small>` : ''}</span>${(p?.cond || []).map(c => `<span class="chip on">${esc(c)}</span>`).join('')}${p?.conc ? `<span class="dm-conc">${t('live.concShort', { n: esc(p.conc) })}</span>` : ''}${hp}</li>`;
+      const hp = p ? `<span class="ib-hp">${p.hp}/${p.hpMax}</span>${bar(p.hp, p.hpMax)}` : o.s ? `<span class="fo-s ${o.s}">${t(HP_WORD[o.s])}</span>` : '';
+      const tags = [...(p?.cond || []).map(c => `<span class="tag t-bad sm">${esc(c)}</span>`), p?.conc ? `<span class="tag t-conc sm">${esc(p.conc)}</span>` : ''].join('');
+      return `<li class="ib${o.cur ? ' cur' : ''}${o.nx ? ' next' : ''}${o.pc ? ' pc' : ' foe'}${me ? ' me' : ''}"><span class="ib-ic ini">${esc((o.n || '?')[0])}</span><span class="ib-n">${esc(o.n)}${me ? ` <small>(${t('nav.me')})</small>` : ''}</span>${o.i ? `<span class="ib-i">${esc(o.i)}</span>` : ''}${hp}${tags ? `<span class="ib-tags">${tags}</span>` : ''}${o.nx ? `<small class="ib-next">${t('fight.nextShort')}</small>` : ''}</li>`;
     }).join('');
-    head = `<div class="fight-state on"><div class="fs-top"><span class="fs-badge">${t('fight.active')}</span><b>${t('turn.round', { n: tr.r })}</b><span>${myTurn() ? `<b class="fs-mine">${t('turn.mineTitle')}</b>` : t('turn.now', { n: esc(tr.name || '?') })}${tr.next ? ' · ' + t('turn.next', { n: esc(tr.next) }) : ''}</span></div>${order ? `<ol class="fight-order">${order}</ol>` : ''}</div>`;
+    head = `<div class="fight-state on${mine ? ' mine' : ''}"><div class="fs-top"><span class="fs-badge">${t('fight.active')}</span><b class="fs-round">${t('turn.round', { n: tr.r })}</b><span>${mine ? `<b class="fs-mine">${t('turn.mineTitle')}</b>` : t('turn.now', { n: esc(tr.name || '?') })}${tr.next ? ' · ' + t('turn.next', { n: esc(tr.next) }) : ''}</span>${sound}</div>${order ? `<ol class="ibar fight-order">${order}</ol>` : ''}</div>`;
   } else if (local) {
     head = `<div class="fight-state on"><div class="fs-top"><span class="fs-badge">${t('fight.active')}</span><span>${t('fight.local')}</span></div></div>`;
   } else {
     const room = L.role === 'player' && L.code;
-    head = `<div class="fight-state"><div class="fs-top"><span class="fs-badge">${t('fight.prep')}</span><span>${t(room ? 'fight.prepRoom' : 'fight.prepSolo')}</span>${room ? '' : `<button class="btn sm solid" data-a="tstart">${t('fight.startSolo')}</button>`}</div></div>`;
+    head = `<div class="fight-state"><div class="fs-top"><span class="fs-badge">${t('fight.prep')}</span><span>${t(room ? 'fight.prepRoom' : 'fight.prepSolo')}</span>${room ? sound : `<button class="btn sm solid" data-a="tstart">${t('fight.startSolo')}</button>`}</div></div>`;
   }
-  return head + vMain({ mode: 'combat' });
+  return head + feedHtml + vMain({ mode: 'combat' });
 }
+const bar = (hp, max) => { const p = max ? Math.max(0, Math.min(100, hp / max * 100)) : 0; return `<span class="hpbar${p <= 25 ? ' low' : p <= 50 ? ' mid' : ''}" aria-hidden="true"><u style="width:${p}%"></u></span>`; };
 export const CAMP_PAGES = { cover: vCover, party: vPartyP, explore: vExplore, trade: vTrade, chron: vChron };
 export const CHAR_PAGES = { prof: vProfile, stats: vStats, spells: vSpellBook };
 export { vHP };

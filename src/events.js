@@ -1,6 +1,7 @@
 import { pageList, curPage, setPageText, setPageTitle, addPage, delPage, pageLabel, addTemplate } from './views/notes.js';
 import { setInvView } from './views/inventory.js';
 import { setPlayerName } from './player.js';
+import { feed, soundOn, setSound, beep, setFeedHook } from './feed.js';
 import { uid as newUid } from './util.js';
 import { applyProposal, shrinkImage } from './live-actions.js';
 import { downloadBackup, parseBackup, loadSnap, restoreBackup, initBackup, snapshot } from './backup.js';
@@ -23,7 +24,7 @@ import { openWizard, applyAbil, suggest, buyStep, toggleClassSkill } from './vie
 import * as camp from './campaigns.js';
 import { vHubResults } from './views/hub.js';
 import { stashPut, stashTake, stashDrop, want, splitCoins, stashOut, depositItem, depositCoins, cancelDeposit, msgOf, syncDeposits, COINK } from './stash.js';
-import { syncBuffs, castOn, dropBuff, maxTargets, heroTemp } from './buffs.js';
+import { syncBuffs, castOn, dropBuff, maxTargets, heroTemp, setBuffHook } from './buffs.js';
 import { masteryCount } from './views/turn.js';
 import { syncAc } from './helpers.js';
 import * as dm from './dm.js';
@@ -95,7 +96,11 @@ app.addEventListener('click',ev=>{
     case 'dmadd':dm.addMonster(b.dataset.m,clamp(Math.floor(+v('dm-qty'))||1,1,20));dm.saveD();break;
     case 'dmman':{const n=v('dm-mn').trim();if(!n){toast(tr('toast.needName'));return}dm.addManual(n,v('dm-mac'),v('dm-mhp'));dm.saveD();break}
     case 'dmchars':dm.addChars();dm.saveD();break;
-    case 'dmopen':dm.DU.open[b.dataset.id]=!dm.DU.open[b.dataset.id];break;
+    case 'dmopen':{const id=b.dataset.id,was=dm.DU.open[id];dm.DU.open={};if(!was)dm.DU.open[id]=true;break}
+    case 'dmfocus':dm.DU.open={[b.dataset.id]:true};break;
+    case 'dmclose':dm.DU.open={};break;
+    case 'fside':U.FSIDE=b.dataset.k;break;
+    case 'soundtg':setSound(!soundOn());if(soundOn())beep();break;
     case 'dmhp':{const amt=Math.floor(+v('dm-amt-'+b.dataset.id))||1,c=dm.find(b.dataset.id);if(c&&c.live&&live.L.role==='dm'){live.sendMsg({type:+b.dataset.d<0?'dmg':'heal',to:c.live,value:amt,...(c.pet?{pet:c.pet}:{})});toast(tr('live.proposed',{n:c.kind==='pet'?c.owner:c.name}));break}dm.changeHp(b.dataset.id,amt*+b.dataset.d);dm.saveD();break}
     case 'dmcond':{const c=dm.find(b.dataset.id);if(c&&c.live&&c.kind==='pc'&&live.L.role==='dm'){live.sendMsg({type:'cond',to:c.live,cond:b.dataset.c,off:!!c.cond[b.dataset.c]});toast(tr('live.proposed',{n:c.name}));break}if(c){if(c.cond[b.dataset.c])delete c.cond[b.dataset.c];else c.cond[b.dataset.c]=true;dm.saveD()}break}
     case 'dmrm':dm.removeC(b.dataset.id);dm.saveD();break;
@@ -417,6 +422,8 @@ app.addEventListener('toggle',e=>{if(e.target.classList&&e.target.classList.cont
 let livePending=false;
 const typing=()=>{const a=document.activeElement;return !!a&&app.contains(a)&&/^(INPUT|TEXTAREA|SELECT)$/.test(a.tagName)};
 let hadTurn=false;
+setBuffHook(m=>feed(m,'good'));
+setFeedHook(()=>later());
 live.setPeerHook(()=>{dm.syncLive(live.players());if(live.L.role!=='player')return;let ch=syncBuffs(live.L.peers);if(syncDeposits(live.dmStash(),m=>live.sendMsg({...m,name:S.name})))ch=true;const tr0=live.dmTurn();if(!tr0&&hadTurn&&S.turn?.on){endCombat();ch=true}hadTurn=!!tr0;if(tr0&&tr0.r!==S.condAt){const gone=seeRound(tr0.r);ch=true;if(gone.length)toast(tr('cond.ended',{c:gone.join(', ')}))}if(syncCampFromDm())ch=true;if(ch){save();later()}});
 // Vor jedem Speichern: Wirkungen abgleichen (Konzentration beendet → Wirkung weg), dann RK neu berechnen
 hooks.beforeSave=()=>{syncBuffs(live.L.role==='player'?live.L.peers:[]);syncAc()};
@@ -427,11 +434,11 @@ live.setDmFlags(()=>({camp:dmCampMeta(),here:dm.hereNote()?.title?.slice(0,80)||
 dm.dmHooks.live=()=>live.refresh();
 live.setDmMsgHook(m=>{const who=(live.players().find(p=>p.key===m.from)||{}).name||m.name||'?';if(m.type==='want'){want(m.iid,who);dm.saveD();later();return}if(stashPut(m,who)){dm.saveD();toast(tr('stash.in',{n:who}));later()}else live.refresh()});
 live.setEndTurnHook(key=>{const gone=dm.endTurnFrom(key);if(gone===null)return;dm.saveD();live.refresh();if(gone.length)toast(gone.map(x=>tr('dm.fxEnded',x)).join(' '));later()});
-live.setTurnHook(mine=>{if(mine){newTurn();save();later();const n=heroTemp();if(n){save();toast(tr('buff.heroTemp',{n}));later()}}if(!mine||turnsHidden())return;toast(tr('turn.yours'));try{navigator.vibrate&&navigator.vibrate([120,60,120])}catch(e){/* nicht unterstützt */}});
+live.setTurnHook(mine=>{if(mine){newTurn();save();later();const n=heroTemp();if(n){save();toast(tr('buff.heroTemp',{n}));later()}}if(!mine||turnsHidden())return;feed(tr('turn.yours'),'turn');if(soundOn())beep()});
 live.setAckHook(m=>toast(tr(m.ok?'live.ackYes':'live.ackNo',{n:m.name})));
 initBackup(()=>{const el=$('bak-hist');if(el)el.innerHTML=vBakHist()});
 let lastLock=false;
-live.setNewMsgHook(m=>{toast(m.type==='handout'?tr('live.newHandout'):tr('live.newMsg',{t:proposalText(m)}));try{navigator.vibrate&&navigator.vibrate([90,50,90])}catch(e){/* nicht unterstützt */}});
+live.setNewMsgHook(m=>{feed(m.type==='handout'?tr('live.newHandout'):tr('live.newMsg',{t:proposalText(m)}),m.type==='dmg'?'bad':m.type==='heal'?'good':m.type==='conc'?'conc':'');try{navigator.vibrate&&navigator.vibrate([90,50,90])}catch(e){/* nicht unterstützt */}});
 live.setLiveListener(force=>{updateDock();const lk=live.lootLocked(),lockChanged=lk!==lastLock;lastLock=lk;if(!force&&!lockChanged&&!S.tab.startsWith('dm')&&S.tab!=='setup')return;if(typing()){livePending=true;return}later()});
 app.addEventListener('focusout',()=>{if(livePending)setTimeout(()=>{if(livePending&&!typing()){livePending=false;later()}},0)});
 

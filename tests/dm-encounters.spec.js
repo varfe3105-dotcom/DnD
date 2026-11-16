@@ -111,6 +111,8 @@ test.describe('Effekte und Legendary Actions @new', () => {
     await page.locator('#dm-fxn-a').fill('Slow');
     await page.locator('#dm-fxr-a').fill('2');
     await page.locator('[data-a="dmfx"][data-id="a"]').click();
+    // Werte im Kompaktdialog; zum Weiterschalten wird er geschlossen
+    await act(page, 'dmclose').click();
     const next = () => act(page, 'dmstep', '[data-d="1"]').click();
     await expect(page.locator('.dm-fx .chip')).toHaveText('Slow 2');
     await next(); await next();

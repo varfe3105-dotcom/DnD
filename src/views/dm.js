@@ -4,6 +4,8 @@ import { BYN } from '../catalog.js';
 import { SK } from '../constants.js';
 import { vCheat, statText } from './dm-rules.js';
 import { esc, mod, sg } from '../util.js';
+import { U } from '../state.js';
+import { glyph } from '../icons.js';
 import { COND } from '../catalog.js';
 import { t, nameLine, dist } from '../i18n/index.js';
 import { L, players, pendingFor } from '../live.js';
@@ -25,23 +27,37 @@ function statBlock(c) {
   return `<div class="dm-stat"><dl class="sm">${ABK.map(k => `<div><dt>${t('abs.' + k)}</dt><dd>${m.abil[k]} (${sg(mod(m.abil[k]))})</dd></div>`).join('')}</dl><p class="cls">${esc([m.size, m.type].filter(Boolean).join(' '))}${m.size || m.type ? ' · ' : ''}CR ${crText(m.cr)} · ${esc(m.speed)}${m.hd ? ' · ' + esc(m.hd) : ''}</p><div class="ptext stat">${statText(m.text)}</div><p class="src">${m.custom ? t('src.own') : t('dm.srcMonster')}</p></div>`;
 }
 const pipsOf = (o, attr) => Array.from({ length: o.max }, (_, j) => `<button class="pip ${j < o.max - o.used ? 'on' : ''}" ${attr} data-j="${j}" aria-label="${t(j < o.max - o.used ? 'pip.use' : 'pip.reset')}"></button>`).join('');
+const who = c => { const m = c.kind === 'mon' && findMonster(c.mon); return m && m.type ? `<span class="ib-ic">${glyph('skull', 'mt:' + String(m.type).toLowerCase().split(' ')[0])}</span>` : `<span class="ib-ic ini">${esc((c.name || '?').trim()[0] || '?')}</span>`; };
+const hpb = (hp, max) => { const p = max ? Math.max(0, Math.min(100, hp / max * 100)) : 0; return `<span class="hpbar${p <= 25 ? ' low' : p <= 50 ? ' mid' : ''}" aria-hidden="true"><u style="width:${p}%"></u></span>`; };
+/** Initiativeleiste: Reihenfolge waagrecht, aktiver Zug golden, der nächste markiert, Fortschritt in der Runde. */
+function vInitBar(list, cur, next) {
+  const live = list.filter(x => !(x.kind === 'mon' && x.hp <= 0) && x.kind !== 'pet'), i = live.findIndex(x => x.id === cur?.id);
+  return `<div class="ibar" role="list" aria-label="${t('fight.order')}">${list.map(x => `<button role="listitem" class="ib${x.id === cur?.id ? ' cur' : ''}${x.id === next?.id ? ' next' : ''}${x.kind === 'mon' ? ' foe' : ' pc'}${x.kind === 'mon' && x.hp <= 0 ? ' down' : ''}${x.kind === 'pet' ? ' pet' : ''}" data-a="dmfocus" data-id="${x.id}" aria-current="${x.id === cur?.id}">${who(x)}<span class="ib-n">${esc(x.name)}</span><span class="ib-i">${x.kind === 'pet' ? '↳' : x.init}</span>${hpb(x.hp, x.hpMax)}${x.id === next?.id ? `<small class="ib-next">${t('fight.nextShort')}</small>` : ''}</button>`).join('')}</div>${live.length ? `<div class="ib-prog" aria-hidden="true">${live.map((x, k) => `<i class="${k < i ? 'done' : k === i ? 'now' : ''}"></i>`).join('')}</div>` : ''}`;
+}
+/** Aktionsbereich: Werte des aktiven Gegners bzw. Hinweis beim Spielercharakter (der handelt am eigenen Gerät). */
+function vActive(c) {
+  if (!c) return '';
+  if (c.kind === 'mon') return `<section class="fight-act"><h3 class="ov-h">${t('fight.actFoe', { n: esc(c.name) })}</h3>${statBlock(c) || `<p class="note">${t('fight.noStat')}</p>`}</section>`;
+  const p = c.live && players().find(x => x.key === c.live);
+  return `<section class="fight-act"><h3 class="ov-h">${t('fight.actPc', { n: esc(c.name) })}</h3><p class="note">${t(p ? 'fight.pcLive' : 'fight.pcLocal')}</p>${p ? vLiveSend(p) : ''}</section>`;
+}
 function row(c, active) {
   const open = DU.open[c.id], down = c.kind === 'mon' && c.hp <= 0, conds = COND.filter(x => c.cond[x.n]);
-  const wait = c.live && L.role === 'dm' && pendingFor(c.live, c.pet || ''), sub = [c.kind === 'pet' ? t('live.petTag', { n: esc(c.owner || '') }) : '', `${t('dm.acShort')} ${c.acB ? `<span class="${c.acB > 0 ? 'buff' : 'debuff'}" title="${esc((c.fx || []).map(x => t('buff.from', { s: x.s, n: x.by })).join('; '))}">${c.ac}</span>` : c.ac}`, ...conds.map(x => esc(x.n)), ...(c.fx || []).map(x => `<span class="${x.good ? 'buff' : 'debuff'}">${esc(x.s)}</span>`), c.conc ? `<span class="dm-conc">${t('live.concShort', { n: esc(c.conc) })}</span>` : '', wait ? `<span class="dm-wait">${t('live.waitAck')}</span>` : ''].filter(Boolean).join(' · ');
+  const wait = c.live && L.role === 'dm' && pendingFor(c.live, c.pet || ''), sub = [c.kind === 'pet' ? t('live.petTag', { n: esc(c.owner || '') }) : '', `${t('dm.acShort')} ${c.acB ? `<span class="${c.acB > 0 ? 'buff' : 'debuff'}" title="${esc((c.fx || []).map(x => t('buff.from', { s: x.s, n: x.by })).join('; '))}">${c.ac}</span>` : c.ac}`, ...conds.map(x => `<span class="tag t-bad sm">${esc(x.n)}</span>`), ...(c.fx || []).filter(x => x.s).map(x => `<span class="tag ${x.good ? 't-good' : 't-bad'} sm">${esc(x.s)}</span>`), c.conc ? `<span class="tag t-conc sm dm-conc">${t('live.concShort', { n: esc(c.conc) })}</span>` : '', wait ? `<span class="dm-wait">${t('live.waitAck')}</span>` : ''].filter(Boolean).join(' · ');
   return `<div class="dm-row${active ? ' on' : ''}${down ? ' down' : ''}${c.kind === 'pet' ? ' pet' : ''}${c.live ? ' live' : ''}">
     <div class="dm-main">
       <input type="number" class="n dm-init" id="dm-init-${c.id}" data-dm="init" data-id="${c.id}" value="${c.init}" aria-label="${t('stat.init')} ${esc(c.name)}">
       <button class="dm-name" data-a="dmopen" data-id="${c.id}" aria-expanded="${!!open}"><b>${esc(c.name)}</b><small>${sub}</small></button>${(c.fx || []).length ? `<div class="chips dm-fx">${c.fx.map(f => `<button class="chip" data-a="dmfxdel" data-id="${c.id}" data-f="${f.id}" title="${t('item.remove')}">${esc(f.n)} <b>${f.r}</b></button>`).join('')}</div>` : ''}${c.la ? `<div class="dm-la"><span class="lbl">LA</span><div class="pips">${pipsOf(c.la, `data-a="dmla" data-id="${c.id}"`)}</div></div>` : ''}
       <div class="dm-hp"><button data-a="dmhp" data-id="${c.id}" data-d="-1" aria-label="${t('hp.damage')} ${esc(c.name)}">−</button><input type="number" class="n" id="dm-amt-${c.id}" min="1" placeholder="1" aria-label="${t('hp.amount')}"><button data-a="dmhp" data-id="${c.id}" data-d="1" aria-label="${t('hp.heal')} ${esc(c.name)}">+</button><span class="dm-hpv"><b>${c.hp}</b>/${c.hpMax}${c.tmp ? ' +' + c.tmp : ''}</span></div>
     </div>
-    ${open ? `<div class="dm-more"><div class="chips">${COND.map(x => `<button class="chip${c.cond[x.n] ? ' on' : ''}" data-a="dmcond" data-id="${c.id}" data-c="${x.n}" aria-pressed="${!!c.cond[x.n]}">${esc(nameLine(x.n, x.de))}</button>`).join('')}</div>
+    ${open ? `<div class="ovl dm-ovl"><div class="dlg dm-dlg" role="dialog" aria-modal="true" aria-labelledby="dmd-${c.id}"><div class="dm-dlg-h"><h3 id="dmd-${c.id}">${esc(c.name)}</h3><span class="dm-hpv"><b>${c.hp}</b>/${c.hpMax}</span><button class="btn sm" data-a="dmclose">${t('common.close')}</button></div><div class="dm-more"><div class="chips">${COND.map(x => `<button class="chip${c.cond[x.n] ? ' on' : ''}" data-a="dmcond" data-id="${c.id}" data-c="${x.n}" aria-pressed="${!!c.cond[x.n]}">${esc(nameLine(x.n, x.de))}</button>`).join('')}</div>
       ${c.live ? '' : `<input type="text" id="dm-conc-${c.id}" data-dm="conc" data-id="${c.id}" value="${esc(c.conc || '')}" placeholder="${t('fight.concPh')}" aria-label="${t('conc.title')}">`}${c.kind === 'pc' && c.live && players().find(p => p.key === c.live) ? vLiveSend(players().find(p => p.key === c.live)) : ''}
       <input type="text" class="wide" id="dm-note-${c.id}" data-dm="note" data-id="${c.id}" value="${esc(c.note)}" placeholder="${t('dm.rowNote')}" aria-label="${t('dm.rowNote')}">
       <div class="add" style="margin:0"><input type="text" id="dm-fxn-${c.id}" placeholder="${t('dm.fxName')}" aria-label="${t('dm.fxName')}"><input type="number" class="n" id="dm-fxr-${c.id}" min="1" value="10" aria-label="${t('dm.fxRounds')}" title="${t('dm.fxRounds')}"><button class="btn sm" data-a="dmfx" data-id="${c.id}">${t('dm.fxAdd')}</button></div>
       ${(c.slots || []).map((s, k) => `<div class="lvh" style="padding:2px 0;border:0"><small>${s.lbl ? esc(s.lbl) : t('spell.level', { n: s.lvl })}</small><div class="pips">${pipsOf(s, `data-a="dmslot" data-id="${c.id}" data-k="${k}"`)}</div></div>`).join('')}
       ${c.kind === 'pc' && c.live ? `<button class="btn sm" data-a="peek" data-k="${esc(c.live)}" data-n="${esc(c.name)}">${t('peek.btn')}</button>` : ''}
       ${statBlock(c)}
-      <button class="btn sm bad" data-a="dmrm" data-id="${c.id}">${t('item.remove')}</button></div>` : ''}
+      <button class="btn sm bad" data-a="dmrm" data-id="${c.id}">${t('item.remove')}</button></div></div></div>` : ''}
   </div>`;
 }
 /** Verbundene Spieler, die noch nicht im Kampf sind, einzeln hinzufügen. */
@@ -53,16 +69,25 @@ function vLiveAdd() {
 }
 function vCombat() {
   const c = D.combat, list = ordered(), on = fighting(), nn = nowNext();
-  const state = on
-    ? `<div class="fight-state on"><div class="fs-top"><span class="fs-badge">${t('fight.active')}</span><b>${t('turn.round', { n: c.round })}</b><span>${t('turn.now', { n: `<b>${esc(nn.cur?.name || '?')}</b>` })}${nn.next ? ' · ' + t('turn.next', { n: esc(nn.next.name) }) : ''}</span></div></div>`
-    : `<div class="fight-state"><div class="fs-top"><span class="fs-badge">${t('fight.prep')}</span><span>${t('fight.prepDm')}</span></div>${D.encounters.length ? `<div class="chips" style="margin-top:8px">${D.encounters.map(e => `<button class="chip" data-a="dmestart" data-id="${e.id}">${t('fight.load', { n: esc(e.name || t('dm.untitled')) })}</button>`).join('')}</div>` : ''}</div>`;
-  const bar = on
-    ? `<div class="dm-bar"><div class="dm-round"><small>${t('dm.round')}</small><b>${c.round}</b></div><button class="btn" data-a="dmstep" data-d="-1">${t('dm.prev')}</button><button class="btn solid" data-a="dmstep" data-d="1">${t('dm.next')}</button><button class="btn" data-a="dmxpopen" aria-expanded="${!!DU.xpOpen}">${t('xp.share')}</button><button class="tg${D.turns !== false ? ' on' : ''}" data-a="dmturns" aria-pressed="${D.turns !== false}" title="${t('dm.turnsHint')}">${t('dm.turns')}</button><button class="btn ${DU.conf === 'end' ? 'warn' : 'bad'}" data-a="dmfightend">${DU.conf === 'end' ? t('fight.endConfirm') : t('fight.end')}</button><button class="btn ${DU.conf === 'clear' ? 'warn' : 'bad'}" data-a="dmclear">${DU.conf === 'clear' ? t('dm.clearConfirm') : t('fight.clearAll')}</button></div>`
-    : `<div class="dm-bar"><button class="btn solid" data-a="dmstep" data-d="1"${list.length ? '' : ' disabled'}>${t('fight.start')}</button><button class="tg${D.turns !== false ? ' on' : ''}" data-a="dmturns" aria-pressed="${D.turns !== false}" title="${t('dm.turnsHint')}">${t('dm.turns')}</button><button class="btn" data-a="dmxpopen" aria-expanded="${!!DU.xpOpen}">${t('xp.share')}</button><button class="btn ${DU.conf === 'clear' ? 'warn' : 'bad'}" data-a="dmclear">${DU.conf === 'clear' ? t('dm.clearConfirm') : t('fight.clearAll')}</button></div>${list.length ? `<p class="note">${t('fight.initHint')}</p>` : ''}`;
-  return `${state}<div class="card">${bar}${vXpShare()}
-  ${list.length ? `<div class="dm-list">${list.map(x => row(x, x.id === c.active)).join('')}</div><p class="note">${t('dm.hint')}</p>` : `<div class="empty">${t('dm.empty')}</div>`}</div>
-  <h2>${t('dm.addTitle')}</h2>${vLiveAdd()}<div class="card"><div class="add"><input type="search" id="dm-mq" value="${esc(DU.mq)}" placeholder="${t('dm.search')}" aria-label="${t('dm.search')}"><input type="number" class="n" id="dm-qty" min="1" max="20" value="1" aria-label="${t('common.count')}"></div><div id="dm-results">${vResults()}</div>
-  <div class="add"><input type="text" id="dm-mn" placeholder="${t('common.name')}"><input type="number" class="n" id="dm-mac" min="0" placeholder="${t('dm.acShort')}" aria-label="${t('stat.ac')}"><input type="number" class="n" id="dm-mhp" min="0" placeholder="${t('head.hpShort')}" aria-label="${t('setup.maxHp')}"><button class="btn" data-a="dmman">${t('common.add')}</button><button class="btn" data-a="dmchars">${t('dm.addChars')}</button></div></div>`;
+  const turns = `<button class="tg${D.turns !== false ? ' on' : ''}" data-a="dmturns" aria-pressed="${D.turns !== false}" title="${t('dm.turnsHint')}">${t('dm.turns')}</button>`;
+  const clear = `<button class="btn ${DU.conf === 'clear' ? 'warn' : 'bad'}" data-a="dmclear">${DU.conf === 'clear' ? t('dm.clearConfirm') : t('fight.clearAll')}</button>`;
+  const add = `<div class="add"><input type="search" id="dm-mq" value="${esc(DU.mq)}" placeholder="${t('dm.search')}" aria-label="${t('dm.search')}"><input type="number" class="n" id="dm-qty" min="1" max="20" value="1" aria-label="${t('common.count')}"></div><div id="dm-results">${vResults()}</div>
+  <div class="add"><input type="text" id="dm-mn" placeholder="${t('common.name')}"><input type="number" class="n" id="dm-mac" min="0" placeholder="${t('dm.acShort')}" aria-label="${t('stat.ac')}"><input type="number" class="n" id="dm-mhp" min="0" placeholder="${t('head.hpShort')}" aria-label="${t('setup.maxHp')}"><button class="btn" data-a="dmman">${t('common.add')}</button><button class="btn" data-a="dmchars">${t('dm.addChars')}</button></div>`;
+  const pcs = list.filter(x => x.kind !== 'mon'), foes = list.filter(x => x.kind === 'mon');
+  if (!on) {
+    const encs = D.encounters.map(e => { const q = rate(e); return `<div class="row prep-enc"><div class="nm">${esc(e.name || t('dm.untitled'))}<small>${e.monsters.map(m => `${m.qty}× ${esc(findMonster(m.id)?.n || '?')}`).join(', ') || t('dm.encEmpty')}</small></div>${badge(q)}<button class="btn sm" data-a="dmestart" data-id="${e.id}"${q.n ? '' : ' disabled'}>${t('fight.loadShort')}</button></div>`; }).join('');
+    return `<div class="fight-state"><div class="fs-top"><span class="fs-badge">${t('fight.prep')}</span><span>${t('fight.prepDm')}</span></div></div>
+    <div class="prep3"><section class="prep-col"><h3 class="ov-h">${t('dm.encounters')}</h3>${encs || `<p class="note">${t('dm.encNone')}</p>`}<button class="linkbtn" data-a="crumb" data-t="dmenc">${t('fight.toEnc')}</button></section>
+    <section class="prep-col"><h3 class="ov-h">${t('fight.lineup')}</h3>${vLiveAdd()}${list.length ? `<p class="note">${t('fight.initHint')}</p><div class="dm-list">${list.map(x => row(x, false)).join('')}</div>` : `<div class="empty">${t('dm.empty')}</div>`}<h3 class="ov-h" style="margin-top:14px">${t('dm.addTitle')}</h3>${add}</section>
+    <aside class="prep-col prep-go"><button class="btn solid big" data-a="dmstep" data-d="1"${list.length ? '' : ' disabled'}>${t('fight.start')}</button><p class="note">${t('fight.startHint', { a: pcs.length, b: foes.length })}</p>${turns}${clear}<button class="btn" data-a="dmxpopen" aria-expanded="${!!DU.xpOpen}">${t('xp.share')}</button>${vXpShare()}</aside></div>`;
+  }
+  const side = U.FSIDE === 'foes' ? 'foes' : 'pcs';
+  const col = (k, title, arr) => `<section class="fight-col ${k}${side === k ? ' show' : ''}"><h3 class="ov-h">${title} <small>${arr.length}</small></h3>${arr.length ? `<div class="dm-list">${arr.map(x => row(x, x.id === c.active)).join('')}</div>` : `<p class="note">${t('fight.none')}</p>`}</section>`;
+  return `<div class="fight-state on"><div class="fs-top"><span class="fs-badge">${t('fight.active')}</span><b class="fs-round">${t('turn.round', { n: c.round })}</b><span>${t('turn.now', { n: `<b>${esc(nn.cur?.name || '?')}</b>` })}${nn.next ? ' · ' + t('turn.next', { n: esc(nn.next.name) }) : ''}</span><span class="fs-btns"><button class="btn" data-a="dmstep" data-d="-1">${t('dm.prev')}</button><button class="btn solid big" data-a="dmstep" data-d="1">${t('dm.next')}</button></span></div>${vInitBar(list, nn.cur, nn.next)}</div>
+  <div class="seg fight-tabs" role="group">${['pcs', 'foes'].map(k => `<button class="tg${side === k ? ' on' : ''}" data-a="fside" data-k="${k}" aria-pressed="${side === k}">${t('fight.side.' + k)}</button>`).join('')}</div>
+  <div class="fight-cols">${col('pcs', t('fight.side.pcs'), pcs)}${col('foes', t('fight.side.foes'), foes)}</div>
+  ${vActive(nn.cur)}
+  <div class="card fight-ctl"><div class="dm-bar">${turns}<button class="btn" data-a="dmxpopen" aria-expanded="${!!DU.xpOpen}">${t('xp.share')}</button><button class="btn ${DU.conf === 'end' ? 'warn' : 'bad'}" data-a="dmfightend">${DU.conf === 'end' ? t('fight.endConfirm') : t('fight.end')}</button>${clear}</div>${vXpShare()}<details class="fight-add"><summary>${t('dm.addTitle')}</summary>${vLiveAdd()}${add}</details><p class="note">${t('dm.hint')}</p></div>`;
 }
 function noteBody(n) {
   const links = linksOf(n), back = backlinks(n);
