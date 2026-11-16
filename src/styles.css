@@ -531,3 +531,19 @@ b.want{color:var(--accent)}
 .row:has(> .qty.cr){flex-wrap:wrap}
 .row:has(> .qty.cr) > .nm{flex:1 1 220px;min-width:0}
 @media (max-width:600px){.qty.cr{flex-basis:100%;justify-content:flex-end}}
+
+/* Zugübersicht 2024 */
+.tv-bar{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.tv-tok{display:inline-block;padding:3px 9px;border-radius:999px;border:1.5px solid var(--line);font-size:.82em;opacity:.55;text-decoration:line-through}
+.tv-tok.on{opacity:1;text-decoration:none;border-color:var(--good,#4c8a4c);color:var(--good,#4c8a4c);font-weight:700}
+.tv-h .tv-tok{margin-left:auto}
+.tv-row .btn[disabled]{opacity:.4}
+.tv-sub{padding-left:22px}
+.tv-sub .ic{transform:scale(.8)}
+.tv-pips{display:inline-flex;gap:3px;vertical-align:middle}
+.tv-pips i{width:11px;height:11px;border:1.5px solid var(--line);border-radius:2px;opacity:.5}
+.tv-pips i.on{background:var(--good,#4c8a4c);border-color:var(--good,#4c8a4c);opacity:1}
+.tv-empty{margin:4px 0 8px}
+.mb-turn b{display:inline-flex;gap:3px;align-items:center}
+.tv-chip{font-style:normal;font-size:.75em;padding:0 4px;border-radius:3px;border:1px solid var(--line);opacity:.45;text-decoration:line-through}
+.tv-chip.on{opacity:1;text-decoration:none;border-color:var(--good,#4c8a4c)}

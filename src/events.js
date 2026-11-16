@@ -16,6 +16,7 @@ import * as cloud from './cloud.js';
 import { setBright, setSkin } from './bright.js';
 import { hpMaxNow } from './effects.js';
 import { endCond, stepRounds, seeRound } from './cond-rounds.js';
+import { doAction, attackOnce, doBonus, doReact, doObj, moveBy, actionSurge, newTurn, endCombat, speedMax } from './turn-state.js';
 import { openWizard, applyAbil, suggest, buyStep, toggleClassSkill } from './views/wizard.js';
 import { stashPut, stashTake, stashDrop, want, splitCoins, stashOut, depositItem, depositCoins, cancelDeposit, msgOf, syncDeposits, COINK } from './stash.js';
 import { syncBuffs, castOn, dropBuff, maxTargets, heroTemp } from './buffs.js';
@@ -23,7 +24,7 @@ import { masteryCount } from './views/turn.js';
 import { syncAc } from './helpers.js';
 import * as dm from './dm.js';
 import { vResults, vNoteList, vEncResults, vPlaceResults } from './views/dm.js';
-import { t as tr, setLang, setUnits, distInput } from './i18n/index.js';
+import { t as tr, setLang, setUnits, distInput, dist as distStr } from './i18n/index.js';
 import { buildCatalog } from './catalog.js';
 import { payCp, addCp, totalCp, cpToGp } from './shop.js';
 import { $, clamp } from './util.js';
@@ -156,12 +157,12 @@ app.addEventListener('click',ev=>{
     case 'insp':S.insp=!S.insp;break;
     case 'castslot':castAt(i,b.dataset.l);break;
     case 'tgt':{const g=U.TARGET;if(!g)break;const k=b.dataset.k;if(g.to.includes(k))g.to=g.to.filter(x=>x!==k);else if(g.to.length>=maxTargets(g.n,g.lvl)){toast(tr('buff.tooMany',{n:maxTargets(g.n,g.lvl)}));return}else g.to.push(k);render();return}
-    case 'tgtok':{const g=U.TARGET;U.TARGET=null;if(!g||!g.to.length)break;if(g.res!=null){const r=S.res[g.res];if(!r||r.used>=r.max){toast(tr('buff.biNone'));break}r.used++}castOn(g.n,g.lvl,g.to);const names=g.to.map(k=>k===S.id?S.name:(live.players().find(p=>p.key===k)||{}).name||'?');toast(tr('buff.sent',{s:g.n,n:names.join(', ')}));break}
+    case 'tgtok':{const g=U.TARGET;U.TARGET=null;if(!g||!g.to.length)break;if(g.res!=null){const r=S.res[g.res];if(!r||r.used>=r.max){toast(tr('buff.biNone'));break}const e=doBonus();if(e){toast(tr('turn.no.'+e));break}r.used++}castOn(g.n,g.lvl,g.to);const names=g.to.map(k=>k===S.id?S.name:(live.players().find(p=>p.key===k)||{}).name||'?');toast(tr('buff.sent',{s:g.n,n:names.join(', ')}));break}
     case 'tgtskip':U.TARGET=null;break;
     case 'wmast':{const w=b.dataset.w,on=S.mastery.includes(w);if(on)S.mastery=S.mastery.filter(x=>x!==w);else{const n=masteryCount();if(S.mastery.length>=n){toast(tr('mast.full',{n}));return}S.mastery.push(w)}break}
     case 'dmbuff':{const k=b.dataset.k,s=v('lv-b-'+k);if(!s){toast(tr('buff.dmPick'));return}dm.dmBuff(s,k);dm.saveD();live.refresh();toast(tr('buff.dmSent',{s,n:(live.players().find(p=>p.key===k)||{}).name||'?'}));break}
     case 'dmbuffrm':dm.dmBuffDrop(b.dataset.id);dm.saveD();live.refresh();break;
-    case 'bigive':{const r=S.res[+b.dataset.i];if(!r||r.used>=r.max){toast(tr('buff.biNone'));return}U.TARGET={n:'Bardic Inspiration',lvl:0,to:[],res:+b.dataset.i};render();return}
+    case 'tbigive':case 'bigive':{const r=S.res[+b.dataset.i];if(!r||r.used>=r.max){toast(tr('buff.biNone'));return}U.TARGET={n:'Bardic Inspiration',lvl:0,to:[],res:+b.dataset.i};render();return}
     case 'stdep':{const i=+v('st-item');const m=i>=0&&v('st-item')!==''?depositItem(i):null;if(!m){toast(tr('stash.pick'));return}m.at=Date.now();live.sendMsg({...msgOf(m),name:S.name});toast(tr('stash.sent'));break}
     case 'stdepc':{const coins={};COINK.forEach(k=>{coins[k]=Math.max(0,Math.floor(+v('stc-'+k))||0)});const m=depositCoins(coins);if(!m){toast(tr('stash.noCoins'));return}m.at=Date.now();live.sendMsg({...msgOf(m),name:S.name});toast(tr('stash.sent'));break}
     case 'stback':cancelDeposit(b.dataset.id);break;
@@ -181,6 +182,16 @@ app.addEventListener('click',ev=>{
     case 'wizsk':{const e=toggleClassSkill(b.dataset.k);if(e){toast(tr(e==='full'?'wiz.skillFull':'wiz.skillHave'));return}break}
     case 'wizgear':{const C=CLASSES[S.klass],g=C&&C.gear&&C.gear[+b.dataset.i];if(!g||S.classGear)return;g.items.forEach(i=>{const c=BYN['item:'+i.id];if(c)putBag(S,mk(c,i.q))});S.gold.gp=(+S.gold.gp||0)+(g.gp||0);S.classGear=true;toast(tr('wiz.gearIn'));break}
     case 'wizdone':{U.WIZ=null;if(!S.level&&S.klass){save();openLU();render();return}break}
+    case 'tact':{const e=doAction(b.dataset.k);if(e){toast(tr('turn.no.'+e));return}if(b.dataset.k==='dash')toast(tr('turn.dashed',{n:distStr(speedMax())}));break}
+    case 'tatk':{const e=attackOnce();if(e){toast(tr('turn.no.'+e));return}break}
+    case 'tbonus':{const i=+b.dataset.res,r=S.res[i];if(r&&r.used>=r.max){toast(tr('turn.no.uses'));return}const e=doBonus();if(e){toast(tr('turn.no.'+e));return}if(r){r.used++;toast(tr('turn.usedRes',{n:r.n}))}break}
+    case 'treact':{const i=+b.dataset.res,r=S.res[i];if(r&&r.used>=r.max){toast(tr('turn.no.uses'));return}const e=doReact();if(e){toast(tr('turn.no.'+e));return}if(r)r.used++;break}
+    case 'tpotion':{const e=doBonus();if(e){toast(tr('turn.no.'+e));return}use(b.dataset.r);break}
+    case 'tmove':{const e=moveBy(+b.dataset.m);if(e){toast(tr('turn.no.'+e));return}break}
+    case 'tobj':{const e=doObj();if(e){toast(tr('turn.no.'+e));return}break}
+    case 'tsurge':{const r=S.res[+b.dataset.i];if(!r||r.used>=r.max){toast(tr('turn.no.uses'));return}r.used++;actionSurge();toast(tr('turn.surged'));break}
+    case 'tnew':newTurn();break;
+    case 'tend':endCombat();break;
     case 'buffrm':dropBuff(b.dataset.id);break;
     case 'peek':{const id=b.dataset.k,name=b.dataset.n;dm.DU.peek={name,loading:true};cloud.peek(id).then(r=>{if(!dm.DU.peek||dm.DU.peek.name!==name)return;dm.DU.peek={name,...(r||{data:null})};render()});break}
     case 'peekclose':dm.DU.peek=null;break;
@@ -211,7 +222,7 @@ app.addEventListener('click',ev=>{
     case 'cond':if(S.cond[b.dataset.c])endCond(b.dataset.c);else S.cond[b.dataset.c]=true;break;
     case 'condr':{const g=stepRounds(b.dataset.c,+b.dataset.d);if(+b.dataset.d>0&&live.dmTurn())S.condAt=live.dmTurn().r;if(g)toast(tr('cond.ended',{c:g}));break}
     case 'exh':S.exh=clamp(S.exh+ +b.dataset.d,0,6);break;
-    case 'cast':cast(i);break;
+    case 'tcast':case 'cast':cast(i);break;
     case 'spopen':U.OPEN[i]=!U.OPEN[i];break;
     case 'concend':toast(tr('toast.concEnded',{s:S.conc}));S.conc='';break;
     case 'use':use(b.dataset.r);break;
@@ -355,7 +366,7 @@ live.setDmFlags(()=>({lock:!!dm.D.lootLock,turn:dm.turnInfo(),stash:stashOut(),b
 dm.dmHooks.live=()=>live.refresh();
 live.setDmMsgHook(m=>{const who=(live.players().find(p=>p.key===m.from)||{}).name||m.name||'?';if(m.type==='want'){want(m.iid,who);dm.saveD();later();return}if(stashPut(m,who)){dm.saveD();toast(tr('stash.in',{n:who}));later()}else live.refresh()});
 live.setEndTurnHook(key=>{const gone=dm.endTurnFrom(key);if(gone===null)return;dm.saveD();live.refresh();if(gone.length)toast(gone.map(x=>tr('dm.fxEnded',x)).join(' '));later()});
-live.setTurnHook(mine=>{if(mine){const n=heroTemp();if(n){save();toast(tr('buff.heroTemp',{n}));later()}}if(!mine||turnsHidden())return;toast(tr('turn.yours'));try{navigator.vibrate&&navigator.vibrate([120,60,120])}catch(e){/* nicht unterstützt */}});
+live.setTurnHook(mine=>{if(mine){newTurn();save();later();const n=heroTemp();if(n){save();toast(tr('buff.heroTemp',{n}));later()}}if(!mine||turnsHidden())return;toast(tr('turn.yours'));try{navigator.vibrate&&navigator.vibrate([120,60,120])}catch(e){/* nicht unterstützt */}});
 live.setAckHook(m=>toast(tr(m.ok?'live.ackYes':'live.ackNo',{n:m.name})));
 initBackup(()=>{const el=$('bak-hist');if(el)el.innerHTML=vBakHist()});
 let lastLock=false;

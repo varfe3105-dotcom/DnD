@@ -1,3 +1,4 @@
+import { spellBlocked, spellSpend, endCombat } from './turn-state.js';
 import { uid as newId } from './util.js';
 import { putBag as toBag } from './state.js';
 import { petView } from './companions.js';
@@ -35,6 +36,7 @@ export function heal(d) {
   toast(t('toast.healed', { n: d }));
 }
 export function rest(long) {
+  endCombat();
   S.res.forEach(r => { if (r.rest === 'short' || (long && r.rest === 'long')) r.used = 0; else if (!long && r.one && r.used > 0) r.used--; });
   S.pact.used = 0;
   if (!long) { toast(S.pact.max ? t('toast.shortPact') : t('toast.short')); return; }
@@ -62,6 +64,9 @@ export function castOptions(s) {
   return out;
 }
 function castWith(s, choice) {
+  const no = spellBlocked(s, true);
+  if (no) { toast(t('turn.no.' + no)); return; }
+  spellSpend(s, true);
   let msg;
   if (choice === 'pact') { S.pact.used++; msg = t('toast.pactUsed', { n: S.pact.lvl }); }
   else { S.slots[choice - 1].used++; msg = t('toast.slotUsed', { n: choice }); }
@@ -74,9 +79,14 @@ function castWith(s, choice) {
 export function cast(i) {
   const s = S.spells[i];
   if (s.lvl === 0) {
+    const no = spellBlocked(s, false);
+    if (no) { toast(t('turn.no.' + no)); return; }
+    spellSpend(s, false);
     if (s.conc) { toast(concMsg(s)); S.conc = s.n; } else toast(t('toast.cast', { s: s.n }));
     return;
   }
+  const no = spellBlocked(s, true);
+  if (no) { toast(t('turn.no.' + no)); return; }
   const opts = castOptions(s);
   if (!opts.length) { toast(t('toast.noSlot', { n: s.lvl }) + (s.ritual ? ' ' + t('toast.ritualHint') : '')); return; }
   if (opts.length > 1) { U.CASTPICK = U.CASTPICK === i ? null : i; return; }

@@ -15,7 +15,7 @@ import { t, loc, dice, dist, lang, nameLine, deName } from '../i18n/index.js';
 import { effects, hpMaxNow, rollState, anyEffect } from '../effects.js';
 import { acBonus, buffText, origin, BUFFS, d4Buffs } from '../buffs.js';
 const d4Html = () => d4Buffs().map(x => `<span class="d4 ${BUFFS[x.s].d4 > 0 ? 'buff' : 'debuff'}" title="${esc(origin(x))}">${BUFFS[x.s].d4 > 0 ? '+' : '−'}${dice('1W4')}</span>`).join('');
-import { vTurnHelp, masteryCount, masteryOf, masteryText } from './turn.js';
+import { vTurnBoard, turnChips, masteryCount, masteryOf, masteryText } from './turn.js';
 /** Meisterschaft einer Waffe: gewählt (aktiv), wählbar oder ohne das Merkmal nur als Hinweis. */
 function mastChip(raw) {
   const e = raw && raw.ref && BYN[raw.ref], m = e && e.mastery && masteryOf(e.mastery);
@@ -195,7 +195,7 @@ export function vProfs() {
 export function vMiniBar(tabsHtml = '') {
   const max = hpMaxNow(), slots = S.slots.map((x, i) => (x.max ? `${i + 1}: ${x.max - x.used}/${x.max}` : '')).filter(Boolean);
   if (S.pact.max) slots.unshift(`${t('mini.pact')} ${S.pact.max - S.pact.used}/${S.pact.max}`);
-  return `<div class="minibar" aria-label="${t('mini.label')}"><div class="mb-hp"><button class="sq" data-a="mbhp" data-d="-1" aria-label="${t('hp.minusOne')}">−</button><span><small>${t('head.hpShort')}</small><b${S.hp === 0 ? ' class="down"' : ''}>${S.hp}</b>/${max}${S.tmp ? ` <i>+${S.tmp}</i>` : ''}</span><button class="sq" data-a="mbhp" data-d="1" aria-label="${t('hp.plusOne')}">+</button></div><span class="mb-v"><small>${t('mini.ac')}</small><b>${acHtml()}</b></span>${slots.length ? `<span class="mb-v mb-slots"><small>${t('mini.slots')}</small><b>${esc(slots.join(' · '))}</b></span>` : ''}${S.conc ? `<span class="mb-v mb-conc"><small>${t('conc.title')}</small><b>${esc(S.conc)}</b></span>` : ''}<nav class="mb-tabs" aria-label="${t('head.areas')}">${tabsHtml}</nav></div>`;
+  return `<div class="minibar" aria-label="${t('mini.label')}">${turnChips()}<div class="mb-hp"><button class="sq" data-a="mbhp" data-d="-1" aria-label="${t('hp.minusOne')}">−</button><span><small>${t('head.hpShort')}</small><b${S.hp === 0 ? ' class="down"' : ''}>${S.hp}</b>/${max}${S.tmp ? ` <i>+${S.tmp}</i>` : ''}</span><button class="sq" data-a="mbhp" data-d="1" aria-label="${t('hp.plusOne')}">+</button></div><span class="mb-v"><small>${t('mini.ac')}</small><b>${acHtml()}</b></span>${slots.length ? `<span class="mb-v mb-slots"><small>${t('mini.slots')}</small><b>${esc(slots.join(' · '))}</b></span>` : ''}${S.conc ? `<span class="mb-v mb-conc"><small>${t('conc.title')}</small><b>${esc(S.conc)}</b></span>` : ''}<nav class="mb-tabs" aria-label="${t('head.areas')}">${tabsHtml}</nav></div>`;
 }
 const MODE_LS = 'charbogen-mode';
 export const sheetMode = () => { try { const m = localStorage.getItem(MODE_LS); return ['combat', 'explore'].includes(m) ? m : 'all'; } catch (e) { return 'all'; } };
@@ -210,6 +210,6 @@ export function vMain() {
   h += vFx(fx);
   const mode = sheetMode(), show = k => mode === 'all' || (mode === 'combat' ? !['feats', 'skills', 'profs'].includes(k) : !['atk', 'charges', 'pets'].includes(k));
   h += `<div class="modes" role="group" aria-label="${t('mode.label')}">${['all', 'combat', 'explore'].map(m => `<button class="tg${mode === m ? ' on' : ''}" data-a="sheetmode" data-m="${m}" aria-pressed="${mode === m}">${t('mode.' + m)}</button>`).join('')}</div>`;
-  h += `<div class="sheet"><aside>${vAbil(false)}</aside><div class="col c1">${vHP()}${vCond()}${show('atk') ? vAtk() + vTurnHelp() : ''}${vQuick()}${show('charges') ? vCharges() : ''}${vRes()}${show('pets') ? vPets() : ''}</div><div class="col c2">${vSpells()}${show('feats') ? vFeats() : ''}${show('skills') ? `<div class="c2sk">${vSkills()}</div>` : ''}${show('profs') ? vProfs() : ''}</div></div>`;
+  h += `<div class="sheet"><aside>${vAbil(false)}</aside><div class="col c1">${vHP()}${vCond()}${show('atk') ? vAtk() + vTurnBoard() : ''}${vQuick()}${show('charges') ? vCharges() : ''}${vRes()}${show('pets') ? vPets() : ''}</div><div class="col c2">${vSpells()}${show('feats') ? vFeats() : ''}${show('skills') ? `<div class="c2sk">${vSkills()}</div>` : ''}${show('profs') ? vProfs() : ''}</div></div>`;
   return h;
 }

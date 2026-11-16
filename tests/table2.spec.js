@@ -57,6 +57,15 @@ test.describe('Zustände mit Runden @new', () => {
   });
 });
 
+test.describe('Zug im Live-Raum @new', () => {
+  test.beforeEach(async ({ page }) => { await page.addInitScript(fake); });
+  test('Spielleitung schaltet auf mich: neuer Zug, Aktionen wieder frei', async ({ page }) => {
+    await asPlayer(page, { turn: { on: true, a: 1, aMax: 1, b: 1, r: 1, mv: 6, dash: 0, atk: 0, atkMax: 0, obj: 1, slot: true } });
+    await page.evaluate(() => window.__peers([{ key: 'dm-x', role: 'dm', turn: { r: 2, cur: 'held1', name: 'Borin' } }]));
+    await expect.poll(async () => (await read(page)).turn).toMatchObject({ on: true, a: 0, b: 0, r: 0, mv: 0, slot: false });
+  });
+});
+
 test.describe('Inspiration über den Live-Tisch @new', () => {
   test.beforeEach(async ({ page }) => { await page.addInitScript(fake); });
 
