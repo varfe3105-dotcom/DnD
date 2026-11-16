@@ -5,6 +5,7 @@ import { S } from './state.js';
 import { isShield } from './helpers.js';
 import { classLevels } from './tables.js';
 import { t } from './i18n/index.js';
+import { hasted, myBuffs } from './buffs.js';
 
 const ARMOR = Object.fromEntries(items.filter(i => i.ac && !i.ac.shield).map(i => [i.id, { cat: i.ac.cat, str: +(i.text.en.match(/STR (\d+)/) || [])[1] || 0, stealth: /Disadvantage on Stealth/.test(i.text.en) }]));
 // Rüstungsübung als Startklasse und beim Multiclassing (L = leicht, M = mittel, H = schwer, S = Schild).
@@ -88,12 +89,14 @@ export function effects() {
   if (ex >= 1) v = Math.max(0, v - 1.5 * Math.min(ex, 6));
   if (e.speed.minus.some(m => m !== X(ex))) v = Math.max(0, v - 3);
   if (e.speed.half.length) v = v / 2;
+  if (hasted()) { v *= 2; e.speed.plus.push('Haste'); e.speed.norm *= 2; }
   if (e.speed.zero.length) v = 0;
   e.speed.val = v;
+  e.buffs = myBuffs();
   return e;
 }
 /** Wirksames Trefferpunktmaximum (Erschöpfung 4 halbiert es). */
 export const hpMaxNow = () => S.hpMax; // 2024: Erschöpfung senkt das TP-Maximum nicht mehr
 /** Vor- und Nachteil zusammengefasst: 'adv', 'dis', 'both' oder ''. */
 export const rollState = (adv, dis) => (adv.length && dis.length ? 'both' : adv.length ? 'adv' : dis.length ? 'dis' : '');
-export const anyEffect = e => !!(e.atk.adv.length || e.atk.dis.length || e.d20 || e.grapAtk.length || e.init.adv.length || e.init.dis.length || e.noConc.length || e.dead || e.checks.length || e.checkAb.str.length || e.stealth.length || e.sight.length || e.hear.length || e.speed.val !== e.speed.norm || e.hpHalf || e.noAct.length || e.noCast.length || e.vs.adv.length || e.vs.dis.length || e.vs.meleeAdv.length || AB.some(a => e.saves[a].fail.length || e.saves[a].dis.length));
+export const anyEffect = e => !!((e.buffs || []).length || e.atk.adv.length || e.atk.dis.length || e.d20 || e.grapAtk.length || e.init.adv.length || e.init.dis.length || e.noConc.length || e.dead || e.checks.length || e.checkAb.str.length || e.stealth.length || e.sight.length || e.hear.length || e.speed.val !== e.speed.norm || e.hpHalf || e.noAct.length || e.noCast.length || e.vs.adv.length || e.vs.dis.length || e.vs.meleeAdv.length || AB.some(a => e.saves[a].fail.length || e.saves[a].dis.length));

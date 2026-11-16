@@ -184,5 +184,5 @@ test('Spielleitungsmodus: neue Spieler erscheinen sofort im Live-Tisch @new', as
   await page.evaluate(s => { localStorage.setItem('charbogen-v4', JSON.stringify(s)); localStorage.setItem('charbogen-dm', JSON.stringify({ on: true, only: true, only: true, view: 'live' })); localStorage.setItem('charbogen-live', JSON.stringify({ code: 'ABC234', role: 'dm' })); }, base4({ tab: 'dmlive' }));
   await page.reload();
   await page.evaluate(p => window.__peers([p]), { key: 'held1', role: 'player', name: 'Mirelle', klass: 'Wizard', level: 3, hp: 10, hpMax: 10, tmp: 0, ac: 12, exh: 0, conc: '', cond: [], death: { s: 0, f: 0 } });
-  await expect(page.locator('.dm-row')).toContainText('Mirelle');
+  await expect(page.locator('.dm-prow')).toContainText('Mirelle');
 });

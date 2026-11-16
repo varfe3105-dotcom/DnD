@@ -501,3 +501,44 @@ body:has(#live-dock.full) #toast{bottom:auto;top:calc(12px + env(safe-area-inset
   #live-dock .turn.mine>div>b{font-size:1.15rem}
   #live-dock .turn.mine .btn{font-size:.9rem;padding:6px 10px}
 }
+
+/* Wirkungen von Mitspielern: Verbesserung grün, Verschlechterung rot */
+.buff{color:#7fd38a;font-weight:700;text-shadow:0 0 8px rgba(127,211,138,.35)}
+.debuff{color:#f07a6a;font-weight:700;text-shadow:0 0 8px rgba(240,122,106,.35)}
+.chip.buff{border-color:#4f9a5a;color:#9be0a4}
+.chip.debuff{border-color:#a5463a;color:#f3a497}
+.st b .buff,.st b .debuff,.acb .buff,.acb .debuff{cursor:help}
+.fx .fxbuff{display:flex;align-items:baseline;gap:6px;flex-wrap:wrap}
+.fx .fxbuff .del{margin-left:auto}
+.tgts{margin:8px 0}
+/* Gruppenansicht */
+.party>summary{cursor:pointer;font:600 1rem var(--f-ui);letter-spacing:.04em}
+.party>summary small{color:var(--mute);margin-left:6px}
+.prow{padding:8px 0;border-top:1px solid var(--line)}
+.prow:first-of-type{border-top:0}
+.prow-h{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
+.prow-h small{flex:1;color:var(--mute)}
+.prow .bar{margin:4px 0}
+.prow.down .prow-h b{color:#f07a6a}
+.prow .chips{margin-top:4px}
+.prow-pet{display:flex;gap:8px;align-items:baseline;margin:2px 0 0 18px;font-size:.9rem}
+.prow-pet small{flex:1;color:var(--mute)}
+.prow.sm{padding:4px 0}
+.prow.sm .prow-h b{font-size:.9rem}
+.dock-top{display:flex;align-items:center;gap:8px;justify-content:space-between}
+.dock-party{font-size:.75rem;padding:2px 8px}
+.dock-plist{max-height:30vh;overflow:auto}
+
+/* Spielerbogen lesen (Spielleitung) */
+.dlg.peek{max-width:min(720px,100%);max-height:88vh;overflow:auto}
+.pk-stats,.pk-abil{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin:8px 0}
+.pk-abil{grid-template-columns:repeat(6,1fr)}
+.pk-stats>div,.pk-abil>div{display:flex;flex-direction:column;align-items:center;padding:6px 4px;border:1px solid var(--line);border-radius:4px}
+.pk-stats small,.pk-abil small{font-size:.7rem;color:var(--mute)}
+.pk-abil span{font-size:.8rem;color:var(--mute)}
+.pk-sec{margin:10px 0 2px}
+.pk-l{margin:2px 0}
+.dm-prow{padding:6px 0;border-top:1px solid var(--line)}
+@media screen and (max-width:520px){.pk-abil{grid-template-columns:repeat(3,1fr)}.pk-stats{grid-template-columns:repeat(2,1fr)}}
+.dlg .tgts .chip:not(.on){background:rgba(60,40,20,.08);color:#2b2118;border:1px solid #8a6d4a;text-shadow:none}
+.dlg .tgts .chip{font-size:.95rem;padding:6px 12px}

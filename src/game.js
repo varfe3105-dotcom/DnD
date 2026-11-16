@@ -8,6 +8,7 @@ import { render } from './render.js';
 import { isPlay5e, importPlay5e } from './import-play5e.js';
 import { t, dice } from './i18n/index.js';
 import { hpMaxNow } from './effects.js';
+import { isBuff, restBuffs } from './buffs.js';
 
 export function damage(d) {
   const msg = [], before = S.hp;
@@ -42,6 +43,7 @@ export function rest(long) {
   S.hd.used = Math.max(0, S.hd.used - back);
   S.slots.forEach(s => { s.used = 0; });
   S.pets.forEach(p => { p.hp = petView(p).hpMax; });
+  restBuffs();
   S.hp = hpMaxNow(); S.tmp = 0; S.death = { s: 0, f: 0 }; S.conc = '';
   delete S.cond.Unconscious;
   let m = t('toast.long', { n: back });
@@ -65,6 +67,8 @@ function castWith(s, choice) {
   else { S.slots[choice - 1].used++; msg = t('toast.slotUsed', { n: choice }); }
   if (s.conc) { msg += ' ' + concMsg(s); S.conc = s.n; }
   toast(msg);
+  // Zauber mit festen Werten für Mitspieler: Ziele wählen
+  if (isBuff(s.n)) U.TARGET = { n: s.n, lvl: choice === 'pact' ? S.pact.lvl : choice, to: [] };
 }
 /** Mehrere freie Grade öffnen die Auswahl, sonst wird sofort gewirkt. */
 export function cast(i) {

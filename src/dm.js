@@ -187,7 +187,7 @@ const petRow = (p, x) => ({ ...base(), kind: 'pet', live: p.key, pet: x.id, owne
 export function addLive(peers, key) {
   const have = new Set(D.combat.list.filter(c => c.kind === 'pc').map(c => c.live));
   peers.filter(p => !have.has(p.key) && (!key || p.key === key)).forEach(p => {
-    D.combat.list.push({ ...base(), kind: 'pc', live: p.key, name: p.name, ac: p.ac, hp: p.hp, hpMax: p.hpMax, tmp: p.tmp, conc: p.conc, cond: Object.fromEntries(p.cond.map(c => [c, true])) });
+    D.combat.list.push({ ...base(), kind: 'pc', live: p.key, name: p.name, ac: p.ac, acB: p.acB || 0, fx: p.fx || [], hp: p.hp, hpMax: p.hpMax, tmp: p.tmp, conc: p.conc, cond: Object.fromEntries(p.cond.map(c => [c, true])) });
     (p.pets || []).forEach(x => D.combat.list.push(petRow(p, x)));
   });
 }
@@ -204,7 +204,7 @@ export function syncLive(peers) {
       return;
     }
     const cond = Object.fromEntries(p.cond.map(x => [x, true]));
-    if (c.hp !== p.hp || c.hpMax !== p.hpMax || c.ac !== p.ac || c.tmp !== p.tmp || c.conc !== p.conc || JSON.stringify(c.cond) !== JSON.stringify(cond)) { Object.assign(c, { hp: p.hp, hpMax: p.hpMax, ac: p.ac, tmp: p.tmp, conc: p.conc, cond }); changed = true; }
+    if (c.hp !== p.hp || c.hpMax !== p.hpMax || c.ac !== p.ac || c.tmp !== p.tmp || c.conc !== p.conc || c.acB !== (p.acB || 0) || JSON.stringify(c.fx || []) !== JSON.stringify(p.fx || []) || JSON.stringify(c.cond) !== JSON.stringify(cond)) { Object.assign(c, { hp: p.hp, hpMax: p.hpMax, ac: p.ac, acB: p.acB || 0, fx: p.fx || [], tmp: p.tmp, conc: p.conc, cond }); changed = true; }
   });
   // Neue Begleiter eines Spielers, der schon im Kampf ist, kommen dazu.
   peers.forEach(p => {

@@ -1,4 +1,6 @@
-import { vLiveSend, vHandoutForm, vLoot, vCloud } from './live-ui.js';
+import { vLiveSend, vHandoutForm, vLoot, vCloud, partyRow } from './live-ui.js';
+import { BYN } from '../catalog.js';
+import { SK } from '../constants.js';
 import { vCheat, statText } from './dm-rules.js';
 import { esc, mod, sg } from '../util.js';
 import { COND } from '../catalog.js';
@@ -24,7 +26,7 @@ function statBlock(c) {
 const pipsOf = (o, attr) => Array.from({ length: o.max }, (_, j) => `<button class="pip ${j < o.max - o.used ? 'on' : ''}" ${attr} data-j="${j}" aria-label="${t(j < o.max - o.used ? 'pip.use' : 'pip.reset')}"></button>`).join('');
 function row(c, active) {
   const open = DU.open[c.id], down = c.kind === 'mon' && c.hp <= 0, conds = COND.filter(x => c.cond[x.n]);
-  const wait = c.live && L.role === 'dm' && pendingFor(c.live, c.pet || ''), sub = [c.kind === 'pet' ? t('live.petTag', { n: esc(c.owner || '') }) : '', `${t('dm.acShort')} ${c.ac}`, ...conds.map(x => esc(x.n)), c.conc ? `<span class="dm-conc">${t('live.concShort', { n: esc(c.conc) })}</span>` : '', wait ? `<span class="dm-wait">${t('live.waitAck')}</span>` : ''].filter(Boolean).join(' · ');
+  const wait = c.live && L.role === 'dm' && pendingFor(c.live, c.pet || ''), sub = [c.kind === 'pet' ? t('live.petTag', { n: esc(c.owner || '') }) : '', `${t('dm.acShort')} ${c.acB ? `<span class="${c.acB > 0 ? 'buff' : 'debuff'}" title="${esc((c.fx || []).map(x => t('buff.from', { s: x.s, n: x.by })).join('; '))}">${c.ac}</span>` : c.ac}`, ...conds.map(x => esc(x.n)), ...(c.fx || []).map(x => `<span class="${x.good ? 'buff' : 'debuff'}">${esc(x.s)}</span>`), c.conc ? `<span class="dm-conc">${t('live.concShort', { n: esc(c.conc) })}</span>` : '', wait ? `<span class="dm-wait">${t('live.waitAck')}</span>` : ''].filter(Boolean).join(' · ');
   return `<div class="dm-row${active ? ' on' : ''}${down ? ' down' : ''}${c.kind === 'pet' ? ' pet' : ''}${c.live ? ' live' : ''}">
     <div class="dm-main">
       <input type="number" class="n dm-init" id="dm-init-${c.id}" data-dm="init" data-id="${c.id}" value="${c.init}" aria-label="${t('stat.init')} ${esc(c.name)}">
@@ -35,6 +37,7 @@ function row(c, active) {
       <input type="text" class="wide" id="dm-note-${c.id}" data-dm="note" data-id="${c.id}" value="${esc(c.note)}" placeholder="${t('dm.rowNote')}" aria-label="${t('dm.rowNote')}">
       <div class="add" style="margin:0"><input type="text" id="dm-fxn-${c.id}" placeholder="${t('dm.fxName')}" aria-label="${t('dm.fxName')}"><input type="number" class="n" id="dm-fxr-${c.id}" min="1" value="10" aria-label="${t('dm.fxRounds')}" title="${t('dm.fxRounds')}"><button class="btn sm" data-a="dmfx" data-id="${c.id}">${t('dm.fxAdd')}</button></div>
       ${(c.slots || []).map((s, k) => `<div class="lvh" style="padding:2px 0;border:0"><small>${s.lbl ? esc(s.lbl) : t('spell.level', { n: s.lvl })}</small><div class="pips">${pipsOf(s, `data-a="dmslot" data-id="${c.id}" data-k="${k}"`)}</div></div>`).join('')}
+      ${c.kind === 'pc' && c.live ? `<button class="btn sm" data-a="peek" data-k="${esc(c.live)}" data-n="${esc(c.name)}">${t('peek.btn')}</button>` : ''}
       ${statBlock(c)}
       <button class="btn sm bad" data-a="dmrm" data-id="${c.id}">${t('item.remove')}</button></div>` : ''}
   </div>`;
@@ -101,7 +104,7 @@ function vLive() {
   if (L.role !== 'dm') return `<div class="card"><p class="note" style="margin-top:0">${t('live.dmIntro')}</p>${L.role === 'player' ? `<p class="note">${t('live.dmBusy')}</p>` : ''}<div class="add"><button class="btn solid" data-a="livecreate">${t('live.create')}</button></div><div class="add"><input type="text" id="live-dmcode" maxlength="6" autocomplete="off" placeholder="${t('live.codePh')}" aria-label="${t('live.code')}"><button class="btn" data-a="livedmjoin">${t('live.dmReopen')}</button></div><p class="note">${t('live.dmReopenHint')}</p></div>`;
   const list = players();
   return `<div class="card"><div class="dm-bar"><div class="live-code"><small>${t('live.code')}</small><b>${esc(L.code)}</b></div>${liveState()}<button class="btn" data-a="liveadd"${list.length ? '' : ' disabled'}>${t('live.addAll')}</button><button class="btn bad" data-a="liveoff">${t('live.close')}</button></div>
-  ${list.length ? list.map(p => { const inC = inCombat(p.key), pct = p.hpMax ? Math.min(100, p.hp / p.hpMax * 100) : 0; return `<div class="dm-row${p.hp === 0 ? ' down' : ''}"><div class="dm-main"><div class="dm-name"><b>${esc(p.name)}</b><small>${esc(p.klass)}${p.level ? ' · ' + t('feat.level', { n: p.level }) : ''} · ${t('dm.acShort')} ${p.ac}${p.conc ? ' · ' + t('conc.title') + ': ' + esc(p.conc) : ''}${p.insp ? ' · ' + t('insp.title') : ''}${(p.pets || []).length ? ' · ' + p.pets.map(x => esc(x.n)).join(', ') : ''}</small></div>${inC ? `<span class="chip on">${t('live.inCombat')}</span>` : `<button class="btn sm" data-a="liveadd1" data-k="${esc(p.key)}">${t('live.addOne')}</button>`}<span class="dm-hpv"><b>${p.hp}</b>/${p.hpMax}${p.tmp ? ' +' + p.tmp : ''}</span></div><div class="bar" aria-hidden="true"><i style="width:${pct}%"></i></div>${p.cond.length || p.exh ? `<div class="chips">${p.cond.map(c => `<span class="chip on">${esc(c)}</span>`).join('')}${p.exh ? `<span class="chip">${t('exh.title', { n: p.exh })}</span>` : ''}</div>` : ''}${p.hp === 0 ? `<p class="lbl">${t('death.s')} ${p.death.s} · ${t('death.f')} ${p.death.f}</p>` : ''}${vLiveSend(p)}</div>`; }).join('') : `<div class="empty">${t('live.waiting')}</div>`}${vCloud()}</div>${vHandoutForm(list)}`;
+  ${list.length ? list.map(p => { const inC = inCombat(p.key); return `<div class="dm-prow">${partyRow(p)}<div class="add" style="margin:4px 0">${inC ? `<span class="chip on">${t('live.inCombat')}</span>` : `<button class="btn sm" data-a="liveadd1" data-k="${esc(p.key)}">${t('live.addOne')}</button>`}<button class="btn sm" data-a="peek" data-k="${esc(p.key)}" data-n="${esc(p.name)}">${t('peek.btn')}</button></div>${vLiveSend(p)}</div>`; }).join('') : `<div class="empty">${t('live.waiting')}</div>`}${vCloud()}</div>${vHandoutForm(list)}`;
 }
 export function liveState() {
   const k = { on: 'live.on', connecting: 'live.connecting', error: 'live.error' }[L.status];
@@ -137,3 +140,39 @@ export function vDm(solo = false) {
   <details class="dm-backup"><summary>${t('setup.backup')}</summary><p class="note">${t('dm.backupHint')}</p><div class="add"><button class="btn" data-a="dmexp">${t('setup.export')}</button><button class="btn" data-a="dmimp">${t('setup.import')}</button></div>${DU.exp ? `<textarea id="dm-exp" readonly aria-label="${t('setup.exportLabel')}">${esc(DU.exp)}</textarea>` : ''}<textarea id="dm-imp" placeholder="${t('setup.pasteImport')}" aria-label="${t('setup.importLabel')}" style="margin-top:8px">${esc(DU.imp)}</textarea></details>`;
 }
 export { dist };
+
+/* ---- Spielerbogen lesen (Online-Stand aus der Gruppe) ---- */
+const md = n => { const m = Math.floor((+n - 10) / 2); return (m >= 0 ? '+' : '') + m; };
+const itemName = r => (r && r.ref && BYN[r.ref] ? BYN[r.ref].n : r && r.n) || '';
+export function vPeek() {
+  const pk = DU.peek;
+  if (!pk) return '';
+  const close = `<button class="btn solid" data-a="peekclose">${t('common.close')}</button>`;
+  const wrap = body => `<div class="ovl"><div class="dlg peek" role="dialog" aria-modal="true" aria-labelledby="pk-h"><h3 id="pk-h">${t('peek.title', { n: esc(pk.name || '?') })}</h3>${body}<div class="dlgf">${close}</div></div></div>`;
+  if (pk.loading) return wrap(`<p class="note">${t('peek.loading')}</p>`);
+  const s = pk.data;
+  if (!s) return wrap(`<p class="note">${t('peek.none')}</p>`);
+  const sec = (title, inner) => inner ? `<p class="lbl pk-sec">${title}</p>${inner}` : '';
+  const abil = ABK.map(k => `<div><small>${t('abs.' + k)}</small><b>${md(s.abil?.[k] ?? 10)}</b><span>${s.abil?.[k] ?? 10}${s.saves?.[k] ? ' ●' : ''}</span></div>`).join('');
+  const skills = SK.filter(([n]) => s.skills?.[n]).map(([n]) => esc(n) + (s.skills[n] === 2 ? ' (E)' : '')).join(', ');
+  const slots = (s.slots || []).map((x, i) => (x.max ? `${i + 1}: ${x.max - x.used}/${x.max}` : '')).filter(Boolean).join(' · ') + (s.pact?.max ? ` · ${t('mini.pact')} ${s.pact.max - s.pact.used}/${s.pact.max}` : '');
+  const byLvl = {};
+  (s.spells || []).forEach(x => { (byLvl[x.lvl] = byLvl[x.lvl] || []).push(esc(x.n) + (x.prep === false ? '' : '')); });
+  const spells = Object.keys(byLvl).sort((x, y) => x - y).map(l => `<p class="pk-l"><span class="lbl">${+l === 0 ? t('spell.cantrips') : t('spell.level', { n: l })}</span> ${byLvl[l].join(', ')}</p>`).join('');
+  const eq = Object.values(s.eq || {}).map(itemName).filter(Boolean).map(esc).join(', ');
+  const bag = (s.bag || []).filter(Boolean).map(r => esc(itemName(r)) + (r.q > 1 ? ' ×' + r.q : '')).join(', ');
+  const res = (s.res || []).map(r => `${esc(r.n)} ${r.max - r.used}/${r.max}`).join(' · ');
+  const conds = Object.keys(s.cond || {}).filter(k => s.cond[k]);
+  const gold = ['pp', 'gp', 'ep', 'sp', 'cp'].filter(k => s.gold?.[k]).map(k => `${s.gold[k]} ${t('coin.' + k)}`).join(', ');
+  return wrap(`<p class="note">${t('peek.ro', { t: esc(new Date(pk.at).toLocaleString()) })}</p>
+  <p class="cls">${esc([s.race, s.subrace].filter(Boolean).join(' / '))} · ${esc([s.klass, s.sub].filter(Boolean).join(' / '))} ${s.level || ''}${(s.multi || []).map(m => ' · ' + esc(m.k) + ' ' + m.lvl).join('')}</p>
+  <div class="pk-stats"><div><small>${t('stat.ac')}</small><b>${s.ac}</b></div><div><small>${t('head.hpShort')}</small><b>${s.hp}/${s.hpMax}${s.tmp ? ' +' + s.tmp : ''}</b></div><div><small>${t('stat.speed')}</small><b>${esc(dist(s.speed))}</b></div><div><small>${t('stat.prof')}</small><b>+${s.prof}</b></div></div>
+  <div class="pk-abil">${abil}</div>
+  ${conds.length || s.conc ? `<p>${conds.map(c => `<span class="chip on">${esc(c)}</span>`).join(' ')}${s.conc ? ` <span class="dm-conc">${t('live.concShort', { n: esc(s.conc) })}</span>` : ''}</p>` : ''}
+  ${sec(t('skill.title'), skills ? `<p>${skills}</p>` : '')}
+  ${sec(t('spell.title'), (slots ? `<p class="pk-l">${esc(slots)}</p>` : '') + spells)}
+  ${sec(t('peek.res'), res ? `<p>${res}</p>` : '')}
+  ${sec(t('peek.feats'), (s.feats || []).length ? `<p>${s.feats.map(f => esc(f.n)).join(', ')}</p>` : '')}
+  ${sec(t('peek.equip'), eq ? `<p>${eq}</p>` : '')}
+  ${sec(t('peek.bag'), bag || gold ? `<p>${bag}${gold ? (bag ? ' · ' : '') + esc(gold) : ''}</p>` : '')}`);
+}

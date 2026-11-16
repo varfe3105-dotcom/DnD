@@ -36,7 +36,7 @@ test.describe('Live-Tisch @new', () => {
     expect((await page.evaluate(() => window.__liveInfo)).code).toBe('ABC234');
     const p = await lastSent(page);
     expect(p.hp).toBe(15);
-    expect(Object.keys(p).sort()).toEqual(['ac', 'conc', 'cond', 'death', 'exh', 'hp', 'hpMax', 'insp', 'klass', 'level', 'name', 'pets', 'role', 'tmp']);
+    expect(Object.keys(p).sort()).toEqual(['ac', 'acB', 'buffs', 'conc', 'cond', 'death', 'exh', 'fx', 'hp', 'hpMax', 'insp', 'klass', 'level', 'name', 'pets', 'role', 'tmp']);
   });
 
   test('Änderungen gehen automatisch hinaus', async ({ page }) => {
@@ -77,9 +77,9 @@ test.describe('Live-Tisch @new', () => {
     await expect(page.locator('.live-code b')).toHaveText(/^[A-HJ-NP-Z2-9]{6}$/);
     expect(await lastSent(page)).toEqual({ role: 'dm', lock: false, turn: null });
     await peers(page, [player({ cond: ['Poisoned'] })]);
-    await expect(page.locator('.dm-row')).toContainText('Mirelle');
-    await expect(page.locator('.dm-row')).toContainText('20');
-    await expect(page.locator('.dm-row .chip')).toHaveText('Poisoned');
+    await expect(page.locator('.dm-prow')).toContainText('Mirelle');
+    await expect(page.locator('.dm-prow')).toContainText('20');
+    await expect(page.locator('.dm-prow .prow .chips .chip')).toHaveText('Poisoned');
     await peers(page, [player({ hp: 5 })]);
     await expect(page.locator('.dm-hpv b')).toHaveText('5');
   });
@@ -88,10 +88,10 @@ test.describe('Live-Tisch @new', () => {
     await openDm(page);
     await act(page, 'livecreate').click();
     await peers(page, [player({ name: '<img src=x onerror="window.__xss=1">', hp: 'viel', cond: ['Poisoned', '<b>böse</b>'], extra: 'x' })]);
-    await expect(page.locator('.dm-row')).toContainText('<img');
-    await expect(page.locator('.dm-row img')).toHaveCount(0);
+    await expect(page.locator('.dm-prow')).toContainText('<img');
+    await expect(page.locator('.dm-prow img')).toHaveCount(0);
     expect(await page.evaluate(() => window.__xss)).toBeUndefined();
-    await expect(page.locator('.dm-row .chip')).toHaveCount(1);
+    await expect(page.locator('.dm-prow .prow .chips .chip')).toHaveCount(1);
   });
 
   test('Spieler in den Kampf: TP folgen automatisch', async ({ page }) => {

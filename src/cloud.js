@@ -82,6 +82,15 @@ export async function pull(kind, id) {
     return res;
   } catch (e) { fail(e); return ''; }
 }
+/** Bogen eines Spielers nur lesen (Spielleitung): nichts wird lokal gespeichert. */
+export async function peek(id) {
+  if (!active()) return null;
+  try {
+    const rows = await rpc('charbogen_get', { p_room: L.code, p_kind: 'char', p_id: id });
+    const row = Array.isArray(rows) ? rows[0] : rows;
+    return row && row.data ? { data: row.data, at: row.updated_at } : { data: null };
+  } catch (e) { fail(e); return { data: null }; }
+}
 export async function remove(kind, id) {
   if (!active()) return;
   try { await rpc('charbogen_del', { p_room: L.code, p_kind: kind, p_id: id }); setBase(keyOf(kind, id), null); await refreshList(); }

@@ -8,6 +8,7 @@ import { S, U } from '../state.js';
 import { numIn, get, refs, slotLabel, slotName, itemView, atk, carried, carryMax } from '../helpers.js';
 import { CAT, BYN } from '../catalog.js';
 import { cpToGp } from '../shop.js';
+import { acHtml } from './sheet.js';
 /** Verkaufspreis pro Stück: halber Katalogpreis (Regeln 2024, auch für magische Gegenstände). */
 export const sellCp = it => { const c = it.ref && BYN[it.ref]; return c && c.cp ? Math.floor(c.cp / (c.q || 1) / 2) : 0; };
 import { t, weight } from '../i18n/index.js';
@@ -45,7 +46,7 @@ function vCarry() {
 }
 function vFigure() {
   const main = S.eq.main && atk(S.eq.main);
-  return `<label class="fig" for="fig-in" style="grid-area:fig" title="${t('inv.figPick')}">${S.fig || S.img ? `<img src="${S.fig || S.img}" alt="">` : `<span>${esc((S.name || '?').trim()[0] || '?')}</span>`}<i class="figedit">${t('inv.figPickShort')}</i><div class="acb"><small>${t('dm.acShort')}</small><b>${S.ac}</b></div></label><input type="file" id="fig-in" accept="image/*" hidden><div class="dstat" style="grid-area:st">${main ? `<div><b>${main.hit}</b><small>${t('atk.hit')}</small></div><div><b>${main.dmg}</b><small>${esc(main.type)}</small></div>` : `<small>${t('inv.noWeapon')}</small>`}</div>`;
+  return `<label class="fig" for="fig-in" style="grid-area:fig" title="${t('inv.figPick')}">${S.fig || S.img ? `<img src="${S.fig || S.img}" alt="">` : `<span>${esc((S.name || '?').trim()[0] || '?')}</span>`}<i class="figedit">${t('inv.figPickShort')}</i><div class="acb"><small>${t('dm.acShort')}</small><b>${acHtml()}</b></div></label><input type="file" id="fig-in" accept="image/*" hidden><div class="dstat" style="grid-area:st">${main ? `<div><b>${main.hit}</b><small>${t('atk.hit')}</small></div><div><b>${main.dmg}</b><small>${esc(main.type)}</small></div>` : `<small>${t('inv.noWeapon')}</small>`}</div>`;
 }
 export function vInv() {
   const tuned = refs().filter(r => get(r).tuned).length, n = Math.ceil(S.bag.length / 6) * 6;

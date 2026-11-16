@@ -1,6 +1,6 @@
 /* global __BUILD__ */
 import { vNotesTab } from './views/notes.js';
-import { vHandout, vBackupNag, vDock } from './views/live-ui.js';
+import { vHandout, vBackupNag, vDock, vTarget, vParty } from './views/live-ui.js';
 import { $, esc } from './util.js';
 import { S, U, roster } from './state.js';
 import { classLevels, XP_LEVELS, totalLevel } from './tables.js';
@@ -9,7 +9,7 @@ import { vInv } from './views/inventory.js';
 import { vWiki } from './views/wiki.js';
 import { vSetup } from './views/setup.js';
 import { vLU } from './views/levelup.js';
-import { vDm } from './views/dm.js';
+import { vDm, vPeek } from './views/dm.js';
 import { D } from './dm.js';
 import { DM_TABS, DM_TAB_IC, dmOnly, vDmHead, vDmBar, vDmSetup } from './views/dm-mode.js';
 import { L } from './live.js';
@@ -54,7 +54,7 @@ export function render() {
   h += `<div class="tabs"><nav role="tablist" aria-label="${t('head.areas')}">${tabs().map(k => `<button role="tab" aria-selected="${tb === k}" data-a="tab" data-t="${k}">${glyph(TAB_IC[k])}<span>${t('tab.' + k)}</span></button>`).join('')}</nav>${dmOnly() ? '' : `<div class="mini${S.hp === 0 ? ' down' : ''}">${L.status === 'on' ? `<i class="live-dot" title="${t('live.on')}"></i>` : ''}${t('head.hpShort')} <b>${S.hp}</b>/${S.hpMax}${S.tmp ? ` +${S.tmp}` : ''}</div>`}</div>`;
   h += (dmOnly() ? vDmBar : vMiniBar)(tabs().map(k => `<button class="${tb === k ? 'on' : ''}" data-a="mbtab" data-t="${k}" title="${t('tab.' + k)}" aria-label="${t('tab.' + k)}">${glyph(TAB_IC[k])}</button>`).join(''));
   h += vDock() + vBackupNag();
-  if (tb === 'main') h += vMain();
+  if (tb === 'main') h += vParty() + vMain();
   if (tb === 'inv') h += vInv();
   if (tb === 'wiki') h += vWiki();
   if (tb === 'notes') h += vNotesTab();
@@ -63,7 +63,7 @@ export function render() {
   if (tb === 'dm') h += vDm();
   h += `<footer><p>${t('footer.rules')}</p><details><summary>${t('footer.about')}</summary><p>${t('footer.srd')}</p><p>${t('footer.icons')}</p><p>${t('footer.fonts')}</p><p class="lbl">${t('footer.version', { v: typeof __BUILD__ !== 'undefined' ? __BUILD__ : '–' })}</p></details></footer>`;
   if (U.LU && CLASSES[S.klass]) h += vLU();
-  h += vHandout();
+  h += vHandout() + vTarget() + vPeek();
   document.body.style.overflow = U.LU ? 'hidden' : '';
   const wl = document.querySelector('.wl'), wlTop = wl && !U.resetWl ? wl.scrollTop : 0, pageY = window.scrollY;
   app.innerHTML = h;

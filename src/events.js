@@ -15,6 +15,8 @@ import * as live from './live.js';
 import * as cloud from './cloud.js';
 import { setBright, setSkin } from './bright.js';
 import { hpMaxNow } from './effects.js';
+import { syncBuffs, castOn, dropBuff, maxTargets } from './buffs.js';
+import { syncAc } from './helpers.js';
 import * as dm from './dm.js';
 import { vResults, vNoteList, vEncResults, vPlaceResults } from './views/dm.js';
 import { t as tr, setLang, distInput } from './i18n/index.js';
@@ -22,7 +24,7 @@ import { buildCatalog } from './catalog.js';
 import { payCp, addCp, totalCp, cpToGp } from './shop.js';
 import { $, clamp } from './util.js';
 import { EQ } from './constants.js';
-import { def, mk, spFrom, putBag, S, setS, U, save, toast, switchChar, newChar, dupChar, delChar } from './state.js';
+import { hooks, def, mk, spFrom, putBag, S, setS, U, save, toast, switchChar, newChar, dupChar, delChar } from './state.js';
 import { classLevels } from './tables.js';
 import { get, set, refs, fits, applyRace, applyRaceChoices } from './helpers.js';
 import { spMeta, setSheetMode } from './views/sheet.js';
@@ -148,6 +150,13 @@ app.addEventListener('click',ev=>{
     case 'bgapply':{const bg=bgById(U.BGPICK);if(!bg)break;const mode=v('bg-mode')||'21',a2=v('bg-a2'),a1=v('bg-a1'),tool=v('bg-tool'),gear=v('bg-gear')||'A';if((mode==='21'&&(!a2||!a1||a1===a2))||(bg.tool.choose&&!tool)){toast(tr(mode==='21'&&a1&&a1===a2?'bg.needDiff':'bg.needPick'));return}const asi=mode==='21'?{[a2]:2,[a1]:1}:Object.fromEntries(bg.abil.map(k=>[k,1]));U.BGPICK=null;U.BGMODE=U.BGA1=U.BGA2=U.BGTOOL='';applyBg(bg,{asi,tool,gear});break}
     case 'insp':S.insp=!S.insp;break;
     case 'castslot':castAt(i,b.dataset.l);break;
+    case 'tgt':{const g=U.TARGET;if(!g)break;const k=b.dataset.k;if(g.to.includes(k))g.to=g.to.filter(x=>x!==k);else if(g.to.length>=maxTargets(g.n,g.lvl)){toast(tr('buff.tooMany',{n:maxTargets(g.n,g.lvl)}));return}else g.to.push(k);render();return}
+    case 'tgtok':{const g=U.TARGET;U.TARGET=null;if(!g||!g.to.length)break;castOn(g.n,g.lvl,g.to);const names=g.to.map(k=>k===S.id?S.name:(live.players().find(p=>p.key===k)||{}).name||'?');toast(tr('buff.sent',{s:g.n,n:names.join(', ')}));break}
+    case 'tgtskip':U.TARGET=null;break;
+    case 'buffrm':dropBuff(b.dataset.id);break;
+    case 'peek':{const id=b.dataset.k,name=b.dataset.n;dm.DU.peek={name,loading:true};cloud.peek(id).then(r=>{if(!dm.DU.peek||dm.DU.peek.name!==name)return;dm.DU.peek={name,...(r||{data:null})};render()});break}
+    case 'peekclose':dm.DU.peek=null;break;
+    case 'dockparty':U.DOCKPARTY=!U.DOCKPARTY;updateDock();return;
     case 'prep':{const s=S.spells[i];if(s&&!s.always)s.prep=s.prep===false;break}
     case 'spall':U.SPALL=!U.SPALL;break;
     case 'charsw':switchChar(b.dataset.id);break;
@@ -299,12 +308,14 @@ window.addEventListener('pointerup',e=>{
   save();render()});
 window.addEventListener('pointercancel',()=>{if(!drag)return;clearOver();if(drag.g)drag.g.remove();drag=null;render()});
 
-app.addEventListener('toggle',e=>{if(e.target.classList&&e.target.classList.contains('dm-custom'))dm.DU.customOpen=e.target.open;if(e.target.dataset&&e.target.dataset.rid){dm.DU.ropen=dm.DU.ropen||{};dm.DU.ropen[e.target.dataset.rid]=e.target.open}},true);
+app.addEventListener('toggle',e=>{if(e.target.classList&&e.target.classList.contains('party'))U.PARTYCARD=e.target.open;if(e.target.classList&&e.target.classList.contains('dm-custom'))dm.DU.customOpen=e.target.open;if(e.target.dataset&&e.target.dataset.rid){dm.DU.ropen=dm.DU.ropen||{};dm.DU.ropen[e.target.dataset.rid]=e.target.open}},true);
 
 /* Live-Tisch: Beim Tippen nicht neu zeichnen, damit Eingaben nicht verloren gehen */
 let livePending=false;
 const typing=()=>{const a=document.activeElement;return !!a&&app.contains(a)&&/^(INPUT|TEXTAREA|SELECT)$/.test(a.tagName)};
-live.setPeerHook(()=>dm.syncLive(live.players()));
+live.setPeerHook(()=>{dm.syncLive(live.players());if(live.L.role==='player'&&syncBuffs(live.L.peers)){save();later()}});
+// Vor jedem Speichern: Wirkungen abgleichen (Konzentration beendet → Wirkung weg), dann RK neu berechnen
+hooks.beforeSave=()=>{syncBuffs(live.L.role==='player'?live.L.peers:[]);syncAc()};
 live.setPetSource(()=>S.pets.map(petView));
 live.setJoinHook(cloud.onJoin);
 cloud.setCloudListener(()=>{if(!S.tab.startsWith('dm')&&S.tab!=='setup')return;if(typing()){livePending=true;return}later()});

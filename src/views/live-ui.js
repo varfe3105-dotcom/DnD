@@ -9,6 +9,7 @@ import { D } from '../dm.js';
 import { lastBackup, needsBackup, charCount } from '../backup.js';
 import { TIERS, COINS, raritiesFor, coinRow } from '../loot.js';
 import { t, lang, dice } from '../i18n/index.js';
+import { BUFFS, maxTargets } from '../buffs.js';
 
 const COINK = ['pp', 'gp', 'ep', 'sp', 'cp'];
 const coinList = c => COINK.filter(k => c[k]).map(k => `${c[k]} ${t('coin.' + k)}`).join(', ');
@@ -21,8 +22,10 @@ export function vDock() {
   const st = L.status === 'on' ? 'on' : L.status === 'error' ? 'error' : 'connecting';
   const pend = L.role === 'dm' ? pendingCount() : 0;
   const light = `<span class="dock-st st-${st}" role="status"><i></i>${t(st === 'on' ? 'live.stOn' : st === 'error' ? 'live.stError' : 'live.stConnecting')}${pend ? ` · ${t('live.pending', { n: pend })}` : ''}</span>`;
-  const body = vTurn() + vInbox();
-  return `<div id="live-dock" class="${body ? 'full' : 'mini'}">${light}${body}</div>`;
+  const party = partyPeers(), open = U.DOCKPARTY && party.length;
+  const pbtn = party.length ? `<button class="chip dock-party${open ? ' on' : ''}" data-a="dockparty" aria-expanded="${!!open}">${t('party.show', { n: party.length })}</button>` : '';
+  const body = vTurn() + vInbox() + (open ? `<div class="dock-plist">${party.map(p => partyRow(p, true)).join('')}</div>` : '');
+  return `<div id="live-dock" class="${body ? 'full' : 'mini'}"><div class="dock-top">${light}${pbtn}</div>${body}</div>`;
 }
 export function vInbox() {
   if (L.role !== 'player' || !L.inbox.length) return '';
@@ -113,4 +116,28 @@ export function vTurn() {
   const next = tr.next || tr.nextEnemy ? ` · ${t('turn.next', { n: who(tr.next, tr.nextEnemy, tr.nextCr) })}` : '';
   if (myTurn()) return `<div class="turn mine" role="status"><div><b>${t('turn.mineTitle')}</b><small>${t('turn.round', { n: tr.r })}${next}</small></div><button class="btn solid" data-a="endturn">${t('turn.end')}</button></div>`;
   return `<div class="turn" role="status"><span class="lbl">${t('turn.round', { n: tr.r })}</span><span>${t('turn.now', { n: who(tr.name, tr.enemy, tr.cr) })}${next}</span></div>`;
+}
+
+/** „Auf wen?“ nach dem Wirken eines Zaubers mit festen Werten (Shield of Faith, Bless …). */
+export function vTarget() {
+  const g = U.TARGET;
+  if (!g || !BUFFS[g.n]) return '';
+  const n = maxTargets(g.n, g.lvl), others = L.role === 'player' ? players().filter(p => p.key !== S.id) : [];
+  const opt = (key, label) => `<button class="chip${g.to.includes(key) ? ' on' : ''}" data-a="tgt" data-k="${esc(key)}" aria-pressed="${g.to.includes(key)}">${label}</button>`;
+  return `<div class="ovl"><div class="dlg" role="dialog" aria-modal="true" aria-labelledby="tg-h"><h3 id="tg-h">${t('buff.title', { s: esc(g.n) })}</h3><p class="note">${t(BUFFS[g.n].conc ? 'buff.upTo' : 'buff.upToNc', { n })}</p><div class="chips tgts">${opt(S.id, t('buff.me', { n: esc(S.name || '?') }))}${others.map(p => opt(p.key, esc(p.name || '?'))).join('')}</div>${others.length ? '' : `<p class="note">${t('buff.noPeers')}</p>`}<div class="dlgf"><button class="btn" data-a="tgtskip">${t('buff.skip')}</button><button class="btn solid" data-a="tgtok"${g.to.length ? '' : ' disabled'}>${t('buff.cast')}</button></div></div></div>`;
+}
+const fxChips = p => (p.fx || []).map(x => `<span class="chip ${x.good ? 'buff' : 'debuff'}" title="${esc(t('buff.from', { s: x.s, n: x.by }))}">${esc(x.s)}</span>`).join('');
+/** Eine Zeile der Gruppenansicht (auch im Kampf-Tracker der Spielleitung nutzbar). */
+export function partyRow(p, compact) {
+  const pct = p.hpMax ? Math.min(100, p.hp / p.hpMax * 100) : 0, down = p.hp === 0;
+  const ac = p.acB ? `<span class="${p.acB > 0 ? 'buff' : 'debuff'}" title="${esc((p.fx || []).map(x => t('buff.from', { s: x.s, n: x.by })).join('; '))}">${p.ac}</span>` : p.ac;
+  const extra = [...p.cond.map(c => `<span class="chip on">${esc(c)}</span>`), p.exh ? `<span class="chip">${t('exh.title', { n: p.exh })}</span>` : '', fxChips(p)].join('');
+  return `<div class="prow${down ? ' down' : ''}${compact ? ' sm' : ''}"><div class="prow-h"><b>${esc(p.name || '?')}</b><small>${compact ? '' : esc(p.klass) + (p.level ? ' ' + p.level : '') + ' · '}${t('dm.acShort')} ${ac}${p.conc ? ' · <span class="dm-conc">' + t('live.concShort', { n: esc(p.conc) }) + '</span>' : ''}</small><span class="dm-hpv"><b>${p.hp}</b>/${p.hpMax}${p.tmp ? ' +' + p.tmp : ''}</span></div><div class="bar" aria-hidden="true"><i style="width:${pct}%"></i></div>${extra ? `<div class="chips">${extra}</div>` : ''}${down ? `<p class="lbl">${t('party.down')} · ${t('death.s')} ${p.death.s} · ${t('death.f')} ${p.death.f}</p>` : ''}${(p.pets || []).map(x => `<div class="prow-pet"><span>${esc(x.n)}</span><small>${t('dm.acShort')} ${x.ac}</small><span class="dm-hpv"><b>${x.hp}</b>/${x.hpMax}</span></div>`).join('')}</div>`;
+}
+export const partyPeers = () => (L.role === 'player' ? players().filter(p => p.key !== S.id) : []);
+/** Gruppenansicht auf der Karte. */
+export function vParty() {
+  if (L.role !== 'player' || !L.code) return '';
+  const list = partyPeers();
+  return `<details class="party card"${U.PARTYCARD === false ? '' : ' open'}><summary>${t('party.title')} <small>${list.length}</small></summary>${list.length ? list.map(p => partyRow(p)).join('') : `<p class="note">${t('party.none')}</p>`}</details>`;
 }

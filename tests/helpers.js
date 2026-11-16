@@ -50,4 +50,7 @@ export async function castFirst(page, button) {
   await (button || act(page, 'cast')).click();
   const pick = page.locator('[data-a="castslot"]');
   if (await pick.count()) await pick.first().click();
+  // Zauber mit Wirkung auf Mitspieler fragen nach dem Ziel: ohne Ziel weiter
+  const skip = page.locator('[data-a="tgtskip"]');
+  if (await skip.count()) await skip.click();
 }

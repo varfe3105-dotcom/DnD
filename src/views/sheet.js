@@ -11,6 +11,9 @@ import { hdText, skv, pips, numIn, get, refs, atk, raceTraits, abName, abShort, 
 import { COND, EXH, featText, byName, CLASSES, BYN } from '../catalog.js';
 import { t, loc, dice, dist, lang, nameLine, deName } from '../i18n/index.js';
 import { effects, hpMaxNow, rollState, anyEffect } from '../effects.js';
+import { acBonus, buffText, origin, BUFFS } from '../buffs.js';
+/** RK mit Wirkungen von Mitspielern: verändert = farbig, Herkunft im Tooltip. */
+export const acHtml = () => { const b = acBonus(); return b.v ? `<span class="${b.v > 0 ? 'buff' : 'debuff'}" title="${esc(b.why)}">${S.ac + b.v}</span>` : String(S.ac); };
 
 /* ---- Wirkungen von Zuständen, Erschöpfung und Rüstung ---- */
 const why = list => [...new Set(list)].join(', ');
@@ -30,6 +33,7 @@ function fxText(adv, dis) {
 export function vFx(e) {
   if (!anyEffect(e)) return '';
   const L = [], line = (k, v) => L.push(`<li><span class="lbl">${k}</span> ${v}</li>`);
+  (e.buffs || []).forEach(x => L.push(`<li class="fxbuff"><span class="lbl ${BUFFS[x.s].good ? 'buff' : 'debuff'}">${esc(origin(x))}</span> ${esc(buffText(x))} <button class="del" data-a="buffrm" data-id="${esc(x.id)}" title="${t('buff.remove')}" aria-label="${t('buff.remove')} ${esc(x.s)}">✕</button></li>`));
   if (e.dead) line(t('fx.dead'), `(${esc(e.dead)})`);
   if (e.noAct.length) line(t('fx.noAct'), `(${esc(why(e.noAct))})`);
   if (e.d20) line(t('fx.d20'), `<b class="fxw dis">−${e.d20}</b> (${esc(e.d20Why)})`);
@@ -179,7 +183,7 @@ export function vProfs() {
 export function vMiniBar(tabsHtml = '') {
   const max = hpMaxNow(), slots = S.slots.map((x, i) => (x.max ? `${i + 1}: ${x.max - x.used}/${x.max}` : '')).filter(Boolean);
   if (S.pact.max) slots.unshift(`${t('mini.pact')} ${S.pact.max - S.pact.used}/${S.pact.max}`);
-  return `<div class="minibar" aria-label="${t('mini.label')}"><div class="mb-hp"><button class="sq" data-a="mbhp" data-d="-1" aria-label="${t('hp.minusOne')}">−</button><span><small>${t('head.hpShort')}</small><b${S.hp === 0 ? ' class="down"' : ''}>${S.hp}</b>/${max}${S.tmp ? ` <i>+${S.tmp}</i>` : ''}</span><button class="sq" data-a="mbhp" data-d="1" aria-label="${t('hp.plusOne')}">+</button></div><span class="mb-v"><small>${t('mini.ac')}</small><b>${S.ac}</b></span>${slots.length ? `<span class="mb-v mb-slots"><small>${t('mini.slots')}</small><b>${esc(slots.join(' · '))}</b></span>` : ''}${S.conc ? `<span class="mb-v mb-conc"><small>${t('conc.title')}</small><b>${esc(S.conc)}</b></span>` : ''}<nav class="mb-tabs" aria-label="${t('head.areas')}">${tabsHtml}</nav></div>`;
+  return `<div class="minibar" aria-label="${t('mini.label')}"><div class="mb-hp"><button class="sq" data-a="mbhp" data-d="-1" aria-label="${t('hp.minusOne')}">−</button><span><small>${t('head.hpShort')}</small><b${S.hp === 0 ? ' class="down"' : ''}>${S.hp}</b>/${max}${S.tmp ? ` <i>+${S.tmp}</i>` : ''}</span><button class="sq" data-a="mbhp" data-d="1" aria-label="${t('hp.plusOne')}">+</button></div><span class="mb-v"><small>${t('mini.ac')}</small><b>${acHtml()}</b></span>${slots.length ? `<span class="mb-v mb-slots"><small>${t('mini.slots')}</small><b>${esc(slots.join(' · '))}</b></span>` : ''}${S.conc ? `<span class="mb-v mb-conc"><small>${t('conc.title')}</small><b>${esc(S.conc)}</b></span>` : ''}<nav class="mb-tabs" aria-label="${t('head.areas')}">${tabsHtml}</nav></div>`;
 }
 const MODE_LS = 'charbogen-mode';
 export const sheetMode = () => { try { const m = localStorage.getItem(MODE_LS); return ['combat', 'explore'].includes(m) ? m : 'all'; } catch (e) { return 'all'; } };
@@ -190,7 +194,7 @@ export function vMain() {
   const spd = fx.speed.val !== fx.speed.base ? st(t('stat.speed'), `<span class="fxw ${worse ? 'dis' : 'adv'}">${dist(fx.speed.val)}</span>`, `<small class="fxsub">${esc(dist(fx.speed.base))} · ${esc(why2)}</small>`) : st(t('stat.speed'), dist(S.speed));
   let h = '';
   if (S.conc) h += `<div class="conc"><div><small>${t('conc.title')}</small><b>${esc(S.conc)}</b><span>${t('conc.hint')}</span></div><button class="btn" data-a="concend">${t('conc.end')}</button></div>`;
-  h += `<div class="stats">${st(t('stat.ac'), S.ac)}${st(t('stat.init'), sg(initBonus()) + (featureLevel('Barbarian') >= 7 ? fxMark(['Feral Instinct'], []) : ''))}${spd}${st(t('stat.prof'), sg(S.prof))}${st(t('stat.pp'), passivePerception(), `<small class="fxsub">${t('pp.more', { i: 10 + skv('Insight'), v: 10 + skv('Investigation') })}</small>`)}</div>`;
+  h += `<div class="stats">${st(t('stat.ac'), acHtml())}${st(t('stat.init'), sg(initBonus()) + (featureLevel('Barbarian') >= 7 ? fxMark(['Feral Instinct'], []) : ''))}${spd}${st(t('stat.prof'), sg(S.prof))}${st(t('stat.pp'), passivePerception(), `<small class="fxsub">${t('pp.more', { i: 10 + skv('Insight'), v: 10 + skv('Investigation') })}</small>`)}</div>`;
   h += vFx(fx);
   const mode = sheetMode(), show = k => mode === 'all' || (mode === 'combat' ? !['feats', 'skills', 'profs'].includes(k) : !['atk', 'charges', 'pets'].includes(k));
   h += `<div class="modes" role="group" aria-label="${t('mode.label')}">${['all', 'combat', 'explore'].map(m => `<button class="tg${mode === m ? ' on' : ''}" data-a="sheetmode" data-m="${m}" aria-pressed="${mode === m}">${t('mode.' + m)}</button>`).join('')}</div>`;
