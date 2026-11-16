@@ -1,4 +1,4 @@
-/* Bereiche mit eigener Identität, alle aus den Tokens in tokens.css. Hier: Startseite „Roll & Tale“. */
+/* Bereiche mit eigener Identität, alle aus den Tokens in tokens.css. Hier: Startseite „RealmCraft“. */
 @media screen{
 html[data-hub] .wrap{max-width:none;padding:0}
 html[data-hub] footer{display:none}
@@ -8,7 +8,8 @@ html[data-hub] footer{display:none}
 .hi.big{width:34px;height:34px;color:var(--c-brass);stroke-width:1.2}
 
 /* Seitenleiste */
-.hub-side{position:sticky;top:0;height:100vh;display:flex;flex-direction:column;background:linear-gradient(180deg,rgba(20,16,20,.96),rgba(14,11,14,.98)),var(--slate);border-right:1px solid var(--c-brass-a);box-shadow:inset -1px 0 0 rgba(0,0,0,.6),6px 0 24px rgba(0,0,0,.4);overflow:hidden}
+.hub-side{position:sticky;top:0;z-index:5;height:100vh;display:flex;flex-direction:column;background:linear-gradient(180deg,rgba(20,16,20,.96),rgba(14,11,14,.98)),var(--slate);border-right:1px solid var(--c-brass-a);box-shadow:inset -1px 0 0 rgba(0,0,0,.6),6px 0 24px rgba(0,0,0,.4);overflow:visible}
+.hub-side::after{content:"";position:absolute;right:-110px;top:46%;width:220px;height:28px;background:url(./assets/realmcraft/ornaments/divider-1.webp) center/contain no-repeat;transform:rotate(90deg);pointer-events:none;filter:drop-shadow(0 0 4px #000)}
 .hub-brand{display:flex;flex-direction:column;align-items:center;padding:24px 16px 4px;text-align:center}
 .hub-mark{width:104px;aspect-ratio:512/502;background:url(./assets/realmcraft/branding/monogram.webp) center/contain no-repeat;filter:drop-shadow(0 2px 3px rgba(0,0,0,.8)) drop-shadow(0 0 16px rgba(214,176,106,.22))}
 .hub-word{margin:12px 0 0;width:196px;aspect-ratio:1200/348;background:url(./assets/realmcraft/branding/wordmark.webp) center/contain no-repeat;font-size:0;color:transparent;filter:drop-shadow(0 2px 3px rgba(0,0,0,.8))}
@@ -27,15 +28,16 @@ html[data-hub] footer{display:none}
 .hub-side nav button:hover,.hub-sidefoot button:hover{color:var(--c-cream);background:linear-gradient(90deg,rgba(90,58,96,.25),transparent)}
 .hub-side nav button[aria-current="page"],.hub-sidefoot button[aria-current="page"]{color:var(--c-cream);background:linear-gradient(90deg,rgba(90,58,96,.85),rgba(59,36,64,.5) 70%,transparent);box-shadow:inset 3px 0 0 var(--c-brass)}
 .hub-side nav button[aria-current="page"]::after{content:"";position:absolute;right:10px;top:50%;width:8px;height:8px;border:1px solid var(--c-brass);transform:translateY(-50%) rotate(45deg)}
-.hub-sideart{flex:1;min-height:120px;margin-top:18px;background:linear-gradient(180deg,rgba(14,11,14,1),rgba(14,11,14,0) 30%),url(./assets/realmcraft/dashboard/sidebar.webp) 30% bottom/cover no-repeat;border-top:1px solid var(--c-brass-soft)}
+.hub-sideart{flex:1;min-height:200px;margin-top:10px;background:linear-gradient(180deg,#0f0c0f 0,rgba(15,12,15,.55) 22%,rgba(15,12,15,0) 45%,rgba(15,12,15,0) 85%,#0f0c0f),url(./assets/realmcraft/dashboard/sidebar.webp) 30% bottom/cover no-repeat}
 .hub-sidefoot{border-top:1px solid var(--c-brass-a);padding:6px 0}
 
 /* Kopfzeile mit Suche */
 .hub-main{min-width:0;display:flex;flex-direction:column}
 .hub-top{display:flex;align-items:center;gap:18px;padding:16px 32px;border-bottom:1px solid var(--c-brass-soft)}
-.hub-search{position:relative;flex:1;max-width:640px;display:flex;align-items:center;gap:10px;padding:0 14px;border:var(--bd-brass);background:rgba(10,8,10,.65);box-shadow:inset 0 2px 6px rgba(0,0,0,.6)}
+.hub-search{position:relative;flex:0 1 640px;display:flex;align-items:center;gap:10px;padding:0 8px;border:10px solid transparent;border-image:var(--frame);background:rgba(10,8,10,.7) padding-box;box-shadow:inset 0 2px 6px rgba(0,0,0,.6)}
+.hub-topline{flex:1;align-self:center;height:26px;min-width:40px;background:url(./assets/realmcraft/ornaments/divider-4.webp) center/auto 22px no-repeat,linear-gradient(90deg,transparent,var(--c-brass-a) 20%,var(--c-brass-a) 80%,transparent) center/100% 1px no-repeat}
 .hub-search>.hi{color:var(--c-brass);width:22px;height:22px}
-.hub-search input{flex:1;border:0;background:none;box-shadow:none;padding:12px 0;color:var(--c-cream);font:400 1rem var(--f-body)}
+.hub-search input{flex:1;border:0;background:none!important;box-shadow:none!important;padding:12px 0;color:var(--c-cream);font:400 1rem var(--f-body)}
 .hub-search input:focus-visible{outline:none}
 .hub-search:focus-within{box-shadow:inset 0 2px 6px rgba(0,0,0,.6),var(--glow-brass)}
 #hub-res{position:absolute;left:-1px;right:-1px;top:100%;z-index:30}
@@ -45,7 +47,7 @@ html[data-hub] footer{display:none}
 .hub-hit .hi{color:var(--c-brass)}
 .hub-hit small{display:block;font-size:.78rem;color:var(--c-cream-mute)}
 .hub-results .note{padding:10px 14px;margin:0}
-.hub-me{margin-left:auto;display:flex;align-items:center;gap:10px;background:none;border:0;color:var(--c-cream-2);font:500 .95rem var(--f-ui)}
+.hub-me{display:flex;align-items:center;gap:10px;background:none;border:0;color:var(--c-cream-2);font:500 .95rem var(--f-ui)}
 .hub-me:hover{color:var(--c-cream)}
 
 /* Porträts */
@@ -61,17 +63,20 @@ html[data-hub] footer{display:none}
 .hub-body{padding:26px 32px 60px}
 .hub-grid{display:grid;grid-template-columns:minmax(0,1fr) 330px;gap:26px;align-items:start}
 .hub-col{display:flex;flex-direction:column;gap:22px;min-width:0}
-.hub-h{display:flex;align-items:center;gap:14px;margin:6px 0 -6px}
+.hub-h{display:flex;align-items:center;gap:14px;margin:8px 0 -4px}
+.hub-h::after{content:"";order:2;flex:1;height:1px;min-width:20px;background:linear-gradient(90deg,var(--c-brass-a),rgba(196,154,82,.08))}
+.hub-h .hub-more{order:3}
+.hub-h.sm::after{display:none}
 .hub-h h2,.hub-h h3{margin:0;font:700 1.75rem/1.1 var(--f-title);color:var(--c-cream);display:block;text-shadow:0 2px 3px #000}
 .hub-h h2::before,.hub-h h2::after{display:none}
 .hub-h.sm h3{font-size:1.45rem}
 .hub-h.sm .hi.big{width:28px;height:28px}
-.hub-more{margin-left:auto;display:inline-flex;align-items:center;gap:6px;background:none;border:0;color:var(--c-cream-2);font:500 .95rem var(--f-ui)}
+.hub-more{display:inline-flex;align-items:center;gap:6px;background:none;border:0;color:var(--c-cream-2);font:500 .95rem var(--f-ui)}
 .hub-more:hover{color:var(--c-brass-lt)}
 .hub-body h2{text-align:left}
 
 /* Knöpfe des Dashboards */
-.hbtn{display:inline-flex;align-items:center;justify-content:center;gap:10px;padding:10px 20px;font:600 1.02rem var(--f-ui);color:var(--c-cream);background:rgba(16,12,16,.6);border:1px solid var(--c-brass-a);box-shadow:inset 0 0 0 1px rgba(0,0,0,.6);transition:background .2s,box-shadow .2s,transform .15s;clip-path:polygon(10px 0,calc(100% - 10px) 0,100% 50%,calc(100% - 10px) 100%,10px 100%,0 50%)}
+.hbtn{display:inline-flex;align-items:center;justify-content:center;gap:10px;padding:10px 22px;font:600 1.02rem var(--f-ui);color:var(--c-cream);background:rgba(16,12,16,.6);border:1px solid var(--c-brass-a);box-shadow:inset 0 0 0 1px rgba(0,0,0,.6);transition:background .2s,box-shadow .2s,transform .15s;clip-path:polygon(10px 0,calc(100% - 10px) 0,100% 50%,calc(100% - 10px) 100%,10px 100%,0 50%)}
 .hbtn:hover{background:rgba(90,58,96,.45);box-shadow:inset 0 0 0 1px rgba(0,0,0,.6),0 0 14px rgba(214,176,106,.25)}
 .hbtn:active{transform:translateY(1px)}
 .hbtn.pri{background:var(--grad-pri);border-color:var(--c-brass)}
@@ -82,8 +87,8 @@ html[data-hub] footer{display:none}
 .hbtn .hi{width:18px;height:18px}
 
 /* Willkommensbereich: Pergament links, Landschaft rechts */
-.hub-hero{position:relative;display:grid;grid-template-columns:minmax(0,1fr);min-height:310px;color:var(--c-parch-ink);isolation:isolate;border:34px solid transparent;border-image:url(./assets/realmcraft/textures/parchment-sheet.webp) 120 fill / 34px stretch;filter:drop-shadow(0 12px 18px rgba(0,0,0,.65))}
-.hub-hero-art{position:absolute;inset:-16px -16px -16px 36%;z-index:-1;background:url(./assets/realmcraft/dashboard/hero.webp) 78% 40%/cover no-repeat;-webkit-mask-image:linear-gradient(90deg,transparent,#000 26%);mask-image:linear-gradient(90deg,transparent,#000 26%)}
+.hub-hero{position:relative;display:grid;grid-template-columns:minmax(0,1fr);min-height:330px;color:var(--c-parch-ink);isolation:isolate;border:34px solid transparent;border-image:url(./assets/realmcraft/textures/parchment-sheet.webp) 120 fill / 34px stretch;filter:drop-shadow(0 12px 18px rgba(0,0,0,.65))}
+.hub-hero-art{position:absolute;inset:-18px -18px -18px 28%;z-index:-1;background:linear-gradient(180deg,rgba(40,24,10,.0) 60%,rgba(40,24,10,.25)),url(./assets/realmcraft/dashboard/hero.webp) 80% 38%/cover no-repeat;-webkit-mask-image:linear-gradient(90deg,transparent 0,rgba(0,0,0,.35) 12%,rgba(0,0,0,.85) 26%,#000 38%);mask-image:linear-gradient(90deg,transparent 0,rgba(0,0,0,.35) 12%,rgba(0,0,0,.85) 26%,#000 38%)}
 .hub-hero-txt{padding:14px 18px;max-width:500px}
 .hub-hero-h{display:block;text-align:left;margin:0}
 .hub-hero-h::before,.hub-hero-h::after{display:none}
@@ -92,37 +97,47 @@ html[data-hub] footer{display:none}
 .hub-hero .hub-orn{justify-content:flex-start;color:var(--c-parch-ink)}
 .hub-hero .hub-orn i{flex-basis:110px;background:linear-gradient(90deg,transparent,rgba(42,29,20,.6))}
 .hub-cta{display:flex;flex-wrap:wrap;gap:10px;margin-top:6px}
-.hub-hero .hbtn:not(.pri){color:var(--c-parch-ink);background:rgba(244,232,204,.7);border-color:var(--c-parch-line)}
+.hub-hero .hbtn:not(.pri){color:var(--c-cream);background:rgba(26,20,26,.82);border-color:var(--c-brass-a)}
 
-/* Kampagnen */
-.hub-camps{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:18px}
-.hub-camp{display:flex;flex-direction:column;background:var(--surface-card);border:var(--bd-brass);box-shadow:var(--sh-1);transition:transform .2s,box-shadow .2s;overflow:hidden}
-.hub-camp:hover{transform:translateY(-3px);box-shadow:var(--sh-2),var(--glow-brass)}
-.hub-camp.archived{opacity:.8}
-.hub-camp-art{position:relative;height:130px;background:center/cover no-repeat;border-bottom:1px solid var(--c-brass-soft)}
-.hub-camp-art.a0{background-image:url(./assets/realmcraft/campaigns/castle-sunset.webp);background-position:75% 40%}.hub-camp-art.a1{background-image:url(./assets/realmcraft/campaigns/castle-valley.webp);background-position:70% 40%}.hub-camp-art.a2{background-image:url(./assets/realmcraft/campaigns/fortress-storm.webp);background-position:65% 40%}.hub-camp-art.a3{background-image:url(./assets/realmcraft/campaigns/river-city.webp);background-position:50% 50%}.hub-camp-art.a4{background-image:url(./assets/realmcraft/campaigns/dungeon-vault.webp);background-position:45% 50%}.hub-camp-art.a5{background-image:url(./assets/realmcraft/campaigns/forest-ruins.webp);background-position:60% 50%}
+/* Kampagnen: Illustration füllt die Karte, Text auf dunklem Verlauf, Messingrahmen mit Ecken */
+.hub-camps{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:20px}
+.hub-col .hub-camps{grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
+.hub-camp{position:relative;isolation:isolate;display:flex;flex-direction:column;justify-content:flex-end;min-height:330px;overflow:hidden;background:var(--c-night);border:1px solid var(--c-brass-a);box-shadow:var(--sh-2);transition:transform .25s,box-shadow .25s}
+.hub-camp::before{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(180deg,rgba(12,9,12,0) 22%,rgba(16,12,16,.72) 48%,rgba(16,12,16,.96) 70%,#120e12)}
+.hub-camp::after{content:"";position:absolute;inset:5px;z-index:0;pointer-events:none;border:10px solid transparent;border-image:var(--frame);opacity:.85}
+.hub-camp:hover{transform:translateY(-4px);box-shadow:var(--sh-3),var(--glow-brass)}
+.hub-camp.archived{filter:saturate(.55)}
+.hub-camp-art{position:absolute;inset:0 0 auto;height:72%;z-index:-2;background:center/cover no-repeat;transition:transform .8s ease}
+.hub-camp:hover .hub-camp-art{transform:scale(1.05)}
+.hub-camp-art.a0{background-image:url(./assets/realmcraft/campaigns/castle-sunset.webp);background-position:78% 35%}.hub-camp-art.a1{background-image:url(./assets/realmcraft/campaigns/castle-valley.webp);background-position:72% 30%}.hub-camp-art.a2{background-image:url(./assets/realmcraft/campaigns/fortress-storm.webp);background-position:66% 30%}.hub-camp-art.a3{background-image:url(./assets/realmcraft/campaigns/river-city.webp);background-position:50% 45%}.hub-camp-art.a4{background-image:url(./assets/realmcraft/campaigns/dungeon-vault.webp);background-position:45% 50%}.hub-camp-art.a5{background-image:url(./assets/realmcraft/campaigns/forest-ruins.webp);background-position:62% 50%}
 .hub-artpick{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:8px;margin:6px 0 10px}
-.hub-artpick button{height:62px;border:2px solid transparent;padding:0;box-shadow:inset 0 0 0 1px rgba(0,0,0,.6)}
+.hub-artpick button{position:relative;inset:auto;z-index:0;height:62px;background-size:cover;border:2px solid transparent;padding:0;box-shadow:inset 0 0 0 1px rgba(0,0,0,.6)}
 .hub-artpick button.on{border-color:var(--c-brass);box-shadow:var(--glow-brass)}
-.hub-camp.archived .hub-camp-art{filter:grayscale(.6) brightness(.8)}
-.hub-status{position:absolute;left:10px;bottom:8px;display:inline-flex;align-items:center;gap:6px;padding:2px 9px;background:rgba(10,8,10,.75);font:500 .78rem var(--f-ui);color:var(--c-cream-2)}
+.hub-status{position:absolute;left:16px;top:16px;z-index:1;display:inline-flex;align-items:center;gap:7px;padding:3px 11px;background:rgba(10,8,10,.78);border:1px solid var(--c-brass-soft);font:600 .78rem var(--f-ui);letter-spacing:.04em;color:var(--c-cream-2)}
 .hub-status i{width:8px;height:8px;border-radius:50%;background:var(--c-good);box-shadow:0 0 6px var(--c-good)}
 .hub-status.archived i{background:var(--c-cream-mute);box-shadow:none}
-.hub-camp-b{padding:12px 16px 14px;display:flex;flex-direction:column;gap:6px;flex:1}
-.hub-camp h3{margin:0;font:700 1.25rem/1.15 var(--f-title);color:var(--c-cream)}
-.hub-camp p{margin:0;font-size:.92rem;color:var(--c-cream-2);line-height:1.35}
+.hub-camp-b{position:relative;z-index:1;padding:0 20px 18px;display:flex;flex-direction:column;gap:6px}
+.hub-camp h3{margin:0;font:700 1.35rem/1.12 var(--f-title);color:var(--c-cream);text-shadow:0 2px 6px #000}
+.hub-camp p{margin:0;font-size:.9rem;color:var(--c-cream-2);line-height:1.35;text-shadow:0 1px 3px #000}
 .hub-avs{display:flex;align-items:center;gap:0;flex-wrap:wrap}
 .hub-avs small{margin-left:14px;color:var(--c-cream-mute);font-size:.8rem}
 .hub-prog{display:flex;flex-direction:column;gap:5px;margin-top:4px;padding-top:8px;border-top:1px solid var(--c-brass-soft);font-size:.85rem;color:var(--c-cream-2)}
-.hub-prog i{display:block;height:4px;background:rgba(0,0,0,.55);border-radius:2px;overflow:hidden}
-.hub-prog u{display:block;height:100%;background:var(--grad-gold)}
-.hub-when{display:flex;align-items:center;gap:8px;color:var(--c-cream-2);font-size:.9rem}
+.hub-prog i{display:block;height:4px;background:rgba(0,0,0,.6);border-radius:2px;overflow:hidden;box-shadow:0 0 0 1px rgba(196,154,82,.15)}
+.hub-prog u{display:block;height:100%;background:var(--grad-gold);box-shadow:0 0 8px rgba(236,210,148,.5)}
+.hub-when{display:flex;align-items:center;gap:8px;color:var(--c-cream-2);font-size:.88rem}
 .hub-when .hi{color:var(--c-brass)}
-.hub-camp-act{display:flex;flex-wrap:wrap;gap:6px;margin-top:auto;padding-top:6px}
-.hub-empty{display:grid;grid-template-columns:minmax(160px,260px) minmax(0,1fr);gap:20px;align-items:center;background:var(--surface-card);border:var(--bd-brass);padding:14px}
-.hub-empty .hub-camp-art{height:150px;border:1px solid var(--c-brass-soft)}
-.hub-empty h3{margin:0 0 6px;font:700 1.35rem var(--f-title)}
-.hub-empty p{margin:0 0 12px;color:var(--c-cream-2)}
+.hub-camp-act{display:flex;align-items:center;gap:6px;margin-top:6px}
+.hub-camp-act .hbtn{margin-right:auto}
+.hub-ib{display:inline-grid;place-items:center;width:34px;height:34px;padding:0;background:rgba(10,8,10,.6);border:1px solid var(--c-brass-soft);color:var(--c-brass-lt);transition:border-color .2s,background .2s}
+.hub-ib:hover{border-color:var(--c-brass);background:rgba(90,58,96,.5)}
+.hub-ib .hi{width:18px;height:18px}
+.hub-empty{position:relative;isolation:isolate;display:flex;flex-direction:column;justify-content:flex-end;min-height:260px;padding:26px 30px;overflow:hidden;border:1px solid var(--c-brass-a);box-shadow:var(--sh-2)}
+.hub-empty::before{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(90deg,rgba(14,11,14,.95) 0,rgba(14,11,14,.75) 45%,rgba(14,11,14,.1))}
+.hub-empty::after{content:"";position:absolute;inset:5px;pointer-events:none;border:10px solid transparent;border-image:var(--frame);opacity:.85}
+.hub-empty .hub-camp-art{height:100%}
+.hub-empty>div:last-child{max-width:430px}
+.hub-empty h3{margin:0 0 6px;font:700 1.6rem var(--f-title)}
+.hub-empty p{margin:0 0 14px;color:var(--c-cream-2)}
 
 /* Charaktere */
 .hub-chars{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:16px}
@@ -141,6 +156,7 @@ html[data-hub] footer{display:none}
 /* Rechte Spalte */
 .hub-panel{position:relative;padding:20px 22px;background:var(--surface-card);border:12px solid transparent;border-image:var(--frame);box-shadow:var(--sh-1)}
 .hub-panel h3{margin:0 0 10px;font:700 1.45rem/1.1 var(--f-title)}
+.hub-panel.orn::before{content:"";position:absolute;left:50%;top:-24px;width:190px;height:24px;transform:translateX(-50%);background:url(./assets/realmcraft/ornaments/divider-3.webp) center/contain no-repeat;filter:drop-shadow(0 2px 3px #000)}
 .hub-next h4{margin:12px 0 4px;font:700 1.3rem var(--f-title);color:var(--c-cream)}
 .hub-next .hbtn{margin-top:14px}
 .hub-next>.hi.big{display:block;margin-bottom:6px}
@@ -170,6 +186,16 @@ html[data-hub] footer{display:none}
 .hub-hp small{color:var(--c-cream-mute)}
 
 /* Formular, Planung, Einstellungen */
+.hub-doc{position:relative;padding:8px 10px;color:var(--c-parch-ink);border:34px solid transparent;border-image:url(./assets/realmcraft/textures/parchment-sheet.webp) 120 fill / 34px stretch;filter:drop-shadow(0 12px 18px rgba(0,0,0,.65))}
+.hub-doc h3{margin:0 0 10px;font:700 1.6rem/1.1 var(--f-title);color:var(--c-parch-ink)}
+.hub-doc .lbl,.hub-doc .note{color:var(--c-parch-mute)}
+.hub-doc :is(input,select,textarea){background:rgba(255,248,230,.55)!important;color:var(--c-parch-ink);border:1px solid var(--c-parch-line);box-shadow:inset 0 1px 3px rgba(80,50,10,.25)}
+.hub-doc .chip{background:rgba(255,248,230,.4);color:var(--c-parch-ink);border:1px solid var(--c-parch-line);box-shadow:none}
+.hub-doc .chip.on{background:var(--grad-pri);color:var(--c-cream);border-color:var(--c-brass-dk)}
+.hub-doc .hbtn:not(.pri){color:var(--c-parch-ink);background:rgba(244,232,204,.6);border-color:var(--c-parch-line)}
+.hub-doc .hbtn.bad{color:#8a2a1c}
+.hub-doc .hub-planrow{border-bottom-color:rgba(42,29,20,.18)}
+.hub-doc .hub-planrow small{color:var(--c-parch-mute)}
 .hub-form .form{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px 14px}
 .hub-form label{display:flex;flex-direction:column;gap:4px}
 .hub-form textarea{width:100%;margin-top:4px}
@@ -194,6 +220,9 @@ html[data-hub] footer{display:none}
   .hub-mark{width:42px}
   .hub-word{width:138px;margin:0}.hub-brand small{display:none}
   .hub-side>.hub-div,.hub-sideart{display:none}
+  .hub-side::after,.hub-topline,.hub-h::after{display:none}
+  .hub-h .hub-more{margin-left:auto}
+  .hub-search{flex:1}
   .hub-side nav{order:3;flex-direction:row;width:100%;overflow-x:auto;scrollbar-width:none;margin:0;border-top:1px solid var(--c-brass-soft)}
   .hub-side nav button{flex:none;padding:10px 14px;gap:8px;font-size:.95rem}
   .hub-side nav button[aria-current="page"]{box-shadow:inset 0 -3px 0 var(--c-brass);background:rgba(90,58,96,.5)}

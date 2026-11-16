@@ -122,4 +122,13 @@ test.describe('Dashboard @new', () => {
     await expect(page.locator('.wiz')).toBeVisible();
     expect(await page.evaluate(() => JSON.parse(localStorage.getItem('charbogen-index')).length)).toBe(3);
   });
+
+  test('Handybreite: kein Querscrollen, Originalgrafiken geladen', async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+    await start(page, { ...chars, 'charbogen-campaigns': [{ id: 'k1', name: 'Grenzland', status: 'active', chars: ['c1'], art: 3 }] });
+    expect(await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth)).toBeLessThanOrEqual(0);
+    const bg = await page.locator('.hub-camp-art').first().evaluate(e => getComputedStyle(e).backgroundImage);
+    expect(bg.startsWith('url("data:image/webp')).toBe(true);
+    await expect(page.locator('.hub-camp')).toBeVisible();
+  });
 });

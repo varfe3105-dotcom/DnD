@@ -24,7 +24,7 @@ const SVG = {
   moon: '<path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/>',
   arrow: '<path d="M5 12h14M13 6l6 6-6 6"/>',
   d20: '<path d="M12 2.5 20.5 7.5v9L12 21.5 3.5 16.5v-9z"/><path d="M12 2.5 7.5 14h9z M3.5 7.5 7.5 14 M20.5 7.5 16.5 14 M7.5 14 12 21.5 16.5 14"/>',
-  plus: '<path d="M12 5v14M5 12h14"/>', upload: '<path d="M12 16V4M7 9l5-5 5 5"/><path d="M4 16v4h16v-4"/>', bag: '<path d="M8 7V6a4 4 0 0 1 8 0v1"/><path d="M4.5 8h15l-1.2 12.5H5.7z"/>', wand: '<path d="M4 20 15 9"/><path d="M17 3v3M17 9v1M14 6h-1M21 6h-3"/>', crown: '<path d="M3 18h18M4 16 3 7l5 4 4-7 4 7 5-4-1 9z"/>',
+  plus: '<path d="M12 5v14M5 12h14"/>', check: '<path d="M4 12.5 9.5 18 20 6.5"/>', pen: '<path d="M4 20l1-4L16 5l3 3L8 19z"/><path d="M14 7l3 3"/>', upload: '<path d="M12 16V4M7 9l5-5 5 5"/><path d="M4 16v4h16v-4"/>', bag: '<path d="M8 7V6a4 4 0 0 1 8 0v1"/><path d="M4.5 8h15l-1.2 12.5H5.7z"/>', wand: '<path d="M4 20 15 9"/><path d="M17 3v3M17 9v1M14 6h-1M21 6h-3"/>', crown: '<path d="M3 18h18M4 16 3 7l5 4 4-7 4 7 5-4-1 9z"/>',
   star: '<path d="M12 3l2.2 6.6H21l-5.5 4 2.1 6.6L12 16.3 6.4 20.2l2.1-6.6L3 9.6h6.8z"/>',
   scroll: '<path d="M8 4h10a2 2 0 0 1 0 4h-1v10a2.5 2.5 0 0 1-2.5 2.5h-9a2 2 0 0 1 0-4H7V5.5A1.5 1.5 0 0 1 8 4"/><path d="M10 9h4.5M10 12.5h4.5"/>',
 };
@@ -52,7 +52,7 @@ function vSide() {
 }
 function vTop() {
   const me = real({ id: S.id, klass: S.klass, level: S.level }) ? `<button class="hub-me" data-a="hubplay" title="${t('hub.openChar', { n: esc(S.name) })}">${portrait({ name: S.name, img: S.img })}<span>${esc(S.name)}</span></button>` : '';
-  return `<header class="hub-top"><div class="hub-search" role="search">${ico('search')}<input type="search" id="hub-q" value="${esc(U.HUBQ || '')}" placeholder="${t('hub.searchPh')}" aria-label="${t('hub.searchPh')}" autocomplete="off"><div id="hub-res">${vHubResults()}</div></div>${me}</header>`;
+  return `<header class="hub-top"><div class="hub-search" role="search">${ico('search')}<input type="search" id="hub-q" value="${esc(U.HUBQ || '')}" placeholder="${t('hub.searchPh')}" aria-label="${t('hub.searchPh')}" autocomplete="off"><div id="hub-res">${vHubResults()}</div></div><i class="hub-topline" aria-hidden="true"></i>${me}</header>`;
 }
 /** Suchergebnisse: Charaktere, Kampagnen und Wiki-Einträge. Eigener Bereich, damit Tippen die Seite nicht neu zeichnet. */
 export function vHubResults() {
@@ -73,9 +73,9 @@ function vHero() {
 function campCard(c, all) {
   const own = all.filter(x => c.chars.includes(x.id));
   const prog = c.planned ? Math.min(100, c.done / c.planned * 100) : 0;
-  return `<article class="hub-camp ${c.status}"><div class="hub-camp-art a${c.art}"><span class="hub-status ${c.status}"><i></i>${t('camp.st.' + c.status)}</span></div><div class="hub-camp-b"><h3>${esc(c.name)}</h3>${c.desc ? `<p>${esc(c.desc)}</p>` : ''}${own.length ? `<div class="hub-avs">${own.map(x => portrait(x, 'hub-av')).join('')}<small>${own.map(x => esc(x.name)).join(', ')}</small></div>` : ''}
+  return `<article class="hub-camp ${c.status}"><div class="hub-camp-art a${c.art}" aria-hidden="true"></div><span class="hub-status ${c.status}"><i></i>${t('camp.st.' + c.status)}</span><div class="hub-camp-b"><h3>${esc(c.name)}</h3>${c.desc ? `<p>${esc(c.desc)}</p>` : ''}${own.length ? `<div class="hub-avs">${own.map(x => portrait(x, 'hub-av')).join('')}<small>${own.map(x => esc(x.name)).join(', ')}</small></div>` : ''}
   <div class="hub-prog"><span>${c.planned ? t('camp.sessOf', { a: c.done, b: c.planned }) : t('camp.sess', { n: c.done })}</span>${c.planned ? `<i><u style="width:${prog}%"></u></i>` : ''}</div>${c.next ? `<p class="hub-when">${ico('cal')}${esc(fmtDate(c.next))}</p>` : ''}
-  <div class="hub-camp-act"><button class="hbtn sm" data-a="campedit" data-id="${esc(c.id)}">${t('camp.edit')}</button>${c.status === 'active' ? `<button class="hbtn sm" data-a="campdone" data-id="${esc(c.id)}" title="${t('camp.doneHint')}">${t('camp.done')}</button>` : ''}${own[0] ? `<button class="hbtn sm pri" data-a="campplay" data-id="${esc(c.id)}">${c.room ? t('camp.toRoom') : t('camp.play')}</button>` : ''}</div></div></article>`;
+  <div class="hub-camp-act">${own[0] ? `<button class="hbtn sm pri" data-a="campplay" data-id="${esc(c.id)}">${c.room ? t('camp.toRoom') : t('camp.play')} ${ico('arrow')}</button>` : ''}${c.status === 'active' ? `<button class="hub-ib" data-a="campdone" data-id="${esc(c.id)}" title="${t('camp.doneHint')}" aria-label="${t('camp.done')}">${ico('check')}</button>` : ''}<button class="hub-ib" data-a="campedit" data-id="${esc(c.id)}" title="${t('camp.edit')}" aria-label="${t('camp.edit')}">${ico('pen')}</button></div></div></article>`;
 }
 function vCampForm() {
   const id = U.CAMPED;
@@ -84,7 +84,7 @@ function vCampForm() {
   if (!c) return '';
   const all = chars().filter(real), sel = new Set(U.CAMPCH || c.chars);
   const f = (l, h) => `<label><span class="lbl">${l}</span>${h}</label>`;
-  return `<section class="hub-panel hub-form" aria-labelledby="cf-h"><h3 id="cf-h">${id === 'new' ? t('camp.new') : t('camp.editTitle', { n: esc(c.name) })}</h3><div class="form">
+  return `<section class="hub-doc hub-form" aria-labelledby="cf-h"><h3 id="cf-h">${id === 'new' ? t('camp.new') : t('camp.editTitle', { n: esc(c.name) })}</h3><div class="form">
   ${f(t('camp.name'), `<input type="text" id="cf-name" value="${esc(c.name)}" maxlength="80">`)}
   ${f(t('camp.status'), `<select id="cf-status"><option value="active"${c.status === 'active' ? ' selected' : ''}>${t('camp.st.active')}</option><option value="archived"${c.status === 'archived' ? ' selected' : ''}>${t('camp.st.archived')}</option></select>`)}
   ${f(t('camp.next'), `<input type="datetime-local" id="cf-next" value="${esc(c.next && c.next.length === 10 ? c.next + 'T19:00' : c.next)}">`)}
@@ -100,7 +100,7 @@ function vCamps(limit) {
   const all = chars(), list = campaigns().sort((a, b) => (a.status === b.status ? b.at.localeCompare(a.at) : a.status === 'active' ? -1 : 1));
   const shown = limit ? list.filter(c => c.status === 'active').slice(0, limit) : list;
   const head = `<div class="hub-h">${ico('d20', 'big')}<h2>${t(limit ? 'hub.yourCamps' : 'hub.nav.camps')}</h2>${limit && list.length ? `<button class="hub-more" data-a="hubgo" data-s="camps">${t('hub.all')} ${ico('arrow')}</button>` : `<button class="hub-more" data-a="campnew">${ico('plus')} ${t('camp.new')}</button>`}</div>`;
-  const empty = `<div class="hub-empty"><div class="hub-camp-art a0"></div><div><h3>${t('camp.emptyTitle')}</h3><p>${t('camp.emptyTxt')}</p><button class="hbtn pri" data-a="campnew">${t('hub.newCamp')} ${ico('arrow')}</button></div></div>`;
+  const empty = `<div class="hub-empty"><div class="hub-camp-art a1" aria-hidden="true"></div><div><h3>${t('camp.emptyTitle')}</h3><p>${t('camp.emptyTxt')}</p><button class="hbtn pri" data-a="campnew">${t('hub.newCamp')} ${ico('arrow')}</button></div></div>`;
   return `${head}${limit ? '' : vCampForm()}${shown.length ? `<div class="hub-camps">${shown.map(c => campCard(c, all)).join('')}</div>` : list.length ? `<p class="note">${t('camp.onlyArchived')}</p>` : empty}`;
 }
 function vChars(limit) {
@@ -120,13 +120,13 @@ function vGroup() {
     const o = c.id === S.id ? S : charSnapshot(c.id) || {}, max = +o.hpMax || 0, hp = Math.max(0, Math.min(max, +o.hp || 0)), pct = max ? hp / max * 100 : 0;
     return `<button class="hub-gm${c.id === S.id ? ' cur' : ''}" data-a="hubplay" data-id="${esc(c.id)}">${portrait(c, 'hub-por md')}<span class="hub-gm-t"><b>${esc(c.name)}</b><small>${esc([c.klass, c.level ? t('feat.level', { n: c.level }) : ''].filter(Boolean).join(' · ') || t('hub.noClass'))}</small>${max ? `<span class="hub-hp" title="${t('hub.hp')} ${hp}/${max}"><em>${t('hub.hpShort')}</em><i><u style="width:${pct}%"></u></i><small>${hp}/${max}</small></span>` : ''}${c.camps.length ? `<small class="hub-gm-c">${c.camps.map(x => esc(x.name)).join(', ')}</small>` : ''}</span></button>`;
   };
-  return head + `<section class="hub-panel hub-group"><div class="hub-gms">${list.slice(0, 6).map(row).join('')}</div></section>`;
+  return head + `<section class="hub-panel orn hub-group"><div class="hub-gms">${list.slice(0, 6).map(row).join('')}</div></section>`;
 }
 function vNext() {
   const n = nextSession(), all = chars();
-  if (!n) return `<section class="hub-panel hub-next">${ico('cal', 'big')}<h3>${t('hub.nextTitle')}</h3><p class="note">${t('hub.noNext')}</p><button class="hbtn wide" data-a="hubgo" data-s="plan">${t('hub.planSession')} ${ico('arrow')}</button></section>`;
+  if (!n) return `<section class="hub-panel orn hub-next">${ico('cal', 'big')}<h3>${t('hub.nextTitle')}</h3><p class="note">${t('hub.noNext')}</p><button class="hbtn wide" data-a="hubgo" data-s="plan">${t('hub.planSession')} ${ico('arrow')}</button></section>`;
   const own = all.filter(x => n.chars.includes(x.id));
-  return `<section class="hub-panel hub-next"><div class="hub-h sm">${ico('cal', 'big')}<h3>${t('hub.nextTitle')}</h3></div><h4>${esc(n.name)}</h4><p class="hub-when">${ico('cal')}${esc(fmtDate(n.next))}</p>${own.length ? `<div class="hub-avs">${own.map(x => portrait(x, 'hub-av lg')).join('')}</div>` : ''}${own[0] ? `<button class="hbtn wide" data-a="campplay" data-id="${esc(n.id)}">${n.room ? t('camp.toRoom') : t('hub.toSession')} ${ico('arrow')}</button>` : `<button class="hbtn wide" data-a="campedit" data-id="${esc(n.id)}">${t('camp.edit')} ${ico('arrow')}</button>`}</section>`;
+  return `<section class="hub-panel orn hub-next"><div class="hub-h sm">${ico('cal', 'big')}<h3>${t('hub.nextTitle')}</h3></div><h4>${esc(n.name)}</h4><p class="hub-when">${ico('cal')}${esc(fmtDate(n.next))}</p>${own.length ? `<div class="hub-avs">${own.map(x => portrait(x, 'hub-av lg')).join('')}</div>` : ''}${own[0] ? `<button class="hbtn wide" data-a="campplay" data-id="${esc(n.id)}">${n.room ? t('camp.toRoom') : t('hub.toSession')} ${ico('arrow')}</button>` : `<button class="hbtn wide" data-a="campedit" data-id="${esc(n.id)}">${t('camp.edit')} ${ico('arrow')}</button>`}</section>`;
 }
 function vQuick() {
   const has = real({ id: S.id, klass: S.klass, level: S.level });
@@ -139,7 +139,7 @@ function vQuick() {
 }
 function vPlan() {
   const list = campaigns().filter(c => c.status === 'active');
-  return `<div class="hub-h">${ico('cal', 'big')}<h2>${t('hub.nav.plan')}</h2></div><section class="hub-panel">${list.length ? list.sort((a, b) => (a.next || '9').localeCompare(b.next || '9')).map(c => `<div class="row hub-planrow"><div class="nm">${esc(c.name)}<small>${c.next ? esc(fmtDate(c.next)) : t('hub.noDate')}</small></div><input type="datetime-local" id="plan-${esc(c.id)}" value="${esc(c.next && c.next.length === 10 ? c.next + 'T19:00' : c.next)}" aria-label="${t('camp.next')} ${esc(c.name)}">${c.next ? `<button class="hbtn sm" data-a="plandel" data-id="${esc(c.id)}">${t('hub.noDateBtn')}</button>` : ''}</div>`).join('') + `<p class="note">${t('hub.planNote')}</p>` : `<p class="note">${t('hub.planEmpty')}</p><button class="hbtn pri" data-a="campnew">${t('hub.newCamp')} ${ico('arrow')}</button>`}</section>`;
+  return `<div class="hub-h">${ico('cal', 'big')}<h2>${t('hub.nav.plan')}</h2></div><section class="hub-doc">${list.length ? list.sort((a, b) => (a.next || '9').localeCompare(b.next || '9')).map(c => `<div class="row hub-planrow"><div class="nm">${esc(c.name)}<small>${c.next ? esc(fmtDate(c.next)) : t('hub.noDate')}</small></div><input type="datetime-local" id="plan-${esc(c.id)}" value="${esc(c.next && c.next.length === 10 ? c.next + 'T19:00' : c.next)}" aria-label="${t('camp.next')} ${esc(c.name)}">${c.next ? `<button class="hbtn sm" data-a="plandel" data-id="${esc(c.id)}">${t('hub.noDateBtn')}</button>` : ''}</div>`).join('') + `<p class="note">${t('hub.planNote')}</p>` : `<p class="note">${t('hub.planEmpty')}</p><button class="hbtn pri" data-a="campnew">${t('hub.newCamp')} ${ico('arrow')}</button>`}</section>`;
 }
 function vSettings() {
   const langBtn = l => `<button class="chip${lang === l ? ' on' : ''}" data-a="lang" data-l="${l}" aria-pressed="${lang === l}">${l === 'de' ? 'Deutsch' : 'English'}</button>`;

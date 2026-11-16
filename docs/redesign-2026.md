@@ -57,6 +57,20 @@ Hauptreferenz: Dashboard-Bild der Nutzerin bzw. des Nutzers (Seitenleiste mit W�
 - Startseite: „Deine Gruppe“ statt großer Charakterkarten; Schnellzugriff Charaktere, Regelwerk, Inventar, Notizen, Kampagne erstellen, Import, Live-Tisch. Eine Weltkarte gibt es nicht.
 - Tests: 371 von 371 bestanden. Einzeldatei 6,2 MB (vorher 5,0 MB).
 
+## Visuelle Überarbeitung nach der Vorlage (16.11.2026)
+
+Vergleich Vorlage ↔ Stand vorher, jeweils behoben:
+- Kopfzeile: Die Suche hat jetzt einen Messingrahmen (`--frame`), und eine Ornamentlinie (divider-4) läuft bis zum Profil (vorher ein schlichter Kasten).
+- Willkommensbereich: Das Burgbild nimmt jetzt etwa 70 % ein, mit mehrstufig weichem Übergang ins Pergament; der zweite Knopf ist dunkel statt hell auf Pergament.
+- Kampagnenkarten: Die Illustration füllt die Karte, der Text steht auf einem dunklen Verlauf. Es gibt einen Messingrahmen mit Ecken, den Status oben, einen goldenen Fortschrittsbalken und „Spielen“ als Hauptknopf; Bearbeiten und „Session gespielt“ sind Symbolknöpfe. Auch der leere Zustand ist bildfüllend.
+- Abschnittsüberschriften mit Goldlinie bis „Alle anzeigen“.
+- Panels (nächste Session, Gruppe) mit Zierornament (divider-3) oben am Rahmen.
+- Seitenleiste: Das Bild ist größer und weich eingeblendet, mit senkrechtem Ornament (divider-1) am rechten Rand.
+- Pergament (Original mit Rissrand, `border-image`) jetzt auch für das Kampagnenformular und die Rundenplanung (`.hub-doc`), zusätzlich zu Willkommensbereich und Schnellzugriff.
+- Am Handy werden Ornamente, die über den Rand ragen, ausgeblendet (vorher 14 px Querscrollen).
+- Behoben: Die Bildauswahl im Formular lag hinter dem Pergament und war nicht anklickbar.
+- Tests: 372 von 372 bestanden (neu: Handybreite ohne Querscrollen, Bilder eingebettet). Beide Builds erfolgreich, Einzeldatei 6,6 MB.
+
 ## Offen
 
 - Phase 3 (Charakterbogen): Die im Auftrag erwähnte zweite Referenz für den Charakterbogen liegt noch nicht vor.
