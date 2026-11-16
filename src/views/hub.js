@@ -1,18 +1,22 @@
-// Startseite „Roll & Tale“: eigenständige Abenteuerzentrale vor dem Spielbereich (U.HUB = Bereich, null = Spielbereich).
+// Startseite RealmCraft (globale Ebene): Dashboard, Kampagnen, Spielleiterbereich, Beitreten, Charaktere, Weltkarte,
+// Regeln & Wissen, Einstellungen (U.HUB = Bereich, null = Spielbereich). Kampagne und Charakter: views/nav.js.
 // Zeigt nur echte Daten: Charaktere aus der Charakterliste, Kampagnen aus campaigns.js, Wiki aus dem Katalog.
 import { esc } from '../util.js';
 import { S, U, roster, charSnapshot } from '../state.js';
 import { CAT } from '../catalog.js';
 import { campaigns, campaignsOf, nextSession, campaignById, ART } from '../campaigns.js';
+import { L, dmCamp, dmOnline, players } from '../live.js';
 import { dmOnly } from './dm-mode.js';
 import { vWiki } from './wiki.js';
 import { vBackup } from './live-ui.js';
 import { skinControls } from '../bright.js';
 import { t, lang, units, nameLine } from '../i18n/index.js';
 
-export const HUB_SECTIONS = ['home', 'camps', 'chars', 'wiki', 'map', 'plan'];
+export const HUB_SECTIONS = ['home', 'camps', 'gm', 'chars', 'map', 'wiki'];
+/** Erreichbar, aber nicht in der Seitenleiste: Beitreten (über Kampagnen und Startseite), Termine (über Kampagnen). */
+const HUB_MORE = ['join', 'plan', 'settings'];
 export const MAP_URL = 'https://www.aidedd.org/atlas/faerun';
-const HUB_IC = { home: 'shield', camps: 'swords', chars: 'person', wiki: 'book', map: 'map', plan: 'cal', settings: 'gear' };
+const HUB_IC = { home: 'shield', camps: 'swords', gm: 'crown', join: 'enter', chars: 'person', wiki: 'book', map: 'map', plan: 'cal', settings: 'gear' };
 /** Eigene Strich-Icons der Seitenleiste (gleicher Stil wie icons.js). */
 const SVG = {
   shield: '<path d="M3 11 12 4l9 7"/><path d="M5 10v10h14V10"/><path d="M10 20v-6h4v6"/>',
@@ -28,6 +32,8 @@ const SVG = {
   plus: '<path d="M12 5v14M5 12h14"/>', check: '<path d="M4 12.5 9.5 18 20 6.5"/>', pen: '<path d="M4 20l1-4L16 5l3 3L8 19z"/><path d="M14 7l3 3"/>', upload: '<path d="M12 16V4M7 9l5-5 5 5"/><path d="M4 16v4h16v-4"/>', bag: '<path d="M8 7V6a4 4 0 0 1 8 0v1"/><path d="M4.5 8h15l-1.2 12.5H5.7z"/>', wand: '<path d="M4 20 15 9"/><path d="M17 3v3M17 9v1M14 6h-1M21 6h-3"/>', crown: '<path d="M3 18h18M4 16 3 7l5 4 4-7 4 7 5-4-1 9z"/>',
   star: '<path d="M12 3l2.2 6.6H21l-5.5 4 2.1 6.6L12 16.3 6.4 20.2l2.1-6.6L3 9.6h6.8z"/>',
   map: '<path d="M3 6.5 9 4l6 2.5L21 4v13.5L15 20l-6-2.5L3 20z"/><path d="M9 4v13.5M15 6.5V20"/>',
+  copy: '<rect x="8" y="8" width="12" height="12" rx="1"/><path d="M16 8V4H4v12h4"/>',
+  enter: '<path d="M10 4h9v16h-9"/><path d="M3 12h11M10 8l4 4-4 4"/>',
   ext: '<path d="M14 4h6v6M20 4l-9 9"/><path d="M18 14v6H4V6h6"/>',
   scroll: '<path d="M8 4h10a2 2 0 0 1 0 4h-1v10a2.5 2.5 0 0 1-2.5 2.5h-9a2 2 0 0 1 0-4H7V5.5A1.5 1.5 0 0 1 8 4"/><path d="M10 9h4.5M10 12.5h4.5"/>',
 };
@@ -71,27 +77,30 @@ export function vHubResults() {
 
 function vHero() {
   const list = chars().filter(real), cont = real({ id: S.id, klass: S.klass, level: S.level });
-  return `<section class="hub-hero"><div class="hub-hero-txt"><h2 class="hub-hero-h">${t('hub.welcome')}</h2><p>${t('hub.welcomeTxt')}</p><i class="hub-div d3" aria-hidden="true"></i><div class="hub-cta"><button class="hbtn pri" data-a="campnew">${t('hub.newCamp')} ${ico('arrow')}</button>${cont ? `<button class="hbtn" data-a="hubplay">${t('hub.continue', { n: esc(S.name) })} ${ico('arrow')}</button>` : list.length ? '' : `<button class="hbtn" data-a="hubnewchar">${t('hub.firstChar')} ${ico('arrow')}</button>`}</div></div><div class="hub-hero-art" aria-hidden="true"></div></section>`;
+  return `<section class="hub-hero"><div class="hub-hero-txt"><h2 class="hub-hero-h">${t('hub.welcome')}</h2><p>${t('hub.welcomeTxt')}</p><i class="hub-div d3" aria-hidden="true"></i><div class="hub-cta"><button class="hbtn pri" data-a="campnew">${t('hub.newCamp')} ${ico('arrow')}</button><button class="hbtn" data-a="hubgo" data-s="join">${t('join.title')} ${ico('enter')}</button>${cont ? `<button class="hbtn" data-a="hubplay">${t('hub.continue', { n: esc(S.name) })} ${ico('arrow')}</button>` : list.length ? '' : `<button class="hbtn" data-a="hubnewchar">${t('hub.firstChar')} ${ico('arrow')}</button>`}</div></div><div class="hub-hero-art" aria-hidden="true"></div></section>`;
 }
 function campCard(c, all) {
   const own = all.filter(x => c.chars.includes(x.id));
   const prog = c.planned ? Math.min(100, c.done / c.planned * 100) : 0;
-  return `<article class="hub-camp ${c.status}"><div class="hub-camp-art a${c.art}" aria-hidden="true"></div><span class="hub-status ${c.status}"><i></i>${t('camp.st.' + c.status)}</span><div class="hub-camp-b"><h3>${esc(c.name)}</h3>${c.desc ? `<p>${esc(c.desc)}</p>` : ''}${own.length ? `<div class="hub-avs">${own.map(x => portrait(x, 'hub-av')).join('')}<small>${own.map(x => esc(x.name)).join(', ')}</small></div>` : ''}
+  const canOpen = c.role === 'dm' || own[0];
+  return `<article class="hub-camp ${c.status}"><div class="hub-camp-art a${c.art}" aria-hidden="true"></div><span class="hub-status ${c.status}"><i></i>${t('camp.st.' + c.status)}</span><span class="hub-role ${c.role}">${t('camp.role.' + c.role)}</span><div class="hub-camp-b"><h3>${esc(c.name)}</h3>${c.desc ? `<p>${esc(c.desc)}</p>` : ''}${own.length ? `<div class="hub-avs">${own.map(x => portrait(x, 'hub-av')).join('')}<small>${own.map(x => esc(x.name)).join(', ')}</small></div>` : ''}
   <div class="hub-prog"><span>${c.planned ? t('camp.sessOf', { a: c.done, b: c.planned }) : t('camp.sess', { n: c.done })}</span>${c.planned ? `<i><u style="width:${prog}%"></u></i>` : ''}</div>${c.next ? `<p class="hub-when">${ico('cal')}${esc(fmtDate(c.next))}</p>` : ''}
-  <div class="hub-camp-act">${own[0] ? `<button class="hbtn sm pri" data-a="campplay" data-id="${esc(c.id)}">${c.room ? t('camp.toRoom') : t('camp.play')} ${ico('arrow')}</button>` : ''}${c.status === 'active' ? `<button class="hub-ib" data-a="campdone" data-id="${esc(c.id)}" title="${t('camp.doneHint')}" aria-label="${t('camp.done')}">${ico('check')}</button>` : ''}<button class="hub-ib" data-a="campedit" data-id="${esc(c.id)}" title="${t('camp.edit')}" aria-label="${t('camp.edit')}">${ico('pen')}</button></div></div></article>`;
+  ${c.role === 'dm' ? `<p class="hub-when">${ico('enter')}${c.room ? `${t('live.code')} <b>${esc(c.room)}</b> <button class="hub-ib sm" data-a="campcopy" data-c="${esc(c.room)}" title="${t('camp.copy')}" aria-label="${t('camp.copy')}">${ico('copy')}</button>` : `<button class="hbtn sm" data-a="campgen2" data-id="${esc(c.id)}">${t('camp.genCode')}</button>`}</p>` : ''}
+  <div class="hub-camp-act">${canOpen ? `<button class="hbtn sm pri" data-a="campplay" data-id="${esc(c.id)}">${c.role === 'dm' ? t('camp.lead') : c.room ? t('camp.toRoom') : t('camp.play')} ${ico('arrow')}</button>` : ''}${c.status === 'active' ? `<button class="hub-ib" data-a="campdone" data-id="${esc(c.id)}" title="${t('camp.doneHint')}" aria-label="${t('camp.done')}">${ico('check')}</button>` : ''}<button class="hub-ib" data-a="campedit" data-id="${esc(c.id)}" title="${t('camp.edit')}" aria-label="${t('camp.edit')}">${ico('pen')}</button></div></div></article>`;
 }
 function vCampForm() {
   const id = U.CAMPED;
   if (!id) return '';
-  const c = id === 'new' ? { name: '', desc: '', status: 'active', chars: [], room: '', next: '', done: 0, planned: 0 } : campaignById(id);
+  const c = id === 'new' ? { name: '', desc: '', status: 'active', role: U.CAMPROLE || 'player', chars: [], room: '', next: '', done: 0, planned: 0 } : campaignById(id);
   if (!c) return '';
   const all = chars().filter(real), sel = new Set(U.CAMPCH || c.chars);
   const f = (l, h) => `<label><span class="lbl">${l}</span>${h}</label>`;
   return `<section class="hub-doc hub-form" aria-labelledby="cf-h"><h3 id="cf-h">${id === 'new' ? t('camp.new') : t('camp.editTitle', { n: esc(c.name) })}</h3><div class="form">
   ${f(t('camp.name'), `<input type="text" id="cf-name" value="${esc(c.name)}" maxlength="80">`)}
   ${f(t('camp.status'), `<select id="cf-status"><option value="active"${c.status === 'active' ? ' selected' : ''}>${t('camp.st.active')}</option><option value="archived"${c.status === 'archived' ? ' selected' : ''}>${t('camp.st.archived')}</option></select>`)}
+  ${f(t('camp.myRole'), `<select id="cf-role">${['dm', 'player'].map(r => `<option value="${r}"${c.role === r ? ' selected' : ''}>${t('camp.role.' + r)}</option>`).join('')}</select>`)}
   ${f(t('camp.next'), `<input type="datetime-local" id="cf-next" value="${esc(c.next && c.next.length === 10 ? c.next + 'T19:00' : c.next)}">`)}
-  ${f(t('camp.room'), `<input type="text" id="cf-room" value="${esc(c.room)}" maxlength="6" placeholder="ABC234" style="text-transform:uppercase">`)}
+  ${f(t('camp.room'), `<input type="text" id="cf-room" value="${esc(c.room)}" maxlength="6" placeholder="ABC234" style="text-transform:uppercase"><button type="button" class="hbtn sm" data-a="campgen">${t('camp.genCode')}</button>`)}
   ${f(t('camp.doneN'), `<input type="number" class="n" id="cf-done" min="0" max="999" value="${c.done}">`)}
   ${f(t('camp.planned'), `<input type="number" class="n" id="cf-planned" min="0" max="999" value="${c.planned || ''}" placeholder="–">`)}
   </div>${f(t('camp.desc'), `<textarea id="cf-desc" rows="2" maxlength="400">${esc(c.desc)}</textarea>`)}
@@ -100,9 +109,9 @@ function vCampForm() {
   <div class="dlgf"><button class="hbtn" data-a="campcancel">${t('common.cancel')}</button>${id !== 'new' ? `<button class="hbtn bad" data-a="campdel" data-id="${esc(id)}">${U.CONF === 'campdel:' + id ? t('chars.delConfirm') : t('common.deleteBtn')}</button>` : ''}<button class="hbtn pri" data-a="campsave">${t('camp.save')}</button></div><p class="note">${t('camp.localNote')}</p></section>`;
 }
 function vCamps(limit) {
-  const all = chars(), list = campaigns().sort((a, b) => (a.status === b.status ? b.at.localeCompare(a.at) : a.status === 'active' ? -1 : 1));
+  const all = chars(), list = campaigns().sort((a, b) => (a.status === b.status ? (b.seen || b.at).localeCompare(a.seen || a.at) : a.status === 'active' ? -1 : 1));
   const shown = limit ? list.filter(c => c.status === 'active').slice(0, limit) : list;
-  const head = `<div class="hub-h">${ico('d20', 'big')}<h2>${t(limit ? 'hub.yourCamps' : 'hub.nav.camps')}</h2>${limit && list.length ? `<button class="hub-more" data-a="hubgo" data-s="camps">${t('hub.all')} ${ico('arrow')}</button>` : `<button class="hub-more" data-a="campnew">${ico('plus')} ${t('camp.new')}</button>`}</div>`;
+  const head = `<div class="hub-h">${ico('d20', 'big')}<h2>${t(limit ? 'hub.yourCamps' : 'hub.nav.camps')}</h2>${limit && list.length ? `<button class="hub-more" data-a="hubgo" data-s="camps">${t('hub.all')} ${ico('arrow')}</button>` : `<span class="hub-more-row"><button class="hub-more" data-a="hubgo" data-s="join">${ico('enter')} ${t('join.title')}</button><button class="hub-more" data-a="hubgo" data-s="plan">${ico('cal')} ${t('hub.nav.plan')}</button><button class="hub-more" data-a="campnew">${ico('plus')} ${t('camp.new')}</button></span>`}</div>`;
   const empty = `<div class="hub-empty"><div class="hub-camp-art a1" aria-hidden="true"></div><div><h3>${t('camp.emptyTitle')}</h3><p>${t('camp.emptyTxt')}</p><button class="hbtn pri" data-a="campnew">${t('hub.newCamp')} ${ico('arrow')}</button></div></div>`;
   return `${head}${limit ? '' : vCampForm()}${shown.length ? `<div class="hub-camps">${shown.map(c => campCard(c, all)).join('')}</div>` : list.length ? `<p class="note">${t('camp.onlyArchived')}</p>` : empty}`;
 }
@@ -136,13 +145,33 @@ function vQuick() {
   const L = [
     ['chars', 'person', t('hub.q.chars')], ['wiki', 'book', t('hub.q.rules')], ['map', 'map', t('hub.q.map')],
     ...(has && !dmOnly() ? [['inv', 'bag', t('hub.q.inv')], ['notes', 'scroll', t('hub.q.notes')]] : []), ['campnew', 'swords', t('hub.q.newCamp')], ['import', 'upload', t('hub.q.import')],
-    ...(dmOnly() ? [['dm', 'crown', t('hub.q.dm')]] : [['live', 'star', t('hub.q.live')]]),
+    ['join', 'enter', t('join.title')], ['gm', 'crown', t('hub.nav.gm')],
   ];
   return `<section class="hub-parch hub-quick"><div class="hub-h sm">${ico('star', 'big')}<h3>${t('hub.quick')}</h3></div>${L.map(([k, ic, l]) => `<button class="hub-ql" data-a="hubq" data-k="${k}">${ico(ic)}<span>${l}</span></button>`).join('')}</section>`;
 }
 function vPlan() {
   const list = campaigns().filter(c => c.status === 'active');
   return `<div class="hub-h">${ico('cal', 'big')}<h2>${t('hub.nav.plan')}</h2></div><section class="hub-doc">${list.length ? list.sort((a, b) => (a.next || '9').localeCompare(b.next || '9')).map(c => `<div class="row hub-planrow"><div class="nm">${esc(c.name)}<small>${c.next ? esc(fmtDate(c.next)) : t('hub.noDate')}</small></div><input type="datetime-local" id="plan-${esc(c.id)}" value="${esc(c.next && c.next.length === 10 ? c.next + 'T19:00' : c.next)}" aria-label="${t('camp.next')} ${esc(c.name)}">${c.next ? `<button class="hbtn sm" data-a="plandel" data-id="${esc(c.id)}">${t('hub.noDateBtn')}</button>` : ''}</div>`).join('') + `<p class="note">${t('hub.planNote')}</p>` : `<p class="note">${t('hub.planEmpty')}</p><button class="hbtn pri" data-a="campnew">${t('hub.newCamp')} ${ico('arrow')}</button>`}</section>`;
+}
+/** Spielleiterbereich: eigene Kampagnen vorbereiten (Code erzeugen und teilen) und starten. */
+function vGm() {
+  const all = chars(), mine = campaigns().filter(c => c.role === 'dm').sort((a, b) => (b.seen || b.at).localeCompare(a.seen || a.at));
+  const head = `<div class="hub-h">${ico('crown', 'big')}<h2>${t('hub.nav.gm')}</h2><button class="hub-more" data-a="campnew" data-r="dm">${ico('plus')} ${t('gm.new')}</button></div>`;
+  const live = L.role === 'dm' && L.code ? `<section class="hub-panel"><p class="lbl">${t('gm.liveNow')}</p><p>${t('live.code')} <b>${esc(L.code)}</b> · ${t('camp.players', { n: players().length })}${players().length ? ': ' + players().map(p => esc(p.name)).join(', ') : ''}</p></section>` : '';
+  return `${head}<p class="note hub-intro">${t('gm.intro')}</p>${vCampForm()}${live}${mine.length ? `<div class="hub-camps">${mine.map(c => campCard(c, all)).join('')}</div>` : `<section class="hub-panel"><p class="note">${t('gm.none')}</p><button class="hbtn pri" data-a="campnew" data-r="dm">${t('gm.new')} ${ico('arrow')}</button></section>`}`;
+}
+/** Beitreten: Code eingeben, Charakter wählen, verbinden, Kampagne ansehen, bestätigen. */
+function vJoin() {
+  const head = `<div class="hub-h">${ico('enter', 'big')}<h2>${t('join.title')}</h2></div>`;
+  const j = U.JOIN;
+  if (!j) {
+    const list = chars().filter(real);
+    return `${head}<section class="hub-doc hub-form"><h3>${t('join.step1')}</h3><div class="form"><label><span class="lbl">${t('live.code')}</span><input type="text" id="join-code" maxlength="6" autocomplete="off" placeholder="ABC234" style="text-transform:uppercase"></label><label><span class="lbl">${t('join.char')}</span><select id="join-char">${list.map(c => `<option value="${esc(c.id)}"${c.id === S.id ? ' selected' : ''}>${esc(c.name)}${c.klass ? ' · ' + esc(c.klass) : ''}</option>`).join('')}<option value="new"${list.length ? '' : ' selected'}>${t('join.newChar')}</option></select></label></div><div class="dlgf"><button class="hbtn pri" data-a="joinconn">${t('join.connect')} ${ico('arrow')}</button></div><p class="note">${t('join.hint')}</p></section>`;
+  }
+  const on = L.code === j.code && L.status === 'on', meta = dmCamp(), others = players().filter(p => p.key !== S.id);
+  const state = L.status === 'error' ? t('live.stError') : on ? (dmOnline() ? t('live.dmOn') : t('join.noDm')) : t('live.stConnecting');
+  return `${head}<section class="hub-doc hub-form"><h3>${t('join.step2')}</h3><p class="lbl">${t('live.code')} ${esc(j.code)} · ${state}</p>${meta ? `<h4 class="join-name">${esc(meta.n)}</h4>${meta.d ? `<p>${esc(meta.d)}</p>` : ''}` : `<p class="note">${on ? t('join.noMeta') : t('join.waiting')}</p>`}<p class="lbl">${t('join.group')}</p><p>${others.length ? others.map(p => esc(p.name)).join(', ') : t('party.none')}</p><p class="lbl">${t('join.char')}</p><p>${j.isNew ? t('join.newChar') : esc(S.name)}</p>
+  <div class="dlgf"><button class="hbtn" data-a="joincancel">${t('common.cancel')}</button><button class="hbtn pri" data-a="joinok"${on ? '' : ' disabled'}>${t('join.confirm')} ${ico('check')}</button></div></section>`;
 }
 /** Weltkarte: Platzhalter im Inhalt, die Karte selbst setzt syncMapLayer() darüber. */
 function vMap() {
@@ -172,7 +201,7 @@ function vSettings() {
 }
 
 export function vHub() {
-  const s = U.HUB === 'settings' || HUB_SECTIONS.includes(U.HUB) ? U.HUB : 'home';
+  const s = HUB_MORE.includes(U.HUB) || HUB_SECTIONS.includes(U.HUB) ? U.HUB : 'home';
   let main = '';
   if (s === 'home') main = `<div class="hub-grid"><div class="hub-col">${vHero()}${vCamps(3)}${vGroup()}</div><div class="hub-col side">${vNext()}${vQuick()}<blockquote class="hub-quote"><i class="hub-div d2" aria-hidden="true"></i><p>${t('hub.quote')}</p><i class="hub-div d4" aria-hidden="true"></i></blockquote></div></div>`;
   if (s === 'camps') main = vCamps(0);
@@ -180,6 +209,8 @@ export function vHub() {
   if (s === 'wiki') main = vWiki();
   if (s === 'plan') main = vPlan();
   if (s === 'map') main = vMap();
+  if (s === 'gm') main = vGm();
+  if (s === 'join') main = vJoin();
   if (s === 'settings') main = vSettings();
   return `<div class="hub" data-sec="${s}">${vSide()}<div class="hub-main">${vTop()}<main class="hub-body">${main}</main><input type="file" id="impf" accept=".json,application/json,text/plain,application/pdf,image/*" multiple hidden></div></div>`;
 }

@@ -200,16 +200,22 @@ export function vMiniBar(tabsHtml = '') {
 const MODE_LS = 'charbogen-mode';
 export const sheetMode = () => { try { const m = localStorage.getItem(MODE_LS); return ['combat', 'explore'].includes(m) ? m : 'all'; } catch (e) { return 'all'; } };
 export const setSheetMode = m => { try { if (m === 'all') localStorage.removeItem(MODE_LS); else localStorage.setItem(MODE_LS, m); } catch (e) { /* Datenschutzmodus */ } };
-export function vMain() {
-  const a = S.abil, st = (l, v, x = '') => `<div class="st"><small>${l}</small><b>${v}</b>${x}</div>`, fx = effects();
+/** Werteleiste RK, Initiative, Tempo, Übung, passive Wahrnehmung (Karte, Werte & Fähigkeiten, Profil). */
+export function statsRow() {
+  const st = (l, v, x = '') => `<div class="st"><small>${l}</small><b>${v}</b>${x}</div>`, fx = effects();
   const worse = fx.speed.val < fx.speed.norm, why2 = [...fx.speed.plus.map(x => '+ ' + x), ...fx.speed.zero, ...fx.speed.half, ...fx.speed.minus].join(', ');
   const spd = fx.speed.val !== fx.speed.base ? st(t('stat.speed'), `<span class="fxw ${worse ? 'dis' : 'adv'}">${dist(fx.speed.val)}</span>`, `<small class="fxsub">${esc(dist(fx.speed.base))} · ${esc(why2)}</small>`) : st(t('stat.speed'), dist(S.speed));
+  return `<div class="stats">${st(t('stat.ac'), acHtml()).replace('<div class="st">', '<div class="st ac">')}${st(t('stat.init'), sg(initBonus()) + (featureLevel('Barbarian') >= 7 ? fxMark(['Feral Instinct'], []) : ''))}${spd}${st(t('stat.prof'), sg(S.prof))}${st(t('stat.pp'), passivePerception(), `<small class="fxsub">${t('pp.more', { i: 10 + skv('Insight'), v: 10 + skv('Investigation') })}</small>`)}</div>`;
+}
+export const concBanner = () => (S.conc ? `<div class="conc"><div><small>${t('conc.title')}</small><b>${esc(S.conc)}</b><span>${t('conc.hint')}</span></div><button class="btn" data-a="concend">${t('conc.end')}</button></div>` : '');
+/** Spielansicht. In einer Kampagne ist sie der Bereich „Kampf“ (opts.mode = 'combat', ohne Umschalter). */
+export function vMain(opts = {}) {
+  const fx = effects();
   let h = '';
-  if (S.conc) h += `<div class="conc"><div><small>${t('conc.title')}</small><b>${esc(S.conc)}</b><span>${t('conc.hint')}</span></div><button class="btn" data-a="concend">${t('conc.end')}</button></div>`;
-  h += `<div class="stats">${st(t('stat.ac'), acHtml()).replace('<div class="st">', '<div class="st ac">')}${st(t('stat.init'), sg(initBonus()) + (featureLevel('Barbarian') >= 7 ? fxMark(['Feral Instinct'], []) : ''))}${spd}${st(t('stat.prof'), sg(S.prof))}${st(t('stat.pp'), passivePerception(), `<small class="fxsub">${t('pp.more', { i: 10 + skv('Insight'), v: 10 + skv('Investigation') })}</small>`)}</div>`;
+  h += concBanner() + statsRow();
   h += vFx(fx);
-  const mode = sheetMode(), show = k => mode === 'all' || (mode === 'combat' ? !['feats', 'skills', 'profs'].includes(k) : !['atk', 'charges', 'pets'].includes(k));
-  h += `<div class="modes" role="group" aria-label="${t('mode.label')}">${['all', 'combat', 'explore'].map(m => `<button class="tg${mode === m ? ' on' : ''}" data-a="sheetmode" data-m="${m}" aria-pressed="${mode === m}">${t('mode.' + m)}</button>`).join('')}</div>`;
+  const mode = opts.mode || sheetMode(), show = k => mode === 'all' || (mode === 'combat' ? !['feats', 'skills', 'profs'].includes(k) : !['atk', 'charges', 'pets'].includes(k));
+  if (!opts.mode) h += `<div class="modes" role="group" aria-label="${t('mode.label')}">${['all', 'combat', 'explore'].map(m => `<button class="tg${mode === m ? ' on' : ''}" data-a="sheetmode" data-m="${m}" aria-pressed="${mode === m}">${t('mode.' + m)}</button>`).join('')}</div>`;
   h += `<div class="sheet"><aside>${vAbil(false)}</aside><div class="col c1">${vHP()}${vCond()}${show('atk') ? vAtk() + vTurnBoard() : ''}${vQuick()}${show('charges') ? vCharges() : ''}${vRes()}${show('pets') ? vPets() : ''}</div><div class="col c2">${vSpells()}${show('feats') ? vFeats() : ''}${show('skills') ? `<div class="c2sk">${vSkills()}</div>` : ''}${show('profs') ? vProfs() : ''}</div></div>`;
   return h;
 }

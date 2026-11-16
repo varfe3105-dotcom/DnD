@@ -11,7 +11,7 @@ import './events.js';
 import { resume } from './live.js';
 
 import { U } from './state.js';
-try { if (sessionStorage.getItem('charbogen-view') !== 'play') U.HUB = 'home'; } catch (e) { U.HUB = 'home'; }
+try { if (sessionStorage.getItem('charbogen-view') !== 'play') U.HUB = 'home'; else U.CAMP = sessionStorage.getItem('charbogen-camp') || null; } catch (e) { U.HUB = 'home'; }
 render();
 resume();
 

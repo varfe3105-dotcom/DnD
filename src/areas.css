@@ -310,3 +310,36 @@ html[data-area="char"] .lvh b{font:600 .95rem var(--f-cap);letter-spacing:.08em;
 @media print{.hub-side,.hub-top{display:none}.hub{display:block}}
 /* Spielbereich am Handy: Kopfknöpfe umbrechen statt die Seite zu verbreitern */
 @media screen and (max-width:520px){.hd .hrow{flex-wrap:wrap}.btn.home{padding-inline:10px}}
+/* Ebenen (views/nav.js): Brotkrumen über dem Kopf, Kampagnenkopf, Seiten der Kampagne */
+.crumbs{display:flex;flex-wrap:wrap;align-items:center;gap:4px 8px;margin:0 0 10px;font:600 .84rem var(--f-ui);color:var(--c-cream-mute)}
+.crumbs button{background:none;border:0;padding:2px 0;color:var(--c-brass-lt);font:inherit;cursor:pointer;text-decoration:underline dotted;text-underline-offset:3px}
+.crumbs button:hover{color:var(--c-cream)}
+.crumbs b{color:var(--c-cream)}
+.crumbs i{font-style:normal;opacity:.55}
+.crumb-lvl,.crumb-role,.hub-role{font:600 .64rem var(--f-cap);letter-spacing:.12em;text-transform:uppercase;padding:3px 9px;border:1px solid var(--c-brass-a);color:var(--c-brass-lt);white-space:nowrap}
+.crumb-lvl.camp{background:var(--c-aub)}
+.crumb-lvl.char{background:rgba(201,162,90,.14)}
+.crumb-role{margin-left:auto}
+.crumb-role.dm,.hub-role.dm{background:var(--grad-pri);color:var(--c-cream)}
+.hub-role{position:absolute;right:16px;top:16px;z-index:1;background:rgba(10,8,10,.78)}
+.hub-more-row{display:inline-flex;flex-wrap:wrap;gap:4px 14px;margin-left:auto}
+.hub-more-row .hub-more{margin-left:0}
+.hub-intro{max-width:70ch;margin:0 0 14px}
+.hub-ib.sm{width:26px;height:26px;vertical-align:middle}
+.join-name{font:700 1.5rem var(--f-title);margin:6px 0 2px}
+.camphd .who h1{font-family:var(--f-title)}
+.camp-me{display:inline-flex;align-items:center;gap:8px;background:rgba(10,8,10,.55);border:1px solid var(--c-brass-soft);color:var(--c-cream);padding:3px 12px 3px 3px;cursor:pointer;font:inherit;text-align:left}
+.camp-me small{display:block;color:var(--c-cream-mute);font-size:.75rem}
+.por.sm{width:38px;height:38px;border-width:2px;box-shadow:none}
+.por.sm span{font-size:1.1rem}
+.por.lg{width:110px;height:110px}
+.camp-mine{align-items:center;gap:12px}
+.camp-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:0 24px}
+.cover-v{font:600 1.15rem var(--f-title);margin:2px 0 10px}
+.subnav{margin:0 0 4px}
+.sheet.solo{display:block}
+.prof-top{display:flex;gap:18px;align-items:center;flex-wrap:wrap}
+.prof-top h3{font:700 1.6rem var(--f-title);margin:0}
+.camp-map{height:min(70vh,640px)}
+@media screen and (max-width:520px){.crumb-role{margin-left:0}.camp-me{padding-right:8px}}
+@media print{.crumbs{display:none}}

@@ -63,11 +63,13 @@ test.describe('Dashboard @new', () => {
     await expect(page.locator('.hub-camp')).toContainText(/1 (of|von) 8/);
   });
 
-  test('Kampagne mit Raumcode: „Zum Live-Tisch“ öffnet den Charakter und betritt den Raum', async ({ page }) => {
+  test('Kampagne mit Raumcode: „Zum Live-Tisch“ öffnet die Kampagne mit dem Charakter und betritt den Raum', async ({ page }) => {
     await page.addInitScript(() => { window.__liveFake = (code, key, onPeers, onStatus) => { window.__code = code; setTimeout(() => onStatus('on'), 0); return { track() {}, send() {}, close() {} }; }; });
     await start(page, { ...chars, 'charbogen-campaigns': [{ id: 'k1', name: 'Grenzland', status: 'active', chars: ['c2'], room: 'ABC234', done: 2 }] });
     await page.locator('[data-a="campplay"]').click();
-    await expect(page.locator('#app header.hd h1')).toHaveText('Borin');
+    // Öffnet die Kampagne (Übersicht) mit Borin als eigenem Charakter
+    await expect(page.locator('.crumbs')).toContainText('Grenzland');
+    await expect(page.locator('.camp-me')).toContainText('Borin');
     await expect(page.locator('#live-dock .st-on')).toBeVisible();
     expect(await page.evaluate(() => window.__code)).toBe('ABC234');
   });

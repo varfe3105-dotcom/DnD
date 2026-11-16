@@ -81,7 +81,7 @@ function vPlace(n) {
   <div class="add"><input type="search" id="dm-pq" value="${esc(DU.pq || '')}" placeholder="${t('dm.search')}" aria-label="${t('dm.search')}"></div><div id="dm-pres">${vPlaceResults()}</div></div>`;
 }
 /** Kopf des Notizbuchs: wo die Gruppe gerade ist und die letzte Sitzung. */
-function vHere() {
+export function vHere() {
   const h = hereNote(), ses = lastSession(), places = D.notes.filter(n => n.kind === 'place');
   const excerpt = raw => { const s = (raw || '').replace(/\[\[([^\]\n]+)\]\]/g, '$1'); return esc(s.slice(0, 420)) + (s.length > 420 ? ' …' : ''); };
   const pick = `<select id="dm-here" aria-label="${t('dm.hereSet')}"><option value="">${t('dm.herePick')}</option>${places.map(p => `<option value="${p.id}"${h && h.id === p.id ? ' selected' : ''}>${esc(p.title || t('dm.untitled'))}</option>`).join('')}</select>`;
