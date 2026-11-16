@@ -36,7 +36,7 @@ test.describe('Live-Tisch @new', () => {
     expect((await page.evaluate(() => window.__liveInfo)).code).toBe('ABC234');
     const p = await lastSent(page);
     expect(p.hp).toBe(15);
-    expect(Object.keys(p).sort()).toEqual(['ac', 'acB', 'buffs', 'conc', 'cond', 'cr', 'death', 'exh', 'fx', 'hp', 'hpMax', 'insp', 'klass', 'level', 'name', 'pets', 'role', 'tmp']);
+    expect(Object.keys(p).sort()).toEqual(['ac', 'acB', 'buffs', 'conc', 'cond', 'cr', 'death', 'exh', 'fx', 'hp', 'hpMax', 'insp', 'klass', 'level', 'name', 'pets', 'pl', 'race', 'role', 'tmp']);
   });
 
   test('Änderungen gehen automatisch hinaus', async ({ page }) => {
@@ -79,9 +79,9 @@ test.describe('Live-Tisch @new', () => {
     await peers(page, [player({ cond: ['Poisoned'] })]);
     await expect(page.locator('.dm-prow')).toContainText('Mirelle');
     await expect(page.locator('.dm-prow')).toContainText('20');
-    await expect(page.locator('.dm-prow .prow .chips .chip')).toHaveText('Poisoned');
+    await expect(page.locator('.dm-prow .tag.t-bad')).toHaveText('Poisoned');
     await peers(page, [player({ hp: 5 })]);
-    await expect(page.locator('.dm-hpv b')).toHaveText('5');
+    await expect(page.locator('.dm-prow .mc-hp b')).toHaveText('5');
   });
 
   test('Fremde Daten werden entschärft und begrenzt', async ({ page }) => {
@@ -91,7 +91,7 @@ test.describe('Live-Tisch @new', () => {
     await expect(page.locator('.dm-prow')).toContainText('<img');
     await expect(page.locator('.dm-prow img')).toHaveCount(0);
     expect(await page.evaluate(() => window.__xss)).toBeUndefined();
-    await expect(page.locator('.dm-prow .prow .chips .chip')).toHaveCount(1);
+    await expect(page.locator('.dm-prow .tag.t-bad')).toHaveCount(1);
   });
 
   test('Spieler in den Kampf: TP folgen automatisch', async ({ page }) => {

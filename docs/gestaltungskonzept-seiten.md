@@ -166,3 +166,33 @@ Nach jeder Stufe: `npm test`, beide Builds, Screenshots für Desktop, Tablet (10
 - Stufe 1 (Bausteine) und Stufe 2 (Charakterbereich) sind umgesetzt.
 - Abnahme durch den Nutzer steht aus.
 - Tests: `tests/charpages.spec.js`. Ältere Inventartests laufen mit der Fixture-Option `invGrid` in der Rasteransicht.
+
+## Stand Stufe 3 (16.11.2026)
+
+**Kampagnenübersicht als Lagebericht**
+- Der Kopf zeigt Status, Rolle, Sitzungen und das Kapitel.
+- Hauptspalte:
+  - aktueller Ort, für die Spielleitung mit Notizauszug
+  - offene Aufgaben
+  - zuletzt in der Chronik
+- Seitenspalte: nächste Sitzung mit geplanten Inhalten, Porträtreihe der Gruppe, Raum.
+
+**Datenquellen ohne Kopien**
+- **Spielleitung:** Aufgaben sind Notizen der Art „Handlung“, Chronik sind Sitzungsnotizen, der Ort ist „Hier sind wir“ (alles aus `D.notes`).
+- **Spieler:** Aufgaben sind Zeilen der eigenen Chronik, die mit `[ ]` beginnen; die Chronik ist die eigene Chronik (`log`).
+
+**Dauerhaft an der Kampagne** (`charbogen-campaigns`): `chapter`, `plan`, `next`, bei Spielern zusätzlich `place`.
+- Die Spielleitung pflegt diese Felder in ihrer Werkzeugleiste. Die Leiste wird für Spieler nicht erzeugt.
+- Die Felder gehen vorübergehend über die Presence (`camp.c/p/x`, `here` nur als Titel).
+- Spieler übernehmen sie in ihren Kampagneneintrag (`syncCampFromDm()` in `events.js`). Danach bleiben sie offline sichtbar.
+
+**Spielername**
+- Gespeichert in `charbogen-player` (Gerät, in der Sicherung).
+- Wird in den Einstellungen und beim Beitreten eingetragen.
+- Geht als Presence-Feld `pl` mit, zusammen mit `race`.
+
+**Gruppe**
+- Porträtkarten (`memberCard()` in `views/party.js`) mit Spielername, Volk, Klasse, Stufe, TP-Balken, RK, Zuständen, Konzentration, Wirkungen, Todesrettungswürfen und Begleitern.
+- Die Spielleitung sieht dieselben Karten mit ihren Werkzeugen darunter.
+
+Tests: `tests/campaign.spec.js`. Abnahme durch den Nutzer steht aus.

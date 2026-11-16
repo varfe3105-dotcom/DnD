@@ -15,6 +15,8 @@ const clean = c => ({
   done: Math.max(0, Math.min(999, Math.floor(+c.done) || 0)), planned: Math.max(0, Math.min(999, Math.floor(+c.planned) || 0)),
   art: Number.isInteger(c.art) ? c.art % ART : 0, at: String(c.at || new Date().toISOString()),
   role: roleOf(c), log: String(c.log || '').slice(0, 20000), seen: String(c.seen || ''),
+  // Lagebericht: Kapitel und geplante Inhalte (dauerhaft), zuletzt bekannter Ort (bei Spielern von der Spielleitung übernommen)
+  chapter: String(c.chapter || '').slice(0, 120), plan: String(c.plan || '').slice(0, 1000), place: String(c.place || '').slice(0, 80),
 });
 export function campaigns() {
   try { const o = JSON.parse(localStorage.getItem(CAMP_KEY) || '[]'); return Array.isArray(o) ? o.filter(x => x && typeof x === 'object').map(clean) : []; } catch (e) { return []; }

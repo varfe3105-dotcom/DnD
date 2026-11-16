@@ -492,3 +492,61 @@ html[data-area="char"] .lvh b{font:600 .95rem var(--f-cap);letter-spacing:.08em;
 .diary-page{min-height:58vh;padding:28px 34px;font:1.12rem/1.7 var(--f-body);color:var(--c-parch-ink);border:30px solid transparent;border-image:url(./assets/realmcraft/textures/parchment-sheet.webp) 120 fill / 30px stretch;background:none}
 .diary-page::placeholder{color:rgba(60,40,25,.55)}
 @media (max-width:520px){.diary-page{padding:16px;border-width:18px}}
+
+/* ===== Kampagne · Übersicht als Lagebericht ===== */
+.lb-tools{margin:14px 0 16px;padding:12px 16px;border:1px dashed var(--c-brass-a);background:rgba(59,36,64,.35)}
+.lb-tools-h{margin:0 0 8px;font:600 .7rem var(--f-cap);letter-spacing:.14em;text-transform:uppercase;color:var(--c-brass-lt)}
+.lb-tools .lb-plan{display:block;margin-top:8px}
+.lb-tools textarea{width:100%}
+.lagebericht{margin-top:14px}
+.lb-head{padding:16px 20px 14px;border:12px solid transparent;border-image:var(--frame);background:linear-gradient(90deg,rgba(59,36,64,.75),rgba(18,14,16,.55)) padding-box}
+.lb-head .lbl{margin:12px 0 0}
+.lb-chapter{margin:2px 0 0;font:700 2rem/1.15 var(--f-title);color:var(--c-cream)}
+.lb-chapter.none{font:italic 1.05rem var(--f-body);color:var(--c-cream-mute)}
+.lb-grid{display:grid;gap:16px;grid-template-columns:minmax(0,1fr);margin-top:16px}
+@media (min-width:900px){.lb-grid{grid-template-columns:minmax(0,1.7fr) minmax(280px,1fr);align-items:start}}
+.lb-main,.lb-side{display:grid;gap:14px}
+.lb-sec{padding:12px 16px;background:rgba(10,8,10,.32);border:1px solid var(--c-brass-soft)}
+.lb-place{border-left:3px solid var(--c-brass)}
+.lb-place .cover-v{font:700 1.6rem/1.2 var(--f-title);margin:2px 0 6px;color:var(--c-cream)}
+.lb-ptext{margin:6px 0 0;font:1rem/1.55 var(--f-body);color:var(--c-cream-2);white-space:pre-line}
+.lb-list{margin:0;padding-left:18px;display:grid;gap:6px}
+.lb-list.rec li span{display:block;color:var(--c-cream-2);font-size:.92rem}
+.lb-date{margin:0;font:700 1.35rem var(--f-title);color:var(--c-brass-lt)}
+.lb-room{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px}
+.mchips{display:grid;gap:6px}
+.mchip{display:flex;align-items:center;gap:10px;width:100%;min-height:var(--hit);padding:4px 8px;background:rgba(255,255,255,.03);border:1px solid transparent;color:var(--c-cream);font:inherit;text-align:left;cursor:pointer}
+.mchip:hover{border-color:var(--c-brass-soft)}
+.mchip>span:last-child{flex:1;min-width:0}
+.mchip small{float:right;color:var(--c-cream-mute)}
+.mchip .hpbar{margin-top:4px}
+.mchip.down b{color:var(--st-bad)}
+
+/* ===== Gruppe: Abenteurergruppe als Porträtkarten ===== */
+.party-grid{display:grid;gap:14px;grid-template-columns:repeat(auto-fill,minmax(min(100%,270px),1fr));margin-top:8px}
+.party-grid.dm{grid-template-columns:repeat(auto-fill,minmax(min(100%,340px),1fr));margin-top:12px}
+.mcard{position:relative;display:flex;flex-direction:column;gap:10px;height:100%;padding:16px;border:12px solid transparent;border-image:var(--frame);background:var(--surface-card) padding-box}
+.mcard.me{background:linear-gradient(180deg,rgba(77,48,83,.6),rgba(18,14,16,.6)) padding-box}
+.mcard.down{filter:saturate(.6)}
+.mc-top{display:flex;gap:12px;align-items:center}
+.mc-por{flex:none;display:grid;place-items:center;width:62px;height:62px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#5a3d26,#1a110a);border:2px solid var(--c-brass);box-shadow:0 0 0 3px rgba(212,171,85,.18);font:700 1.7rem var(--f-title);color:var(--c-brass-lt)}
+.mc-por.sm{width:34px;height:34px;font-size:1rem;border-width:1.5px;box-shadow:none}
+.mc-id{flex:1;min-width:0}
+.mc-id h3{margin:0;font:700 1.3rem/1.15 var(--f-title);color:var(--c-cream)}
+.mc-id h3 small{font:400 .8rem var(--f-ui);color:var(--c-cream-mute)}
+.mc-pl{margin:2px 0 0;font:italic .88rem var(--f-body);color:var(--c-brass-lt)}
+.mc-line{margin:2px 0 0;font-size:.85rem;color:var(--c-cream-mute)}
+.mc-ac{flex:none;text-align:center;padding:4px 8px;border:1px solid var(--c-brass-a);background:var(--grad-pri)}
+.mc-ac small{display:block;font:600 .6rem var(--f-cap);letter-spacing:.1em;color:var(--c-cream-mute)}
+.mc-ac b{font:700 1.35rem var(--f-title);color:var(--c-brass-lt)}
+.mc-hp small{font:600 .66rem var(--f-cap);letter-spacing:.12em;color:var(--c-cream-mute);margin-right:6px}
+.mc-hp b{font:700 1.6rem var(--f-title);color:var(--c-cream)}
+.mc-hp i{font-style:normal;color:var(--c-cream-mute)}
+.mc-hp em{margin-left:6px;font-style:normal;font-size:.85rem;color:var(--st-good)}
+.mcard.down .mc-hp b{color:var(--st-bad)}
+.mc-down{margin:0;font-size:.85rem;color:var(--st-bad)}
+.mc-pet{display:flex;gap:8px;align-items:baseline;font-size:.88rem;padding-left:10px;border-left:2px solid var(--c-brass-soft)}
+.mc-pet span{flex:1}
+.mc-act{margin-top:auto;padding-top:8px;border-top:1px solid var(--c-brass-soft)}
+.mc-act .live-send{flex-wrap:wrap}
+@media (max-width:520px){.lb-chapter{font-size:1.45rem}.lb-place .cover-v{font-size:1.3rem}}

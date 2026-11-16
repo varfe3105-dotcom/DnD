@@ -1,5 +1,6 @@
 import { pageList, curPage, setPageText, setPageTitle, addPage, delPage, pageLabel, addTemplate } from './views/notes.js';
 import { setInvView } from './views/inventory.js';
+import { setPlayerName } from './player.js';
 import { uid as newUid } from './util.js';
 import { applyProposal, shrinkImage } from './live-actions.js';
 import { downloadBackup, parseBackup, loadSnap, restoreBackup, initBackup } from './backup.js';
@@ -227,7 +228,7 @@ app.addEventListener('click',ev=>{
     case 'campedit':U.CAMPART=null;leavePlay();U.HUB=U.HUB==='gm'?'gm':'camps';U.CAMPED=b.dataset.id;U.CAMPCH=null;U.HUBQ='';window.scrollTo(0,0);break;
     case 'campcancel':U.CAMPED=null;U.CAMPCH=null;U.CONF=null;break;
     case 'campchar':{const c=U.CAMPED==='new'?null:camp.campaignById(U.CAMPED);const set=new Set(U.CAMPCH||(c?c.chars:[]));const id=b.dataset.id;if(set.has(id))set.delete(id);else set.add(id);U.CAMPCH=[...set];b.classList.toggle('on',set.has(id));b.setAttribute('aria-pressed',set.has(id));return}
-    case 'campsave':{const name=v('cf-name').trim();if(!name){toast(tr('toast.needName'));return}const room=v('cf-room').trim().toUpperCase();if(room&&!live.isCode(room)){toast(tr('live.badCode'));return}const old=U.CAMPED==='new'?null:camp.campaignById(U.CAMPED);const r=camp.saveCampaign({...(old||{}),id:old?old.id:undefined,name,desc:v('cf-desc').trim(),status:v('cf-status'),role:v('cf-role')||(old?old.role:undefined),next:v('cf-next'),room,done:v('cf-done'),planned:v('cf-planned'),chars:U.CAMPCH||(old?old.chars:[]),...(U.CAMPART!=null?{art:U.CAMPART}:{})});U.CAMPART=null;if(!r){toast(tr('toast.saveFailed'));return}U.CAMPED=null;U.CAMPCH=null;U.CAMPROLE=null;toast(tr('camp.saved',{n:r.name}));break}
+    case 'campsave':{const name=v('cf-name').trim();if(!name){toast(tr('toast.needName'));return}const room=v('cf-room').trim().toUpperCase();if(room&&!live.isCode(room)){toast(tr('live.badCode'));return}const old=U.CAMPED==='new'?null:camp.campaignById(U.CAMPED);const r=camp.saveCampaign({...(old||{}),id:old?old.id:undefined,name,desc:v('cf-desc').trim(),status:v('cf-status'),chapter:v('cf-chapter'),plan:v('cf-plan'),role:v('cf-role')||(old?old.role:undefined),next:v('cf-next'),room,done:v('cf-done'),planned:v('cf-planned'),chars:U.CAMPCH||(old?old.chars:[]),...(U.CAMPART!=null?{art:U.CAMPART}:{})});U.CAMPART=null;if(!r){toast(tr('toast.saveFailed'));return}U.CAMPED=null;U.CAMPCH=null;U.CAMPROLE=null;toast(tr('camp.saved',{n:r.name}));break}
     case 'campdel':{const id=b.dataset.id;if(U.CONF!=='campdel:'+id){U.CONF='campdel:'+id;break}U.CONF=null;camp.deleteCampaign(id);U.CAMPED=null;toast(tr('camp.deleted'));break}
     case 'campdone':{camp.sessionDone(b.dataset.id);toast(tr('camp.doneToast'));break}
     case 'campplay':if(!openCamp(b.dataset.id))return;break;
@@ -299,6 +300,8 @@ app.addEventListener('change',ev=>{
   const el=ev.target;
   if((el.id==='img-in'||el.id==='img-in2')&&el.files&&el.files[0]){loadPortrait(el.files[0]);return}
   if(el.dataset.sh){setDraft(el);return}
+  if(el.id==='cv-next'){const c=U.CAMP&&camp.campaignById(U.CAMP);if(c){camp.saveCampaign({...c,next:el.value});live.refresh();later()}return}
+  if(el.id==='cv-here'){dm.setHere(el.value);dm.saveD();live.refresh();later();return}
   if(el.id==='impf'&&el.files&&[...el.files].some(isSheetFile)){startSheets([...el.files].filter(isSheetFile));return}
   if(el.id==='impf'&&el.files&&el.files[0]){const fr=new FileReader();fr.onload=()=>{const bak=parseBackup(String(fr.result));if(bak){U.RESTORE=bak;render();return}U.IMP=String(fr.result);const ta=$('imp');if(ta)ta.value=U.IMP;U.CONF=null;toast(tr('toast.fileLoaded'))};fr.readAsText(el.files[0]);return}
   if(el.id==='inv-sel'||el.id==='sp-sel'){const c=el.id==='inv-sel'?BYN[el.value]:BYN['spell:'+el.value];const h=$(el.id+'-h');if(h)h.textContent=c?(c.k==='spell'?spMeta(c)+' — '+c.eff:c.p+(c.att?' · '+tr('item.needsAttune'):'')):'';return}
@@ -347,6 +350,8 @@ app.addEventListener('input',ev=>{
   const el=ev.target;
   if(el.id==='inv-filter'){U.invQ=el.value;later();return}
   if(el.id==='inv-sort'){U.INVS=el.value;later();return}
+  if(el.id==='cv-chapter'||el.id==='cv-plan'){const c=U.CAMP&&camp.campaignById(U.CAMP);if(c){camp.saveCampaign({...c,[el.id==='cv-chapter'?'chapter':'plan']:el.value});live.refresh()}return}
+  if(el.id==='pl-name'||el.id==='join-pl'){setPlayerName(el.value);live.refresh();return}
   if(el.id==='camp-log'){const c=U.CAMP&&camp.campaignById(U.CAMP);if(c)camp.saveCampaign({...c,log:el.value});return}
   if(el.id==='ho-t'){dm.DU.hoT=el.value;return}
   if(el.id==='ho-x'){dm.DU.hoX=el.value;return}
@@ -402,7 +407,7 @@ app.addEventListener('toggle',e=>{if(e.target.classList&&e.target.classList.cont
 let livePending=false;
 const typing=()=>{const a=document.activeElement;return !!a&&app.contains(a)&&/^(INPUT|TEXTAREA|SELECT)$/.test(a.tagName)};
 let hadTurn=false;
-live.setPeerHook(()=>{dm.syncLive(live.players());if(live.L.role!=='player')return;let ch=syncBuffs(live.L.peers);if(syncDeposits(live.dmStash(),m=>live.sendMsg({...m,name:S.name})))ch=true;const tr0=live.dmTurn();if(!tr0&&hadTurn&&S.turn?.on){endCombat();ch=true}hadTurn=!!tr0;if(tr0&&tr0.r!==S.condAt){const gone=seeRound(tr0.r);ch=true;if(gone.length)toast(tr('cond.ended',{c:gone.join(', ')}))}if(ch){save();later()}});
+live.setPeerHook(()=>{dm.syncLive(live.players());if(live.L.role!=='player')return;let ch=syncBuffs(live.L.peers);if(syncDeposits(live.dmStash(),m=>live.sendMsg({...m,name:S.name})))ch=true;const tr0=live.dmTurn();if(!tr0&&hadTurn&&S.turn?.on){endCombat();ch=true}hadTurn=!!tr0;if(tr0&&tr0.r!==S.condAt){const gone=seeRound(tr0.r);ch=true;if(gone.length)toast(tr('cond.ended',{c:gone.join(', ')}))}if(syncCampFromDm())ch=true;if(ch){save();later()}});
 // Vor jedem Speichern: Wirkungen abgleichen (Konzentration beendet → Wirkung weg), dann RK neu berechnen
 hooks.beforeSave=()=>{syncBuffs(live.L.role==='player'?live.L.peers:[]);syncAc()};
 live.setPetSource(()=>S.pets.map(petView));
@@ -451,6 +456,8 @@ function openCamp(id,tab='cover'){const c=camp.campaignById(id);if(!c)return fal
   else{const own=c.chars.find(x=>roster().some(r=>r.id===x));if(own&&own!==S.id&&!switchChar(own)){toast(tr('toast.saveFailed'));return false}if(dm.D.only){dm.D.only=false;dm.saveD()}U.CAMP=c.id;if(c.room&&(live.L.code!==c.room||live.L.role!=='player')){live.connect(c.room,'player');toast(tr('camp.joined',{c:c.room}))}}
   camp.touchCampaign(c.id);enterPlay(tab);return true}
 /** Für die Presence der Spielleitung: Name und Beschreibung der geöffneten Kampagne, wenn ihr Raum offen ist. */
-function dmCampMeta(){const c=U.CAMP&&camp.campaignById(U.CAMP);return c&&c.role==='dm'&&c.room&&c.room===live.L.code?{n:c.name,d:c.desc.slice(0,200)}:null}
+function dmCampMeta(){const c=U.CAMP&&camp.campaignById(U.CAMP);return c&&c.role==='dm'&&c.room&&c.room===live.L.code?{n:c.name,d:c.desc.slice(0,200),c:c.chapter,p:c.plan.slice(0,600),x:c.next}:null}
+/** Spieler: Kapitel, Planung, Termin und Ort der Spielleitung dauerhaft in den eigenen Kampagneneintrag übernehmen. */
+function syncCampFromDm(){const m=live.dmCamp(),c=U.CAMP&&camp.campaignById(U.CAMP);if(!m||!c||c.role!=='player'||c.room!==live.L.code)return false;const up={};if(m.c!==c.chapter)up.chapter=m.c;if(m.p!==c.plan)up.plan=m.p;if(m.x!==c.next)up.next=m.x;const h=live.dmHere();if(h&&h!==c.place)up.place=h;if(!Object.keys(up).length)return false;camp.saveCampaign({...c,...up});return true}
 /** Import vom Dashboard: in Einrichten wechseln und die Dateiauswahl öffnen (dort liegen Prüfansicht und Übernahme). */
 function hubImport(){enterPlay('setup');render();const f=$('impf');if(f){f.scrollIntoView({block:'center'});f.click()}}

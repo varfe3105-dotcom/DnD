@@ -6,6 +6,7 @@ import { S, U, roster, charSnapshot } from '../state.js';
 import { CAT } from '../catalog.js';
 import { campaigns, campaignsOf, nextSession, campaignById, ART } from '../campaigns.js';
 import { L, dmCamp, dmOnline, players } from '../live.js';
+import { playerName } from '../player.js';
 import { dmOnly } from './dm-mode.js';
 import { vWiki } from './wiki.js';
 import { vBackup } from './live-ui.js';
@@ -39,7 +40,7 @@ const SVG = {
 };
 const ico = (k, cls = '') => `<svg class="hi${cls ? ' ' + cls : ''}" viewBox="0 0 24 24" aria-hidden="true">${SVG[k]}</svg>`;
 const ornament = () => `<div class="hub-orn" aria-hidden="true"><i></i>${ico('d20')}<i></i></div>`;
-const fmtDate = s => {
+export const fmtDate = s => {
   if (!s) return '';
   const d = new Date(s.length > 10 ? s : s + 'T00:00');
   if (Number.isNaN(+d)) return s;
@@ -103,7 +104,8 @@ function vCampForm() {
   ${f(t('camp.room'), `<input type="text" id="cf-room" value="${esc(c.room)}" maxlength="6" placeholder="ABC234" style="text-transform:uppercase"><button type="button" class="hbtn sm" data-a="campgen">${t('camp.genCode')}</button>`)}
   ${f(t('camp.doneN'), `<input type="number" class="n" id="cf-done" min="0" max="999" value="${c.done}">`)}
   ${f(t('camp.planned'), `<input type="number" class="n" id="cf-planned" min="0" max="999" value="${c.planned || ''}" placeholder="–">`)}
-  </div>${f(t('camp.desc'), `<textarea id="cf-desc" rows="2" maxlength="400">${esc(c.desc)}</textarea>`)}
+  ${f(t('lb.chapter'), `<input type="text" id="cf-chapter" maxlength="120" value="${esc(c.chapter || '')}">`)}
+  </div>${f(t('camp.desc'), `<textarea id="cf-desc" rows="2" maxlength="400">${esc(c.desc)}</textarea>`)}${f(t('lb.plan'), `<textarea id="cf-plan" rows="2" maxlength="1000">${esc(c.plan || '')}</textarea>`)}
   <p class="lbl">${t('camp.art')}</p><div class="hub-artpick">${Array.from({ length: ART }, (_, i) => `<button class="hub-camp-art a${i}${(U.CAMPART ?? c.art ?? 0) === i ? ' on' : ''}" data-a="campart" data-i="${i}" aria-pressed="${(U.CAMPART ?? c.art ?? 0) === i}" aria-label="${t('camp.artN', { n: i + 1 })}"></button>`).join('')}</div>
   <p class="lbl">${t('camp.chars')}</p><div class="chips">${all.map(x => `<button class="chip${sel.has(x.id) ? ' on' : ''}" data-a="campchar" data-id="${esc(x.id)}" aria-pressed="${sel.has(x.id)}">${esc(x.name)}</button>`).join('') || `<span class="note">${t('camp.noChars')}</span>`}</div>
   <div class="dlgf"><button class="hbtn" data-a="campcancel">${t('common.cancel')}</button>${id !== 'new' ? `<button class="hbtn bad" data-a="campdel" data-id="${esc(id)}">${U.CONF === 'campdel:' + id ? t('chars.delConfirm') : t('common.deleteBtn')}</button>` : ''}<button class="hbtn pri" data-a="campsave">${t('camp.save')}</button></div><p class="note">${t('camp.localNote')}</p></section>`;
@@ -166,7 +168,7 @@ function vJoin() {
   const j = U.JOIN;
   if (!j) {
     const list = chars().filter(real);
-    return `${head}<section class="hub-doc hub-form"><h3>${t('join.step1')}</h3><div class="form"><label><span class="lbl">${t('live.code')}</span><input type="text" id="join-code" maxlength="6" autocomplete="off" placeholder="ABC234" style="text-transform:uppercase"></label><label><span class="lbl">${t('join.char')}</span><select id="join-char">${list.map(c => `<option value="${esc(c.id)}"${c.id === S.id ? ' selected' : ''}>${esc(c.name)}${c.klass ? ' · ' + esc(c.klass) : ''}</option>`).join('')}<option value="new"${list.length ? '' : ' selected'}>${t('join.newChar')}</option></select></label></div><div class="dlgf"><button class="hbtn pri" data-a="joinconn">${t('join.connect')} ${ico('arrow')}</button></div><p class="note">${t('join.hint')}</p></section>`;
+    return `${head}<section class="hub-doc hub-form"><h3>${t('join.step1')}</h3><div class="form"><label><span class="lbl">${t('live.code')}</span><input type="text" id="join-code" maxlength="6" autocomplete="off" placeholder="ABC234" style="text-transform:uppercase"></label><label><span class="lbl">${t('player.name')}</span><input type="text" id="join-pl" maxlength="40" value="${esc(playerName())}" placeholder="${t('player.ph')}"></label><label><span class="lbl">${t('join.char')}</span><select id="join-char">${list.map(c => `<option value="${esc(c.id)}"${c.id === S.id ? ' selected' : ''}>${esc(c.name)}${c.klass ? ' · ' + esc(c.klass) : ''}</option>`).join('')}<option value="new"${list.length ? '' : ' selected'}>${t('join.newChar')}</option></select></label></div><div class="dlgf"><button class="hbtn pri" data-a="joinconn">${t('join.connect')} ${ico('arrow')}</button></div><p class="note">${t('join.hint')}</p></section>`;
   }
   const on = L.code === j.code && L.status === 'on', meta = dmCamp(), others = players().filter(p => p.key !== S.id);
   const state = L.status === 'error' ? t('live.stError') : on ? (dmOnline() ? t('live.dmOn') : t('join.noDm')) : t('live.stConnecting');
@@ -196,7 +198,7 @@ export function syncMapLayer() {
 }
 function vSettings() {
   const langBtn = l => `<button class="chip${lang === l ? ' on' : ''}" data-a="lang" data-l="${l}" aria-pressed="${lang === l}">${l === 'de' ? 'Deutsch' : 'English'}</button>`;
-  return `<div class="hub-h">${ico('gear', 'big')}<h2>${t('hub.nav.settings')}</h2></div><section class="hub-panel"><p class="lbl">${t('head.language')}</p><div class="chips">${langBtn('de')}${langBtn('en')}</div><p class="lbl">${t('head.units')}</p><div class="chips">${['m', 'ft'].map(u => `<button class="chip${units === u ? ' on' : ''}" data-a="units" data-u="${u}" aria-pressed="${units === u}">${t('units.' + u)}</button>`).join('')}</div><p class="lbl">${t('hub.look')}</p><div class="add">${skinControls(t)}</div><label class="ck"><input type="checkbox" id="dm-only"${dmOnly() ? ' checked' : ''}> ${t('dmm.toggle')}</label><p class="note">${t('dmm.offHint')}</p></section>
+  return `<div class="hub-h">${ico('gear', 'big')}<h2>${t('hub.nav.settings')}</h2></div><section class="hub-panel"><p class="lbl">${t('head.language')}</p><div class="chips">${langBtn('de')}${langBtn('en')}</div><p class="lbl">${t('head.units')}</p><div class="chips">${['m', 'ft'].map(u => `<button class="chip${units === u ? ' on' : ''}" data-a="units" data-u="${u}" aria-pressed="${units === u}">${t('units.' + u)}</button>`).join('')}</div><p class="lbl">${t('player.name')}</p><input type="text" id="pl-name" maxlength="40" value="${esc(playerName())}" placeholder="${t('player.ph')}" aria-label="${t('player.name')}"><p class="note">${t('player.hint')}</p><p class="lbl">${t('hub.look')}</p><div class="add">${skinControls(t)}</div><label class="ck"><input type="checkbox" id="dm-only"${dmOnly() ? ' checked' : ''}> ${t('dmm.toggle')}</label><p class="note">${t('dmm.offHint')}</p></section>
   <div class="hub-h">${ico('upload', 'big')}<h2>${t('setup.backup')}</h2></div><section class="hub-panel">${vBackup()}</section>`;
 }
 

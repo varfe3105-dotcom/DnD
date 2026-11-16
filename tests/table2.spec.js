@@ -80,7 +80,7 @@ test.describe('Inspiration über den Live-Tisch @new', () => {
   test('Spielleitung: Knopf Inspiration schickt zuverlässige Nachricht', async ({ page }) => {
     await asDm(page, 'dmlive', { view: 'live' });
     await page.evaluate(l => window.__peers(l), [peer('held1', 'Mira', { insp: true })]);
-    await expect(page.locator('.dm-prow .chip.buff', { hasText: 'Inspiration' })).toBeVisible();
+    await expect(page.locator('.dm-prow .tag.t-res', { hasText: 'Inspiration' })).toBeVisible();
     await page.locator('[data-a="livesend"][data-t="insp"]').click();
     await expect.poll(() => page.evaluate(() => window.__sent.filter(m => m.type === 'insp').length)).toBeGreaterThan(0);
   });

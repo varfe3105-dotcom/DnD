@@ -13,6 +13,7 @@ import { liveState, vHere } from './dm.js';
 import { partyRow, partyPeers, vStashPlayer } from './live-ui.js';
 import { vMain, vHP } from './sheet.js';
 import { vProfile, vStats, vSpellBook } from './char.js';
+import { vCover, vPartyP } from './campaign.js';
 import { hpMaxNow } from '../effects.js';
 import { t } from '../i18n/index.js';
 
@@ -73,41 +74,6 @@ export function vCampHead() {
 const card = (title, body, cls = '') => `<h2>${title}</h2><div class="card${cls ? ' ' + cls : ''}">${body}</div>`;
 const go = (k, l) => `<button class="btn sm" data-a="crumb" data-t="${k}">${l}</button>`;
 
-/** Raum der Kampagne: Spielleitung öffnet und teilt den Code, Spieler verbinden sich. */
-function vRoom(c) {
-  const here = L.code && c.room === L.code, role = L.role;
-  if (dmOnly()) {
-    if (here && role === 'dm') return `<div class="dm-bar"><div class="live-code"><small>${t('live.code')}</small><b>${esc(L.code)}</b></div>${liveState()}<span class="lbl">${t('camp.players', { n: players().length })}</span><button class="btn sm" data-a="campcopy" data-c="${esc(L.code)}">${t('camp.copy')}</button><button class="btn sm bad" data-a="liveoff">${t('live.close')}</button></div><p class="note">${t('camp.shareHint')}</p>`;
-    return `<div class="add" style="margin-top:0"><button class="btn solid" data-a="camproom" data-id="${esc(c.id)}">${c.room ? t('camp.roomOpen', { c: esc(c.room) }) : t('camp.roomNew')}</button></div><p class="note">${t('camp.roomHintDm')}</p>`;
-  }
-  if (here && role === 'player') return `<div class="dm-bar"><div class="live-code"><small>${t('live.code')}</small><b>${esc(L.code)}</b></div>${liveState()}<span class="lbl">${dmOnline() ? t('live.dmOn') : t('live.dmOff')}</span><button class="btn sm bad" data-a="liveoff">${t('live.leave')}</button></div>`;
-  return c.room ? `<div class="add" style="margin-top:0"><button class="btn solid" data-a="camproom" data-id="${esc(c.id)}">${t('camp.connect', { c: esc(c.room) })}</button></div>` : `<p class="note" style="margin-top:0">${t('camp.noRoomP')}</p>`;
-}
-function vCover() {
-  const c = curCamp(), dm = dmOnly();
-  if (!c) return vNoCamp();
-  const prog = c.planned ? t('camp.sessOf', { a: c.done, b: c.planned }) : t('camp.sess', { n: c.done });
-  const place = dm ? hereNote()?.title || '' : dmHere();
-  const last = dm ? lastSession() : null;
-  const group = dm ? players() : [{ name: S.name, hp: S.hp, hpMax: hpMaxNow(), klass: S.klass, level: S.level, me: true }, ...partyPeers()];
-  const info = `${c.desc ? `<p style="margin-top:0">${esc(c.desc)}</p>` : ''}<p class="lbl">${esc(prog)}${c.next ? ' · ' + t('camp.nextAt', { d: esc(c.next.replace('T', ' ')) }) : ''}</p><div class="add"><button class="btn sm" data-a="campedit" data-id="${esc(c.id)}">${t('camp.edit')}</button>${c.status === 'active' ? `<button class="btn sm" data-a="campdone" data-id="${esc(c.id)}">${t('camp.done')}</button>` : ''}</div>`;
-  const state = `<p class="lbl" style="margin-top:0">${t('nav.here')}</p><p class="cover-v">${place ? esc(place) : `<span class="note">${t(dm ? 'nav.hereNoneDm' : 'nav.hereNone')}</span>`}</p>${dm ? `<p class="lbl">${t('dm.lastSession')}</p><p class="cover-v">${last ? esc(last.title) : `<span class="note">${t('dm.noSession')}</span>`}</p>` : c.log ? `<p class="lbl">${t('nav.chron')}</p><p class="ptext">${esc(c.log.slice(-300))}</p>` : ''}`;
-  const grp = group.length ? group.map(p => `<div class="row"><div class="nm">${esc(p.name || '?')}${p.me ? ` <span class="lbl">${t('nav.me')}</span>` : ''}<small>${esc([p.klass, p.level ? t('feat.level', { n: p.level }) : ''].filter(Boolean).join(' · '))}</small></div><span class="dm-hpv"><b>${p.hp}</b>/${p.hpMax}</span></div>`).join('') : `<p class="note" style="margin-top:0">${t('nav.groupEmpty')}</p>`;
-  const quick = `<div class="add" style="margin-top:0">${(dm ? CAMP_DM : CAMP_P).slice(1).map(k => go(k, tabLabel(k))).join('')}</div>`;
-  return `<div class="camp-grid"><div>${card(t('nav.cover'), info)}${card(t('nav.room'), vRoom(c))}</div><div>${card(t('nav.now'), state)}${card(t('nav.party'), grp)}</div></div>${card(t('nav.quick'), quick)}`;
-}
-/** Spielleitung ohne geöffnete Kampagne (früherer Spielleitungsmodus): Kampagne wählen oder anlegen. */
-function vNoCamp() {
-  const mine = campaigns().filter(c => c.role === 'dm' && c.status === 'active');
-  return card(t('nav.noCamp'), `<p class="note" style="margin-top:0">${t('nav.noCampHint')}</p>${mine.map(c => `<div class="row"><div class="nm">${esc(c.name)}<small>${c.room ? esc(c.room) : t('camp.noRoom')}</small></div><button class="btn sm solid" data-a="campopen" data-id="${esc(c.id)}">${t('hub.open')}</button></div>`).join('')}<div class="add"><button class="btn" data-a="hubgo" data-s="gm">${t('hub.nav.gm')}</button></div>`);
-}
-/** Gruppe (Spieler): eigener Charakter und die verbundenen Mitspieler. Die Spielleitung nutzt dafür den Live-Tisch. */
-function vPartyP() {
-  const me = `<div class="row camp-mine"><span class="por sm">${S.img ? `<img src="${S.img}" alt="">` : `<span>${esc((S.name || '?').trim()[0] || '?')}</span>`}</span><div class="nm">${esc(S.name)}<small>${esc([S.subrace || S.race, S.klass, S.sub, S.level ? t('feat.level', { n: S.level }) : ''].filter(Boolean).join(' · '))} · ${t('dm.acShort')} ${S.ac} · ${t('head.hpShort')} ${S.hp}/${hpMaxNow()}</small></div><button class="btn sm solid" data-a="crumb" data-t="prof">${t('nav.openChar')}</button></div>`;
-  const peers = partyPeers();
-  const rest = L.role === 'player' && L.code ? (peers.length ? peers.map(p => partyRow(p)).join('') : `<p class="note">${t('party.none')}</p>`) : `<p class="note">${t('nav.partyOffline')}</p>`;
-  return card(t('nav.myChar'), me) + card(t('nav.members'), rest);
-}
 /** Erkundung: aktueller Ort, bekannte Orte und Handlung (Spielleitung), Karte auf Wunsch. */
 function vExplore() {
   const map = `<div class="add" style="margin-top:0"><button class="btn${U.MAPOPEN ? ' solid' : ''}" data-a="mapshow" aria-pressed="${!!U.MAPOPEN}">${t(U.MAPOPEN ? 'nav.mapHide' : 'nav.mapShow')}</button><a class="btn" href="https://www.aidedd.org/atlas/faerun" target="_blank" rel="noopener noreferrer">${t('map.newTab')}</a></div>${U.MAPOPEN ? `<p class="note">${t('map.source')}</p><div id="hub-map-slot" class="hub-mapslot camp-map" aria-hidden="true"></div>` : ''}`;

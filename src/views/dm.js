@@ -1,4 +1,5 @@
-import { vLiveSend, vHandoutForm, vLoot, vCloud, partyRow } from './live-ui.js';
+import { vLiveSend, vHandoutForm, vLoot, vCloud } from './live-ui.js';
+import { memberCard } from './party.js';
 import { BYN } from '../catalog.js';
 import { SK } from '../constants.js';
 import { vCheat, statText } from './dm-rules.js';
@@ -111,7 +112,7 @@ function vLive() {
   if (L.role !== 'dm') return `<div class="card"><p class="note" style="margin-top:0">${t('live.dmIntro')}</p>${L.role === 'player' ? `<p class="note">${t('live.dmBusy')}</p>` : ''}<div class="add"><button class="btn solid" data-a="livecreate">${t('live.create')}</button></div><div class="add"><input type="text" id="live-dmcode" maxlength="6" autocomplete="off" placeholder="${t('live.codePh')}" aria-label="${t('live.code')}"><button class="btn" data-a="livedmjoin">${t('live.dmReopen')}</button></div><p class="note">${t('live.dmReopenHint')}</p></div>`;
   const list = players();
   return `<div class="card"><div class="dm-bar"><div class="live-code"><small>${t('live.code')}</small><b>${esc(L.code)}</b></div>${liveState()}<button class="btn" data-a="liveadd"${list.length ? '' : ' disabled'}>${t('live.addAll')}</button><button class="btn bad" data-a="liveoff">${t('live.close')}</button></div>
-  ${list.length ? list.map(p => { const inC = inCombat(p.key); return `<div class="dm-prow">${partyRow(p)}<div class="add" style="margin:4px 0">${inC ? `<span class="chip on">${t('live.inCombat')}</span>` : `<button class="btn sm" data-a="liveadd1" data-k="${esc(p.key)}">${t('live.addOne')}</button>`}<button class="btn sm" data-a="peek" data-k="${esc(p.key)}" data-n="${esc(p.name)}">${t('peek.btn')}</button></div>${vLiveSend(p)}</div>`; }).join('') : `<div class="empty">${t('live.waiting')}</div>`}${vCloud()}</div>${vHandoutForm(list)}`;
+  ${list.length ? '<div class="party-grid dm">' + list.map(p => { const inC = inCombat(p.key); return `<div class="dm-prow">${memberCard(p, `<div class="mc-act"><div class="add" style="margin:4px 0">${inC ? `<span class="chip on">${t('live.inCombat')}</span>` : `<button class="btn sm" data-a="liveadd1" data-k="${esc(p.key)}">${t('live.addOne')}</button>`}<button class="btn sm" data-a="peek" data-k="${esc(p.key)}" data-n="${esc(p.name)}">${t('peek.btn')}</button></div>${vLiveSend(p)}</div>`)}</div>`; }).join('') + '</div>' : `<div class="empty">${t('live.waiting')}</div>`}${vCloud()}</div>${vHandoutForm(list)}`;
 }
 export function liveState() {
   const k = { on: 'live.on', connecting: 'live.connecting', error: 'live.error' }[L.status];
