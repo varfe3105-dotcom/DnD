@@ -63,12 +63,13 @@ test.describe('Angriffe @new', () => {
     await expect(row.locator('.atk b').nth(1)).toHaveText('3');
     await seed(page, base4({ klass: 'Monk', level: 5, prof: 3 }));
     await expect(row.locator('.atk b').first()).toHaveText('+6');
-    await expect(row.locator('.atk b').nth(1)).toHaveText(/1[dW]6\+3/);
+    // 2024: Kampfkunstwürfel W8 ab Stufe 5
+    await expect(row.locator('.atk b').nth(1)).toHaveText(/1[dW]8\+3/);
   });
 
   test('Monk nutzt GE und größeren Würfel bei Monk-Waffen', async ({ page }) => {
     await seed(page, base4({ klass: 'Monk', level: 11, prof: 4, eq: { main: weapon('quarterstaff', 'Quarterstaff', QS) } }));
-    await expect(atkVals(page).nth(1)).toHaveText(/1[dW]8\+3/);
+    await expect(atkVals(page).nth(1)).toHaveText(/1[dW]10\+3/);
   });
 
   test('Kampfstil in Einrichten umschalten', async ({ page }) => {

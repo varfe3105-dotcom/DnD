@@ -81,7 +81,7 @@ test.describe('Katalog in der Oberfläche @new', () => {
     await seed(page, base4({ tab: 'wiki' }));
     await page.locator('#wq').fill('Eldritch Blast');
     await page.locator('#wc').selectOption('W');
-    await expect(page.locator('.wli')).toHaveCount(0);
+    await expect(page.locator('.wli[data-key="spell:Eldritch Blast"]')).toHaveCount(0);
     await page.locator('#wc').selectOption('K');
     await expect(page.locator('.wli', { hasText: 'Eldritch Blast' })).toBeVisible();
   });

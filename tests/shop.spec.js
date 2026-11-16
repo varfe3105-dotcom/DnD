@@ -37,15 +37,11 @@ test.describe('Einkaufen und Verkaufen @new', () => {
 });
 
 test.describe('Zaubertausch beim Aufstieg @new', () => {
-  test('Sorcerer 2 → 3: einen bekannten Zauber gegen einen anderen tauschen', async ({ page }) => {
-    await seed(page, base4({ klass: 'Sorcerer', sub: 'Draconic Bloodline', level: 2, prof: 2, hpMax: 14, hp: 14, abil, hd: { max: 2, used: 0, die: 'W6' }, spells: [spell('Magic Missile', 1, { cls: 'SW' }), spell('Sleep', 1, { cls: 'BSW' })] }));
+  test('Sorcerer 2024 bereitet vor: kein Tausch, dafür mehr vorbereitete Zauber laut Tabelle', async ({ page }) => {
+    await seed(page, base4({ klass: 'Sorcerer', level: 2, prof: 2, hpMax: 14, hp: 14, abil, hd: { max: 2, used: 0, die: 'W6' }, spells: [spell('Magic Missile', 1, { cls: 'SW' }), spell('Sleep', 1, { cls: 'BSW' })] }));
     await act(page, 'lu').click();
-    await page.locator('#lu-swapold').selectOption('Sleep');
-    await page.locator('#lu-swapnew').selectOption('Burning Hands');
-    await act(page, 'luapply').click();
-    const s = await read(page);
-    expect(s.spells.map(x => x.n)).toEqual(expect.arrayContaining(['Burning Hands', 'Magic Missile']));
-    expect(s.spells.map(x => x.n)).not.toContain('Sleep');
+    await expect(page.locator('#lu-swapold')).toHaveCount(0);
+    await expect(page.locator('.lup-head').last()).toContainText(/0 (of|von) 4/);
   });
 
   test('Cleric und Ranger 2024 haben keinen Tausch (bereiten vor)', async ({ page }) => {

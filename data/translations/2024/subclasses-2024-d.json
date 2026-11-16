@@ -1,0 +1,96 @@
+{
+  "Monk": {
+    "Warrior of Mercy": {
+      "3": [
+        { "n": "Hand of Harm", "en": "Once per turn, when you hit a creature with an Unarmed Strike and deal damage, you can expend 1 Focus Point to deal extra Necrotic damage equal to one roll of your Martial Arts die + your Wisdom modifier.", "de": "Einmal pro Zug, wenn du waffenlos triffst und Schaden machst, kannst du 1 Fokuspunkt ausgeben: zusätzlich ein Kampfkunstwürfel + Weisheitsmodifikator nekrotischer Schaden." },
+        { "n": "Hand of Healing", "en": "As a Magic action, expend 1 Focus Point to touch a creature and restore Hit Points equal to one roll of your Martial Arts die + your Wisdom modifier. When you use Flurry of Blows, you can replace one of the Unarmed Strikes with a use of this feature without expending a Focus Point for the healing.", "de": "Als Magie-Aktion gibst du 1 Fokuspunkt aus und heilst eine berührte Kreatur um einen Kampfkunstwürfel + Weisheitsmodifikator TP. Bei Flurry of Blows kannst du einen der Schläge durch diese Heilung ersetzen, ohne dafür einen Punkt auszugeben." },
+        { "n": "Implements of Mercy", "en": "You gain proficiency in Insight and Medicine and with the Herbalism Kit.", "de": "Übung in Motiv erkennen, Heilkunde und mit dem Kräuterkundeset." }
+      ],
+      "6": [
+        { "n": "Physician's Touch", "en": "Hand of Harm: the target also has the Poisoned condition until the end of your next turn. Hand of Healing: you can also end one of these conditions on the creature: Blinded, Deafened, Paralyzed, Poisoned or Stunned.", "de": "Hand of Harm: Das Ziel ist außerdem bis zum Ende deines nächsten Zuges Poisoned. Hand of Healing: Du kannst zusätzlich einen dieser Zustände beenden: Blinded, Deafened, Paralyzed, Poisoned oder Stunned." }
+      ],
+      "11": [
+        { "n": "Flurry of Healing and Harm", "en": "When you use Flurry of Blows, you can replace each Unarmed Strike with Hand of Healing without expending Focus Points for it. When you make an Unarmed Strike with Flurry of Blows and deal damage, you can use Hand of Harm with it without expending a Focus Point (still once per turn). Free uses equal to your Wisdom modifier (minimum 1), regained on a Long Rest.", "de": "Bei Flurry of Blows kannst du jeden Schlag durch Hand of Healing ersetzen, ohne dafür Punkte auszugeben. Machst du mit Flurry of Blows Schaden, kannst du Hand of Harm ohne Fokuspunkt nutzen (weiter einmal pro Zug). Freie Anwendungen: Weisheitsmodifikator (mindestens 1), zurück nach einer langen Rast." }
+      ],
+      "17": [
+        { "n": "Hand of Ultimate Mercy", "en": "As a Magic action, touch the corpse of a creature that died within the past 24 hours and expend 5 Focus Points: it returns to life with 4d10 + your Wisdom modifier Hit Points, and the Blinded, Deafened, Paralyzed, Poisoned and Stunned conditions end on it. Once per Long Rest.", "de": "Als Magie-Aktion berührst du den Leichnam einer Kreatur, die vor höchstens 24 Stunden gestorben ist, und gibst 5 Fokuspunkte aus: Sie kehrt mit 4W10 + Weisheitsmodifikator TP ins Leben zurück, Blinded, Deafened, Paralyzed, Poisoned und Stunned enden. Einmal pro langer Rast." }
+      ]
+    },
+    "Warrior of Shadow": {
+      "3": [
+        { "n": "Shadow Arts", "en": "Darkness: expend 1 Focus Point to cast Darkness without components; you can see within it, and at the start of each of your turns you can move its area up to 60 feet. Darkvision 60 feet (or +60 feet if you have it). Shadowy Figments: you know Minor Illusion (Wisdom as spellcasting ability).", "de": "Darkness: Für 1 Fokuspunkt wirkst du Darkness ohne Komponenten; du siehst darin, und zu Beginn jedes deiner Züge kannst du den Bereich bis 18 m verschieben. Dunkelsicht 18 m (oder 18 m mehr). Shadowy Figments: Du kennst Minor Illusion (Zauberattribut Weisheit)." }
+      ],
+      "6": [
+        { "n": "Shadow Step", "en": "While in Dim Light or Darkness, as a Bonus Action you can teleport up to 60 feet to an unoccupied space in Dim Light or Darkness that you can see, and you have Advantage on the next melee attack you make before the end of the turn.", "de": "Im Dämmerlicht oder in Dunkelheit teleportierst du dich als Bonusaktion bis 18 m in ein freies Feld im Dämmerlicht oder in Dunkelheit, das du siehst, und hast bis Zugende Vorteil auf den nächsten Nahkampfangriff." }
+      ],
+      "11": [
+        { "n": "Improved Shadow Step", "en": "You can expend 1 Focus Point to ignore Shadow Step's lighting requirements for that use. Immediately after teleporting with it, you can make an Unarmed Strike as part of the same Bonus Action.", "de": "Für 1 Fokuspunkt entfällt bei Shadow Step die Lichtbedingung. Direkt nach dem Teleport kannst du als Teil derselben Bonusaktion waffenlos zuschlagen." }
+      ],
+      "17": [
+        { "n": "Cloak of Shadows", "en": "As a Magic action while in Dim Light or Darkness, expend 3 Focus Points to become Invisible for 1 minute, until you are Incapacitated or end your turn in Bright Light. During this time you can move through occupied spaces as Difficult Terrain (taking 1d10 Force damage if you end your turn there), and you can use Flurry of Blows without expending Focus Points.", "de": "Als Magie-Aktion im Dämmerlicht oder in Dunkelheit gibst du 3 Fokuspunkte aus und bist 1 Minute lang Invisible (bis du Incapacitated bist oder deinen Zug im hellen Licht beendest). Solange kannst du dich wie durch schwieriges Gelände durch besetzte Felder bewegen (1W10 Energieschaden, wenn du dort den Zug beendest) und Flurry of Blows ohne Fokuspunkte nutzen." }
+      ]
+    },
+    "Warrior of the Elements": {
+      "3": [
+        { "n": "Elemental Attunement", "en": "At the start of your turn, expend 1 Focus Point to attune for 10 minutes or until Incapacitated: your Unarmed Strikes have 10 feet more reach, and when you hit with one you can make it deal Acid, Cold, Fire, Lightning or Thunder damage and force a Strength saving throw; on a failure you push or pull the target up to 10 feet.", "de": "Zu Beginn deines Zuges gibst du 1 Fokuspunkt aus und bist 10 Minuten (oder bis du Incapacitated bist) eingestimmt: Waffenlose Schläge reichen 3 m weiter, und bei einem Treffer kannst du Säure-, Kälte-, Feuer-, Blitz- oder Schallschaden machen und einen Stärkerettungswurf verlangen; bei Misserfolg ziehst oder stößt du das Ziel bis 3 m." },
+        { "n": "Manipulate Elements", "en": "You know the Elementalism spell (Wisdom as spellcasting ability).", "de": "Du kennst den Zauber Elementalism (Zauberattribut Weisheit)." }
+      ],
+      "6": [
+        { "n": "Elemental Burst", "en": "As a Magic action, expend 2 Focus Points: each creature in a 20-foot-radius Sphere centered on a point within 120 feet makes a Dexterity saving throw, taking damage of an element of your choice (Acid, Cold, Fire, Lightning, Thunder) equal to three rolls of your Martial Arts die on a failure, or half on a success.", "de": "Als Magie-Aktion gibst du 2 Fokuspunkte aus: Jede Kreatur in einer Kugel mit 6 m Radius um einen Punkt in 36 m macht einen Geschicklichkeitsrettungswurf und erleidet drei Kampfkunstwürfel Schaden eines Elements deiner Wahl (Säure, Kälte, Feuer, Blitz, Schall), halb bei Erfolg." }
+      ],
+      "11": [
+        { "n": "Stride of the Elements", "en": "While Elemental Attunement is active you have a Fly Speed and a Swim Speed equal to your Speed.", "de": "Solange Elemental Attunement wirkt, hast du ein Flug- und ein Schwimmtempo in Höhe deines Tempos." }
+      ],
+      "17": [
+        { "n": "Elemental Epitome", "en": "While Elemental Attunement is active: Damage Resistance: Resistance to one of Acid, Cold, Fire, Lightning or Thunder, chosen at the start of each of your turns. Destructive Stride: when you use Step of the Wind your Speed increases by 20 feet, and a creature you move within 5 feet of takes one roll of your Martial Arts die of your chosen element (once per creature per turn). Empowered Strikes: once on each of your turns, an Unarmed Strike that hits deals extra damage equal to one roll of your Martial Arts die of the same type.", "de": "Solange Elemental Attunement wirkt: Resistenz gegen Säure, Kälte, Feuer, Blitz oder Schall, gewählt zu Beginn jedes deiner Züge. Destructive Stride: Bei Step of the Wind +6 m Tempo, und eine Kreatur, an der du dich bis auf 1,5 m vorbeibewegst, erleidet einen Kampfkunstwürfel Schaden des gewählten Elements (einmal je Kreatur und Zug). Empowered Strikes: Einmal in jedem deiner Züge macht ein waffenloser Treffer zusätzlich einen Kampfkunstwürfel Schaden derselben Art." }
+      ]
+    }
+  },
+  "Rogue": {
+    "Arcane Trickster": {
+      "3": [
+        { "n": "Spellcasting", "en": "You cast Wizard spells with Intelligence (save DC 8 + Intelligence modifier + Proficiency Bonus). Cantrips: Mage Hand plus two others (four total at level 10). Prepared spells by Rogue level: 3 at 3, 4 at 4, 5 at 7, 6 at 8, 7 at 10, 8 at 11, 9 at 13, 10 at 14, 11 at 16, 12 at 19, 13 at 20; spell slots as a one-third caster. When you gain a Rogue level you can replace one prepared spell.", "de": "Du wirkst Magierzauber mit Intelligenz (Zauber-SG 8 + Intelligenzmodifikator + Übungsbonus). Zaubertricks: Mage Hand und zwei weitere (vier ab Stufe 10). Vorbereitete Zauber nach Schurkenstufe: 3 auf Stufe 3, 4 auf 4, 5 auf 7, 6 auf 8, 7 auf 10, 8 auf 11, 9 auf 13, 10 auf 14, 11 auf 16, 12 auf 19, 13 auf 20; Zauberplätze als Drittelzauberer. Beim Aufstieg darfst du einen vorbereiteten Zauber tauschen." },
+        { "n": "Mage Hand Legerdemain", "en": "When you cast Mage Hand you can make the hand Invisible, and you can control it as a Bonus Action. You can make Dexterity (Sleight of Hand) checks through it.", "de": "Wirkst du Mage Hand, kannst du die Hand unsichtbar machen und als Bonusaktion steuern. Mit ihr kannst du Geschicklichkeitswürfe (Fingerfertigkeit) machen." }
+      ],
+      "9": [
+        { "n": "Magical Ambush", "en": "If you have the Invisible condition when you cast a spell on a creature, it has Disadvantage on any saving throw it makes against the spell on the same turn.", "de": "Bist du Invisible, wenn du einen Zauber auf eine Kreatur wirkst, hat sie in diesem Zug Nachteil auf Rettungswürfe dagegen." }
+      ],
+      "13": [
+        { "n": "Versatile Trickster", "en": "When you use the Trip option of Cunning Strike on a creature, you can also use it on another creature within 5 feet of your spectral hand.", "de": "Nutzt du Trip aus Cunning Strike, kannst du es zusätzlich gegen eine andere Kreatur in 1,5 m von deiner Geisterhand einsetzen." }
+      ],
+      "17": [
+        { "n": "Spell Thief", "en": "Immediately after a creature casts a spell that targets you or includes you in its area, you can take a Reaction: the creature makes a saving throw with its spellcasting ability against your spell save DC. On a failure you negate the spell's effect against you, and if the spell is level 1+ and of a level you can cast, you can cast it for the next 8 hours using your spell slots; the creature can't cast it during that time. Once per Long Rest.", "de": "Direkt nachdem eine Kreatur einen Zauber auf dich oder mit dir im Bereich wirkt, kannst du als Reaktion: Sie macht einen Rettungswurf mit ihrem Zauberattribut gegen deinen Zauber-SG. Bei Misserfolg wirkt der Zauber nicht auf dich, und ist er ab Grad 1 und von einem Grad, den du wirken kannst, kannst du ihn 8 Stunden lang mit deinen Plätzen wirken; die Kreatur kann es so lange nicht. Einmal pro langer Rast." }
+      ]
+    },
+    "Assassin": {
+      "3": [
+        { "n": "Assassinate", "en": "Initiative: Advantage on Initiative rolls. Surprising Strikes: during the first round of each combat, you have Advantage on attack rolls against any creature that hasn't taken a turn yet, and if your Sneak Attack hits in that round, the target takes extra damage of the weapon's type equal to your Rogue level.", "de": "Initiative: Vorteil auf Initiativewürfe. Surprising Strikes: In der ersten Runde jedes Kampfes hast du Vorteil auf Angriffe gegen Kreaturen, die noch nicht dran waren; trifft dein Sneak Attack in dieser Runde, erleidet das Ziel zusätzlich Schaden in Höhe deiner Schurkenstufe (Art der Waffe)." },
+        { "n": "Assassin's Tools", "en": "You gain a Disguise Kit and a Poisoner's Kit and proficiency with both.", "de": "Du erhältst ein Verkleidungsset und ein Giftmischerset und Übung mit beiden." }
+      ],
+      "9": [
+        { "n": "Infiltration Expertise", "en": "Masterful Mimicry: you can unerringly mimic another person's speech, handwriting or both if you have experienced them for at least 1 hour. Roving Aim: your Speed isn't reduced to 0 by using Steady Aim.", "de": "Masterful Mimicry: Hast du jemanden mindestens 1 Stunde erlebt, kannst du Sprache und Handschrift täuschend nachahmen. Roving Aim: Steady Aim senkt dein Tempo nicht mehr auf 0." }
+      ],
+      "13": [
+        { "n": "Envenom Weapons", "en": "When you use the Poison option of Cunning Strike, the target also takes 2d6 Poison damage whenever it fails the saving throw. This damage ignores Resistance to Poison damage.", "de": "Nutzt du Poison aus Cunning Strike, erleidet das Ziel bei jedem gescheiterten Rettungswurf zusätzlich 2W6 Giftschaden, der Resistenz gegen Gift ignoriert." }
+      ],
+      "17": [
+        { "n": "Death Strike", "en": "When you hit with your Sneak Attack on the first round of a combat, the target makes a Constitution saving throw (DC 8 + Dexterity modifier + Proficiency Bonus); on a failure the attack's damage is doubled against it.", "de": "Triffst du mit Sneak Attack in der ersten Kampfrunde, macht das Ziel einen Konstitutionsrettungswurf (SG 8 + Geschicklichkeitsmodifikator + Übungsbonus); bei Misserfolg verdoppelt sich der Schaden des Angriffs." }
+      ]
+    },
+    "Soulknife": {
+      "3": [
+        { "n": "Psionic Power", "en": "You have Psionic Energy Dice: four d6 (six d8 at level 5, eight d8 at 9, eight d10 at 11, ten d10 at 13, twelve d12 at 17). One returns on a Short Rest, all on a Long Rest. Psi-Bolstered Knack: if you fail an ability check using a skill or tool proficiency, roll a die and add it; it is expended only if the check then succeeds. Psychic Whispers: as a Magic action, choose up to your Proficiency Bonus creatures you can see; you can communicate telepathically with them for a number of hours equal to a roll of a die. The first use per Long Rest is free, later uses expend a die.", "de": "Psionische Energiewürfel: vier W6 (sechs W8 ab Stufe 5, acht W8 ab 9, acht W10 ab 11, zehn W10 ab 13, zwölf W12 ab 17). Einer kommt nach einer kurzen Rast zurück, alle nach einer langen. Psi-Bolstered Knack: Scheiterst du bei einem Attributswurf mit geübter Fertigkeit oder geübtem Werkzeug, wirfst du einen Würfel und addierst ihn; verbraucht nur, wenn der Wurf dann gelingt. Psychic Whispers: Als Magie-Aktion verbindest du dich telepathisch mit bis zu Übungsbonus Kreaturen, die du siehst, für so viele Stunden wie ein Würfelwurf. Die erste Nutzung pro langer Rast ist frei, danach kostet sie einen Würfel." },
+        { "n": "Psychic Blades", "en": "When you take the Attack action or make an Opportunity Attack, you can manifest a psychic blade: a Simple Melee weapon with Finesse and Thrown (range 60/120 feet), 1d6 Psychic damage, Vex mastery. It vanishes after the attack. After attacking with it, you can make a second blade attack as a Bonus Action with your other hand for 1d4 Psychic damage.", "de": "Bei der Angriffsaktion oder einem Gelegenheitsangriff kannst du eine psychische Klinge formen: einfache Nahkampfwaffe mit Finesse und Wurf (18/36 m), 1W6 psychischer Schaden, Meisterschaft Vex. Sie verschwindet nach dem Angriff. Danach kannst du als Bonusaktion mit der anderen Hand eine zweite Klinge für 1W4 psychischen Schaden einsetzen." }
+      ],
+      "9": [
+        { "n": "Soul Blades", "en": "Homing Strikes: if you miss with a Psychic Blade, roll a Psionic Energy Die and add it to the attack roll; the die is expended only if the attack then hits. Psychic Teleportation: as a Bonus Action, expend a die and throw a blade at an unoccupied space you can see up to 10 times the roll in feet away; you teleport there.", "de": "Homing Strikes: Verfehlst du mit einer psychischen Klinge, wirfst du einen Energiewürfel und addierst ihn; verbraucht nur, wenn der Angriff dann trifft. Psychic Teleportation: Als Bonusaktion gibst du einen Würfel aus, wirfst eine Klinge auf ein freies Feld bis zum Wurf × 3 m entfernt und teleportierst dich dorthin." }
+      ],
+      "13": [
+        { "n": "Psychic Veil", "en": "As a Magic action you become Invisible for 1 hour or until you end it (no action); it ends early immediately after you deal damage to a creature or force a creature to make a saving throw. Once per Long Rest, or again by expending a die.", "de": "Als Magie-Aktion bist du 1 Stunde lang Invisible (beenden ohne Aktion); es endet sofort, nachdem du Schaden zufügst oder jemanden einen Rettungswurf machen lässt. Einmal pro langer Rast, weitere Male für einen Würfel." }
+      ],
+      "17": [
+        { "n": "Rend Mind", "en": "When you deal Sneak Attack damage with a Psychic Blade, the target makes a Wisdom saving throw (DC 8 + Dexterity modifier + Proficiency Bonus) or is Stunned for 1 minute, repeating the save at the end of each of its turns. Once per Long Rest, or again by expending three dice.", "de": "Machst du mit einer psychischen Klinge Sneak-Attack-Schaden, macht das Ziel einen Weisheitsrettungswurf (SG 8 + Geschicklichkeitsmodifikator + Übungsbonus) oder ist 1 Minute Stunned; Rettungswurf am Ende jedes seiner Züge. Einmal pro langer Rast, weitere Male für drei Würfel." }
+      ]
+    }
+  }
+}

@@ -33,7 +33,7 @@ export function luData() {
   if (klass === 'Barbarian' && cl === 20) extra.push(t('lu.barb20'));
   const next = cur ? list.map(x => x.k === klass ? { ...x, lvl: cl, sub: chosen } : x) : [...list, { k: klass, sub: chosen, lvl: cl }];
   const lock = next.find(x => x.k === 'Warlock');
-  return { C, klass, cl, isNew, chosen, to, gain, base, avg, con, dw, feats, extra, asi: C.asi.includes(cl), profOld: S.level ? S.prof : pb(0), profNew: pb(to), slotsOld: S.slots.map(s => s.max), slotsNew: slotsAll(next), hasCaster: next.some(x => castKind(x.k, x.sub)), pact: lock ? pactFor(lock.lvl) : null, res: resFor(klass, cl, undefined, chosen), cant: [cantripsFor(klass, cl - 1), cantripsFor(klass, cl)], known: [knownFor(klass, cl - 1), knownFor(klass, cl)] };
+  return { C, klass, cl, isNew, chosen, to, gain, base, avg, con, dw, feats, extra, asi: C.asi.includes(cl), profOld: S.level ? S.prof : pb(0), profNew: pb(to), slotsOld: S.slots.map(s => s.max), slotsNew: slotsAll(next), hasCaster: next.some(x => castKind(x.k, x.sub)), pact: lock ? pactFor(lock.lvl) : null, res: resFor(klass, cl, undefined, chosen), cant: [cantripsFor(klass, cl - 1, chosen), cantripsFor(klass, cl, chosen)], known: [knownFor(klass, cl - 1), knownFor(klass, cl)] };
 }
 import { tl } from '../i18n/index.js';
 const t2 = (l, key, C, to) => tl(l, key, { subs: C.subs.join(', '), n: to });
@@ -131,8 +131,8 @@ export function spellPools(d) {
   if (!max) return pools;
   if (d.klass === 'Wizard') pools.push({ key: 'sp', kind: 'book', n: d.cl === 1 ? 6 : 2, list: list(1, max) });
   else if (d.known[1] != null) { const n = d.known[1] - (d.known[0] || 0); if (n > 0) pools.push({ key: 'sp', kind: 'known', n, list: list(1, max) }); }
-  else if (prepFor(d.klass, d.cl) != null) {
-    const cap = prepFor(d.klass, d.cl);
+  else if (prepFor(d.klass, d.cl, d.chosen) != null) {
+    const cap = prepFor(d.klass, d.cl, d.chosen);
     const now = S.spells.filter(s => s.lvl > 0 && !s.always && s.prep !== false).length;
     if (cap - now > 0) pools.push({ key: 'sp', kind: 'prep', n: cap - now, list: list(1, max) });
   }
@@ -160,7 +160,7 @@ export function vLU() {
   const d = luData(), C = d.C, abOpt = sel => `<option value="">${t('lu.ability')}</option>` + ABK.map(k => `<option value="${k}"${k === sel ? ' selected' : ''}>${abName(k)} (${S.abil[k]})</option>`).join('');
   const chg = (l, a, b) => String(a) === String(b) ? `<span>${l} ${a}</span>` : `<span class="up">${l} ${a} → ${b}</span>`;
   const sl = d.slotsNew.map((n, i) => [i + 1, d.slotsOld[i], n]).filter(x => x[1] || x[2]);
-  const prepN = prepFor(d.klass, d.cl) || 0, prepared = prepN > 0;
+  const prepN = prepFor(d.klass, d.cl, d.chosen) || 0, prepared = prepN > 0;
   const resOld = Object.fromEntries(S.res.map(r => [r.n, r.max]));
   const dieN = dice('W' + C.hd);
   const dwarf = d.dw ? ` +${d.dw} ${t('lu.perLevel')}` : '';

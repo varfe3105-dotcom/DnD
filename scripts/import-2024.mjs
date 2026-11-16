@@ -346,12 +346,16 @@ function feats() {
   console.log(`Talente: ${out.length} (SRD: ${out.filter(f => f.source === SRC).length})`);
 }
 
-/* ---- Klassen 2024 (vorerst die Klassen der Gruppe): SRD-Merkmale wörtlich, deutsche Texte und Unterklassen außerhalb des SRD als eigene Zusammenfassung ---- */
-const CLASSES_24 = { bard: 'Bard', cleric: 'Cleric', paladin: 'Paladin', ranger: 'Ranger' };
-const SUBS_24 = { Bard: ['College of Dance', 'College of Glamour', 'College of Lore', 'College of Valor'], Cleric: ['Life Domain', 'Light Domain', 'Trickery Domain', 'War Domain'], Paladin: ['Oath of Devotion', 'Oath of Glory', 'Oath of the Ancients', 'Oath of Vengeance'], Ranger: ['Beast Master', 'Fey Wanderer', 'Gloom Stalker', 'Hunter'] };
+/* ---- Klassen 2024 (alle zwölf): SRD-Merkmale wörtlich, deutsche Texte und Unterklassen außerhalb des SRD als eigene Zusammenfassung ---- */
+const CLASSES_24 = { barbarian: 'Barbarian', bard: 'Bard', cleric: 'Cleric', druid: 'Druid', fighter: 'Fighter', monk: 'Monk', paladin: 'Paladin', ranger: 'Ranger', rogue: 'Rogue', sorcerer: 'Sorcerer', warlock: 'Warlock', wizard: 'Wizard' };
+// Datenfehler im Paket: Zaubertricks des Druiden springen auf Stufe 7 und 16 (laut PHB 2 / 3 ab Stufe 4 / 4 ab Stufe 10)
+const CANT_FIX = { druid: Array.from({ length: 20 }, (_, i) => (i + 1 >= 10 ? 4 : i + 1 >= 4 ? 3 : 2)) };
+const SUBS_24 = { Bard: ['College of Dance', 'College of Glamour', 'College of Lore', 'College of Valor'], Cleric: ['Life Domain', 'Light Domain', 'Trickery Domain', 'War Domain'], Paladin: ['Oath of Devotion', 'Oath of Glory', 'Oath of the Ancients', 'Oath of Vengeance'], Ranger: ['Beast Master', 'Fey Wanderer', 'Gloom Stalker', 'Hunter'],
+  Barbarian: ['Path of the Berserker', 'Path of the Wild Heart', 'Path of the World Tree', 'Path of the Zealot'], Druid: ['Circle of the Land', 'Circle of the Moon', 'Circle of the Sea', 'Circle of the Stars'], Fighter: ['Battle Master', 'Champion', 'Eldritch Knight', 'Psi Warrior'], Monk: ['Warrior of Mercy', 'Warrior of Shadow', 'Warrior of the Elements', 'Warrior of the Open Hand'], Rogue: ['Arcane Trickster', 'Assassin', 'Soulknife', 'Thief'], Sorcerer: ['Aberrant Sorcery', 'Clockwork Sorcery', 'Draconic Sorcery', 'Wild Magic Sorcery'], Warlock: ['Archfey Patron', 'Celestial Patron', 'Fiend Patron', 'Great Old One Patron'], Wizard: ['Abjurer', 'Diviner', 'Evoker', 'Illusionist'] };
 function classes() {
-  const de = readJson(path.join(trDir, 'de-classes.json'));
-  const own = Object.assign({}, ...['subclasses-2024-a.json', 'subclasses-2024-b.json'].map(x => readJson(path.join(trDir, x))));
+  const de = tr('de-classes');
+  const own = {};
+  fs.readdirSync(trDir).filter(x => /^subclasses-2024-.*.json$/.test(x)).sort().forEach(x => Object.entries(readJson(path.join(trDir, x))).forEach(([k, v]) => { own[k] = { ...(own[k] || {}), ...v }; }));
   const feats = srd('Features'), levels = srd('Levels'), cls = srd('Classes'), subcls = srd('Subclasses');
   const C = JSON.parse(fs.readFileSync(dataFile('classes.json'), 'utf8'));
   const SC = JSON.parse(fs.readFileSync(dataFile('subclasses.json'), 'utf8'));
@@ -364,7 +368,9 @@ function classes() {
     feats.filter(x => x.class?.index === idx && !x.subclass).forEach(x => { (f[lvlOf(x)] = f[lvlOf(x)] || []).push(feat(x)); });
     const subLv = ls.filter(l => l.features.some(x => /Subclass$/.test(x.name))).map(l => l.level);
     C[k] = { ...old, ed: 2024, hd: c.hit_die, sv: c.saving_throws.map(x => x.index), subL: 3, subs: SUBS_24[k], sl: subLv, asi: [4, 8, 12, 16, 19],
-      prep: ls.map(l => l.spellcasting?.prepared_spells || 0), cant: ls.map(l => l.spellcasting?.cantrips_known || 0), f };
+      prep: ls.map(l => l.spellcasting?.prepared_spells || 0), cant: CANT_FIX[idx] || ls.map(l => l.spellcasting?.cantrips_known || 0), f };
+    if (!C[k].prep.some(Boolean)) delete C[k].prep;
+    if (!C[k].cant.some(Boolean)) delete C[k].cant;
     // Unterklassen: SRD wörtlich, übrige aus den Zusammenfassungen
     const out = {};
     subcls.filter(x => x.class?.index === idx).forEach(sc => {

@@ -47,6 +47,8 @@ function vSetupBody() {
    ${R && Object.keys(R.subs).length ? field(t('setup.subrace'), sel('subrace', [['', t('common.noneOpt')], ...named(Object.keys(R.subs))], S.subrace, t('setup.subrace'))) : ''}
    ${field(t('setup.class'), sel('klass', [['', t('common.choose')], ...named(Object.keys(CLASSES))], S.klass, t('setup.class')))}
    ${field(t('setup.subclass'), sel('sub', [['', C ? t('setup.subFrom', { n: C.subN, l: C.subL }) : t('common.choose')], ...(C ? C.subs : []).map(x => [x, x]), ...(S.sub && !(C && C.subs.includes(S.sub)) ? [[S.sub, S.sub]] : [])].map(([k, x]) => [esc(k), esc(x)]), esc(S.sub), t('setup.subclass')))}
+   ${['Cleric', 'Druid'].includes(S.klass) ? field(t('setup.order'), sel('order', [['', t('common.choose')], ...(S.klass === 'Cleric' ? ['Protector', 'Thaumaturge'] : ['Magician', 'Warden']).map(x => [x, x])], esc(S.order || ''), t('setup.order'))) : ''}
+   ${S.sub === 'Circle of the Land' ? field(t('setup.land'), sel('land', [['', t('common.choose')], ...['arid', 'polar', 'temperate', 'tropical'].map(x => [x, t('land.' + x)])], esc(S.land || ''), t('setup.land'))) : ''}
    ${field(t('setup.level'), numIn('level', S.level, t('setup.level'), 0, 20))}
    ${field(t('xp.title'), numIn('xp', S.xp || 0, t('xp.title'), 0, 999999))}
    ${vBgField()}

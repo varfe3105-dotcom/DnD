@@ -69,8 +69,8 @@ test.describe('Vorbereitete Zauber @new', () => {
     await expect(page.locator('.spprep')).toContainText('Prepared 1 of 9');
     await expect(page.locator('.sp', { hasText: 'Charm Person' }).locator('[data-a="prep"]')).toBeDisabled();
   });
-  test('Klassen ohne Vorbereiten sehen nichts davon', async ({ page }) => {
-    await seed(page, base4({ klass: 'Sorcerer', level: 3, slots: slots(4), spells: [spell('Sleep', 1, { prep: false })] }));
+  test('Klassen ohne Zauberwirken sehen nichts davon (Zauber aus anderer Quelle)', async ({ page }) => {
+    await seed(page, base4({ klass: 'Fighter', level: 3, slots: slots(4), spells: [spell('Sleep', 1, { prep: false })] }));
     await expect(page.locator('.spprep')).toHaveCount(0);
     await expect(page.locator('.sp', { hasText: 'Sleep' })).toBeVisible();
   });

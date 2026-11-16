@@ -11,7 +11,9 @@ const ARMOR = Object.fromEntries(items.filter(i => i.ac && !i.ac.shield).map(i =
 // Rüstungsübung als Startklasse und beim Multiclassing (L = leicht, M = mittel, H = schwer, S = Schild).
 const START = { Barbarian: 'LMS', Bard: 'L', Cleric: 'LMS', Druid: 'LMS', Fighter: 'LMHS', Monk: '', Paladin: 'LMHS', Ranger: 'LMS', Rogue: 'L', Sorcerer: '', Warlock: 'L', Wizard: '' };
 const MULTI = { Barbarian: 'S', Bard: 'L', Cleric: 'LMS', Druid: 'LMS', Fighter: 'LMS', Monk: '', Paladin: 'LMS', Ranger: 'LMS', Rogue: 'L', Sorcerer: '', Warlock: 'L', Wizard: '' };
-const SUB = { 'College of Valor': 'MS', 'Life Domain': 'H', 'Nature Domain': 'H', 'Tempest Domain': 'H', 'War Domain': 'H' };
+// Regeln 2024: schwere Rüstung für Kleriker nur über Divine Order (Protector), mittlere für Druiden über Primal Order (Warden)
+const SUB = { 'College of Valor': 'MS' };
+const ORDER = { Protector: 'H', Warden: 'M' };
 const FEAT = { 'Lightly Armored': 'L', 'Moderately Armored': 'MS', 'Heavily Armored': 'H' };
 const CAT = { Light: 'L', Medium: 'M', Heavy: 'H' };
 
@@ -21,6 +23,7 @@ function armorProfs() {
   (S.multi || []).forEach(m => { p += MULTI[m.k] || ''; });
   [S.sub, ...(S.multi || []).map(m => m.sub)].forEach(s => { p += SUB[s] || ''; });
   if (S.subrace === 'Mountain Dwarf') p += 'LM';
+  p += ORDER[S.order] || '';
   S.feats.forEach(f => { p += FEAT[f.n] || ''; });
   return p;
 }

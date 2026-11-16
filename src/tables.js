@@ -6,7 +6,9 @@ const THIRD={Fighter:'Eldritch Knight',Rogue:'Arcane Trickster'};
 export const castKind=(k,sub)=>{const C=CLASSES[k];if(!C)return '';if(C.cast==='full'||C.cast==='half')return C.cast;return THIRD[k]&&sub===THIRD[k]?'third':''};
 export function slotsFor(k,l,sub){const C=CLASSES[k];let a=[];if(C&&l>0){const c=castKind(k,sub);if(c==='full')a=FULL[l];else if(c==='half')a=FULL[l<2&&C.ed!==2024?0:Math.ceil(l/2)];else if(c==='third')a=FULL[l<3?0:Math.ceil(l/3)]}return Array.from({length:9},(_,i)=>a[i]||0)}
 export function pactFor(l){if(l<1)return [0,1];return [l>=17?4:l>=11?3:l>=2?2:1,Math.min(5,Math.ceil(l/2))]}
-export const cantripsFor=(k,l)=>CLASSES[k]?.cant?(l>0?CLASSES[k].cant[l-1]||0:0):CANT[k]!=null&&l>0?CANT[k]+(l>=4)+(l>=10):0;
+// Drittelzauberer 2024 (Eldritch Knight, Arcane Trickster): vorbereitete Zauber nach Klassenstufe
+const THIRD_PREP=[0,0,3,4,4,4,5,6,6,7,8,8,9,10,10,11,11,11,12,13];
+export const cantripsFor=(k,l,sub)=>{if(l<1)return 0;if(sub&&THIRD[k]===sub&&l>=3)return (k==='Rogue'?3:2)+(l>=10?1:0);const C=CLASSES[k];let n=C?.cant?C.cant[l-1]||0:CANT[k]!=null?CANT[k]+(l>=4)+(l>=10):0;if(n&&((k==='Cleric'&&S.order==='Thaumaturge')||(k==='Druid'&&S.order==='Magician')))n++;return n};
 // Regeln 2024: Barde und Waldläufer bereiten Zauber vor (feste Zahl), es gibt für sie keine „bekannten“ Zauber mehr
 export const knownFor=(k,l)=>CLASSES[k]?.ed===2024?null:KNOWN[k]&&l>0?KNOWN[k][l-1]:null;
 
@@ -23,16 +25,17 @@ export const mcMet=k=>{const r=MULTICLASS[k]?.req||{};const {any,...all}=r;retur
 
 const PREP = { Cleric: 'wis', Druid: 'wis', Wizard: 'int', Paladin: 'cha' };
 /** Vorbereitete Zauber einer Klasse auf einer Stufe: 2024 laut Tabelle, sonst Attribut + Stufe (PHB 2014). null = bereitet nicht vor. */
-export function prepFor(k, l) {
+export function prepFor(k, l, sub) {
   const C = CLASSES[k];
   if (!C || l < 1) return null;
+  if (sub && THIRD[k] === sub) return l >= 3 ? THIRD_PREP[l - 1] : null;
   if (C.prep) return C.prep[l - 1] || null;
   if (!PREP[k] || (k === 'Paladin' && l < 2)) return null;
   return Math.max(1, Math.floor((S.abil[PREP[k]] - 10) / 2) + (k === 'Paladin' ? Math.floor(l / 2) : l));
 }
 /** Wie viele Zauber vorbereitet werden dürfen; null, wenn keine Klasse vorbereitet. */
 export function prepCap() {
-  const list = classLevels().map(c => prepFor(c.k, c.lvl)).filter(n => n != null);
+  const list = classLevels().map(c => prepFor(c.k, c.lvl, c.sub)).filter(n => n != null);
   return list.length ? list.reduce((a, n) => a + n, 0) : null;
 }
 /** Zauber-SG und Angriffsbonus je Zauberklasse. */

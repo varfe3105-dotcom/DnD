@@ -1,0 +1,150 @@
+{
+  "Barbarian": {
+    "Path of the Wild Heart": {
+      "3": [
+        { "n": "Animal Speaker", "en": "You can cast Beast Sense and Speak with Animals, but only as Rituals. Wisdom is your spellcasting ability for them.", "de": "Du kannst Beast Sense und Speak with Animals wirken, aber nur als Ritual. Zauberattribut ist Weisheit." },
+        { "n": "Rage of the Wilds", "en": "Whenever you activate your Rage, choose one option for its duration. Bear: Resistance to every damage type except Force, Necrotic, Psychic and Radiant. Eagle: when you activate the Rage you can take the Dash and Disengage actions as part of that Bonus Action, and while raging you can take a Bonus Action to take both. Wolf: your allies have Advantage on attack rolls against any enemy of yours within 5 feet of you.", "de": "Bei jedem Kampfrausch wählst du eine Option für seine Dauer. Bär: Resistenz gegen jede Schadensart außer Energie, nekrotisch, psychisch und gleißend. Adler: Beim Start kannst du als Teil der Bonusaktion Spurten und Rückzug nutzen, im Kampfrausch beides als Bonusaktion. Wolf: Deine Verbündeten haben Vorteil auf Angriffe gegen Feinde in 1,5 m von dir." }
+      ],
+      "6": [
+        { "n": "Aspect of the Wilds", "en": "Choose one option (you can change it after a Long Rest). Owl: Darkvision 60 feet, or +60 feet if you have it. Panther: Climb Speed equal to your Speed. Salmon: Swim Speed equal to your Speed.", "de": "Wähle eine Option (nach einer langen Rast wechselbar). Eule: Dunkelsicht 18 m oder 18 m mehr. Panther: Klettertempo in Höhe deines Tempos. Lachs: Schwimmtempo in Höhe deines Tempos." }
+      ],
+      "10": [
+        { "n": "Nature Speaker", "en": "You can cast Commune with Nature, but only as a Ritual. Wisdom is your spellcasting ability for it.", "de": "Du kannst Commune with Nature wirken, aber nur als Ritual. Zauberattribut ist Weisheit." }
+      ],
+      "14": [
+        { "n": "Power of the Wilds", "en": "Whenever you activate your Rage, choose one option for its duration. Falcon: a Fly Speed equal to your Speed while you wear no armor. Lion: enemies within 5 feet of you have Disadvantage on attack rolls against targets other than you or another Barbarian with this option. Ram: when you hit a Large or smaller creature with a melee attack, you can give it the Prone condition.", "de": "Bei jedem Kampfrausch wählst du eine Option für seine Dauer. Falke: Flugtempo in Höhe deines Tempos, solange du keine Rüstung trägst. Löwe: Feinde in 1,5 m haben Nachteil auf Angriffe gegen andere Ziele als dich (oder einen anderen Barbaren mit dieser Option). Widder: Triffst du eine höchstens große Kreatur im Nahkampf, kannst du sie Prone machen." }
+      ]
+    },
+    "Path of the World Tree": {
+      "3": [
+        { "n": "Vitality of the Tree", "en": "When you activate your Rage you gain Temporary Hit Points equal to your Barbarian level. At the start of each of your turns while raging, you can choose another creature within 10 feet; it gains Temporary Hit Points equal to a number of d6s equal to your Rage Damage bonus.", "de": "Beim Start des Kampfrauschs erhältst du temporäre TP in Höhe deiner Barbarenstufe. Zu Beginn jedes deiner Züge im Kampfrausch kannst du einer anderen Kreatur in 3 m so viele W6 temporäre TP geben, wie dein Kampfrausch-Schadensbonus beträgt." }
+      ],
+      "6": [
+        { "n": "Branches of the Tree", "en": "While raging, when a creature you can see starts its turn within 30 feet of you, you can take a Reaction: it makes a Strength saving throw (DC 8 + Strength modifier + Proficiency Bonus) or is teleported to an unoccupied space within 5 feet of you (or the nearest one), and you can reduce its Speed to 0 until the end of the current turn.", "de": "Beginnt im Kampfrausch eine Kreatur, die du siehst, ihren Zug in 9 m, kannst du als Reaktion: Stärkerettungswurf (SG 8 + Stärkemodifikator + Übungsbonus) oder sie wird in ein freies Feld in 1,5 m von dir teleportiert, und du kannst ihr Tempo bis zum Ende des Zuges auf 0 senken." }
+      ],
+      "10": [
+        { "n": "Battering Roots", "en": "On your turn your reach is 10 feet greater with Melee weapons that have the Heavy or Versatile property. When you hit with such a weapon on your turn, you can activate the Push or Topple mastery property in addition to another mastery property you use with it.", "de": "In deinem Zug ist deine Reichweite mit schweren oder vielseitigen Nahkampfwaffen 3 m größer. Triffst du damit in deinem Zug, kannst du zusätzlich zu einer anderen Meisterschaft Push oder Topple auslösen." }
+      ],
+      "14": [
+        { "n": "Travel along the Tree", "en": "When you activate your Rage, and as a Bonus Action while raging, you can teleport up to 60 feet to an unoccupied space you can see. Once per Rage you can instead teleport up to 150 feet and bring up to six willing creatures within 10 feet of you, who arrive within 10 feet of your destination.", "de": "Beim Start des Kampfrauschs und als Bonusaktion darin teleportierst du dich bis 18 m in ein freies Feld, das du siehst. Einmal pro Kampfrausch geht es stattdessen bis 45 m, und bis zu sechs bereitwillige Kreaturen in 3 m kommen mit und landen in 3 m von deinem Ziel." }
+      ]
+    },
+    "Path of the Zealot": {
+      "3": [
+        { "n": "Divine Fury", "en": "On each of your turns while raging, the first creature you hit with a weapon or an Unarmed Strike takes extra damage equal to 1d6 plus half your Barbarian level (round down), Necrotic or Radiant (your choice).", "de": "In jedem deiner Züge im Kampfrausch erleidet die erste Kreatur, die du mit einer Waffe oder waffenlos triffst, zusätzlich 1W6 + halbe Barbarenstufe (abgerundet) nekrotischen oder gleißenden Schaden (deine Wahl)." },
+        { "n": "Warrior of the Gods", "en": "You have a pool of four d12s for healing (five at level 6, six at 12, seven at 17), regained on a Long Rest. As a Bonus Action, expend any number of them, roll and regain that many Hit Points.", "de": "Du hast einen Vorrat von vier W12 zum Heilen (fünf ab Stufe 6, sechs ab 12, sieben ab 17), zurück nach einer langen Rast. Als Bonusaktion gibst du beliebig viele aus, würfelst und heilst so viele TP." }
+      ],
+      "6": [
+        { "n": "Fanatical Focus", "en": "Once per active Rage, if you fail a saving throw, you can reroll it with a bonus equal to your Rage Damage bonus and must use the new roll.", "de": "Einmal pro Kampfrausch kannst du einen gescheiterten Rettungswurf mit einem Bonus in Höhe deines Kampfrausch-Schadensbonus wiederholen (neues Ergebnis gilt)." }
+      ],
+      "10": [
+        { "n": "Zealous Presence", "en": "As a Bonus Action, up to ten other creatures of your choice within 60 feet gain Advantage on attack rolls and saving throws until the start of your next turn. Once per Long Rest, or again by expending a use of Rage (no action).", "de": "Als Bonusaktion haben bis zu zehn andere Kreaturen deiner Wahl in 18 m bis zum Beginn deines nächsten Zuges Vorteil auf Angriffe und Rettungswürfe. Einmal pro langer Rast, weitere Male für eine Anwendung Kampfrausch (keine Aktion)." }
+      ],
+      "14": [
+        { "n": "Rage of the Gods", "en": "When you activate your Rage you can take on a divine form for 1 minute or until you drop to 0 Hit Points: a Fly Speed equal to your Speed and you can hover; Resistance to Necrotic, Psychic and Radiant damage; and when a creature within 30 feet would drop to 0 Hit Points, you can take a Reaction and expend a use of Rage to set its Hit Points to your Barbarian level instead. Once per Long Rest, or again by expending a use of Rage (no action).", "de": "Beim Start des Kampfrauschs nimmst du 1 Minute lang (oder bis du auf 0 TP fällst) göttliche Gestalt an: Flugtempo in Höhe deines Tempos und Schweben; Resistenz gegen nekrotischen, psychischen und gleißenden Schaden; fällt eine Kreatur in 9 m auf 0 TP, kannst du als Reaktion eine Anwendung Kampfrausch ausgeben, und sie hat stattdessen TP in Höhe deiner Barbarenstufe. Einmal pro langer Rast, weitere Male für eine Anwendung Kampfrausch." }
+      ]
+    }
+  },
+  "Druid": {
+    "Circle of the Moon": {
+      "3": [
+        { "n": "Circle Forms", "en": "Your Wild Shape forms can have a Challenge Rating up to your Druid level divided by 3 (round down, minimum 1). In a Wild Shape form your AC is 13 + your Wisdom modifier if that is higher than the Beast's, and you gain Temporary Hit Points equal to three times your Druid level.", "de": "Deine Tiergestalten dürfen einen HG bis Druidenstufe/3 haben (abgerundet, mindestens 1). In Tiergestalt ist deine RK 13 + Weisheitsmodifikator, wenn das höher ist, und du erhältst temporäre TP in Höhe der dreifachen Druidenstufe." },
+        { "n": "Circle of the Moon Spells", "en": "Always prepared: level 3 Cure Wounds, Moonbeam, Starry Wisp; level 5 Conjure Animals; level 7 Fount of Moonlight; level 9 Mass Cure Wounds. You can cast them while in a Wild Shape form.", "de": "Immer vorbereitet: Stufe 3 Cure Wounds, Moonbeam, Starry Wisp; Stufe 5 Conjure Animals; Stufe 7 Fount of Moonlight; Stufe 9 Mass Cure Wounds. Diese Zauber kannst du auch in Tiergestalt wirken." }
+      ],
+      "6": [
+        { "n": "Improved Circle Forms", "en": "Lunar Radiance: your attacks in Wild Shape can deal Radiant damage instead of their normal type. Increased Toughness: you add your Wisdom modifier to your Constitution saving throws.", "de": "Lunar Radiance: Angriffe in Tiergestalt dürfen gleißenden Schaden statt ihrer normalen Art machen. Increased Toughness: Du addierst deinen Weisheitsmodifikator zu Konstitutionsrettungswürfen." }
+      ],
+      "10": [
+        { "n": "Moonlight Step", "en": "As a Bonus Action you teleport up to 30 feet to an unoccupied space you can see and have Advantage on the next attack roll you make before the end of this turn. Uses equal to your Wisdom modifier (minimum 1), regained on a Long Rest; you can also regain one by expending a spell slot of level 2 or higher.", "de": "Als Bonusaktion teleportierst du dich bis 9 m in ein freies Feld, das du siehst, und hast Vorteil auf deinen nächsten Angriff in diesem Zug. Anwendungen: Weisheitsmodifikator (mindestens 1), zurück nach einer langen Rast; eine weitere für einen Zauberplatz ab Grad 2." }
+      ],
+      "14": [
+        { "n": "Lunar Form", "en": "Improved Lunar Radiance: once per turn, an attack in Wild Shape that hits deals an extra 2d10 Radiant damage. Shared Moonlight: when you use Moonlight Step you can bring one willing creature within 10 feet, who arrives within 10 feet of your destination.", "de": "Improved Lunar Radiance: Einmal pro Zug macht ein Treffer in Tiergestalt zusätzlich 2W10 gleißenden Schaden. Shared Moonlight: Bei Moonlight Step kannst du eine bereitwillige Kreatur in 3 m mitnehmen; sie landet in 3 m von deinem Ziel." }
+      ]
+    },
+    "Circle of the Sea": {
+      "3": [
+        { "n": "Circle of the Sea Spells", "en": "Always prepared: level 3 Fog Cloud, Gust of Wind, Ray of Frost, Shatter, Thunderwave; level 5 Lightning Bolt, Water Breathing; level 7 Control Water, Ice Storm; level 9 Conjure Elemental, Hold Monster.", "de": "Immer vorbereitet: Stufe 3 Fog Cloud, Gust of Wind, Ray of Frost, Shatter, Thunderwave; Stufe 5 Lightning Bolt, Water Breathing; Stufe 7 Control Water, Ice Storm; Stufe 9 Conjure Elemental, Hold Monster." },
+        { "n": "Wrath of the Sea", "en": "As a Bonus Action, expend a use of Wild Shape to manifest a 5-foot Emanation of ocean spray for 10 minutes (it ends early if you dismiss it, use it again or are Incapacitated). When you manifest it and as a Bonus Action on later turns, one creature in it makes a Constitution saving throw or takes Cold damage equal to a number of d6s equal to your Wisdom modifier (minimum one) and, if Large or smaller, is pushed up to 15 feet away from you.", "de": "Als Bonusaktion gibst du eine Anwendung Wild Shape aus und erzeugst für 10 Minuten eine Emanation von 1,5 m aus Gischt (endet früher, wenn du sie beendest, erneut nutzt oder Incapacitated bist). Beim Erzeugen und als Bonusaktion in späteren Zügen macht eine Kreatur darin einen Konstitutionsrettungswurf oder erleidet so viele W6 Kälteschaden wie dein Weisheitsmodifikator (mindestens einen) und wird, wenn höchstens groß, bis 4,5 m weggestoßen." }
+      ],
+      "6": [
+        { "n": "Aquatic Affinity", "en": "The Emanation of Wrath of the Sea becomes 10 feet, and you gain a Swim Speed equal to your Speed.", "de": "Die Emanation von Wrath of the Sea wird 3 m groß, und du erhältst ein Schwimmtempo in Höhe deines Tempos." }
+      ],
+      "10": [
+        { "n": "Stormborn", "en": "While Wrath of the Sea is active you have a Fly Speed equal to your Speed and Resistance to Cold, Lightning and Thunder damage.", "de": "Solange Wrath of the Sea wirkt, hast du ein Flugtempo in Höhe deines Tempos und Resistenz gegen Kälte-, Blitz- und Schallschaden." }
+      ],
+      "14": [
+        { "n": "Oceanic Gift", "en": "You can manifest the Emanation of Wrath of the Sea around a willing creature within 60 feet instead of yourself; it gains the benefits and uses your save DC and Wisdom modifier. Alternatively, expend two uses of Wild Shape to manifest it around both of you.", "de": "Du kannst die Emanation von Wrath of the Sea um eine bereitwillige Kreatur in 18 m statt um dich erzeugen; sie erhält die Vorteile, es gelten dein SG und dein Weisheitsmodifikator. Für zwei Anwendungen Wild Shape um euch beide." }
+      ]
+    },
+    "Circle of the Stars": {
+      "3": [
+        { "n": "Star Map", "en": "You have a star chart as your Spellcasting Focus. You always have Guidance and Guiding Bolt prepared, and you can cast Guiding Bolt without a spell slot a number of times equal to your Wisdom modifier (minimum once), regained on a Long Rest.", "de": "Eine Sternenkarte dient dir als Zauberfokus. Guidance und Guiding Bolt sind immer vorbereitet; Guiding Bolt wirkst du so oft wie dein Weisheitsmodifikator (mindestens einmal) ohne Zauberplatz, zurück nach einer langen Rast." },
+        { "n": "Starry Form", "en": "As a Bonus Action, expend a use of Wild Shape to take a starry form for 10 minutes instead of shape-shifting (Bright Light 10 feet, Dim Light 10 feet beyond). Choose a constellation. Archer: when you take the form and as a Bonus Action on later turns, make a ranged spell attack against a creature within 60 feet for 1d8 + Wisdom modifier Radiant damage. Chalice: when you cast a spell with a spell slot that restores Hit Points, you or another creature within 30 feet regains 1d8 + Wisdom modifier Hit Points. Dragon: when you make an Intelligence or Wisdom check or a Constitution save to keep Concentration, a d20 roll of 9 or lower counts as 10.", "de": "Als Bonusaktion gibst du eine Anwendung Wild Shape aus und nimmst statt einer Tiergestalt 10 Minuten lang Sternengestalt an (helles Licht 3 m, 3 m weiter schwach). Wähle ein Sternbild. Bogenschütze: Beim Annehmen und als Bonusaktion in späteren Zügen ein Fernkampf-Zauberangriff gegen eine Kreatur in 18 m für 1W8 + Weisheitsmodifikator gleißenden Schaden. Kelch: Heilst du mit einem Zauberplatz, erhält du oder eine Kreatur in 9 m zusätzlich 1W8 + Weisheitsmodifikator TP. Drache: Bei Intelligenz- oder Weisheitswürfen und Konstitutionsrettungswürfen für Konzentration zählt eine 9 oder weniger als 10." }
+      ],
+      "6": [
+        { "n": "Cosmic Omen", "en": "After each Long Rest, roll a die: even means Weal, odd means Woe. When a creature you can see within 30 feet makes a D20 Test, you can take a Reaction to add 1d6 (Weal) or subtract 1d6 (Woe). Uses equal to your Wisdom modifier (minimum 1), regained on a Long Rest.", "de": "Nach jeder langen Rast wirfst du einen Würfel: gerade = Heil, ungerade = Unheil. Macht eine Kreatur in 9 m, die du siehst, einen W20-Test, kannst du als Reaktion 1W6 addieren (Heil) oder abziehen (Unheil). Anwendungen: Weisheitsmodifikator (mindestens 1), zurück nach einer langen Rast." }
+      ],
+      "10": [
+        { "n": "Twinkling Constellations", "en": "Archer and Chalice now use 2d8. While the Dragon is active you have a Fly Speed of 20 feet and can hover. At the start of each of your turns in Starry Form you can change the constellation.", "de": "Bogenschütze und Kelch nutzen jetzt 2W8. Mit dem Drachen hast du ein Flugtempo von 6 m und kannst schweben. Zu Beginn jedes deiner Züge in Sternengestalt darfst du das Sternbild wechseln." }
+      ],
+      "14": [
+        { "n": "Full of Stars", "en": "While in Starry Form you have Resistance to Bludgeoning, Piercing and Slashing damage.", "de": "In Sternengestalt hast du Resistenz gegen Wucht-, Stich- und Hiebschaden." }
+      ]
+    }
+  },
+  "Fighter": {
+    "Battle Master": {
+      "3": [
+        { "n": "Combat Superiority", "en": "You learn three maneuvers (Ambush, Bait and Switch, Commander's Strike, Commanding Presence, Disarming Attack, Distracting Strike, Evasive Footwork, Feinting Attack, Goading Attack, Lunging Attack, Maneuvering Attack, Menacing Attack, Parry, Precision Attack, Pushing Attack, Rally, Riposte, Sweeping Attack, Tactical Assessment, Trip Attack) and have four Superiority Dice (d8), regained on a Short or Long Rest; one die per maneuver. Save DC 8 + Strength or Dexterity modifier + Proficiency Bonus. More maneuvers: two at levels 7, 10 and 15. More dice: five at level 7, six at 15. Die size: d10 at level 10, d12 at 18.", "de": "Du lernst drei Manöver (z. B. Ambush, Commander's Strike, Disarming Attack, Distracting Strike, Evasive Footwork, Feinting Attack, Goading Attack, Lunging Attack, Maneuvering Attack, Menacing Attack, Parry, Precision Attack, Pushing Attack, Rally, Riposte, Sweeping Attack, Tactical Assessment, Trip Attack) und hast vier Überlegenheitswürfel (W8), zurück nach einer kurzen oder langen Rast; ein Würfel je Manöver. SG 8 + Stärke- oder Geschicklichkeitsmodifikator + Übungsbonus. Je zwei weitere Manöver auf den Stufen 7, 10 und 15. Fünf Würfel ab Stufe 7, sechs ab 15. W10 ab Stufe 10, W12 ab 18." },
+        { "n": "Student of War", "en": "You gain proficiency with one Artisan's Tool of your choice and in one skill from the Fighter's skill list.", "de": "Übung mit einem Handwerkszeug deiner Wahl und in einer Fertigkeit aus der Kämpferliste." }
+      ],
+      "7": [
+        { "n": "Know Your Enemy", "en": "As a Bonus Action, you learn whether a creature you can see within 30 feet has any Immunities, Resistances or Vulnerabilities, and what they are. Once per Long Rest, or again by expending a Superiority Die.", "de": "Als Bonusaktion erfährst du, ob eine Kreatur in 9 m, die du siehst, Immunitäten, Resistenzen oder Anfälligkeiten hat und welche. Einmal pro langer Rast, weitere Male für einen Überlegenheitswürfel." }
+      ],
+      "10": [
+        { "n": "Improved Combat Superiority", "en": "Your Superiority Die becomes a d10.", "de": "Dein Überlegenheitswürfel wird W10." }
+      ],
+      "15": [
+        { "n": "Relentless", "en": "Once per turn, when you use a maneuver, you can roll 1d8 and use it instead of expending a Superiority Die.", "de": "Einmal pro Zug kannst du bei einem Manöver 1W8 werfen und nutzen, statt einen Überlegenheitswürfel auszugeben." }
+      ],
+      "18": [
+        { "n": "Ultimate Combat Superiority", "en": "Your Superiority Die becomes a d12.", "de": "Dein Überlegenheitswürfel wird W12." }
+      ]
+    },
+    "Eldritch Knight": {
+      "3": [
+        { "n": "Spellcasting", "en": "You cast Wizard spells with Intelligence (save DC 8 + Intelligence modifier + Proficiency Bonus). Cantrips: two (three at level 10). Prepared spells by Fighter level: 3 at 3, 4 at 4, 5 at 7, 6 at 8, 7 at 10, 8 at 11, 9 at 13, 10 at 14, 11 at 16, 12 at 19, 13 at 20; spell slots as a one-third caster. When you gain a Fighter level you can replace one prepared spell.", "de": "Du wirkst Magierzauber mit Intelligenz (Zauber-SG 8 + Intelligenzmodifikator + Übungsbonus). Zaubertricks: zwei (drei ab Stufe 10). Vorbereitete Zauber nach Kämpferstufe: 3 auf Stufe 3, 4 auf 4, 5 auf 7, 6 auf 8, 7 auf 10, 8 auf 11, 9 auf 13, 10 auf 14, 11 auf 16, 12 auf 19, 13 auf 20; Zauberplätze als Drittelzauberer. Beim Aufstieg darfst du einen vorbereiteten Zauber tauschen." },
+        { "n": "War Bond", "en": "Through a 1-hour ritual you bond with a weapon (up to two at a time). You can't be disarmed of it unless Incapacitated, and as a Bonus Action you can summon it to your hand from the same plane.", "de": "In einem einstündigen Ritual bindest du eine Waffe an dich (höchstens zwei zugleich). Man kann sie dir nicht entwaffnen, solange du nicht Incapacitated bist, und als Bonusaktion rufst du sie von derselben Ebene in deine Hand." }
+      ],
+      "7": [
+        { "n": "War Magic", "en": "When you take the Attack action, you can replace one of the attacks with casting one of your Wizard cantrips that has a casting time of an action.", "de": "Bei der Angriffsaktion kannst du einen Angriff durch einen deiner Magier-Zaubertricks mit 1 Aktion Zeitaufwand ersetzen." }
+      ],
+      "10": [
+        { "n": "Eldritch Strike", "en": "When you hit a creature with a weapon, it has Disadvantage on the next saving throw it makes against a spell you cast before the end of your next turn.", "de": "Triffst du eine Kreatur mit einer Waffe, hat sie Nachteil auf den nächsten Rettungswurf gegen einen Zauber von dir bis zum Ende deines nächsten Zuges." }
+      ],
+      "15": [
+        { "n": "Arcane Charge", "en": "When you use Action Surge, you can teleport up to 30 feet to an unoccupied space you can see, before or after the additional action.", "de": "Bei Action Surge kannst du dich vor oder nach der zusätzlichen Aktion bis 9 m in ein freies Feld teleportieren, das du siehst." }
+      ],
+      "18": [
+        { "n": "Improved War Magic", "en": "When you take the Attack action, you can replace two of the attacks with casting one of your level 1 or level 2 Wizard spells that has a casting time of an action.", "de": "Bei der Angriffsaktion kannst du zwei Angriffe durch einen deiner Magierzauber des 1. oder 2. Grades mit 1 Aktion Zeitaufwand ersetzen." }
+      ]
+    },
+    "Psi Warrior": {
+      "3": [
+        { "n": "Psionic Power", "en": "You have Psionic Energy Dice: four d6 (six d8 at level 5, eight d8 at 9, eight d10 at 11, ten d10 at 13, twelve d12 at 17). One returns on a Short Rest, all on a Long Rest. Protective Field: when you or a creature within 30 feet takes damage, take a Reaction and expend a die to reduce the damage by the roll + Intelligence modifier (minimum 1). Psionic Strike: once per turn, right after you hit a target within 30 feet with an attack, expend a die to deal extra Force damage equal to the roll + Intelligence modifier. Telekinetic Movement: as a Magic action, move a Large or smaller loose object or willing creature within 30 feet up to 30 feet; once per Short or Long Rest, or again by expending a die.", "de": "Psionische Energiewürfel: vier W6 (sechs W8 ab Stufe 5, acht W8 ab 9, acht W10 ab 11, zehn W10 ab 13, zwölf W12 ab 17). Einer kommt nach einer kurzen Rast zurück, alle nach einer langen. Protective Field: Nimmst du oder eine Kreatur in 9 m Schaden, gibst du als Reaktion einen Würfel aus und senkst den Schaden um Wurf + Intelligenzmodifikator (mindestens 1). Psionic Strike: Einmal pro Zug direkt nach einem Treffer gegen ein Ziel in 9 m einen Würfel ausgeben: zusätzlich Wurf + Intelligenzmodifikator Energieschaden. Telekinetic Movement: Magie-Aktion, bewegt einen höchstens großen losen Gegenstand oder eine bereitwillige Kreatur in 9 m bis 9 m weit; einmal pro kurzer oder langer Rast, weitere Male für einen Würfel." }
+      ],
+      "7": [
+        { "n": "Telekinetic Adept", "en": "Psi-Powered Leap: as a Bonus Action you gain a Fly Speed equal to twice your Speed until the end of the turn; once per Short or Long Rest, or again by expending a die. Telekinetic Thrust: when you deal Psionic Strike damage, the target makes a Strength saving throw (DC 8 + Intelligence modifier + Proficiency Bonus) or has the Prone condition or is pushed up to 10 feet away (your choice).", "de": "Psi-Powered Leap: Als Bonusaktion bis Zugende Flugtempo in Höhe deines doppelten Tempos; einmal pro kurzer oder langer Rast, weitere Male für einen Würfel. Telekinetic Thrust: Bei Psionic Strike macht das Ziel einen Stärkerettungswurf (SG 8 + Intelligenzmodifikator + Übungsbonus), sonst ist es Prone oder wird bis 3 m weggestoßen (deine Wahl)." }
+      ],
+      "10": [
+        { "n": "Guarded Mind", "en": "You have Resistance to Psychic damage. If you start your turn Charmed or Frightened, you can expend a Psionic Energy Die to end every effect on you causing those conditions.", "de": "Resistenz gegen psychischen Schaden. Beginnst du deinen Zug Charmed oder Frightened, kannst du einen Energiewürfel ausgeben und alle Wirkungen beenden, die das verursachen." }
+      ],
+      "15": [
+        { "n": "Bulwark of Force", "en": "As a Bonus Action, choose up to your Intelligence modifier (minimum 1) creatures within 30 feet, which can include you: each has Half Cover for 1 minute or until you are Incapacitated. Once per Long Rest, or again by expending a die.", "de": "Als Bonusaktion wählst du bis zu Intelligenzmodifikator (mindestens 1) Kreaturen in 9 m, auch dich: Jede hat 1 Minute lang (oder bis du Incapacitated bist) halbe Deckung. Einmal pro langer Rast, weitere Male für einen Würfel." }
+      ],
+      "18": [
+        { "n": "Telekinetic Master", "en": "You always have Telekinesis prepared and can cast it without a spell slot or components (Intelligence as spellcasting ability), once per Long Rest or again by expending a die. While concentrating on it, you can make one weapon attack as a Bonus Action.", "de": "Telekinesis ist immer vorbereitet; du wirkst ihn ohne Zauberplatz und Komponenten mit Intelligenz, einmal pro langer Rast, weitere Male für einen Würfel. Solange du dich darauf konzentrierst, kannst du als Bonusaktion einen Waffenangriff machen." }
+      ]
+    }
+  }
+}

@@ -88,10 +88,12 @@ test.describe('Stufenaufstieg 1 bis 5', () => {
 test.describe('Unterklassen und Talente @new', () => {
   test('Unterklassen-Merkmale werden automatisch eingetragen', async ({ page }) => {
     await seed(page, start('Wizard'));
-    for (let l = 1; l <= 2; l++) await levelUp(page, 'School of Evocation');
+    // 2024: Unterklasse auf Stufe 3
+    for (let l = 1; l <= 3; l++) await levelUp(page, 'Evoker');
     const s = await read(page);
-    expect(s.feats.map(f => f.n)).toEqual(expect.arrayContaining(['Evocation Savant', 'Sculpt Spells']));
-    expect(s.feats.find(f => f.n === 'Sculpt Spells').src).toBe('Unterklasse');
+    expect(s.sub).toBe('Evoker');
+    expect(s.feats.map(f => f.n)).toEqual(expect.arrayContaining(['Evocation Savant', 'Potent Cantrip']));
+    expect(s.feats.find(f => f.n === 'Potent Cantrip').src).toBe('Unterklasse');
     expect(s.feats.some(f => /neues Merkmal|new feature/.test(f.n))).toBe(false);
   });
 
@@ -160,10 +162,10 @@ test.describe('Unterklassen und Talente @new', () => {
 
   test('Merkmalstexte folgen der Sprache', async ({ page }) => {
     await seed(page, start('Wizard'));
-    for (let l = 1; l <= 2; l++) await levelUp(page, 'School of Evocation');
+    for (let l = 1; l <= 3; l++) await levelUp(page, 'Evoker');
     await page.locator('[data-a="lang"][data-l="de"]').click();
-    await page.locator('.feat', { hasText: 'Sculpt Spells' }).locator('summary').click();
-    await expect(page.locator('.feat', { hasText: 'Sculpt Spells' })).toContainText('relativer Sicherheit');
+    await page.locator('.feat', { hasText: 'Potent Cantrip' }).locator('summary').click();
+    await expect(page.locator('.feat', { hasText: 'Potent Cantrip' })).toContainText('halben Schaden');
   });
 
   test('Talente im Wiki mit Voraussetzung', async ({ page }) => {

@@ -7,7 +7,7 @@ import { numIn, txtIn, get, itemView } from '../helpers.js';
 import { classLevels } from '../tables.js';
 import { BYN, OPTIONS } from '../catalog.js';
 import { searchMonsters } from '../dm.js';
-import { chargeOf, chargeRefs, petView } from '../companions.js';
+import { chargeOf, chargeRefs, petView, isPrimalRanger, PRIMAL_KINDS, primalText } from '../companions.js';
 import { BACKGROUNDS, TOOL_CHOICES, bgById, bgFeatName, featByName } from '../backgrounds.js';
 import { abName } from '../helpers.js';
 import { t, loc, dice, dist, nameLine, lang } from '../i18n/index.js';
@@ -51,7 +51,7 @@ export function vPets() {
     const p = petView(raw);
     return `<div class="row wrow${p.hp === 0 ? ' petdown' : ''}"><div class="ic">${tok('leaf')}</div><div class="nm">${esc(p.n)}<small>${t('dm.acShort')} ${p.ac}${p.speed ? ' · ' + esc(speedText(p.speed)) : ''}${p.hp === 0 ? ' · ' + t('pet.down') : ''}</small></div><div class="qty"><button data-a="pethp" data-i="${i}" data-d="-1" aria-label="${t('hp.minusOne')}">−</button><span class="pethp"><b>${p.hp}</b>/${p.hpMax}</span><button data-a="pethp" data-i="${i}" data-d="1" aria-label="${t('common.more')}">+</button></div></div>
     ${p.attacks.map(a => `<div class="petatk"><span>${esc(a.n)}</span><b>+${a.hit}</b><b>${esc(dice(a.dmg))}</b><small>${esc(typeText(a.type))}</small></div>`).join('')}
-    ${p.text ? `<details class="feat"><summary><span>${t('pet.details')}</span></summary><div class="pettext stat">${statText(p.text)}</div><p class="note">${p.source === 'own' ? t('src.own') : srcNote(p.source) && t('dm.srcMonster')}</p></details>` : ''}`;
+    ${p.primal ? `<details class="feat"><summary><span>${t('pet.details')}</span></summary><p class="ptext">${esc(loc(primalText(p)))}</p><p class="note">${t('pet.primalNote')}</p></details>` : ''}${p.text ? `<details class="feat"><summary><span>${t('pet.details')}</span></summary><div class="pettext stat">${statText(p.text)}</div><p class="note">${p.source === 'own' ? t('src.own') : srcNote(p.source) && t('dm.srcMonster')}</p></details>` : ''}`;
   }).join('')}</div>`;
 }
 
@@ -65,7 +65,8 @@ export function vPetResults() {
 
 export function vPetSetup() {
   const beast = /beast/i.test(S.sub || '');
-  return `<h2>${t('pet.title')}</h2><div class="card">${S.pets.map((p, i) => `<div class="edrow">${txtIn(`pets.${i}.n`, p.n, t('common.name'))}${numIn(`pets.${i}.ac`, p.ac, t('stat.ac'), 0, 40)}${numIn(`pets.${i}.hpMax`, p.hpMax, t('setup.maxHp'), 1, 999)}<button class="del" data-a="del" data-k="pets" data-i="${i}" aria-label="${esc(p.n)} ${t('common.delete')}">✕</button>${beast || p.bm ? `<label class="ck wide"><input type="checkbox" data-petbm="${i}"${p.bm ? ' checked' : ''}> ${t('pet.bm')}</label>` : ''}</div>`).join('') || `<div class="empty">${t('pet.empty')}</div>`}
+  const primal = isPrimalRanger() && !S.pets.some(p => p.primal) ? `<div class="add"><span class="lbl">${t('pet.primal')}</span>${PRIMAL_KINDS.map(k => `<button class="btn sm solid" data-a="petprimal" data-k="${k}">${t('pet.primal.' + k)}</button>`).join('')}</div>` : '';
+  return `<h2>${t('pet.title')}</h2><div class="card">${primal}${S.pets.map((p, i) => `<div class="edrow">${txtIn(`pets.${i}.n`, p.n, t('common.name'))}${numIn(`pets.${i}.ac`, p.ac, t('stat.ac'), 0, 40)}${numIn(`pets.${i}.hpMax`, p.hpMax, t('setup.maxHp'), 1, 999)}<button class="del" data-a="del" data-k="pets" data-i="${i}" aria-label="${esc(p.n)} ${t('common.delete')}">✕</button>${beast || p.bm ? `<label class="ck wide"><input type="checkbox" data-petbm="${i}"${p.bm ? ' checked' : ''}> ${t('pet.bm')}</label>` : ''}</div>`).join('') || `<div class="empty">${t('pet.empty')}</div>`}
   <div class="add"><input type="search" id="pet-q" value="${esc(U.petQ)}" placeholder="${t('pet.search')}" aria-label="${t('pet.search')}"></div><div id="pet-res">${vPetResults()}</div>
   <details><summary>${t('pet.own')}</summary><div class="add"><input type="text" id="pet-n" placeholder="${t('common.name')}" aria-label="${t('common.name')}"><input type="number" class="n" id="pet-ac" min="0" placeholder="${t('dm.acShort')}" aria-label="${t('stat.ac')}"><input type="number" class="n" id="pet-hp" min="1" placeholder="${t('head.hpShort')}" aria-label="${t('setup.maxHp')}"><input type="text" id="pet-sp" placeholder="${t('stat.speed')}" aria-label="${t('stat.speed')}"></div><textarea id="pet-t" rows="3" placeholder="${t('pet.ownText')}" aria-label="${t('pet.ownText')}"></textarea><div class="add"><button class="btn solid" data-a="petown">${t('common.create')}</button></div></details></div>`;
 }

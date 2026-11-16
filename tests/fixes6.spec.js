@@ -60,12 +60,13 @@ test.describe('Unterklasse in Einrichten @new', () => {
 
   test('Auswahl zeigt die Unterklassen der Klasse und trägt Merkmale bis zur Stufe ein', async ({ page }) => {
     await seed(page, base4({ tab: 'setup', klass: 'Fighter', level: 3 }));
-    await expect(sub(page).locator('option')).toHaveCount(4);
+    // 2024: vier Unterklassen plus Platzhalter
+    await expect(sub(page).locator('option')).toHaveCount(5);
     await sub(page).selectOption('Champion');
     await expect.poll(async () => (await read(page)).sub).toBe('Champion');
     const f = (await read(page)).feats;
     expect(f.map(x => x.n)).toContain('Improved Critical');
-    expect(f.map(x => x.n)).not.toContain('Remarkable Athlete');
+    expect(f.map(x => x.n)).not.toContain('Additional Fighting Style');
   });
 
   test('Wechsel nimmt die alten Merkmale zurück', async ({ page }) => {

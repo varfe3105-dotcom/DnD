@@ -1,0 +1,146 @@
+{
+  "Sorcerer": {
+    "Aberrant Sorcery": {
+      "3": [
+        { "n": "Psionic Spells", "en": "Always prepared: level 3 Arms of Hadar, Calm Emotions, Detect Thoughts, Dissonant Whispers, Mind Sliver; level 5 Hunger of Hadar, Sending; level 7 Evard's Black Tentacles, Summon Aberration; level 9 Rary's Telepathic Bond, Telekinesis.", "de": "Immer vorbereitet: Stufe 3 Arms of Hadar, Calm Emotions, Detect Thoughts, Dissonant Whispers, Mind Sliver; Stufe 5 Hunger of Hadar, Sending; Stufe 7 Black Tentacles, Summon Aberration; Stufe 9 Telepathic Bond, Telekinesis." },
+        { "n": "Telepathic Speech", "en": "As a Bonus Action, choose a creature you can see within 30 feet: you and it can speak telepathically while within a number of miles equal to your Charisma modifier (minimum 1), for minutes equal to your Sorcerer level.", "de": "Als Bonusaktion wählst du eine Kreatur in 9 m, die du siehst: Ihr könnt telepathisch sprechen, solange ihr höchstens Charismamodifikator (mindestens 1) Meilen voneinander entfernt seid, für Zaubererstufe Minuten." }
+      ],
+      "6": [
+        { "n": "Psionic Sorcery", "en": "When you cast a level 1+ spell from Psionic Spells, you can spend Sorcery Points equal to its level instead of a spell slot; cast this way it needs no Verbal or Somatic components, and no Material components unless they have a cost or are consumed.", "de": "Einen Zauber ab Grad 1 aus Psionic Spells kannst du statt mit einem Zauberplatz mit Zauberpunkten in Höhe seines Grades wirken; dann braucht er weder verbale noch Gestenkomponenten und Material nur, wenn es Kosten hat oder verbraucht wird." },
+        { "n": "Psychic Defenses", "en": "You have Resistance to Psychic damage and Advantage on saving throws to avoid or end the Charmed or Frightened condition.", "de": "Resistenz gegen psychischen Schaden und Vorteil auf Rettungswürfe gegen Charmed und Frightened." }
+      ],
+      "14": [
+        { "n": "Revelation in Flesh", "en": "As a Bonus Action, spend 1 or more Sorcery Points; for 10 minutes you gain one benefit per point spent: Aquatic Adaptation (Swim Speed twice your Speed, breathe underwater), Glistening Flight (Fly Speed equal to your Speed, hover), See the Invisible (see Invisible creatures within 60 feet), Wormlike Movement (squeeze through a 1-inch space, 5 feet of movement escapes a grapple or nonmagical restraints).", "de": "Als Bonusaktion gibst du 1 oder mehr Zauberpunkte aus und erhältst 10 Minuten lang je Punkt einen Vorteil: Wasseranpassung (Schwimmtempo doppeltes Tempo, Atmen unter Wasser), Gleißender Flug (Flugtempo in Höhe deines Tempos, Schweben), Unsichtbares sehen (in 18 m), Wurmartige Bewegung (durch 2,5 cm breite Lücken, 1,5 m Bewegung befreien aus Packen oder nicht magischen Fesseln)." }
+      ],
+      "18": [
+        { "n": "Warping Implosion", "en": "As a Magic action you teleport to an unoccupied space within 120 feet. Each creature within 30 feet of the space you left makes a Strength saving throw against your spell save DC, taking 3d10 Force damage and being pulled to the nearest space next to where you were on a failure, or half damage on a success. Once per Long Rest, or again by spending 5 Sorcery Points.", "de": "Als Magie-Aktion teleportierst du dich in ein freies Feld in 36 m. Jede Kreatur in 9 m um deinen alten Platz macht einen Stärkerettungswurf gegen deinen Zauber-SG: 3W10 Energieschaden und zum alten Platz gezogen, halb bei Erfolg. Einmal pro langer Rast, weitere Male für 5 Zauberpunkte." }
+      ]
+    },
+    "Clockwork Sorcery": {
+      "3": [
+        { "n": "Clockwork Spells", "en": "Always prepared: level 3 Aid, Alarm, Lesser Restoration, Protection from Evil and Good; level 5 Dispel Magic, Protection from Energy; level 7 Freedom of Movement, Summon Construct; level 9 Greater Restoration, Wall of Force.", "de": "Immer vorbereitet: Stufe 3 Aid, Alarm, Lesser Restoration, Protection from Evil and Good; Stufe 5 Dispel Magic, Protection from Energy; Stufe 7 Freedom of Movement, Summon Construct; Stufe 9 Greater Restoration, Wall of Force." },
+        { "n": "Restore Balance", "en": "When a creature you can see within 60 feet is about to roll a d20 with Advantage or Disadvantage, you can take a Reaction to cancel both for that roll. Uses equal to your Charisma modifier (minimum 1), regained on a Long Rest.", "de": "Will eine Kreatur in 18 m, die du siehst, einen W20 mit Vorteil oder Nachteil werfen, kannst du als Reaktion beides für diesen Wurf aufheben. Anwendungen: Charismamodifikator (mindestens 1), zurück nach einer langen Rast." }
+      ],
+      "6": [
+        { "n": "Bastion of Law", "en": "As a Magic action, spend 1 to 5 Sorcery Points to give a creature within 30 feet a ward of that many d8s. When the warded creature takes damage, it can expend any number of the dice, roll them and reduce the damage by the total. The ward lasts until you finish a Long Rest or use this feature again.", "de": "Als Magie-Aktion gibst du 1 bis 5 Zauberpunkte aus und gibst einer Kreatur in 9 m einen Schutz aus so vielen W8. Nimmt sie Schaden, kann sie beliebig viele davon werfen und den Schaden um die Summe senken. Der Schutz hält bis zu deiner nächsten langen Rast oder bis du das Merkmal erneut nutzt." }
+      ],
+      "14": [
+        { "n": "Trance of Order", "en": "As a Bonus Action you enter a state of order for 1 minute: attack rolls against you can't have Advantage, and on your D20 Tests a roll of 9 or lower counts as 10. Once per Long Rest, or again by spending 5 Sorcery Points.", "de": "Als Bonusaktion 1 Minute lang: Angriffe gegen dich haben keinen Vorteil, und bei deinen W20-Tests zählt eine 9 oder weniger als 10. Einmal pro langer Rast, weitere Male für 5 Zauberpunkte." }
+      ],
+      "18": [
+        { "n": "Clockwork Cavalcade", "en": "As a Magic action, spirits of order fill a 30-foot Cube originating from you: Heal: restore up to 100 Hit Points divided among creatures of your choice in it. Repair: damaged objects in it are repaired. Dispel: every spell of level 6 or lower ends on creatures and objects of your choice in it. Once per Long Rest, or again by spending 7 Sorcery Points.", "de": "Als Magie-Aktion füllen Ordnungsgeister einen Würfel von 9 m: Heilen: bis zu 100 TP auf Kreaturen deiner Wahl darin verteilen. Reparieren: beschädigte Gegenstände darin werden repariert. Bannen: Alle Zauber bis Grad 6 auf Kreaturen und Gegenständen deiner Wahl darin enden. Einmal pro langer Rast, weitere Male für 7 Zauberpunkte." }
+      ]
+    },
+    "Wild Magic Sorcery": {
+      "3": [
+        { "n": "Wild Magic Surge", "en": "Once per turn, after you cast a Sorcerer spell with a spell slot, you can roll 1d20; on a 20, roll on the Wild Magic Surge table. If the surge effect is a spell, it can't be affected by Metamagic.", "de": "Einmal pro Zug, nachdem du einen Zaubererzauber mit Zauberplatz gewirkt hast, kannst du 1W20 werfen; bei 20 wird auf der Tabelle für wilde Magie gewürfelt. Ist das Ergebnis ein Zauber, wirkt keine Metamagie darauf." },
+        { "n": "Tides of Chaos", "en": "Before you roll a D20 Test, you can give yourself Advantage on it. Once per Long Rest; after using it, the next time you cast a Sorcerer spell with a spell slot before a Long Rest you automatically roll on the Wild Magic Surge table and regain this use.", "de": "Vor einem W20-Test kannst du dir Vorteil geben. Einmal pro langer Rast; wirkst du danach vor einer langen Rast einen Zaubererzauber mit Zauberplatz, wird automatisch auf der Tabelle für wilde Magie gewürfelt und du erhältst die Anwendung zurück." }
+      ],
+      "6": [
+        { "n": "Bend Luck", "en": "Immediately after another creature you can see rolls the d20 for a D20 Test, you can take a Reaction and spend 1 Sorcery Point to roll 1d4 and add it to or subtract it from the result.", "de": "Direkt nachdem eine andere Kreatur, die du siehst, für einen W20-Test gewürfelt hat, kannst du als Reaktion 1 Zauberpunkt ausgeben und 1W4 addieren oder abziehen." }
+      ],
+      "14": [
+        { "n": "Controlled Chaos", "en": "Whenever you roll on the Wild Magic Surge table, you can roll twice and use either number.", "de": "Würfelst du auf der Tabelle für wilde Magie, darfst du zweimal würfeln und eines der Ergebnisse wählen." }
+      ],
+      "18": [
+        { "n": "Tamed Surge", "en": "Immediately after you cast a Sorcerer spell with a spell slot, you can create one effect of your choice from the Wild Magic Surge table (not the one that has you roll again). Once per Long Rest.", "de": "Direkt nachdem du einen Zaubererzauber mit Zauberplatz gewirkt hast, wählst du eine Wirkung der Tabelle für wilde Magie aus (nicht die zum erneuten Würfeln). Einmal pro langer Rast." }
+      ]
+    }
+  },
+  "Warlock": {
+    "Archfey Patron": {
+      "3": [
+        { "n": "Archfey Spells", "en": "Always prepared: level 3 Calm Emotions, Faerie Fire, Misty Step, Phantasmal Force, Sleep; level 5 Blink, Plant Growth; level 7 Dominate Beast, Greater Invisibility; level 9 Dominate Person, Seeming.", "de": "Immer vorbereitet: Stufe 3 Calm Emotions, Faerie Fire, Misty Step, Phantasmal Force, Sleep; Stufe 5 Blink, Plant Growth; Stufe 7 Dominate Beast, Greater Invisibility; Stufe 9 Dominate Person, Seeming." },
+        { "n": "Steps of the Fey", "en": "You can cast Misty Step without a spell slot a number of times equal to your Charisma modifier (minimum once), regained on a Long Rest. Whenever you cast it, choose an extra effect. Refreshing Step: you or a creature within 10 feet gains 1d10 Temporary Hit Points. Taunting Step: creatures within 5 feet of the space you left make a Wisdom saving throw or have Disadvantage on attack rolls against creatures other than you until the start of your next turn.", "de": "Misty Step wirkst du so oft wie dein Charismamodifikator (mindestens einmal) ohne Zauberplatz, zurück nach einer langen Rast. Bei jedem Wirken wählst du eine Zusatzwirkung. Refreshing Step: Du oder eine Kreatur in 3 m erhält 1W10 temporäre TP. Taunting Step: Kreaturen in 1,5 m um deinen alten Platz machen einen Weisheitsrettungswurf oder haben bis zum Beginn deines nächsten Zuges Nachteil auf Angriffe gegen andere als dich." }
+      ],
+      "6": [
+        { "n": "Misty Escape", "en": "You can cast Misty Step as a Reaction when you take damage. New Steps of the Fey options: Disappearing Step: you are Invisible until the start of your next turn or until you attack, deal damage or cast a spell. Dreadful Step: creatures within 5 feet of the space you left or arrive in make a Wisdom saving throw or take 2d10 Psychic damage.", "de": "Nimmst du Schaden, kannst du Misty Step als Reaktion wirken. Neue Zusatzwirkungen: Disappearing Step: Du bist bis zum Beginn deines nächsten Zuges Invisible oder bis du angreifst, Schaden zufügst oder zauberst. Dreadful Step: Kreaturen in 1,5 m um deinen alten oder neuen Platz machen einen Weisheitsrettungswurf oder erleiden 2W10 psychischen Schaden." }
+      ],
+      "10": [
+        { "n": "Beguiling Defenses", "en": "You are immune to the Charmed condition. When a creature you can see hits you with an attack roll, you can take a Reaction to halve the damage (round down) and force it to make a Wisdom saving throw; on a failure it takes Psychic damage equal to the damage you take. Once per Long Rest, or again by expending a Pact Magic slot.", "de": "Immun gegen Charmed. Trifft dich eine Kreatur, die du siehst, kannst du als Reaktion den Schaden halbieren (abgerundet), und sie macht einen Weisheitsrettungswurf; bei Misserfolg erleidet sie psychischen Schaden in Höhe des Schadens, den du nimmst. Einmal pro langer Rast, weitere Male für einen Paktplatz." }
+      ],
+      "14": [
+        { "n": "Bewitching Magic", "en": "Immediately after you cast an Enchantment or Illusion spell with an action and a spell slot, you can cast Misty Step as part of the same action without a spell slot.", "de": "Direkt nachdem du einen Verzauberungs- oder Illusionszauber mit einer Aktion und einem Zauberplatz gewirkt hast, kannst du als Teil derselben Aktion Misty Step ohne Zauberplatz wirken." }
+      ]
+    },
+    "Celestial Patron": {
+      "3": [
+        { "n": "Celestial Spells", "en": "Always prepared: level 3 Aid, Cure Wounds, Guiding Bolt, Lesser Restoration, Light, Sacred Flame; level 5 Daylight, Revivify; level 7 Guardian of Faith, Wall of Fire; level 9 Greater Restoration, Summon Celestial.", "de": "Immer vorbereitet: Stufe 3 Aid, Cure Wounds, Guiding Bolt, Lesser Restoration, Light, Sacred Flame; Stufe 5 Daylight, Revivify; Stufe 7 Guardian of Faith, Wall of Fire; Stufe 9 Greater Restoration, Summon Celestial." },
+        { "n": "Healing Light", "en": "You have a pool of d6s equal to 1 + your Warlock level, regained on a Long Rest. As a Bonus Action, you heal yourself or a creature within 60 feet by expending up to your Charisma modifier (minimum 1) dice from the pool and rolling them.", "de": "Du hast einen Vorrat von 1 + Hexenmeisterstufe W6, zurück nach einer langen Rast. Als Bonusaktion heilst du dich oder eine Kreatur in 18 m mit bis zu Charismamodifikator (mindestens 1) Würfeln aus dem Vorrat." }
+      ],
+      "6": [
+        { "n": "Radiant Soul", "en": "You have Resistance to Radiant damage. Once per turn, when a spell you cast deals Radiant or Fire damage, you can add your Charisma modifier to that spell's damage against one of its targets.", "de": "Resistenz gegen gleißenden Schaden. Einmal pro Zug, wenn ein Zauber von dir gleißenden oder Feuerschaden macht, addierst du deinen Charismamodifikator zum Schaden gegen eines seiner Ziele." }
+      ],
+      "10": [
+        { "n": "Celestial Resilience", "en": "When you use Magical Cunning or finish a Short or Long Rest, you gain Temporary Hit Points equal to your Warlock level + Charisma modifier, and up to five creatures you can see gain Temporary Hit Points equal to half your Warlock level + your Charisma modifier.", "de": "Nutzt du Magical Cunning oder beendest eine kurze oder lange Rast, erhältst du Hexenmeisterstufe + Charismamodifikator temporäre TP, und bis zu fünf Kreaturen, die du siehst, erhalten halbe Hexenmeisterstufe + Charismamodifikator temporäre TP." }
+      ],
+      "14": [
+        { "n": "Searing Vengeance", "en": "When you or an ally within 60 feet is about to make a Death Saving Throw, you can unleash radiant energy: that creature regains Hit Points equal to half its Hit Point maximum and can end the Prone condition on itself. Each creature of your choice within 30 feet of it takes 2d8 + your Charisma modifier Radiant damage and is Blinded until the end of the current turn. Once per Long Rest.", "de": "Muss du oder ein Verbündeter in 18 m einen Todesrettungswurf machen, kannst du gleißende Energie freisetzen: Die Kreatur erhält TP in Höhe ihres halben TP-Maximums und kann Prone beenden. Jede Kreatur deiner Wahl in 9 m von ihr erleidet 2W8 + Charismamodifikator gleißenden Schaden und ist bis zum Ende des Zuges Blinded. Einmal pro langer Rast." }
+      ]
+    },
+    "Great Old One Patron": {
+      "3": [
+        { "n": "Great Old One Spells", "en": "Always prepared: level 3 Detect Thoughts, Dissonant Whispers, Phantasmal Force, Tasha's Hideous Laughter; level 5 Clairvoyance, Hunger of Hadar; level 7 Confusion, Summon Aberration; level 9 Modify Memory, Telekinesis.", "de": "Immer vorbereitet: Stufe 3 Detect Thoughts, Dissonant Whispers, Phantasmal Force, Hideous Laughter; Stufe 5 Clairvoyance, Hunger of Hadar; Stufe 7 Confusion, Summon Aberration; Stufe 9 Modify Memory, Telekinesis." },
+        { "n": "Awakened Mind", "en": "As a Bonus Action, form a telepathic connection with a creature you can see within 30 feet for minutes equal to your Warlock level; you can communicate while within a number of miles equal to your Charisma modifier (minimum 1).", "de": "Als Bonusaktion verbindest du dich für Hexenmeisterstufe Minuten telepathisch mit einer Kreatur in 9 m, die du siehst; ihr könnt euch verständigen, solange ihr höchstens Charismamodifikator (mindestens 1) Meilen entfernt seid." },
+        { "n": "Psychic Spells", "en": "When you cast a Warlock spell that deals damage, you can change its damage type to Psychic. Your Enchantment and Illusion Warlock spells need no Verbal or Somatic components.", "de": "Macht ein Hexenmeisterzauber Schaden, kannst du ihn in psychischen Schaden ändern. Deine Verzauberungs- und Illusionszauber brauchen keine verbalen und Gestenkomponenten." }
+      ],
+      "6": [
+        { "n": "Clairvoyant Combatant", "en": "When you form a telepathic bond with Awakened Mind, you can force the creature to make a Wisdom saving throw against your spell save DC. On a failure, for the bond's duration it has Disadvantage on attack rolls against you and you have Advantage on attack rolls against it. Once per Short or Long Rest, or again by expending a Pact Magic slot.", "de": "Beim Verbinden mit Awakened Mind kannst du einen Weisheitsrettungswurf gegen deinen Zauber-SG verlangen. Bei Misserfolg hat die Kreatur für die Dauer Nachteil auf Angriffe gegen dich und du Vorteil gegen sie. Einmal pro kurzer oder langer Rast, weitere Male für einen Paktplatz." }
+      ],
+      "10": [
+        { "n": "Eldritch Hex", "en": "You always have Hex prepared. When you cast it, choose one ability; the target has Disadvantage on saving throws of that ability for the spell's duration.", "de": "Hex ist immer vorbereitet. Beim Wirken wählst du ein Attribut; das Ziel hat für die Dauer Nachteil auf Rettungswürfe mit diesem Attribut." },
+        { "n": "Thought Shield", "en": "Your thoughts can't be read unless you allow it. You have Resistance to Psychic damage, and a creature that deals Psychic damage to you takes the same amount.", "de": "Deine Gedanken lassen sich nur mit deiner Erlaubnis lesen. Resistenz gegen psychischen Schaden, und wer dir psychischen Schaden zufügt, erleidet dieselbe Menge." }
+      ],
+      "14": [
+        { "n": "Create Thrall", "en": "When you cast Summon Aberration, you can make it need no Concentration; its duration becomes 1 minute. The Aberration gains Temporary Hit Points equal to your Warlock level + Charisma modifier, and the first time each turn it hits a creature under your Hex, it deals extra Psychic damage equal to Hex's bonus damage.", "de": "Bei Summon Aberration kannst du auf Konzentration verzichten; dann hält er 1 Minute. Die Aberration erhält Hexenmeisterstufe + Charismamodifikator temporäre TP, und trifft sie in einem Zug zum ersten Mal eine Kreatur unter deinem Hex, macht sie zusätzlich den Bonusschaden von Hex als psychischen Schaden." }
+      ]
+    }
+  },
+  "Wizard": {
+    "Abjurer": {
+      "3": [
+        { "n": "Abjuration Savant", "en": "Add two Abjuration Wizard spells of level 2 or lower to your spellbook for free. Whenever you gain access to a new level of spell slots, add one Abjuration Wizard spell of that level for free.", "de": "Zwei Bannzauber bis Grad 2 kostenlos ins Zauberbuch; mit jedem neuen Zaubergrad ein weiterer kostenlos." },
+        { "n": "Arcane Ward", "en": "When you cast an Abjuration spell with a spell slot, you can create a magical ward on yourself with Hit Points equal to twice your Wizard level + your Intelligence modifier; it absorbs damage you take first. Creating it is once per Long Rest. Whenever you cast an Abjuration spell with a spell slot, the ward regains twice the spell's level in Hit Points; as a Bonus Action you can also expend a spell slot to restore twice its level.", "de": "Wirkst du einen Bannzauber mit Zauberplatz, kannst du einen Schutz mit 2 × Magierstufe + Intelligenzmodifikator TP auf dich legen; er fängt Schaden zuerst ab. Erschaffen einmal pro langer Rast. Jeder Bannzauber mit Platz gibt ihm 2 × Grad TP zurück; als Bonusaktion kannst du auch einen Platz ausgeben und 2 × dessen Grad heilen." }
+      ],
+      "6": [
+        { "n": "Projected Ward", "en": "When a creature you can see within 30 feet takes damage, you can take a Reaction to have your Arcane Ward absorb that damage.", "de": "Nimmt eine Kreatur in 9 m, die du siehst, Schaden, kannst du als Reaktion deinen Arcane Ward den Schaden abfangen lassen." }
+      ],
+      "10": [
+        { "n": "Spell Breaker", "en": "You always have Counterspell and Dispel Magic prepared. You can cast Dispel Magic as a Bonus Action and add your Proficiency Bonus to its ability check. If Counterspell or Dispel Magic fails to stop a spell, the slot isn't expended.", "de": "Counterspell und Dispel Magic sind immer vorbereitet. Dispel Magic kannst du als Bonusaktion wirken und addierst den Übungsbonus zu seinem Attributswurf. Scheitert Counterspell oder Dispel Magic, ist der Platz nicht verbraucht." }
+      ],
+      "14": [
+        { "n": "Spell Resistance", "en": "You have Advantage on saving throws against spells and Resistance to the damage of spells.", "de": "Vorteil auf Rettungswürfe gegen Zauber und Resistenz gegen Schaden von Zaubern." }
+      ]
+    },
+    "Diviner": {
+      "3": [
+        { "n": "Divination Savant", "en": "Add two Divination Wizard spells of level 2 or lower to your spellbook for free. Whenever you gain access to a new level of spell slots, add one Divination Wizard spell of that level for free.", "de": "Zwei Erkenntniszauber bis Grad 2 kostenlos ins Zauberbuch; mit jedem neuen Zaubergrad ein weiterer kostenlos." },
+        { "n": "Portent", "en": "After each Long Rest, roll two d20s and record the numbers. You can replace any D20 Test made by you or a creature you can see with one of these rolls, before the roll; once per turn. Unused rolls are lost at your next Long Rest.", "de": "Nach jeder langen Rast wirfst du zwei W20 und notierst die Ergebnisse. Einen W20-Test von dir oder einer Kreatur, die du siehst, kannst du vor dem Wurf durch eines davon ersetzen, einmal pro Zug. Unbenutzte verfallen bei der nächsten langen Rast." }
+      ],
+      "6": [
+        { "n": "Expert Divination", "en": "When you cast a Divination spell with a spell slot of level 2 or higher, you regain one expended spell slot of a lower level than that slot (at most level 5).", "de": "Wirkst du einen Erkenntniszauber mit einem Platz ab Grad 2, erhältst du einen verbrauchten Platz niedrigeren Grades zurück (höchstens Grad 5)." }
+      ],
+      "10": [
+        { "n": "The Third Eye", "en": "As a Bonus Action, choose one benefit until you start a Short or Long Rest: Darkvision 120 feet; Greater Comprehension (read any language); or See Invisibility (as the spell). Once per Short or Long Rest.", "de": "Als Bonusaktion wählst du einen Vorteil bis zu deiner nächsten Rast: Dunkelsicht 36 m, jede Sprache lesen oder See Invisibility (wie der Zauber). Einmal pro kurzer oder langer Rast." }
+      ],
+      "14": [
+        { "n": "Greater Portent", "en": "You roll three d20s for Portent instead of two.", "de": "Für Portent wirfst du drei statt zwei W20." }
+      ]
+    },
+    "Illusionist": {
+      "3": [
+        { "n": "Illusion Savant", "en": "Add two Illusion Wizard spells of level 2 or lower to your spellbook for free. Whenever you gain access to a new level of spell slots, add one Illusion Wizard spell of that level for free.", "de": "Zwei Illusionszauber bis Grad 2 kostenlos ins Zauberbuch; mit jedem neuen Zaubergrad ein weiterer kostenlos." },
+        { "n": "Improved Illusions", "en": "Your Illusion spells need no Verbal components, and those with a range of 10 feet or more gain 60 feet of range. You know Minor Illusion; with one casting it can create both a sound and an image, and you can cast it as a Bonus Action.", "de": "Deine Illusionszauber brauchen keine verbalen Komponenten, und solche mit mindestens 3 m Reichweite reichen 18 m weiter. Du kennst Minor Illusion, erzeugst damit Ton und Bild zugleich und kannst ihn als Bonusaktion wirken." }
+      ],
+      "6": [
+        { "n": "Phantasmal Creatures", "en": "You always have Summon Beast and Summon Fey prepared and can cast them as Illusion spells. You can cast each once without a spell slot per Long Rest; cast that way the creature has half its normal Hit Points.", "de": "Summon Beast und Summon Fey sind immer vorbereitet und zählen bei dir als Illusionen. Jeden kannst du einmal pro langer Rast ohne Zauberplatz wirken; so beschworen hat die Kreatur halbe TP." }
+      ],
+      "10": [
+        { "n": "Illusory Self", "en": "When a creature hits you with an attack roll, you can take a Reaction to interpose an illusory duplicate; the attack misses. Once per Short or Long Rest, or again by expending a spell slot of level 2 or higher.", "de": "Trifft dich ein Angriff, kannst du als Reaktion ein Trugbild dazwischenschieben; der Angriff verfehlt. Einmal pro kurzer oder langer Rast, weitere Male für einen Platz ab Grad 2." }
+      ],
+      "14": [
+        { "n": "Illusory Reality", "en": "When you cast an Illusion spell with a spell slot, you can make one inanimate, nonmagical object in the illusion real for 1 minute. It can't deal damage or give conditions.", "de": "Wirkst du einen Illusionszauber mit Zauberplatz, kannst du einen unbelebten, nicht magischen Gegenstand darin 1 Minute lang real machen. Er kann keinen Schaden zufügen und keine Zustände verursachen." }
+      ]
+    }
+  }
+}

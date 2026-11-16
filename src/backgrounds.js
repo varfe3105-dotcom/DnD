@@ -96,6 +96,6 @@ export function applySubclass(old) {
   const keep = new Set(resFor(S.klass, lvl, undefined, '').map(r => r.n)), now = resFor(S.klass, lvl, undefined, S.sub);
   const oldSub = new Set(resFor(S.klass, lvl, undefined, old || '').map(r => r.n).filter(n => !keep.has(n)));
   S.res = S.res.filter(r => !oldSub.has(r.n) || now.some(x => x.n === r.n));
-  now.forEach(r => { if (!S.res.some(x => x.n === r.n)) S.res.push({ n: r.n, ic: r.ic, max: r.max, used: 0, rest: r.rest, p: r.p }); });
+  now.forEach(r => { if (!S.res.some(x => x.n === r.n)) S.res.push({ n: r.n, ic: r.ic, max: r.max, used: 0, rest: r.rest, p: r.p, ...(r.one ? { one: true } : {}) }); });
   syncAlwaysSpells();
 }

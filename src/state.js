@@ -24,6 +24,8 @@ export function norm(o){
   s.death=Object.assign({s:0,f:0},o.death||{});
   if(!Array.isArray(s.slots)||s.slots.length!==9)s.slots=def().slots;
   ['saves','skills','cond','eq'].forEach(k=>{if(!s[k]||typeof s[k]!=='object'||Array.isArray(s[k]))s[k]={}});
+  const SUBN={'Draconic Bloodline':'Draconic Sorcery','Wild Magic':'Wild Magic Sorcery','The Fiend':'Fiend Patron','The Archfey':'Archfey Patron','The Great Old One':'Great Old One Patron','The Celestial':'Celestial Patron','School of Evocation':'Evoker','School of Abjuration':'Abjurer','School of Divination':'Diviner','School of Illusion':'Illusionist','Way of the Open Hand':'Warrior of the Open Hand','Way of Shadow':'Warrior of Shadow','Way of the Four Elements':'Warrior of the Elements','Ranger Hunter':'Hunter'};
+  if(SUBN[s.sub])s.sub=SUBN[s.sub];(s.multi||[]).forEach(m=>{if(SUBN[m.sub])m.sub=SUBN[m.sub]});
   s.acMode=o.acMode==='auto'?'auto':'manual';s.insp=!!o.insp;
   ['res','spells','feats','multi','tools','langs','pets','notePages','buffs','buffsOut','buffsGone','mastery'].forEach(k=>{if(!Array.isArray(s[k]))s[k]=[]});
   if(!Array.isArray(s.bag))s.bag=[];while(s.bag.length<24)s.bag.push(null);

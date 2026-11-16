@@ -7,15 +7,17 @@ import { classLevels } from './tables.js';
 import { t, dice } from './i18n/index.js';
 import { itemView, isShield } from './helpers.js';
 
+const AMMO = /Munition|Ammunition/i, TWO = /Two-Handed|Zweihändig/i, HEAVY = /Heavy|Schwer/i, FINESSE = /Finesse/i;
 const SIMPLE = ['simple'], ALL = ['simple', 'martial'];
-const ROGUE_W = ['hand-crossbow', 'longsword', 'rapier', 'shortsword'];
-const CASTER_W = ['dagger', 'dart', 'sling', 'quarterstaff', 'light-crossbow'];
+// Regeln 2024: alle Klassen einfache Waffen; Mönch dazu leichte Kriegs-Nahkampfwaffen, Schurke Kriegswaffen mit Finesse oder Leicht
 const CLASS_W = {
-  Barbarian: { g: ALL }, Bard: { g: SIMPLE, w: ROGUE_W }, Cleric: { g: SIMPLE },
-  Druid: { w: ['club', 'dagger', 'dart', 'javelin', 'mace', 'quarterstaff', 'scimitar', 'sickle', 'sling', 'spear'] },
-  Fighter: { g: ALL }, Monk: { g: SIMPLE, w: ['shortsword'] }, Paladin: { g: ALL }, Ranger: { g: ALL },
-  Rogue: { g: SIMPLE, w: ROGUE_W }, Sorcerer: { w: CASTER_W }, Warlock: { g: SIMPLE }, Wizard: { w: CASTER_W },
+  Barbarian: { g: ALL }, Bard: { g: SIMPLE }, Cleric: { g: SIMPLE }, Druid: { g: SIMPLE },
+  Fighter: { g: ALL }, Monk: { g: SIMPLE, light: true }, Paladin: { g: ALL }, Ranger: { g: ALL },
+  Rogue: { g: SIMPLE, fl: true }, Sorcerer: { g: SIMPLE }, Warlock: { g: SIMPLE }, Wizard: { g: SIMPLE },
 };
+// Kriegswaffen durch Unterklasse oder Ordenswahl (Divine Order: Protector, Primal Order: Warden)
+const SUB_MARTIAL = ['College of Valor', 'College of Swords'];
+const LIGHT = /\b(Light|Leicht)\b/;
 // Beim Multiclassing bringt eine weitere Klasse weniger Übungen mit als als Startklasse.
 const MULTI_W = { Barbarian: { g: ALL }, Fighter: { g: ALL }, Paladin: { g: ALL }, Ranger: { g: ALL }, Monk: { g: SIMPLE, w: ['shortsword'] }, Warlock: { g: SIMPLE } };
 const ELF_W = ['longsword', 'shortsword', 'shortbow', 'longbow'];
@@ -30,7 +32,9 @@ const styled = n => S.feats.some(f => f.n === n);
 function classProf(raw) {
   const id = refId(raw), g = groupOf(raw);
   if (!S.klass || !id || !ALL.includes(g)) return true;
-  const ok = e => !!e && ((e.g || []).includes(g) || (e.w || []).includes(id));
+  const p = BYN[raw.ref]?.p || '', melee = !AMMO.test(p) && !/Thrown|Wurf/.test(p.split('·')[0] || '');
+  const ok = e => !!e && ((e.g || []).includes(g) || (e.w || []).includes(id) || (g === 'martial' && ((e.light && LIGHT.test(p) && melee) || (e.fl && (LIGHT.test(p) || FINESSE.test(p))))));
+  if (g === 'martial' && (['Protector', 'Warden'].includes(S.order) || classLevels().some(c => SUB_MARTIAL.includes(c.sub)))) return true;
   return ok(CLASS_W[S.klass]) || (S.multi || []).some(m => ok(MULTI_W[m.k])) || (RACE_W[S.race] || []).includes(id) || (RACE_W[S.subrace] || []).includes(id);
 }
 // Welche Munition eine Fernkampfwaffe verbraucht (Katalogschlüssel).
@@ -41,11 +45,11 @@ export function ammoLeft(ref) { const at = []; let n = 0; S.bag.forEach((it, i) 
 export const weaponProf = raw => (raw.prof != null ? !!raw.prof : classProf(raw));
 
 const monkLevel = () => classLevels().find(c => c.k === 'Monk')?.lvl || 0;
-const martialDie = l => (l >= 17 ? '1d10' : l >= 11 ? '1d8' : l >= 5 ? '1d6' : '1d4');
+// 2024: Kampfkunstwürfel W6, W8 ab Stufe 5, W10 ab 11, W12 ab 17
+const martialDie = l => (l >= 17 ? '1d12' : l >= 11 ? '1d10' : l >= 5 ? '1d8' : '1d6');
 const sides = d => +(String(d).match(/[Wd](\d+)/)?.[1] || 1);
 
 const DMG = { Hieb: 'slashing', Stich: 'piercing', Wucht: 'bludgeoning', slashing: 'slashing', piercing: 'piercing', bludgeoning: 'bludgeoning' };
-const AMMO = /Munition|Ammunition/i, TWO = /Two-Handed|Zweihändig/i, HEAVY = /Heavy|Schwer/i, FINESSE = /Finesse/i;
 
 export function atk(raw, hand = 'main') {
   const it = itemView(raw);
@@ -54,7 +58,8 @@ export function atk(raw, hand = 'main') {
   const st = mod(S.abil.str), dx = mod(S.abil.dex);
   const ranged = AMMO.test(it.p) || refId(raw) === 'dart', twoH = TWO.test(it.p);
   const monk = monkLevel();
-  const monkWeapon = monk > 0 && !ranged && !twoH && !HEAVY.test(it.p) && (groupOf(raw) === 'simple' || refId(raw) === 'shortsword');
+  // Mönchswaffen 2024: einfache Nahkampfwaffen und Kriegs-Nahkampfwaffen mit Leicht
+  const monkWeapon = monk > 0 && !ranged && (groupOf(raw) === 'simple' || (groupOf(raw) === 'martial' && LIGHT.test(it.p))) && !(twoH && HEAVY.test(it.p));
   const am = AMMO.test(it.p) ? dx : (FINESSE.test(it.p) || monkWeapon) ? Math.max(st, dx) : st;
   const plus = +((it.n.match(/\+(\d)/) || [])[1] || 0);
   const prof = weaponProf(raw), tags = [];

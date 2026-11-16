@@ -6,7 +6,7 @@ import { vLootCoins, vLootItems, vBakHist, turnsHidden, setTurnsHidden, proposal
 import { vRuleList } from './views/dm-rules.js';
 import { vPetResults } from './views/extras.js';
 import { weaponProf, ammoFor, ammoLeft } from './attacks.js';
-import { chargeOf, applyDawn, petFrom, petOwn, petView } from './companions.js';
+import { chargeOf, applyDawn, petFrom, petOwn, petView, petPrimal } from './companions.js';
 import { pickBg, applyBg, bgById, toggleStyle, applySubclass } from './backgrounds.js';
 import { isSheetFile, readSheets } from './sheet-read.js';
 import { importDraft } from './import-play5e.js';
@@ -145,6 +145,7 @@ app.addEventListener('click',ev=>{
     case 'dawn':U.DAWN=!U.DAWN;break;
     case 'dawnapply':{const n=applyDawn([...document.querySelectorAll('[data-dawn]')].map(x=>[x.dataset.dawn,x.value]));U.DAWN=false;toast(tr('chg.dawnDone',{n}));break}
     case 'pethp':{const p=S.pets[i];if(p){p.hp=clamp(petView(p).hp+ +b.dataset.d,0,petView(p).hpMax)}break}
+    case 'petprimal':{const p=petPrimal(b.dataset.k);S.pets.push(p);p.hp=petView(p).hpMax;toast(tr('toast.added',{n:p.n}));break}
     case 'petadd':{const m=dm.findMonster(b.dataset.m);if(!m)break;S.pets.push(petFrom(m));U.petQ='';toast(tr('toast.added',{n:m.n}));break}
     case 'petown':{const n=v('pet-n').trim();if(!n){toast(tr('toast.needName'));return}S.pets.push(petOwn(n,v('pet-ac'),v('pet-hp'),v('pet-sp').trim(),v('pet-t').trim()));toast(tr('toast.created',{n}));break}
     case 'bgcancel':U.BGPICK=null;U.BGMODE=U.BGA1=U.BGA2=U.BGTOOL='';break;
@@ -196,7 +197,7 @@ app.addEventListener('click',ev=>{
     case 'qty':{const it=get(U.SEL);if(it)it.q=Math.max(1,it.q+ +b.dataset.d);break}
     case 'equip':{const it=get(U.SEL);if(!it)break;const c2=EQ.map(e=>'eq:'+e[0]).filter(r=>fits(it,r));const t=c2.find(r=>!get(r))||c2[0];if(!t){toast(tr('toast.noSlotFit'));break}move(U.SEL,t);break}
     case 'unequip':{let j=S.bag.indexOf(null);if(j<0){j=S.bag.length;for(let x=0;x<6;x++)S.bag.push(null)}move(U.SEL,'bag:'+j);break}
-    case 'tune':{const it=get(U.SEL);if(!it)break;if(!it.tuned&&refs().filter(r=>get(r).tuned).length>=3){toast(tr('toast.maxAttune'));break}it.tuned=!it.tuned;if(it.tuned)toast(tr('toast.attuneTime'));break}
+    case 'tune':{const it=get(U.SEL);if(!it)break;if(!it.tuned&&refs().filter(r=>get(r).tuned).length>=(classLevels().some(c=>c.k==='Rogue'&&c.sub==='Thief'&&c.lvl>=13)?4:3)){toast(tr('toast.maxAttune'));break}it.tuned=!it.tuned;if(it.tuned)toast(tr('toast.attuneTime'));break}
     case 'rm':if(U.CONF!=='rm'){U.CONF='rm';break}set(U.SEL,null);U.SEL=null;U.CONF=null;break;
     case 'unsel':U.SEL=null;break;
     case 'addinv':{const key=v('inv-sel');if(!key){toast(tr('toast.pickItem'));return}const c2=BYN[key];const q=Math.floor(+v('inv-q'))||c2.q||1;putBag(S,mk(c2,q));toast(tr('toast.toBag',{n:c2.n}));break}
@@ -258,6 +259,7 @@ app.addEventListener('change',ev=>{
   const oldSub=S.sub;
   setPath(p,val);
   if(p==='sub')applySubclass(oldSub);
+  if(p==='land'||p==='order')applySubclass(S.sub);
   if(p==='race'){S.subrace='';applyRace()}
   if(p==='subrace')applyRace();
   if(p==='klass'){const C=CLASSES[S.klass];S.cls=C?C.l:'';if(C){S.hd.die='W'+C.hd;if(!C.subs.includes(S.sub))S.sub=''}}

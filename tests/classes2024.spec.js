@@ -69,3 +69,58 @@ test('Spickzettel: Regeln 2024 stehen oben, Suche findet die Meisterschaften @ne
   await page.locator('#dm-rq').fill('Nick');
   await expect(page.locator('.dm-rs[data-rid="r24-mastery"]')).toContainText(/Attack action/);
 });
+
+test.describe('Alle Klassen 2024 und die drei Lücken @new', () => {
+  const ab = { str: 10, dex: 16, con: 14, int: 10, wis: 14, cha: 16 };
+  const acBox = page => page.locator('.stats .st').first().locator('b');
+  test('College of Dance: RK 10 + GE + CH ohne Rüstung und Schild', async ({ page }) => {
+    await seed(page, base4({ klass: 'Bard', sub: 'College of Dance', level: 3, abil: ab, acMode: 'auto' }));
+    await expect(acBox(page)).toHaveText('16');
+  });
+  test('Draconic Sorcery 2024: RK 10 + GE + CH; alte Unterklasse wird umbenannt', async ({ page }) => {
+    await seed(page, base4({ klass: 'Sorcerer', sub: 'Draconic Bloodline', level: 3, abil: ab, acMode: 'auto' }));
+    await expect(acBox(page)).toHaveText('16');
+    expect((await read(page)).sub).toBe('Draconic Sorcery');
+  });
+  test('Divine Order: Thaumaturge gibt einen Zaubertrick mehr, Protector schwere Rüstung', async ({ page }) => {
+    await seed(page, base4({ tab: 'setup', klass: 'Cleric', level: 1, abil: ab }));
+    await page.locator('[data-p="order"]').selectOption('Thaumaturge');
+    expect((await read(page)).order).toBe('Thaumaturge');
+    await page.locator('[data-p="order"]').selectOption('Protector');
+    const plate = { id: 'p', n: 'Plate Armor', ref: 'item:plate-armor', ic: 'armor', p: '', q: 1, slot: 'body' };
+    await seed(page, base4({ klass: 'Cleric', level: 1, abil: { ...ab, str: 16 }, order: 'Protector', eq: { body: plate } }));
+    await expect(page.locator('.fx')).not.toContainText(/without proficiency|ohne Übung/);
+    await seed(page, base4({ klass: 'Cleric', level: 1, abil: { ...ab, str: 16 }, eq: { body: plate } }));
+    await expect(page.locator('.fx')).toContainText(/without proficiency|ohne Übung/);
+  });
+  test('Beast Master: Primal Companion mit Werten nach Stufe und Weisheit', async ({ page }) => {
+    await seed(page, base4({ tab: 'setup', klass: 'Ranger', sub: 'Beast Master', level: 5, prof: 3, abil: ab }));
+    await act(page, 'petprimal', '[data-k="land"]').click();
+    const s = await read(page);
+    expect(s.pets[0]).toMatchObject({ primal: 'land', hp: 30 });
+    await page.locator('[data-a="tab"][data-t="main"]').click();
+    await expect(page.locator('.petatk').first()).toContainText('+5');
+    await expect(page.locator('.petatk').first()).toContainText(/1[dW]8\+4/);
+  });
+  test('Circle of the Land: Zauber nach Gelände', async ({ page }) => {
+    await seed(page, base4({ tab: 'setup', klass: 'Druid', sub: 'Circle of the Land', level: 5, prof: 3, abil: ab }));
+    await page.locator('[data-p="land"]').selectOption('polar');
+    let s = await read(page);
+    expect(s.spells.filter(x => x.always).map(x => x.n)).toEqual(expect.arrayContaining(['Fog Cloud', 'Hold Person', 'Ray of Frost', 'Sleet Storm']));
+    await page.locator('[data-p="land"]').selectOption('arid');
+    s = await read(page);
+    expect(s.spells.filter(x => x.always).map(x => x.n)).toEqual(expect.arrayContaining(['Burning Hands', 'Fireball']));
+  });
+  test('Barbar: Kampfrausch laut Tabelle, kurze Rast gibt eine Anwendung zurück; Schurke: Rapier ja, Langschwert nein', async ({ page }) => {
+    await seed(page, base4({ tab: 'setup', klass: 'Barbarian', level: 5, prof: 3, abil: ab }));
+    await page.locator('[data-p="level"]').fill('6');
+    await page.locator('[data-p="level"]').blur();
+    await seed(page, base4({ klass: 'Barbarian', level: 6, prof: 3, res: [{ n: 'Rage', ic: 'flame', max: 4, used: 4, rest: 'long', one: true, p: '' }] }));
+    await rest(page, 'short');
+    expect((await read(page)).res[0].used).toBe(3);
+    const w = (id, n) => ({ id, n, ref: 'item:' + id, ic: 'sword', p: '', q: 1, slot: 'hand', att: true });
+    await seed(page, base4({ klass: 'Rogue', level: 1, eq: { main: w('rapier', 'Rapier'), off: w('longsword', 'Longsword') } }));
+    await expect(page.locator('.atkt .prf').nth(0)).toHaveAttribute('aria-pressed', 'true');
+    await expect(page.locator('.atkt .prf').nth(1)).toHaveAttribute('aria-pressed', 'false');
+  });
+});

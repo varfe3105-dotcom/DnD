@@ -97,48 +97,58 @@ export function applyRace() {
   hooks.raceSpells?.();
   toast(t('toast.race24'));
 }
+/** Klassen- und Unterklassen-Ressourcen nach den Regeln 2024. one = kurze Rast gibt eine Anwendung zurück. */
 export function resFor(k, l, tongue = lang, sub = classLevels().find(c => c.k === k)?.sub || '') {
-  const o = [], cha = mod(S.abil.cha), R = (n, max, rest, key, ic, params, one) => o.push({ n, max, rest, p: tl(tongue, key, params), ic, ...(one ? { one: true } : {}) });
-  const W = Math.max(1, mod(S.abil.wis)), CH = Math.max(1, cha), ed24 = CLASSES[k]?.ed === 2024;
-  const d = s => dice(s, tongue);
+  const o = [], R = (n, max, rest, key, ic, params, one) => o.push({ n, max, rest, p: tl(tongue, key, params), ic, ...(one ? { one: true } : {}) });
+  const W = Math.max(1, mod(S.abil.wis)), CH = Math.max(1, mod(S.abil.cha)), I = Math.max(1, mod(S.abil.int));
+  const d = s => dice(s, tongue), at = (...t) => t.reduce((n, [lv, v]) => (l >= lv ? v : n), 0);
+  const psiN = at([3, 4], [5, 6], [9, 8], [13, 10], [17, 12]), psiD = d('W' + at([3, 6], [5, 8], [11, 10], [17, 12]));
   switch (k) {
-    case 'Barbarian': R('Rage', l >= 20 ? 99 : l >= 17 ? 6 : l >= 12 ? 5 : l >= 6 ? 4 : l >= 3 ? 3 : 2, 'long', l >= 20 ? 'res.rageUnl' : 'res.rage', 'flame', { n: l >= 16 ? 4 : l >= 9 ? 3 : 2 }); break;
-    case 'Bard': R('Bardic Inspiration', Math.max(1, cha), l >= 5 ? 'short' : 'long', 'res.inspiration', 'music', { d: d('W' + (l >= 15 ? 12 : l >= 10 ? 10 : l >= 5 ? 8 : 6)) }); break;
-    case 'Cleric': if (ed24) { if (l >= 2) R('Channel Divinity', l >= 18 ? 4 : l >= 6 ? 3 : 2, 'long', 'res.channelC24', 'star', null, true); if (l >= 10) R('Divine Intervention', 1, 'long', 'res.divInt', 'star'); break; } if (l >= 2) R('Channel Divinity', l >= 18 ? 3 : l >= 6 ? 2 : 1, 'short', 'res.channelC', 'star'); break;
-    case 'Druid': if (l >= 2) R('Wild Shape', l >= 20 ? 99 : 2, 'short', 'res.wild', 'leaf', { cr: l >= 8 ? '1' : l >= 4 ? '1/2' : '1/4' }); break;
-    case 'Fighter': R('Second Wind', 1, 'short', 'res.secondWind', 'heart', { d: d(`1W10+${l}`) }); if (l >= 2) R('Action Surge', l >= 17 ? 2 : 1, 'short', 'res.surge', 'bolt'); if (l >= 9) R('Indomitable', l >= 17 ? 3 : l >= 13 ? 2 : 1, 'long', 'res.indomitable', 'shield'); break;
-    case 'Monk': if (l >= 2) R('Ki', l, 'short', 'res.ki', 'swirl', { d: d('W' + (l >= 17 ? 10 : l >= 11 ? 8 : l >= 5 ? 6 : 4)) }); break;
-    case 'Paladin': if (ed24) { R('Lay on Hands', 5 * l, 'long', 'res.layOn24', 'heart'); if (l >= 2) R("Paladin's Smite", 1, 'long', 'res.smite', 'bolt'); if (l >= 3) R('Channel Divinity', l >= 11 ? 3 : 2, 'long', 'res.channelP24', 'star', null, true); if (l >= 5) R('Faithful Steed', 1, 'long', 'res.steed', 'star'); break; } R('Divine Sense', 1 + Math.max(0, cha), 'long', 'res.sense', 'eye'); R('Lay on Hands', 5 * l, 'long', 'res.layOn', 'heart'); if (l >= 3) R('Channel Divinity', 1, 'short', 'res.channelP', 'star'); break;
-    case 'Ranger': if (ed24) { R('Favored Enemy', l >= 17 ? 6 : l >= 13 ? 5 : l >= 9 ? 4 : l >= 5 ? 3 : 2, 'long', 'res.favored', 'bow'); if (l >= 10) R('Tireless', W, 'long', 'res.tireless', 'heart'); if (l >= 14) R("Nature's Veil", W, 'long', 'res.veil', 'cloak'); } break;
+    case 'Barbarian': R('Rage', at([1, 2], [3, 3], [6, 4], [12, 5], [17, 6]), 'long', 'res.rage24', 'flame', { n: at([1, 2], [9, 3], [16, 4]) }, true); break;
+    case 'Bard': R('Bardic Inspiration', CH, l >= 5 ? 'short' : 'long', 'res.inspiration', 'music', { d: d('W' + at([1, 6], [5, 8], [10, 10], [15, 12])) }); break;
+    case 'Cleric': if (l >= 2) R('Channel Divinity', at([2, 2], [6, 3], [18, 4]), 'long', 'res.channelC24', 'star', null, true); if (l >= 10) R('Divine Intervention', 1, 'long', 'res.divInt', 'star'); break;
+    case 'Druid': if (l >= 2) R('Wild Shape', at([2, 2], [6, 3], [17, 4]), 'long', 'res.wild24', 'leaf', { cr: l >= 8 ? '1' : l >= 4 ? '1/2' : '1/4' }, true); break;
+    case 'Fighter': R('Second Wind', at([1, 2], [4, 3], [10, 4]), 'long', 'res.secondWind24', 'heart', { d: d('1W10+' + l) }, true); if (l >= 2) R('Action Surge', l >= 17 ? 2 : 1, 'short', 'res.surge', 'bolt'); if (l >= 9) R('Indomitable', at([9, 1], [13, 2], [17, 3]), 'long', 'res.indomitable24', 'shield', { n: l }); break;
+    case 'Monk': if (l >= 2) { R('Focus Points', l, 'short', 'res.focus', 'swirl', { d: d('W' + at([1, 6], [5, 8], [11, 10], [17, 12])) }); R('Uncanny Metabolism', 1, 'long', 'res.metabolism', 'heart'); } break;
+    case 'Paladin': R('Lay on Hands', 5 * l, 'long', 'res.layOn24', 'heart'); if (l >= 2) R("Paladin's Smite", 1, 'long', 'res.smite', 'bolt'); if (l >= 3) R('Channel Divinity', l >= 11 ? 3 : 2, 'long', 'res.channelP24', 'star', null, true); if (l >= 5) R('Faithful Steed', 1, 'long', 'res.steed', 'star'); break;
+    case 'Ranger': R('Favored Enemy', at([1, 2], [5, 3], [9, 4], [13, 5], [17, 6]), 'long', 'res.favored', 'bow'); if (l >= 10) R('Tireless', W, 'long', 'res.tireless', 'heart'); if (l >= 14) R("Nature's Veil", W, 'long', 'res.veil', 'cloak'); break;
     case 'Rogue': if (l >= 20) R('Stroke of Luck', 1, 'short', 'res.luck', 'star'); break;
-    case 'Sorcerer': if (l >= 2) R('Sorcery Points', l, 'long', 'res.points', 'gem'); break;
-    case 'Warlock': if (l >= 11) R('Mystic Arcanum', l >= 17 ? 4 : l >= 15 ? 3 : l >= 13 ? 2 : 1, 'long', 'res.arcanum', 'gem'); if (l >= 20) R('Eldritch Master', 1, 'long', 'res.master', 'eye'); break;
-    case 'Wizard': R('Arcane Recovery', 1, 'long', 'res.recovery', 'book', { n: Math.ceil(l / 2) }); break;
+    case 'Sorcerer': R('Innate Sorcery', 2, 'long', 'res.innate', 'flame'); if (l >= 2) R('Sorcery Points', l, 'long', 'res.points', 'gem'); if (l >= 5) R('Sorcerous Restoration', 1, 'long', 'res.sorcRest', 'gem', { n: Math.floor(l / 2) }); break;
+    case 'Warlock': if (l >= 2) R('Magical Cunning', 1, 'long', l >= 20 ? 'res.cunningAll' : 'res.cunning', 'eye'); if (l >= 9) R('Contact Patron', 1, 'long', 'res.contact', 'eye'); if (l >= 11) R('Mystic Arcanum', at([11, 1], [13, 2], [15, 3], [17, 4]), 'long', 'res.arcanum', 'gem'); break;
+    case 'Wizard': R('Arcane Recovery', 1, 'long', 'res.recovery', 'book', { n: Math.ceil(l / 2) }); if (l >= 20) R('Signature Spells', 2, 'short', 'res.signature', 'book'); break;
   }
-  // Unterklassen mit eigener Anzahl an Anwendungen (PHB 2014)
-  const wis = Math.max(1, mod(S.abil.wis)), I = Math.max(1, mod(S.abil.int));
   const SR = {
-    'Light Domain': () => { if (!ed24) { R('Warding Flare', wis, 'long', 'res.sub.flare', 'shield'); return; } if (l >= 3) R('Warding Flare', W, l >= 6 ? 'short' : 'long', 'res.sub.flare24', 'shield'); if (l >= 17) R('Corona of Light', W, 'long', 'res.sub.corona', 'star'); },
-    'Tempest Domain': () => R('Wrath of the Storm', wis, 'long', 'res.sub.wrath', 'bolt'),
-    'War Domain': () => { if (!ed24) { R('War Priest', wis, 'long', 'res.sub.warPriest', 'sword'); return; } if (l >= 3) R('War Priest', W, 'short', 'res.sub.warPriest24', 'sword'); },
-    'Oath of Glory': () => { if (l >= 15) R('Glorious Defense', CH, 'long', 'res.sub.gloriousDef', 'shield'); if (l >= 20) R('Living Legend', 1, 'long', 'res.sub.capstone', 'star'); },
-    'Gloom Stalker': () => { if (l >= 3) R('Dreadful Strike', W, 'long', 'res.sub.dreadful', 'eye'); },
-    'Fey Wanderer': () => { if (l >= 15) R('Misty Wanderer', W, 'long', 'res.sub.mistyW', 'cloak'); },
+    'Path of the Berserker': () => { if (l >= 14) R('Intimidating Presence', 1, 'long', 'res.sub.intimidate', 'skull'); },
+    'Path of the Zealot': () => { if (l >= 3) R('Warrior of the Gods', at([3, 4], [6, 5], [12, 6], [17, 7]), 'long', 'res.sub.godsDice', 'heart'); if (l >= 10) R('Zealous Presence', 1, 'long', 'res.sub.zealous', 'star'); if (l >= 14) R('Rage of the Gods', 1, 'long', 'res.sub.rageGods', 'wing'); },
     'College of Glamour': () => { if (l >= 3) R('Beguiling Magic', 1, 'long', 'res.sub.beguile', 'music'); if (l >= 6) R('Mantle of Majesty', 1, 'long', 'res.sub.majesty', 'star'); if (l >= 14) R('Unbreakable Majesty', 1, 'short', 'res.sub.unbreak', 'shield'); },
+    'Light Domain': () => { if (l >= 3) R('Warding Flare', W, l >= 6 ? 'short' : 'long', 'res.sub.flare24', 'shield'); if (l >= 17) R('Corona of Light', W, 'long', 'res.sub.corona', 'star'); },
+    'War Domain': () => { if (l >= 3) R('War Priest', W, 'short', 'res.sub.warPriest24', 'sword'); },
+    'Circle of the Land': () => { if (l >= 6) R('Natural Recovery', 1, 'long', 'res.sub.natural24', 'leaf', { n: Math.ceil(l / 2) }); },
+    'Circle of the Moon': () => { if (l >= 10) R('Moonlight Step', W, 'long', 'res.sub.moonStep', 'cloak'); },
+    'Circle of the Stars': () => { if (l >= 3) R('Star Map', W, 'long', 'res.sub.starMap', 'star'); if (l >= 6) R('Cosmic Omen', W, 'long', 'res.sub.omen', 'eye'); },
+    'Battle Master': () => { if (l >= 3) R('Superiority Dice', at([3, 4], [7, 5], [15, 6]), 'short', 'res.sub.superiority', 'dice', { d: d('W' + at([3, 8], [10, 10], [18, 12])) }); },
+    'Psi Warrior': () => { if (l >= 3) R('Psionic Energy', psiN, 'long', 'res.sub.psi', 'eye', { d: psiD }, true); },
+    'Warrior of Mercy': () => { if (l >= 11) R('Flurry of Healing and Harm', W, 'long', 'res.sub.mercyFlurry', 'heart'); if (l >= 17) R('Hand of Ultimate Mercy', 1, 'long', 'res.sub.ultMercy', 'heart'); },
+    'Warrior of the Open Hand': () => { if (l >= 6) R('Wholeness of Body', W, 'long', 'res.sub.wholeness24', 'heart'); },
+    'Oath of Glory': () => { if (l >= 15) R('Glorious Defense', CH, 'long', 'res.sub.gloriousDef', 'shield'); if (l >= 20) R('Living Legend', 1, 'long', 'res.sub.capstone', 'star'); },
     'Oath of the Ancients': () => { if (l >= 15) R('Undying Sentinel', 1, 'long', 'res.sub.undying', 'heart'); if (l >= 20) R('Elder Champion', 1, 'long', 'res.sub.capstone', 'star'); },
     'Oath of Devotion': () => { if (l >= 20) R('Holy Nimbus', 1, 'long', 'res.sub.capstone', 'star'); },
     'Oath of Vengeance': () => { if (l >= 20) R('Avenging Angel', 1, 'long', 'res.sub.capstone', 'star'); },
-    'Battle Master': () => { if (l >= 3) R('Superiority Dice', l >= 15 ? 6 : l >= 7 ? 5 : 4, 'short', 'res.sub.superiority', 'dice', { d: d('W' + (l >= 18 ? 12 : l >= 10 ? 10 : 8)) }); },
-    'Circle of the Land': () => { if (l >= 2) R('Natural Recovery', 1, 'long', 'res.sub.natural', 'leaf', { n: Math.ceil(l / 2) }); },
-    'Way of the Open Hand': () => { if (l >= 6) R('Wholeness of Body', 1, 'long', 'res.sub.wholeness', 'heart', { n: 3 * l }); },
-    'Wild Magic': () => R('Tides of Chaos', 1, 'long', 'res.sub.tides', 'swirl'),
-    'The Archfey': () => { R('Fey Presence', 1, 'short', 'res.sub.fey', 'star'); if (l >= 6) R('Misty Escape', 1, 'short', 'res.sub.misty', 'cloak'); if (l >= 14) R('Dark Delirium', 1, 'short', 'res.sub.delirium', 'eye'); },
-    'The Fiend': () => { if (l >= 6) R("Dark One's Own Luck", 1, 'short', 'res.sub.luck', 'star'); if (l >= 14) R('Hurl Through Hell', 1, 'long', 'res.sub.hurl', 'flame'); },
-    'The Great Old One': () => { if (l >= 6) R('Entropic Ward', 1, 'short', 'res.sub.entropic', 'shield'); },
-    'School of Divination': () => { if (l >= 2) R('Portent', l >= 14 ? 3 : 2, 'long', 'res.sub.portent', 'eye'); },
-    'School of Abjuration': () => { if (l >= 2) R('Arcane Ward', 2 * l + I, 'long', 'res.sub.ward', 'shield'); },
-    'School of Conjuration': () => { if (l >= 6) R('Benign Transposition', 1, 'long', 'res.sub.transpose', 'swirl'); },
-    'School of Illusion': () => { if (l >= 10) R('Illusory Self', 1, 'short', 'res.sub.illusory', 'eye'); },
+    'Gloom Stalker': () => { if (l >= 3) R('Dreadful Strike', W, 'long', 'res.sub.dreadful', 'eye'); },
+    'Fey Wanderer': () => { if (l >= 15) R('Misty Wanderer', W, 'long', 'res.sub.mistyW', 'cloak'); },
+    Soulknife: () => { if (l >= 3) R('Psionic Energy', psiN, 'long', 'res.sub.psi', 'eye', { d: psiD }, true); },
+    'Arcane Trickster': () => { if (l >= 17) R('Spell Thief', 1, 'long', 'res.sub.spellThief', 'book'); },
+    'Aberrant Sorcery': () => { if (l >= 18) R('Warping Implosion', 1, 'long', 'res.sub.implosion', 'swirl'); },
+    'Clockwork Sorcery': () => { if (l >= 3) R('Restore Balance', CH, 'long', 'res.sub.balance', 'gem'); if (l >= 14) R('Trance of Order', 1, 'long', 'res.sub.trance', 'gem'); if (l >= 18) R('Clockwork Cavalcade', 1, 'long', 'res.sub.cavalcade', 'gem'); },
+    'Draconic Sorcery': () => { if (l >= 14) R('Dragon Wings', 1, 'long', 'res.sub.wings', 'wing'); if (l >= 18) R('Dragon Companion', 1, 'long', 'res.sub.dragon', 'flame'); },
+    'Wild Magic Sorcery': () => { if (l >= 3) R('Tides of Chaos', 1, 'long', 'res.sub.tides24', 'swirl'); if (l >= 18) R('Tamed Surge', 1, 'long', 'res.sub.tamed', 'swirl'); },
+    'Archfey Patron': () => { if (l >= 3) R('Steps of the Fey', CH, 'long', 'res.sub.feySteps', 'cloak'); if (l >= 10) R('Beguiling Defenses', 1, 'long', 'res.sub.beguileDef', 'shield'); },
+    'Celestial Patron': () => { if (l >= 3) R('Healing Light', 1 + l, 'long', 'res.sub.healLight', 'heart', { n: CH }); if (l >= 14) R('Searing Vengeance', 1, 'long', 'res.sub.searing', 'flame'); },
+    'Fiend Patron': () => { if (l >= 6) R("Dark One's Own Luck", CH, 'long', 'res.sub.luck24', 'star'); if (l >= 14) R('Hurl Through Hell', 1, 'long', 'res.sub.hurl', 'flame'); },
+    'Great Old One Patron': () => { if (l >= 6) R('Clairvoyant Combatant', 1, 'short', 'res.sub.clairvoyant', 'eye'); },
+    Abjurer: () => { if (l >= 3) R('Arcane Ward', 2 * l + I, 'long', 'res.sub.ward', 'shield'); },
+    Diviner: () => { if (l >= 3) R('Portent', l >= 14 ? 3 : 2, 'long', 'res.sub.portent', 'eye'); if (l >= 10) R('The Third Eye', 1, 'short', 'res.sub.thirdEye', 'eye'); },
+    Illusionist: () => { if (l >= 6) R('Phantasmal Creatures', 2, 'long', 'res.sub.phantasmal', 'mask'); if (l >= 10) R('Illusory Self', 1, 'short', 'res.sub.illusory', 'eye'); },
   };
   if (SR[sub]) SR[sub]();
   return o;
@@ -185,13 +195,15 @@ export function computeAc() {
     const a = armorStats(body);
     if (!a || a.shield) return null;
     const cap = a.max == null ? Infinity : a.max + (a.cat === 'Medium' && hasFeat('Medium Armor Master', 'Talent') ? 1 : 0);
-    ac = a.b + (a.dex ? Math.min(dex, cap) : 0) + numPlus(body.n) + (hasFeat('Defense', 'Klasse') ? 1 : 0);
+    ac = a.b + (a.dex ? Math.min(dex, cap) : 0) + numPlus(body.n) + (hasFeat('Defense') ? 1 : 0);
   } else {
     const list = classLevels();
     const opts = [10 + dex];
     if (list.some(c => c.k === 'Barbarian')) opts.push(10 + dex + mod(S.abil.con));
     if (list.some(c => c.k === 'Monk') && !isShield(off)) opts.push(10 + dex + mod(S.abil.wis));
-    if (list.some(c => c.k === 'Sorcerer' && c.sub === 'Draconic Bloodline')) opts.push(13 + dex);
+    if (list.some(c => c.k === 'Sorcerer' && (c.sub === 'Draconic Sorcery' || c.sub === 'Draconic Bloodline') && c.lvl >= 3)) opts.push(10 + dex + mod(S.abil.cha));
+    // College of Dance (Dazzling Footwork): ohne Rüstung und Schild 10 + GE + CH
+    if (list.some(c => c.k === 'Bard' && c.sub === 'College of Dance' && c.lvl >= 3) && !off) opts.push(10 + dex + mod(S.abil.cha));
     ac = Math.max(...opts);
     if (S.eq.hands?.ref === 'magic:bracers-of-defense' && S.eq.hands.tuned && !isShield(off)) ac += 2;
   }

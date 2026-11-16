@@ -27,7 +27,36 @@ const RANGER = {
   'Fey Wanderer': { 3: ['Charm Person'], 5: ['Misty Step'], 9: ['Summon Fey'], 13: ['Dimension Door'], 17: ['Mislead'] },
 };
 const BARD = { '': { 20: ['Power Word Heal', 'Power Word Kill'] }, 'College of Glamour': { 3: ['Charm Person', 'Mirror Image'], 6: ['Command'] } };
-export const ALWAYS = { Cleric: CLERIC, Paladin: PALADIN, Ranger: RANGER, Bard: BARD };
+const DRUID = {
+  '': { 1: ['Speak with Animals'] },
+  'Circle of the Moon': { 3: ['Cure Wounds', 'Moonbeam', 'Starry Wisp'], 5: ['Conjure Animals'], 7: ['Fount of Moonlight'], 9: ['Mass Cure Wounds'] },
+  'Circle of the Sea': { 3: ['Fog Cloud', 'Gust of Wind', 'Ray of Frost', 'Shatter', 'Thunderwave'], 5: ['Lightning Bolt', 'Water Breathing'], 7: ['Control Water', 'Ice Storm'], 9: ['Conjure Elemental', 'Hold Monster'] },
+  'Circle of the Stars': { 3: ['Guidance', 'Guiding Bolt'] },
+};
+// Circle of the Land: Zauber nach dem gewählten Gelände (S.land), Schlüssel = Druidenstufe
+export const LAND = {
+  arid: { 3: ['Blur', 'Burning Hands', 'Fire Bolt'], 5: ['Fireball'], 7: ['Blight'], 9: ['Wall of Stone'] },
+  polar: { 3: ['Fog Cloud', 'Hold Person', 'Ray of Frost'], 5: ['Sleet Storm'], 7: ['Ice Storm'], 9: ['Cone of Cold'] },
+  temperate: { 3: ['Misty Step', 'Shocking Grasp', 'Sleep'], 5: ['Lightning Bolt'], 7: ['Freedom of Movement'], 9: ['Tree Stride'] },
+  tropical: { 3: ['Acid Splash', 'Ray of Sickness', 'Web'], 5: ['Stinking Cloud'], 7: ['Polymorph'], 9: ['Insect Plague'] },
+};
+const SORCERER = {
+  'Aberrant Sorcery': { 3: ['Arms of Hadar', 'Calm Emotions', 'Detect Thoughts', 'Dissonant Whispers', 'Mind Sliver'], 5: ['Hunger of Hadar', 'Sending'], 7: ['Black Tentacles', 'Summon Aberration'], 9: ['Telepathic Bond', 'Telekinesis'] },
+  'Clockwork Sorcery': { 3: ['Aid', 'Alarm', 'Lesser Restoration', 'Protection from Evil and Good'], 5: ['Dispel Magic', 'Protection from Energy'], 7: ['Freedom of Movement', 'Summon Construct'], 9: ['Greater Restoration', 'Wall of Force'] },
+  'Draconic Sorcery': { 3: ['Alter Self', 'Chromatic Orb', 'Command', "Dragon's Breath"], 5: ['Fear', 'Fly'], 7: ['Arcane Eye', 'Charm Monster'], 9: ['Legend Lore', 'Summon Dragon'] },
+};
+const WARLOCK = {
+  '': { 9: ['Contact Other Plane'] },
+  'Archfey Patron': { 3: ['Calm Emotions', 'Faerie Fire', 'Misty Step', 'Phantasmal Force', 'Sleep'], 5: ['Blink', 'Plant Growth'], 7: ['Dominate Beast', 'Greater Invisibility'], 9: ['Dominate Person', 'Seeming'] },
+  'Celestial Patron': { 3: ['Aid', 'Cure Wounds', 'Guiding Bolt', 'Lesser Restoration', 'Light', 'Sacred Flame'], 5: ['Daylight', 'Revivify'], 7: ['Guardian of Faith', 'Wall of Fire'], 9: ['Greater Restoration', 'Summon Celestial'] },
+  'Fiend Patron': { 3: ['Burning Hands', 'Command', 'Scorching Ray', 'Suggestion'], 5: ['Fireball', 'Stinking Cloud'], 7: ['Fire Shield', 'Wall of Fire'], 9: ['Geas', 'Insect Plague'] },
+  'Great Old One Patron': { 3: ['Detect Thoughts', 'Dissonant Whispers', 'Phantasmal Force', 'Hideous Laughter'], 5: ['Clairvoyance', 'Hunger of Hadar'], 7: ['Confusion', 'Summon Aberration'], 9: ['Modify Memory', 'Telekinesis'], 10: ['Hex'] },
+};
+const WIZARD = { Abjurer: { 10: ['Counterspell', 'Dispel Magic'] }, Illusionist: { 3: ['Minor Illusion'], 6: ['Summon Beast', 'Summon Fey'] } };
+const FIGHTER = { 'Psi Warrior': { 18: ['Telekinesis'] } };
+const MONK = { 'Warrior of Shadow': { 3: ['Minor Illusion'] }, 'Warrior of the Elements': { 3: ['Elementalism'] } };
+const ROGUE = { 'Arcane Trickster': { 3: ['Mage Hand'] } };
+export const ALWAYS = { Cleric: CLERIC, Paladin: PALADIN, Ranger: RANGER, Bard: BARD, Druid: DRUID, Sorcerer: SORCERER, Warlock: WARLOCK, Wizard: WIZARD, Fighter: FIGHTER, Monk: MONK, Rogue: ROGUE };
 // Zauber aus Volk und Abstammung (Regeln 2024), Schlüssel = Charakterstufe.
 export const SPECIES = {
   Aasimar: { 1: ['Light'] },
@@ -50,7 +79,7 @@ const byLower = () => { const m = {}; Object.values(BYN).forEach(e => { if (e.k 
 /** Alle immer vorbereiteten Zauber, die der Charakter auf seiner Stufe haben müsste. */
 export function alwaysFor(list = classLevels()) {
   const out = [];
-  list.forEach(c => [ALWAYS[c.k]?.[''], c.sub ? ALWAYS[c.k]?.[c.sub] : null].forEach(t => { if (t) Object.entries(t).forEach(([l, ns]) => { if (c.lvl >= +l) out.push(...ns); }); }));
+  list.forEach(c => [ALWAYS[c.k]?.[''], c.sub ? ALWAYS[c.k]?.[c.sub] : null, c.sub === 'Circle of the Land' ? LAND[S.land] : null].forEach(t => { if (t) Object.entries(t).forEach(([l, ns]) => { if (c.lvl >= +l) out.push(...ns); }); }));
   return [...new Set(out)];
 }
 /** Trägt fehlende Domänen- und Eidzauber als „immer vorbereitet“ ein. Liefert die Zahl der Änderungen. */
