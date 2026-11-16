@@ -5,6 +5,8 @@ import { esc } from '../util.js';
 import { S, U, roster, charSnapshot } from '../state.js';
 import { CAT } from '../catalog.js';
 import { campaigns, campaignsOf, nextSession, campaignById, ART } from '../campaigns.js';
+import { legacySummary } from '../dm.js';
+import { instSnapshot } from '../state.js';
 import { L, dmCamp, dmOnline, players } from '../live.js';
 import { playerName } from '../player.js';
 import { dmOnly } from './dm-mode.js';
@@ -76,9 +78,11 @@ export function vHubResults() {
   return `<div class="hub-results">${all.join('') || `<p class="note">${t('wiki.nothing')}</p>`}</div>`;
 }
 
+/** Zuletzt geöffnete Kampagne: der Einstieg ins Spiel. */
+const lastCamp = () => campaigns().filter(c => c.status === 'active' && c.seen).sort((a, b) => b.seen.localeCompare(a.seen))[0] || null;
 function vHero() {
   const list = chars().filter(real), cont = real({ id: S.id, klass: S.klass, level: S.level });
-  return `<section class="hub-hero"><div class="hub-hero-txt"><h2 class="hub-hero-h">${t('hub.welcome')}</h2><p>${t('hub.welcomeTxt')}</p><i class="hub-div d3" aria-hidden="true"></i><div class="hub-cta"><button class="hbtn pri" data-a="campnew">${t('hub.newCamp')} ${ico('arrow')}</button><button class="hbtn" data-a="hubgo" data-s="join">${t('join.title')} ${ico('enter')}</button>${cont ? `<button class="hbtn" data-a="hubplay">${t('hub.continue', { n: esc(S.name) })} ${ico('arrow')}</button>` : list.length ? '' : `<button class="hbtn" data-a="hubnewchar">${t('hub.firstChar')} ${ico('arrow')}</button>`}</div></div><div class="hub-hero-art" aria-hidden="true"></div></section>`;
+  return `<section class="hub-hero"><div class="hub-hero-txt"><h2 class="hub-hero-h">${t('hub.welcome')}</h2><p>${t('hub.welcomeTxt')}</p><i class="hub-div d3" aria-hidden="true"></i><div class="hub-cta"><button class="hbtn pri" data-a="campnew">${t('hub.newCamp')} ${ico('arrow')}</button><button class="hbtn" data-a="hubgo" data-s="join">${t('join.title')} ${ico('enter')}</button>${lastCamp() ? `<button class="hbtn" data-a="campplay" data-id="${esc(lastCamp().id)}">${t('hub.continueCamp', { n: esc(lastCamp().name) })} ${ico('arrow')}</button>` : cont ? `<button class="hbtn" data-a="hubplay">${t('hub.continue', { n: esc(S.name) })} ${ico('arrow')}</button>` : list.length ? '' : `<button class="hbtn" data-a="hubnewchar">${t('hub.firstChar')} ${ico('arrow')}</button>`}</div></div><div class="hub-hero-art" aria-hidden="true"></div></section>`;
 }
 function campCard(c, all) {
   const own = all.filter(x => c.chars.includes(x.id));
@@ -108,7 +112,7 @@ function vCampForm() {
   </div>${f(t('camp.desc'), `<textarea id="cf-desc" rows="2" maxlength="400">${esc(c.desc)}</textarea>`)}${f(t('lb.plan'), `<textarea id="cf-plan" rows="2" maxlength="1000">${esc(c.plan || '')}</textarea>`)}
   <p class="lbl">${t('camp.art')}</p><div class="hub-artpick">${Array.from({ length: ART }, (_, i) => `<button class="hub-camp-art a${i}${(U.CAMPART ?? c.art ?? 0) === i ? ' on' : ''}" data-a="campart" data-i="${i}" aria-pressed="${(U.CAMPART ?? c.art ?? 0) === i}" aria-label="${t('camp.artN', { n: i + 1 })}"></button>`).join('')}</div>
   <p class="lbl">${t('camp.chars')}</p><div class="chips">${all.map(x => `<button class="chip${sel.has(x.id) ? ' on' : ''}" data-a="campchar" data-id="${esc(x.id)}" aria-pressed="${sel.has(x.id)}">${esc(x.name)}</button>`).join('') || `<span class="note">${t('camp.noChars')}</span>`}</div>
-  <div class="dlgf"><button class="hbtn" data-a="campcancel">${t('common.cancel')}</button>${id !== 'new' ? `<button class="hbtn bad" data-a="campdel" data-id="${esc(id)}">${U.CONF === 'campdel:' + id ? t('chars.delConfirm') : t('common.deleteBtn')}</button>` : ''}<button class="hbtn pri" data-a="campsave">${t('camp.save')}</button></div><p class="note">${t('camp.localNote')}</p></section>`;
+  <div class="dlgf"><button class="hbtn" data-a="campcancel">${t('common.cancel')}</button>${id !== 'new' && c.migr ? `<button class="hbtn ${U.CONF === 'campundo:' + id ? 'bad' : ''}" data-a="campundo" data-id="${esc(id)}" title="${t('mig.undoHint')}">${U.CONF === 'campundo:' + id ? t('mig.undoConfirm') : t('mig.undo')}</button>` : ''}${id !== 'new' ? `<button class="hbtn bad" data-a="campdel" data-id="${esc(id)}">${U.CONF === 'campdel:' + id ? t('chars.delConfirm') : t('common.deleteBtn')}</button>` : ''}<button class="hbtn pri" data-a="campsave">${t('camp.save')}</button></div><p class="note">${t('camp.localNote')}</p></section>`;
 }
 function vCamps(limit) {
   const all = chars(), list = campaigns().sort((a, b) => (a.status === b.status ? (b.seen || b.at).localeCompare(a.seen || a.at) : a.status === 'active' ? -1 : 1));
@@ -117,13 +121,20 @@ function vCamps(limit) {
   const empty = `<div class="hub-empty"><div class="hub-camp-art a1" aria-hidden="true"></div><div><h3>${t('camp.emptyTitle')}</h3><p>${t('camp.emptyTxt')}</p><button class="hbtn pri" data-a="campnew">${t('hub.newCamp')} ${ico('arrow')}</button></div></div>`;
   return `${head}${limit ? '' : vCampForm()}${shown.length ? `<div class="hub-camps">${shown.map(c => campCard(c, all)).join('')}</div>` : list.length ? `<p class="note">${t('camp.onlyArchived')}</p>` : empty}`;
 }
+/** Bibliothek: in welchen Kampagnen der Charakter spielt, mit welchem Stand; öffnen und zuordnen. */
+function vCharCamps(c) {
+  const rows = c.camps.filter(k => k.role === 'player').map(k => { const s = k.split ? instSnapshot(k.id, c.id) : null; return `<li><span>${esc(k.name)}<small>${k.split ? (s ? t('lib.inst', { l: s.level || 0, h: s.hp, m: s.hpMax }) : t('lib.instNew')) : t('lib.shared')}</small></span><button class="hbtn sm pri" data-a="campplay" data-id="${esc(k.id)}">${t('lib.play')} ${ico('arrow')}</button></li>`; }).join('');
+  const free = campaigns().filter(k => k.role === 'player' && k.status === 'active' && !k.chars.includes(c.id));
+  const add = free.length ? `<div class="lib-add"><select id="lib-add-${esc(c.id)}" aria-label="${t('lib.addTo')}"><option value="">${t('lib.addTo')}</option>${free.map(k => `<option value="${esc(k.id)}">${esc(k.name)}</option>`).join('')}</select><button class="hbtn sm" data-a="libadd" data-id="${esc(c.id)}">${ico('plus')}</button></div>` : '';
+  return `${rows ? `<ul class="lib-camps">${rows}</ul>` : `<p class="note">${t('lib.noCamp')}</p>`}${add}`;
+}
 function vChars(limit) {
   const list = chars().filter(real);
-  const head = `<div class="hub-h">${ico('person', 'big')}<h2>${t(limit ? 'hub.yourChars' : 'hub.nav.chars')}</h2>${limit && list.length > limit ? `<button class="hub-more" data-a="hubgo" data-s="chars">${t('hub.all')} ${ico('arrow')}</button>` : ''}</div>`;
-  const card = c => { const pct = c.hpMax ? Math.min(100, c.hp / c.hpMax * 100) : 0; return `<article class="hub-char${c.id === S.id ? ' cur' : ''}"><i class="hub-char-art hub-camp-art a${c.camps[0]?.art ?? 1}" aria-hidden="true"></i>${portrait(c, 'hub-por xl')}<div class="hub-char-b"><h3>${esc(c.name)}</h3><p>${esc([c.race, c.klass, c.sub].filter(Boolean).join(' · ') || t('hub.noClass'))}</p><div class="hub-stats">${c.level ? `<span><small>${t('hub.lvl')}</small><b>${c.level}</b></span>` : ''}${c.ac ? `<span><small>${t('dm.acShort')}</small><b>${c.ac}</b></span>` : ''}${c.hpMax ? `<span class="hp"><small>${t('hub.hpShort')}</small><b>${c.hp}/${c.hpMax}</b><i><u style="width:${pct}%"></u></i></span>` : ''}</div>${c.camps.length ? `<p class="hub-tag">${ico('swords')}${c.camps.map(x => esc(x.name)).join(', ')}</p>` : ''}<button class="hbtn sm pri" data-a="hubplay" data-id="${esc(c.id)}">${t('hub.open')} ${ico('arrow')}</button></div></article>`; };
+  const head = `<div class="hub-h">${ico('person', 'big')}<h2>${t(limit ? 'hub.yourChars' : 'lib.title')}</h2>${limit && list.length > limit ? `<button class="hub-more" data-a="hubgo" data-s="chars">${t('hub.all')} ${ico('arrow')}</button>` : ''}</div>`;
+  const card = c => { const pct = c.hpMax ? Math.min(100, c.hp / c.hpMax * 100) : 0; return `<article class="hub-char${c.id === S.id ? ' cur' : ''}"><i class="hub-char-art hub-camp-art a${c.camps[0]?.art ?? 1}" aria-hidden="true"></i>${portrait(c, 'hub-por xl')}<div class="hub-char-b"><h3>${esc(c.name)}</h3><p>${esc([c.race, c.klass, c.sub].filter(Boolean).join(' · ') || t('hub.noClass'))}</p><div class="hub-stats">${c.level ? `<span><small>${t('hub.lvl')}</small><b>${c.level}</b></span>` : ''}${c.ac ? `<span><small>${t('dm.acShort')}</small><b>${c.ac}</b></span>` : ''}${c.hpMax ? `<span class="hp"><small>${t('hub.hpShort')}</small><b>${c.hp}/${c.hpMax}</b><i><u style="width:${pct}%"></u></i></span>` : ''}</div>${vCharCamps(c)}<button class="hbtn sm" data-a="hubplay" data-lib="1" data-id="${esc(c.id)}">${t('lib.base')} ${ico('pen')}</button></div></article>`; };
   const shown = limit ? list.slice(0, limit) : list;
   const add = `<article class="hub-char add"><button class="hub-addc" data-a="hubnewchar">${ico('plus')}<span>${t('hub.newChar')}</span></button><button class="hub-addc" data-a="hubimport">${ico('upload')}<span>${t('hub.importChar')}</span></button></article>`;
-  return `${head}<div class="hub-chars">${shown.map(card).join('')}${limit && shown.length >= limit ? '' : add}</div>`;
+  return `${head}${limit ? '' : `<p class="note hub-intro">${t('lib.intro')}</p>`}<div class="hub-chars">${shown.map(card).join('')}${limit && shown.length >= limit ? '' : add}</div>`;
 }
 /** Eigene Gruppe kompakt: Porträt, Name, Klasse und Stufe, TP aus dem gespeicherten Bogen, Kampagne. */
 function vGroup() {
@@ -202,6 +213,27 @@ function vSettings() {
   <div class="hub-h">${ico('upload', 'big')}<h2>${t('setup.backup')}</h2></div><section class="hub-panel">${vBackup()}</section>`;
 }
 
+/** Übernahme einer Kampagne aus dem gemeinsamen Stand: Dialog vor dem ersten Öffnen. Nichts geschieht ohne Bestätigung. */
+function vMigrate() {
+  const c = U.MIGRATE && campaignById(U.MIGRATE);
+  if (!c) return '';
+  let body;
+  if (c.role === 'dm') {
+    const s = legacySummary(), taken = campaigns().find(x => x.id !== c.id && x.migr?.dm === 'this'), legacyDm = campaigns().filter(x => x.role === 'dm' && !x.split);
+    const pre = !taken && legacyDm.length === 1 ? 'this' : '';
+    body = `<p>${t('mig.dmTxt', { n: s.notes, e: s.enc, f: s.fight })}</p>${taken ? `<p class="note">${t('mig.dmTaken', { n: esc(taken.name) })}</p>` : ''}
+    <label class="ck mig-o"><input type="radio" name="mig-dm" value="this"${pre === 'this' ? ' checked' : ''}> ${t('mig.dmThis')}</label>
+    <label class="ck mig-o"><input type="radio" name="mig-dm" value="empty"> ${t('mig.dmEmpty')}</label>`;
+  } else {
+    const own = c.chars.find(id => roster().some(r => r.id === id)), o = own && charSnapshot(own);
+    if (!o) return '';
+    const shared = campaigns().filter(x => !x.split && x.role === 'player' && x.chars.includes(own));
+    body = `<p>${t('mig.charTxt', { n: esc(o.name), l: o.level || 0, h: o.hp, m: o.hpMax, g: o.gold?.gp || 0 })}</p>${shared.length > 1 ? `<p class="note">${t('mig.charMany', { n: shared.map(x => esc(x.name)).join(', ') })}</p>` : ''}
+    <label class="ck mig-o"><input type="radio" name="mig-char" value="cur"${shared.length === 1 ? ' checked' : ''}> ${t('mig.charCur')}</label>`;
+  }
+  return `<div class="ovl"><div class="dlg mig" role="dialog" aria-modal="true" aria-labelledby="mig-h"><h3 id="mig-h">${t('mig.title', { n: esc(c.name) })}</h3>${body}<p class="note">${t('mig.safety')}</p>
+  <div class="dlgf"><button class="hbtn" data-a="migcancel">${t('common.cancel')}</button><button class="hbtn" data-a="miglater">${t('mig.later')}</button><button class="hbtn pri" data-a="migok">${t('mig.ok')}</button></div></div></div>`;
+}
 export function vHub() {
   const s = HUB_MORE.includes(U.HUB) || HUB_SECTIONS.includes(U.HUB) ? U.HUB : 'home';
   let main = '';
@@ -214,5 +246,5 @@ export function vHub() {
   if (s === 'gm') main = vGm();
   if (s === 'join') main = vJoin();
   if (s === 'settings') main = vSettings();
-  return `<div class="hub" data-sec="${s}">${vSide()}<div class="hub-main">${vTop()}<main class="hub-body">${main}</main><input type="file" id="impf" accept=".json,application/json,text/plain,application/pdf,image/*" multiple hidden></div></div>`;
+  return `<div class="hub" data-sec="${s}">${vSide()}<div class="hub-main">${vTop()}<main class="hub-body">${main}</main>${vMigrate()}<input type="file" id="impf" accept=".json,application/json,text/plain,application/pdf,image/*" multiple hidden></div></div>`;
 }

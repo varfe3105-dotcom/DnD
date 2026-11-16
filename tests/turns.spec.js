@@ -89,7 +89,7 @@ test.describe('Spielleitungsmodus und Meilenstein @new', () => {
     await expect(page.locator('h2', { hasText: /Notebook|Notizbuch/ }).first()).toBeVisible();
     await page.locator('[data-a="tab"][data-t="setup"]').click();
     await page.locator('#dm-only').click();
-    await expect(page.locator('[data-a="tab"][data-t="main"]')).toHaveCount(1);
+    await expect(page.locator('[data-a="tab"][data-t="prof"]')).toHaveCount(1);
     await expect(page.locator('.dmhd')).toHaveCount(0);
   });
 

@@ -65,7 +65,7 @@ test.describe('Dashboard @new', () => {
 
   test('Kampagne mit Raumcode: „Zum Live-Tisch“ öffnet die Kampagne mit dem Charakter und betritt den Raum', async ({ page }) => {
     await page.addInitScript(() => { window.__liveFake = (code, key, onPeers, onStatus) => { window.__code = code; setTimeout(() => onStatus('on'), 0); return { track() {}, send() {}, close() {} }; }; });
-    await start(page, { ...chars, 'charbogen-campaigns': [{ id: 'k1', name: 'Grenzland', status: 'active', chars: ['c2'], room: 'ABC234', done: 2 }] });
+    await start(page, { ...chars, 'charbogen-campaigns': [{ id: 'k1', name: 'Grenzland', status: 'active', chars: ['c2'], room: 'ABC234', done: 2, split: true }] });
     await page.locator('[data-a="campplay"]').click();
     // Öffnet die Kampagne (Übersicht) mit Borin als eigenem Charakter
     await expect(page.locator('.crumbs')).toContainText('Grenzland');

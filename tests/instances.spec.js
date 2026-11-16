@@ -1,6 +1,6 @@
 // Schritt 1 der Kampagnenstände: derselbe Charakter hat je Kampagne einen eigenen Stand, Spielleitungsdaten sind je Kampagne
 // getrennt, eigene Monster bleiben global. Ältere Kampagnen (ohne split) und alle vorhandenen Daten bleiben unverändert.
-import { test, expect, URL_UNDER_TEST } from './helpers.js';
+import { test, expect, URL_UNDER_TEST, tab } from './helpers.js';
 
 test.use({ hub: true });
 const IMG = 'data:image/jpeg;base64,/9j/AAAA';
@@ -54,7 +54,7 @@ test.describe('Kampagnenstände @new', () => {
     expect(s.spells).toHaveLength(0);
     expect(s.bag.filter(Boolean)).toHaveLength(0);
     // In Beta ändern: Gold und Zustand
-    await page.locator('[data-a="tab"][data-t="main"]').click();
+    await tab(page, 'main');
     await page.locator('[data-a="condopen"]').click();
     await page.locator('[data-a="cond"][data-c="Prone"]').click();
     await page.locator('[data-a="tab"][data-t="party"]').click();
@@ -132,6 +132,8 @@ test.describe('Kampagnenstände @new', () => {
     await page.locator('[data-a="crumbhome"]').click();
     await page.locator('.hub-side [data-s="gm"]').click();
     await page.locator('.hub-camp', { hasText: 'Alte Runde' }).locator('[data-a="campplay"]').click();
+    await expect(page.locator('.dlg.mig')).toContainText(/1 (notes|Notizen)/);
+    await page.locator('[data-a="miglater"]').click();
     await expect(page.locator('.lb-legacy')).toBeVisible();
     await page.locator('[data-a="tab"][data-t="dmnotes"]').click();
     await expect(page.locator('.wli')).toHaveText([/Alte Notiz/]);
@@ -144,7 +146,10 @@ test.describe('Kampagnenstände @new', () => {
 
   test('ältere Kampagne ohne Trennung nutzt weiter den gemeinsamen Charakter; Sicherung enthält die neuen Stände', async ({ page }) => {
     await start(page, { ...base, 'charbogen-campaigns': [...base['charbogen-campaigns'], { id: 'k0', name: 'Gamma', status: 'active', chars: ['c1'], role: 'player' }] });
-    await open(page, 'Gamma');
+    await page.locator('.hub-side [data-s="camps"]').click();
+    await page.locator('.hub-camp', { hasText: 'Gamma' }).locator('[data-a="campplay"]').click();
+    await page.locator('[data-a="miglater"]').click();
+    await page.locator('.crumbs', { hasText: 'Gamma' }).waitFor();
     expect(await ls(page, 'charbogen-v4')).toMatchObject({ camp: null, level: 3 });
     await expect(page.locator('.lb-legacy')).toBeVisible();
     await open(page, 'Alpha');

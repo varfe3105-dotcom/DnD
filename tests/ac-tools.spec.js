@@ -9,6 +9,7 @@ const auto = o => base4({ acMode: 'auto', abil, ...o });
 const shownAc = page => page.locator('.st').first().locator('b');
 
 async function drag(page, from, to) {
+  await page.setViewportSize({ width: 1280, height: 1500 });
   const a = await page.locator(`[data-drag="${from}"]`).boundingBox();
   const b = await page.locator(`[data-slot="${to}"]`).boundingBox();
   await page.mouse.move(a.x + a.width / 2, a.y + a.height / 2);

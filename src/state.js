@@ -77,6 +77,10 @@ export const charSnapshot=id=>id===S.id&&!S.camp?S:get(slotKey(id));
 export const instSnapshot=(camp,id)=>S.camp===camp&&S.id===id?S:get(instKey(camp,id));
 /** Lädt den Stand eines Charakters in einer Kampagne. Fehlt er, entsteht er aus dem Grundbogen (Beitritt). Liefert 'new', true oder false. */
 export function loadInstance(camp,id){if(S.camp===camp&&S.id===id)return true;const lib=S.id===id&&!S.camp?JSON.parse(JSON.stringify(S)):get(slotKey(id));if(!lib)return false;const o=get(instKey(camp,id));if(!park())return false;const n=o||JSON.parse(JSON.stringify(lib));IDENT.forEach(k=>{n[k]=lib[k]||''});n.id=id;n.camp=camp;if(!o){n.tab='prof';delete n.turn}setS(norm(n));fresh();save();return o?true:'new'}
+/** Rückweg der Übernahme: alle Kampagnenstände einer Kampagne entfernen (der geladene wird vorher gegen den Grundbogen getauscht). */
+export function dropInstances(camp){if(S.camp===camp){const lib=get(slotKey(S.id));if(lib){setS(norm(lib));drop(slotKey(S.id));fresh();save()}}const ks=[];for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);if(k&&k.startsWith('charbogen-inst-'+camp+'-'))ks.push(k)}ks.forEach(drop);return ks.length}
+/** Kampagnenstand bewusst als Grundbogen übernehmen (z. B. nach dem Assistenten beim Beitritt). Identität bleibt. */
+export function toLibrary(){if(!S.camp)return false;const c=JSON.parse(JSON.stringify(S));c.camp=null;const lib=get(slotKey(S.id))||{};IDENT.forEach(k=>{c[k]=lib[k]||S[k]||''});return put(slotKey(S.id),norm(c))}
 export function switchChar(id){if(id===S.id&&!S.camp)return false;const o=get(slotKey(id));if(!o||!park())return false;setS(norm(o));drop(slotKey(id));fresh();save();return true}
 const pristine=()=>!S.klass&&!S.level&&!S.spells.length&&!S.notes&&!S.bag.some(Boolean)&&!Object.keys(S.eq).length;
 /** Platz für einen importierten Charakter: Ein noch leerer Bogen wird ersetzt, alle anderen bleiben. */

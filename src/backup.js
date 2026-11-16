@@ -58,6 +58,7 @@ const metas = all => all.sort((a, b) => b.at.localeCompare(a.at)).map(x => ({ at
 
 let lastSig = '', lastAt = 0;
 /** Legt einen Stand an, wenn sich seit dem letzten etwas geändert hat. */
+/** Automatischer Sicherungsstand (IndexedDB), auch vor der Übernahme. */
 export async function snapshot() {
   try {
     const b = collect(), sig = JSON.stringify(b.data);

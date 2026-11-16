@@ -14,6 +14,12 @@ const libCustom = () => { const l = getJ(LIB); return l && Array.isArray(l.custo
 const mergeCustom = (a, b) => [...a, ...(b || []).filter(x => x && !a.some(y => y.id === x.id))];
 let ctx = null;
 export const dmCtx = () => ctx;
+/** Kurzfassung des bisherigen gemeinsamen Bereichs für den Übernahme-Dialog. */
+export function legacySummary() { const o = normD(getJ(KEY)); return { notes: o.notes.length, enc: o.encounters.length, fight: o.combat.list.length }; }
+/** Übernahme: Kopie der Kampagnenteile des gemeinsamen Bereichs in eine Kampagne. Der gemeinsame Bereich bleibt unverändert. */
+export function adoptLegacy(id) { const { on, only, view, custom, ...camp } = normD(getJ(KEY)); localStorage.setItem(campKey(id), JSON.stringify(camp)); }
+/** Rückweg: Spielleitungsdaten einer Kampagne entfernen. */
+export function dropCamp(id) { if (ctx === id) useCamp(null); localStorage.removeItem(campKey(id)); }
 const blank = () => ({ on: false, view: 'combat', combat: { round: 1, active: null, list: [] }, notes: [], sel: null, party: [{ count: 4, level: 3 }], encounters: [], custom: [], encSel: null });
 function load() {
   const o = normD(getJ(KEY)), lc = libCustom();

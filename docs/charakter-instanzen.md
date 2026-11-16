@@ -161,3 +161,29 @@ Für jede ältere Kampagne ohne `split` zeigt ein Dialog vor dem ersten Öffnen:
   Die eigenen Monster sind schon global und werden nicht gefragt.
 - Nach der Wahl wird die Kampagne auf `split: true` gesetzt und der gewählte Stand als **Kopie** angelegt. Der gemeinsame Stand bleibt unverändert.
 - „Übernahme zurücknehmen“ entfernt die Kopien und setzt `split` zurück.
+
+## 12. Stand Schritt 2 und 3 (umgesetzt)
+
+**Übernahme**
+- Beim Öffnen einer älteren Kampagne (ohne `split`) erscheint der Dialog `vMigrate()` (in `views/hub.js`).
+  - Spieler: „aktuellen Stand als Kopie übernehmen“. Vorbelegt nur, wenn der Charakter in genau einer älteren Kampagne steht. Ohne Wahl geschieht nichts.
+  - Spielleitung: „gehört zu dieser Kampagne (Kopie)“ oder „leer beginnen“. Vorbelegt nur bei genau einer älteren Spielleitungskampagne ohne frühere Zuordnung. Ist der Bereich schon einer Kampagne zugeordnet, wird das angezeigt.
+- „Später“ öffnet die Kampagne wie bisher; in dieser Sitzung wird nicht erneut gefragt.
+- Vor der Übernahme wird ein automatischer Sicherungsstand angelegt (`snapshot()`).
+- Danach gilt `split: true` und `migr` wird gesetzt. Der Kampagnenstand entsteht beim Öffnen als Kopie (`loadInstance`), die Spielleitungsdaten als Kopie (`adoptLegacy`).
+- Bibliothek und gemeinsamer Spielleitungsbereich bleiben unverändert.
+- **Rückweg:** „Übernahme zurücknehmen“ im Kampagnenformular, nur für übernommene Kampagnen, mit Bestätigung. Er entfernt die kopierten Stände (`dropInstances`, `dropCamp`) und setzt `split` zurück.
+
+**Bibliothek** (Startseite → Charaktere)
+- Zeigt je Charakter die Kampagnen mit eigenem Stand (Stufe, TP), noch nicht übernommen oder neu.
+- „Spielen“ öffnet die Kampagne. Zuordnen zu einer Kampagne ist möglich.
+- „Grundbogen“ öffnet die Bibliothek mit Hinweisband, ohne Kampf und ohne Rasten.
+- Im Kampagnenstand gibt es unter Bearbeiten „Diesen Stand als Grundbogen übernehmen“ (mit Bestätigung).
+
+**Einstiege**
+- Die Startseite bietet „Weiter in <Kampagne>“ (zuletzt geöffnet).
+- Charaktere in der Gruppenleiste der Startseite und „Weiter“ öffnen die zuletzt genutzte Kampagne des Charakters.
+
+**Tests:** `tests/migration.spec.js`.
+- Ältere Tests, die Spiellogik am Grundbogen prüfen, erreichen die Kampfseite über dieselbe Aktion wie ein Reiter (`tab()` in `tests/helpers.js`).
+- Kampagnen in Tests, die nicht die Übernahme prüfen, sind als getrennt angelegt.

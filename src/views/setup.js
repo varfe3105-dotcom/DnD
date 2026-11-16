@@ -39,7 +39,7 @@ export function vSetup() {
 function vSetupBody() {
   const R = RACES[S.race], C = CLASSES[S.klass];
   const bonus = R ? `${loc(R.size || { en: '', de: '' })}${R.size ? ' · ' : ''}${loc(R.asi)}` : '';
-  return `<p class="note">${t('setup.intro')}</p>
+  return `${S.camp ? `<div class="card lib-tolib"><p class="note" style="margin-top:0">${t('lib.tolibHint')}</p><button class="btn sm ${U.CONF === 'tolib' ? 'warn' : ''}" data-a="tolib">${U.CONF === 'tolib' ? t('lib.tolibConfirm') : t('lib.tolib')}</button></div>` : ''}<p class="note">${t('setup.intro')}</p>
   ${vWizardStart()}
   ${vChars()}
   ${vLiveJoin()}

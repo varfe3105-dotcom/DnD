@@ -550,3 +550,12 @@ html[data-area="char"] .lvh b{font:600 .95rem var(--f-cap);letter-spacing:.08em;
 .mc-act{margin-top:auto;padding-top:8px;border-top:1px solid var(--c-brass-soft)}
 .mc-act .live-send{flex-wrap:wrap}
 @media (max-width:520px){.lb-chapter{font-size:1.45rem}.lb-place .cover-v{font-size:1.3rem}}
+/* Bibliothek und Übernahme */
+.lib-banner{margin:10px 0 0;padding:8px 14px;border-left:3px solid var(--st-res);background:var(--st-res-bg);font-size:.92rem;color:var(--c-cream-2)}
+.lib-camps{list-style:none;margin:8px 0 4px;padding:0;display:grid;gap:6px}
+.lib-camps li{display:flex;align-items:center;gap:8px;justify-content:space-between}
+.lib-camps small{display:block;color:var(--c-cream-mute);font-size:.8rem}
+.lib-add{display:flex;gap:6px;margin:6px 0}
+.lib-add select{flex:1;min-width:0}
+.lib-tolib{border-left:3px solid var(--st-res)}
+.dlg.mig .mig-o{display:flex;margin:8px 0;padding:8px 10px;border:1px solid var(--c-brass-soft)}

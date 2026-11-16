@@ -1,5 +1,5 @@
 // Drei Ebenen: Startseite (global), Kampagne, Charakter. Rollen je Kampagne, Spielleiterbereich, Beitreten per Code.
-import { test, expect, URL_UNDER_TEST } from './helpers.js';
+import { test, expect, URL_UNDER_TEST, tab } from './helpers.js';
 
 test.use({ hub: true });
 const chars = { 'charbogen-v4': { v: 4, id: 'c1', name: 'Mirelle', race: 'Elf', klass: 'Cleric', level: 5, tab: 'main' }, 'charbogen-char-c2': { v: 4, id: 'c2', name: 'Borin', klass: 'Fighter', level: 4, hp: 30, hpMax: 36, gold: { gp: 12 } }, 'charbogen-index': [{ id: 'c1', name: 'Mirelle', klass: 'Cleric', level: 5 }, { id: 'c2', name: 'Borin', klass: 'Fighter', level: 4 }] };
@@ -19,7 +19,7 @@ const fake = (page, dm) => page.addInitScript(d => {
 
 test.describe('Ebenen und Rollen @new', () => {
   test('Spieler: Kampagne → Gruppe → Charakter, Brotkrumen führen zurück, Neuladen bleibt in der Kampagne', async ({ page }) => {
-    await start(page, { ...chars, 'charbogen-campaigns': [{ id: 'k1', name: 'Grenzland', status: 'active', chars: ['c2'], role: 'player' }] });
+    await start(page, { ...chars, 'charbogen-campaigns': [{ id: 'k1', name: 'Grenzland', status: 'active', chars: ['c2'], role: 'player', split: true }] });
     await page.locator('[data-a="campplay"]').click();
     await expect(page.locator('.crumb-lvl')).toHaveText(/Kampagne|Campaign/);
     expect(await navKeys(page)).toEqual(['cover', 'party', 'main', 'explore', 'trade', 'chron']);
@@ -38,7 +38,7 @@ test.describe('Ebenen und Rollen @new', () => {
     // Zurück zur Kampagne, Kampf ohne Umschalter Alles/Kampf/Erkundung
     await page.locator('.crumbs [data-a="crumb"][data-t="cover"]').click();
     expect(await navKeys(page)).toContain('chron');
-    await page.locator('[data-a="tab"][data-t="main"]').click();
+    await tab(page, 'main');
     await expect(page.locator('.stats .st.ac')).toBeVisible();
     await expect(page.locator('.modes')).toHaveCount(0);
     // Inventar & Handel und Chronik
@@ -112,7 +112,9 @@ test.describe('Ebenen und Rollen @new', () => {
   test('Ohne Kampagne: Charakterebene mit Spielansicht, Regeln über den Kopf', async ({ page }) => {
     await start(page, chars);
     await page.locator('.hub-gm', { hasText: 'Mirelle' }).click();
-    expect(await navKeys(page)).toEqual(['prof', 'stats', 'inv', 'spells', 'notes', 'setup', 'main']);
+    expect(await navKeys(page)).toEqual(['prof', 'stats', 'inv', 'spells', 'notes', 'setup']);
+    await expect(page.locator('.lib-banner')).toBeVisible();
+    await expect(page.locator('[data-a="rest"]')).toHaveCount(0);
     await expect(page.locator('.ov-abil > div')).toHaveCount(6);
     await expect(page.locator('.tabs.side')).toBeVisible();
     await page.locator('[data-a="tab"][data-t="wiki"]').click();
@@ -124,7 +126,7 @@ test.describe('Ebenen und Rollen @new', () => {
 
   test('Handybreite: Kampagnenübersicht und Charakterebene ohne Querscrollen', async ({ page }) => {
     await page.setViewportSize({ width: 390, height: 844 });
-    await start(page, { ...chars, 'charbogen-campaigns': [{ id: 'k1', name: 'Grenzland mit sehr langem Namen', status: 'active', chars: ['c2'], role: 'player', room: 'ABC234' }] });
+    await start(page, { ...chars, 'charbogen-campaigns': [{ id: 'k1', name: 'Grenzland mit sehr langem Namen', status: 'active', chars: ['c2'], role: 'player', room: 'ABC234', split: true }] });
     await page.locator('[data-a="campplay"]').click();
     const over = () => page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
     expect(await over()).toBeLessThanOrEqual(0);

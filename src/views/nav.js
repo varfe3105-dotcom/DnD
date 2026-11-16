@@ -31,7 +31,8 @@ export const curCamp = () => (U.CAMP && campaignById(U.CAMP)) || null;
 export const charLevel = () => !dmOnly() && (CHAR_T.includes(S.tab) || (!curCamp() && ['main', 'wiki'].includes(S.tab)));
 export function navTabs() {
   if (dmOnly()) return CAMP_DM;
-  if (!curCamp()) return [...CHAR_T, 'main'];
+  // Bibliothek (ohne Kampagne): Grundbogen ohne Spielbetrieb, also ohne Kampf
+  if (!curCamp()) return CHAR_T;
   return CHAR_T.includes(S.tab) ? CHAR_T : CAMP_P;
 }
 export function validTabs() {
@@ -81,8 +82,8 @@ function vExplore() {
     const here = dmHere();
     return card(t('nav.here'), `<p class="cover-v" style="margin-top:0">${here ? esc(here) : `<span class="note">${t('nav.hereNone')}</span>`}</p><p class="note">${t('nav.explorePlayer')}</p>`) + card(t('hub.nav.map'), map);
   }
-  const list = kind => D.notes.filter(n => n.kind === kind).map(n => `<button class="chip${D.here === n.id ? ' on' : ''}" data-a="dmopen" data-id="${esc(n.id)}">${esc(n.title || t('dm.untitled'))}</button>`).join('');
-  return `${vHere().replaceAll('data-a="dmsel"', 'data-a="dmopen"')}${card(t('nav.places'), `<div class="chips">${list('place') || `<span class="note">${t('dm.hereNoPlaces')}</span>`}</div><div class="add"><button class="btn sm solid" data-a="dmnewhere">${t('dm.newPlace')}</button></div>`)}${card(t('nav.plot'), `<div class="chips">${list('plot') || `<span class="note">${t('nav.plotNone')}</span>`}</div><p class="note">${t('nav.plotHint')}</p>`)}${card(t('hub.nav.map'), map)}`;
+  const list = kind => D.notes.filter(n => n.kind === kind).map(n => `<button class="chip${D.here === n.id ? ' on' : ''}" data-a="dmnote" data-id="${esc(n.id)}">${esc(n.title || t('dm.untitled'))}</button>`).join('');
+  return `${vHere().replaceAll('data-a="dmsel"', 'data-a="dmnote"')}${card(t('nav.places'), `<div class="chips">${list('place') || `<span class="note">${t('dm.hereNoPlaces')}</span>`}</div><div class="add"><button class="btn sm solid" data-a="dmnewhere">${t('dm.newPlace')}</button></div>`)}${card(t('nav.plot'), `<div class="chips">${list('plot') || `<span class="note">${t('nav.plotNone')}</span>`}</div><p class="note">${t('nav.plotHint')}</p>`)}${card(t('hub.nav.map'), map)}`;
 }
 /** Inventar & Handel (Spieler): Münzen, Gruppenkasse, Einkauf. Das persönliche Inventar bleibt beim Charakter. */
 function vTrade() {

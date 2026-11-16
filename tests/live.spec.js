@@ -139,7 +139,7 @@ test.describe('Live-Tisch gegen das echte Projekt @new @real', () => {
     await expect(guest.locator('.dm-bar .lbl')).toHaveText(/DM is online/, { timeout: 15000 });
     await expect(host.locator('.dm-row')).toContainText('Gast', { timeout: 15000 });
     await expect(host.locator('.dm-hpv b')).toHaveText('11');
-    await guest.locator('[data-a="tab"][data-t="main"]').click();
+    await tab(guest, 'main');
     await guest.locator('[data-a="hp"][data-d="-1"]').first().click();
     await expect(host.locator('.dm-hpv b')).toHaveText('10', { timeout: 15000 });
     const key = await host.locator('[data-a="livesend"][data-t="dmg"]').getAttribute('data-k');

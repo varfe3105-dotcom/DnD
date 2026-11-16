@@ -38,8 +38,15 @@ export async function seed(page, state, key = KEY) {
 
 export const read = page => page.evaluate(k => JSON.parse(localStorage.getItem(k)), KEY);
 export const act = (page, a, extra = '') => page.locator(`[data-a="${a}"]${extra}`);
-export const tab = (page, t) => page.locator(`[data-a="tab"][data-t="${t}"]`).click();
-export const rest = (page, r) => act(page, 'rest', `[data-r="${r}"]`).click();
+// Die Kampfseite ist in der Bibliothek (ohne Kampagne) nicht verlinkt, bleibt aber als Seite gültig. Viele Tests prüfen dort
+// die Spiellogik am Grundbogen; sie gelangen über dieselbe Aktion „tab“ dorthin, die auch die Reiter auslösen.
+export const tab = async (page, t) => {
+  const b = page.locator(`[data-a="tab"][data-t="${t}"]`);
+  if (t === 'main' && !(await b.count())) return page.evaluate(() => { const x = document.createElement('button'); x.dataset.a = 'tab'; x.dataset.t = 'main'; x.hidden = true; document.getElementById('app').appendChild(x); x.click(); });
+  return b.click();
+};
+// Rasten stehen im Charakterkopf nur im Spielbetrieb (Kampagne oder Kampfseite); im Grundbogen erst zur Kampfseite.
+export const rest = async (page, r) => { if (!(await page.locator('[data-a="rest"]').count())) await tab(page, 'main'); return act(page, 'rest', `[data-r="${r}"]`).click(); };
 
 export const blankSlots = () => Array.from({ length: 9 }, () => ({ max: 0, used: 0 }));
 export const base4 = o => ({ v: 4, name: 'Test', hp: 20, hpMax: 20, tmp: 0, level: 1, prof: 2, ac: 12, speed: 9, abil: { str: 14, dex: 16, con: 12, int: 10, wis: 10, cha: 10 }, slots: blankSlots(), tab: 'main', ...o });

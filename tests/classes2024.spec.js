@@ -1,4 +1,4 @@
-import { test, expect, seed, read, act, base4, rest } from './helpers.js';
+import { test, expect, seed, read, act, base4, rest, tab } from './helpers.js';
 
 const abil = { str: 14, dex: 14, con: 14, int: 10, wis: 16, cha: 16 };
 
@@ -98,7 +98,7 @@ test.describe('Alle Klassen 2024 und die drei Lücken @new', () => {
     await act(page, 'petprimal', '[data-k="land"]').click();
     const s = await read(page);
     expect(s.pets[0]).toMatchObject({ primal: 'land', hp: 30 });
-    await page.locator('[data-a="tab"][data-t="main"]').click();
+    await tab(page, 'main');
     await expect(page.locator('.petatk').first()).toContainText('+5');
     await expect(page.locator('.petatk').first()).toContainText(/1[dW]8\+4/);
   });

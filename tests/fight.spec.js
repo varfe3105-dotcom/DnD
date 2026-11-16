@@ -1,5 +1,5 @@
 // Kampfmodus (Vorbereitung / laufender Kampf), Reihenfolge für Spieler, Konzentration beenden, Meldungen, Zauberverwaltung
-import { test, expect, URL_UNDER_TEST, seed, read, base4 } from './helpers.js';
+import { test, expect, URL_UNDER_TEST, seed, read, base4, tab } from './helpers.js';
 
 const blankSlots = () => Array.from({ length: 9 }, () => ({ max: 0, used: 0 }));
 async function dmPage(page) {
@@ -52,7 +52,7 @@ test.describe('Kampfmodus @new', () => {
     await page.locator('#live-code').fill('ABC234');
     await page.locator('[data-a="livejoin"]').click();
     await expect(page.locator('#toast')).toContainText('Shield of Faith');
-    await page.locator('[data-a="tab"][data-t="main"]').click();
+    await tab(page, 'main');
     await expect(page.locator('.fight-state.on')).toContainText(/Round 2|Runde 2/);
     await expect(page.locator('.fight-order li.cur')).toContainText('Goblin');
     await expect(page.locator('.fight-order li.cur .fo-s')).toHaveText(/bloodied|schwer verletzt/);

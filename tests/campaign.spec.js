@@ -20,7 +20,7 @@ test.describe('Lagebericht und Gruppe @new', () => {
   test('Spielleitung: Werkzeugleiste, Kapitel und Planung dauerhaft, Aufgaben und Chronik aus dem Notizbuch, Presence trägt sie', async ({ page }) => {
     await fake(page);
     const dmData = { on: true, only: false, notes: [{ id: 'n1', kind: 'plot', title: 'Den Boten finden', body: '' }, { id: 'n2', kind: 'session', title: 'Sitzung 4', body: 'Die Brücke fiel.' }, { id: 'n3', kind: 'place', title: 'Grenzhall', body: 'Geheim: Der Vogt ist bestochen.' }], here: 'n3' };
-    await start(page, { ...chars, 'charbogen-dm': dmData, 'charbogen-campaigns': [{ id: 'k1', name: 'Grenzland', status: 'active', chars: [], role: 'dm', room: 'ABC234' }] });
+    await start(page, { ...chars, 'charbogen-dm': { on: true }, 'charbogen-dm-camp-k1': dmData, 'charbogen-campaigns': [{ id: 'k1', name: 'Grenzland', status: 'active', chars: [], role: 'dm', room: 'ABC234', split: true }] });
     await page.locator('.hub-side [data-s="gm"]').click();
     await page.locator('.hub-camp [data-a="campplay"]').click();
     await expect(page.locator('.lb-tools')).toBeVisible();
@@ -40,7 +40,7 @@ test.describe('Lagebericht und Gruppe @new', () => {
 
   test('Spieler: keine Werkzeuge, Angaben der Spielleitung werden dauerhaft übernommen, Aufgaben aus der eigenen Chronik', async ({ page }) => {
     await fake(page, { key: 'dm-x', role: 'dm', camp: { n: 'Grenzland', d: '', c: 'Kapitel 2', p: 'Vorräte', x: '2026-12-01T19:00' }, here: 'Taverne' });
-    await start(page, { ...chars, 'charbogen-campaigns': [{ id: 'k1', name: 'Grenzland', status: 'active', chars: ['c1'], role: 'player', room: 'ABC234', log: 'Sitzung 1: Ankunft\n[ ] Den Schmied fragen' }] });
+    await start(page, { ...chars, 'charbogen-campaigns': [{ id: 'k1', name: 'Grenzland', status: 'active', chars: ['c1'], role: 'player', room: 'ABC234', split: true, log: 'Sitzung 1: Ankunft\n[ ] Den Schmied fragen' }] });
     await page.locator('[data-a="campplay"]').click();
     await expect(page.locator('.lb-tools')).toHaveCount(0);
     await expect(page.locator('.lb-chapter')).toHaveText('Kapitel 2');
@@ -52,7 +52,7 @@ test.describe('Lagebericht und Gruppe @new', () => {
 
   test('Spielername: einmal in den Einstellungen, geht mit der Presence und steht auf der Gruppenkarte', async ({ page }) => {
     await fake(page, { key: 'p2', role: 'player', name: 'Borin', pl: 'Tom', klass: 'Fighter', level: 4, hp: 8, hpMax: 36, ac: 17, cond: ['Prone'] });
-    await start(page, { ...chars, 'charbogen-campaigns': [{ id: 'k1', name: 'Grenzland', status: 'active', chars: ['c1'], role: 'player', room: 'ABC234' }] });
+    await start(page, { ...chars, 'charbogen-campaigns': [{ id: 'k1', name: 'Grenzland', status: 'active', chars: ['c1'], role: 'player', room: 'ABC234', split: true }] });
     await page.locator('.hub-side [data-s="settings"]').click();
     await page.locator('#pl-name').fill('Lea');
     expect(await page.evaluate(() => localStorage.getItem('charbogen-player'))).toBe('Lea');

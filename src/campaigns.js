@@ -18,6 +18,8 @@ const clean = c => ({
   // Lagebericht: Kapitel und geplante Inhalte (dauerhaft), zuletzt bekannter Ort (bei Spielern von der Spielleitung übernommen)
   // split: eigene Charakterstände und Spielleitungsdaten (neu angelegte Kampagnen); ältere bleiben bis zur Übernahme beim gemeinsamen Stand
   split: !!c.split,
+  // migr: Übernahme aus dem gemeinsamen Stand (Zeitpunkt, Charakter: 'cur', Spielleitung: 'this' | 'empty'); nur dann gibt es den Rückweg
+  migr: c.migr && typeof c.migr === 'object' ? { at: String(c.migr.at || ''), char: c.migr.char === 'cur' ? 'cur' : '', dm: ['this', 'empty'].includes(c.migr.dm) ? c.migr.dm : '' } : null,
   chapter: String(c.chapter || '').slice(0, 120), plan: String(c.plan || '').slice(0, 1000), place: String(c.place || '').slice(0, 80),
 });
 export function campaigns() {

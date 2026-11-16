@@ -3,7 +3,7 @@ import { setInvView } from './views/inventory.js';
 import { setPlayerName } from './player.js';
 import { uid as newUid } from './util.js';
 import { applyProposal, shrinkImage } from './live-actions.js';
-import { downloadBackup, parseBackup, loadSnap, restoreBackup, initBackup } from './backup.js';
+import { downloadBackup, parseBackup, loadSnap, restoreBackup, initBackup, snapshot } from './backup.js';
 import { vLootCoins, vLootItems, vBakHist, turnsHidden, setTurnsHidden, proposalText } from './views/live-ui.js';
 import { vRuleList } from './views/dm-rules.js';
 import { vPetResults } from './views/extras.js';
@@ -33,7 +33,7 @@ import { buildCatalog } from './catalog.js';
 import { payCp, addCp, totalCp, cpToGp } from './shop.js';
 import { $, clamp } from './util.js';
 import { EQ } from './constants.js';
-import { hooks, def, mk, spFrom, putBag, S, setS, U, save, toast, switchChar, newChar, dupChar, delChar, roster, loadInstance } from './state.js';
+import { hooks, def, mk, spFrom, putBag, S, setS, U, save, toast, switchChar, newChar, dupChar, delChar, roster, loadInstance, dropInstances, toLibrary } from './state.js';
 import { classLevels } from './tables.js';
 import { get, set, refs, fits, applyRace, applyRaceChoices } from './helpers.js';
 import { spMeta, setSheetMode } from './views/sheet.js';
@@ -56,7 +56,7 @@ app.addEventListener('click',ev=>{
   const b=ev.target.closest('[data-a]');if(!b)return;
   const a=b.dataset.a,i=+b.dataset.i,k=b.dataset.k,v=id=>($(id)||{}).value||'';
   if(a==='luclose-bg'&&ev.target!==b)return;
-  if(a!=='rm'&&a!=='imp'&&a!=='reset'&&a!=='chardel'&&a!=='npdel'&&a!=='campdel'&&a!=='stdrop'&&a!=='spdel')U.CONF=null;
+  if(a!=='rm'&&a!=='imp'&&a!=='reset'&&a!=='chardel'&&a!=='npdel'&&a!=='campdel'&&a!=='stdrop'&&a!=='spdel'&&a!=='campundo'&&a!=='tolib')U.CONF=null;
   if(!['dmclear','dmfightend','dmndel','dmedel','dmcdel'].includes(a))dm.DU.conf=null;
   if(a!=='cast'&&a!=='castslot')U.CASTPICK=null;
   pend=false;
@@ -207,6 +207,13 @@ app.addEventListener('click',ev=>{
     case 'invview':setInvView(b.dataset.v);break;
     case 'nptpl':addTemplate(b.dataset.k);break;
     case 'crumb':S.tab=b.dataset.t;U.SEL=null;window.scrollTo({top:0});break;
+    case 'migcancel':U.MIGRATE=null;break;
+    case 'miglater':{const id=U.MIGRATE;U.MIGRATE=null;U.MIGSKIP={...(U.MIGSKIP||{}),[id]:true};if(!openCamp(id,U.MIGTAB))return;break}
+    case 'migok':{const id=U.MIGRATE,c=camp.campaignById(id);if(!c)return;const pick=n=>(document.querySelector(`input[name="${n}"]:checked`)||{}).value||'';const ch=c.role==='dm'?pick('mig-dm'):pick('mig-char');if(!ch){toast(tr('mig.pick'));return}
+      snapshot().catch(()=>{}).then(()=>{if(c.role==='dm'&&ch==='this')dm.adoptLegacy(id);camp.saveCampaign({...c,split:true,migr:{at:new Date().toISOString(),char:c.role==='dm'?'':ch,dm:c.role==='dm'?ch:''}});U.MIGRATE=null;toast(tr('mig.done',{n:c.name}));if(openCamp(id,U.MIGTAB))render()});return}
+    case 'campundo':{const id=b.dataset.id,c=camp.campaignById(id);if(!c||!c.migr)return;if(U.CONF!=='campundo:'+id){U.CONF='campundo:'+id;break}U.CONF=null;snapshot().catch(()=>{}).then(()=>{if(live.L.code&&live.L.code===c.room)live.disconnect();const n=dropInstances(id);dm.dropCamp(id);camp.saveCampaign({...c,split:false,migr:null});toast(tr('mig.undone',{n:c.name,k:n}));render()});return}
+    case 'libadd':{const id=b.dataset.id,k=camp.campaignById(v('lib-add-'+id));if(!k){toast(tr('lib.pickCamp'));return}if(!k.chars.includes(id))camp.saveCampaign({...k,chars:[...k.chars,id]});toast(tr('lib.added',{n:k.name}));break}
+    case 'tolib':{if(U.CONF!=='tolib'){U.CONF='tolib';break}U.CONF=null;if(toLibrary())toast(tr('lib.saved'));break}
     case 'campopen':if(!openCamp(b.dataset.id))return;break;
     case 'camproom':{const c=camp.campaignById(b.dataset.id);if(!c)return;if(dm.D.only){if(c.room)live.connect(c.room,'dm');else{live.createRoom();camp.saveCampaign({...c,room:live.L.code})}}else if(c.room){live.connect(c.room,'player');toast(tr('camp.joined',{c:c.room}))}break}
     case 'campcopy':{const c=b.dataset.c;try{navigator.clipboard.writeText(c).then(()=>toast(tr('camp.copied',{c})),()=>toast(c))}catch(e){toast(c)}return}
@@ -214,11 +221,14 @@ app.addEventListener('click',ev=>{
     case 'campgen2':{const c=camp.campaignById(b.dataset.id);if(c&&!c.room)camp.saveCampaign({...c,room:live.makeCode()});break}
     case 'mapshow':U.MAPOPEN=!U.MAPOPEN;break;
     case 'shopopen':S.tab='wiki';U.WF='item';U.WQ='';U.WSEL=null;window.scrollTo(0,0);break;
-    case 'dmopen':dm.D.sel=b.dataset.id;dm.D.view='notes';S.tab='dmnotes';dm.saveD();window.scrollTo(0,0);break;
+    case 'dmnote':dm.D.sel=b.dataset.id;dm.D.view='notes';S.tab='dmnotes';dm.saveD();window.scrollTo(0,0);break;
     case 'joinconn':{const code=v('join-code').trim().toUpperCase();if(!live.isCode(code)){toast(tr('live.badCode'));return}const ch=v('join-char');if(ch==='new')newChar();else if(ch&&ch!==S.id&&!switchChar(ch)){toast(tr('toast.saveFailed'));return}if(dm.D.only){dm.D.only=false;dm.saveD()}U.JOIN={code,isNew:ch==='new'};live.connect(code,'player');break}
     case 'joincancel':if(U.JOIN&&live.L.code===U.JOIN.code&&!camp.campaignByRoom(U.JOIN.code))live.disconnect();U.JOIN=null;break;
     case 'joinok':{const j=U.JOIN;if(!j)return;const meta=live.dmCamp(),old=camp.campaignByRoom(j.code);const r=camp.saveCampaign(old?{...old,role:'player',chars:[...new Set([...old.chars,S.id])]}:{name:meta?.n||tr('join.defName',{c:j.code}),desc:meta?.d||'',room:j.code,role:'player',chars:[S.id]});if(!r){toast(tr('toast.saveFailed'));return}U.JOIN=null;toast(tr('join.done',{n:r.name}));if(j.isNew)openWizard();openCamp(r.id,j.isNew?'setup':'cover');break}
-    case 'hubplay':{if(!b.dataset.id&&S.camp&&camp.campaignById(S.camp)){if(!openCamp(S.camp,'prof'))return;break}U.CAMP=null;const id=b.dataset.id;if(id&&id!==S.id&&!switchChar(id)){toast(tr('toast.saveFailed'));return}enterPlay(b.dataset.t||'prof');break}
+    case 'hubplay':{if(!b.dataset.id&&S.camp&&camp.campaignById(S.camp)){if(!openCamp(S.camp,'prof'))return;break}
+      // Einstieg über die Kampagne: spielt der Charakter in einer, öffnet sich die zuletzt genutzte (außer bei „Grundbogen“)
+      if(b.dataset.id&&!b.dataset.lib){const k=camp.campaignsOf(b.dataset.id).filter(x=>x.role==='player'&&x.status==='active').sort((x,y)=>(y.seen||y.at).localeCompare(x.seen||x.at))[0];if(k){if(!openCamp(k.id,'prof'))return;break}}
+      U.CAMP=null;const id=b.dataset.id;if(id&&id!==S.id&&!switchChar(id)){toast(tr('toast.saveFailed'));return}enterPlay(b.dataset.t||'prof');break}
     case 'hubwiki':U.HUB='wiki';U.HUBQ='';U.WSEL=b.dataset.key;U.WF='all';U.WQ='';window.scrollTo(0,0);break;
     case 'hubnewchar':newChar();openWizard();enterPlay('setup');break;
     case 'hubimport':hubImport();return;
@@ -452,6 +462,8 @@ function enterPlay(tab){U.HUB=null;U.HUBQ='';U.CAMPED=null;try{sessionStorage.se
 function leavePlay(){U.CAMP=null;if(dm.dmCtx()&&!(live.L.role==='dm'&&live.L.code))dm.useCamp(null);try{sessionStorage.removeItem('charbogen-view');sessionStorage.removeItem('charbogen-camp')}catch(e){/* Datenschutzmodus */}}
 /** Kampagne öffnen: Rolle der Kampagne bestimmt Spielleitungsmodus oder eigenen Charakter, Raum wird betreten. */
 function openCamp(id,tab='cover'){const c=camp.campaignById(id);if(!c)return false;
+  // Ältere Kampagne (gemeinsamer Stand): erst fragen, wie übernommen wird; „Später“ öffnet sie wie bisher
+  if(!c.split&&!(U.MIGSKIP||{})[c.id]&&(c.role==='dm'||c.chars.some(x=>roster().some(r=>r.id===x)))){leavePlay();U.HUB=U.HUB||'camps';U.MIGRATE=c.id;U.MIGTAB=tab;return true}
   if(c.role==='dm'){if(live.L.role==='dm'&&live.L.code&&live.L.code!==c.room)live.disconnect();dm.useCamp(c.split?c.id:null);dm.D.on=true;dm.D.only=true;dm.saveD();U.CAMP=c.id;if(c.room&&(live.L.code!==c.room||live.L.role!=='dm'))live.connect(c.room,'dm');else live.refresh()}
   else{const own=c.chars.find(x=>roster().some(r=>r.id===x));if(own&&(c.split?!loadInstance(c.id,own):(own!==S.id||S.camp)&&!switchChar(own))){toast(tr('toast.saveFailed'));return false}if(dm.D.only){dm.D.only=false;dm.saveD()}U.CAMP=c.id;if(c.room&&(live.L.code!==c.room||live.L.role!=='player')){live.connect(c.room,'player');toast(tr('camp.joined',{c:c.room}))}}
   camp.touchCampaign(c.id);enterPlay(tab);return true}

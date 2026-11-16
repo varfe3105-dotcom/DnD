@@ -1,5 +1,5 @@
 import fs from 'node:fs';
-import { test, expect, seed, read, act, base4, item } from './helpers.js';
+import { test, expect, seed, read, act, base4, item, tab } from './helpers.js';
 import spells from '../data/spells.json' with { type: 'json' };
 import items from '../data/items.json' with { type: 'json' };
 import magic from '../data/magic-items.json' with { type: 'json' };
@@ -92,7 +92,7 @@ test.describe('Katalog in der Oberfläche @new', () => {
     await seed(page, base4({ tab: 'inv', bag: [old, own] }));
     await expect(page.locator('[data-drag="bag:0"]')).toHaveAttribute('aria-label', 'Longsword');
     await expect(page.locator('[data-drag="bag:1"]')).toHaveAttribute('aria-label', 'Langschwert');
-    await act(page, 'tab', '[data-t="main"]').click();
+    await tab(page, 'main');
     const s = await read(page);
     expect(s.bag[0].ref).toBe('item:longsword');
     expect(s.bag[0].p).toBe(old.p);
@@ -105,7 +105,7 @@ test.describe('Katalog in der Oberfläche @new', () => {
     await act(page, 'addinv').click();
     await page.locator('[data-drag="bag:0"]').click();
     await act(page, 'equip').click();
-    await act(page, 'tab', '[data-t="main"]').click();
+    await tab(page, 'main');
     await expect(page.locator('.atk b').nth(1)).toHaveText('1d8+3');
     await setLang(page, 'de');
     await expect(page.locator('.atk b').nth(1)).toHaveText('1W8+3');
