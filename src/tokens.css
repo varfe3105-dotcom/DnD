@@ -1,0 +1,54 @@
+/* Designsystem „Roll & Tale“ (2026): Dark Fantasy aus Anthrazit, Aubergine und Braun, Pergament als Kontrast,
+   Altgold und Messing als Akzent, Cremeweiß für Text. Diese Datei ist die einzige Quelle für Farben, Schriften,
+   Abstände, Rahmen und Flächen. styles.css (Aufbau), theme.css (Grimoire-Optik) und skins.css (Alternativen)
+   verwenden nur diese Variablen. Schriften lokal eingebettet (Fontsource, OFL-1.1). */
+@font-face{font-family:"Cinzel";font-weight:400;font-display:swap;src:url(../node_modules/@fontsource/cinzel/files/cinzel-latin-400-normal.woff2) format("woff2")}
+@font-face{font-family:"Cinzel";font-weight:600;font-display:swap;src:url(../node_modules/@fontsource/cinzel/files/cinzel-latin-600-normal.woff2) format("woff2")}
+@font-face{font-family:"Cormorant Garamond";font-weight:600;font-display:swap;src:url(../node_modules/@fontsource/cormorant-garamond/files/cormorant-garamond-latin-600-normal.woff2) format("woff2")}
+@font-face{font-family:"Cormorant Garamond";font-weight:700;font-display:swap;src:url(../node_modules/@fontsource/cormorant-garamond/files/cormorant-garamond-latin-700-normal.woff2) format("woff2")}
+@font-face{font-family:"Cormorant Garamond";font-style:italic;font-weight:600;font-display:swap;src:url(../node_modules/@fontsource/cormorant-garamond/files/cormorant-garamond-latin-600-italic.woff2) format("woff2")}
+
+:root{
+  /* ---- Palette ---- */
+  --c-night:#110d11;--c-anth-1:#1a161a;--c-anth-2:#221c22;--c-anth-3:#2d252c;--c-anth-4:#3a303a;
+  --c-aub-dk:#24162a;--c-aub:#3b2440;--c-aub-2:#4d3053;--c-aub-lt:#6a4a70;
+  --c-brown:#2a1f18;--c-brown-lt:#4a3626;
+  --c-parch-lt:#f4e8cc;--c-parch:#e9d7b0;--c-parch-dk:#d2b986;--c-parch-ink:#2a1d14;--c-parch-mute:#6b5338;--c-parch-line:#b39563;
+  --c-brass-lt:#ecd294;--c-brass:#c49a52;--c-brass-dk:#7d5a28;--c-brass-a:rgba(196,154,82,.45);--c-brass-soft:rgba(196,154,82,.2);
+  --c-cream:#efe4cf;--c-cream-2:#d8c9ad;--c-cream-mute:#a99a82;
+  --c-good:#86c18f;--c-bad:#e3806d;--c-warn:#e6ad5c;--c-info:#c9b3d6;--c-rubric:#5b2a3c;
+
+  /* ---- Typografie ---- */
+  --f-title:"Cormorant Garamond","Iowan Old Style",Palatino,Georgia,serif;
+  --f-disp:"Cormorant Garamond","Iowan Old Style",Palatino,Georgia,serif;
+  --f-body:"Alegreya","Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif;
+  --f-ui:"Alegreya","Iowan Old Style",Palatino,Georgia,serif;
+  --f-cap:"Cinzel","Cormorant Garamond",Palatino,Georgia,serif;
+  --f-rule:"Alegreya","Iowan Old Style",Palatino,Georgia,serif;
+  --fs-xs:.75rem;--fs-sm:.875rem;--fs-md:1rem;--fs-lg:1.25rem;--fs-xl:1.6rem;--fs-2xl:2.2rem;--fs-3xl:clamp(2rem,4vw,2.9rem);
+
+  /* ---- Abstände, Rundungen, Linien ---- */
+  --sp-1:4px;--sp-2:8px;--sp-3:12px;--sp-4:16px;--sp-5:24px;--sp-6:32px;--sp-7:48px;
+  --r-1:2px;--r-2:4px;--r-3:6px;
+  --bd-brass:1px solid var(--c-brass-a);--bd-soft:1px solid var(--c-brass-soft);--edge:#0a080a;
+
+  /* ---- Flächen ---- */
+  --slate:url(./assets/slate.jpg);--parch-tex:url(./assets/parchment.jpg);
+  --surface-page:var(--c-night) url(./assets/bg-dark.jpg) center top/cover no-repeat fixed;
+  --surface-card:linear-gradient(180deg,rgba(36,31,34,.92),rgba(22,19,21,.95)),var(--slate);
+  --surface-raised:linear-gradient(180deg,rgba(52,42,51,.92),rgba(32,26,32,.95)),var(--slate);
+  --surface-sunk:rgba(8,6,9,.55);
+  --surface-parch:linear-gradient(rgba(120,80,30,.04),rgba(90,50,10,.14)),var(--parch-tex);
+  --frame:url(./assets/frame-brass.svg) 40 / 24px / 2px round;
+  --flourish:url(./assets/flourish-gold.svg);
+
+  /* ---- Schatten und Leuchten ---- */
+  --sh-1:0 4px 12px rgba(0,0,0,.45);--sh-2:0 12px 30px rgba(0,0,0,.6);--sh-3:0 24px 60px rgba(0,0,0,.75);
+  --glow-brass:0 0 0 1px var(--c-brass-a),0 0 18px rgba(214,176,106,.25);
+
+  /* ---- Bausteine ---- */
+  --grad-btn:linear-gradient(180deg,#3a3039,#241e24);--grad-btn-h:linear-gradient(180deg,#4a3d49,#2c252c);
+  --grad-pri:linear-gradient(180deg,#56355c,#33203a);--grad-pri-h:linear-gradient(180deg,#68426f,#3d2645);
+  --grad-gold:linear-gradient(180deg,#ecd294,#b48a46);
+  --bar-hp:linear-gradient(180deg,#d9654f 0,#9b2f25 50%,#5b1712 100%);--bar-temp:linear-gradient(180deg,#a6d6ac,#4c8a5c);
+}
