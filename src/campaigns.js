@@ -16,6 +16,8 @@ const clean = c => ({
   art: Number.isInteger(c.art) ? c.art % ART : 0, at: String(c.at || new Date().toISOString()),
   role: roleOf(c), log: String(c.log || '').slice(0, 20000), seen: String(c.seen || ''),
   // Lagebericht: Kapitel und geplante Inhalte (dauerhaft), zuletzt bekannter Ort (bei Spielern von der Spielleitung übernommen)
+  // split: eigene Charakterstände und Spielleitungsdaten (neu angelegte Kampagnen); ältere bleiben bis zur Übernahme beim gemeinsamen Stand
+  split: !!c.split,
   chapter: String(c.chapter || '').slice(0, 120), plan: String(c.plan || '').slice(0, 1000), place: String(c.place || '').slice(0, 80),
 });
 export function campaigns() {
@@ -27,7 +29,7 @@ export const campaignById = id => campaigns().find(c => c.id === id) || null;
 export function saveCampaign(c) {
   const list = campaigns(), i = list.findIndex(x => x.id === c.id);
   const art = Number.isInteger(c.art) ? c.art : i >= 0 ? list[i].art : list.length % ART;
-  const v = clean({ ...(i >= 0 ? list[i] : {}), ...c, art });
+  const v = clean({ ...(i >= 0 ? list[i] : { split: c.split !== false }), ...c, art });
   if (!v.name) return null;
   if (i >= 0) list[i] = v; else list.push(v);
   return store(list) ? v : null;

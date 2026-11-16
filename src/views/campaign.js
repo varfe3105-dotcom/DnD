@@ -52,7 +52,7 @@ export function vCover() {
   const placeTxt = dm && h?.body ? `<p class="lb-ptext">${excerpt(h.body, 260)}</p>` : '';
   const chapter = c.chapter ? `<p class="lb-chapter">${esc(c.chapter)}</p>` : '';
   const prog = c.planned ? t('camp.sessOf', { a: c.done, b: c.planned }) : t('camp.sess', { n: c.done });
-  const head = `<header class="lb-head"><div class="tags"><span class="tag ${c.status === 'active' ? 't-good' : ''}">${t('camp.st.' + c.status)}</span><span class="tag t-res">${t('camp.role.' + c.role)}</span><span class="tag">${esc(prog)}</span></div><p class="lbl">${t('lb.chapter')}</p>${chapter || `<p class="lb-chapter none">${t(dm ? 'lb.noChapterDm' : 'lb.noChapter')}</p>`}</header>`;
+  const head = `<header class="lb-head"><div class="tags"><span class="tag ${c.status === 'active' ? 't-good' : ''}">${t('camp.st.' + c.status)}</span><span class="tag t-res">${t('camp.role.' + c.role)}</span><span class="tag">${esc(prog)}</span></div>${c.split ? '' : `<p class="note lb-legacy">${t('inst.legacy')}</p>`}<p class="lbl">${t('lb.chapter')}</p>${chapter || `<p class="lb-chapter none">${t(dm ? 'lb.noChapterDm' : 'lb.noChapter')}</p>`}</header>`;
   // Lage: Ort, offene Aufgaben, zuletzt
   const tasks = dm ? D.notes.filter(n => n.kind === 'plot').slice(0, 6).map(n => `<li><button class="linkbtn" data-a="dmopen" data-id="${esc(n.id)}">${esc(n.title || t('dm.untitled'))}</button></li>`) : logTasks(c.log).slice(0, 6).map(x => `<li>${esc(x)}</li>`);
   const recent = dm ? D.notes.filter(n => n.kind === 'session').slice(0, 3).map(n => `<li><b>${esc(n.title || t('dm.untitled'))}</b>${n.body ? `<span>${excerpt(n.body)}</span>` : ''}</li>`) : logRecent(c.log).map(x => `<li><span>${esc(x.slice(0, 200))}</span></li>`);

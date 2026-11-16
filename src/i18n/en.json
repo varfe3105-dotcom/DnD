@@ -1649,5 +1649,6 @@
  "player.ph": "e.g. Lea",
  "player.hint": "Applies to this device and all campaigns. The group sees it next to your character.",
  "party.playedBy": "played by {n}",
- "lb.next": "Next session"
+ "lb.next": "Next session",
+ "inst.legacy": "This campaign still uses the shared state from before the separation: character and DM data are the same as in other older campaigns. The separate takeover follows only after your approval."
 }

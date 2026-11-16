@@ -1649,5 +1649,6 @@
  "player.ph": "z. B. Lea",
  "player.hint": "Gilt für dieses Gerät und alle Kampagnen. Die Gruppe sieht ihn neben deinem Charakter.",
  "party.playedBy": "gespielt von {n}",
- "lb.next": "Nächste Sitzung"
+ "lb.next": "Nächste Sitzung",
+ "inst.legacy": "Diese Kampagne nutzt noch den gemeinsamen Stand von vor der Trennung: Charakter und Spielleitungsdaten sind dieselben wie in anderen älteren Kampagnen. Die getrennte Übernahme folgt erst nach deiner Freigabe."
 }

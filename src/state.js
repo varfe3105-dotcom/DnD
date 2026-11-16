@@ -6,7 +6,7 @@ import { BYN, CLASSES, byName, findRef } from './catalog.js';
 import { loc } from './i18n/index.js';
 
 export const KEY='charbogen-v4',OLD='charbogen-v2';
-export const def=()=>({v:4,id:uid(),xp:0,noteTitle:'',notePages:[],notePage:0,fig:'',pets:[],bg:null,multi:[],tools:[],langs:[],acMode:'auto',insp:false,name:t('char.new'),info:'',img:'',race:'',subrace:'',klass:'',sub:'',level:0,cls:'',hp:10,hpMax:10,tmp:0,ac:10,speed:9,prof:2,
+export const def=()=>({v:4,id:uid(),camp:null,xp:0,noteTitle:'',notePages:[],notePage:0,fig:'',pets:[],bg:null,multi:[],tools:[],langs:[],acMode:'auto',insp:false,name:t('char.new'),info:'',img:'',race:'',subrace:'',klass:'',sub:'',level:0,cls:'',hp:10,hpMax:10,tmp:0,ac:10,speed:9,prof:2,
  abil:{str:10,dex:10,con:10,int:10,wis:10,cha:10},saves:{},skills:{},hd:{max:1,used:0,die:'W8'},death:{s:0,f:0},conc:'',
  slots:Array.from({length:9},()=>({max:0,used:0})),pact:{max:0,used:0,lvl:1},res:[],spells:[],feats:[],bag:Array(24).fill(null),eq:{},
  gold:{pp:0,gp:0,ep:0,sp:0,cp:0},cond:{},exh:0,notes:'',tab:'main'});
@@ -54,25 +54,39 @@ export let S=load();
 export function setS(v){S=v}
 export const U={HUB:null,HUBQ:'',CAMPED:null,CAMPCH:null,CAMPART:null,OPEN:{},SEL:null,CONF:null,WF:'all',WQ:'',WC:'',WSEL:null,EXP:'',IMP:'',LU:null,LUfocus:false,IMPREP:null,invQ:'',resetWl:false,anchor:null,SHEET:null,CASTPICK:null,SPALL:false,DAWN:false,BGPICK:null,petQ:'',NAGOFF:false,RESTORE:null,SNAPS:[]};
 export const hooks={onSave:null,beforeSave:null,afterSave:null,cloud:null};
-export const save=()=>{if(hooks.beforeSave)hooks.beforeSave();try{localStorage.setItem(KEY,JSON.stringify(S));localStorage.setItem(IDX,JSON.stringify(roster()))}catch(e){toast(t('toast.saveFailed'))}if(hooks.onSave)hooks.onSave();if(hooks.afterSave)hooks.afterSave();if(hooks.cloud)hooks.cloud()};
+export const save=()=>{if(hooks.beforeSave)hooks.beforeSave();try{localStorage.setItem(KEY,JSON.stringify(S));localStorage.setItem(IDX,JSON.stringify(roster()));syncIdentity()}catch(e){toast(t('toast.saveFailed'))}if(hooks.onSave)hooks.onSave();if(hooks.afterSave)hooks.afterSave();if(hooks.cloud)hooks.cloud()};
 
 /* Mehrere Charaktere: Der aktive liegt unter KEY, alle anderen in eigenen Schlüsseln, IDX hält die Übersicht. */
 const IDX='charbogen-index',slotKey=id=>'charbogen-char-'+id;
+/* Kampagnenstände (docs/charakter-instanzen.md): Die Bibliothek (charbogen-char-<id>) hält Identität und Grundbogen.
+   Spielt ein Charakter in einer getrennten Kampagne, liegt sein Stand dort in charbogen-inst-<Kampagne>-<id>.
+   S.camp sagt, welcher Stand gerade geladen ist (null = Grundbogen). Die Charakter-ID ist in jedem Stand dieselbe. */
+export const instKey=(camp,id)=>'charbogen-inst-'+camp+'-'+id;
+const slotOf=s=>s.camp?instKey(s.camp,s.id):slotKey(s.id);
+/** Gemeinsam über alle Kampagnen: nur diese vier Felder. */
+export const IDENT=['name','img','fig','info'];
 const get=k=>{try{return JSON.parse(localStorage.getItem(k)||'null')}catch(e){return null}};
 const put=(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v));return true}catch(e){toast(t('toast.saveFailed'));return false}};
 const drop=k=>{try{localStorage.removeItem(k)}catch(e){/* Datenschutzmodus */}};
-export const roster=()=>{const list=get(IDX)||[],me={id:S.id,name:S.name,klass:S.klass,level:S.level},i=list.findIndex(x=>x.id===S.id);if(i<0)list.unshift(me);else list[i]=me;return list};
+export const roster=()=>{const lib=S.camp?get(slotKey(S.id)):null,list=get(IDX)||[],me={id:S.id,name:S.name,klass:lib?lib.klass:S.klass,level:lib?lib.level:S.level},i=list.findIndex(x=>x.id===S.id);if(i<0)list.unshift(me);else list[i]=me;return list};
 const fresh=()=>{U.OPEN={};U.SEL=null;U.EXP='';U.CONF=null;U.DAWN=false;U.BGPICK=null;U.petQ=''};
-const park=()=>{const list=roster();if(!put(slotKey(S.id),S))return null;return list};
-export const charSnapshot=id=>id===S.id?S:get(slotKey(id));
-export function switchChar(id){if(id===S.id)return false;const o=get(slotKey(id));if(!o||!park())return false;setS(norm(o));drop(slotKey(id));fresh();save();return true}
+// Kampagnenstände speichern Porträt und Figurbild nicht mit; sie kommen beim Laden aus der Bibliothek.
+const park=()=>{const list=roster();if(!put(slotOf(S),S.camp?{...S,img:'',fig:''}:S))return null;return list};
+/** Bibliotheksstand eines Charakters (Identität und Grundbogen), auch wenn gerade sein Kampagnenstand geladen ist. */
+export const charSnapshot=id=>id===S.id&&!S.camp?S:get(slotKey(id));
+export const instSnapshot=(camp,id)=>S.camp===camp&&S.id===id?S:get(instKey(camp,id));
+/** Lädt den Stand eines Charakters in einer Kampagne. Fehlt er, entsteht er aus dem Grundbogen (Beitritt). Liefert 'new', true oder false. */
+export function loadInstance(camp,id){if(S.camp===camp&&S.id===id)return true;const lib=S.id===id&&!S.camp?JSON.parse(JSON.stringify(S)):get(slotKey(id));if(!lib)return false;const o=get(instKey(camp,id));if(!park())return false;const n=o||JSON.parse(JSON.stringify(lib));IDENT.forEach(k=>{n[k]=lib[k]||''});n.id=id;n.camp=camp;if(!o){n.tab='prof';delete n.turn}setS(norm(n));fresh();save();return o?true:'new'}
+export function switchChar(id){if(id===S.id&&!S.camp)return false;const o=get(slotKey(id));if(!o||!park())return false;setS(norm(o));drop(slotKey(id));fresh();save();return true}
 const pristine=()=>!S.klass&&!S.level&&!S.spells.length&&!S.notes&&!S.bag.some(Boolean)&&!Object.keys(S.eq).length;
 /** Platz für einen importierten Charakter: Ein noch leerer Bogen wird ersetzt, alle anderen bleiben. */
 export function openFresh(){if(pristine()){const list=roster().filter(x=>x.id!==S.id);put(IDX,list);setS(def());fresh();return true}if(!park())return false;const list=roster();setS(def());fresh();put(IDX,list);return true}
 export function newChar(){if(!park())return;const list=roster();setS(def());S.tab='setup';fresh();put(IDX,list);save()}
-export function dupChar(){if(!park())return;const list=roster();const c=JSON.parse(JSON.stringify(S));c.id=uid();c.name=S.name+' (2)';setS(norm(c));fresh();put(IDX,list);save()}
+export function dupChar(){if(!park())return;const list=roster();const c=JSON.parse(JSON.stringify(S));c.id=uid();c.camp=null;c.name=S.name+' (2)';setS(norm(c));fresh();put(IDX,list);save()}
+/** Im Kampagnenstand geänderte Identität (Name, Porträt, Figurbild, Beschreibung) in die Bibliothek schreiben; die anderen Kampagnen übernehmen sie beim Laden. */
+function syncIdentity(){if(!S.camp)return;const lib=get(slotKey(S.id));if(!lib||IDENT.every(k=>(lib[k]||'')===(S[k]||'')))return;IDENT.forEach(k=>{lib[k]=S[k]||''});localStorage.setItem(slotKey(S.id),JSON.stringify(lib))}
 export function delChar(id){const list=roster().filter(x=>x.id!==id);drop(slotKey(id));put(IDX,list);if(id!==S.id)return;const next=list[0]&&get(slotKey(list[0].id));if(next){setS(norm(next));drop(slotKey(list[0].id))}else{setS(def());S.tab='setup'}fresh();save()}
 /** Legt einen Charakter aus einer Online-Sicherung ab: ersetzt den aktiven oder einen geparkten mit gleicher ID, sonst kommt er dazu. */
-export function storeChar(o){const c=norm(JSON.parse(JSON.stringify(o)));if(c.id===S.id){setS(c);fresh();save();return'active'}const list=roster(),i=list.findIndex(x=>x.id===c.id),me={id:c.id,name:c.name,klass:c.klass,level:c.level};if(i<0)list.push(me);else list[i]=me;if(!put(slotKey(c.id),c))return'';put(IDX,list);return i<0?'new':'updated'}
+export function storeChar(o){const c=norm(JSON.parse(JSON.stringify(o)));if(c.id===S.id){c.camp=S.camp||null;setS(c);fresh();save();return'active'}c.camp=null;const list=roster(),i=list.findIndex(x=>x.id===c.id),me={id:c.id,name:c.name,klass:c.klass,level:c.level};if(i<0)list.push(me);else list[i]=me;if(!put(slotKey(c.id),c))return'';put(IDX,list);return i<0?'new':'updated'}
 export let tt;
 export function toast(m){const t=$('toast');t.textContent=m;t.hidden=false;clearTimeout(tt);tt=setTimeout(()=>{t.hidden=true},4600)}

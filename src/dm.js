@@ -5,12 +5,20 @@ import { charSnapshot, roster, toast } from './state.js';
 import { t } from './i18n/index.js';
 
 const KEY = 'charbogen-dm';
+/* Spielleitungsdaten je Kampagne (D1): Getrennte Kampagnen speichern in charbogen-dm-camp-<id>.
+   charbogen-dm bleibt der bisherige gemeinsame Bereich (für Kampagnen vor der Trennung und Spielleitung ohne Kampagne)
+   und hält die Geräteschalter. Eigene Monster liegen für alle in charbogen-dm-lib. */
+const LIB = 'charbogen-dm-lib', campKey = id => 'charbogen-dm-camp-' + id, FLAGS = ['on', 'only', 'view'];
+const getJ = k => { try { return JSON.parse(localStorage.getItem(k) || 'null'); } catch (e) { return null; } };
+const libCustom = () => { const l = getJ(LIB); return l && Array.isArray(l.custom) ? l.custom : null; };
+const mergeCustom = (a, b) => [...a, ...(b || []).filter(x => x && !a.some(y => y.id === x.id))];
+let ctx = null;
+export const dmCtx = () => ctx;
 const blank = () => ({ on: false, view: 'combat', combat: { round: 1, active: null, list: [] }, notes: [], sel: null, party: [{ count: 4, level: 3 }], encounters: [], custom: [], encSel: null });
 function load() {
-  try {
-    const o = JSON.parse(localStorage.getItem(KEY) || 'null');
-    return normD(o);
-  } catch (e) { return blank(); }
+  const o = normD(getJ(KEY)), lc = libCustom();
+  if (lc) o.custom = lc;
+  return o;
 }
 function normD(o) {
   const b = blank();
@@ -20,9 +28,29 @@ function normD(o) {
 export let D = load();
 export const DU = { mq: '', nq: '', eq: '', conf: null, open: {}, exp: '', imp: '', editMon: null };
 export const dmHooks = { onSave: null, live: null };
-export const saveD = () => { try { localStorage.setItem(KEY, JSON.stringify(D)); } catch (e) { toast(t('toast.saveFailed')); } if (dmHooks.onSave) dmHooks.onSave(); if (dmHooks.live) dmHooks.live(); };
+export const saveD = () => {
+  try {
+    localStorage.setItem(LIB, JSON.stringify({ custom: D.custom }));
+    if (ctx) {
+      const { on, only, view, custom, ...camp } = D;
+      localStorage.setItem(campKey(ctx), JSON.stringify(camp));
+      const shared = getJ(KEY) || {};
+      FLAGS.forEach(k => { shared[k] = D[k]; });
+      localStorage.setItem(KEY, JSON.stringify(shared));
+    } else localStorage.setItem(KEY, JSON.stringify(D));
+  } catch (e) { toast(t('toast.saveFailed')); } if (dmHooks.onSave) dmHooks.onSave(); if (dmHooks.live) dmHooks.live(); };
 /** Ersetzt den DM-Bereich durch einen Online-Stand. */
-export function replaceD(o) { const { kind, ...rest } = o || {}; D = normD({ ...rest, on: true }); saveD(); }
+export function replaceD(o) { const { kind, ...rest } = o || {}, mine = D.custom; D = normD({ ...rest, only: D.only, view: D.view, on: true }); D.custom = mergeCustom(mine, D.custom); saveD(); }
+/** Spielleitungsdaten einer getrennten Kampagne laden (id) oder den bisherigen gemeinsamen Bereich (null). Schalter und eigene Monster bleiben. */
+export function useCamp(id) {
+  const next = id || null;
+  if (next === ctx) return;
+  const flags = Object.fromEntries(FLAGS.map(k => [k, D[k]])), custom = D.custom;
+  ctx = next;
+  D = normD({ ...(getJ(ctx ? campKey(ctx) : KEY) || {}), ...flags });
+  D.custom = libCustom() || custom;
+  DU.open = {}; DU.conf = null;
+}
 export const setDmOn = on => { D.on = !!on; saveD(); };
 export const dmOn = () => D.on;
 
@@ -272,8 +300,9 @@ export function importD(text) {
   let o;
   try { o = JSON.parse(text); } catch (e) { return false; }
   if (!o || o.kind !== 'charbogen-dm') return false;
-  const { kind, ...rest } = o;
-  D = normD({ ...rest, on: true });
+  const { kind, ...rest } = o, mine = D.custom;
+  D = normD({ ...rest, only: D.only, view: D.view, on: true });
+  D.custom = mergeCustom(mine, D.custom);
   saveD();
   return true;
 }

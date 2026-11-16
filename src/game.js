@@ -131,11 +131,12 @@ export function importText(txt) {
     toast(t('imp.done', { n: r.reports.map(x => x.name).join(', ') }));
     return true;
   }
-  const keepId = S.id;
+  const keepId = S.id, keepCamp = S.camp || null;
   if (o.v >= 3) setS(norm(o));
   else if (o.abil || o.hpMax != null) setS(migrate(o));
   else { toast(t('toast.unknownFormat')); return false; }
   S.id = keepId;
+  S.camp = keepCamp;
   S.tab = 'setup'; U.OPEN = {}; U.SEL = null; U.EXP = '';
   toast(t('toast.imported', { n: S.name }));
   return true;

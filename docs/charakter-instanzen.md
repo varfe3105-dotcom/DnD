@@ -1,6 +1,6 @@
 # Kampagnenspezifische Charakterstände und Spielleitungsdaten – Architekturkonzept
 
-Stand 16.11.2026. **Nichts davon ist umgesetzt.** Grundlage für die Entscheidung des Nutzers. Ergänzt `docs/dm-daten-je-kampagne.md` (D1), weil beides dasselbe Prinzip braucht: Daten gehören einer Kampagne.
+Stand 16.11.2026. **Freigegeben mit allen vier Empfehlungen; Schritt 1 ist umgesetzt** (siehe Abschnitt 10). Übernahme bestehender Daten noch nicht. Grundlage für die Entscheidung des Nutzers. Ergänzt `docs/dm-daten-je-kampagne.md` (D1), weil beides dasselbe Prinzip braucht: Daten gehören einer Kampagne.
 
 ## 1. Bestand: was heute wo liegt
 
@@ -110,3 +110,54 @@ Grundsatz: Es wird nichts gelöscht, nichts überschrieben und nichts automatisc
 2. Der Bibliotheks-Charakter ist ein Grundbogen ohne Spielbetrieb, also ohne Kampf und ohne Rasten. *(Empfehlung: ja)*
 3. Migration bei mehreren Kampagnen ohne Vorbelegung, bei nur einer Kampagne mit „aktueller Stand“ vorbelegt; immer mit Bestätigung. *(Empfehlung: ja)*
 4. D1 (Spielleitungsdaten je Kampagne) zusammen mit Schritt 1 umsetzen, mit eigenen Monstern weiter global. *(Empfehlung: ja)*
+
+## 10. Stand Schritt 1 (umgesetzt)
+
+**Charaktere** (`src/state.js`)
+- `S.camp`, `instKey()`, `loadInstance()` und `IDENT` (Name, Porträt, Figurbild, Beschreibung).
+- `park()` legt in den richtigen Platz ab. Kampagnenstände ohne Porträt und Figurbild.
+- `syncIdentity()` schreibt geänderte Identität in die Bibliothek. Andere Kampagnen übernehmen sie beim Laden.
+- `charSnapshot()` liefert immer den Bibliotheksstand.
+- `storeChar()` (Online-Stand laden) und `importText()` behalten den geladenen Kampagnenstand bei.
+
+**Spielleitung** (`src/dm.js`)
+- `useCamp(id)` lädt `charbogen-dm-camp-<id>`.
+- `charbogen-dm` bleibt der bisherige gemeinsame Bereich mit den Geräteschaltern.
+- Eigene Monster liegen in `charbogen-dm-lib`. Beim ersten Speichern wird die bisherige Liste von dort aus geführt; online geladene oder importierte Monster werden zusammengeführt, nicht ersetzt.
+
+**Welche Kampagnen getrennt sind**
+- Nur Kampagnen mit `split: true`. Das sind alle **ab jetzt neu angelegten oder per Code beigetretenen** Kampagnen.
+- Ältere Kampagnen haben kein `split`. Sie nutzen weiter den gemeinsamen Charakter und den gemeinsamen Spielleitungsbereich, genau wie bisher. Der Lagebericht zeigt dazu einen Hinweis.
+- Es wurde nichts kopiert, verschoben oder gelöscht.
+
+**Öffnen und Verlassen** (`openCamp()` in `events.js`)
+- Eine getrennte Kampagne lädt beim Öffnen ihren Stand bzw. ihre Spielleitungsdaten, **bevor** der Raum betreten wird.
+- Ein anderer Raum der Spielleitung wird vorher getrennt.
+- „Weiterspielen“ ohne Auswahl öffnet die Kampagne des geladenen Stands.
+
+**Raum und Online-Speicherung**
+- Unverändert. Sie senden immer `S` bzw. `D`, also den geladenen Stand.
+- Getestet: In Raum A landet nur der Stand von A.
+
+**Sicherung**
+- `KEEP` umfasst `inst-*`, `dm-camp-*` und `dm-lib`.
+- Das Wiederherstellen legt vorher wie bisher einen automatischen Stand an.
+
+**Offline:** unverändert, alles lokal.
+
+**Tests:** `tests/instances.spec.js`.
+
+## 11. Vorschau der Übernahme (Schritt 2, noch nicht ausgeführt)
+
+Für jede ältere Kampagne ohne `split` zeigt ein Dialog vor dem ersten Öffnen:
+- **Spieler-Kampagne:** „Borin spielt hier. Stand für diese Kampagne:“
+  - ○ aktueller Stand (Stufe, Gold, TP …, Vorbelegung nur bei genau einer Kampagne)
+  - ○ Grundbogen kopieren
+  - ○ später
+- **Spielleitungs-Kampagne:** „Bisheriger Spielleitungsbereich (N Notizen, M Begegnungen, laufender Kampf mit K Beteiligten) gehört zu:“
+  - ○ dieser Kampagne
+  - ○ einer anderen Kampagne
+  - ○ später, bleibt im gemeinsamen Bereich
+  Die eigenen Monster sind schon global und werden nicht gefragt.
+- Nach der Wahl wird die Kampagne auf `split: true` gesetzt und der gewählte Stand als **Kopie** angelegt. Der gemeinsame Stand bleibt unverändert.
+- „Übernahme zurücknehmen“ entfernt die Kopien und setzt `split` zurück.
