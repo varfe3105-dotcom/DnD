@@ -1,7 +1,7 @@
 import { clamp, esc, mod, sg } from '../util.js';
 import { tok } from '../icons.js';
 import { ABK, CLIC } from '../constants.js';
-import { pb, pactFor, cantripsFor, knownFor, classLevels, slotsAll, slotsFor, castKind, mcMet } from '../tables.js';
+import { pb, pactFor, cantripsFor, knownFor, classLevels, slotsAll, slotsFor, castKind, mcMet, prepFor } from '../tables.js';
 import { S, U, toast, spFrom } from '../state.js';
 import { alwaysFor, syncAlwaysSpells } from '../domain-spells.js';
 import { abName, resFor , syncRaceRes } from '../helpers.js';
@@ -131,8 +131,8 @@ export function spellPools(d) {
   if (!max) return pools;
   if (d.klass === 'Wizard') pools.push({ key: 'sp', kind: 'book', n: d.cl === 1 ? 6 : 2, list: list(1, max) });
   else if (d.known[1] != null) { const n = d.known[1] - (d.known[0] || 0); if (n > 0) pools.push({ key: 'sp', kind: 'known', n, list: list(1, max) }); }
-  else if (PREP_AB[d.klass]) {
-    const cap = Math.max(1, mod(S.abil[PREP_AB[d.klass]]) + (d.klass === 'Paladin' ? Math.floor(d.cl / 2) : d.cl));
+  else if (prepFor(d.klass, d.cl) != null) {
+    const cap = prepFor(d.klass, d.cl);
     const now = S.spells.filter(s => s.lvl > 0 && !s.always && s.prep !== false).length;
     if (cap - now > 0) pools.push({ key: 'sp', kind: 'prep', n: cap - now, list: list(1, max) });
   }
@@ -160,8 +160,7 @@ export function vLU() {
   const d = luData(), C = d.C, abOpt = sel => `<option value="">${t('lu.ability')}</option>` + ABK.map(k => `<option value="${k}"${k === sel ? ' selected' : ''}>${abName(k)} (${S.abil[k]})</option>`).join('');
   const chg = (l, a, b) => String(a) === String(b) ? `<span>${l} ${a}</span>` : `<span class="up">${l} ${a} → ${b}</span>`;
   const sl = d.slotsNew.map((n, i) => [i + 1, d.slotsOld[i], n]).filter(x => x[1] || x[2]);
-  const prepared = { Cleric: 'wis', Druid: 'wis', Wizard: 'int', Paladin: 'cha' }[d.klass];
-  const prepN = prepared ? Math.max(1, mod(S.abil[prepared]) + (d.klass === 'Paladin' ? Math.floor(d.cl / 2) : d.cl)) : 0;
+  const prepN = prepFor(d.klass, d.cl) || 0, prepared = prepN > 0;
   const resOld = Object.fromEntries(S.res.map(r => [r.n, r.max]));
   const dieN = dice('W' + C.hd);
   const dwarf = d.dw ? ` +${d.dw} ${t('lu.perLevel')}` : '';
@@ -178,7 +177,7 @@ export function vLU() {
   ${vOptions(d)}
   ${sl.length ? `<h4>${t('setup.slots')}</h4><div class="chg">${sl.map(([g, a, b]) => chg(t('spell.level', { n: g }) + ':', a, b)).join('')}</div>` : ''}
   ${d.pact ? `<h4>${t('spell.pact')}</h4><div class="chg">${chg('', t('lu.pactOf', { a: S.pact.max, b: S.pact.lvl }), t('lu.pactOf', { a: d.pact[0], b: d.pact[1] }))}</div>` : ''}
-  ${d.cant[1] || d.known[1] != null || prepared ? `<h4>${t('spell.title')}</h4><div class="chg">${d.cant[1] ? chg(t('spell.cantrips'), d.cant[0], d.cant[1]) : ''}${d.known[1] != null ? chg(t('lu.known'), d.known[0] || 0, d.known[1]) : ''}${prepared && (d.klass !== 'Paladin' || d.cl >= 2) ? `<span>${t('lu.prepared', { n: prepN })}</span>` : ''}${d.klass === 'Wizard' ? `<span class="up">${d.cl === 1 ? t('lu.book6') : t('lu.book2')}</span>` : ''}</div>` : ''}${vSpellPick(d)}
+  ${d.cant[1] || d.known[1] != null || prepared ? `<h4>${t('spell.title')}</h4><div class="chg">${d.cant[1] ? chg(t('spell.cantrips'), d.cant[0], d.cant[1]) : ''}${d.known[1] != null ? chg(t('lu.known'), d.known[0] || 0, d.known[1]) : ''}${prepared ? `<span>${t('lu.prepared', { n: prepN })}</span>` : ''}${d.klass === 'Wizard' ? `<span class="up">${d.cl === 1 ? t('lu.book6') : t('lu.book2')}</span>` : ''}</div>` : ''}${vSpellPick(d)}
   ${d.res.length ? `<h4>${t('res.title')}</h4><div class="chg">${d.res.map(r => chg(r.n + ':', resOld[r.n] == null ? t('lu.new') : resOld[r.n] >= 99 ? '∞' : resOld[r.n], r.max >= 99 ? '∞' : r.max)).join('')}</div>` : ''}
   <div class="dlgf"><button class="btn" data-a="luclose">${t('common.cancel')}</button><button class="btn solid" data-a="luapply">${d.to === 1 ? t('lu.apply1') : t('lu.apply')}</button></div></div></div>`;
 }
@@ -223,7 +222,7 @@ export function applyLU() {
     } else { const add = (k, v) => { S.abil[k] = Math.min(20, Math.max(S.abil[k], S.abil[k] + v)); }; if (L.asi === 'one') add(L.a1, 2); else { add(L.a1, 1); add(L.a2, 1); } }
   }
   if (d.klass === 'Barbarian' && cl === 20) { S.abil.str = Math.min(24, S.abil.str + 4); S.abil.con = Math.min(24, S.abil.con + 4); }
-  d.res.forEach(r => { const ex = S.res.find(x => x.n === r.n); if (ex) { ex.max = r.max; ex.rest = r.rest; ex.p = r.p; ex.used = Math.min(ex.used, r.max); } else S.res.push({ n: r.n, ic: r.ic, max: r.max, used: 0, rest: r.rest, p: r.p }); });
+  d.res.forEach(r => { const ex = S.res.find(x => x.n === r.n); if (ex) { ex.max = r.max; ex.rest = r.rest; ex.p = r.p; ex.used = Math.min(ex.used, r.max); if (r.one) ex.one = true; else delete ex.one; } else S.res.push({ n: r.n, ic: r.ic, max: r.max, used: 0, rest: r.rest, p: r.p, ...(r.one ? { one: true } : {}) }); });
   if (S.race === 'Dwarf') S.raceHp = (S.raceHp || 0) + 1; // in d.gain schon enthalten
   syncRaceRes();
   U.LU = null;

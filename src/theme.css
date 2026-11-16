@@ -556,3 +556,6 @@ body:has(#live-dock.full) #toast{bottom:auto;top:calc(12px + env(safe-area-inset
 .tv-sec li{margin:3px 0;line-height:1.35}
 .tv-sec li span{color:var(--mute);font-size:.88rem}
 .tv-own{margin:6px 0 0;font-size:.9rem}
+
+.d4{font-size:.72rem;margin-left:3px;white-space:nowrap}
+.atk .d4{display:block;margin:0}

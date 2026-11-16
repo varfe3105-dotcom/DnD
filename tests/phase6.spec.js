@@ -91,11 +91,12 @@ test.describe('Multiclassing @new', () => {
     await up(page, { klass: 'Cleric' });
     const s = await read(page);
     expect(s.level).toBe(5);
-    expect(s.multi).toEqual([{ k: 'Cleric', sub: 'Life Domain', lvl: 2 }]);
+    // 2024: Unterklasse des Klerikers erst auf Stufe 3
+    expect(s.multi).toEqual([{ k: 'Cleric', sub: '', lvl: 2 }]);
     expect(s.slots.slice(0, 3).map(x => x.max)).toEqual([4, 3, 2]);
     expect(s.prof).toBe(3);
     expect(s.saves).toEqual({ int: true, wis: true });
-    expect(s.feats.map(f => f.n)).toEqual(expect.arrayContaining(['Multiclass: Cleric', 'Disciple of Life']));
+    expect(s.feats.map(f => f.n)).toEqual(expect.arrayContaining(['Multiclass: Cleric', 'Divine Order']));
     expect(s.hd.die).toBe('W6');
     await expect(page.locator('.who p').first()).toContainText('Wizard 3 / Cleric 2');
   });

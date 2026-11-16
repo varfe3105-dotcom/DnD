@@ -84,6 +84,9 @@ export function effects() {
   if (monk >= 2 && !S.eq.body && !shield) { const m = monk >= 18 ? 9 : monk >= 14 ? 7.5 : monk >= 10 ? 6 : monk >= 6 ? 4.5 : 3; plus += m; e.speed.plus.push('Unarmored Movement'); }
   if (lv('Barbarian') >= 5 && !(body && body.cat === 'Heavy')) { plus += 3; e.speed.plus.push('Fast Movement'); }
   if (S.feats.some(f => f.n === 'Mobile')) { plus += 3; e.speed.plus.push('Mobile'); }
+  // Regeln 2024: Roving (Waldläufer 6, ohne schwere Rüstung), Aura of Alacrity (Oath of Glory 7)
+  if (lv('Ranger') >= 6 && !(body && body.cat === 'Heavy')) { plus += 3; e.speed.plus.push('Roving'); }
+  if (classLevels().some(c => c.k === 'Paladin' && c.sub === 'Oath of Glory' && c.lvl >= 7)) { plus += 3; e.speed.plus.push('Aura of Alacrity'); }
   e.speed.norm = S.speed + plus;
   let v = e.speed.norm;
   if (ex >= 1) v = Math.max(0, v - 1.5 * Math.min(ex, 6));

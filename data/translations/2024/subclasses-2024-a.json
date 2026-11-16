@@ -1,0 +1,81 @@
+{
+  "Bard": {
+    "College of Dance": {
+      "3": [
+        { "n": "Dazzling Footwork", "en": "While you wear no armor and wield no Shield: Dance Virtuoso: Advantage on Charisma (Performance) checks that involve dancing. Unarmored Defense: your AC is 10 + Dexterity modifier + Charisma modifier. Agile Strikes: when you expend a use of Bardic Inspiration as part of an action, Bonus Action or Reaction, you can make one Unarmed Strike as part of it. Bardic Damage: your Unarmed Strikes can use Dexterity for attack and damage, and deal Bludgeoning damage equal to a roll of your Bardic Inspiration die + Dexterity modifier (this doesn't expend a use).", "de": "Ohne Rüstung und Schild: Dance Virtuoso: Vorteil auf Charisma (Auftreten), wenn getanzt wird. Ungerüstete Verteidigung: RK = 10 + Geschicklichkeits- + Charismamodifikator. Agile Strikes: Gibst du Bardic Inspiration als Teil einer Aktion, Bonusaktion oder Reaktion aus, kannst du dabei einen waffenlosen Schlag machen. Bardic Damage: Waffenlose Schläge dürfen Geschicklichkeit für Angriff und Schaden nutzen und machen Wuchtschaden in Höhe eines Wurfs deines Bardic-Inspiration-Würfels + Geschicklichkeitsmodifikator (verbraucht keine Anwendung)." }
+      ],
+      "6": [
+        { "n": "Inspiring Movement", "en": "When an enemy you can see ends its turn within 5 feet of you, you can take a Reaction and expend a use of Bardic Inspiration to move up to half your Speed. Then one ally within 30 feet of you can move up to half its Speed using its Reaction. None of this movement provokes Opportunity Attacks.", "de": "Beendet ein Feind, den du siehst, seinen Zug in 1,5 m von dir, kannst du als Reaktion eine Bardic Inspiration ausgeben und dich bis zu deinem halben Tempo bewegen. Danach darf sich ein Verbündeter in 9 m mit seiner Reaktion bis zu seinem halben Tempo bewegen. Diese Bewegung löst keine Gelegenheitsangriffe aus." },
+        { "n": "Tandem Footwork", "en": "When you roll Initiative and aren't Incapacitated, you can expend a use of Bardic Inspiration and roll the die. You and each ally within 30 feet who can see or hear you add the number rolled to Initiative.", "de": "Wirfst du Initiative und bist nicht Incapacitated, kannst du eine Bardic Inspiration ausgeben und den Würfel werfen. Du und jeder Verbündete in 9 m, der dich sieht oder hört, addiert das Ergebnis zur Initiative." }
+      ],
+      "14": [
+        { "n": "Leading Evasion", "en": "When an effect lets you make a Dexterity saving throw to take only half damage, you take no damage on a success and half on a failure. Creatures within 5 feet of you making the same save gain the same benefit. You lose this while Incapacitated.", "de": "Erlaubt dir eine Wirkung einen Geschicklichkeitsrettungswurf für halben Schaden, nimmst du bei Erfolg keinen und bei Misserfolg halben Schaden. Kreaturen in 1,5 m, die denselben Wurf machen, profitieren ebenso. Nicht, solange du Incapacitated bist." }
+      ]
+    },
+    "College of Glamour": {
+      "3": [
+        { "n": "Beguiling Magic", "en": "You always have Charm Person and Mirror Image prepared. Immediately after you cast an Enchantment or Illusion spell with a spell slot, you can make one creature you can see within 60 feet make a Wisdom saving throw against your spell save DC. On a failure it has the Charmed or Frightened condition (your choice) for 1 minute, repeating the save at the end of each of its turns. Once per Long Rest, or again by expending a use of Bardic Inspiration (no action).", "de": "Charm Person und Mirror Image sind immer vorbereitet. Direkt nachdem du einen Verzauberungs- oder Illusionszauber mit Zauberplatz gewirkt hast, kannst du eine Kreatur in 18 m, die du siehst, einen Weisheitsrettungswurf gegen deinen Zauber-SG machen lassen. Scheitert sie, ist sie 1 Minute Charmed oder Frightened (deine Wahl); Rettungswurf am Ende jedes ihrer Züge. Einmal pro langer Rast, weitere Male für je eine Bardic Inspiration (keine Aktion)." },
+        { "n": "Mantle of Inspiration", "en": "As a Bonus Action, expend a use of Bardic Inspiration and roll the die. Choose up to your Charisma modifier (minimum 1) creatures within 60 feet. Each gains Temporary Hit Points equal to twice the roll and can immediately use its Reaction to move up to its Speed without provoking Opportunity Attacks.", "de": "Als Bonusaktion gibst du eine Bardic Inspiration aus und wirfst den Würfel. Wähle bis zu Charismamodifikator (mindestens 1) Kreaturen in 18 m. Jede erhält temporäre TP in Höhe des doppelten Ergebnisses und darf sich sofort mit ihrer Reaktion bis zu ihrem Tempo bewegen, ohne Gelegenheitsangriffe auszulösen." }
+      ],
+      "6": [
+        { "n": "Mantle of Majesty", "en": "You always have Command prepared. As a Bonus Action you cast Command without a spell slot and take on an unearthly appearance for 1 minute or until your Concentration ends. During this time you can cast Command as a Bonus Action without a spell slot, and creatures Charmed by you automatically fail their saves against it. Once per Long Rest, or again by expending a spell slot of level 3 or higher (no action).", "de": "Command ist immer vorbereitet. Als Bonusaktion wirkst du Command ohne Zauberplatz und nimmst 1 Minute lang (oder bis deine Konzentration endet) eine überirdische Erscheinung an. In dieser Zeit kannst du Command als Bonusaktion ohne Zauberplatz wirken; von dir bezauberte Kreaturen scheitern automatisch am Rettungswurf. Einmal pro langer Rast, weitere Male für einen Zauberplatz ab Grad 3 (keine Aktion)." }
+      ],
+      "14": [
+        { "n": "Unbreakable Majesty", "en": "As a Bonus Action you take on a majestic presence for 1 minute or until you are Incapacitated. The first time each turn a creature hits you with an attack roll, it must succeed on a Charisma saving throw against your spell save DC or the attack misses instead. Once per Short or Long Rest.", "de": "Als Bonusaktion nimmst du 1 Minute lang (oder bis du Incapacitated bist) eine majestätische Gestalt an. Trifft dich eine Kreatur in einem Zug zum ersten Mal mit einem Angriffswurf, muss sie einen Charismarettungswurf gegen deinen Zauber-SG schaffen, sonst verfehlt der Angriff. Einmal pro kurzer oder langer Rast." }
+      ]
+    },
+    "College of Valor": {
+      "3": [
+        { "n": "Combat Inspiration", "en": "A creature that has one of your Bardic Inspiration dice can also use it in these ways. Defense: when hit by an attack roll, it can take a Reaction to roll the die and add it to its AC against that attack, possibly causing a miss. Offense: immediately after hitting with an attack roll, it can roll the die and add the number to the attack's damage.", "de": "Eine Kreatur mit deinem Bardic-Inspiration-Würfel kann ihn auch so nutzen. Verteidigung: Wird sie von einem Angriffswurf getroffen, kann sie als Reaktion den Würfel werfen und zur RK gegen diesen Angriff addieren, sodass er vielleicht verfehlt. Angriff: Direkt nach einem Treffer mit einem Angriffswurf kann sie den Würfel werfen und zum Schaden addieren." },
+        { "n": "Martial Training", "en": "You gain proficiency with Martial weapons and training with Medium armor and Shields. You can use a Simple or Martial weapon as a Spellcasting Focus for your Bard spells.", "de": "Übung mit Kriegswaffen sowie mittlerer Rüstung und Schilden. Einfache und Kriegswaffen kannst du als Zauberfokus für Bardenzauber nutzen." }
+      ],
+      "6": [
+        { "n": "Extra Attack", "en": "You can attack twice instead of once whenever you take the Attack action. You can cast one of your cantrips with a casting time of an action in place of one of those attacks.", "de": "Mit der Angriffsaktion greifst du zweimal an. Einen der Angriffe kannst du durch einen deiner Zaubertricks mit 1 Aktion Zeitaufwand ersetzen." }
+      ],
+      "14": [
+        { "n": "Battle Magic", "en": "After you cast a spell with a casting time of an action, you can make one attack with a weapon as a Bonus Action.", "de": "Nachdem du einen Zauber mit 1 Aktion Zeitaufwand gewirkt hast, kannst du als Bonusaktion einen Waffenangriff machen." }
+      ]
+    }
+  },
+  "Cleric": {
+    "Light Domain": {
+      "3": [
+        { "n": "Light Domain Spells", "en": "Always prepared: level 3 Burning Hands, Faerie Fire, Scorching Ray, See Invisibility; level 5 Daylight, Fireball; level 7 Arcane Eye, Wall of Fire; level 9 Flame Strike, Scrying.", "de": "Immer vorbereitet: Stufe 3 Burning Hands, Faerie Fire, Scorching Ray, See Invisibility; Stufe 5 Daylight, Fireball; Stufe 7 Arcane Eye, Wall of Fire; Stufe 9 Flame Strike, Scrying." },
+        { "n": "Radiance of the Dawn", "en": "As a Magic action, expend a use of Channel Divinity: magical Darkness in a 30-foot Emanation is dispelled, and each creature of your choice in it makes a Constitution saving throw, taking Radiant damage equal to 2d10 + your Cleric level on a failure or half as much on a success.", "de": "Als Magie-Aktion gibst du eine Anwendung Channel Divinity aus: Magische Dunkelheit in einer Emanation von 9 m endet, und jede Kreatur deiner Wahl darin macht einen Konstitutionsrettungswurf. Sie erleidet 2W10 + Klerikerstufe gleißenden Schaden, halb bei Erfolg." },
+        { "n": "Warding Flare", "en": "When a creature you can see within 30 feet makes an attack roll, you can take a Reaction to impose Disadvantage on it. Uses equal to your Wisdom modifier (minimum 1), regained on a Long Rest.", "de": "Macht eine Kreatur in 9 m, die du siehst, einen Angriffswurf, kannst du ihm als Reaktion Nachteil geben. Anwendungen: Weisheitsmodifikator (mindestens 1), zurück nach einer langen Rast." }
+      ],
+      "6": [
+        { "n": "Improved Warding Flare", "en": "You regain all uses of Warding Flare on a Short or Long Rest. When you use it, you can also give the target of the triggering attack Temporary Hit Points equal to 2d6 + your Wisdom modifier.", "de": "Warding Flare kommt nach einer kurzen oder langen Rast vollständig zurück. Setzt du es ein, kannst du dem Ziel des Angriffs zusätzlich 2W6 + Weisheitsmodifikator temporäre TP geben." }
+      ],
+      "17": [
+        { "n": "Corona of Light", "en": "As a Magic action you shine an aura of sunlight for 1 minute (or until you end it, no action): Bright Light in a 60-foot radius and Dim Light 30 feet beyond. Enemies in the Bright Light have Disadvantage on saving throws against your Radiance of the Dawn and against spells that deal Fire or Radiant damage. Uses equal to your Wisdom modifier (minimum 1), regained on a Long Rest.", "de": "Als Magie-Aktion strahlst du 1 Minute lang (oder bis du es beendest, keine Aktion) Sonnenlicht aus: hell im Radius 18 m, 9 m weiter schwach. Feinde im hellen Licht haben Nachteil auf Rettungswürfe gegen Radiance of the Dawn und gegen Zauber mit Feuer- oder gleißendem Schaden. Anwendungen: Weisheitsmodifikator (mindestens 1), zurück nach einer langen Rast." }
+      ]
+    },
+    "Trickery Domain": {
+      "3": [
+        { "n": "Trickery Domain Spells", "en": "Always prepared: level 3 Charm Person, Disguise Self, Invisibility, Pass without Trace; level 5 Hypnotic Pattern, Nondetection; level 7 Confusion, Dimension Door; level 9 Dominate Person, Modify Memory.", "de": "Immer vorbereitet: Stufe 3 Charm Person, Disguise Self, Invisibility, Pass without Trace; Stufe 5 Hypnotic Pattern, Nondetection; Stufe 7 Confusion, Dimension Door; Stufe 9 Dominate Person, Modify Memory." },
+        { "n": "Blessing of the Trickster", "en": "As a Magic action, you or a willing creature within 30 feet gains Advantage on Dexterity (Stealth) checks until you finish a Long Rest or use this feature again.", "de": "Als Magie-Aktion hat du oder eine bereitwillige Kreatur in 9 m Vorteil auf Geschicklichkeit (Heimlichkeit), bis du eine lange Rast beendest oder das Merkmal erneut nutzt." },
+        { "n": "Invoke Duplicity", "en": "As a Bonus Action, expend a use of Channel Divinity to create a perfect visual illusion of yourself in an unoccupied space within 30 feet. It lasts 1 minute, until you end it (no action) or until you are Incapacitated. Cast Spells: you can cast spells as though you were in its space, using your own senses. Distract: while you and the illusion are both within 5 feet of a creature that can see it, you have Advantage on attack rolls against that creature. Move: as a Bonus Action you can move it up to 30 feet to a space within 120 feet of you.", "de": "Als Bonusaktion gibst du eine Anwendung Channel Divinity aus und erschaffst eine täuschend echte Illusion von dir in einem freien Feld in 9 m. Sie hält 1 Minute, bis du sie beendest (keine Aktion) oder bis du Incapacitated bist. Zauber: Du kannst Zauber wirken, als stündest du an ihrem Platz, mit deinen eigenen Sinnen. Ablenken: Sind du und die Illusion beide in 1,5 m einer Kreatur, die sie sieht, hast du Vorteil auf Angriffe gegen sie. Bewegen: Als Bonusaktion bewegst du sie bis 9 m weit, höchstens 36 m von dir entfernt." }
+      ],
+      "6": [
+        { "n": "Trickster's Transposition", "en": "Whenever you take the Bonus Action to create or move the illusion of Invoke Duplicity, you can teleport, swapping places with it.", "de": "Wenn du die Illusion von Invoke Duplicity per Bonusaktion erschaffst oder bewegst, kannst du dich teleportieren und mit ihr den Platz tauschen." }
+      ],
+      "17": [
+        { "n": "Improved Duplicity", "en": "Shared Distraction: when you and your allies make attack rolls against a creature within 5 feet of the illusion, they have Advantage. Healing Illusion: when the illusion ends, you or a creature within 5 feet of it regains Hit Points equal to your Cleric level.", "de": "Geteilte Ablenkung: Greifen du und deine Verbündeten eine Kreatur in 1,5 m der Illusion an, haben die Angriffe Vorteil. Heilende Illusion: Endet die Illusion, erhältst du oder eine Kreatur in 1,5 m von ihr TP in Höhe deiner Klerikerstufe." }
+      ]
+    },
+    "War Domain": {
+      "3": [
+        { "n": "War Domain Spells", "en": "Always prepared: level 3 Guiding Bolt, Magic Weapon, Shield of Faith, Spiritual Weapon; level 5 Crusader's Mantle, Spirit Guardians; level 7 Fire Shield, Freedom of Movement; level 9 Hold Monster, Steel Wind Strike.", "de": "Immer vorbereitet: Stufe 3 Guiding Bolt, Magic Weapon, Shield of Faith, Spiritual Weapon; Stufe 5 Crusader's Mantle, Spirit Guardians; Stufe 7 Fire Shield, Freedom of Movement; Stufe 9 Hold Monster, Steel Wind Strike." },
+        { "n": "Guided Strike", "en": "When you or a creature within 30 feet misses with an attack roll, you can expend a use of Channel Divinity to give that roll +10, possibly causing a hit. Doing this for another creature uses your Reaction.", "de": "Verfehlt du oder eine Kreatur in 9 m mit einem Angriffswurf, kannst du eine Anwendung Channel Divinity ausgeben und dem Wurf +10 geben, sodass er vielleicht trifft. Für eine andere Kreatur kostet das deine Reaktion." },
+        { "n": "War Priest", "en": "As a Bonus Action you can make one attack with a weapon or an Unarmed Strike. Uses equal to your Wisdom modifier (minimum 1), regained on a Short or Long Rest.", "de": "Als Bonusaktion machst du einen Waffenangriff oder waffenlosen Schlag. Anwendungen: Weisheitsmodifikator (mindestens 1), zurück nach einer kurzen oder langen Rast." }
+      ],
+      "6": [
+        { "n": "War God's Blessing", "en": "You can expend a use of Channel Divinity to cast Shield of Faith or Spiritual Weapon without a spell slot. Cast this way, the spell needs no Concentration and lasts 1 minute, ending early if you cast it again, are Incapacitated or die.", "de": "Für eine Anwendung Channel Divinity wirkst du Shield of Faith oder Spiritual Weapon ohne Zauberplatz. So gewirkt braucht der Zauber keine Konzentration und hält 1 Minute; er endet früher, wenn du ihn erneut wirkst, Incapacitated bist oder stirbst." }
+      ],
+      "17": [
+        { "n": "Avatar of Battle", "en": "You have Resistance to Bludgeoning, Piercing and Slashing damage.", "de": "Resistenz gegen Wucht-, Stich- und Hiebschaden." }
+      ]
+    }
+  }
+}

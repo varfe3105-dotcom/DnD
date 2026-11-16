@@ -59,8 +59,7 @@ test.describe('Online-Speicherung @new', () => {
     await expect(row).toBeVisible();
     await row.locator('[data-a="cloudpull"]').click();
     await expect(b.page.locator('.edrow', { hasText: 'Mirelle' }).first()).toBeVisible();
-    const stored = await b.page.evaluate(() => JSON.parse(localStorage.getItem('charbogen-char-held1')));
-    expect(stored.hp).toBe(17);
+    await expect.poll(() => b.page.evaluate(() => JSON.parse(localStorage.getItem('charbogen-char-held1'))?.hp)).toBe(17);
     await a.ctx.close(); await b.ctx.close();
   });
 

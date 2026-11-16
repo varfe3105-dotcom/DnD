@@ -511,3 +511,7 @@ label.fig:hover .figedit,label.fig:focus-visible .figedit{opacity:1}
 .np-head input{flex:1 1 200px;min-width:0}
 .dm-place{margin-top:12px;padding-top:10px;border-top:1px solid var(--line)}
 .dm-nk{margin:8px 0}
+.dm-diff.low{background:#2f5a35;color:#dff2df}
+.dm-diff.moderate{background:#7b6a22;color:#fff5cc}
+.dm-diff.high{background:#9a5420;color:#ffeeda}
+.dm-diff.over{background:#8f2a22;color:#ffe6dc}

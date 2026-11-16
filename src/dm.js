@@ -131,8 +131,6 @@ export function togglePip(o, j) { o.used = clamp(j < o.max - o.used ? o.used + 1
 
 /* ---- Begegnungen ---- */
 const XP = { 0: 10, 0.125: 25, 0.25: 50, 0.5: 100, 1: 200, 2: 450, 3: 700, 4: 1100, 5: 1800, 6: 2300, 7: 2900, 8: 3900, 9: 5000, 10: 5900, 11: 7200, 12: 8400, 13: 10000, 14: 11500, 15: 13000, 16: 15000, 17: 18000, 18: 20000, 19: 22000, 20: 25000, 21: 33000, 22: 41000, 23: 50000, 24: 62000, 25: 75000, 26: 90000, 27: 105000, 28: 120000, 29: 135000, 30: 155000 };
-const THRESH = [null, [25, 50, 75, 100], [50, 100, 150, 200], [75, 150, 225, 400], [125, 250, 375, 500], [250, 500, 750, 1100], [300, 600, 900, 1400], [350, 750, 1100, 1700], [450, 900, 1400, 2100], [550, 1100, 1600, 2400], [600, 1200, 1900, 2800], [800, 1600, 2400, 3600], [1000, 2000, 3000, 4500], [1100, 2200, 3400, 5100], [1250, 2500, 3800, 5700], [1400, 2800, 4300, 6400], [1600, 3200, 4800, 7200], [2000, 3900, 5900, 8800], [2100, 4200, 6300, 9500], [2400, 4900, 7300, 10900], [2800, 5700, 8500, 12700]];
-const STEPS = [0.5, 1, 1.5, 2, 2.5, 3, 4, 5];
 export const xpOf = cr => XP[cr] ?? 0;
 /** XP der besiegten Monster im laufenden Kampf (TP 0). */
 export function defeatedXp() {
@@ -140,17 +138,18 @@ export function defeatedXp() {
   return { list: gone, xp: gone.reduce((a, c) => a + xpOf(findMonster(c.mon)?.cr), 0) };
 }
 export const partySize = () => D.party.reduce((a, p) => a + (+p.count || 0), 0);
-export const thresholds = () => D.party.reduce((t, p) => { const r = THRESH[clamp(+p.level || 1, 1, 20)]; return t.map((v, i) => v + r[i] * (+p.count || 0)); }, [0, 0, 0, 0]);
+/** XP-Budget je Charakter nach DMG 2024: niedrig, mittel, hoch. */
+const BUDGET = [null, [50, 75, 100], [100, 150, 200], [150, 225, 400], [250, 375, 500], [500, 750, 1100], [600, 1000, 1400], [750, 1300, 1700], [1000, 1700, 2100], [1300, 2000, 2600], [1600, 2300, 3100], [1900, 2900, 4100], [2200, 3700, 4700], [2600, 4200, 5400], [2900, 4900, 6200], [3300, 5400, 7800], [3800, 6100, 9800], [4500, 7200, 11700], [5000, 8700, 14200], [5500, 10700, 17200], [6400, 13200, 22000]];
+export const thresholds = () => D.party.reduce((t, p) => { const r = BUDGET[clamp(+p.level || 1, 1, 20)]; return t.map((v, i) => v + r[i] * (+p.count || 0)); }, [0, 0, 0]);
 /** Schwierigkeit nach den DMG-Regeln: Grund-XP mal Faktor nach Monsterzahl und Gruppengröße. */
 export function rate(enc) {
   let n = 0, xp = 0;
   enc.monsters.forEach(e => { const m = findMonster(e.id); if (m) { n += e.qty; xp += xpOf(m.cr) * e.qty; } });
-  let i = n <= 1 ? 1 : n === 2 ? 2 : n <= 6 ? 3 : n <= 10 ? 4 : n <= 14 ? 5 : 6;
-  const size = partySize();
-  if (size < 3) i += 1; else if (size >= 6) i -= 1;
-  const mult = STEPS[clamp(i, 0, 7)], adj = Math.round(xp * mult), th = thresholds();
-  const level = !n ? 'none' : adj >= th[3] ? 'deadly' : adj >= th[2] ? 'hard' : adj >= th[1] ? 'medium' : adj >= th[0] ? 'easy' : 'trivial';
-  return { n, xp, mult, adj, level };
+  // 2024: kein Faktor für die Anzahl der Monster; das Budget der gewählten Schwierigkeit ist die Obergrenze
+  const th = thresholds();
+  const level = !n ? 'none' : xp > th[2] ? 'over' : xp > th[1] ? 'high' : xp > th[0] ? 'moderate' : 'low';
+  const budget = level === 'over' ? th[2] : level === 'high' ? th[2] : level === 'moderate' ? th[1] : th[0];
+  return { n, xp, mult: 1, adj: xp, level, budget };
 }
 export const curEnc = () => D.encounters.find(e => e.id === D.encSel) || null;
 export function newEnc(name) { const e = { id: uid(), name, monsters: [] }; D.encounters.unshift(e); D.encSel = e.id; }
@@ -184,6 +183,13 @@ export function delCustom(id) { D.custom = D.custom.filter(m => m.id !== id); }
 /* ---- Live-Tisch ---- */
 const petRow = (p, x) => ({ ...base(), kind: 'pet', live: p.key, pet: x.id, owner: p.name, name: x.n, ac: x.ac, hp: x.hp, hpMax: x.hpMax });
 /** Verbundene Spieler (alle oder nur einen) mit ihren Begleitern in den Kampf holen. */
+/** Wirkungen, die die Spielleitung auf Spieler legt (z. B. Bane eines Gegners). Bleiben, bis sie entfernt werden. */
+export function dmBuff(s, key) {
+  D.buffsOut = (D.buffsOut || []).filter(b => !(b.s === s && b.to.includes(key)));
+  D.buffsOut.push({ id: uid(), s, to: [key], v: s === 'Aid' ? 5 : s === 'Heroism' ? 3 : 0 });
+}
+export const dmBuffsFor = key => (D.buffsOut || []).filter(b => b.to.includes(key));
+export function dmBuffDrop(id) { D.buffsOut = (D.buffsOut || []).filter(b => b.id !== id); }
 export function addLive(peers, key) {
   const have = new Set(D.combat.list.filter(c => c.kind === 'pc').map(c => c.live));
   peers.filter(p => !have.has(p.key) && (!key || p.key === key)).forEach(p => {

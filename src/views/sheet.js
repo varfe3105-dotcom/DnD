@@ -11,7 +11,8 @@ import { hdText, skv, pips, numIn, get, refs, atk, raceTraits, abName, abShort, 
 import { COND, EXH, featText, byName, CLASSES, BYN } from '../catalog.js';
 import { t, loc, dice, dist, lang, nameLine, deName } from '../i18n/index.js';
 import { effects, hpMaxNow, rollState, anyEffect } from '../effects.js';
-import { acBonus, buffText, origin, BUFFS } from '../buffs.js';
+import { acBonus, buffText, origin, BUFFS, d4Buffs } from '../buffs.js';
+const d4Html = () => d4Buffs().map(x => `<span class="d4 ${BUFFS[x.s].d4 > 0 ? 'buff' : 'debuff'}" title="${esc(origin(x))}">${BUFFS[x.s].d4 > 0 ? '+' : '−'}${dice('1W4')}</span>`).join('');
 import { vTurnHelp, masteryCount, masteryOf, masteryText } from './turn.js';
 /** Meisterschaft einer Waffe: gewählt (aktiv), wählbar oder ohne das Merkmal nur als Hinweis. */
 function mastChip(raw) {
@@ -81,7 +82,7 @@ export function vAbil(edit) {
   const fx = edit ? null : effects();
   return `<div class="abs${edit ? ' edit' : ''}">${ABK.map(k => {
     const n = abName(k), m = mod(S.abil[k]), sv = m + (S.saves[k] ? S.prof : 0);
-    return `<div class="abw"><div class="ab"><div class="abi"><svg class="rune" viewBox="0 0 20 20" aria-hidden="true"><path d="${RUNES[k]}"/></svg><small>${n}</small><b>${sg(m)}</b></div></div><div class="abv">${edit ? numIn('abil.' + k, S.abil[k], n, 1, 30) : S.abil[k]}</div>${edit ? `<button class="tg${S.saves[k] ? ' on' : ''}" data-a="tsave" data-k="${k}" aria-pressed="${!!S.saves[k]}">${t('ab.saveProf')}</button>` : `<div class="sv${S.saves[k] ? ' p' : ''}" title="${t('ab.save')}"><i></i><span class="svl">${t('ab.save')}</span><span class="svs">${t('ab.saveShort')}</span> ${sg(sv)}${fx ? fxMark([], fx.saves[k].dis, fx.saves[k].fail) : ''}</div>`}</div>`;
+    return `<div class="abw"><div class="ab"><div class="abi"><svg class="rune" viewBox="0 0 20 20" aria-hidden="true"><path d="${RUNES[k]}"/></svg><small>${n}</small><b>${sg(m)}</b></div></div><div class="abv">${edit ? numIn('abil.' + k, S.abil[k], n, 1, 30) : S.abil[k]}</div>${edit ? `<button class="tg${S.saves[k] ? ' on' : ''}" data-a="tsave" data-k="${k}" aria-pressed="${!!S.saves[k]}">${t('ab.saveProf')}</button>` : `<div class="sv${S.saves[k] ? ' p' : ''}" title="${t('ab.save')}"><i></i><span class="svl">${t('ab.save')}</span><span class="svs">${t('ab.saveShort')}</span> ${sg(sv)}${fx ? d4Html() + fxMark([], fx.saves[k].dis, fx.saves[k].fail) : ''}</div>`}</div>`;
   }).join('')}</div>`;
 }
 export function vHP() {
@@ -114,10 +115,10 @@ export function vAtk() {
   const rows = ['main', 'off'].filter(k => S.eq[k]).map(k => {
     const raw = S.eq[k], a = atk(raw, k); if (!a) return '';
     const it = itemView(raw);
-    return `<div class="row wrow"><div class="ic">${tok(it.ic, itTone(it), it.ref)}</div><div class="nm">${esc(it.n)}<small>${esc(it.p)}</small><span class="atkt"><button class="chip prf${a.prof ? ' on' : ''}" data-a="wprof" data-k="${k}" aria-pressed="${a.prof}">${t(a.prof ? 'atk.prof' : 'atk.noProf')}</button>${a.tags.map(x => `<span class="lbl">${esc(x)}</span>`).join('')}${fxTag}${mastChip(raw)}</span>${(S.mastery || []).includes(raw.ref) && BYN[raw.ref]?.mastery ? `<small class="mast-t">${esc(masteryText(BYN[raw.ref].mastery))}</small>` : ''}</div><div class="atk"><b>${a.hit}</b><small>${t('atk.hit')}</small></div><div class="atk"><b>${a.dmg}</b><small>${esc(a.type)}${a.vers ? ` · 2H ${a.vers}` : ''}</small></div>${ammoRow(raw, k)}</div>`;
+    return `<div class="row wrow"><div class="ic">${tok(it.ic, itTone(it), it.ref)}</div><div class="nm">${esc(it.n)}<small>${esc(it.p)}</small><span class="atkt"><button class="chip prf${a.prof ? ' on' : ''}" data-a="wprof" data-k="${k}" aria-pressed="${a.prof}">${t(a.prof ? 'atk.prof' : 'atk.noProf')}</button>${a.tags.map(x => `<span class="lbl">${esc(x)}</span>`).join('')}${fxTag}${mastChip(raw)}</span>${(S.mastery || []).includes(raw.ref) && BYN[raw.ref]?.mastery ? `<small class="mast-t">${esc(masteryText(BYN[raw.ref].mastery))}</small>` : ''}</div><div class="atk"><b>${a.hit}</b>${d4Html()}<small>${t('atk.hit')}</small></div><div class="atk"><b>${a.dmg}</b><small>${esc(a.type)}${a.vers ? ` · 2H ${a.vers}` : ''}</small></div>${ammoRow(raw, k)}</div>`;
   }).join('');
   const u = unarmed();
-  const fist = `<div class="row wrow atk-un"><div class="ic">${tok('swirl')}</div><div class="nm">${t('atk.unarmed')}${u.tags.length ? `<small>${esc(u.tags.join(' · '))}</small>` : ''}${fxTag ? `<span class="atkt">${fxTag}</span>` : ''}</div><div class="atk"><b>${u.hit}</b><small>${t('atk.hit')}</small></div><div class="atk"><b>${u.dmg}</b><small>${esc(u.type)}</small></div></div>`;
+  const fist = `<div class="row wrow atk-un"><div class="ic">${tok('swirl')}</div><div class="nm">${t('atk.unarmed')}${u.tags.length ? `<small>${esc(u.tags.join(' · '))}</small>` : ''}${fxTag ? `<span class="atkt">${fxTag}</span>` : ''}</div><div class="atk"><b>${u.hit}</b>${d4Html()}<small>${t('atk.hit')}</small></div><div class="atk"><b>${u.dmg}</b><small>${esc(u.type)}</small></div></div>`;
   return `<h2>${t('atk.title')}</h2><div class="card">${rows}${fist}<p class="note">${rows ? t('atk.note') : t('atk.none')}</p></div>`;
 }
 export function vQuick() {

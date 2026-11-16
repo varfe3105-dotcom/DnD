@@ -44,7 +44,7 @@ export function syncBuffs(peers = []) {
   const me = S.id, mine = arr('buffs'), gone = new Set(arr('buffsGone'));
   S.buffsOut = activeOut();
   const self = { key: me, name: S.name, buffs: S.buffsOut, self: true };
-  const sources = [self, ...peers.filter(p => p.role === 'player' && p.key !== me)];
+  const sources = [self, ...peers.filter(p => (p.role === 'player' || p.role === 'dm') && p.key !== me).map(p => (p.role === 'dm' ? { ...p, name: t('buff.dm') } : p))];
   const forMe = (src, id) => (src.buffs || []).some(b => b.id === id && (b.to || []).includes(me));
   let changed = false;
   sources.forEach(src => (src.buffs || []).forEach(b => {
@@ -100,4 +100,13 @@ export function buffText(x) {
   return '';
 }
 /** Für die Presence: was auf mir liegt (Gruppenansicht, Kampf-Tracker). */
+/** Bless/Bane als „+1W4“/„−1W4“ an Angriffs- und Rettungswürfen. */
+export const d4Buffs = () => myBuffs().filter(x => BUFFS[x.s].d4);
+/** Heroism: temporäre TP zu Beginn des eigenen Zuges. Liefert die Zahl, wenn sich etwas geändert hat. */
+export function heroTemp() {
+  const x = myBuffs().find(b => BUFFS[b.s].hero && b.v > 0);
+  if (!x || S.tmp >= x.v) return 0;
+  S.tmp = x.v;
+  return x.v;
+}
 export const fxOut = () => myBuffs().slice(0, 6).map(x => ({ s: x.s, by: x.by || S.name, good: BUFFS[x.s].good }));

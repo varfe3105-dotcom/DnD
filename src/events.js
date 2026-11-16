@@ -15,7 +15,7 @@ import * as live from './live.js';
 import * as cloud from './cloud.js';
 import { setBright, setSkin } from './bright.js';
 import { hpMaxNow } from './effects.js';
-import { syncBuffs, castOn, dropBuff, maxTargets } from './buffs.js';
+import { syncBuffs, castOn, dropBuff, maxTargets, heroTemp } from './buffs.js';
 import { masteryCount } from './views/turn.js';
 import { syncAc } from './helpers.js';
 import * as dm from './dm.js';
@@ -155,6 +155,8 @@ app.addEventListener('click',ev=>{
     case 'tgtok':{const g=U.TARGET;U.TARGET=null;if(!g||!g.to.length)break;castOn(g.n,g.lvl,g.to);const names=g.to.map(k=>k===S.id?S.name:(live.players().find(p=>p.key===k)||{}).name||'?');toast(tr('buff.sent',{s:g.n,n:names.join(', ')}));break}
     case 'tgtskip':U.TARGET=null;break;
     case 'wmast':{const w=b.dataset.w,on=S.mastery.includes(w);if(on)S.mastery=S.mastery.filter(x=>x!==w);else{const n=masteryCount();if(S.mastery.length>=n){toast(tr('mast.full',{n}));return}S.mastery.push(w)}break}
+    case 'dmbuff':{const k=b.dataset.k,s=v('lv-b-'+k);if(!s){toast(tr('buff.dmPick'));return}dm.dmBuff(s,k);dm.saveD();live.refresh();toast(tr('buff.dmSent',{s,n:(live.players().find(p=>p.key===k)||{}).name||'?'}));break}
+    case 'dmbuffrm':dm.dmBuffDrop(b.dataset.id);dm.saveD();live.refresh();break;
     case 'buffrm':dropBuff(b.dataset.id);break;
     case 'peek':{const id=b.dataset.k,name=b.dataset.n;dm.DU.peek={name,loading:true};cloud.peek(id).then(r=>{if(!dm.DU.peek||dm.DU.peek.name!==name)return;dm.DU.peek={name,...(r||{data:null})};render()});break}
     case 'peekclose':dm.DU.peek=null;break;
@@ -322,10 +324,10 @@ hooks.beforeSave=()=>{syncBuffs(live.L.role==='player'?live.L.peers:[]);syncAc()
 live.setPetSource(()=>S.pets.map(petView));
 live.setJoinHook(cloud.onJoin);
 cloud.setCloudListener(()=>{if(!S.tab.startsWith('dm')&&S.tab!=='setup')return;if(typing()){livePending=true;return}later()});
-live.setDmFlags(()=>({lock:!!dm.D.lootLock,turn:dm.turnInfo()}));
+live.setDmFlags(()=>({lock:!!dm.D.lootLock,turn:dm.turnInfo(),buffs:(dm.D.buffsOut||[]).map(b=>({id:b.id,s:b.s,to:b.to,v:b.v||0}))}));
 dm.dmHooks.live=()=>live.refresh();
 live.setEndTurnHook(key=>{const gone=dm.endTurnFrom(key);if(gone===null)return;dm.saveD();live.refresh();if(gone.length)toast(gone.map(x=>tr('dm.fxEnded',x)).join(' '));later()});
-live.setTurnHook(mine=>{if(!mine||turnsHidden())return;toast(tr('turn.yours'));try{navigator.vibrate&&navigator.vibrate([120,60,120])}catch(e){/* nicht unterstützt */}});
+live.setTurnHook(mine=>{if(mine){const n=heroTemp();if(n){save();toast(tr('buff.heroTemp',{n}));later()}}if(!mine||turnsHidden())return;toast(tr('turn.yours'));try{navigator.vibrate&&navigator.vibrate([120,60,120])}catch(e){/* nicht unterstützt */}});
 live.setAckHook(m=>toast(tr(m.ok?'live.ackYes':'live.ackNo',{n:m.name})));
 initBackup(()=>{const el=$('bak-hist');if(el)el.innerHTML=vBakHist()});
 let lastLock=false;

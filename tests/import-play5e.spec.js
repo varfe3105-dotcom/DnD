@@ -33,7 +33,7 @@ test.describe('Import aus dem anderen Tool @new', () => {
     expect(s.skills).toEqual({ Perception: 1, Insight: 1 });
     expect(s.gold.gp).toBe(4);
     expect(s.slots[0]).toEqual({ max: 2, used: 1 });
-    expect(s.feats.map(f => f.n)).toEqual(expect.arrayContaining(['Spellcasting', 'Blessing of the Trickster']));
+    expect(s.feats.map(f => f.n)).toEqual(expect.arrayContaining(['Spellcasting', 'Divine Order']));
   });
 
   test('Zauber und Gegenstände dem Katalog zuordnen, Rest in die Notizen', async ({ page }) => {

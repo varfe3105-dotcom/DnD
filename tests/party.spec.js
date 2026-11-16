@@ -144,3 +144,35 @@ test.describe('Spielleitung sieht Wirkungen und Bögen @new', () => {
     await expect(page.locator('.dlg.peek')).toHaveCount(0);
   });
 });
+
+test.describe('Lücken aus Etappe 4 @new', () => {
+  test.beforeEach(async ({ page }) => { await page.addInitScript(fake); });
+
+  test('Bane von der Spielleitung: −1W4 an Rettungswürfen und Angriffen, Herkunft Spielleitung', async ({ page }) => {
+    await asPlayer(page);
+    await page.evaluate(l => window.__peers(l), [{ key: 'dm-x', role: 'dm', name: '', cond: [], death: { s: 0, f: 0 }, buffs: [{ id: 'd1', s: 'Bane', to: ['held1'], v: 0 }] }]);
+    await expect(page.locator('.fx .fxbuff')).toContainText(/Bane (from|von) (DM|Spielleitung)/);
+    await expect(page.locator('.sv .d4.debuff')).toHaveCount(6);
+    await expect(page.locator('.atk .d4.debuff').first()).toHaveText(/−1d4|−1W4/);
+  });
+
+  test('Heroism: temporäre TP, sobald der eigene Zug angezeigt wird', async ({ page }) => {
+    await asPlayer(page);
+    await page.evaluate(l => window.__peers(l), [peer('held2', 'Mira', { buffs: [{ id: 'h1', s: 'Heroism', to: ['held1'], v: 3 }] })]);
+    await expect(page.locator('.fx .fxbuff')).toContainText('Heroism');
+    await page.evaluate(l => window.__peers(l), [peer('held2', 'Mira', { buffs: [{ id: 'h1', s: 'Heroism', to: ['held1'], v: 3 }] }), { key: 'dm-x', role: 'dm', name: '', cond: [], death: { s: 0, f: 0 }, turn: { r: 1, cur: 'held1', name: 'Borin', enemy: false, next: '', nextEnemy: false } }]);
+    await expect.poll(async () => (await read(page)).tmp).toBe(3);
+  });
+
+  test('Spielleitung legt eine Wirkung auf einen Spieler und nimmt sie wieder weg', async ({ page }) => {
+    await page.goto(URL_UNDER_TEST);
+    await page.evaluate(() => { localStorage.setItem('charbogen-v4', JSON.stringify({ v: 4, tab: 'dmlive' })); localStorage.setItem('charbogen-dm', JSON.stringify({ on: true, only: true, view: 'live' })); localStorage.setItem('charbogen-live', JSON.stringify({ code: 'ABC234', role: 'dm' })); });
+    await page.reload();
+    await page.evaluate(l => window.__peers(l), [peer('held2', 'Mira')]);
+    await page.locator('#lv-b-held2').selectOption('Bane');
+    await act(page, 'dmbuff').click();
+    await expect.poll(() => page.evaluate(() => window.__tracked.at(-1).buffs)).toEqual([expect.objectContaining({ s: 'Bane', to: ['held2'] })]);
+    await act(page, 'dmbuffrm').click();
+    await expect.poll(() => page.evaluate(() => window.__tracked.at(-1).buffs)).toEqual([]);
+  });
+});

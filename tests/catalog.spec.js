@@ -71,7 +71,8 @@ test.describe('Katalog in der Oberfläche @new', () => {
     await page.locator('#wq').fill('Hail of Thorns');
     await act(page, 'wsel', '[data-key="spell:Hail of Thorns"]').click();
     await expect(page.locator('.wd.pane .src')).toContainText('Summary');
-    await expect(page.locator('.wd.pane')).toContainText('2014');
+    await expect(page.locator('.wd.pane')).toContainText(/Summary|Zusammenfassung/);
+    await expect(page.locator('.wd.pane')).not.toContainText('2014');
     await setLang(page, 'de');
     await expect(page.locator('.wd.pane .src')).toHaveText('Zusammenfassung, bei Unklarheit im Buch prüfen.');
   });

@@ -50,7 +50,7 @@ test.describe('Vorbereitete Zauber @new', () => {
   const list = () => [spell('Bless', 1), spell('Command', 1), spell('Sleep', 1, { prep: false }), spell('Guidance', 0)];
   test('Filter blendet Unvorbereitete aus, Zähler rechnet Attribut plus Stufe', async ({ page }) => {
     await seed(page, cleric({ spells: list() }));
-    await expect(page.locator('.spprep')).toContainText('Prepared 2 of 8');
+    await expect(page.locator('.spprep')).toContainText('Prepared 2 of 9');
     await expect(page.locator('.sp', { hasText: 'Sleep' })).toHaveCount(0);
     await expect(page.locator('.sp', { hasText: 'Guidance' })).toBeVisible();
     await act(page, 'spall').click();
@@ -62,11 +62,11 @@ test.describe('Vorbereitete Zauber @new', () => {
     await act(page, 'spall').click();
     await page.locator('.sp', { hasText: 'Sleep' }).locator('[data-a="prep"]').click();
     expect((await read(page)).spells.find(s => s.n === 'Sleep').prep).toBe(true);
-    await expect(page.locator('.spprep')).toContainText('Prepared 3 of 8');
+    await expect(page.locator('.spprep')).toContainText('Prepared 3 of 9');
   });
   test('immer vorbereitete zählen nicht und sind gesperrt', async ({ page }) => {
     await seed(page, cleric({ spells: [spell('Bless', 1), spell('Charm Person', 1, { always: true })] }));
-    await expect(page.locator('.spprep')).toContainText('Prepared 1 of 8');
+    await expect(page.locator('.spprep')).toContainText('Prepared 1 of 9');
     await expect(page.locator('.sp', { hasText: 'Charm Person' }).locator('[data-a="prep"]')).toBeDisabled();
   });
   test('Klassen ohne Vorbereiten sehen nichts davon', async ({ page }) => {

@@ -272,9 +272,9 @@ test.describe('Spickzettel @new', () => {
 
   test('alle Abschnitte da, Suche filtert, Tabellen werden gezeichnet', async ({ page }) => {
     await dm(page);
-    await expect(page.locator('.dm-rs')).toHaveCount(33);
+    await expect(page.locator('.dm-rs')).toHaveCount(44);
     await page.locator('#dm-rq').fill('falling');
-    expect(await page.locator('.dm-rs').count()).toBeLessThan(33);
+    expect(await page.locator('.dm-rs').count()).toBeLessThan(44);
     await page.locator('#dm-rq').fill('');
     await en(page);
     await page.locator('.dm-rs[data-rid="objects"] summary').first().click();

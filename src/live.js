@@ -56,7 +56,7 @@ function clean(p) {
     insp: !!p.insp, lock: !!p.lock, hp: int(p.hp), hpMax: int(p.hpMax), tmp: int(p.tmp), ac: int(p.ac, 99), exh: int(p.exh, 6), conc: str(p.conc),
     cond: Array.isArray(p.cond) ? p.cond.filter(c => CONDS.has(c)) : [], death: { s: int(p.death?.s, 3), f: int(p.death?.f, 3) },
     acB: int(p.acB, 20), fx: Array.isArray(p.fx) ? p.fx.slice(0, 6).filter(x => x && BUFFS[x.s]).map(x => ({ s: x.s, by: str(x.by), good: !!x.good })) : [],
-    buffs: Array.isArray(p.buffs) ? p.buffs.slice(0, 4).filter(b => b && BUFFS[b.s]).map(b => ({ id: str(b.id, 40), s: b.s, to: Array.isArray(b.to) ? b.to.slice(0, 6).map(k => str(k, 40)) : [], v: int(b.v, 99) })) : [],
+    buffs: Array.isArray(p.buffs) ? p.buffs.slice(0, 8).filter(b => b && BUFFS[b.s]).map(b => ({ id: str(b.id, 40), s: b.s, to: Array.isArray(b.to) ? b.to.slice(0, 6).map(k => str(k, 40)) : [], v: int(b.v, 99) })) : [],
     pets: Array.isArray(p.pets) ? p.pets.slice(0, 3).map(x => ({ id: str(x?.id, 40), n: str(x?.n), hp: int(x?.hp), hpMax: int(x?.hpMax), ac: int(x?.ac, 99) })).filter(x => x.id) : [],
     turn: p.role === 'dm' && p.turn && typeof p.turn === 'object' ? { r: int(p.turn.r, 999), cur: str(p.turn.cur, 40), name: str(p.turn.name), next: str(p.turn.next), enemy: !!p.turn.enemy, nextEnemy: !!p.turn.nextEnemy, cr: str(p.turn.cr, 6), nextCr: str(p.turn.nextCr, 6) } : null,
   };
@@ -198,7 +198,7 @@ export const refresh = () => push();
 let petSource = () => [];
 /** Begleiter (Ranger-Begleiter, Vertrauter …) mit ihren Spielwerten, gesetzt in events.js. */
 export const setPetSource = fn => { petSource = fn; };
-const payload = () => (L.role === 'dm' ? { role: 'dm', lock: !!dmFlags().lock, turn: dmFlags().turn || null } : { role: 'player', insp: !!S.insp, name: S.name, klass: S.klass, level: S.level, hp: S.hp, hpMax: S.hpMax, tmp: S.tmp, ac: acNow(), acB: acBonus().v, fx: fxOut(), buffs: activeOut().slice(0, 4).map(b => ({ id: b.id, s: b.s, to: b.to.slice(0, 6), v: b.v || 0 })), exh: S.exh, conc: S.conc, cond: Object.keys(S.cond).filter(c => S.cond[c]), death: S.death, pets: petSource().slice(0, 3).map(p => ({ id: p.id, n: p.n, hp: p.hp, hpMax: p.hpMax, ac: p.ac })) });
+const payload = () => (L.role === 'dm' ? { role: 'dm', lock: !!dmFlags().lock, turn: dmFlags().turn || null, buffs: (dmFlags().buffs || []).slice(0, 8) } : { role: 'player', insp: !!S.insp, name: S.name, klass: S.klass, level: S.level, hp: S.hp, hpMax: S.hpMax, tmp: S.tmp, ac: acNow(), acB: acBonus().v, fx: fxOut(), buffs: activeOut().slice(0, 4).map(b => ({ id: b.id, s: b.s, to: b.to.slice(0, 6), v: b.v || 0 })), exh: S.exh, conc: S.conc, cond: Object.keys(S.cond).filter(c => S.cond[c]), death: S.death, pets: petSource().slice(0, 3).map(p => ({ id: p.id, n: p.n, hp: p.hp, hpMax: p.hpMax, ac: p.ac })) });
 function push() {
   if (!transport) return;
   const p = payload(), j = JSON.stringify(p);

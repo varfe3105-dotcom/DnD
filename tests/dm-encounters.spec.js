@@ -18,36 +18,38 @@ test.describe('Begegnungen @new', () => {
 
   test('Schwellen folgen der Gruppe', async ({ page }) => {
     await open(page);
-    await expect(page.locator('.dm-th b')).toHaveText(['300', '600', '900', '1600']);
+    await expect(page.locator('.dm-th b')).toHaveText(['600', '900', '1600']);
     await page.locator('#dmp-l0').fill('5');
     await page.locator('#dmp-l0').blur();
-    await expect(page.locator('.dm-th b')).toHaveText(['1000', '2000', '3000', '4400']);
+    await expect(page.locator('.dm-th b')).toHaveText(['2000', '3000', '4400']);
   });
 
   test('gemischte Stufen addieren sich', async ({ page }) => {
     await open(page, { party: [{ count: 2, level: 3 }, { count: 1, level: 5 }] });
-    await expect(page.locator('.dm-th b')).toHaveText(['400', '800', '1200', '1900']);
+    await expect(page.locator('.dm-th b')).toHaveText(['800', '1200', '1900']);
   });
 
   const cases = [
-    ['ein Ogre', [{ id: 'ogre', qty: 1 }], 'Easy', 450],
-    ['drei Ogres mit Faktor 2', [{ id: 'ogre', qty: 3 }], 'Deadly', 2700],
-    ['vier Goblins mit Faktor 2', [{ id: 'goblin-warrior', qty: 4 }], 'Easy', 400],
+    ['ein Ogre', [{ id: 'ogre', qty: 1 }], 'Low', 450, 600],
+    ['drei Ogres (2024 ohne Faktor)', [{ id: 'ogre', qty: 3 }], 'High', 1350, 1600],
+    ['zwölf Ogres', [{ id: 'ogre', qty: 12 }], 'Beyond High', 5400, 1600],
+    ['vier Goblins', [{ id: 'goblin-warrior', qty: 4 }], 'Low', 200, 600],
   ];
-  for (const [name, monsters, label, adj] of cases) {
+  for (const [name, monsters, label, xp, budget] of cases) {
     test(`Rechner: ${name}`, async ({ page }) => {
       await open(page, { encounters: [enc(monsters)], encSel: 'e1' });
       await expect(page.locator('.dm-total .dm-diff')).toHaveText(label);
-      await expect(page.locator('.dm-total')).toContainText(`= ${adj} XP`);
+      await expect(page.locator('.dm-total')).toContainText(`${xp} XP of ${budget} XP`);
     });
   }
 
-  test('kleine und große Gruppen verschieben den Faktor', async ({ page }) => {
-    await open(page, { party: [{ count: 2, level: 3 }], encounters: [enc([{ id: 'goblin-warrior', qty: 1 }])], encSel: 'e1' });
-    await expect(page.locator('.dm-total')).toContainText('× 1.5');
+  test('2024: Gruppengröße ändert das Budget, nicht die Monster-XP', async ({ page }) => {
+    await open(page, { party: [{ count: 2, level: 3 }], encounters: [enc([{ id: 'ogre', qty: 2 }])], encSel: 'e1' });
+    await expect(page.locator('.dm-total .dm-diff')).toHaveText('Beyond High');
     await page.locator('#dmp-c0').fill('6');
     await page.locator('#dmp-c0').blur();
-    await expect(page.locator('.dm-total')).toContainText('× 0.5');
+    await expect(page.locator('.dm-total .dm-diff')).toHaveText('Low');
+    await expect(page.locator('.dm-total')).toContainText('900 XP of 900 XP');
   });
 
   test('zusammenstellen und starten: Spieler bleiben, Monster werden ersetzt', async ({ page }) => {

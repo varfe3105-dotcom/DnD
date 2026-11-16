@@ -346,7 +346,44 @@ function feats() {
   console.log(`Talente: ${out.length} (SRD: ${out.filter(f => f.source === SRC).length})`);
 }
 
-const steps = { spells, conditions, mastery, items, magic, monsters, species, feats };
+/* ---- Klassen 2024 (vorerst die Klassen der Gruppe): SRD-Merkmale wörtlich, deutsche Texte und Unterklassen außerhalb des SRD als eigene Zusammenfassung ---- */
+const CLASSES_24 = { bard: 'Bard', cleric: 'Cleric', paladin: 'Paladin', ranger: 'Ranger' };
+const SUBS_24 = { Bard: ['College of Dance', 'College of Glamour', 'College of Lore', 'College of Valor'], Cleric: ['Life Domain', 'Light Domain', 'Trickery Domain', 'War Domain'], Paladin: ['Oath of Devotion', 'Oath of Glory', 'Oath of the Ancients', 'Oath of Vengeance'], Ranger: ['Beast Master', 'Fey Wanderer', 'Gloom Stalker', 'Hunter'] };
+function classes() {
+  const de = readJson(path.join(trDir, 'de-classes.json'));
+  const own = Object.assign({}, ...['subclasses-2024-a.json', 'subclasses-2024-b.json'].map(x => readJson(path.join(trDir, x))));
+  const feats = srd('Features'), levels = srd('Levels'), cls = srd('Classes'), subcls = srd('Subclasses');
+  const C = JSON.parse(fs.readFileSync(dataFile('classes.json'), 'utf8'));
+  const SC = JSON.parse(fs.readFileSync(dataFile('subclasses.json'), 'utf8'));
+  const feat = x => { const t = { en: clean(x.description) }; if (de[x.index]) t.de = de[x.index]; else missing.push('Klassenmerkmal ohne Deutsch: ' + x.index); return { n: x.name.replace('Lay On Hands', 'Lay on Hands'), text: t, source: SRC, verified: false }; };
+  const lvlOf = x => +String(x.level?.index || '').split('-').pop();
+  for (const [idx, k] of Object.entries(CLASSES_24)) {
+    const c = cls.find(x => x.index === idx), old = C[k];
+    const ls = levels.filter(l => l.class?.index === idx && !l.subclass).sort((a, b) => a.level - b.level);
+    const f = {};
+    feats.filter(x => x.class?.index === idx && !x.subclass).forEach(x => { (f[lvlOf(x)] = f[lvlOf(x)] || []).push(feat(x)); });
+    const subLv = ls.filter(l => l.features.some(x => /Subclass$/.test(x.name))).map(l => l.level);
+    C[k] = { ...old, ed: 2024, hd: c.hit_die, sv: c.saving_throws.map(x => x.index), subL: 3, subs: SUBS_24[k], sl: subLv, asi: [4, 8, 12, 16, 19],
+      prep: ls.map(l => l.spellcasting?.prepared_spells || 0), cant: ls.map(l => l.spellcasting?.cantrips_known || 0), f };
+    // Unterklassen: SRD wörtlich, übrige aus den Zusammenfassungen
+    const out = {};
+    subcls.filter(x => x.class?.index === idx).forEach(sc => {
+      const o = {};
+      feats.filter(x => x.subclass?.index === sc.index).forEach(x => { (o[lvlOf(x)] = o[lvlOf(x)] || []).push(feat(x)); });
+      out[sc.name] = o;
+    });
+    Object.entries(own[k] || {}).forEach(([n, byL]) => {
+      out[n] = Object.fromEntries(Object.entries(byL).map(([l, list]) => [l, list.map(x => ({ n: x.n, text: { en: x.en, de: x.de }, source: 'summary', verified: false }))]));
+    });
+    SC[k] = Object.fromEntries(SUBS_24[k].filter(n => out[n]).map(n => [n, out[n]]));
+    SUBS_24[k].filter(n => !out[n]).forEach(n => missing.push('Unterklasse fehlt: ' + n));
+  }
+  fs.writeFileSync(dataFile('classes.json'), JSON.stringify(C, null, 1) + '\n');
+  fs.writeFileSync(dataFile('subclasses.json'), JSON.stringify(SC, null, 1) + '\n');
+  console.log('Klassen 2024: ' + Object.values(CLASSES_24).join(', '));
+}
+
+const steps = { spells, conditions, mastery, items, magic, monsters, species, feats, classes };
 const only = process.argv.slice(2).filter(a => !a.startsWith('--'));
 for (const [name, fn] of Object.entries(steps)) if (!only.length || only.includes(name)) fn();
 fs.writeFileSync(path.join(root, '.cache/missing-2024.txt'), missing.join('\n') + '\n');

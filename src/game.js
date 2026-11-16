@@ -35,7 +35,7 @@ export function heal(d) {
   toast(t('toast.healed', { n: d }));
 }
 export function rest(long) {
-  S.res.forEach(r => { if (r.rest === 'short' || (long && r.rest === 'long')) r.used = 0; });
+  S.res.forEach(r => { if (r.rest === 'short' || (long && r.rest === 'long')) r.used = 0; else if (!long && r.one && r.used > 0) r.used--; });
   S.pact.used = 0;
   if (!long) { toast(S.pact.max ? t('toast.shortPact') : t('toast.short')); return; }
   // Regeln 2024: Eine lange Rast gibt alle ausgegebenen Trefferwürfel zurück.

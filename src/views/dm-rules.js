@@ -1,10 +1,13 @@
 // Spickzettel für die Spielleitung: Kurzfassung oben, SRD-Text in aufklappbaren Unterabschnitten, Suche markiert Treffer.
-import sections from '../../data/rule-sections.json';
+import srdSections from '../../data/rule-sections.json';
+import rules24 from '../../data/rules-2024.json';
+// Oben die Regeln 2024 als eigene Kurzfassung, darunter die SRD-5.1-Kapitel (Regeln 2014) zum Nachlesen
+const sections = [...rules24, ...srdSections];
 import { esc } from '../util.js';
 import { DU } from '../dm.js';
 import { t, lang, dice, convUnits } from '../i18n/index.js';
 
-const GROUPS = ['combat', 'adventuring', 'using-ability-scores', 'spellcasting', 'equipment', 'appendix'];
+const GROUPS = ['rules2024', 'combat', 'adventuring', 'using-ability-scores', 'spellcasting', 'equipment', 'appendix'];
 const nameOf = s => (lang === 'de' && s.n.de) || s.n.en;
 const sumOf = s => (s.sum && (s.sum[lang] || (lang === 'en' ? '' : ''))) || '';
 const inline = x => x.replace(/\*\*\*(.+?)\*\*\*/g, '<b><i>$1</i></b>').replace(/\*\*(.+?)\*\*/g, '<b>$1</b>').replace(/\*(.+?)\*/g, '<i>$1</i>');
@@ -69,16 +72,17 @@ export function summary(text, q = '') {
 }
 
 function body(s, q) {
+  if (!s.text) return `${summary(sumOf(s), q)}<p class="note">${t('src.summary')}</p>`;
   const orig = md(s.text.en, s.n.en, q), sum = sumOf(s);
   if (!sum) return `${lang === 'de' ? `<p class="note">${t('dm.cheatNoDe')}</p>` : ''}<div class="rs">${orig}</div>`;
   const hitOrig = q && s.text.en.toLowerCase().includes(q.toLowerCase());
   return `${summary(sum, q)}<p class="note">${t('src.summary')}</p><details class="rs-orig"${hitOrig ? ' open' : ''}><summary>${t('dm.cheatOrig')}</summary><div class="rs">${orig}</div></details>`;
 }
-const topics = s => [...new Set(subsections(s.text.en, s.n.en).filter(p => p.h).map(p => p.h.replace(/\*/g, '')))];
+const topics = s => (s.text ? [...new Set(subsections(s.text.en, s.n.en).filter(p => p.h).map(p => p.h.replace(/\*/g, '')))] : []);
 
 export function vRuleList() {
   const q = (DU.rq || '').trim(), low = q.toLowerCase();
-  const match = s => !low || [s.n.en, s.n.de, s.sum?.de, s.sum?.en, s.text.en].some(x => x && x.toLowerCase().includes(low));
+  const match = s => !low || [s.n.en, s.n.de, s.sum?.de, s.sum?.en, s.text?.en].some(x => x && x.toLowerCase().includes(low));
   const html = GROUPS.map(g => {
     const list = sections.filter(s => s.group === g && match(s));
     if (!list.length) return '';

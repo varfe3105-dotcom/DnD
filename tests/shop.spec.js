@@ -37,19 +37,18 @@ test.describe('Einkaufen und Verkaufen @new', () => {
 });
 
 test.describe('Zaubertausch beim Aufstieg @new', () => {
-  test('Ranger 2 → 3: einen bekannten Zauber gegen einen anderen tauschen', async ({ page }) => {
-    await seed(page, base4({ klass: 'Ranger', level: 2, prof: 2, hpMax: 20, hp: 20, abil, hd: { max: 2, used: 0, die: 'W10' }, spells: [spell("Hunter's Mark", 1, { cls: 'R' }), spell('Cure Wounds', 1, { cls: 'BDPR' })] }));
+  test('Sorcerer 2 → 3: einen bekannten Zauber gegen einen anderen tauschen', async ({ page }) => {
+    await seed(page, base4({ klass: 'Sorcerer', sub: 'Draconic Bloodline', level: 2, prof: 2, hpMax: 14, hp: 14, abil, hd: { max: 2, used: 0, die: 'W6' }, spells: [spell('Magic Missile', 1, { cls: 'SW' }), spell('Sleep', 1, { cls: 'BSW' })] }));
     await act(page, 'lu').click();
-    await page.locator('#lu-sub').fill('Hunter');
-    await page.locator('#lu-sub').press('Tab');
-    await page.locator('#lu-swapold').selectOption('Cure Wounds');
-    await page.locator('#lu-swapnew').selectOption('Goodberry');
+    await page.locator('#lu-swapold').selectOption('Sleep');
+    await page.locator('#lu-swapnew').selectOption('Burning Hands');
     await act(page, 'luapply').click();
     const s = await read(page);
-    expect(s.spells.map(x => x.n).sort()).toEqual(['Goodberry', "Hunter's Mark"]);
+    expect(s.spells.map(x => x.n)).toEqual(expect.arrayContaining(['Burning Hands', 'Magic Missile']));
+    expect(s.spells.map(x => x.n)).not.toContain('Sleep');
   });
 
-  test('Cleric hat keinen Tausch (bereitet täglich vor)', async ({ page }) => {
+  test('Cleric und Ranger 2024 haben keinen Tausch (bereiten vor)', async ({ page }) => {
     await seed(page, base4({ klass: 'Cleric', sub: 'Life Domain', level: 2, prof: 2, hpMax: 18, hp: 18, abil, hd: { max: 2, used: 0, die: 'W8' } }));
     await act(page, 'lu').click();
     await expect(page.locator('#lu-swapold')).toHaveCount(0);
