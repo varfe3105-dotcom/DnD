@@ -15,4 +15,4 @@ import/*
 .cache/
 
 # Entwurfsablage mit Originalgrafiken (groß, nicht veröffentlichen; Übernahme per scripts/import-realmcraft.py)
-RealmCraft/
+/RealmCraft/

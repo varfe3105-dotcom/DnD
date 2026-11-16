@@ -27,6 +27,8 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm run build:web
+      # Bricht ab, wenn Grafiken fehlen (z. B. nicht im Repository) und nur tote Verweise eingebaut wurden
+      - run: node scripts/check-build.mjs dist-web/index.html
       - uses: actions/upload-pages-artifact@v3
         with:
           path: dist-web
