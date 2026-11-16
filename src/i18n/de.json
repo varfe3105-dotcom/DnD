@@ -1465,5 +1465,6 @@
  "hub.q.map": "Weltkarte öffnen",
  "map.newTab": "In neuem Tab öffnen",
  "map.source": "Interaktive Karte von Faerûn von aidedd.org (Karte: Mike Schley). Wird nur hier und nur mit Internetverbindung geladen; eigene Markierungen speichert aidedd.org in deinem Browser, nicht im Bogen.",
- "map.offline": "Keine Internetverbindung: Die Weltkarte kommt von aidedd.org und lässt sich offline nicht anzeigen."
+ "map.offline": "Keine Internetverbindung: Die Weltkarte kommt von aidedd.org und lässt sich offline nicht anzeigen.",
+ "hub.lvl": "Stufe"
 }

@@ -43,7 +43,7 @@ const fmtDate = s => {
 
 /** Charaktere mit Bild und Kampagnen. Der aktive kommt aus S, alle anderen aus ihrem Speicherplatz. */
 function chars() {
-  return roster().map(c => { const o = charSnapshot(c.id) || {}; return { ...c, img: o.img || '', race: o.race || '', sub: o.sub || '', camps: campaignsOf(c.id) }; });
+  return roster().map(c => { const o = charSnapshot(c.id) || {}; return { ...c, img: o.img || '', race: o.race || '', sub: o.sub || '', hp: +o.hp || 0, hpMax: +o.hpMax || 0, ac: +o.ac || 0, camps: campaignsOf(c.id) }; });
 }
 const real = c => c.klass || c.level || c.id !== S.id || S.name !== t('char.new');
 const portrait = (c, cls = 'hub-por') => `<span class="${cls}">${c.img ? `<img src="${esc(c.img)}" alt="">` : `<b>${esc((c.name || '?').trim()[0] || '?')}</b>`}</span>`;
@@ -109,7 +109,7 @@ function vCamps(limit) {
 function vChars(limit) {
   const list = chars().filter(real);
   const head = `<div class="hub-h">${ico('person', 'big')}<h2>${t(limit ? 'hub.yourChars' : 'hub.nav.chars')}</h2>${limit && list.length > limit ? `<button class="hub-more" data-a="hubgo" data-s="chars">${t('hub.all')} ${ico('arrow')}</button>` : ''}</div>`;
-  const card = c => `<article class="hub-char${c.id === S.id ? ' cur' : ''}">${portrait(c, 'hub-por lg')}<div><h3>${esc(c.name)}</h3><p>${esc([c.race, c.klass, c.level ? t('feat.level', { n: c.level }) : ''].filter(Boolean).join(' · ') || t('hub.noClass'))}</p>${c.camps.length ? `<p class="hub-tag">${ico('swords')}${c.camps.map(x => esc(x.name)).join(', ')}</p>` : ''}<button class="hbtn sm pri" data-a="hubplay" data-id="${esc(c.id)}">${t('hub.open')} ${ico('arrow')}</button></div></article>`;
+  const card = c => { const pct = c.hpMax ? Math.min(100, c.hp / c.hpMax * 100) : 0; return `<article class="hub-char${c.id === S.id ? ' cur' : ''}"><i class="hub-char-art hub-camp-art a${c.camps[0]?.art ?? 1}" aria-hidden="true"></i>${portrait(c, 'hub-por xl')}<div class="hub-char-b"><h3>${esc(c.name)}</h3><p>${esc([c.race, c.klass, c.sub].filter(Boolean).join(' · ') || t('hub.noClass'))}</p><div class="hub-stats">${c.level ? `<span><small>${t('hub.lvl')}</small><b>${c.level}</b></span>` : ''}${c.ac ? `<span><small>${t('dm.acShort')}</small><b>${c.ac}</b></span>` : ''}${c.hpMax ? `<span class="hp"><small>${t('hub.hpShort')}</small><b>${c.hp}/${c.hpMax}</b><i><u style="width:${pct}%"></u></i></span>` : ''}</div>${c.camps.length ? `<p class="hub-tag">${ico('swords')}${c.camps.map(x => esc(x.name)).join(', ')}</p>` : ''}<button class="hbtn sm pri" data-a="hubplay" data-id="${esc(c.id)}">${t('hub.open')} ${ico('arrow')}</button></div></article>`; };
   const shown = limit ? list.slice(0, limit) : list;
   const add = `<article class="hub-char add"><button class="hub-addc" data-a="hubnewchar">${ico('plus')}<span>${t('hub.newChar')}</span></button><button class="hub-addc" data-a="hubimport">${ico('upload')}<span>${t('hub.importChar')}</span></button></article>`;
   return `${head}<div class="hub-chars">${shown.map(card).join('')}${limit && shown.length >= limit ? '' : add}</div>`;
