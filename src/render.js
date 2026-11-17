@@ -19,7 +19,7 @@ import { hideTip } from './tooltip.js';
 import { glyph } from './icons.js';
 import { syncAc } from './helpers.js';
 import { CLASSES } from './catalog.js';
-import { navTabs, validTabs, fallbackTab, tabLabel, vCrumbs, vCampHead, charLevel, curCamp, CAMP_PAGES, CHAR_PAGES, CHAR_STYLE, vDmSub, vFight } from './views/nav.js';
+import { navTabs, validTabs, fallbackTab, tabLabel, tabOn, charSub, vCrumbs, vCampHead, charLevel, curCamp, CAMP_PAGES, CHAR_PAGES, CHAR_STYLE, vDmSub, vFight } from './views/nav.js';
 import { t, lang, units } from './i18n/index.js';
 import { corners } from './views/orn.js';
 import { progOf } from './views/camp-set.js';
@@ -68,12 +68,15 @@ export function render() {
   else {
   h = vCrumbs() + (dmOnly() ? vDmHead() : charLevel() || !curCamp() ? vHead() : vCampHead());
   // Charakterebene: Navigation seitlich (Desktop), Inhalt daneben; sonst Reiter oben. Am Handy immer die feste Leiste unten.
-  const side = charLevel();
+  // Seitliche Charakternavigation nur in der Bibliothek (ohne Kampagne); in der Kampagne bleibt die Kampagnenleiste stehen.
+  const side = charLevel() && !curCamp(), csub = charSub();
   // Reiter mit Liniensymbolen. Am Handy stehen die ersten fünf unten, der Rest im Menü („Mehr“).
   const keys = tabs(), MOB = 5;
-  const tabsHtml = `<div class="tabs${side ? ' side' : ''}"><nav role="tablist" aria-label="${t('head.areas')}"${side ? ' aria-orientation="vertical"' : ''}>${keys.map((k, i) => `<button role="tab" aria-selected="${tb === k}" data-a="tab" data-t="${k}" class="${[k === 'main' ? 'tab-fight' : '', i >= MOB ? 'mx' : '', side && k === 'cover' ? 'tab-back' : ''].filter(Boolean).join(' ')}">${line(k)}<span>${tabLabel(k)}</span></button>`).join('')}${keys.length > MOB ? `<button class="tab-more" data-a="mmenu" aria-expanded="${!!U.MMENU}"${keys.slice(MOB).includes(tb) ? ' aria-selected="true"' : ''}>${line('more')}<span>${t('frame.more')}</span></button>` : ''}</nav>${dmOnly() ? '' : `<div class="mini${S.hp === 0 ? ' down' : ''}">${L.status === 'on' ? `<i class="live-dot" title="${t('live.on')}"></i>` : ''}${t('head.hpShort')} <b>${S.hp}</b>/${S.hpMax}${S.tmp ? ` +${S.tmp}` : ''}</div>`}</div>`;
-  const mini = (dmOnly() ? vDmBar : vMiniBar)(keys.map(k => `<button class="${tb === k ? 'on' : ''}" data-a="mbtab" data-t="${k}" title="${tabLabel(k)}" aria-label="${tabLabel(k)}">${line(k)}</button>`).join(''));
+  const tabsHtml = `<div class="tabs${side ? ' side' : ''}"><nav role="tablist" aria-label="${t('head.areas')}"${side ? ' aria-orientation="vertical"' : ''}>${keys.map((k, i) => `<button role="tab" aria-selected="${tabOn(k)}" data-a="tab" data-t="${k}" class="${[k === 'main' ? 'tab-fight' : '', i >= MOB ? 'mx' : ''].filter(Boolean).join(' ')}">${line(k)}<span>${tabLabel(k)}</span></button>`).join('')}${keys.length > MOB ? `<button class="tab-more" data-a="mmenu" aria-expanded="${!!U.MMENU}"${keys.slice(MOB).some(tabOn) ? ' aria-selected="true"' : ''}>${line('more')}<span>${t('frame.more')}</span></button>` : ''}</nav>${dmOnly() ? '' : `<div class="mini${S.hp === 0 ? ' down' : ''}">${L.status === 'on' ? `<i class="live-dot" title="${t('live.on')}"></i>` : ''}${t('head.hpShort')} <b>${S.hp}</b>/${S.hpMax}${S.tmp ? ` +${S.tmp}` : ''}</div>`}</div>`;
+  const mini = (dmOnly() ? vDmBar : vMiniBar)(keys.map(k => `<button class="${tabOn(k) ? 'on' : ''}" data-a="mbtab" data-t="${k}" title="${tabLabel(k)}" aria-label="${tabLabel(k)}">${line(k)}</button>`).join(''));
   let body = '';
+  // Unterleiste „Mein Charakter“: Übersicht, Werte, Inventar, Zauber, Notizen, Bearbeiten
+  if (csub) body += `<nav class="chips subnav charsub" aria-label="${t('nav.myChar')}">${csub.map(k => `<button class="chip${tb === k ? ' on' : ''}" data-a="${k === 'prof' ? 'crumb' : 'tab'}" data-t="${k}" aria-pressed="${tb === k}">${line(k)}<span>${tabLabel(k, true)}</span></button>`).join('')}</nav>`;
   if (tb === 'main') body += vFight() + vParty();
   if (CAMP_PAGES[tb]) body += CAMP_PAGES[tb]();
   if (CHAR_PAGES[tb]) body += CHAR_PAGES[tb]();

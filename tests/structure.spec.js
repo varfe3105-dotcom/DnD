@@ -22,13 +22,15 @@ test.describe('Ebenen und Rollen @new', () => {
     await start(page, { ...chars, 'charbogen-campaigns': [{ id: 'k1', name: 'Grenzland', status: 'active', chars: ['c2'], role: 'player', split: true }] });
     await page.locator('[data-a="campplay"]').click();
     await expect(page.locator('.crumb-lvl')).toHaveText(/Kampagne|Campaign/);
-    expect(await navKeys(page)).toEqual(['cover', 'party', 'prof', 'main', 'explore', 'trade', 'chron', 'wiki']);
+    expect(await navKeys(page)).toEqual(['cover', 'party', 'prof', 'main', 'explore', 'trade', 'chron', 'map', 'wiki']);
     await expect(page.locator('.camp-me')).toContainText('Borin');
     // Gruppe → eigener Charakter
     await page.locator('[data-a="tab"][data-t="party"]').click();
     await page.locator('.camp-mine [data-a="crumb"][data-t="prof"]').click();
     await expect(page.locator('.crumb-lvl')).toHaveText(/Charakter|Character/);
-    expect(await navKeys(page)).toEqual(['cover', 'prof', 'stats', 'inv', 'spells', 'notes', 'setup']);
+    // Kampagnenleiste bleibt, „Mein Charakter“ aktiv; Unterseiten in der Unterleiste
+    expect(await navKeys(page)).toEqual(['cover', 'party', 'prof', 'main', 'explore', 'trade', 'chron', 'map', 'wiki']);
+    expect(await page.locator('.charsub [data-t]').evaluateAll(b => b.map(x => x.dataset.t))).toEqual(['prof', 'stats', 'inv', 'spells', 'notes', 'setup']);
     await expect(page.locator('#app header.hd h1')).toHaveText('Borin');
     await expect(page.locator('.crumbs')).toContainText('Grenzland');
     await page.locator('[data-a="tab"][data-t="stats"]').click();
@@ -75,7 +77,7 @@ test.describe('Ebenen und Rollen @new', () => {
     await expect(page.locator('.hub-camp')).toContainText(code);
     await page.locator('.hub-camp [data-a="campplay"]').click();
     await expect(page.locator('header.dmhd h1')).toHaveText('Die letzte Bastion');
-    expect(await navKeys(page)).toEqual(['cover', 'dmlive', 'dmcombat', 'explore', 'dmloot', 'dmnotes', 'wiki', 'dmset']);
+    expect(await navKeys(page)).toEqual(['cover', 'dmlive', 'dmcombat', 'explore', 'dmloot', 'dmnotes', 'map', 'wiki', 'dmset']);
     expect(await page.evaluate(() => window.__code)).toBe(code);
     await expect.poll(() => page.evaluate(() => window.__sent.at(-1)?.camp?.n)).toBe('Die letzte Bastion');
     // Kampf mit Unterleiste: Vorbereitung der Begegnungen

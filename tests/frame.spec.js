@@ -26,10 +26,11 @@ test.describe('Rahmen @new', () => {
     const rail = page.locator('.rail');
     await expect(rail).toBeVisible();
     await expect(rail.locator('[data-s="camps"]')).toHaveAttribute('aria-current', 'true');
-    // Mein Charakter ist Teil der Kampagnenreiter; im Charakter führt der erste Eintrag zurück
+    // Mein Charakter ist Teil der Kampagnenreiter; die Kampagnenleiste bleibt dort stehen
     await page.locator('.tabs [data-a="tab"][data-t="prof"]').click();
     await expect(rail).toBeVisible();
-    await expect(page.locator('.tabs [data-t="cover"]')).toContainText('Zur Kampagne');
+    await expect(page.locator('.tabs [data-t="cover"]')).toContainText('Lagebericht');
+    await expect(page.locator('.charsub')).toBeVisible();
     await rail.locator('[data-a="railfold"]').click();
     await expect(page.locator('.shell')).toHaveClass(/folded/);
     await page.reload();

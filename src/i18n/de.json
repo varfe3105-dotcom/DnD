@@ -1943,5 +1943,11 @@
  "fight.moveMax": "maximale Bewegung",
  "fight.prepBadge": "Kein Kampf",
  "fight.prepWait": "Die Spielleitung startet den Kampf. Bis dahin siehst du hier alle Optionen deines Zugs.",
- "fight.prepNoRoom": "Nicht mit dem Raum verbunden. Deine Optionen stehen trotzdem bereit."
+ "fight.prepNoRoom": "Nicht mit dem Raum verbunden. Deine Optionen stehen trotzdem bereit.",
+ "tab.map": "Weltkarte",
+ "sec.title": "Absicherung:",
+ "sec.on": "aktiv. Spieler senden genaue TP nur verschlüsselt an dich; ihre Bögen kann online nur der Besitzer und du lesen.",
+ "sec.mixed": "aktiv, aber mindestens ein Gerät nutzt noch die alte App-Version und sendet TP im Klartext. Bitte dort neu laden.",
+ "sec.foreign": "Dieser Raum gehört laut Datenbank einer anderen Spielleitung. Deine Geräte-Kennung passt nicht; öffne den Raum vom ursprünglichen Gerät oder lege einen neuen Raum an.",
+ "sec.off": "nicht aktiv. Die Datenbank hat das SQL „D3“ noch nicht (supabase/d3-rechte.sql); bis dahin gilt das bisherige Verhalten."
 }

@@ -17,6 +17,7 @@ import { vMain, vHP } from './sheet.js';
 import { vProfile, vStats, vSpellBook } from './char.js';
 import { vCover, vPartyP } from './campaign.js';
 import { vCampSet } from './camp-set.js';
+import { vWorldMap } from './hub.js';
 import { coarseHp } from './party.js';
 import { timeline, logEntries, book } from './chron.js';
 import { hpMaxNow } from '../effects.js';
@@ -36,8 +37,8 @@ import { vAtk, vSpells, vCond, vRes, vQuick, concBanner } from './sheet.js';
 
 
 /** Kampagnenebene: Spieler und Spielleitung sehen dieselben Bereiche, die Spielleitung mit ihren Werkzeugen. */
-export const CAMP_P = ['cover', 'party', 'prof', 'main', 'explore', 'trade', 'chron', 'wiki'];
-export const CAMP_DM = ['cover', 'dmlive', 'dmcombat', 'explore', 'dmloot', 'dmnotes', 'wiki', 'dmset'];
+export const CAMP_P = ['cover', 'party', 'prof', 'main', 'explore', 'trade', 'chron', 'map', 'wiki'];
+export const CAMP_DM = ['cover', 'dmlive', 'dmcombat', 'explore', 'dmloot', 'dmnotes', 'map', 'wiki', 'dmset'];
 /** Erreichbar, aber nicht in der Leiste: Begegnungen und Spickzettel über den Kampf, Wiki und Einrichten über den Kopf. */
 const DM_MORE = ['dmenc', 'dmcheat', 'setup'];
 export const CHAR_T = ['prof', 'stats', 'inv', 'spells', 'notes', 'setup'];
@@ -51,19 +52,23 @@ export function navTabs() {
   if (dmOnly()) return CAMP_DM;
   // Bibliothek (ohne Kampagne): Grundbogen ohne Spielbetrieb, also ohne Kampf
   if (!curCamp()) return CHAR_T;
-  // Charakter in der Kampagne: erster Eintrag führt zurück in die Kampagne
-  return CHAR_T.includes(S.tab) ? ['cover', ...CHAR_T] : CAMP_P;
+  // In der Kampagne bleibt die Kampagnenleiste immer stehen; die Charakterseiten haben darunter eine eigene Unterleiste.
+  return CAMP_P;
 }
+/** Unterleiste „Mein Charakter“ (nur in einer Kampagne, auf den Charakterseiten). */
+export const charSub = () => (curCamp() && !dmOnly() && CHAR_T.includes(S.tab) ? CHAR_T : null);
+/** Reiter gilt als aktiv: auf allen Charakterseiten der Kampagne ist „Mein Charakter“ hervorgehoben. */
+export const tabOn = k => S.tab === k || (k === 'prof' && !!charSub());
 export function validTabs() {
   if (dmOnly()) return [...CAMP_DM, ...DM_MORE];
   return [...(curCamp() ? CAMP_P : ['main']), ...CHAR_T, 'wiki'];
+  // 'map' gehört zu CAMP_P (Weltkarte im Kampagnenkontext)
 }
 export const fallbackTab = () => (curCamp() ? 'cover' : dmOnly() ? 'dmnotes' : 'prof');
 
 const LBL = { cover: 'nav.cover', party: 'nav.party', explore: 'nav.explore', trade: 'nav.trade', chron: 'nav.chron', prof: 'nav.charHome', setup: 'nav.edit', stats: 'nav.stats', spells: 'nav.spells', dmlive: 'nav.party', dmcombat: 'nav.fight', dmloot: 'nav.trade', dmnotes: 'nav.chron' };
-export const tabLabel = k => {
-  if (k === 'prof' && curCamp() && !charLevel()) return t('nav.myChar');
-  if (k === 'cover' && charLevel()) return t('nav.backCamp');
+export const tabLabel = (k, sub = false) => {
+  if (k === 'prof' && curCamp() && !sub) return t('nav.myChar');
   return t(k === 'main' ? 'nav.fight' : k === 'dmset' ? 'nav.campSet' : LBL[k] || 'tab.' + k);
 };
 export const NAV_IC = { cover: 'shield', party: 'mask', explore: 'eye', trade: 'coin', chron: 'book', prof: 'star', stats: 'gem', spells: 'wand', dmlive: 'mask', dmcombat: 'sword', dmloot: 'coin', dmnotes: 'book' };
@@ -233,6 +238,6 @@ function vFightLive(tr, mine, sound, feedHtml) {
 }
 
 const bar = (hp, max) => { const p = max ? Math.max(0, Math.min(100, hp / max * 100)) : 0; return `<span class="hpbar${p <= 25 ? ' low' : p <= 50 ? ' mid' : ''}" aria-hidden="true"><u style="width:${p}%"></u></span>`; };
-export const CAMP_PAGES = { cover: vCover, party: vPartyP, explore: vExplore, trade: vTrade, chron: vChron, dmset: vCampSet };
+export const CAMP_PAGES = { map: vWorldMap, cover: vCover, party: vPartyP, explore: vExplore, trade: vTrade, chron: vChron, dmset: vCampSet };
 export const CHAR_PAGES = { prof: vProfile, stats: vStats, spells: vSpellBook };
 export { vHP };

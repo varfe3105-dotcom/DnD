@@ -17,7 +17,7 @@ import { glyph } from '../icons.js';
 import { COND } from '../catalog.js';
 import { t, nameLine, dist, loc, convUnits, lang } from '../i18n/index.js';
 const cName = x => esc(lang === 'de' && x.de ? x.de : x.n);
-import { L, players, pendingFor } from '../live.js';
+import { L, players, pendingFor, SEC } from '../live.js';
 import { defeatedXp, hereNote, lastSession, inCombat } from '../dm.js';
 import { D, DU, allMonsters, findMonster, thresholds, partySize, rate, curEnc, xpOf, ordered, searchMonsters, KINDS, curNote, linksOf, noteByTitle, backlinks, searchNotes, fighting, nowNext } from '../dm.js';
 
@@ -228,10 +228,16 @@ function vXpShare() {
   const { list, xp } = defeatedXp(), n = players().length || D.combat.list.filter(c => c.kind === 'pc').length || 1;
   return `<div class="card xpshare"><p class="lbl" style="margin:0 0 6px">${t('xp.share')}</p><p>${list.length ? t('xp.defeated', { m: list.map(c => esc(c.name)).join(', '), n: xp }) : t('xp.noneDefeated')}</p><div class="add"><label class="ck">${t('xp.total')} <input type="number" class="n" id="dm-xpt" min="0" value="${xp}"></label><label class="ck">${t('xp.players')} <input type="number" class="n" id="dm-xpn" min="1" value="${n}"></label><button class="btn solid" data-a="dmxpsend">${t('xp.send')}</button></div><p class="note">${L.role === 'dm' && L.status === 'on' ? t('xp.sendNote') : t('xp.offline')}</p></div>`;
 }
+/** Stand der serverseitigen Absicherung (D3) für die Spielleitung. */
+export function vSecState() {
+  const m = SEC.mode, plain = players().some(p => !p.est && !p.sec && p.hpMax > 0 && !p.hq);
+  const k = m === 'on' ? (plain ? 'sec.mixed' : 'sec.on') : m === 'foreign' ? 'sec.foreign' : 'sec.off';
+  return `<p class="sec-state ${m}${plain ? ' mixed' : ''}" role="status"><b>${t('sec.title')}</b> ${t(k)}</p>`;
+}
 function vLive() {
   if (L.role !== 'dm') return `<div class="card"><p class="note" style="margin-top:0">${t('live.dmIntro')}</p>${L.role === 'player' ? `<p class="note">${t('live.dmBusy')}</p>` : ''}<div class="add"><button class="btn solid" data-a="livecreate">${t('live.create')}</button></div><div class="add"><input type="text" id="live-dmcode" maxlength="6" autocomplete="off" placeholder="${t('live.codePh')}" aria-label="${t('live.code')}"><button class="btn" data-a="livedmjoin">${t('live.dmReopen')}</button></div><p class="note">${t('live.dmReopenHint')}</p></div>`;
   const list = players();
-  return `<div class="card"><div class="dm-bar"><div class="live-code"><small>${t('live.code')}</small><b>${esc(L.code)}</b></div>${liveState()}<button class="btn" data-a="liveadd"${list.length ? '' : ' disabled'}>${t('live.addAll')}</button><button class="btn bad" data-a="liveoff">${t('live.close')}</button></div>
+  return `${vSecState()}<div class="card"><div class="dm-bar"><div class="live-code"><small>${t('live.code')}</small><b>${esc(L.code)}</b></div>${liveState()}<button class="btn" data-a="liveadd"${list.length ? '' : ' disabled'}>${t('live.addAll')}</button><button class="btn bad" data-a="liveoff">${t('live.close')}</button></div>
   ${list.length ? '<div class="party-grid dm">' + list.map(p => { const inC = inCombat(p.key); return `<div class="dm-prow">${memberCard(p, `<div class="mc-act"><div class="add" style="margin:4px 0">${inC ? `<span class="chip on">${t('live.inCombat')}</span>` : `<button class="btn sm" data-a="liveadd1" data-k="${esc(p.key)}">${t('live.addOne')}</button>`}<button class="btn sm" data-a="peek" data-k="${esc(p.key)}" data-n="${esc(p.name)}">${t('peek.btn')}</button></div>${vLiveSend(p)}</div>`, true)}</div>`; }).join('') + '</div>' : `<div class="empty">${t('live.waiting')}</div>`}${vCloud()}</div>${vHandoutForm(list)}`;
 }
 export function liveState() {

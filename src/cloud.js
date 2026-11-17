@@ -51,6 +51,17 @@ async function call(fn, body) {
   }
   return rpc(fn, body);
 }
+/* ---- D3: Raum der Spielleitung, Schlüssel für verschlüsselte Spielerwerte ---- */
+/** null = unbekannt, true = D3-Funktionen vorhanden, false = Datenbank noch ohne D3. */
+export const D3 = { on: null };
+async function rpc3(fn, body) {
+  try { const r = await rpc(fn, body); D3.on = true; return r; }
+  catch (e) { if (e.setup) D3.on = false; throw e; }
+}
+/** Spielleitung: Raum beanspruchen und öffentlichen Schlüssel hinterlegen. true = sie ist die Spielleitung. */
+export const claimRoom = (room, key) => rpc3('charbogen_claim', { p_room: room, p_secret: secretFor(room), p_key: key }).then(r => r === true);
+/** Spieler: öffentlicher Schlüssel der Spielleitung des Raums (oder null, solange sie den Raum nicht beansprucht hat). */
+export const roomKey = room => rpc3('charbogen_room_key', { p_room: room });
 const fail = e => { C.status = e.setup ? 'setup' : 'error'; C.err = e.message || ''; listener(); };
 
 /** Was dieses Gerät gerade sichern soll. */
@@ -87,7 +98,11 @@ dmHooks.onSave = () => { if (L.role === 'dm') schedule(); };
 export async function refreshList() {
   if (!active()) { C.list = null; return; }
   const room = L.code;
-  try { C.list = await rpc('charbogen_list', { p_room: room }); C.listFor = room; if (C.status === 'setup' || C.status === 'error') C.status = 'ok'; }
+  try {
+    // D3: Übersicht mit Geheimnis (Spieler sehen nur ihre eigenen Zeilen); sonst die bisherige Übersicht
+    try { C.list = await rpc('charbogen_list2', { p_room: room, p_secret: secretFor(room) }); }
+    catch (e) { if (!e.setup) throw e; C.list = await rpc('charbogen_list', { p_room: room }); }
+    C.listFor = room; if (C.status === 'setup' || C.status === 'error') C.status = 'ok'; }
   catch (e) { C.list = null; fail(e); return; }
   listener();
 }

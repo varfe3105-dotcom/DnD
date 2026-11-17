@@ -435,3 +435,14 @@ body:has(.rail #live-dock.full) #toast{top:auto;bottom:calc(16px + env(safe-area
 .msrc{color:var(--t-lbl-d)}
 @media (max-width:520px){.sp-row{grid-template-columns:minmax(0,1fr) auto}.sp-row small{grid-column:1/-1;grid-row:2}}
 .econ .mv small{display:block;font:600 .74rem var(--f-ui);color:var(--t-sub-d)}
+/* Unterleiste „Mein Charakter“ in der Kampagne (die Kampagnenleiste bleibt darüber stehen) */
+.charsub{display:flex;flex-wrap:wrap;gap:6px;margin:4px 0 14px}
+.charsub .chip{display:inline-flex;align-items:center;gap:6px;min-height:36px}
+.charsub .li{width:18px;height:18px}
+@media (max-width:640px){.charsub{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;margin-inline:-12px;padding-inline:12px}.charsub .chip{flex:none}}
+/* Kein eigener Stapelkontext im Spielbereich: Kopfleiste, untere Leiste, Menü und Dialoge liegen über der Weltkarte (#map-layer) */
+html:not([data-hub]) .wrap{z-index:auto}
+.sec-state{margin:0 0 12px;padding:8px 12px;border:1px solid var(--c-brass-soft);background:rgba(0,0,0,.25);font:500 .92rem var(--f-ui);color:var(--c-cream-2)}
+.sec-state.on{border-color:rgba(95,191,106,.55)}.sec-state.on b{color:#8fd49a}
+.sec-state.off b,.sec-state.mixed b{color:#e3b866}.sec-state.foreign{border-color:rgba(224,80,60,.6)}.sec-state.foreign b{color:#ec8a78}
+@media (min-width:521px){.tabs:not(.side) nav{flex-wrap:wrap;overflow:visible}.tabs:not(.side) nav button{flex:none}}

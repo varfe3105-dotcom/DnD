@@ -7,6 +7,8 @@ import { COND, BYN } from './catalog.js';
 import { acNow, acBonus, fxOut, activeOut, BUFFS } from './buffs.js';
 import { playerName } from './player.js';
 import { condRoundsOut } from './cond-rounds.js';
+import { seal, unseal, hpLevel, dmKeys, supported } from './secure.js';
+import { claimRoom, roomKey } from './cloud.js';
 
 export const SUPA = 'https://ovkxoqgqocspwjvxhige.supabase.co';
 const WS = SUPA.replace('https', 'wss') + '/realtime/v1';
@@ -15,6 +17,10 @@ const LS = 'charbogen-live';
 const CODE_CHARS = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
 
 export const L = { status: 'off', code: '', role: '', peers: [], inbox: [], handouts: [] };
+/** D3 – Absicherung im Live-Tisch. mode: 'off' (Datenbank ohne D3: bisheriges Verhalten), 'wait' (Spieler: noch kein
+ * Schlüssel der Spielleitung – genaue Werte gehen gar nicht hinaus), 'on' (abgesichert), 'foreign' (Spielleitung: Raum
+ * gehört einer anderen Spielleitung). */
+export const SEC = { mode: 'off', key: null, box: null, plain: '', busy: false, tried: 0, cache: new Map() };
 export const isCode = c => /^[A-HJ-NP-Z2-9]{6}$/.test(c);
 export const players = () => L.peers.filter(p => p.role === 'player');
 export const dmOnline = () => L.peers.some(p => p.role === 'dm');
@@ -62,8 +68,18 @@ function realtime(code, key, onPeers, onStatus, onMsg) {
 const CONDS = new Set(COND.map(c => c.n));
 const int = (v, max = 9999) => Math.max(0, Math.min(max, Math.floor(+v) || 0));
 const str = (v, n = 60) => String(v ?? '').slice(0, n);
-/** Eingehende Daten kommen von anderen Geräten und werden auf die erwarteten Felder begrenzt. */
+const HQ = ['ok', 'hurt', 'bad', 'down'], HQ_EST = { ok: 4, hurt: 2, bad: 1, down: 0 };
+const b64ok = (v, n) => typeof v === 'string' && v.length <= n && /^[A-Za-z0-9+/=_-]*$/.test(v);
+const box = b => (b && typeof b === 'object' && b.e && b64ok(b.e.x, 64) && b64ok(b.e.y, 64) && b64ok(b.iv, 24) && b64ok(b.ct, 4000) ? { e: { x: b.e.x, y: b.e.y }, iv: b.iv, ct: b.ct } : null);
+/** Eingehende Daten kommen von anderen Geräten und werden auf die erwarteten Felder begrenzt. Mit D3 kommen TP nur als
+ * grobe Stufe (hq); für die Anzeige stehen dann Schätzwerte darin (est: true), bis die Spielleitung entschlüsselt hat. */
 function clean(p) {
+  const c = clean0(p), hq = HQ.includes(p.hq) ? p.hq : '';
+  if (c.role === 'player' && hq && p.hp === undefined) Object.assign(c, { hq, hp: HQ_EST[hq], hpMax: 4, tmp: 0, est: true, sec: box(p.sec) });
+  if (c.role === 'player') c.pets = c.pets.map((x, i) => { const q = p.pets?.[i]?.hq; return HQ.includes(q) && p.pets[i].hp === undefined ? { ...x, hp: HQ_EST[q], hpMax: 4, est: true } : x; });
+  return c;
+}
+function clean0(p) {
   return {
     key: str(p.key, 40), role: p.role === 'dm' ? 'dm' : 'player', name: str(p.name), klass: str(p.klass, 30), level: int(p.level, 20),
     insp: !!p.insp, lock: !!p.lock, hp: int(p.hp), hpMax: int(p.hpMax), tmp: int(p.tmp), ac: int(p.ac, 99), exh: int(p.exh, 6), conc: str(p.conc),
@@ -221,9 +237,18 @@ export const refresh = () => push();
 let petSource = () => [];
 /** Begleiter (Ranger-Begleiter, Vertrauter …) mit ihren Spielwerten, gesetzt in events.js. */
 export const setPetSource = fn => { petSource = fn; };
-const payload = () => (L.role === 'dm' ? { role: 'dm', chron: dmFlags().chron || '', shop: (dmFlags().shop || []).slice(0, 4), atlas: (dmFlags().atlas || []).slice(0, 16), camp: dmFlags().camp || null, here: dmFlags().here || '', lock: !!dmFlags().lock, turn: dmFlags().turn || null, stash: dmFlags().stash || null, buffs: (dmFlags().buffs || []).slice(0, 8) } : { role: 'player', insp: !!S.insp, name: S.name, pl: playerName(), race: S.subrace || S.race, klass: S.klass, level: S.level, hp: S.hp, hpMax: S.hpMax, tmp: S.tmp, ac: acNow(), acB: acBonus().v, fx: fxOut(), buffs: activeOut().slice(-6).map(b => ({ id: b.id, s: b.s, to: b.to.slice(0, 6), v: b.v || 0 })), exh: S.exh, conc: S.conc, cond: Object.keys(S.cond).filter(c => S.cond[c]), cr: condRoundsOut(), death: S.death, pets: petSource().slice(0, 3).map(p => ({ id: p.id, n: p.n, hp: p.hp, hpMax: p.hpMax, ac: p.ac })) });
+/** Genaue Werte, die nur die Spielleitung lesen darf. */
+const secretPart = () => ({ hp: S.hp, hpMax: S.hpMax, tmp: S.tmp, pets: petSource().slice(0, 3).map(p => ({ id: p.id, hp: p.hp, hpMax: p.hpMax })) });
+/** Ohne D3 wie bisher; mit D3 im Klartext nur die grobe Stufe, genau nur verschlüsselt für die Spielleitung. */
+const hpOut = () => (SEC.mode === 'off' ? { hp: S.hp, hpMax: S.hpMax, tmp: S.tmp } : { hq: hpLevel(S.hp, S.hpMax), ...(SEC.mode === 'on' && SEC.box ? { sec: SEC.box } : {}) });
+const payload = () => (L.role === 'dm' ? { role: 'dm', chron: dmFlags().chron || '', shop: (dmFlags().shop || []).slice(0, 4), atlas: (dmFlags().atlas || []).slice(0, 16), camp: dmFlags().camp || null, here: dmFlags().here || '', lock: !!dmFlags().lock, turn: dmFlags().turn || null, stash: dmFlags().stash || null, buffs: (dmFlags().buffs || []).slice(0, 8) } : { role: 'player', insp: !!S.insp, name: S.name, pl: playerName(), race: S.subrace || S.race, klass: S.klass, level: S.level, ...hpOut(), ac: acNow(), acB: acBonus().v, fx: fxOut(), buffs: activeOut().slice(-6).map(b => ({ id: b.id, s: b.s, to: b.to.slice(0, 6), v: b.v || 0 })), exh: S.exh, conc: S.conc, cond: Object.keys(S.cond).filter(c => S.cond[c]), cr: condRoundsOut(), death: S.death, pets: petSource().slice(0, 3).map(p => (SEC.mode === 'off' ? { id: p.id, n: p.n, hp: p.hp, hpMax: p.hpMax, ac: p.ac } : { id: p.id, n: p.n, hq: hpLevel(p.hp, p.hpMax), ac: p.ac })) });
 function push() {
   if (!transport) return;
+  // Spieler mit Schlüssel der Spielleitung: genaue Werte neu verschlüsseln, sobald sie sich ändern
+  if (L.role === 'player' && SEC.mode === 'on') {
+    const pt = JSON.stringify(secretPart());
+    if (pt !== SEC.plain && !SEC.busy) { SEC.busy = true; const room = L.code; seal(SEC.key, JSON.parse(pt)).then(box => { SEC.busy = false; if (room !== L.code) return; SEC.box = box; SEC.plain = pt; push(); }); }
+  }
   const p = payload(), j = JSON.stringify(p);
   if (j === lastSent) return;
   lastSent = j;
@@ -236,12 +261,15 @@ const store = () => { try { if (L.code) localStorage.setItem(LS, JSON.stringify(
 export function connect(code, role) {
   disconnect();
   L.code = code; L.role = role; L.peers = []; L.inbox = []; L.handouts = [];
+  // Spieler senden genaue Werte erst, wenn feststeht, ob der Raum abgesichert ist (secInit)
+  SEC.mode = role === 'player' ? 'wait' : 'off';
   store();
   // Die Kennung der Spielleitung bleibt pro Raum gleich, damit Neuverbinden keine „neue“ Spielleitung erzeugt.
   myKey = role === 'dm' ? dmKeyFor(code) : S.id;
   restoreQueues();
   openTransport();
   joinHook();
+  secInit();
 }
 function dmKeyFor(code) {
   try { const o = JSON.parse(localStorage.getItem('charbogen-live-dmkey') || 'null'); if (o && o.code === code) return o.key; const key = 'dm-' + uid(); localStorage.setItem('charbogen-live-dmkey', JSON.stringify({ code, key })); return key; } catch (e) { return 'dm-' + uid(); }
@@ -251,8 +279,9 @@ function openTransport() {
   L.status = 'connecting';
   const factory = window.__liveFake || realtime;
   const gen = ++generation, mine = fn => (...x) => { if (gen === generation) fn(...x); };
-  transport = factory(L.code, myKey, mine(list => {
+  const onList = mine(list => {
     L.peers = list.map(clean);
+    if (L.role === 'dm') openBoxes(list, onList);
     peerHook();
     // Wer neu (oder wieder) im Raum ist, bekommt offene Nachrichten sofort.
     const keys = players().map(p => p.key), sig = keys.join(',');
@@ -260,15 +289,55 @@ function openTransport() {
     const tr = dmTurn(), ts = tr ? JSON.stringify(tr) : '';
     // Spieler: Gruppenansicht und Wirkungen hängen an den Presence-Daten, deshalb immer neu zeichnen
     if (ts !== lastTurn) { lastTurn = ts; if (L.role === 'player') turnHook(myTurn()); listener(true); } else listener(L.role === 'player');
-  }), mine(onStatusChange), mine(onMessage));
+    // Spieler wartet auf den Schlüssel der Spielleitung: erneut fragen, sobald sie im Raum ist
+    if (L.role === 'player' && SEC.mode === 'wait' && L.peers.some(x => x.role === 'dm') && Date.now() - SEC.tried > 15000) secInit();
+  });
+  transport = factory(L.code, myKey, onList, mine(onStatusChange), mine(onMessage));
   lastSent = '';
   push();
   clearInterval(resendTimer);
   if (L.role === 'dm') resendTimer = setInterval(() => resend(), 4000);
   listener(true);
 }
+/** Spielleitung: verschlüsselte Spielerwerte öffnen (Ergebnis je Chiffrat zwischengespeichert) und einsetzen. */
+function openBoxes(list, again) {
+  let pending = false;
+  L.peers.forEach(p => {
+    if (!p.sec) return;
+    const v = SEC.cache.get(p.sec.ct);
+    if (v === undefined) {
+      pending = true; SEC.cache.set(p.sec.ct, null);
+      unseal(L.code, p.sec).then(o => { SEC.cache.set(p.sec.ct, o || false); if (SEC.cache.size > 200) SEC.cache.delete(SEC.cache.keys().next().value); again(list); });
+      return;
+    }
+    if (!v) return;
+    Object.assign(p, { hp: int(v.hp), hpMax: int(v.hpMax), tmp: int(v.tmp), est: false });
+    p.pets = p.pets.map(x => { const y = Array.isArray(v.pets) && v.pets.find(z => z && z.id === x.id); return y ? { ...x, hp: int(y.hp), hpMax: int(y.hpMax), est: false } : x; });
+  });
+  return pending;
+}
+/** D3 einrichten: Spielleitung beansprucht den Raum mit ihrem öffentlichen Schlüssel, Spieler holen diesen Schlüssel. */
+async function secInit() {
+  const room = L.code, role = L.role;
+  if (!room || !supported()) return;
+  SEC.tried = Date.now();
+  try {
+    if (role === 'dm') {
+      const k = await dmKeys(room);
+      const ok = await claimRoom(room, k.pub);
+      if (room !== L.code) return;
+      SEC.mode = ok ? 'on' : 'foreign';
+    } else {
+      const k = await roomKey(room);
+      if (room !== L.code) return;
+      SEC.key = k && k.x ? k : null; SEC.mode = SEC.key ? 'on' : 'wait'; SEC.plain = '';
+    }
+  } catch (e) { if (room === L.code && e.setup) SEC.mode = 'off'; }
+  lastSent = ''; push(); listener(true);
+}
 export function disconnect() {
   generation++;
+  Object.assign(SEC, { mode: 'off', key: null, box: null, plain: '', busy: false, tried: 0 });
   clearTimeout(timer); clearTimeout(retryTimer); clearInterval(resendTimer); knownPeers = '';
   if (transport) { try { transport.close(); } catch (e) { /* bereits getrennt */ } }
   transport = null;

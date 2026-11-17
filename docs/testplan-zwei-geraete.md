@@ -58,5 +58,23 @@ Hake jeden Schritt ab, und notiere bei einem Fehler, was du siehst und was du er
 - [ ] B: In „Nebenrunde“ TP ändern, dann zurück zu „Testrunde“. Dort sind die TP unverändert.
 - [ ] A: In „Nebenrunde“ ist das Notizbuch leer, die eigenen Monster sind vorhanden.
 
+## 7. Rechte (D3) – erst nach dem SQL aus docs/d3-rechte-serverseitig.md
+Gerät A = Spielleitung, Gerät B = Spieler. Optional ein drittes Gerät oder ein privates Browserfenster als Spieler C.
+- [ ] A: Raum öffnen, Gruppe/Live-Tisch. Erwartet: „Absicherung: aktiv“.
+- [ ] A: In Supabase `select room, dm_key is not null from charbogen_rooms;` zeigt den Raum mit Schlüssel.
+- [ ] B: beitreten, TP auf einen krummen Wert ändern (z. B. 17 von 38). A sieht 17/38 in Gruppe und Kampf.
+- [ ] C (zweiter Spieler): sieht B nur als „Verwundet“ bzw. „Schwer verwundet“, ohne Zahl, auch im Kampf und in der Initiativleiste.
+- [ ] C: Browser-Entwicklerwerkzeuge → Netzwerk → WebSocket (realtime) öffnen. In den Nachrichten von B steht kein `"hp":` mit Zahl, nur `"hq"` und `"sec"`.
+- [ ] A: „Bogen ansehen“ bei B zeigt den vollständigen Bogen.
+- [ ] C: Unter Einrichten/Online-Speicherung erscheint B nicht in der Übersicht; ein Laden von Bs Bogen ist nicht möglich.
+- [ ] A: Kampf mit Gegnern starten. B und C sehen keine Gegner-TP, keine Balken, keine Zustandswörter zu Gegner-TP.
+- [ ] Gegenprobe: B lädt die Seite neu; A sieht danach weiter genaue Werte (neuer Schlüssel wird automatisch geholt).
+- [ ] Nach D3 Teil 2: Online-Speicherung bei A und B zeigt weiterhin „gesichert“.
+
+## 8. Navigation in der Kampagne
+- [ ] B (Handy und Desktop): Lagebericht → Mein Charakter → Kampf → Weltkarte → Wiki → Gruppe. Die Kampagnenleiste bleibt immer sichtbar, der aktive Bereich ist hervorgehoben, die Kampagne wird nie verlassen.
+- [ ] B: In der globalen Leiste (Desktop) bzw. im Menü (Handy) „Weltkarte“ und „Wiki“ antippen: bleibt in der Kampagne.
+- [ ] A: dasselbe als Spielleitung (Kampf, Weltkarte, Wiki, Einstellungen).
+
 ## Ergebnis
 Notiere je Abschnitt: ✓, ✗ (mit Beschreibung) oder „nicht geprüft“.

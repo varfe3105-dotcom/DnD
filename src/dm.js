@@ -258,10 +258,12 @@ export const inCombat = key => D.combat.list.some(c => c.kind === 'pc' && c.live
 export function syncLive(peers) {
   let changed = false;
   D.combat.list.forEach(c => {
-    const p = c.live && peers.find(x => x.key === c.live);
-    if (!p) return;
+    const p0 = c.live && peers.find(x => x.key === c.live);
+    if (!p0) return;
+    // D3: Schätzwerte (noch verschlüsselt) überschreiben die TP im Kampf nicht
+    const p = p0.est ? { ...p0, hp: c.hp, hpMax: c.hpMax, tmp: c.tmp } : p0;
     if (c.kind === 'pet') {
-      const x = (p.pets || []).find(y => y.id === c.pet);
+      const x0 = (p.pets || []).find(y => y.id === c.pet), x = x0 && x0.est ? { ...x0, hp: c.hp, hpMax: c.hpMax } : x0;
       if (x && (c.hp !== x.hp || c.hpMax !== x.hpMax || c.ac !== x.ac || c.name !== x.n)) { Object.assign(c, { hp: x.hp, hpMax: x.hpMax, ac: x.ac, name: x.n }); changed = true; }
       return;
     }

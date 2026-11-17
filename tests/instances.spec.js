@@ -33,6 +33,8 @@ const fakes = page => page.addInitScript(() => {
   window.__liveFake = (code, key, onPeers, onStatus) => { setTimeout(() => onStatus('on'), 0); return { track(p) { window.__sent.push({ code, key, ...p }); onPeers([{ ...p, key }]); }, send() {}, close() {} }; };
   window.__cloudFake = async (url, opts) => {
     // Neue (*2, mit Geheimnis) und alte Funktionen gleich behandeln
+    // D3-Funktionen gibt es in diesem Nachbau nicht (wie eine Datenbank ohne D3)
+    if (/charbogen_(claim|room_key|list2)$/.test(url)) return { ok: false, status: 404, json: async () => ({}), text: async () => '{"code":"PGRST202"}' };
     const fn = url.split('/').pop().replace(/2$/, ''), body = JSON.parse(opts.body || '{}');
     if (fn === 'charbogen_put') window.__puts.push({ room: body.p_room, kind: body.p_kind, id: body.p_id, camp: body.p_data?.camp ?? null, level: body.p_data?.level, gp: body.p_data?.gold?.gp, notes: (body.p_data?.notes || []).map(n => n.title) });
     const out = fn === 'charbogen_put' ? new Date().toISOString() : [];

@@ -307,6 +307,7 @@ app.addEventListener('click',ev=>{
     case 'lang':setLang(b.dataset.l);buildCatalog();break;
     case 'units':setUnits(b.dataset.u);buildCatalog();break;
     case 'mbtab':
+    case 'railtab':
     case 'tab':S.tab=b.dataset.t;U.SEL=null;window.scrollTo({top:0});break;
     case 'lu':openLU();break;
     case 'luclose':case 'luclose-bg':U.LU=null;break;

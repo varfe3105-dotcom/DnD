@@ -5,7 +5,7 @@ import { S, U } from '../state.js';
 import { L } from '../live.js';
 import { t, lang, units } from '../i18n/index.js';
 import { dmOnly } from './dm-mode.js';
-import { curCamp, charLevel, tabLabel } from './nav.js';
+import { curCamp, charLevel, tabLabel, tabOn } from './nav.js';
 
 /** Liniensymbole (24er-Raster, nur Striche). Gleicher Stil wie die Seitenleiste der Startseite. */
 export const LINE = {
@@ -44,6 +44,8 @@ export const LINE = {
 export const line = (k, cls = '') => `<svg class="li${cls ? ' ' + cls : ''}" viewBox="0 0 24 24" aria-hidden="true">${LINE[k] || LINE.more}</svg>`;
 
 const GLOBAL = ['home', 'camps', 'gm', 'chars', 'map', 'wiki'];
+/** Weltkarte und Wiki bleiben in einer Kampagne Bereiche dieser Kampagne (kein Verlassen, kein Neuladen). */
+const inCamp = s => !!curCamp() && ['map', 'wiki'].includes(s);
 /** Welcher globale Bereich gerade „aktiv“ ist: in einer Kampagne „Meine Kampagnen“, sonst die Bibliothek. */
 const here = () => (curCamp() ? (dmOnly() ? 'gm' : 'camps') : dmOnly() ? 'gm' : 'chars');
 
@@ -55,7 +57,7 @@ export function toggleRail() { railMin = !railMin; try { localStorage.setItem('c
 /** Globale Leiste (ab 900 px). Die Live-Leiste sitzt am Desktop unten in der Leiste und verdeckt so keine Inhalte. */
 export function vRail(dockHtml) {
   const cur = here();
-  const btn = s => `<button data-a="hubgo" data-s="${s}" aria-current="${cur === s ? 'true' : 'false'}" title="${t('hub.nav.' + s)}">${line(s)}<span>${t('hub.nav.' + s)}</span></button>`;
+  const btn = s => { const inC = inCamp(s); return `<button data-a="${inC ? 'railtab' : 'hubgo'}" ${inC ? `data-t="${s}"` : `data-s="${s}"`} aria-current="${(inC ? S.tab === s : cur === s && !['map', 'wiki'].includes(S.tab)) ? 'true' : 'false'}" title="${t('hub.nav.' + s)}">${line(s)}<span>${t('hub.nav.' + s)}</span></button>`; };
   return `<aside class="rail" aria-label="${t('hub.navLabel')}"><button class="rail-brand" data-a="railhome" title="${t('hub.backTitle')}"><i class="hub-mark" aria-hidden="true"></i><b>RealmCraft</b></button><nav>${GLOBAL.map(btn).join('')}</nav><div class="rail-foot">${btn('settings')}<button class="rail-fold" data-a="railfold" aria-pressed="${railMin}" title="${t(railMin ? 'frame.unfold' : 'frame.fold')}">${line('fold')}<span>${t('frame.fold')}</span></button></div>${dockHtml}</aside>`;
 }
 
@@ -70,7 +72,7 @@ export function vMobTop() {
 export function vMobMenu(tabKeys) {
   if (!U.MMENU) return '';
   const c = curCamp(), dm = dmOnly(), player = c && !dm;
-  const tabBtn = k => `<button data-a="tab" data-t="${k}" aria-current="${S.tab === k ? 'page' : 'false'}">${line(k)}<span>${tabLabel(k)}</span></button>`;
+  const tabBtn = k => `<button data-a="tab" data-t="${k}" aria-current="${tabOn(k) ? 'page' : 'false'}">${line(k)}<span>${tabLabel(k)}</span></button>`;
   const acts = [];
   if (charLevel() && !dm) acts.push(`<button class="btn gilt" data-a="lu">${S.level ? (S.level >= 20 ? t('head.lvl20') : t('head.levelUp')) : t('head.build1')}</button>`);
   if (player || charLevel() && (S.camp || c)) acts.push(`<button class="btn" data-a="rest" data-r="short">${t('rest.short')}</button><button class="btn" data-a="rest" data-r="long">${t('rest.long')}</button>`);
@@ -78,7 +80,7 @@ export function vMobMenu(tabKeys) {
   if (c && charLevel()) acts.push(`<button class="btn" data-a="crumb" data-t="cover">${t('frame.toCamp', { n: esc(c.name) })}</button>`);
   const langBtn = l => `<button data-a="lang" data-l="${l}" aria-pressed="${lang === l}" lang="${l}">${l.toUpperCase()}</button>`;
   const prefs = `<div class="mm-prefs"><div class="langs" role="group" aria-label="${t('head.language')}">${langBtn('en')}${langBtn('de')}</div><div class="langs units" role="group" aria-label="${t('head.units')}">${['m', 'ft'].map(u => `<button data-a="units" data-u="${u}" aria-pressed="${units === u}" title="${t('units.' + u)}">${u}</button>`).join('')}</div></div>`;
-  const glob = [...GLOBAL, 'settings'].map(s => `<button data-a="hubgo" data-s="${s}">${line(s)}<span>${t('hub.nav.' + s)}</span></button>`).join('');
+  const glob = [...GLOBAL, 'settings'].filter(s => !inCamp(s)).map(s => `<button data-a="hubgo" data-s="${s}">${line(s)}<span>${t('hub.nav.' + s)}</span></button>`).join('');
   return `<div class="mm-ovl" data-a="mmenu"></div><div class="mmenu" role="dialog" aria-modal="true" aria-label="${t('frame.menu')}"><div class="mm-h"><b>${t('frame.menu')}</b><button class="mm-x" data-a="mmenu" aria-label="${t('common.close')}">${line('close')}</button></div>
   <h4>${t(charLevel() ? 'nav.lvl.char' : 'nav.lvl.camp')}</h4><nav class="mm-grid">${tabKeys.map(tabBtn).join('')}</nav>${acts.length ? `<div class="mm-acts">${acts.join('')}</div>` : ''}${prefs}<h4>RealmCraft</h4><nav class="mm-grid">${glob}</nav></div>`;
 }

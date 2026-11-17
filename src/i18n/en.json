@@ -1943,5 +1943,11 @@
  "fight.moveMax": "maximum movement",
  "fight.prepBadge": "No fight",
  "fight.prepWait": "The DM starts the fight. Until then you can see all options of your turn here.",
- "fight.prepNoRoom": "Not connected to the room. Your options are still available."
+ "fight.prepNoRoom": "Not connected to the room. Your options are still available.",
+ "tab.map": "World map",
+ "sec.title": "Protection:",
+ "sec.on": "active. Players send exact HP only encrypted to you; their sheets can only be read online by their owner and you.",
+ "sec.mixed": "active, but at least one device still runs the old app version and sends HP in plain text. Please reload there.",
+ "sec.foreign": "According to the database this room belongs to another DM. Your device key does not match; open the room from the original device or create a new room.",
+ "sec.off": "not active. The database does not have SQL “D3” yet (supabase/d3-rechte.sql); until then the previous behaviour applies."
 }

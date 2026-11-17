@@ -27,6 +27,8 @@ export const selfMember = () => ({
 
 /** Karte eines Gruppenmitglieds. act: zusätzliche Knöpfe unten (z. B. Werkzeuge der Spielleitung). */
 export function memberCard(p, act = '', full = !!p.me) {
+  // Noch nicht entschlüsselte Werte (D3) zeigen auch bei der Spielleitung nur die grobe Stufe
+  if (p.est) full = false;
   const down = p.hp === 0 && p.hpMax > 0;
   const tags = [
     p.conc ? `<span class="tag t-conc">${t('live.concShort', { n: esc(p.conc) })}</span>` : '',

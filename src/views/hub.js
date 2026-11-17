@@ -188,7 +188,7 @@ function vJoin() {
   <div class="dlgf"><button class="hbtn" data-a="joincancel">${t('common.cancel')}</button><button class="hbtn pri" data-a="joinok"${on ? '' : ' disabled'}>${t('join.confirm')} ${ico('check')}</button></div></section>`;
 }
 /** Weltkarte: Platzhalter im Inhalt, die Karte selbst setzt syncMapLayer() darüber. */
-function vMap() {
+export function vWorldMap() {
   const on = typeof navigator === 'undefined' || navigator.onLine !== false;
   return `<div class="hub-h">${ico('map', 'big')}<h2>${t('hub.nav.map')}</h2><a class="hub-more" href="${MAP_URL}" target="_blank" rel="noopener noreferrer">${t('map.newTab')} ${ico('ext')}</a></div>
   <p class="note hub-mapnote">${t('map.source')}</p>${on ? '<div id="hub-map-slot" class="hub-mapslot" aria-hidden="true"></div>' : `<section class="hub-panel"><p class="note">${t('map.offline')}</p></section>`}`;
@@ -243,7 +243,7 @@ export function vHub() {
   if (s === 'chars') main = vChars(0);
   if (s === 'wiki') main = vWiki();
   if (s === 'plan') main = vPlan();
-  if (s === 'map') main = vMap();
+  if (s === 'map') main = vWorldMap();
   if (s === 'gm') main = vGm();
   if (s === 'join') main = vJoin();
   if (s === 'settings') main = vSettings();
