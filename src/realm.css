@@ -231,3 +231,18 @@ header.hd .por{box-shadow:0 0 0 3px #d4b06a,0 0 0 8px #1a1015,0 0 0 10px #a8833f
 .fight-state.on.mine{box-shadow:0 0 0 2px #e3c47f,0 0 24px rgba(236,210,148,.3)}
 @media (max-width:640px){.econ{grid-template-columns:repeat(2,minmax(0,1fr));padding:12px}.tabs2{padding:0 10px}.tabs2 button{flex:1 1 auto;padding:8px 8px;font-size:.86rem}.pf-body{padding:12px 10px}}
 @media (max-width:999px){.pfight .pf-main{order:-1}}
+/* ---- Heldenakte (M2): Schriftstufen statt gedämpfter Werte ---- */
+.ov-vit{grid-template-columns:minmax(0,1.6fr) repeat(auto-fit,minmax(90px,1fr))}
+.ov-v small{font-size:.72rem;letter-spacing:.14em;color:var(--t-lbl-d)}
+.ov-v b{font:700 2.2rem/1.1 var(--f-title);color:var(--t-val-d)}
+.ov-v b i{font-style:normal;color:var(--t-sub-d)}
+.ov-v em{display:block;font:600 .86rem var(--f-ui);font-style:normal;color:var(--t-sub-d)}
+.ov-gear>div{grid-template-columns:96px minmax(0,1fr);padding:6px 0;border-bottom:1px solid rgba(212,176,106,.14)}
+.ov-gear dt{font-size:.72rem;letter-spacing:.14em;color:var(--t-lbl-d)}
+.ov-gear dd b{font:700 1.04rem var(--f-ui);color:var(--t-name-d)}
+.ov-gear dd small{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 10px;margin-top:3px;color:var(--t-sub-d)}
+.ov-gear dd small .rc-v.s{font-size:1.15rem}
+.ov-gear dd small .rc-l{margin-right:-4px}
+.ov-res b{color:var(--t-val-d)}.ov-res b i{color:var(--t-sub-d);font-style:normal}
+.ov-res span{color:var(--t-name-d)}
+@media (max-width:640px){.ov-vit{grid-template-columns:repeat(3,minmax(0,1fr))}}

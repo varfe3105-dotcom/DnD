@@ -8,6 +8,7 @@ import { campaignsOf } from '../campaigns.js';
 import { effects, hpMaxNow } from '../effects.js';
 import { atk, itemView, initBonus, passivePerception, skv } from '../helpers.js';
 import { t, dist, dice } from '../i18n/index.js';
+import { spellStats } from '../tables.js';
 import { concBanner, vFx, vAbil, vSkills, vFeats, vProfs, vSpells, acHtml } from './sheet.js';
 
 const tag = (cls, html, title = '') => `<span class="tag ${cls}"${title ? ` title="${esc(title)}"` : ''}>${html}</span>`;
@@ -31,20 +32,21 @@ function vNow() {
 function vGear() {
   const rows = [];
   const w = S.eq.main && atk(S.eq.main, 'main');
-  if (w) rows.push([t('ov.weapon'), esc(itemView(S.eq.main).n), `${w.hit} · ${esc(w.dmg)} ${esc(w.type)}`]);
-  if (S.eq.off) { const o = itemView(S.eq.off), a = atk(S.eq.off, 'off'); rows.push([t('ov.offhand'), esc(o.n), a ? `${a.hit} · ${esc(a.dmg)}` : '']); }
-  if (S.eq.body) rows.push([t('ov.armor'), esc(itemView(S.eq.body).n), `${t('dm.acShort')} ${acHtml()}`]);
+  const val = a => `<span class="rc-v s">${a.hit}</span><span class="rc-v s">${esc(a.dmg)}</span><span class="rc-s">${esc(a.type || '')}</span>`;
+  if (w) rows.push([t('ov.weapon'), esc(itemView(S.eq.main).n), val(w)]);
+  if (S.eq.off) { const o = itemView(S.eq.off), a = atk(S.eq.off, 'off'); rows.push([t('ov.offhand'), esc(o.n), a ? val(a) : '']); }
+  if (S.eq.body) rows.push([t('ov.armor'), esc(itemView(S.eq.body).n), `<span class="rc-l">${t('dm.acShort')}</span><span class="rc-v s">${acHtml()}</span>`]);
   const lv = S.spells.filter(s => s.lvl > 0 && (s.always || s.prep !== false)).length, can = S.spells.filter(s => s.lvl === 0).length;
-  const slots = S.slots.map((x, i) => (x.max ? `${i + 1}: ${x.max - x.used}/${x.max}` : '')).filter(Boolean);
-  if (S.pact.max) slots.unshift(`${t('mini.pact')} ${S.pact.max - S.pact.used}/${S.pact.max}`);
-  if (lv || can) rows.push([t('spell.title'), t('ov.spellCount', { a: lv, b: can }), slots.length ? esc(slots.slice(0, 3).join(' · ')) : '']);
+  const slots = S.slots.map((x, i) => (x.max ? `<span class="rc-l">${i + 1}</span><span class="rc-v s">${x.max - x.used}<span class="mx">/${x.max}</span></span>` : '')).filter(Boolean);
+  if (S.pact.max) slots.unshift(`<span class="rc-l">${t('mini.pact')}</span><span class="rc-v s">${S.pact.max - S.pact.used}<span class="mx">/${S.pact.max}</span></span>`);
+  if (lv || can) rows.push([t('spell.title'), t('ov.spellCount', { a: lv, b: can }), slots.length ? slots.slice(0, 3).join(' ') : '']);
   return `<section class="ov-col"><h3 class="ov-h">${t('ov.gear')}</h3>${rows.length ? `<dl class="ov-gear">${rows.map(([k, n, v]) => `<div><dt>${k}</dt><dd><b>${n}</b>${v ? `<small>${v}</small>` : ''}</dd></div>`).join('')}</dl>` : `<p class="note">${t('ov.nothingGear')}</p>`}</section>`;
 }
 function vRecent() {
   const c = campaignsOf(S.id).find(x => x.log && x.log.trim());
   if (!c) return '';
   const lines = c.log.split('\n').map(x => x.trim()).filter(Boolean).slice(-3);
-  return `<section class="ov-recent"><h3 class="ov-h">${t('ov.recent', { n: esc(c.name) })}</h3><ul>${lines.map(l => `<li>${esc(l.slice(0, 200))}</li>`).join('')}</ul></section>`;
+  return `<section class="ov-recent"><h3 class="ov-h">${t('ov.recent', { n: esc(c.name) })}</h3><ul>${lines.map(l => `<li>${esc(l.replace(/^(##|!)\s*/, '').replace(/^(-\s*)?\[ \]\s*/, '☐ ').replace(/^(-\s*)?\[x\]\s*/i, '☑ ').slice(0, 200))}</li>`).join('')}</ul></section>`;
 }
 export function vProfile() {
   const fx = effects(), max = hpMaxNow();
@@ -55,7 +57,7 @@ export function vProfile() {
     <div class="ov-v hp${S.hp === 0 ? ' down' : ''}"><small>${t('hp.title')}</small><b>${S.hp}<i>/${max}</i></b>${S.tmp ? `<em>+${S.tmp} ${t('hp.temp')}</em>` : ''}${hpBar(S.hp, max)}</div>
     <div class="ov-v ac"><small>${t('stat.ac')}</small><b>${acHtml()}</b></div>
     <div class="ov-v"><small>${t('stat.init')}</small><b>${sg(initBonus())}</b></div>
-    <div class="ov-v"><small>${t('stat.speed')}</small><b>${esc(dist(fx.speed.val))}</b></div></div>`;
+    <div class="ov-v"><small>${t('stat.speed')}</small><b>${esc(dist(fx.speed.val))}</b></div>${(() => { const st = spellStats()[0]; return st ? `<div class="ov-v"><small>${t('fight.spellDc')}</small><b>${st.dc}</b><em>${t('fight.spellAtk')} ${sg(st.atk)}</em></div>` : ''; })()}</div>`;
   const abil = `<div class="ov-abil">${ABK.map(k => `<div title="${t('abs.' + k)} ${S.abil[k]}"><small>${t('abs.' + k)}</small><b>${sg(mod(S.abil[k]))}</b></div>`).join('')}</div>`;
   return `<div class="ov2">${vitals}${abil}<div class="page-2">${vNow()}${vGear()}</div><section class="ov-desc"><h3 class="ov-h">${t('ov.desc')}</h3>${desc}</section>${vRecent()}</div>`;
 }
