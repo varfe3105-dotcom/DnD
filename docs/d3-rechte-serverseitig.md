@@ -1,4 +1,4 @@
-# D3: Rechte serverseitig (17.11.2026)
+# D3: Rechte serverseitig (17.11.2026, SQL überarbeitet nach Sicherheitsprüfung)
 
 ## 1. Ausgangslage
 
@@ -26,14 +26,14 @@
 | Teil | Wirkung |
 |---|---|
 | Neue Tabelle `charbogen_rooms` | Hält je Raum, wer die Spielleitung ist (Hash ihres Geheimnisses), und ihren **öffentlichen** Schlüssel. Keine Policies, also nur über Funktionen erreichbar. |
-| Bestehende Räume | Werden übernommen: Die Besitzerin der Zeile `dm`/`dm` wird als Spielleitung eingetragen. Das ist nur ein Einfügen; `charbogen_saves` wird nicht verändert. |
-| `charbogen_claim` | Die Spielleitung beansprucht beim Öffnen des Raums den Raum. Der erste Anspruch gilt. Ein Raum mit fremdem Spielleitungsbereich kann nicht übernommen werden. |
+| Bestehende Räume | Räume, deren Zeile `dm`/`dm` schon einen Besitzer hat, werden eingetragen (nur Einfügen). Altbestandsräume werden eingetragen, sobald die Spielleitung ihre Zeile übernimmt (siehe Abschnitt 4). `charbogen_saves` wird nicht verändert. |
+| `charbogen_claim` | Die Spielleitung beansprucht beim Öffnen den Raum. Gibt es eine Spielleitungszeile, darf nur deren Besitzerin beanspruchen (Altbestand ohne Besitzer: niemand). Nur bei ganz neuen Räumen gilt der erste Anspruch. Der Schlüssel wird geprüft (EC P-256, ohne privaten Teil). |
 | `charbogen_room_key` | Liefert nur den öffentlichen Schlüssel. |
 | `charbogen_get2` (neu definiert) | Ein Charakterbogen geht nur an seinen Besitzer und an die Spielleitung des Raums; der Spielleitungsbereich nur an die Spielleitung; die gemeinsame Chronik an alle im Raum. |
-| `charbogen_put2` (neu definiert) | Spielleitungsbereich und gemeinsame Chronik schreibt nur die Spielleitung. |
+| `charbogen_put2` (neu definiert) | Prüft Art (`char`/`dm`/`chron`), Kennung, Daten und Geheimnis. Spielleitungsbereich und gemeinsame Chronik schreibt nur die Spielleitung. Altbestand nur mit genauem Zeitstempel. Wer die Spielleitungszeile besitzt, wird Spielleitung des noch nicht eingetragenen Raums. |
 | `charbogen_list2` | Übersicht ohne Daten: Spieler sehen nur ihre eigenen Zeilen, die Spielleitung alle. |
-| `charbogen_del2` | Löschen nur durch den Besitzer oder die Spielleitung. |
-| Teil 2 (später) | Die alten Funktionen ohne Schutz (`charbogen_put/get/list/del`) entfernen. Erst danach ist der Lesezugriff ohne Geheimnis vollständig geschlossen. |
+| `charbogen_del2` | Löschen nur durch den Besitzer oder die Spielleitung des Raums; kurze oder leere Geheimnisse löschen nie. |
+| Teil 2 (direkt nach Teil 1) | Die alten Funktionen ohne Schutz (`charbogen_put/get/list/del`) entfernen. Erst danach ist der Lesezugriff ohne Geheimnis vollständig geschlossen. |
 
 **App:**
 
@@ -50,34 +50,85 @@
 - Zuganzeige, Gruppenkasse, Wirkungen und Begleiter
 - Bogen ansehen durch die Spielleitung
 
-## 3. Was du in Supabase ausführen musst
+## 3. Ausführung in Supabase (Reihenfolge verbindlich)
 
-Projekt `ovkxoqgqocspwjvxhige`, Bereich **SQL Editor**.
+Projekt `ovkxoqgqocspwjvxhige`, Bereich **SQL Editor**. Die Kontrollabfragen stehen in `supabase/kontrolle-d2-d3.sql` (K0 bis K4) und lesen nur.
 
-1. **Sicherung (empfohlen):** Im Table Editor die Tabelle `charbogen_saves` als CSV exportieren. Zusätzlich in der App „Sicherung herunterladen“ auf dem Gerät der Spielleitung.
-2. **D2 prüfen:** Falls noch nicht geschehen, zuerst den Abschnitt „D2“ am Ende von `supabase/charbogen-saves.sql` ausführen. Prüfen kannst du das so: Unter Database → Functions muss `charbogen_put2` existieren.
-3. **D3 Teil 1:** Den Inhalt von `supabase/d3-rechte.sql` **bis zur Zeile „Teil 2“** einfügen und **Run** drücken. Die Abfrage ist wiederholbar.
-4. **Kontrolle** (im SQL Editor):
-   ```sql
-   select count(*) from public.charbogen_rooms;            -- Räume mit eingetragener Spielleitung
-   select room, dm_key is not null as hat_schluessel from public.charbogen_rooms;
-   select proname from pg_proc where proname like 'charbogen_%' order by 1;
-   ```
-   Die Liste muss `charbogen_claim`, `charbogen_room_key`, `charbogen_list2`, `charbogen_is_dm` und `charbogen_hash` enthalten.
-5. **App neu laden:** Auf allen Geräten die Seite einmal neu laden. Am Handy die App schließen und wieder öffnen, damit die neue Version aktiv wird. Danach den Raum öffnen; die Spielleitung sieht dann „Absicherung: aktiv“.
-6. **D3 Teil 2, erst danach:** Wenn alle Geräte die neue Version haben, die vier `drop function`-Zeilen am Ende der Datei ausführen (ohne `--` davor). Das löscht nur Funktionen, keine Daten. Ältere App-Versionen können danach nicht mehr online speichern.
+**Warum diese Reihenfolge:**
+- D3 setzt die Spalte `owner_hash` und die Art `chron` aus D2 voraus. Ohne D2 bricht D3 Teil 1 mit „column owner_hash does not exist“ ab und ändert nichts.
+- Teil 2 entfernt die alten Funktionen ohne Geheimnis. Erst danach ist der Zugriff ohne Geheimnis geschlossen, und erst dann ist der Zeitstempel des Altbestands nicht mehr für jeden abrufbar.
+- **D2, D3 Teil 1 und D3 Teil 2 deshalb unmittelbar nacheinander ausführen.**
 
-**Rückweg:** Teil 1 ändert keine Daten. Willst du ihn zurücknehmen, stelle den Abschnitt D2 aus `charbogen-saves.sql` wieder her (erneut ausführen) und lösche `charbogen_rooms`. Die App fällt dann auf das bisherige Verhalten zurück.
+| Schritt | Was | Kontrolle |
+|---|---|---|
+| 0 | Table Editor → `charbogen_saves` → Export als CSV (Sicherung der 17 Zeilen). Optional zusätzlich eine Kopie in der Datenbank anlegen, siehe unten. | K0: `tabelle` und die vier alten Funktionen `true`, `zeilen` = 17. Ergebnis von K0b aufheben (Notiz oder Bildschirmfoto). |
+| 1 | **D2:** `supabase/charbogen-saves.sql` ab der Zeile `-- D2 (17.11.2026, überarbeitet …)` bis zum Dateiende ausführen. | K1: alle `ok = true`. K1b zeigt das Schema von pgcrypto (`public` oder `extensions`, beides funktioniert). K1c: `ohne_besitzer` = 17. |
+| 2 | **D3 Teil 1:** `supabase/d3-rechte.sql` von Dateianfang bis vor die Zeile `Teil 2` ausführen. | K2: alle `ok = true`. K2b ist anfangs leer; Altbestandsräume erscheinen erst, wenn die Spielleitung gespeichert hat. |
+| 3 | **D3 Teil 2:** die vier `drop function`-Zeilen am Ende von `d3-rechte.sql` ohne `--` ausführen. Die aktuelle App braucht die alten Funktionen nicht mehr. | K3: alle `true`. |
+| 4 | **App:** Auf allen Geräten neu laden. Erst die Spielleitung öffnet den Raum und speichert einmal (siehe „Altbestand“), danach die Spieler. Dann einmal neu laden: Unter Gruppe/Live-Tisch steht „Absicherung: aktiv“. | K1c: `ohne_besitzer` sinkt. K2b: Raum mit `hat_schluessel = true`. K4: Räume, Arten und Anzahlen wie in K0b. |
 
-## 4. Grenzen (ehrlich)
+**Optionale Sicherungskopie in der Datenbank** (vor Schritt 1; ändert `charbogen_saves` nicht):
+```sql
+create table public.charbogen_saves_backup_d2 as select * from public.charbogen_saves;
+alter table public.charbogen_saves_backup_d2 enable row level security;
+revoke all on public.charbogen_saves_backup_d2 from anon, authenticated;
+```
 
+**Rückweg:** D2 und D3 löschen keine Stände.
+- D3 Teil 1 lässt sich zurücknehmen, indem du den D2-Abschnitt erneut ausführst und `charbogen_rooms` löschst.
+- Die alten Funktionen aus Teil 2 stellt das Grundskript (Anfang von `charbogen-saves.sql`) wieder her.
+
+## 4. Grenzen und verbleibende Risiken
+
+### Altbestand (die 17 Zeilen von vor D2)
+
+Diese Zeilen wurden ohne Geheimnis gespeichert. Die Datenbank kann deshalb nicht feststellen, welchem Gerät sie gehören.
+
+**Regel in D2/D3:**
+- Eine solche Zeile wird nur übernommen, wenn das Gerät genau ihren gespeicherten Zeitstempel (`updated_at`, auf die Mikrosekunde) mitschickt.
+- Ein blindes Überschreiben (`p_base = null`) oder ein falscher Zeitstempel ergibt „Konflikt“, und es wird nichts geändert.
+- Übernimmt die Spielleitung ihre Zeile `dm`/`dm`, wird sie automatisch als Spielleitung des Raums eingetragen. Vorher kann niemand den Raum beanspruchen.
+
+**Warum das keine echte Anmeldung ist:**
+- Der Zeitstempel ist kein Geheimnis im kryptografischen Sinn.
+- Solange die alten Funktionen bestehen (bis Teil 2), kann ihn jeder mit Raumcode abrufen; nach D2 allein auch über `charbogen_get2` für Charakterbögen.
+- Wer in diesem Zeitfenster schneller ist als das richtige Gerät, kann eine Altzeile übernehmen.
+- Nach Teil 2 bekommt den Zeitstempel einer Altzeile nur noch die Spielleitung des Raums.
+
+**Gegenmaßnahmen:**
+- D2, D3 Teil 1 und Teil 2 unmittelbar nacheinander ausführen.
+- Danach zügig alle Geräte einmal speichern lassen.
+- Mit K1c prüfen, wie viele Zeilen noch ohne Besitzer sind.
+
+**Wenn ein Gerät nicht übernehmen kann** (Konflikt):
+- Das richtige Gerät kennt den Zeitstempel, wenn es zuletzt gespeichert oder den Online-Stand geladen hat. Spieler können den Online-Stand ihrer Altzeile nach D3 nicht mehr selbst laden, weil sie nur die Spielleitung lesen darf.
+- Für solche Fälle gibt es den sicheren Weg unten.
+
+**Sicherer Weg (empfohlen für wertvolle Zeilen) – ausdrückliche Zuweisung:**
+- Wer das Supabase-Projekt verwaltet, kann den Besitz im SQL Editor fest zuweisen.
+- Das Geheimnis eines Geräts steht in seiner Sicherungsdatei (Einstellungen → Sicherung herunterladen, Eintrag `charbogen-cloud-secret`, Wert für den Raumcode).
+- Wer die Sicherungsdatei des Geräts hat, beweist damit tatsächlich den Besitz:
+```sql
+-- Beispiel: Charakterbogen <ID> im Raum <CODE> dem Gerät mit diesem Geheimnis zuweisen (nur, wenn noch ohne Besitzer)
+update public.charbogen_saves
+   set owner_hash = encode(digest('<GEHEIMNIS AUS DER SICHERUNG>', 'sha256'), 'hex')
+ where room = '<CODE>' and kind = 'char' and id = '<ID>' and owner_hash is null;
+```
+- Für die Spielleitung dasselbe mit `kind = 'dm' and id = 'dm'`. Danach einmal speichern; der Raum wird dann eingetragen.
+- Liegt pgcrypto im Schema `extensions`, schreibst du `extensions.digest(…)`.
+
+**Sperren statt übernehmen (optional, nach der Übernahme durch alle Geräte):**
+- Zeilen, die dann noch ohne Besitzer sind, gehören zu niemandem mehr.
+- Sie lassen sich gegen Übernahme sperren: `update public.charbogen_saves set owner_hash = 'gesperrt' where owner_hash is null;`
+- Dabei ändert sich nur die Besitzerspalte, nicht der Inhalt. Lesen kann sie danach nur noch die Spielleitung (Charakterbögen) bzw. niemand (Spielleitungszeile).
+
+### Weitere Grenzen
+
+- **Neuer Raum ohne Spielleitungszeile:** Den ersten Anspruch auf einen ganz neuen Raum kann jeder stellen, der den Code vor der Spielleitung kennt. Das gilt auch für Altbestandsräume ohne Spielleitungszeile (in deinem Bestand prüfbar mit K0b). Die App beansprucht neue Räume sofort beim Öffnen. Die Spielleitung sähe einen fremden Anspruch als „Raum gehört einer anderen Spielleitung“.
 - **Realtime selbst** ist weiter ein offener Kanal mit Raumcode. Geschützt sind die *Inhalte*: genaue TP verschlüsselt, Bögen nur über die Funktionen. Auch Nicht-Mitglieder mit Raumcode sehen Namen, Klasse, Stufe, RK, Zustände, Konzentration und die grobe TP-Stufe; das sind die Werte, die Mitspieler laut Auftrag sehen dürfen.
-- **Nachrichten der Spielleitung an einzelne Spieler** gehen technisch an alle im Kanal; die App zeigt sie nur dem Empfänger. Gemeint sind Schadenshöhe, Gegenstand und Handout. Sie enthalten keine vollständigen Bögen. Eine Verschlüsselung je Spieler wäre der nächste Schritt.
-- **Wer zuerst beansprucht, ist Spielleitung:**
-  - Bestehende Räume sind über ihre Spielleitungszeile geschützt, neue Räume beansprucht die App sofort beim Öffnen.
-  - Ein Spieler, der den Code eines neuen Raums kennt, *bevor* die Spielleitung ihn je geöffnet hat, könnte ihn beanspruchen; die Spielleitung sähe dann „Raum gehört einer anderen Spielleitung“ und legt einen neuen Raum an.
-- **Geheimnis an das Gerät gebunden:** Bögen sind online nur mit dem Geheimnis des Geräts lesbar, das sie gespeichert hat. Auf einem neuen Gerät gilt das erst nach dem Einspielen der Sicherungsdatei. Das galt schon mit D2 für das Schreiben.
-- **Vollständige serverseitige Durchsetzung auch im Realtime-Kanal** bräuchte Supabase Auth (z. B. anonyme Anmeldung) und Realtime Authorization mit privaten Kanälen. Das ist eine größere Umstellung und nicht umgesetzt.
+- **Nachrichten der Spielleitung an einzelne Spieler** gehen technisch an alle im Kanal; die App zeigt sie nur dem Empfänger. Gemeint sind Schadenshöhe, Gegenstand und Handout; sie enthalten keine vollständigen Bögen.
+- **Geheimnis an das Gerät gebunden:** Auf einem neuen Gerät hilft nur die Sicherungsdatei.
+- **Vollständige serverseitige Durchsetzung auch im Realtime-Kanal** bräuchte Supabase Auth und Realtime Authorization mit privaten Kanälen. Das ist nicht umgesetzt.
 
 ## 5. Prüfungen
 
@@ -95,3 +146,11 @@ Ohne D3 bleibt das bisherige Verhalten, und die Spielleitung sieht „nicht akti
 - Der echte Realtime-Kanal mit zwei Geräten.
 
 Beides deckt der manuelle Testplan ab: `docs/testplan-zwei-geraete.md`, Abschnitt 7.
+
+**SQL-Prüfung in einer echten PostgreSQL-Datenbank** (PGlite, PostgreSQL 17 als WebAssembly; Rollen `anon`/`authenticated` und Standardrechte wie bei Supabase nachgebildet):
+- Getestet wurden die Dateien aus dem Projekt mit 17 Bestandszeilen: 14 Charakterbögen und 3 Spielleitungsbereiche in 4 Räumen.
+- Zwei Ausgangslagen: pgcrypto nicht installiert, und pgcrypto schon in `public`.
+- Geprüft: D2, D3 Teil 1 und Teil 2 nacheinander; die Kontrollabfragen K1, K2 und K3; fehlerhafte Eingaben, falsche und leere Geheimnisse, Konflikte, Altbestand, Chronik, Lesen, Übersicht, Löschversuche Unberechtigter und Rechte der Hilfsfunktionen.
+- Dazu: D3 ohne D2 bricht ab; nach allen Schritten sind alle 17 Zeilen vorhanden, nicht übernommene unverändert.
+- Ergebnis: 128 von 128 Prüfungen bestanden. Das Testskript liegt nicht im Projekt; der Bericht im Chat vom 17.11.2026 beschreibt es.
+- Nicht nachgebildet: Supabase-eigene Besonderheiten außerhalb von PostgreSQL (PostgREST, Dashboard-Rollen). Deshalb die Kontrollabfragen nach jedem Schritt.

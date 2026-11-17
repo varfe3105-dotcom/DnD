@@ -28,6 +28,8 @@ Die Oberfläche tut das nie. Wer die Schnittstelle von Hand aufruft, kommt aber 
 
 ## SQL (zum Ausführen im Supabase SQL Editor, erst nach Freigabe)
 
+> **Veraltet (17.11.2026):** Der Abschnitt unten ist die erste Fassung. Ausführen nur die überarbeitete Fassung am Ende von `supabase/charbogen-saves.sql` (Prüfung von Art, Kennung und Daten; Altbestand nur mit genauem Zeitstempel; Chronik nur durch die Spielleitung; kein Löschen von Altbestand durch Dritte; Suchpfad mit `extensions`). Reihenfolge und Kontrollen: `docs/d3-rechte-serverseitig.md`, Abschnitt 3.
+
 ```sql
 create extension if not exists pgcrypto;
 
