@@ -78,16 +78,12 @@ test.describe('Zugübersicht @new', () => {
     await expect(page.locator('#toast')).toContainText(/one spell slot per turn/);
   });
 
-  test('Bewegung: Schritte bis zum Tempo, Spurten verdoppelt, Aufstehen kostet die Hälfte', async ({ page }) => {
+  test('Bewegung: nur die maximale Weite in Metern, kein Zähler; Spurten verdoppelt', async ({ page }) => {
     await seed(page, base4({ klass: 'Fighter', level: 1, speed: 9 }));
-    const plus = page.locator('[data-a="tmove"][data-m="1.5"]');
-    for (let i = 0; i < 6; i++) await plus.click();
-    expect((await read(page)).turn.mv).toBe(9);
-    await expect(plus).toBeDisabled();
+    await expect(page.locator('[data-a="tmove"]')).toHaveCount(0);
+    await expect(page.locator('.turnboard')).toContainText('9 m');
     await page.locator('[data-a="tact"][data-k="dash"]').click();
-    await expect(plus).toBeEnabled();
-    await page.locator('[data-a="tmove"][data-m="4.5"]').click();
-    expect((await read(page)).turn.mv).toBe(13.5);
+    await expect(page.locator('.turnboard')).toContainText('18 m');
   });
 
   test('Lange Rast beendet die Zählung', async ({ page }) => {

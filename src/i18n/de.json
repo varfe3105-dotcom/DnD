@@ -1938,5 +1938,10 @@
  "sp.empty": "Keine vorbereiteten Gegner.",
  "sp.more": "Weitere Gegner aus Katalog und eigenen Monstern",
  "sp.go": "Kampf vorbereiten ({n} Gegner)",
- "src.legacy": "Älterer Datensatz"
+ "src.legacy": "Älterer Datensatz",
+ "turn.moveMax": "bis {n}",
+ "fight.moveMax": "maximale Bewegung",
+ "fight.prepBadge": "Kein Kampf",
+ "fight.prepWait": "Die Spielleitung startet den Kampf. Bis dahin siehst du hier alle Optionen deines Zugs.",
+ "fight.prepNoRoom": "Nicht mit dem Raum verbunden. Deine Optionen stehen trotzdem bereit."
 }

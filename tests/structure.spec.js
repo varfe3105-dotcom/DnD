@@ -39,7 +39,9 @@ test.describe('Ebenen und Rollen @new', () => {
     await page.locator('.crumbs [data-a="crumb"][data-t="cover"]').click();
     expect(await navKeys(page)).toContain('chron');
     await tab(page, 'main');
-    await expect(page.locator('.stats .st.ac')).toBeVisible();
+    // Ohne laufenden Kampf: Aufteilung nach Aktionsarten wie im Kampf (Aktion, Bonusaktion, Reaktion, Bewegung)
+    await expect(page.locator('.pfight .econ')).toBeVisible();
+    await expect(page.locator('.fs-badge.off')).toBeVisible();
     await expect(page.locator('.modes')).toHaveCount(0);
     // Inventar & Handel und Chronik
     await page.locator('[data-a="tab"][data-t="trade"]').click();

@@ -1938,5 +1938,10 @@
  "sp.empty": "No prepared foes.",
  "sp.more": "More foes from the catalogue and your own monsters",
  "sp.go": "Prepare fight ({n} foes)",
- "src.legacy": "Legacy data"
+ "src.legacy": "Legacy data",
+ "turn.moveMax": "up to {n}",
+ "fight.moveMax": "maximum movement",
+ "fight.prepBadge": "No fight",
+ "fight.prepWait": "The DM starts the fight. Until then you can see all options of your turn here.",
+ "fight.prepNoRoom": "Not connected to the room. Your options are still available."
 }

@@ -55,15 +55,15 @@ export function turnChips() {
   const T = turn();
   if (!T.on) return '';
   const c = (on, l, title) => `<i class="tv-chip${on ? ' on' : ''}" title="${title}">${l}</i>`;
-  return `<span class="mb-v mb-turn"><small>${t('turn.title')}</small><b>${c(T.a < T.aMax, t('turn.abbrA'), t('tv.action'))}${c(!T.b, t('turn.abbrB'), t('tv.bonus'))}${c(!T.r, t('turn.abbrR'), t('tv.react'))} ${esc(dist(Math.max(0, speedMax() - T.mv)))}</b></span>`;
+  return `<span class="mb-v mb-turn"><small>${t('turn.title')}</small><b>${c(T.a < T.aMax, t('turn.abbrA'), t('tv.action'))}${c(!T.b, t('turn.abbrB'), t('tv.bonus'))}${c(!T.r, t('turn.abbrR'), t('tv.react'))} ${esc(dist(speedMax()))}</b></span>`;
 }
 
 /** Teile der Zugübersicht einzeln (für die Reiter im Kampfbereich der Kampagne): top, act, bonus, react, move, free. */
 export function turnParts() {
   const o = own(), T = turn(), aFree = T.a < T.aMax, n = attacksPerAction();
-  const left = Math.max(0, speedMax() - T.mv), step = 1.5;
+  const step = 1.5;
   const surge = S.res.findIndex(r => r.n === 'Action Surge');
-  const top = `<div class="tv-bar">${[[aFree, t('tv.action') + (T.aMax > 1 ? ` ${T.aMax - T.a}/${T.aMax}` : '')], [!T.b, t('tv.bonus')], [!T.r, t('tv.react')], [!T.obj, t('turn.objShort')]].map(([on, l]) => `<span class="tv-tok${on ? ' on' : ''}">${l}</span>`).join('')}<span class="tv-tok on">${t('turn.moveLeft', { n: dist(left) })}</span>${btn('tnew', '', T.on ? t('turn.new') : t('turn.start'))}${T.on ? '<button class="btn sm" data-a="tend">' + t('turn.endCombat') + '</button>' : ''}</div><p class="note">${t(T.on ? 'turn.introOn' : 'turn.intro')}</p>`;
+  const top = `<div class="tv-bar">${[[aFree, t('tv.action') + (T.aMax > 1 ? ` ${T.aMax - T.a}/${T.aMax}` : '')], [!T.b, t('tv.bonus')], [!T.r, t('tv.react')], [!T.obj, t('turn.objShort')]].map(([on, l]) => `<span class="tv-tok${on ? ' on' : ''}">${l}</span>`).join('')}<span class="tv-tok on">${t('turn.moveMax', { n: dist(speedMax()) })}</span>${btn('tnew', '', T.on ? t('turn.new') : t('turn.start'))}${T.on ? '<button class="btn sm" data-a="tend">' + t('turn.endCombat') + '</button>' : ''}</div><p class="note">${t(T.on ? 'turn.introOn' : 'turn.intro')}</p>`;
 
   // Aktion
   const atkLeft = T.atkMax - T.atk, inAttack = T.atkMax > 0;
@@ -105,10 +105,11 @@ export function turnParts() {
   // Bewegung
   const str = S.abil.str || 10, jumpL = dist(Math.round(str * 0.3 * 2) / 2), jumpH = dist(Math.max(0, Math.round((3 + Math.floor((str - 10) / 2)) * 0.3 * 2) / 2));
   const half = Math.round(speedMax() / (1 + T.dash) / 2 / step) * step;
-  const move = head(t('tv.move'), left > 0, t('turn.moveOf', { a: dist(left), b: dist(speedMax()) })) +
-    `<div class="row tv-row"><div class="ic">${tok('boots')}</div><div class="nm">${t('turn.walk')}<small>${t('tv.speedD')}</small></div><div class="qty"><button data-a="tmove" data-m="-${step}" aria-label="${t('turn.moveBack')}">−</button><span>${esc(dist(T.mv))}</span><button data-a="tmove" data-m="${step}" aria-label="${t('turn.moveOn', { n: dist(step) })}"${left < step ? ' disabled' : ''}>+</button></div></div>` +
+  // Bewegung: nur die maximale Weite (kein Zähler, keine Positionen; Wunsch der Gruppe). Spurten verdoppelt die Anzeige.
+  const move = head(t('tv.move'), true, t('turn.moveMax', { n: dist(speedMax()) })) +
+    `<div class="row tv-row"><div class="ic">${tok('boots')}</div><div class="nm">${t('turn.walk')}<small>${t('tv.speedD')}</small></div><b class="rc-v s">${esc(dist(speedMax()))}</b></div>` +
     row('wing', t('tv.jump'), t('tv.jumpD', { l: jumpL, h: jumpH }), '') +
-    row('leaf', t('turn.standUp'), t('turn.s.standUp', { n: dist(half) }), btn('tmove', `data-m="${half}"`, t('turn.do'), left < half)) +
+    row('leaf', t('turn.standUp'), t('turn.s.standUp', { n: dist(half) }), '') +
     row('leaf', t('tv.terrain'), t('tv.terrainD'), '');
 
   // Nebenbei
