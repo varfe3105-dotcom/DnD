@@ -4,127 +4,180 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>RealmCraft Mockups</title>
-<!-- Entwurf zur Abstimmung (docs/design-gesamtkonzept.md). Nutzt die echten Tokens und Grafiken, ist aber nicht Teil der App. -->
+<!-- Entwurf zur Abstimmung (docs/design-gesamtkonzept.md), Fassung 2. Nutzt die echten Tokens und Bausteine der Startseite
+     (src/tokens.css, src/areas.css) sowie Elemente aus den Originalen (design/mockups/assets, extract.py). Nicht Teil der App. -->
 <link rel="stylesheet" href="../../src/tokens.css">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Alegreya:ital,wght@0,400;0,600;0,700;1,400&family=Cinzel:wght@600;700&family=Cormorant+Garamond:wght@600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../src/areas.css">
+<link href="https://fonts.googleapis.com/css2?family=Alegreya:ital,wght@0,400;0,600;0,700;1,400&family=Cinzel:wght@600;700&family=Cormorant+Garamond:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
 <style>
-:root{--A:../../src/assets/realmcraft}
 *{box-sizing:border-box}
-body{margin:0;background:#0d0a0c;color:var(--c-cream);font:16px/1.5 Alegreya,serif;padding:30px}
-h1.cap{font:700 1.1rem Cinzel;letter-spacing:.14em;color:var(--c-brass-lt);margin:30px 0 10px}
-.mock{width:1440px;margin:0 0 50px;background:var(--surface-page,#1d181b);position:relative;overflow:hidden;border:1px solid #333}
+body{margin:0;padding:30px;background:var(--surface-page);color:var(--c-cream);font:16px/1.5 var(--f-body)}
+h1.cap{font:700 1.05rem var(--f-cap);letter-spacing:.16em;color:var(--c-brass-lt);margin:34px 0 12px}
+.mock{width:1440px;margin:0 0 40px;position:relative;overflow:hidden;background:var(--surface-page);box-shadow:0 0 0 1px #3a2e2a}
 .phone{width:390px}
-/* Schale: schmale globale Leiste + Inhalt */
-.shell{display:grid;grid-template-columns:76px 1fr;min-height:900px}
-.rail{background:linear-gradient(180deg,#191215,#120e10);border-right:1px solid rgba(201,162,90,.25);display:flex;flex-direction:column;align-items:center;gap:6px;padding:14px 0}
-.rail .mono{width:46px;height:46px;background:url(../../src/assets/realmcraft/branding/monogram.webp) center/contain no-repeat;margin-bottom:10px}
-.rail a{width:52px;height:52px;display:grid;place-items:center;border-radius:8px;color:var(--c-cream-mute);font-size:11px;text-align:center;line-height:1.1}
-.rail a svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.6;display:block;margin:0 auto 3px}
-.rail a.on{color:var(--c-brass-lt);background:rgba(201,162,90,.12);box-shadow:inset 3px 0 0 var(--c-brass)}
-.main{padding:0 0 30px}
-.crumbs{display:flex;gap:8px;align-items:center;padding:12px 28px;font:600 .85rem Alegreya;color:var(--c-cream-mute)}
-.crumbs b{color:var(--c-cream)} .crumbs i{opacity:.5;font-style:normal}
-.lvl{font:600 .62rem Cinzel;letter-spacing:.14em;border:1px solid var(--c-brass-a);padding:3px 8px;color:var(--c-brass-lt)}
-.role{margin-left:auto}
-/* Kampagnenbanner: Illustration, dunkle Abdunklung nach unten, keine Farbverläufe hinter dem Namen */
-.banner{position:relative;height:250px;margin:0 28px;border:1px solid var(--c-brass-a);background-size:cover;background-position:center 40%}
-.banner::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(10,8,10,0) 30%,rgba(10,8,10,.88) 100%)}
-.banner .in{position:absolute;left:30px;right:30px;bottom:22px;z-index:1;display:flex;align-items:flex-end;gap:22px}
-.banner h2{margin:0;font:700 3rem/1 'Cormorant Garamond';color:#f3e7cf;text-shadow:0 2px 8px #000}
-.banner p{margin:6px 0 0;color:var(--c-cream-2)}
-.banner .acts{margin-left:auto;display:flex;gap:8px}
-.tags{display:flex;gap:6px;flex-wrap:wrap}
-.tag{font:600 .78rem Alegreya;padding:2px 9px;border:1px solid var(--c-brass-soft);color:var(--c-cream-2);background:rgba(0,0,0,.35)}
-.tag.g{color:#8fbf8b;border-color:#7fae7c}.tag.r{color:#e08a7b;border-color:#c7695a}.tag.b{color:#9cbbe3;border-color:#7b9fcc}.tag.y{color:#e1c27f;border-color:rgba(212,176,106,.6)}
-.btn{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;font:700 .92rem Alegreya;color:#f3e7cf;background:#2a2125;border:1px solid var(--c-brass-a);clip-path:polygon(10px 0,calc(100% - 10px) 0,100% 50%,calc(100% - 10px) 100%,10px 100%,0 50%)}
-.btn.pri{background:linear-gradient(180deg,#b8924f,#8a6a35);color:#1a1209;border-color:#d4b06a}
-.btn.aub{background:linear-gradient(180deg,#4d3053,#2e1d33)}
-.btn.bad{color:#e08a7b;border-color:#c7695a}
-.tabs{display:flex;gap:2px;margin:0 28px;border-bottom:1px solid rgba(201,162,90,.3)}
-.tabs a{padding:12px 18px;font:600 .95rem Alegreya;color:var(--c-cream-mute)}
-.tabs a.on{color:var(--c-cream);box-shadow:inset 0 -3px 0 var(--c-brass);background:rgba(201,162,90,.08)}
-.wrap{padding:20px 28px}
-.h{display:flex;align-items:center;gap:14px;margin:18px 0 12px}
-.h h3{margin:0;font:700 1.55rem 'Cormorant Garamond';color:var(--c-cream)}
-.h::after{content:"";flex:1;height:1px;background:linear-gradient(90deg,var(--c-brass-a),transparent)}
-.orn{height:26px;background:url(../../src/assets/realmcraft/ornaments/divider-3.webp) center/contain no-repeat;margin:10px auto;width:420px;opacity:.9}
-.panel{background:rgba(14,11,13,.55);border:1px solid var(--c-brass-soft);padding:16px 18px;position:relative}
-.panel.frame{border:12px solid transparent;border-image:var(--frame);background:var(--surface-card,#221b1f) padding-box}
-.parch{color:#3b2a1c;border:30px solid transparent;border-image:url(../../src/assets/realmcraft/textures/parchment-sheet.webp) 120 fill / 30px stretch;padding:6px 10px;font:1.05rem/1.6 Alegreya}
-.parch h4{font:700 1.5rem 'Cormorant Garamond';margin:0 0 4px;color:#4a1f2c}
-.grid2{display:grid;grid-template-columns:1.7fr 1fr;gap:18px}
-.lbl{font:600 .66rem Cinzel;letter-spacing:.14em;text-transform:uppercase;color:var(--c-brass-lt);margin:0 0 6px}
-.big{font:700 2rem/1.1 'Cormorant Garamond';color:#f3e7cf}
-.por{width:44px;height:44px;border-radius:50%;border:2px solid var(--c-brass);display:grid;place-items:center;font:700 1.2rem 'Cormorant Garamond';color:var(--c-brass-lt);background:radial-gradient(circle at 35% 30%,#5a3d26,#1a110a);flex:none}
-.por.xl{width:118px;height:118px;font-size:3rem;border-width:3px;box-shadow:0 0 0 4px rgba(10,8,10,.7),0 0 0 6px var(--c-brass-a)}
-.bar{height:6px;background:rgba(255,255,255,.1);margin-top:5px}.bar u{display:block;height:100%;background:#7fae7c}.bar.l u{background:#c7695a}.bar.m u{background:#e6ad5c}
-.row{display:flex;align-items:center;gap:12px;padding:8px 0;border-bottom:1px dotted rgba(201,162,90,.2)}
-.mem{display:flex;gap:10px;align-items:center;padding:8px;background:rgba(255,255,255,.03);margin-bottom:6px}
-.mem div{flex:1}.mem small{float:right;color:var(--c-cream-mute)}
-ul.l{margin:0;padding-left:18px} ul.l li{margin:4px 0}
-.note{font-style:italic;color:var(--c-cream-mute);font-size:.88rem}
-/* Charakter */
-.chead{position:relative;margin:0 28px;height:200px;border:1px solid var(--c-brass-a);background-size:cover;background-position:center 60%}
-.chead::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(10,8,10,.92) 0,rgba(10,8,10,.7) 45%,rgba(10,8,10,.25) 100%)}
-.chead .in{position:absolute;inset:0;z-index:1;display:flex;align-items:center;gap:26px;padding:0 30px}
-.chead h2{margin:0;font:700 2.7rem/1 'Cormorant Garamond'}
-.chead .sub{color:var(--c-cream-2);margin:6px 0}
-.cgrid{display:grid;grid-template-columns:210px 1fr;gap:24px;padding:20px 28px}
-.cnav{background:rgba(14,11,13,.6);border:1px solid var(--c-brass-soft);padding:8px}
-.cnav a{display:flex;gap:10px;align-items:center;padding:10px 12px;color:var(--c-cream-2);font-weight:600}
-.cnav a.on{background:rgba(201,162,90,.12);box-shadow:inset 3px 0 0 var(--c-brass);color:var(--c-cream)}
-.cnav hr{border:0;border-top:1px solid var(--c-brass-soft);margin:6px 0}
-.vit{display:grid;grid-template-columns:1.6fr repeat(3,1fr);border:1px solid var(--c-brass-a);background:rgba(14,11,13,.6)}
-.vit>div{padding:12px 18px;border-left:1px solid var(--c-brass-soft)}.vit>div:first-child{border:0}
-.vit b{font:700 2.2rem 'Cormorant Garamond'}.vit .hp b{font-size:3rem}
-.abil{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;margin:14px 0}
-.med{text-align:center;padding:10px 0;border:1px solid var(--c-brass-soft);background:radial-gradient(circle at 50% 30%,rgba(201,162,90,.14),transparent 70%)}
-.med b{display:block;font:700 1.7rem 'Cormorant Garamond'}
+/* ---------- Materialien ---------- */
+.aub{background:linear-gradient(180deg,rgba(40,24,44,.35),rgba(18,10,20,.55)),url(assets/aubergine.jpg) center/cover}
+.dark{background:linear-gradient(180deg,rgba(14,10,14,.5),rgba(10,8,10,.7)),url(assets/dark.jpg) center/cover}
+.co{position:absolute;width:86px;height:84px;background:url(assets/corner-gold.png) 0 0/contain no-repeat;pointer-events:none;z-index:2}
+.co.tl{left:6px;top:6px}.co.tr{right:6px;top:6px;transform:scaleX(-1)}.co.bl{left:6px;bottom:6px;transform:scaleY(-1)}.co.br{right:6px;bottom:6px;transform:scale(-1,-1)}
+.co.sm{width:34px;height:33px}
+.dsm{display:block;height:20px;background:url(assets/divider-small.png) center/contain no-repeat;margin:4px auto;width:120px}
+.ribbon{display:inline-block;padding:7px 46px 7px 22px;background:url(assets/banner.webp) left center/100% 100% no-repeat;font:600 1.05rem var(--f-title);color:#f0dfb8;letter-spacing:.02em}
+.gold{background:linear-gradient(180deg,#d8b874,#a8833f 55%,#7f5f2b)!important;color:#1d140a!important;border-color:#e6c98a!important;text-shadow:none}
+.gold:hover{filter:brightness(1.08)}
+.seal{display:inline-grid;place-items:center;width:38px;height:38px;border-radius:50%;font:700 .8rem var(--f-cap);color:#f5e6c4;background:radial-gradient(circle at 35% 30%,#a43c2c,#6b1d14 70%);box-shadow:0 0 0 2px #4a130d,0 2px 4px rgba(0,0,0,.6),inset 0 0 6px rgba(0,0,0,.5)}
+.seal.green{background:radial-gradient(circle at 35% 30%,#5e8d4f,#2f5427 70%);box-shadow:0 0 0 2px #1f3a19,0 2px 4px rgba(0,0,0,.6),inset 0 0 6px rgba(0,0,0,.5)}
+.ring{display:grid;place-items:center;border-radius:50%;flex:none;font:700 1.3rem var(--f-title);color:var(--c-brass-lt);background:radial-gradient(circle at 35% 30%,#5b3c58,#1e1220 70%);box-shadow:0 0 0 2px #d4b06a,0 0 0 4px #1a1015,0 0 0 5px #8a6a35,0 3px 8px rgba(0,0,0,.6)}
+.ring.s{width:46px;height:46px;font-size:1.25rem}.ring.m{width:64px;height:64px;font-size:1.8rem}
+.ring.xl{width:176px;height:176px;font-size:4.6rem;box-shadow:0 0 0 3px #d4b06a,0 0 0 9px #1a1015,0 0 0 11px #a8833f,0 0 0 12px #3a2a18,0 8px 22px rgba(0,0,0,.7)}
+.tag{display:inline-flex;align-items:center;gap:5px;padding:2px 10px;font:600 .8rem var(--f-ui);border:1px solid rgba(212,176,106,.45);background:rgba(10,8,10,.55);color:var(--c-cream-2)}
+.tag.g{color:#9fd09a;border-color:#6f9f6a}.tag.r{color:#eb9787;border-color:#b75a4b}.tag.b{color:#a9c6ea;border-color:#6f93c2}.tag.y{color:#efcf8a;border-color:#b8924f}
+.bar{height:7px;background:rgba(0,0,0,.45);border:1px solid rgba(212,176,106,.25);margin-top:5px}.bar u{display:block;height:100%;background:linear-gradient(180deg,#9ccf8f,#5d9a56)}.bar.l u{background:linear-gradient(180deg,#e07d6b,#a33f30)}.bar.m u{background:linear-gradient(180deg,#f0c374,#b88433)}
+.ink{color:var(--c-parch-ink)}
+.cap-s{font:600 .68rem var(--f-cap);letter-spacing:.16em;text-transform:uppercase;color:var(--c-brass-lt)}
+.hub-parch .cap-s,.pg .cap-s{color:#7a3b2a}
+.fgrid .hub-h{margin:0 0 12px}
+/* ---------- Gerüst ---------- */
+.shell{display:grid;grid-template-columns:96px 1fr;min-height:940px}
+.rail{position:relative;display:flex;flex-direction:column;align-items:center;gap:4px;padding:16px 0;border-right:1px solid var(--c-brass-a)}
+.rail::after{content:"";position:absolute;right:-12px;top:120px;width:22px;height:220px;background:url(assets/vertical.png) center/contain no-repeat}
+.rail .mono{width:56px;height:56px;background:url(../../src/assets/realmcraft/branding/monogram.webp) center/contain no-repeat;margin-bottom:4px}
+.rail .dsm{width:70px;margin:2px 0 10px}
+.rail a{position:relative;width:84px;padding:9px 2px 8px;text-align:center;font:600 .74rem/1.15 var(--f-ui);color:var(--c-cream-2)}
+.rail a svg{width:24px;height:24px;display:block;margin:0 auto 4px;stroke:currentColor;fill:none;stroke-width:1.5}
+.rail a.on{color:#f5e6c4;background:linear-gradient(90deg,rgba(90,52,96,.95),rgba(59,36,64,.6));box-shadow:inset 3px 0 0 var(--c-brass)}
+.rail a.on::after{content:"";position:absolute;right:-6px;top:50%;width:10px;height:10px;transform:translate(0,-50%) rotate(45deg);border:1px solid var(--c-brass);background:#2a1a2c}
+.main{padding:0 30px 30px}
+.crumbs{display:flex;align-items:center;gap:10px;padding:14px 0 10px;font:600 .86rem var(--f-ui);color:var(--c-cream-mute)}
+.crumbs b{color:var(--c-cream)}.crumbs i{font-style:normal;color:var(--c-brass)}
+.crumbs .lv{font:600 .62rem var(--f-cap);letter-spacing:.16em;padding:3px 9px;border:1px solid var(--c-brass-a);color:var(--c-brass-lt);background:rgba(59,36,64,.6)}
+.crumbs .role{margin-left:auto}
+/* Reiter wie die Navigation der Startseite */
+.tabsx{display:flex;gap:4px;margin:16px 0 4px;padding:0 6px;border-bottom:1px solid var(--c-brass-a)}
+.tabsx a{position:relative;display:flex;align-items:center;gap:8px;padding:11px 18px;font:600 1rem var(--f-ui);color:var(--c-cream-2)}
+.tabsx a svg{width:19px;height:19px;stroke:currentColor;fill:none;stroke-width:1.5}
+.tabsx a.on{color:#f5e6c4;background:linear-gradient(180deg,rgba(90,52,96,.9),rgba(59,36,64,.75))}
+.tabsx a.on::after{content:"";position:absolute;left:10%;right:10%;bottom:-1px;height:2px;background:var(--c-brass-lt);box-shadow:0 0 8px rgba(236,210,148,.6)}
+.hub-h .hi,.hub-h svg{width:30px;height:30px;stroke:var(--c-brass);fill:none;stroke-width:1.4}
+/* Titelbereich der Kampagne: Platte aus Aubergine mit Eckfiligran, daneben die Illustration */
+.ctitle{position:relative;display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);min-height:290px;border:1px solid var(--c-brass-a);box-shadow:var(--sh-2)}
+.ctitle .plate{position:relative;padding:34px 40px 30px;z-index:1}
+.ctitle .art{background-size:cover;background-position:center 40%;-webkit-mask-image:linear-gradient(90deg,transparent 0,#000 22%);mask-image:linear-gradient(90deg,transparent 0,#000 22%);margin-left:-120px}
+.ctitle h2{margin:10px 0 4px;font:700 3.4rem/1 var(--f-title);color:#f5e8cc;text-shadow:0 2px 6px #000}
+.acts{display:flex;gap:10px;margin-top:18px;flex-wrap:wrap}
+.cols{display:grid;grid-template-columns:minmax(0,1.75fr) minmax(300px,1fr);gap:26px;margin-top:10px}
+.stack{display:grid;gap:22px;align-content:start}
+.quest{display:flex;gap:12px;align-items:flex-start;padding:9px 0;border-bottom:1px solid rgba(212,176,106,.16)}
+.quest:last-child{border:0}
+.quest .dia{flex:none;width:12px;height:12px;margin-top:7px;transform:rotate(45deg);border:1px solid var(--c-brass);background:rgba(212,176,106,.25)}
+.quest small{display:block;color:var(--c-cream-mute);font-size:.85rem}
+.chr{padding:8px 0;border-bottom:1px solid rgba(212,176,106,.16)}.chr:last-child{border:0}
+.chr b{font:700 1.15rem var(--f-title);color:#f0dfb8}
+.chr p{margin:2px 0 0;font:italic 1rem var(--f-body);color:var(--c-cream-2)}
+.grp{display:flex;align-items:center;gap:12px;padding:8px 0;border-bottom:1px solid rgba(90,60,30,.25)}.grp:last-child{border:0}
+.grp div{flex:1}.grp small{float:right;color:#6b4c35;font-weight:600}
+.quote{text-align:center;padding:6px 10px}
+.quote p{margin:8px 0;font:italic 600 1.35rem/1.3 var(--f-title);color:var(--c-brass-lt)}
+.place{display:grid;grid-template-columns:1fr 210px;gap:18px;align-items:center}
+.place .pic{height:150px;background-size:cover;background-position:center;border:2px solid #8a6a35;box-shadow:0 2px 6px rgba(0,0,0,.4);filter:sepia(.25)}
+/* Heldenakte */
+.hero-akte{position:relative;display:grid;grid-template-columns:auto 1fr minmax(0,420px);gap:30px;align-items:center;min-height:270px;padding:28px 40px;border:1px solid var(--c-brass-a);box-shadow:var(--sh-2)}
+.hero-akte .art{position:absolute;right:0;top:0;bottom:0;width:48%;background-size:cover;background-position:center 60%;-webkit-mask-image:linear-gradient(90deg,transparent,#000 40%);mask-image:linear-gradient(90deg,transparent,#000 40%);opacity:.75}
+.hero-akte h2{margin:0;font:700 3.6rem/1 var(--f-title);color:#f5e8cc;text-shadow:0 2px 6px #000}
+.hero-akte .line{font:600 1.15rem var(--f-title);color:var(--c-brass-lt);margin:8px 0 12px}
+.hero-akte .side{position:relative;z-index:1;justify-self:end;display:grid;gap:10px;justify-items:end}
+.xpbar{width:320px}
+.cgrid{display:grid;grid-template-columns:220px 1fr;gap:26px;margin-top:22px}
+.bm{position:relative;padding:12px 0;border:1px solid var(--c-brass-a)}
+.bm a{position:relative;display:flex;align-items:center;gap:11px;margin:2px 0;padding:11px 18px;font:600 1rem var(--f-ui);color:var(--c-cream-2)}
+.bm a svg{width:20px;height:20px;stroke:var(--c-brass);fill:none;stroke-width:1.5}
+.bm a.on{color:#f5e6c4;background:linear-gradient(90deg,rgba(110,60,110,.95),rgba(70,40,76,.85));clip-path:polygon(0 0,100% 0,calc(100% - 14px) 50%,100% 100%,0 100%);box-shadow:inset 3px 0 0 var(--c-brass-lt);margin-right:-14px}
+.bm .sep{height:1px;margin:10px 16px;background:linear-gradient(90deg,transparent,var(--c-brass-a),transparent)}
+.vitals{display:grid;grid-template-columns:1.7fr repeat(3,1fr)}
+.vitals>div{padding:4px 22px;border-left:1px solid rgba(212,176,106,.25)}.vitals>div:first-child{border:0;padding-left:0}
+.vitals b{font:700 2.4rem/1.1 var(--f-title);color:#f5e8cc}.vitals .hp b{font-size:3.2rem}.vitals .ac b{color:var(--c-brass-lt)}
+.meds{display:grid;grid-template-columns:repeat(6,1fr);gap:14px;margin:22px 0 8px}
+.med{display:grid;justify-items:center;gap:4px}
+.med .disc{width:92px;height:92px;border-radius:50%;display:grid;place-items:center;align-content:center;background:radial-gradient(circle at 40% 30%,#4a2f4c,#1d1220 72%);box-shadow:0 0 0 3px #c9a45f,0 0 0 6px #241622,0 0 0 7px #8a6a35,0 4px 10px rgba(0,0,0,.6)}
+.med .disc small{font:600 .62rem var(--f-cap);letter-spacing:.14em;color:var(--c-brass-lt)}
+.med .disc b{font:700 2rem/1 var(--f-title);color:#f5e8cc}
+.med .val{margin-top:-14px;padding:1px 12px;font:700 .9rem var(--f-title);color:#2a1a10;background:linear-gradient(180deg,#e6cf96,#b89252);border:1px solid #6b4f24;position:relative}
+.gear{display:grid;grid-template-columns:auto 1fr auto;gap:4px 12px;align-items:center;padding:9px 0;border-bottom:1px solid rgba(90,60,30,.22)}.gear:last-child{border:0}
+.gear .ico{width:34px;height:34px;display:grid;place-items:center;border:1px solid #8a6a35;background:rgba(90,60,30,.12);color:#7a4b2a}
+.gear small{color:#6b4c35}
+.dropcap::first-letter{float:left;font:700 3.4rem/.8 var(--f-title);color:#7a2632;margin:6px 8px 0 0}
 /* Kampf */
-.fbar{position:sticky;top:0;z-index:2;margin:0 28px;padding:12px 16px;background:linear-gradient(180deg,#241a20,#191316);border:1px solid var(--c-brass)}
-.fbar .top{display:flex;align-items:center;gap:14px}
-.ib{display:flex;gap:8px;margin-top:10px;overflow:hidden}
-.ib>div{min-width:158px;padding:8px 10px;border:1px solid var(--c-brass-soft);background:rgba(0,0,0,.4)}
-.ib .cur{border-color:var(--c-brass-lt);box-shadow:0 0 0 1px var(--c-brass),0 0 18px rgba(236,210,148,.45);background:linear-gradient(180deg,rgba(212,176,106,.22),rgba(30,22,26,.9))}
-.ib .nx{border-style:dashed;border-color:var(--c-brass-a)}
-.ib .foe b{color:#e7b3a6}
-.ib small{font:600 .6rem Cinzel;letter-spacing:.1em;color:var(--c-brass-lt)}
-.fcols{display:grid;grid-template-columns:1fr 1fr;gap:18px;padding:16px 28px}
-.fcard{display:grid;grid-template-columns:auto 1fr auto;gap:6px 12px;align-items:center;padding:10px 12px;border:1px solid var(--c-brass-soft);background:rgba(0,0,0,.3);margin-bottom:8px}
-.fcard.on{border-color:var(--c-brass);box-shadow:0 0 14px rgba(212,176,106,.35)}
-.qa{display:flex;gap:4px}.qa span{width:38px;height:38px;display:grid;place-items:center;border:1px solid var(--c-brass-a);background:#221a1e;font-weight:700}
-.qa span.d{color:#e08a7b}.qa span.h{color:#8fbf8b}.qa input{width:52px;height:38px;background:#151013;border:1px solid var(--c-brass-soft);color:#f3e7cf;text-align:center}
+.fightbar{position:relative;padding:16px 20px 14px;border:12px solid transparent;border-image:var(--frame)}
+.fightbar .top{display:flex;align-items:center;gap:16px}
+.rnd{font:700 1.7rem var(--f-title);color:var(--c-brass-lt)}
+.ini{display:flex;gap:10px;margin-top:14px}
+.ini .c{position:relative;min-width:168px;padding:10px 12px 9px;background:rgba(14,10,14,.7);border:1px solid rgba(212,176,106,.3)}
+.ini .c b{font:700 1.05rem var(--f-title);color:#f0dfb8}.ini .c .n{float:right;font:700 1.1rem var(--f-title);color:var(--c-brass-lt)}
+.ini .c.foe b{color:#ecb1a3}
+.ini .c.cur{background:linear-gradient(180deg,rgba(120,84,40,.55),rgba(40,26,20,.9));border:2px solid #e3c47f;box-shadow:0 0 0 3px #1a1015,0 0 0 4px #a8833f,0 0 22px rgba(236,210,148,.45);transform:translateY(-3px)}
+.ini .c.nx{border:1px dashed var(--c-brass-lt)}
+.ini .c small{display:block;margin-top:5px;font:600 .6rem var(--f-cap);letter-spacing:.14em;color:var(--c-brass-lt)}
+.fgrid{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:20px}
+.fc{position:relative;display:grid;grid-template-columns:auto 1fr auto;gap:6px 14px;align-items:center;padding:12px 14px;margin-bottom:10px;background:var(--surface-card);border:1px solid rgba(212,176,106,.3)}
+.fc.foe{background:linear-gradient(180deg,rgba(54,30,28,.92),rgba(24,16,16,.95))}
+.fc.on{border:2px solid #e3c47f;box-shadow:0 0 0 3px #1a1015,0 0 0 4px #a8833f,0 0 18px rgba(236,210,148,.35)}
+.fc b{font:700 1.2rem var(--f-title);color:#f5e8cc}.fc .meta{color:var(--c-cream-mute);font-size:.88rem}
+.qa{display:flex;gap:5px;align-items:center}.qa span{width:42px;height:42px;display:grid;place-items:center;font:700 1.2rem var(--f-ui);border:1px solid var(--c-brass-a);background:linear-gradient(180deg,#3a2b30,#211a1d)}
+.qa .d{color:#eb9787}.qa .h{color:#9fd09a}.qa input{width:56px;height:42px;text-align:center;background:#130e11;color:#f5e8cc;border:1px solid var(--c-brass-a);font:700 1.05rem var(--f-ui)}
+.foeicon{width:46px;height:46px;border-radius:50%;display:grid;place-items:center;font-size:1.4rem;background:radial-gradient(circle at 40% 30%,#5a2a22,#1f0f0c 72%);box-shadow:0 0 0 2px #a8833f,0 0 0 4px #1a1015}
 /* Chronik als Buch */
-.book{display:grid;grid-template-columns:300px 1fr;gap:0;margin:20px 28px;border:12px solid transparent;border-image:var(--frame);background:#2a1d17 padding-box}
-.book .idx{padding:18px;background:linear-gradient(90deg,#241812,#2e2019);border-right:2px solid rgba(0,0,0,.5)}
-.book .idx a{display:block;padding:8px 10px;color:var(--c-cream-2);border-left:2px solid transparent}
-.book .idx a.on{border-color:var(--c-brass);color:#f3e7cf;background:rgba(201,162,90,.1)}
-.book .pg{padding:8px}
-.hl{border-left:3px solid #8a2a2a;background:rgba(138,42,42,.08);padding:4px 10px;font-weight:700}
-.seal{display:inline-flex;align-items:center;gap:6px;font:600 .75rem Alegreya;padding:2px 8px;border:1px solid}
-/* Bibliothek */
-.lib{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;padding:10px 0}
-.lcard{border:12px solid transparent;border-image:var(--frame);background:var(--surface-card,#221b1f) padding-box;padding:18px;display:grid;grid-template-columns:auto 1fr;gap:16px}
-.lcard h4{margin:0;font:700 1.6rem 'Cormorant Garamond'}
-.lc{display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-top:1px dotted rgba(201,162,90,.25);font-size:.92rem}
+.book{position:relative;padding:26px;margin-top:18px;border:1px solid var(--c-brass-a);box-shadow:var(--sh-3)}
+.pages{position:relative;display:grid;grid-template-columns:330px 1fr}
+.pages::after{content:"";position:absolute;left:330px;top:0;bottom:0;width:36px;transform:translateX(-18px);background:linear-gradient(90deg,rgba(60,35,15,0),rgba(60,35,15,.35) 45%,rgba(30,15,5,.55) 50%,rgba(60,35,15,.35) 55%,rgba(60,35,15,0));pointer-events:none}
+.pg{color:var(--c-parch-ink);background:linear-gradient(rgba(120,80,30,.05),rgba(90,50,10,.12)),url(../../src/assets/realmcraft/textures/parchment-sheet.webp) center/cover;padding:30px 34px;min-height:520px}
+.pg.l{box-shadow:inset -18px 0 24px -18px rgba(60,35,15,.6)}.pg.r{box-shadow:inset 18px 0 24px -18px rgba(60,35,15,.6)}
+.toc h4,.entry h3{font:700 1.7rem var(--f-title);color:#4a1f2c;margin:0 0 6px}
+.toc a{display:flex;gap:6px;padding:7px 0;color:#3b2a1c;font:600 1.02rem var(--f-body)}
+.toc a span{flex:1;border-bottom:1px dotted rgba(90,60,30,.5);margin-bottom:6px}
+.toc a.on{color:#7a2632}.toc a.on::before{content:"";width:8px;margin-left:-20px;margin-right:12px;background:#7a2632;clip-path:polygon(0 0,100% 0,100% 100%,50% 75%,0 100%)}
+.toc .shared{color:#2f5427;font-size:.8rem}
+.entry p{font:1.08rem/1.7 var(--f-body);margin:8px 0}
+.margin{border-left:3px solid #7a2632;padding:2px 12px;color:#5a1a24;font-weight:700;background:rgba(122,38,50,.07)}
+.private{position:relative;margin-top:22px;padding:16px 20px 14px 58px;color:#e8dcc4;border:1px dashed rgba(212,176,106,.6);box-shadow:0 6px 14px rgba(0,0,0,.35)}
+.private::before{content:"🔒";position:absolute;left:18px;top:14px;font-size:1.2rem}
+.bookbar{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.mark{padding:5px 12px 9px;font:600 .82rem var(--f-ui);color:#f0dfb8;background:linear-gradient(180deg,#5b3460,#3a2140);clip-path:polygon(0 0,100% 0,100% 100%,50% 80%,0 100%)}
+.mark.off{background:linear-gradient(180deg,#3a2c30,#241b1e);color:var(--c-cream-mute)}
+/* Heldenarchiv */
+.archive{display:grid;grid-template-columns:repeat(3,1fr);gap:26px;margin-top:16px}
+.akte{position:relative;display:flex;flex-direction:column;background:var(--surface-card);border:12px solid transparent;border-image:var(--frame);box-shadow:var(--sh-2)}
+.akte .top{height:150px;background-size:cover;background-position:center;position:relative}
+.akte .top::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(10,8,10,0) 40%,rgba(22,16,20,.95))}
+.akte .ring{margin:-92px auto 0;position:relative;z-index:1;width:140px;height:140px;font-size:3.6rem}
+.akte .name{text-align:center;margin:10px 16px 0}
+.akte .name h4{margin:0;font:700 2rem/1 var(--f-title);color:#f5e8cc}
+.akte .name p{margin:4px 0 0;color:var(--c-brass-lt);font:600 1rem var(--f-title)}
+.akte .desc{margin:10px 18px 0;text-align:center;font:italic 1rem var(--f-body);color:var(--c-cream-2)}
+.akte .camps{margin:14px 14px 0}
+.stand{display:grid;grid-template-columns:auto 1fr auto;gap:10px;align-items:center;padding:10px 0;border-top:1px solid rgba(212,176,106,.2)}
+.lvl{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;font:700 1.1rem var(--f-title);color:#2a1a10;background:radial-gradient(circle at 40% 30%,#efd79d,#b58b45 70%);box-shadow:0 0 0 2px #6b4f24}
+.akte .foot{display:flex;justify-content:center;gap:10px;padding:14px}
 /* Handy */
-.mhead{position:relative;height:150px;background-size:cover;background-position:center 40%}
-.mhead::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(10,8,10,.2),rgba(10,8,10,.9))}
-.mhead .in{position:absolute;left:16px;right:16px;bottom:12px;z-index:1}
-.mhead h2{margin:0;font:700 1.9rem/1 'Cormorant Garamond'}
-.mnav{position:sticky;bottom:0;display:grid;grid-template-columns:repeat(5,1fr);background:#120e10;border-top:1px solid var(--c-brass-a)}
-.mnav a{padding:8px 0 10px;text-align:center;font-size:11px;color:var(--c-cream-mute)}
-.mnav a.on{color:var(--c-brass-lt);box-shadow:inset 0 3px 0 var(--c-brass)}
-.mnav svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.6;display:block;margin:0 auto 2px}
-.mtop{display:flex;align-items:center;gap:10px;padding:10px 16px;background:#120e10;border-bottom:1px solid var(--c-brass-soft);font-size:.85rem}
-.mtop .mono{width:28px;height:28px;background:url(../../src/assets/realmcraft/branding/monogram.webp) center/contain no-repeat}
+.mt{display:flex;align-items:center;gap:10px;padding:10px 14px;border-bottom:1px solid var(--c-brass-a)}
+.mt .mono{width:34px;height:34px;background:url(../../src/assets/realmcraft/branding/monogram.webp) center/contain no-repeat}
+.mnav{position:sticky;bottom:0;display:grid;grid-template-columns:repeat(5,1fr);border-top:1px solid var(--c-brass-a)}
+.mnav a{position:relative;padding:9px 0 11px;text-align:center;font:600 .7rem var(--f-ui);color:var(--c-cream-2)}
+.mnav a svg{width:23px;height:23px;display:block;margin:0 auto 3px;stroke:currentColor;fill:none;stroke-width:1.5}
+.mnav a.on{color:#f5e6c4;background:linear-gradient(180deg,rgba(90,52,96,.9),rgba(59,36,64,.5))}
+.mnav a.on::before{content:"";position:absolute;left:22%;right:22%;top:0;height:2px;background:var(--c-brass-lt)}
+/* Materialtafel */
+.board{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;padding:24px}
+.sw{background:rgba(10,8,10,.5);border:1px solid rgba(212,176,106,.25);padding:12px}
+.sw .img{height:120px;background-position:center;background-size:contain;background-repeat:no-repeat;margin-bottom:8px;background-color:#1a1418}
+.sw b{display:block;font:700 1.05rem var(--f-title);color:#f0dfb8}
+.sw p{margin:4px 0 0;font-size:.88rem;color:var(--c-cream-2)}
+.sw .src{font-size:.75rem;color:var(--c-cream-mute)}
 </style>
 </head>
 <body>
 <svg width="0" height="0" style="position:absolute">
  <symbol id="i-home" viewBox="0 0 24 24"><path d="M3 11 12 4l9 7M5 10v10h14V10M10 20v-6h4v6"/></symbol>
- <symbol id="i-sw" viewBox="0 0 24 24"><path d="M4 4l10 10M4 4v4M4 4h4M20 4 10 14M20 4v4M20 4h-4M8 16l-3 3M16 16l3 3"/></symbol>
+ <symbol id="i-sw" viewBox="0 0 24 24"><path d="M4 4l10 10M4 4v4M4 4h4M20 4 10 14M20 4v4M20 4h-4M8 16l-3 3M16 16l3 3M7 13l4 4M17 13l-4 4"/></symbol>
  <symbol id="i-crown" viewBox="0 0 24 24"><path d="M3 18h18M4 16 3 7l5 4 4-7 4 7 5-4-1 9z"/></symbol>
  <symbol id="i-p" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c1-4.5 4.5-7 8-7s7 2.5 8 7"/></symbol>
  <symbol id="i-map" viewBox="0 0 24 24"><path d="M3 6.5 9 4l6 2.5L21 4v13.5L15 20l-6-2.5L3 20zM9 4v13.5M15 6.5V20"/></symbol>
@@ -132,94 +185,143 @@ ul.l{margin:0;padding-left:18px} ul.l li{margin:4px 0}
  <symbol id="i-gear" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2.5v3M12 18.5v3M2.5 12h3M18.5 12h3M5.3 5.3l2.1 2.1M16.6 16.6l2.1 2.1M5.3 18.7l2.1-2.1M16.6 7.4l2.1-2.1"/></symbol>
  <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3l7.5 3v5.5c0 4.5-3.2 7.8-7.5 9.5-4.3-1.7-7.5-5-7.5-9.5V6z"/></symbol>
  <symbol id="i-sword" viewBox="0 0 24 24"><path d="M19 3h2v2L10 16l-2-2zM6 13l5 5M8 16l-4 4"/></symbol>
+ <symbol id="i-compass" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M15.5 8.5 13.5 13.5 8.5 15.5 10.5 10.5z"/></symbol>
+ <symbol id="i-bag" viewBox="0 0 24 24"><path d="M8 7V6a4 4 0 0 1 8 0v1M4.5 8h15l-1.2 12.5H5.7z"/></symbol>
+ <symbol id="i-quill" viewBox="0 0 24 24"><path d="M20 4C12 5 7 10 5 19l2 1c1-3 3-6 6-8M9 15h5"/></symbol>
+ <symbol id="i-cal" viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="15" rx="1"/><path d="M3.5 10h17M8 3v4M16 3v4"/></symbol>
+ <symbol id="i-star" viewBox="0 0 24 24"><path d="M12 3l2.2 6.6H21l-5.5 4 2.1 6.6L12 16.3 6.4 20.2l2.1-6.6L3 9.6h6.8z"/></symbol>
+ <symbol id="i-gem" viewBox="0 0 24 24"><path d="M6 4h12l3 5-9 11L3 9zM3 9h18M9 4l3 16M15 4l-3 16"/></symbol>
+ <symbol id="i-wand" viewBox="0 0 24 24"><path d="M4 20 15 9M17 3v3M17 9v1M14 6h-1M21 6h-3"/></symbol>
+ <symbol id="i-scroll" viewBox="0 0 24 24"><path d="M8 4h10a2 2 0 0 1 0 4h-1v10a2.5 2.5 0 0 1-2.5 2.5h-9a2 2 0 0 1 0-4H7V5.5A1.5 1.5 0 0 1 8 4M10 9h4.5M10 12.5h4.5"/></symbol>
  <symbol id="i-dots" viewBox="0 0 24 24"><circle cx="5" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="19" cy="12" r="1.5"/></symbol>
 </svg>
-<template id="rail"><nav class="rail"><i class="mono"></i><a><svg><use href="#i-home"/></svg>Start</a><a class="on"><svg><use href="#i-sw"/></svg>Kampa&shy;gnen</a><a><svg><use href="#i-crown"/></svg>Leiten</a><a><svg><use href="#i-p"/></svg>Helden</a><a><svg><use href="#i-map"/></svg>Karte</a><a><svg><use href="#i-book"/></svg>Regeln</a><a style="margin-top:auto"><svg><use href="#i-gear"/></svg>Optionen</a></nav></template>
+<template id="rail"><nav class="rail dark"><i class="mono"></i><i class="dsm"></i><a><svg><use href="#i-home"/></svg>Start</a><a class="on"><svg><use href="#i-sw"/></svg>Kampagnen</a><a><svg><use href="#i-crown"/></svg>Leiten</a><a><svg><use href="#i-p"/></svg>Helden</a><a><svg><use href="#i-map"/></svg>Weltkarte</a><a><svg><use href="#i-book"/></svg>Regeln</a><a style="margin-top:auto"><svg><use href="#i-gear"/></svg>Optionen</a></nav></template>
+<template id="ctabs"><nav class="tabsx"><a data-k="cover"><svg><use href="#i-shield"/></svg>Übersicht</a><a data-k="party"><svg><use href="#i-p"/></svg>Gruppe</a><a data-k="fight"><svg><use href="#i-sword"/></svg>Kampf</a><a data-k="explore"><svg><use href="#i-compass"/></svg>Erkundung</a><a data-k="trade"><svg><use href="#i-bag"/></svg>Inventar &amp; Handel</a><a data-k="chron"><svg><use href="#i-book"/></svg>Chronik</a></nav></template>
+
+<!-- M0 Materialtafel -->
+<h1 class="cap">M0 · Materialtafel – vorhandene Elemente und ihr Einsatz</h1>
+<section class="mock" id="m0"><div class="board">
+ <div class="sw"><div class="img" style="background-image:url(../../src/assets/realmcraft/textures/parchment-sheet.webp)"></div><b>Pergament (Rissränder)</b><p>Lesetexte: aktueller Ort, Beschreibung der Heldenakte, Chronikseiten, Regeltexte, Ausrüstungsliste.</p><span class="src">Textures · in der App</span></div>
+ <div class="sw"><div class="img" style="background:url(assets/aubergine.jpg) center/cover"></div><b>Aubergine, strukturiert</b><p>Titelplatten (Kampagne, Heldenakte), Buchdeckel der Chronik, Initiativeleiste, aktive Marken.</p><span class="src">neu gewonnen aus dem Banner-Blatt</span></div>
+ <div class="sw"><div class="img" style="background:url(assets/dark.jpg) center/cover"></div><b>Dunkle Marmorfläche</b><p>Globale Leiste, Lesezeichenleiste, Handy-Leisten, Steuerflächen im Kampf.</p><span class="src">neu gewonnen (Seitenleiste des Blatts)</span></div>
+ <div class="sw"><div class="img" style="background-image:url(assets/corner-gold.png);background-color:#3a2440"></div><b>Goldenes Eckfiligran</b><p>Vier Ecken an Titelplatten, Chronikdeckel und Zugdialog. Nicht an Listen und kleinen Karten.</p><span class="src">neu gewonnen (Banner-Ecke, gespiegelt)</span></div>
+ <div class="sw"><div class="img" style="background-image:url(assets/banner.webp);background-size:90% auto"></div><b>Schwalbenschwanz-Band</b><p>Kapitel-Band im Kampagnentitel, Kopf „Spielleiterbereich“, Titelband der Chronik.</p><span class="src">Ornaments (3) · bisher ungenutzt</span></div>
+ <div class="sw"><div class="img" style="background-image:url(../../src/assets/realmcraft/ornaments/divider-3.webp)"></div><b>Ornamentleisten 1–4 (W20)</b><p>Über Panels („Gruppe“, „Chronik“), unter Titeln, Zitat; 1 senkrecht an der Seitenleiste.</p><span class="src">in der App</span></div>
+ <div class="sw"><div class="img" style="background-image:url(assets/divider-small.png);background-size:60% auto"></div><b>Kleiner Rautentrenner</b><p>Unter dem Monogramm, in Brotkrumen, zwischen kleinen Abschnitten (mobil).</p><span class="src">neu gewonnen</span></div>
+ <div class="sw"><div class="img" style="background-image:url(assets/vertical.png)"></div><b>Senkrechte Zierleiste</b><p>Rand der globalen Leiste (wie in der Referenz).</p><span class="src">neu gewonnen</span></div>
+ <div class="sw"><div class="img" style="background-image:url(../../src/assets/realmcraft/campaigns/castle-sunset.webp);background-size:cover"></div><b>6 Kampagnenillustrationen</b><p>Kampagnentitel, Heldenakte-Hintergrund, Kopf der Archivkarten, Ortsbilder (Stadt, Verlies, Ruinen).</p><span class="src">in der App</span></div>
+ <div class="sw"><div class="img" style="background-image:url(../../src/assets/realmcraft/dashboard/hero.webp);background-size:cover"></div><b>Burgpanorama, Seitenleistenbild</b><p>Nur Startseite (stärkster Hintergrund) und Fuß der breiten Seitenleiste.</p><span class="src">in der App</span></div>
+ <div class="sw"><div class="img" style="background-image:url(../../src/assets/realmcraft/branding/monogram.webp)"></div><b>Monogramm, Schriftzug</b><p>Monogramm in schmaler Leiste und Handy-Kopf; Schriftzug nur Startseite.</p><span class="src">in der App</span></div>
+ <div class="sw"><div class="img" style="background:#1a1418;display:grid;place-items:center"><span class="seal green">✓</span></div><b>Siegel (CSS, kein Bild)</b><p>„geteilt“ in der Chronik, Stufe im Archiv. Echte Wappen/Siegel als Grafik gibt es nicht.</p><span class="src">fehlt als Grafik</span></div>
+</div></section>
 
 <!-- M1 Kampagne · Lagebericht -->
 <h1 class="cap">M1 · Kampagne · Lagebericht (Spielleitung)</h1>
 <section class="mock" id="m1"><div class="shell"><slot-rail></slot-rail><div class="main">
- <div class="crumbs"><span class="lvl">KAMPAGNE</span>RealmCraft<i>›</i><b>Grenzland</b><i>›</i>Übersicht<span class="lvl role">SPIELLEITUNG</span></div>
- <div class="banner" style="background-image:url(../../src/assets/realmcraft/campaigns/castle-sunset.webp)"><div class="in"><div><div class="tags"><span class="tag g">Aktiv</span><span class="tag y">Sitzung 5 von 12</span><span class="tag">Raum QW3RT9 · verbunden</span></div><h2>Grenzland</h2><p>Kapitel 3 · Die Belagerung von Grenzhall</p></div><div class="acts"><span class="btn">Kapitel bearbeiten</span><span class="btn pri">Sitzung starten</span></div></div></div>
- <nav class="tabs"><a class="on">Übersicht</a><a>Gruppe</a><a>Kampf</a><a>Erkundung</a><a>Inventar &amp; Handel</a><a>Chronik</a></nav>
- <div class="wrap grid2"><div>
-  <div class="h"><h3>Aktuelle Lage</h3></div>
-  <div class="parch"><p class="lbl" style="color:#7a4b2a">Aktueller Ort</p><h4>Grenzhall, Obere Stadt</h4>Ummauerte Oberstadt mit Bergfried. Der Vogt verweigert Hilfe.</div>
-  <div class="grid2" style="grid-template-columns:1fr 1fr;margin-top:6px"><div class="panel"><p class="lbl">Offene Aufgaben</p><ul class="l"><li>Den verschwundenen Boten finden</li><li>Wer bestach den Vogt?</li></ul></div><div class="panel"><p class="lbl">Zuletzt in der Chronik</p><ul class="l"><li><b>Sitzung 5</b> – Ankunft in Grenzhall</li><li><b>Sitzung 4</b> – Die Brücke fällt</li></ul></div></div>
- </div><div>
-  <div class="h"><h3>Nächste Sitzung</h3></div><div class="panel frame"><div class="big">Di., 01.12. · 19:00</div><p class="note">Vorräte auffüllen, Brief des Vogts lesen.</p></div>
-  <div class="h"><h3>Gruppe</h3></div><div class="panel"><div class="mem"><span class="por">B</span><div><b>Borin</b><small>9/44</small><div class="bar l"><u style="width:20%"></u></div></div></div><div class="mem"><span class="por">S</span><div><b>Sefa</b><small>33/40</small><div class="bar"><u style="width:82%"></u></div></div></div><div class="mem"><span class="por">M</span><div><b>Mirelle</b><small>30/38</small><div class="bar"><u style="width:78%"></u></div></div></div></div>
+ <div class="crumbs"><span class="lv">KAMPAGNE</span>RealmCraft<i>◆</i><b>Grenzland</b><i>◆</i>Übersicht<span class="lv role">SPIELLEITUNG</span></div>
+ <div class="ctitle aub"><i class="co tl"></i><i class="co bl"></i><div class="plate"><div style="display:flex;gap:8px"><span class="tag g">● Aktiv</span><span class="tag y">Sitzung 5 von 12</span><span class="tag">Raum QW3RT9 · verbunden</span></div><h2>Grenzland</h2><span class="ribbon">Kapitel 3 · Die Belagerung von Grenzhall</span><div class="acts"><span class="hbtn gold">Sitzung starten →</span><span class="hbtn">Kapitel bearbeiten</span></div></div><div class="art" style="background-image:url(../../src/assets/realmcraft/campaigns/castle-sunset.webp)"></div></div>
+ <slot-tabs data-on="cover"></slot-tabs>
+ <div class="cols"><div class="stack">
+  <div class="hub-h"><svg><use href="#i-compass"/></svg><h2>Aktuelle Lage</h2></div>
+  <section class="hub-parch"><div class="place"><div><p class="cap-s">Aktueller Ort</p><h3 style="margin:2px 0 6px;font:700 1.9rem var(--f-title);color:#4a1f2c">Grenzhall, Obere Stadt</h3><p class="dropcap" style="margin:0;font-size:1.06rem;line-height:1.65">Ummauerte Oberstadt mit Bergfried. Der Vogt residiert dort, empfängt nur selten und verweigert der Gruppe jede Hilfe gegen die Orks.</p></div><div class="pic" style="background-image:url(../../src/assets/realmcraft/campaigns/river-city.webp)"></div></div></section>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:22px">
+   <section class="hub-panel"><div class="hub-h sm"><svg><use href="#i-scroll"/></svg><h3>Offene Aufgaben</h3></div><div class="quest"><i class="dia"></i><div>Den verschwundenen Boten finden<small>Handlung · seit Sitzung 3</small></div></div><div class="quest"><i class="dia"></i><div>Wer bestach den Vogt?<small>Handlung · neu</small></div></div><div class="quest"><i class="dia"></i><div>Vorräte für die Belagerung<small>Gruppe</small></div></div></section>
+   <section class="hub-panel orn"><div class="hub-h sm"><svg><use href="#i-quill"/></svg><h3>Zuletzt in der Chronik</h3></div><div class="chr"><b>Sitzung 5</b><p>„Ankunft in Grenzhall – der Vogt verweigert Hilfe.“</p></div><div class="chr"><b>Sitzung 4</b><p>„Die Brücke von Arrenhall fällt.“</p></div></section>
+  </div>
+ </div><div class="stack">
+  <section class="hub-panel orn"><div class="hub-h sm"><svg><use href="#i-cal"/></svg><h3>Nächste Sitzung</h3></div><h4 style="margin:6px 0 2px;font:700 1.35rem var(--f-title)">Di., 01.12.2026 · 19:00 Uhr</h4><p style="margin:0 0 12px;color:var(--c-cream-2);font-style:italic">Vorräte auffüllen, Brief des Vogts lesen.</p><div style="display:flex;gap:10px"><span class="ring s">B</span><span class="ring s">S</span><span class="ring s">M</span><span class="ring s">I</span></div></section>
+  <section class="hub-parch"><div class="hub-h sm"><svg style="stroke:#7a3b2a"><use href="#i-p"/></svg><h3>Gruppe</h3></div><div class="grp"><span class="ring s">B</span><div><b class="ink">Borin</b> <small>9/44</small><div class="bar l"><u style="width:20%"></u></div></div></div><div class="grp"><span class="ring s">S</span><div><b class="ink">Sefa</b> <small>33/40</small><div class="bar"><u style="width:82%"></u></div></div></div><div class="grp"><span class="ring s">M</span><div><b class="ink">Mirelle</b> <small>30/38</small><div class="bar"><u style="width:78%"></u></div></div></div></section>
+  <blockquote class="quote"><i class="hub-div d2"></i><p>„Die Mauern halten –<br>noch.“</p><i class="hub-div d4"></i></blockquote>
  </div></div>
 </div></div></section>
 
-<!-- M2 Charakter · Profil -->
-<h1 class="cap">M2 · Charakter in der Kampagne · Profil</h1>
+<!-- M2 Heldenakte -->
+<h1 class="cap">M2 · Charakter in der Kampagne · Heldenakte (Profil)</h1>
 <section class="mock" id="m2"><div class="shell"><slot-rail></slot-rail><div class="main">
- <div class="crumbs"><span class="lvl">CHARAKTER</span>RealmCraft<i>›</i>Grenzland<i>›</i>Gruppe<i>›</i><b>Mirelle</b><i>›</i>Profil<span class="lvl role">SPIELER</span></div>
- <div class="chead" style="background-image:url(../../src/assets/realmcraft/campaigns/river-city.webp)"><div class="in"><span class="por xl">M</span><div><h2>Mirelle</h2><p class="sub">Elf · Klerikerin · Lebensdomäne · Stufe 5</p><div class="tags"><span class="tag y">Grenzland</span><span class="tag">XP 7.200 / 14.000</span></div></div><div style="margin-left:auto;display:flex;gap:8px"><span class="btn">Kurze Rast</span><span class="btn">Lange Rast</span><span class="btn pri">Stufenaufstieg</span></div></div></div>
- <div class="cgrid"><nav class="cnav"><a class="on">✦ Profil</a><a>◆ Werte &amp; Fähigkeiten</a><a>▣ Inventar</a><a>✧ Zauber</a><a>✎ Notizen</a><hr><a>⚙ Bearbeiten</a></nav><div>
-  <div class="vit"><div class="hp"><p class="lbl">Trefferpunkte</p><b>30</b><span class="note"> / 38</span><div class="bar"><u style="width:78%"></u></div></div><div><p class="lbl">Rüstungsklasse</p><b style="color:var(--c-brass-lt)">18</b></div><div><p class="lbl">Initiative</p><b>+0</b></div><div><p class="lbl">Tempo</p><b>9 m</b></div></div>
-  <div class="abil"><div class="med"><span class="lbl">ST</span><b>+1</b></div><div class="med"><span class="lbl">GE</span><b>+0</b></div><div class="med"><span class="lbl">KO</span><b>+2</b></div><div class="med"><span class="lbl">IN</span><b>+0</b></div><div class="med"><span class="lbl">WE</span><b>+4</b></div><div class="med"><span class="lbl">CH</span><b>+1</b></div></div>
-  <div class="grid2" style="grid-template-columns:1fr 1fr"><div class="panel"><p class="lbl">Jetzt</p><div class="tags"><span class="tag b">◇ Konzentration: Bless</span><span class="tag r">✕ Vergiftet</span><span class="tag g">＋ Schild des Glaubens</span></div><div class="row"><span style="flex:1">Göttliche Macht</span><b style="color:#e1c27f">1/2</b></div></div><div class="panel"><p class="lbl">Gerüstet</p><div class="row"><span style="flex:1">Streitkolben</span><span class="note">+5 · 1W6+2</span></div><div class="row"><span style="flex:1">Kettenpanzer · Schild</span><span class="note">RK 18</span></div><div class="row"><span style="flex:1">9 Zauber vorbereitet</span><span class="note">Plätze 3/4 · 2/3</span></div></div></div>
-  <div class="orn"></div>
-  <div class="parch"><p class="lbl" style="color:#7a4b2a">Beschreibung</p>Priesterin aus Grenzhall. Sucht ihren verschwundenen Bruder und misstraut dem Fürstenhaus.</div>
+ <div class="crumbs"><span class="lv">CHARAKTER</span>RealmCraft<i>◆</i>Grenzland<i>◆</i>Gruppe<i>◆</i><b>Mirelle</b><span class="lv role">SPIELER</span></div>
+ <div class="hero-akte aub"><i class="art" style="background-image:url(../../src/assets/realmcraft/campaigns/river-city.webp)"></i><i class="co tl"></i><i class="co bl"></i><span class="ring xl" style="position:relative;z-index:1">M</span><div style="position:relative;z-index:1"><p class="cap-s" style="margin:0 0 6px">Heldenakte</p><h2>Mirelle</h2><p class="line">Elf · Klerikerin der Lebensdomäne · Stufe 5</p><div style="display:flex;gap:8px;flex-wrap:wrap"><span class="tag y">⚑ Grenzland</span><span class="tag">gespielt von Lea</span></div><div class="xpbar" style="margin-top:14px"><span class="cap-s">Erfahrung 7.200 / 14.000</span><div class="bar m"><u style="width:51%"></u></div></div></div><div class="side"><span class="hbtn gold">Stufenaufstieg ✦</span><div style="display:flex;gap:8px"><span class="hbtn sm">Kurze Rast</span><span class="hbtn sm">Lange Rast</span></div></div></div>
+ <div class="cgrid"><nav class="bm dark"><a class="on"><svg><use href="#i-star"/></svg>Profil</a><a><svg><use href="#i-gem"/></svg>Werte &amp; Fähigkeiten</a><a><svg><use href="#i-bag"/></svg>Inventar</a><a><svg><use href="#i-wand"/></svg>Zauber</a><a><svg><use href="#i-quill"/></svg>Notizen</a><i class="sep"></i><a><svg><use href="#i-gear"/></svg>Bearbeiten</a></nav>
+ <div>
+  <section class="hub-panel"><div class="vitals"><div class="hp"><p class="cap-s">Trefferpunkte</p><b>30</b><span style="color:var(--c-cream-mute)"> / 38</span><div class="bar"><u style="width:78%"></u></div></div><div class="ac"><p class="cap-s">Rüstungsklasse</p><b>18</b></div><div><p class="cap-s">Initiative</p><b>+0</b></div><div><p class="cap-s">Tempo</p><b>9 m</b></div></div></section>
+  <div class="meds"><div class="med"><div class="disc"><small>ST</small><b>+1</b></div><span class="val">12</span></div><div class="med"><div class="disc"><small>GE</small><b>+0</b></div><span class="val">10</span></div><div class="med"><div class="disc"><small>KO</small><b>+2</b></div><span class="val">14</span></div><div class="med"><div class="disc"><small>IN</small><b>+0</b></div><span class="val">10</span></div><div class="med"><div class="disc"><small>WE</small><b>+4</b></div><span class="val">18</span></div><div class="med"><div class="disc"><small>CH</small><b>+1</b></div><span class="val">12</span></div></div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:22px;margin-top:14px">
+   <section class="hub-panel orn"><div class="hub-h sm"><svg><use href="#i-star"/></svg><h3>Jetzt</h3></div><div style="display:flex;gap:8px;flex-wrap:wrap"><span class="tag b">◇ Konzentration: Bless</span><span class="tag r">✕ Vergiftet</span><span class="tag g">＋ Schild des Glaubens</span></div><div class="quest" style="margin-top:8px"><i class="dia"></i><div style="flex:1">Göttliche Macht</div><b style="color:var(--c-brass-lt);font:700 1.2rem var(--f-title)">1 / 2</b></div></section>
+   <section class="hub-parch"><div class="hub-h sm"><svg style="stroke:#7a3b2a"><use href="#i-sword"/></svg><h3>Gerüstet</h3></div><div class="gear"><span class="ico">⚒</span><b class="ink">Streitkolben</b><small>+5 · 1W6+2 Wucht</small></div><div class="gear"><span class="ico">⛨</span><b class="ink">Kettenpanzer &amp; Schild</b><small>RK 18</small></div><div class="gear"><span class="ico">✧</span><b class="ink">9 Zauber vorbereitet</b><small>Plätze 3/4 · 2/3</small></div></section>
+  </div>
  </div></div>
 </div></div></section>
 
-<!-- M3 Kampf · Spielleitung -->
-<h1 class="cap">M3 · Kampf (laufend, Spielleitung)</h1>
+<!-- M3 Kampf -->
+<h1 class="cap">M3 · Kampf, laufend (Spielleitung)</h1>
 <section class="mock" id="m3"><div class="shell"><slot-rail></slot-rail><div class="main">
- <div class="crumbs"><span class="lvl">KAMPAGNE</span>RealmCraft<i>›</i>Grenzland<i>›</i><b>Kampf</b><span class="lvl role">SPIELLEITUNG</span></div>
- <nav class="tabs"><a>Übersicht</a><a>Gruppe</a><a class="on">Kampf</a><a>Erkundung</a><a>Inventar &amp; Handel</a><a>Chronik</a></nav>
- <div style="height:14px"></div>
- <div class="fbar"><div class="top"><span class="tag r">KAMPF LÄUFT</span><b style="font:700 1.4rem 'Cormorant Garamond';color:var(--c-brass-lt)">Runde 2</b><span>Am Zug: <b>Goblin 1</b> · danach Mirelle</span><span style="margin-left:auto;display:flex;gap:8px"><span class="btn">Zurück</span><span class="btn pri">Nächster Zug ▸</span></span></div>
- <div class="ib"><div><b>Borin</b> <span class="note">18</span><div class="bar l"><u style="width:20%"></u></div></div><div class="cur foe"><b>Goblin 1</b> <span class="note">15</span><div class="bar m"><u style="width:70%"></u></div><small>AM ZUG</small></div><div class="nx"><b>Mirelle</b> <span class="note">12</span><div class="bar"><u style="width:78%"></u></div><small>ALS NÄCHSTES</small></div><div class="foe"><b>Goblin 2</b> <span class="note">9</span><div class="bar l"><u style="width:25%"></u></div></div><div class="foe"><b>Oger</b> <span class="note">6</span><div class="bar"><u style="width:87%"></u></div></div><div><b>Sefa</b> <span class="note">4</span><div class="bar"><u style="width:82%"></u></div></div></div></div>
- <div class="fcols"><div><div class="h"><h3>Gruppe</h3></div>
-  <div class="fcard"><span class="por">B</span><div><b>Borin</b> <span class="note">RK 18</span><div class="tags"><span class="tag r">✕ Liegend</span></div><div class="bar l"><u style="width:20%"></u></div></div><div class="qa"><span class="d">−</span><input value="5"><span class="h">+</span></div></div>
-  <div class="fcard"><span class="por">M</span><div><b>Mirelle</b> <span class="note">RK 18</span><div class="tags"><span class="tag b">◇ Bless</span></div><div class="bar"><u style="width:78%"></u></div></div><div class="qa"><span class="d">−</span><input><span class="h">+</span></div></div>
- </div><div><div class="h"><h3>Gegner</h3></div>
-  <div class="fcard on"><span class="por">☠</span><div><b style="color:#e7b3a6">Goblin 1</b> <span class="note">RK 15 · HG ¼</span><div class="bar m"><u style="width:70%"></u></div></div><div class="qa"><span class="d">−</span><input><span class="h">+</span></div></div>
-  <div class="fcard"><span class="por">☠</span><div><b style="color:#e7b3a6">Goblin 2</b> <span class="note">RK 15</span><div class="tags"><span class="tag r">✕ Verängstigt</span></div><div class="bar l"><u style="width:25%"></u></div></div><div class="qa"><span class="d">−</span><input><span class="h">+</span></div></div>
+ <div class="crumbs"><span class="lv">KAMPAGNE</span>RealmCraft<i>◆</i>Grenzland<i>◆</i><b>Kampf</b><span class="lv role">SPIELLEITUNG</span></div>
+ <slot-tabs data-on="fight"></slot-tabs>
+ <div class="fightbar aub" style="margin-top:16px"><div class="top"><span class="tag r">⚔ KAMPF LÄUFT</span><span class="rnd">Runde 2</span><span>Am Zug: <b>Goblin 1</b> · als Nächstes Mirelle</span><span style="margin-left:auto;display:flex;gap:10px"><span class="hbtn">◂ Zurück</span><span class="hbtn gold">Nächster Zug ▸</span></span></div>
+  <div class="ini"><div class="c"><b>Borin</b><span class="n">18</span><div class="bar l"><u style="width:20%"></u></div></div><div class="c foe cur"><i class="co sm tl"></i><i class="co sm tr"></i><b>Goblin 1</b><span class="n">15</span><div class="bar m"><u style="width:70%"></u></div><small>◆ AM ZUG</small></div><div class="c nx"><b>Mirelle</b><span class="n">12</span><div class="bar"><u style="width:78%"></u></div><small>ALS NÄCHSTES</small></div><div class="c foe"><b>Goblin 2</b><span class="n">9</span><div class="bar l"><u style="width:25%"></u></div></div><div class="c foe"><b>Oger</b><span class="n">6</span><div class="bar"><u style="width:87%"></u></div></div><div class="c"><b>Sefa</b><span class="n">4</span><div class="bar"><u style="width:82%"></u></div></div></div></div>
+ <div class="fgrid"><div><div class="hub-h sm"><svg><use href="#i-p"/></svg><h3>Gruppe</h3></div>
+  <div class="fc"><span class="ring s">B</span><div><b>Borin</b> <span class="meta">RK 18 · Kämpfer</span><div style="display:flex;gap:6px;margin:3px 0"><span class="tag r">✕ Liegend</span></div><div class="bar l"><u style="width:20%"></u></div></div><div class="qa"><span class="d">−</span><input value="5"><span class="h">+</span></div></div>
+  <div class="fc"><span class="ring s">M</span><div><b>Mirelle</b> <span class="meta">RK 18 · Klerikerin</span><div style="display:flex;gap:6px;margin:3px 0"><span class="tag b">◇ Bless</span></div><div class="bar"><u style="width:78%"></u></div></div><div class="qa"><span class="d">−</span><input><span class="h">+</span></div></div>
+ </div><div><div class="hub-h sm"><svg><use href="#i-sword"/></svg><h3>Gegner</h3></div>
+  <div class="fc foe on"><span class="foeicon">☠</span><div><b style="color:#f2c1b4">Goblin 1</b> <span class="meta">RK 15 · HG ¼</span><div class="bar m" style="margin-top:6px"><u style="width:70%"></u></div></div><div class="qa"><span class="d">−</span><input><span class="h">+</span></div></div>
+  <div class="fc foe"><span class="foeicon">☠</span><div><b style="color:#f2c1b4">Goblin 2</b> <span class="meta">RK 15</span><div style="display:flex;gap:6px;margin:3px 0"><span class="tag r">✕ Verängstigt</span></div><div class="bar l"><u style="width:25%"></u></div></div><div class="qa"><span class="d">−</span><input><span class="h">+</span></div></div>
  </div></div>
 </div></div></section>
 
-<!-- M4 Chronik als Buch -->
+<!-- M4 Chronik -->
 <h1 class="cap">M4 · Chronik als Kampagnenbuch</h1>
 <section class="mock" id="m4"><div class="shell"><slot-rail></slot-rail><div class="main">
- <div class="crumbs"><span class="lvl">KAMPAGNE</span>RealmCraft<i>›</i>Grenzland<i>›</i><b>Chronik</b></div>
- <nav class="tabs"><a>Übersicht</a><a>Gruppe</a><a>Kampf</a><a>Erkundung</a><a>Inventar &amp; Handel</a><a class="on">Chronik</a></nav>
- <div class="book"><div class="idx"><p class="lbl">Sitzungen</p><a class="on">Sitzung 5 · 09.11.</a><a>Sitzung 4 · 02.11.</a><a>Sitzung 3 · 26.10.</a><a>Sitzung 2 · 19.10.</a><p class="lbl" style="margin-top:16px">Filter</p><div class="tags"><span class="tag y">Ereignisse</span><span class="tag">Aufgaben</span><span class="tag">Orte</span></div></div>
- <div class="pg"><div class="parch" style="min-height:430px"><div style="display:flex;justify-content:space-between;align-items:center"><h4>Sitzung 5 · Ankunft in Grenzhall</h4><span class="seal" style="color:#3e6b3a;border-color:#3e6b3a">✓ mit der Gruppe geteilt</span></div><p>Die Gruppe erreicht Grenzhall bei Einbruch der Nacht. Die Wachen lassen sie erst nach langem Zögern ein.</p><p class="hl">Der Vogt verweigert jede Hilfe gegen die Orks.</p><p>☐ Den Schmied nach dem Boten fragen<br>☑ <s>Taverne durchsucht</s></p><div class="orn" style="filter:sepia(.4) brightness(.6)"></div><p style="color:#6b4c35"><i>Private Notiz der Spielleitung (🔒 nur sichtbar für dich): Der Vogt ist bestochen.</i></p></div></div></div>
+ <div class="crumbs"><span class="lv">KAMPAGNE</span>RealmCraft<i>◆</i>Grenzland<i>◆</i><b>Chronik</b><span class="lv role">SPIELLEITUNG</span></div>
+ <slot-tabs data-on="chron"></slot-tabs>
+ <div class="book aub" style="margin-top:20px"><i class="co tl"></i><i class="co tr"></i><i class="co bl"></i><i class="co br"></i>
+  <div class="bookbar" style="padding:0 70px"><span class="ribbon" style="font-size:1.2rem">Das Buch von Grenzland</span><span style="margin-left:auto;display:flex;gap:6px"><span class="mark">Sitzungen</span><span class="mark off">Ereignisse</span><span class="mark off">Aufgaben</span><span class="mark off">Orte</span></span></div>
+  <div class="pages" style="margin:0 40px"><div class="pg l toc"><h4>Inhalt</h4><i class="hub-div d3" style="filter:sepia(.6) brightness(.55);margin:2px 0 10px"></i>
+   <a class="on">Sitzung 5 · Ankunft in Grenzhall<span></span>09.11.</a><a>Sitzung 4 · Die Brücke fällt<span></span>02.11.</a><a>Sitzung 3 · Der Hinterhalt<span></span>26.10.</a><a>Sitzung 2 · Aufbruch<span></span>19.10.</a><a>Sitzung 1 · Die Einladung<span></span>12.10.</a>
+   <p class="toc" style="margin-top:18px;font-size:.9rem;color:#6b4c35"><span class="seal green" style="width:22px;height:22px;font-size:.6rem">✓</span> geteilt mit der Gruppe &nbsp; 🔒 nur für dich</p></div>
+  <div class="pg r entry"><div style="display:flex;align-items:flex-start;gap:14px"><div style="flex:1"><p class="cap-s" style="margin:0">Sitzung 5 · 09.11.2026</p><h3>Ankunft in Grenzhall</h3></div><span class="seal green" title="mit der Gruppe geteilt">✓</span></div><i class="hub-div d3" style="filter:sepia(.6) brightness(.55);margin:0 0 6px"></i>
+   <p class="dropcap">Die Gruppe erreicht Grenzhall bei Einbruch der Nacht. Die Wachen lassen sie erst nach langem Zögern ein, und in den Gassen der Oberstadt brennen kaum noch Lichter.</p>
+   <p class="margin">Der Vogt verweigert jede Hilfe gegen die Orks.</p>
+   <p>☐ Den Schmied nach dem Boten fragen<br>☑ <s>Die Taverne durchsucht</s></p>
+   <div class="private aub"><p class="cap-s" style="margin:0 0 4px">Randnotiz der Spielleitung · nur für dich</p>Der Vogt ist bestochen. Sein Siegel liegt im Keller des Bergfrieds.</div></div></div>
+ </div>
 </div></div></section>
 
-<!-- M5 Bibliothek -->
-<h1 class="cap">M5 · Charakterbibliothek (Archiv)</h1>
-<section class="mock" id="m5"><div class="shell"><slot-rail></slot-rail><div class="main"><div class="wrap">
- <div class="h"><h3>Charakterbibliothek</h3><span class="btn">Importieren</span><span class="btn pri">Neuer Charakter</span></div>
- <p class="note">Identität und Grundbogen deiner Helden. Gespielt wird in der Kampagne.</p>
- <div class="lib">
-  <div class="lcard"><span class="por xl">M</span><div><h4>Mirelle</h4><p class="note" style="margin:2px 0 8px">Elf · Klerikerin</p><p style="margin:0 0 8px;font-size:.92rem">Priesterin aus Grenzhall.</p><div class="lc"><span>Grenzland<br><span class="note">Stufe 6 · TP 50/52</span></span><span class="btn aub">Spielen</span></div><div class="lc"><span>Küstenwacht<br><span class="note">Stufe 3 · TP 21/24</span></span><span class="btn aub">Spielen</span></div><div class="lc"><span class="note">Grundbogen öffnen · Zuordnen</span></div></div></div>
-  <div class="lcard"><span class="por xl">B</span><div><h4>Borin</h4><p class="note" style="margin:2px 0 8px">Zwerg · Kämpfer</p><div class="lc"><span>Grenzland<br><span class="note">Stufe 5 · TP 9/44</span></span><span class="btn aub">Spielen</span></div></div></div>
-  <div class="lcard" style="place-items:center;grid-template-columns:1fr"><span class="btn">＋ Charakter anlegen</span></div>
- </div></div></div></div></section>
+<!-- M5 Heldenarchiv -->
+<h1 class="cap">M5 · Charakterbibliothek als Heldenarchiv</h1>
+<section class="mock" id="m5"><div class="shell"><nav class="rail dark"><i class="mono"></i><i class="dsm"></i><a><svg><use href="#i-home"/></svg>Start</a><a><svg><use href="#i-sw"/></svg>Kampagnen</a><a><svg><use href="#i-crown"/></svg>Leiten</a><a class="on"><svg><use href="#i-p"/></svg>Helden</a><a><svg><use href="#i-map"/></svg>Weltkarte</a><a><svg><use href="#i-book"/></svg>Regeln</a><a style="margin-top:auto"><svg><use href="#i-gear"/></svg>Optionen</a></nav><div class="main">
+ <div style="height:20px"></div>
+ <div class="hub-h"><svg><use href="#i-p"/></svg><h2>Heldenarchiv</h2><span class="hub-more" style="display:flex;gap:10px"><span class="hbtn sm">Importieren</span><span class="hbtn sm gold">＋ Neuer Held</span></span></div>
+ <p style="color:var(--c-cream-2);font-style:italic;margin:8px 0 0">Identität und Grundbogen deiner Helden. Gespielt wird in der Kampagne – jede hat ihren eigenen Stand.</p>
+ <div class="archive">
+  <article class="akte"><div class="top" style="background-image:url(../../src/assets/realmcraft/campaigns/river-city.webp)"></div><span class="ring xl">M</span><div class="name"><h4>Mirelle</h4><p>Elf · Klerikerin</p></div><p class="desc">„Priesterin aus Grenzhall, auf der Suche nach ihrem Bruder.“</p><i class="hub-div d4" style="margin:10px auto 0"></i>
+   <div class="camps"><div class="stand"><span class="lvl">6</span><div><b>Grenzland</b><div class="bar"><u style="width:96%"></u></div><span style="font-size:.8rem;color:var(--c-cream-mute)">TP 50/52</span></div><span class="hbtn sm gold">Spielen</span></div><div class="stand"><span class="lvl">3</span><div><b>Küstenwacht</b><div class="bar m"><u style="width:55%"></u></div><span style="font-size:.8rem;color:var(--c-cream-mute)">TP 13/24</span></div><span class="hbtn sm gold">Spielen</span></div></div>
+   <div class="foot"><span class="hbtn sm">Grundbogen</span><span class="hbtn sm">Zuordnen</span></div></article>
+  <article class="akte"><div class="top" style="background-image:url(../../src/assets/realmcraft/campaigns/fortress-storm.webp)"></div><span class="ring xl">B</span><div class="name"><h4>Borin</h4><p>Zwerg · Kämpfer</p></div><p class="desc">„Hält die Stellung, solange er steht.“</p><i class="hub-div d4" style="margin:10px auto 0"></i>
+   <div class="camps"><div class="stand"><span class="lvl">5</span><div><b>Grenzland</b><div class="bar l"><u style="width:20%"></u></div><span style="font-size:.8rem;color:var(--c-cream-mute)">TP 9/44 · Liegend</span></div><span class="hbtn sm gold">Spielen</span></div></div>
+   <div class="foot"><span class="hbtn sm">Grundbogen</span><span class="hbtn sm">Zuordnen</span></div></article>
+  <article class="hub-parch" style="display:grid;place-items:center;text-align:center;min-height:520px"><div><span class="ring xl" style="margin:0 auto;opacity:.75">＋</span><h3 style="font:700 1.8rem var(--f-title);color:#4a1f2c;margin:20px 0 6px">Neuer Held</h3><p class="ink" style="margin:0 0 14px">Mit dem Assistenten anlegen<br>oder Bogen importieren.</p><span class="hbtn gold">Held anlegen</span></div></article>
+ </div>
+</div></div></section>
 
 <!-- M6 Handy -->
-<h1 class="cap">M6 · Smartphone: Lagebericht und Kampf (Spieler)</h1>
+<h1 class="cap">M6a / M6b · Smartphone: Lagebericht und eigener Zug</h1>
 <div style="display:flex;gap:40px;align-items:flex-start">
-<section class="mock phone" id="m6a"><div class="mtop"><i class="mono"></i><b>Grenzland</b><span class="lvl" style="margin-left:auto">SPIELER</span></div>
- <div class="mhead" style="background-image:url(../../src/assets/realmcraft/campaigns/castle-sunset.webp)"><div class="in"><div class="tags"><span class="tag g">Aktiv</span><span class="tag">Sitzung 5/12</span></div><h2>Grenzland</h2><span class="note">Kapitel 3 · Die Belagerung</span></div></div>
- <div style="padding:14px 16px"><div class="parch" style="border-width:20px"><p class="lbl" style="color:#7a4b2a">Aktueller Ort</p><h4 style="font-size:1.3rem">Grenzhall</h4>Ummauerte Oberstadt.</div>
- <div class="panel" style="margin-top:10px"><p class="lbl">Nächste Sitzung</p><b>Di., 01.12. · 19:00</b></div>
- <div class="panel" style="margin-top:10px"><p class="lbl">Gruppe</p><div class="mem"><span class="por">B</span><div><b>Borin</b><small>9/44</small><div class="bar l"><u style="width:20%"></u></div></div></div><div class="mem"><span class="por">M</span><div><b>Mirelle (du)</b><small>30/38</small><div class="bar"><u style="width:78%"></u></div></div></div></div></div>
- <nav class="mnav"><a class="on"><svg><use href="#i-shield"/></svg>Lage</a><a><svg><use href="#i-p"/></svg>Held</a><a><svg><use href="#i-sword"/></svg>Kampf</a><a><svg><use href="#i-book"/></svg>Chronik</a><a><svg><use href="#i-dots"/></svg>Mehr</a></nav></section>
-<section class="mock phone" id="m6b"><div class="mtop"><i class="mono"></i><b>Grenzland · Kampf</b><span class="tag r" style="margin-left:auto">Runde 2</span></div>
- <div style="position:sticky;top:0;padding:10px 12px;background:#191316;border-bottom:1px solid var(--c-brass)"><div class="ib" style="margin:0"><div class="cur" style="min-width:130px"><b>Mirelle (du)</b><small> AM ZUG</small><div class="bar"><u style="width:78%"></u></div></div><div class="nx foe" style="min-width:120px"><b>Goblin 2</b><div class="bar l"><u style="width:25%"></u></div></div><div style="min-width:120px"><b>Oger</b></div></div></div>
- <div style="padding:12px 16px"><div class="panel" style="border-color:var(--c-brass);background:linear-gradient(90deg,rgba(212,176,106,.2),rgba(10,8,10,.4))"><b style="font:700 1.4rem 'Cormorant Garamond';color:var(--c-brass-lt)">Du bist am Zug</b><div style="display:flex;gap:8px;margin-top:8px"><span class="tag g">Aktion frei</span><span class="tag g">Bonus frei</span><span class="tag">Bewegung 9 m</span></div></div>
- <div class="panel" style="margin-top:10px;border-left:3px solid #c7695a">Du hast 8 Schaden erhalten · <b>Annehmen</b></div>
- <div class="h"><h3 style="font-size:1.3rem">Angriffe</h3></div><div class="row"><span style="flex:1">Streitkolben</span><b>+5</b><span class="note">1W6+2</span></div><div class="row"><span style="flex:1">Sacred Flame</span><b>SG 15</b><span class="note">2W8</span></div>
- <div style="margin-top:14px"><span class="btn pri" style="width:100%;justify-content:center">Zug beenden</span></div></div>
- <nav class="mnav"><a><svg><use href="#i-shield"/></svg>Lage</a><a><svg><use href="#i-p"/></svg>Held</a><a class="on"><svg><use href="#i-sword"/></svg>Kampf</a><a><svg><use href="#i-book"/></svg>Chronik</a><a><svg><use href="#i-dots"/></svg>Mehr</a></nav></section>
+<section class="mock phone" id="m6a"><div class="mt dark"><i class="mono"></i><b style="font:700 1.15rem var(--f-title)">Grenzland</b><span class="tag y" style="margin-left:auto">SPIELER</span></div>
+ <div class="aub" style="position:relative;padding:16px 16px 14px;border-bottom:1px solid var(--c-brass-a)"><i class="co sm tl"></i><i class="co sm tr"></i><div style="height:96px;margin:-16px -16px 10px;background:url(../../src/assets/realmcraft/campaigns/castle-sunset.webp) center 40%/cover;-webkit-mask-image:linear-gradient(180deg,#000 50%,transparent);mask-image:linear-gradient(180deg,#000 50%,transparent)"></div><div style="display:flex;gap:6px"><span class="tag g">● Aktiv</span><span class="tag">Sitzung 5/12</span></div><h2 style="margin:6px 0 4px;font:700 2.2rem/1 var(--f-title);color:#f5e8cc">Grenzland</h2><span class="ribbon" style="font-size:.9rem;padding:5px 34px 5px 14px">Kapitel 3 · Die Belagerung</span></div>
+ <div style="padding:14px"><section class="hub-parch" style="border-width:20px"><p class="cap-s">Aktueller Ort</p><h3 style="margin:2px 0 4px;font:700 1.4rem var(--f-title);color:#4a1f2c">Grenzhall</h3><p class="ink" style="margin:0">Ummauerte Oberstadt mit Bergfried.</p></section>
+ <section class="hub-panel" style="margin-top:14px"><div class="hub-h sm"><svg><use href="#i-cal"/></svg><h3>Nächste Sitzung</h3></div><b>Di., 01.12. · 19:00</b></section>
+ <section class="hub-panel orn" style="margin-top:30px"><div class="hub-h sm"><svg><use href="#i-p"/></svg><h3>Gruppe</h3></div><div class="grp" style="border-color:rgba(212,176,106,.16)"><span class="ring s">B</span><div><b>Borin</b> <small style="color:var(--c-cream-mute)">9/44</small><div class="bar l"><u style="width:20%"></u></div></div></div><div class="grp" style="border:0"><span class="ring s">M</span><div><b>Mirelle (du)</b> <small style="color:var(--c-cream-mute)">30/38</small><div class="bar"><u style="width:78%"></u></div></div></div></section></div>
+ <nav class="mnav dark"><a class="on"><svg><use href="#i-shield"/></svg>Lage</a><a><svg><use href="#i-p"/></svg>Held</a><a><svg><use href="#i-sword"/></svg>Kampf</a><a><svg><use href="#i-book"/></svg>Chronik</a><a><svg><use href="#i-dots"/></svg>Mehr</a></nav></section>
+<section class="mock phone" id="m6b"><div class="mt dark"><i class="mono"></i><b style="font:700 1.15rem var(--f-title)">Grenzland · Kampf</b><span class="tag r" style="margin-left:auto">Runde 2</span></div>
+ <div class="aub" style="padding:10px 12px;border-bottom:1px solid var(--c-brass)"><div class="ini" style="margin:0;overflow:hidden"><div class="c cur" style="min-width:150px"><i class="co sm tl"></i><b>Mirelle (du)</b><span class="n">12</span><div class="bar"><u style="width:78%"></u></div><small>◆ AM ZUG</small></div><div class="c foe nx" style="min-width:126px"><b>Goblin 2</b><span class="n">9</span><div class="bar l"><u style="width:25%"></u></div></div><div class="c foe" style="min-width:110px"><b>Oger</b></div></div></div>
+ <div style="padding:14px"><section class="aub" style="position:relative;padding:16px;border:2px solid #e3c47f;box-shadow:0 0 0 3px #1a1015,0 0 0 4px #a8833f,0 0 18px rgba(236,210,148,.35)"><i class="co sm tl"></i><i class="co sm tr"></i><i class="co sm bl"></i><i class="co sm br"></i><b style="font:700 1.6rem var(--f-title);color:#f0dfb8">Du bist am Zug</b><div style="display:flex;gap:6px;margin-top:8px;flex-wrap:wrap"><span class="tag g">Aktion frei</span><span class="tag g">Bonus frei</span><span class="tag">Bewegung 9 m</span></div></section>
+ <div style="margin-top:12px;padding:10px 12px;border-left:3px solid #c7695a;background:rgba(10,8,10,.55)">Du hast <b>8 Schaden</b> erhalten · <span style="color:var(--c-brass-lt);font-weight:700">Annehmen</span></div>
+ <section class="hub-parch" style="border-width:20px;margin-top:14px"><div class="hub-h sm"><svg style="stroke:#7a3b2a"><use href="#i-sword"/></svg><h3>Angriffe</h3></div><div class="gear"><span class="ico">⚒</span><b class="ink">Streitkolben</b><small>+5 · 1W6+2</small></div><div class="gear"><span class="ico">✧</span><b class="ink">Sacred Flame</b><small>SG 15 · 2W8</small></div></section>
+ <span class="hbtn gold wide" style="margin-top:14px">Zug beenden</span></div>
+ <nav class="mnav dark"><a><svg><use href="#i-shield"/></svg>Lage</a><a><svg><use href="#i-p"/></svg>Held</a><a class="on"><svg><use href="#i-sword"/></svg>Kampf</a><a><svg><use href="#i-book"/></svg>Chronik</a><a><svg><use href="#i-dots"/></svg>Mehr</a></nav></section>
 </div>
-<script>document.querySelectorAll('slot-rail').forEach(s => s.replaceWith(document.getElementById('rail').content.cloneNode(true)));</script>
+<script>
+document.querySelectorAll('slot-rail').forEach(s => s.replaceWith(document.getElementById('rail').content.cloneNode(true)));
+document.querySelectorAll('slot-tabs').forEach(s => { const n = document.getElementById('ctabs').content.cloneNode(true); n.querySelector(`[data-k="${s.dataset.on}"]`)?.classList.add('on'); s.replaceWith(n); });
+</script>
 </body>
 </html>

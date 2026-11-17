@@ -1,6 +1,6 @@
 # RealmCraft – Gestaltung als Gesamtanwendung (Analyse und Vorschlag zur Abstimmung)
 
-Stand 17.11.2026. Grundlage: „RealmCraft – Übergreifendes Design- und UI-Konzept“ des Nutzers und das bestehende Dashboard als Qualitätsreferenz.
+Stand 17.11.2026, **Fassung 2 nach Rückmeldung** (siehe Abschnitt 9; Abschnitte 1–8 sind die erste Fassung). Grundlage: „RealmCraft – Übergreifendes Design- und UI-Konzept“ des Nutzers und das bestehende Dashboard als Qualitätsreferenz.
 
 **Noch nichts davon ist im Code umgesetzt.** Die Mockups liegen als eigene Entwurfsseite in `design/mockups/index.html`; sie nutzen die echten Tokens und Grafiken, sind aber nicht Teil der App.
 
@@ -149,3 +149,80 @@ Die neuen Grafiken würdest du wie bisher erzeugen und in den Design-Eingang leg
 6. Abschlussprüfung aller Seiten auf drei Bildschirmgrößen.
 
 Nach jeder Stufe gibt es Tests, Screenshots und deine Abnahme.
+
+## 9. Fassung 2 (nach Rückmeldung des Nutzers)
+
+**Rückmeldung zu Fassung 1:** zu flach, zu technisch, zu viel Schwarz mit dünnen Rahmen. Die vorhandenen Elemente aus dem Design-Eingang waren kaum genutzt.
+
+**Entscheidungen des Nutzers:**
+- **A:** Gold nur für Hauptaktionen; Nebenaktionen in Aubergine oder dunkel mit Messingkante.
+- **B:** Dialoge dunkel mit Messing; Pergament für Lesedialoge und längere Inhalte.
+- **C:** schmale globale Leiste, aber lesbar (Symbol mit Beschriftung).
+- **D:** Linien-Symbole für die Navigation; Spielinhalte behalten eigene Symbole.
+- **E:** noch keine neuen Grafiken; erst alles Vorhandene prüfen und zuordnen.
+
+### 9.1 Vollständige Bestandsaufnahme der Originale (`RealmCraft/Design-inbox`, 12 Dateien)
+
+| Ordner | Datei | Inhalt | verwertbar |
+|---|---|---|---|
+| Branding | 2 Bilder | Monogramm (quadratisch), Schriftzug | ja, schon in der App |
+| Campaigns | 6 Bilder | Burg im Sonnenuntergang, Burg im Tal, Festung im Sturm, Stadt am Fluss, Verlies, Waldruinen | ja, schon in der App; zusätzlich als Ortsbilder |
+| Dashboard | 1 Bild | die Referenz selbst (Bildschirmentwurf) | nur als Vorlage, nicht ausschneidbar (enthält Texte und fremde Porträts) |
+| Ornaments (2) | 1 Blatt | vier goldene W20-Ornamentleisten | ja, schon in der App (divider-1…4) |
+| Ornaments (3) | 1 Blatt | Schwalbenschwanz-Banner (Aubergine, goldenes Eckfiligran), dunkle Seitenleistenfläche mit Rautentrenner und senkrechter Zierleiste, Muster-Panel „Aktive Gruppe“, Zitat mit Ornamenten | **teilweise neu gewonnen**, siehe 9.2 |
+| Textures | 1 Bild | Pergament mit Rissrändern | ja, schon in der App |
+| Characters | – | leer | – |
+
+**Es gibt keine** Leder- oder Steintextur, keine Wappen und keine Siegel als Grafik, keine einzelnen Ortsillustrationen außer den sechs Kampagnenbildern und keine Charakterporträts. Die Porträts im Muster-Panel sind fremde Beispielgesichter und werden nicht verwendet.
+
+### 9.2 Aus den Originalen gewonnen (`design/mockups/extract.py`, Originale bleiben unverändert)
+
+| Element | Quelle | Einsatz |
+|---|---|---|
+| Goldenes Eckfiligran (transparent, viermal gespiegelt) | Ecke des Banners | Titelplatten (Kampagne, Heldenakte), Buchdeckel der Chronik, Zugkarte „Du bist am Zug“; klein (34 px) an der aktiven Initiative. Nie an Listen oder gewöhnlichen Karten. |
+| Strukturierte Aubergine-Fläche | Innenfläche des Banners | Titelplatten, Chronikdeckel, Initiativeleiste, Randnotiz der Spielleitung, Handy-Titel. Ersetzt die Leder-Rolle der Konzeptvorlage. |
+| Dunkle Marmorfläche | Seitenleiste des Blatts | globale Leiste, Lesezeichenleiste des Charakters, Handy-Kopf und -Leiste. Ersetzt die Stein-Rolle. |
+| Schwalbenschwanz-Band | ganzes Banner | Kapitel-Band im Kampagnentitel, Titelband „Das Buch von …“ der Chronik, später Kopf des Spielleiterbereichs. |
+| Kleiner Rautentrenner | Seitenleiste des Blatts | unter dem Monogramm, mobil zwischen kleinen Abschnitten. |
+| Senkrechte Zierleiste | Rand der Seitenleiste | Kante der globalen Leiste, wie in der Referenz. |
+
+Der feine Panelrahmen des Muster-Panels war zu kontrastarm zum Ausschneiden; diese Rolle übernimmt der vorhandene Messingrahmen `--frame`.
+
+### 9.3 Gestaltungssprache je Seite (Mockups `screenshots/design-mockups-v2/`)
+
+- **M0 Materialtafel:** jedes vorhandene Element mit Herkunft und festem Einsatzort.
+- **M1 Lagebericht als Titelbereich:**
+  - Aubergine-Platte mit Eckfiligran, Kapitel im Schwalbenschwanz-Band, goldene Hauptaktion; die Kampagnenillustration läuft weich aus.
+  - Ort auf Pergament mit Initiale und Ortsbild im Messingrahmen.
+  - Aufgaben und Chronik als Panels mit Messingrahmen bzw. Ornament.
+  - Nächste Sitzung als Panel mit Porträtringen, Gruppe auf Pergament, Zitat mit Ornamentleisten (wie die Referenz).
+- **M2 Heldenakte:**
+  - Großes Porträt im doppelten Messingring auf der Aubergine-Platte mit Eckfiligran, Kampagnenbild im Hintergrund.
+  - Stufenaufstieg in Gold, Rasten zurückhaltend.
+  - Lesezeichenleiste mit Schwalbenschwanz für die aktive Seite.
+  - Werte im gerahmten Panel, Attribute als Messingmedaillons mit Wertschild.
+  - „Gerüstet“ auf Pergament, „Jetzt“ als Panel mit Statusmarken.
+- **M3 Kampf:**
+  - Übersicht vor Schmuck: Initiativeleiste auf Aubergine.
+  - Die aktive Figur bekommt einen doppelten Messingrahmen mit kleinem Eckfiligran und leichtem Leuchten, die nächste einen gestrichelten Rahmen.
+  - Gegnerkarten in dunklem Rotbraun, Gruppe in Anthrazit; keine weiteren Ornamente.
+- **M4 Kampagnenbuch:**
+  - Aubergine-Buchdeckel mit vier Eckfiligranen und Titelband.
+  - Zwei Pergamentseiten mit Falz: links das Inhaltsverzeichnis mit Punktlinien und rotem Lesezeichen, rechts der Eintrag mit Initiale, Randvermerk für Wichtiges und Aufgaben.
+  - Grünes Siegel heißt „mit der Gruppe geteilt“. Die private Notiz liegt als Aubergine-Zettel mit Schloss deutlich abgesetzt auf der Seite.
+  - Lesezeichen-Reiter zum Filtern.
+- **M5 Heldenarchiv:**
+  - Jede Akte mit Kampagnenbild oben, großem Porträtring, Name, Volk und Klasse, kurzem Zitat und Ornamentleiste.
+  - Pro Kampagne eine Zeile mit Stufensiegel, TP-Balken und „Spielen“ in Gold.
+  - Leere Akte auf Pergament zum Anlegen.
+- **M6a/b Handy:**
+  - Gleiche Materialien in kleiner Form: dunkler Kopf mit Monogramm, Titel auf Aubergine mit Eckfiligran und Kapitelband, Ort auf Pergament.
+  - Leiste unten mit 5 Zielen.
+  - Im Kampf: angeheftete Initiative, Zugkarte mit Filigran, Angriffe auf Pergament, großer goldener Knopf.
+
+### 9.4 Was danach noch fehlen würde (Entscheidung E, zweiter Schritt)
+
+- **Wappen bzw. Heraldik je Kampagne:** größter Gewinn. Sie würden das Statuskästchen im Titel und das Stufensiegel ersetzen.
+- **Charakterporträts:** nur, wenn Spieler welche hochladen. Ohne sie bleibt die Initiale im Ring.
+- **Ortsbilder** (Taverne, Höhle, Dorf), falls die sechs Kampagnenbilder für den Atlas nicht reichen.
+- **Wachssiegel als Grafik:** optional. Das CSS-Siegel funktioniert.
