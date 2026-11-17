@@ -226,3 +226,66 @@ Der feine Panelrahmen des Muster-Panels war zu kontrastarm zum Ausschneiden; die
 - **Charakterporträts:** nur, wenn Spieler welche hochladen. Ohne sie bleibt die Initiale im Ring.
 - **Ortsbilder** (Taverne, Höhle, Dorf), falls die sechs Kampagnenbilder für den Atlas nicht reichen.
 - **Wachssiegel als Grafik:** optional. Das CSS-Siegel funktioniert.
+
+## 10. Fassung 3: Kampfbereich und Lesbarkeit (Rückmeldung 17.11.2026)
+
+Mockups: `screenshots/design-mockups-v3/`. Neu sind M3a, M3b und M6c; überarbeitet M2 und M6b.
+
+### 10.1 Schrifthierarchie (gilt überall)
+
+| Stufe | Wofür | dunkle Fläche | Pergament |
+|---|---|---|---|
+| 1 Wert | TP, RK, Angriff, Schaden, SG, Zähler | Titelschrift fett, `#f7ebd2` | Titelschrift fett, `#22130a` |
+| 2 Name | Gegenstand, Zauber, Figur | UI-Schrift fett, `#efe2c6` | `#2b1a0f` |
+| 3 Zusatz | Schadensart, Reichweite, Grad, Formel, Herkunft | .86rem, `#cfbc95` | `#553720` |
+| 4 Beschriftung | Kapitälchen über Werten und Spalten | .72rem, `#dcc189` | `#7a3424` |
+
+Werte stehen nie mehr in der gedämpften Farbe `--c-cream-mute`. Für Schadensarten gibt es nur drei zurückhaltende Farben: Gleißend und Feuer rotbraun, Heilung grün, Energie violett, alle anderen Arten in Stufe 3. Zauberplätze und Ressourcen verwenden die Kästchen des Bogens (leer = verfügbar, ✕ = verbraucht) und daneben die Zahl.
+
+### 10.2 Einheitliche Karte für Gruppe und Gegner
+
+Feste Höhe von 104 px, am Handy 78 px, mit gleichem Raster:
+- **Zeile 1:** Porträt bzw. Kreatursymbol, Name, Klasse oder HG, rechts RK und TP.
+- **Zeile 2:** TP-Balken über die volle Breite.
+- **Zeile 3:** Zustände und Wirkungen; ohne Einträge steht „keine Zustände“.
+
+Gegner unterscheiden sich nur durch die Fläche (dunkles Rotbraun), die Namensfarbe und das Symbol. Gold bekommt nur die Figur am Zug (doppelter Rahmen und Fähnchen „AM ZUG“). Die ausgewählte Figur bekommt eine goldene Kante links und das Fähnchen „AUSGEWÄHLT“. Spieler sehen Gegner wie bisher nur grob: Balken und ein Wort wie „angeschlagen“, kein RK und keine TP.
+
+### 10.3 Aufbau des Kampfbereichs
+
+Die Initiativeleiste oben bleibt. Darunter:
+- **Spielleitung, Desktop:** drei Spalten
+  1. Beteiligte (Gruppe, dann Gegner).
+  2. **Am Zug**.
+  3. Eingreifen und Kampfmeldungen.
+- **Tablet:** zwei Spalten. Eingreifen und Meldungen rutschen unter „Am Zug“.
+- **Spieler, Desktop:** zwei Spalten. Links Beteiligte und „Für dich“, rechts „Am Zug“.
+
+**Am Zug: Gegner (M3a)**
+- Werteblock kompakt: RK, TP, Tempo, Initiative, Übung und sechs Attribute.
+- Aktionen als Tabelle auf Pergament mit Angriff, Treffer und Schadensart; dazu Bonusaktion und Eigenschaften.
+- Woher die Werte kommen: Der Monsterkatalog liegt nur auf Englisch vor (`data/monsters.json`). Angriffswert, Reichweite und Schaden werden zur Anzeige aus dem Text gelesen; Namen und Volltext bleiben englisch.
+- Zähler wie „3/Day“ gibt es bereits (`monsterExtras`) und erscheinen hier.
+
+**Am Zug: Spieler (M3b)**
+- Die bisherige Zugübersicht (`vTurnBoard`, `S.turn`) im neuen Kleid.
+- Oben die vier Zähler: Aktion, Bonusaktion, Reaktion, Bewegung.
+- Links auf Pergament die Aktion: Waffen und Zauber mit Angriff oder SG, Schaden, Art, Grad, Reichweite und Dauer, jeweils mit Knopf „Angreifen“ oder „Wirken“. Darunter die Standardaktionen als Marken.
+- Rechts Bonusaktion, Reaktion, Fähigkeiten und Plätze.
+- Ein Hinweis „beendet Bless“ erscheint, wenn ein Konzentrationszauber den laufenden beenden würde.
+- Was die Spielleitung sieht, wenn ein Spieler am Zug ist: dieselbe Spalte, nur lesend. Sie zeigt Presence-Werte (TP, RK, Zustände, Wirkungen, Konzentration), dazu Angriffe und Zauber aus dem letzten Online-Stand (`peek`), mit Hinweis auf dessen Alter. Neue Daten werden dafür nicht übertragen.
+
+**Eingreifen (Spielleitung)**
+- Wirkt immer auf die ausgewählte Figur; „+ weitere“ erlaubt mehrere Ziele.
+- Zahl mit Schaden, Heilung oder Temp-TP.
+- Häufige Zustände und Wirkungen als Marken; aktive tragen ✕ zum Entfernen.
+- „Konzentration beenden“ ist nur aktiv, wenn das Ziel sich konzentriert; daneben „Werte anpassen“.
+- Kein Untermenü.
+
+**Kampfmeldungen:** die neuesten oben, mit Runde und farbiger Kante (Schaden rot, Heilung grün, Wirkung blau, Zug gold). Spieler sehen unter „Für dich“ nur, was sie selbst betrifft, plus Wirkungen auf die Gruppe. Grundlage ist der bestehende Meldungsstreifen (`src/feed.js`); ein vollständiges Protokoll gibt es nicht.
+
+**Handy:** angeheftete Initiative, darunter die Karte „Am Zug“.
+- **Spieler (M6b):** Zähler, Meldung zum Annehmen, Reiter Aktion, Bonus, Reaktion und Plätze, großer goldener Knopf „Zug beenden“ über der Leiste.
+- **Spielleitung (M6c):** Gegner kompakt, darunter die Beteiligten. Wer ausgewählt ist, öffnet unten ein Eingreif-Feld mit Schaden, Heilung, Zuständen und Wirkungen.
+
+Bewusst nicht vorgesehen sind Spielfeld, Positionen, Animationen und ein Würfelwurf.
