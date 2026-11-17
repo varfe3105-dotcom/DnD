@@ -33,12 +33,14 @@ test.describe('Kampfmodus @new', () => {
     await expect(page.locator('.fight-state.on')).toContainText(/Round 1|Runde 1/);
     await expect(page.locator('.fight-state.on')).toContainText('Goblin Warrior');
     await page.locator('.dm-row [data-a="dmhp"][data-d="-1"]').click();
-    await expect.poll(() => page.evaluate(() => window.__sent.at(-1)?.turn?.order)).toEqual([{ n: 'Goblin Warrior', pc: false, k: '', s: 'hurt', cur: true, i: '0', nx: false }]);
+    await expect.poll(() => page.evaluate(() => window.__sent.at(-1)?.turn?.order)).toEqual([{ n: 'Goblin Warrior', pc: false, k: '', s: '', cr: '1/4', ac: '', c: [], ty: 'fey', cur: true, i: '0', nx: false }]);
+    // Geheimhaltung: nach Schaden verrät die Übertragung an Spieler weder TP noch einen groben Zustand
+    expect(JSON.stringify(await page.evaluate(() => window.__sent.at(-1)?.turn))).not.toMatch(/hurt|bad|hp/);
     // Konzentration eines Gegners eintragen
     await page.locator('.dm-name').click();
     await page.locator('[data-dm="conc"]').fill('Hold Person');
     await page.locator('[data-dm="conc"]').blur();
-    await expect(page.locator('.dm-name small')).toContainText('Hold Person');
+    await expect(page.locator('.dm-row')).toContainText('Hold Person');
     await page.locator('[data-a="dmclose"]').click();
     // Initiativeleiste: aktiver Zug golden markiert
     await expect(page.locator('.ibar .ib.cur')).toContainText('Goblin Warrior');
@@ -50,14 +52,16 @@ test.describe('Kampfmodus @new', () => {
   });
 
   test('Spieler: Reihenfolge mit Zustand der Gegner, Meldungen bei Wirkung und Konzentrationsende', async ({ page }) => {
-    await fake(page, { key: 'dm-x', role: 'dm', turn: { r: 2, cur: '', name: 'Goblin', enemy: true, next: 'Test', order: [{ n: 'Goblin', pc: false, s: 'bad', cur: true }, { n: 'Test', pc: true, k: '$KEY' }] }, buffs: [{ id: 'b1', s: 'Shield of Faith', to: ['$KEY'], v: 2 }] }, [{ id: 'm1', type: 'conc', to: '$KEY', from: 'dm-x' }]);
+    await fake(page, { key: 'dm-x', role: 'dm', turn: { r: 2, cur: '', name: 'Goblin', enemy: true, next: 'Test', order: [{ n: 'Goblin', pc: false, s: 'bad', cur: true }, { n: 'Test', pc: true, k: '$KEY' }, { n: 'Ork', pc: false, s: 'down' }] }, buffs: [{ id: 'b1', s: 'Shield of Faith', to: ['$KEY'], v: 2 }] }, [{ id: 'm1', type: 'conc', to: '$KEY', from: 'dm-x' }]);
     await seed(page, base4({ tab: 'setup', conc: 'Bless' }));
     await joinRoom(page, 'ABC234');
     await expect(page.locator('#toast')).toContainText('Shield of Faith');
     await tab(page, 'main');
     await expect(page.locator('.fight-state.on')).toContainText(/Round 2|Runde 2/);
     await expect(page.locator('.fight-order li.cur')).toContainText('Goblin');
-    await expect(page.locator('.fight-order li.cur .fo-s')).toHaveText(/bloodied|schwer verletzt/);
+    // Gegner-TP bleiben verborgen: auch ein grober Zustand („bad“) wird verworfen, nur „besiegt“ (von der Spielleitung markiert) erscheint
+    await expect(page.locator('.fight-order li.cur')).not.toContainText(/bloodied|schwer verletzt|verletzt/);
+    await expect(page.locator('.fight-order li', { hasText: 'Ork' })).toContainText(/defeated|besiegt/i);
     await expect(page.locator('.fight-order li.me .ib-hp')).toContainText('20');
     await page.locator('[data-a="liveyes"][data-id="m1"]').click();
     expect((await read(page)).conc).toBe('');
@@ -92,7 +96,7 @@ test.describe('Kampfmodus @new', () => {
     await page.locator('.ibar [data-a="dmfocus"]').nth(1).click();
     await expect(page.locator('.dm-dlg')).toBeVisible();
     await page.locator('.dm-dlg [data-a="dmcond"][data-c="Prone"]').click();
-    await expect(page.locator('.fight-col.foes .dm-row').nth(1).locator('.tag.t-bad')).toHaveText('Prone');
+    await expect(page.locator('.fight-col.foes .dm-row').nth(1).locator('.tag.t-bad')).toHaveText(/Prone/);
     expect(await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth)).toBeLessThanOrEqual(0);
   });
 

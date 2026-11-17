@@ -1,6 +1,8 @@
 import { vLiveSend, vHandoutForm, vLoot, vCloud } from './live-ui.js';
 import { memberCard } from './party.js';
-import { BYN } from '../catalog.js';
+import { BYN, byName } from '../catalog.js';
+import { parseMonster } from '../mon-parse.js';
+import { corners, flag } from './orn.js';
 import { SK } from '../constants.js';
 import { vCheat, statText } from './dm-rules.js';
 import { esc, mod, sg } from '../util.js';
@@ -11,7 +13,8 @@ import { V2 } from '../cloud.js';
 import { cpToGp } from '../shop.js';
 import { glyph } from '../icons.js';
 import { COND } from '../catalog.js';
-import { t, nameLine, dist } from '../i18n/index.js';
+import { t, nameLine, dist, loc, convUnits, lang } from '../i18n/index.js';
+const cName = x => esc(lang === 'de' && x.de ? x.de : x.n);
 import { L, players, pendingFor } from '../live.js';
 import { defeatedXp, hereNote, lastSession, inCombat } from '../dm.js';
 import { D, DU, allMonsters, findMonster, thresholds, partySize, rate, curEnc, xpOf, ordered, searchMonsters, KINDS, curNote, linksOf, noteByTitle, backlinks, searchNotes, fighting, nowNext } from '../dm.js';
@@ -38,30 +41,96 @@ function vInitBar(list, cur, next) {
   const live = list.filter(x => !(x.kind === 'mon' && x.hp <= 0) && x.kind !== 'pet'), i = live.findIndex(x => x.id === cur?.id);
   return `<div class="ibar" role="list" aria-label="${t('fight.order')}">${list.map(x => `<button role="listitem" class="ib${x.id === cur?.id ? ' cur' : ''}${x.id === next?.id ? ' next' : ''}${x.kind === 'mon' ? ' foe' : ' pc'}${x.kind === 'mon' && x.hp <= 0 ? ' down' : ''}${x.kind === 'pet' ? ' pet' : ''}" data-a="dmfocus" data-id="${x.id}" aria-current="${x.id === cur?.id}">${who(x)}<span class="ib-n">${esc(x.name)}</span><span class="ib-i">${x.kind === 'pet' ? '↳' : x.init}</span>${hpb(x.hp, x.hpMax)}${x.id === next?.id ? `<small class="ib-next">${t('fight.nextShort')}</small>` : ''}</button>`).join('')}</div>${live.length ? `<div class="ib-prog" aria-hidden="true">${live.map((x, k) => `<i class="${k < i ? 'done' : k === i ? 'now' : ''}"></i>`).join('')}</div>` : ''}`;
 }
-/** Aktionsbereich: Werte des aktiven Gegners bzw. Hinweis beim Spielercharakter (der handelt am eigenen Gerät). */
-function vActive(c) {
-  if (!c) return '';
-  if (c.kind === 'mon') return `<section class="fight-act"><h3 class="ov-h">${t('fight.actFoe', { n: esc(c.name) })}</h3>${statBlock(c) || `<p class="note">${t('fight.noStat')}</p>`}</section>`;
-  const p = c.live && players().find(x => x.key === c.live);
-  return `<section class="fight-act"><h3 class="ov-h">${t('fight.actPc', { n: esc(c.name) })}</h3><p class="note">${t(p ? 'fight.pcLive' : 'fight.pcLocal')}</p>${p ? vLiveSend(p) : ''}</section>`;
+/* ---- Kampf der Spielleitung (Gestaltungskonzept, Abschnitte 10 und 11) ---- */
+const tShort = iso => { const d = new Date(iso); return Number.isNaN(+d) ? '' : d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }); };
+/** „Am Zug“ für einen Gegner: Werteblock kompakt, Aktionen als Tabelle. Werte nur aus dem festen Muster (mon-parse.js). */
+function vTurnFoe(c) {
+  const m = findMonster(c.mon);
+  const head = (sub, ic) => `<div class="tp-head rc-aub">${corners({ top: true, sm: true })}${ic}<div><span class="rc-l">${t('fight.atTurn')} · ${t('fight.statblock')}</span><h3>${esc(c.name)}</h3>${sub}</div></div>`;
+  if (!m) return `<section class="turnp">${head('', who(c))}<div class="tp-body"><div class="srow">${sv(t('dm.acShort'), c.ac)}${sv(t('head.hpShort'), `${c.hp}<span class="mx"> / ${c.hpMax}</span>`)}${sv(t('fight.initShort'), c.init)}</div><p class="note">${t('fight.noStat')}</p></div></section>`;
+  const ents = parseMonster(m.text), pb = m.cr < 1 ? 2 : 2 + Math.floor((m.cr - 1) / 4);
+  const aRow = e => {
+    const a = e.atk, s = e.save, ok = a || s;
+    const hit = a ? cv(esc(a.hit), t('fight.atk')) : s ? cv(`${t('fight.dc')} ${s.dc}`, t('fight.saveOf', { a: t('abs.' + s.ab) })) : '<span class="rc-v q">–</span>';
+    const dmg = a ? cv(esc(a.dice), `Ø ${esc(a.avg)} · ${esc(a.type)}`, 'rc-dt') : s && s.dice ? cv(esc(s.dice), `Ø ${esc(s.avg)} · ${esc(s.type)}`, 'rc-dt') : '<span class="rc-v q">–</span>';
+    const kind = a ? t(a.kind === 'Ranged' ? 'fight.ranged' : a.kind === 'Melee' ? 'fight.melee' : 'fight.meleeRanged') : '';
+    const sub = a ? `${kind} · ${esc(a.reach)}${a.note ? ' · ' + esc(a.note) : ''}` : s ? '' : t('fight.textOnly');
+    return `<details class="arow-d"><summary class="arow"><span class="rc-n">${esc(e.name)}${ok ? ` <span class="ok" title="${t('fight.parsed')}">✓</span>` : ''}<small class="rc-s">${sub}</small></span>${hit}${dmg}<span class="chev" aria-hidden="true">▸</span></summary><p class="arow-x">${esc(convUnits(e.text))}</p></details>`;
+  };
+  const SEC = { Actions: 'fight.secAct', 'Bonus Actions': 'fight.secBonus', Reactions: 'fight.secReact', 'Legendary Actions': 'fight.secLeg', 'Lair Actions': 'fight.secLair' };
+  const groups = Object.keys(SEC).map(k => { const l = ents.filter(e => e.sec === k && e.name); return l.length ? `<p class="grp2"><span class="rc-l">${t(SEC[k])}</span></p>${l.map(aRow).join('')}` : ''; }).join('');
+  const traits = ents.filter(e => e.sec === 'Traits' && e.name);
+  const sub = `<span class="rc-s">${esc(m.n)} · ${esc([m.size, m.type].filter(Boolean).join(' '))} · ${t('fight.cr')} ${crText(m.cr)} · ${xpOf(m.cr)} XP</span>`;
+  return `<section class="turnp">${head(sub, `<span class="tp-ic">${who(c)}</span>`)}<div class="tp-body">
+    <div class="srow">${sv(t('dm.acShort'), c.ac)}${sv(t('head.hpShort'), `${c.hp}<span class="mx"> / ${c.hpMax}</span>`)}${sv(t('fight.speed'), esc(convUnits(String(m.speed || '').replace(/^walk /, ''))))}${sv(t('fight.initShort'), c.init)}${sv(t('fight.prof'), '+' + pb)}</div>
+    <div class="abil6">${ABK.map(k => `<div><span class="rc-l">${t('abs.' + k)} ${m.abil[k]}</span><b class="rc-v s">${sg(mod(m.abil[k]))}</b></div>`).join('')}</div>
+    <section class="hub-parch rc-pp tp-acts">${groups || `<p class="note">${t('fight.noActions')}</p>`}</section>
+    ${traits.length ? `<div class="tp-blk"><p class="rc-l">${t('fight.traits')}</p>${traits.map(e => `<details class="arow-d"><summary class="arow t"><span class="rc-n">${esc(e.name)}</span><span class="chev" aria-hidden="true">▸</span></summary><p class="arow-x">${esc(convUnits(e.text))}</p></details>`).join('')}</div>` : ''}
+    <p class="note">${t('fight.parseNote')}</p><details class="tp-full"><summary>${t('fight.fullText')}</summary>${statBlock(c)}</details></div></section>`;
 }
-function row(c, active) {
-  const open = DU.open[c.id], down = c.kind === 'mon' && c.hp <= 0, conds = COND.filter(x => c.cond[x.n]);
-  const wait = c.live && L.role === 'dm' && pendingFor(c.live, c.pet || ''), sub = [c.kind === 'pet' ? t('live.petTag', { n: esc(c.owner || '') }) : '', `${t('dm.acShort')} ${c.acB ? `<span class="${c.acB > 0 ? 'buff' : 'debuff'}" title="${esc((c.fx || []).map(x => t('buff.from', { s: x.s, n: x.by })).join('; '))}">${c.ac}</span>` : c.ac}`, ...conds.map(x => `<span class="tag t-bad sm">${esc(x.n)}</span>`), ...(c.fx || []).filter(x => x.s).map(x => `<span class="tag ${x.good ? 't-good' : 't-bad'} sm">${esc(x.s)}</span>`), c.conc ? `<span class="tag t-conc sm dm-conc">${t('live.concShort', { n: esc(c.conc) })}</span>` : '', wait ? `<span class="dm-wait">${t('live.waitAck')}</span>` : ''].filter(Boolean).join(' · ');
-  return `<div class="dm-row${active ? ' on' : ''}${down ? ' down' : ''}${c.kind === 'pet' ? ' pet' : ''}${c.live ? ' live' : ''}">
+const sv = (l, v) => `<div><span class="rc-l">${l}</span><span class="rc-v l">${v}</span></div>`;
+const cv = (v, s, cls = 'rc-s') => `<span class="c"><span class="rc-v">${v}</span><small class="${cls}">${s}</small></span>`;
+/** „Am Zug“ für einen Spieler (nur lesen): Live-Werte aus der Presence, Bogen aus dem letzten Online-Stand mit Zeitstempel. */
+const TIME_GRP = x => { const e = String(x?.time?.en || x?.time || '').toLowerCase(); return /bonus action/.test(e) ? 'b' : /reaction/.test(e) ? 'r' : /^1 action|^action/.test(e) ? 'a' : 'o'; };
+function vTurnPc(c) {
+  const p = c.live && players().find(x => x.key === c.live), pk = DU.pk && DU.pk.key === c.live ? DU.pk : null, s = pk && pk.data;
+  const hp = p ? p.hp : c.hp, hpMax = p ? p.hpMax : c.hpMax, ac = p ? p.ac : c.ac, conds = p ? p.cond || [] : COND.filter(x => c.cond[x.n]).map(x => x.n), conc = p ? p.conc : c.conc;
+  const mins = s && pk.at ? Math.max(0, Math.round((Date.now() - new Date(pk.at)) / 60000)) : 0;
+  const before = s && pk.at && DU.fightAt && new Date(pk.at) < DU.fightAt, old = s && mins > 10;
+  const stamps = !c.live ? `<p class="note">${t('fight.pcRoom')}</p>` : `<div class="tp-stamps"><span class="stamp ok">● ${t('fight.liveStamp')}</span>${pk?.loading ? `<span class="stamp">${t('fight.sheetLoad')}</span>` : s ? `<span class="stamp${before || old ? ' old' : ' ok'}">◷ ${t('fight.sheetAt', { t: tShort(pk.at), m: mins })}</span>` : `<span class="stamp old">${t('fight.sheetNone')}</span>`}</div>${before || old ? `<div class="staleb">⚠ <span>${t(before ? 'fight.staleStart' : 'fight.stale10')}</span></div>` : ''}`;
+  let sheet = c.live && !s && !pk?.loading ? `<p class="note">${t('fight.noSheet')}</p>` : '';
+  if (s) {
+    const spells = (s.spells || []).filter(x => x.lvl === 0 || x.always || x.prep !== false).map(x => ({ x, k: byName(x.n) })), weap = ['main', 'off'].map(k => s.eq?.[k]).filter(Boolean);
+    const row = ({ x, k }) => { const r = k || {}; const lv = x.lvl === 0 ? t('fight.cantrips') : t('spell.level', { n: x.lvl }); return `<div class="arow ro"><span class="rc-n">${esc(x.n)}${r.conc ? ` <span class="ck">${t('fight.conc')}</span>` : ''}<small class="rc-s">${[lv, r.range ? esc(loc(r.range)) : '', r.dur ? esc(loc(r.dur)) : ''].filter(Boolean).join(' · ')}</small></span></div>`; };
+    const grp = (g, title) => { const l = spells.filter(o => TIME_GRP(o.k) === g); return l.length ? `<p class="grp2"><span class="rc-l">${title}</span></p>${l.map(row).join('')}` : ''; };
+    const slots = (s.slots || []).map((o, i) => (o.max ? `${i + 1}: <b>${o.max - o.used}</b><span class="mx">/${o.max}</span>` : '')).filter(Boolean).join(' · ');
+    const res = (s.res || []).filter(r => r.max > 0 && r.max < 99).map(r => `<div class="li"><span class="rc-n">${esc(r.n)}</span><span class="rc-v s">${r.max - r.used}<span class="mx">/${r.max}</span></span></div>`).join('');
+    sheet = `<section class="hub-parch rc-pp tp-acts">${weap.length ? `<p class="grp2"><span class="rc-l">${t('fight.weapons')}</span></p>${weap.map(w => `<div class="arow ro"><span class="rc-n">${esc(itemName(w))}</span></div>`).join('')}` : ''}${grp('a', t('fight.tAction'))}${grp('b', t('fight.tBonus'))}${grp('r', t('fight.tReact'))}${grp('o', t('fight.tOther'))}</section>
+      <div class="tp-two">${slots ? `<div class="tp-blk"><p class="rc-l">${t('fight.slots')}</p><p class="rc-v s">${slots}</p></div>` : ''}${res ? `<div class="tp-blk"><p class="rc-l">${t('fight.res')}</p>${res}</div>` : ''}</div><p class="note">${t('fight.roNote')}</p>`;
+  }
+  const tags = [...conds.map(n => `<span class="tag t-bad sm">✕ ${esc(n)}</span>`), conc ? `<span class="tag t-conc sm">◇ ${esc(conc)}</span>` : ''].join('');
+  return `<section class="turnp">
+    <div class="tp-head rc-aub">${corners({ top: true, sm: true })}<span class="tp-ic">${who(c)}</span><div><span class="rc-l">${t('fight.atTurn')}${c.live ? ' · ' + t('peek.roShort') : ''}</span><h3>${esc(c.name)}</h3><span class="rc-s">${p ? esc([p.klass, p.level].filter(Boolean).join(' ')) : ''}</span></div></div>
+    ${stamps}<div class="tp-body"><div class="srow">${sv(t('dm.acShort'), ac)}${sv(t('head.hpShort'), `${hp}<span class="mx"> / ${hpMax}</span>`)}${sv(t('fight.initShort'), c.init)}</div>${tags ? `<div class="tags">${tags}</div>` : ''}${sheet}</div></section>`;
+}
+/** Eingreifen (11.4): wirkt auf die ausgewählte Figur, ohne Untermenü. Desktop: feste Spalte; Handy: Blatt, wenn ausgewählt. */
+function vEin(c, opened) {
+  if (!c) return '';
+  const p = c.live && L.role === 'dm' && players().find(x => x.key === c.live), mon = c.kind === 'mon';
+  const num = (f, l, v) => `<label><span class="rc-l">${l}</span><input type="number" class="n" id="dm-${f}-${c.id}" data-dm="${f}" data-id="${c.id}" value="${v ?? ''}"></label>`;
+  const hp = p ? vLiveSend(p) : `<div class="ein-row"><input type="number" class="n" id="dm-amp-${c.id}" min="1" placeholder="1" aria-label="${t('hp.amount')}"><button class="btn sm bad" data-a="dmhp" data-src="dm-amp-${c.id}" data-id="${c.id}" data-d="-1">− ${t('fight.dmg')}</button><button class="btn sm good" data-a="dmhp" data-src="dm-amp-${c.id}" data-id="${c.id}" data-d="1">+ ${t('hp.heal')}</button><button class="btn sm" data-a="dmtmp" data-src="dm-amp-${c.id}" data-id="${c.id}">${t('live.temp')}</button></div>`;
+  const vals = p ? '' : `<p class="rc-l">${t('fight.values')}</p><div class="ein-vals">${num('ac', t('dm.acShort'), c.ac)}${num('hp', t('head.hpShort'), c.hp)}${num('hpMax', t('fight.max'), c.hpMax)}</div>`;
+  const vis = mon ? `<p class="rc-l">${t('fight.pubTitle')}</p><div class="chips">${[['cr', !c.hideCr, t('fight.pubCr')], ['ac', !!c.showAc, t('fight.pubAc')], ['gone', !!c.gone, t('fight.gone')]].map(([f, on, l]) => `<button class="chip tgl${on ? ' on' : ''}" data-a="dmpub" data-id="${c.id}" data-f="${f}" aria-pressed="${on}"><i aria-hidden="true"></i>${l}</button>`).join('')}</div>` : '';
+  const conds = `<p class="rc-l">${t('fight.conds')}</p><div class="chips">${COND.map(x => `<button class="chip${c.cond[x.n] ? ' on' : ''}" data-a="dmcond" data-id="${c.id}" data-c="${x.n}" aria-pressed="${!!c.cond[x.n]}" title="${esc(x.n)}">${cName(x)}${c.cond[x.n] ? ' ✕' : ''}</button>`).join('')}</div>`;
+  const fx = `<p class="rc-l">${t('fight.effects')}</p>${(c.fx || []).length ? `<div class="chips">${c.fx.map(f => `<button class="chip on" data-a="dmfxdel" data-id="${c.id}" data-f="${f.id}" title="${t('item.remove')}">${esc(f.n)} · ${f.r} ✕</button>`).join('')}</div>` : ''}<div class="add" style="margin:4px 0 0"><input type="text" id="dm-fxn-${c.id}" placeholder="${t('dm.fxName')}" aria-label="${t('dm.fxName')}"><input type="number" class="n" id="dm-fxr-${c.id}" min="1" value="10" aria-label="${t('dm.fxRounds')}" title="${t('dm.fxRounds')}"><button class="btn sm" data-a="dmfx" data-id="${c.id}">${t('dm.fxAdd')}</button></div>`;
+  const conc = p ? '' : `<p class="rc-l">${t('conc.title')}</p><div class="add" style="margin:0"><input type="text" id="dm-conc-${c.id}" data-dm="conc" data-id="${c.id}" value="${esc(c.conc || '')}" placeholder="${t('fight.concPh')}" aria-label="${t('conc.title')}">${c.conc ? `<button class="btn sm" data-a="dmconcend" data-id="${c.id}">${t('fight.concEnd')}</button>` : ''}</div>`;
+  const slots = (c.slots || []).map((s, k) => `<div class="lvh" style="padding:2px 0;border:0"><small>${s.lbl ? esc(s.lbl) : t('spell.level', { n: s.lvl })}</small><div class="pips">${pipsOf(s, `data-a="dmslot" data-id="${c.id}" data-k="${k}"`)}</div></div>`).join('');
+  const note = `<input type="text" class="wide" id="dm-note-${c.id}" data-dm="note" data-id="${c.id}" value="${esc(c.note)}" placeholder="${t('dm.rowNote')}" aria-label="${t('dm.rowNote')}">`;
+  const foot = `<div class="add">${c.kind === 'pc' && c.live ? `<button class="btn sm" data-a="peek" data-k="${esc(c.live)}" data-n="${esc(c.name)}">${t('peek.btn')}</button>` : ''}<button class="btn sm bad" data-a="dmrm" data-id="${c.id}">${t('item.remove')}</button></div>`;
+  const stat = mon && c.id !== D.combat.active ? `<details class="tp-full"><summary>${t('fight.fullText')}</summary>${statBlock(c)}</details>` : '';
+  const body = `<div class="ein-h"><span class="rc-l">${t('fight.ein')}</span><b class="rc-n">${esc(c.name)}</b><span class="rc-v s">${c.hp}<span class="mx">/${c.hpMax}</span></span>${opened ? `<button class="btn sm" data-a="dmclose">${t('common.close')}</button>` : ''}</div>${hp}${vals}${vis}${conds}${fx}${conc}${slots}${note}${stat}${foot}`;
+  return opened ? `<div class="ovl dm-ovl ein-wrap"><div class="dlg dm-dlg ein" role="dialog" aria-modal="true" aria-label="${t('fight.ein')}: ${esc(c.name)}">${body}</div></div>` : `<section class="ein ein-inline">${body}</section>`;
+}
+/** Karte einer Figur: Gruppe und Gegner gleich aufgebaut (10.2). Initiative, Name mit Klasse oder HG, RK und TP, Balken,
+ * Zustände und Wirkungen in fester dritter Zeile, schnelle TP-Änderung. Name antippen wählt die Figur für „Eingreifen“. */
+function row(c, active, sel) {
+  const down = c.kind === 'mon' && c.hp <= 0, conds = COND.filter(x => c.cond[x.n]), m = c.kind === 'mon' && findMonster(c.mon);
+  const p = c.live && players().find(x => x.key === c.live), wait = c.live && L.role === 'dm' && pendingFor(c.live, c.pet || '');
+  const meta = c.kind === 'pet' ? t('live.petTag', { n: esc(c.owner || '') }) : m ? `${t('fight.cr')} ${crText(m.cr)}` : p ? esc([p.klass, p.level].filter(Boolean).join(' ')) : '';
+  const ac = c.acB ? `<span class="rc-v s ${c.acB > 0 ? 'buff' : 'debuff'}" title="${esc((c.fx || []).map(x => t('buff.from', { s: x.s, n: x.by })).join('; '))}">${c.ac}</span>` : `<span class="rc-v s">${c.ac}</span>`;
+  const tags = [...conds.map(x => `<span class="tag t-bad sm" title="${esc(x.n)}">✕ ${cName(x)}</span>`), ...(c.fx || []).filter(x => x.s).map(x => `<span class="tag ${x.good ? 't-good' : 't-bad'} sm">${esc(x.s)}</span>`), c.conc ? `<span class="tag t-conc sm dm-conc">${t('live.concShort', { n: esc(c.conc) })}</span>` : '', c.gone ? `<span class="tag sm">${t('fight.gone')}</span>` : '', wait ? `<span class="dm-wait">${t('live.waitAck')}</span>` : ''].filter(Boolean);
+  const chips = (c.fx || []).map(f => `<button class="chip sm" data-a="dmfxdel" data-id="${c.id}" data-f="${f.id}" title="${t('item.remove')}">${esc(f.n)} <b>${f.r}</b></button>`).join('');
+  const la = c.la ? `<span class="dm-la"><span class="lbl">LA</span><span class="pips">${pipsOf(c.la, `data-a="dmla" data-id="${c.id}"`)}</span></span>` : '';
+  return `<div class="dm-row uc${c.kind === 'mon' ? ' foe' : ''}${active ? ' on rc-cur' : ''}${sel && !active ? ' rc-sel' : ''}${down ? ' down' : ''}${c.kind === 'pet' ? ' pet' : ''}${c.live ? ' live' : ''}">${active ? flag(t('fight.flagNow')) : sel ? flag(t('fight.flagSel')) : ''}
     <div class="dm-main">
-      <input type="number" class="n dm-init" id="dm-init-${c.id}" data-dm="init" data-id="${c.id}" value="${c.init}" aria-label="${t('stat.init')} ${esc(c.name)}">
-      <button class="dm-name" data-a="dmopen" data-id="${c.id}" aria-expanded="${!!open}"><b>${esc(c.name)}</b><small>${sub}</small></button>${(c.fx || []).length ? `<div class="chips dm-fx">${c.fx.map(f => `<button class="chip" data-a="dmfxdel" data-id="${c.id}" data-f="${f.id}" title="${t('item.remove')}">${esc(f.n)} <b>${f.r}</b></button>`).join('')}</div>` : ''}${c.la ? `<div class="dm-la"><span class="lbl">LA</span><div class="pips">${pipsOf(c.la, `data-a="dmla" data-id="${c.id}"`)}</div></div>` : ''}
-      <div class="dm-hp"><button data-a="dmhp" data-id="${c.id}" data-d="-1" aria-label="${t('hp.damage')} ${esc(c.name)}">−</button><input type="number" class="n" id="dm-amt-${c.id}" min="1" placeholder="1" aria-label="${t('hp.amount')}"><button data-a="dmhp" data-id="${c.id}" data-d="1" aria-label="${t('hp.heal')} ${esc(c.name)}">+</button><span class="dm-hpv"><b>${c.hp}</b>/${c.hpMax}${c.tmp ? ' +' + c.tmp : ''}</span></div>
+      <input type="number" class="n dm-init" id="dm-init-${c.id}" data-dm="init" data-id="${c.id}" value="${c.init}" aria-label="${t('stat.init')} ${esc(c.name)}" title="${t('stat.init')}">
+      ${who(c)}
+      <button class="dm-name" data-a="dmopen" data-id="${c.id}" aria-expanded="${!!sel}"><b>${esc(c.name)}</b><small>${meta}</small></button>
+      <span class="u-st"><span class="rc-l">${t('dm.acShort')}</span>${ac}<span class="rc-l">${t('head.hpShort')}</span><span class="dm-hpv rc-v s"><b>${c.hp}</b><span class="mx">/${c.hpMax}${c.tmp ? ' +' + c.tmp : ''}</span></span></span>
+      ${hpb(c.hp, c.hpMax)}
+      <span class="u-tags">${tags.join('') || `<span class="none">${t('fight.noCond')}</span>`}${chips ? `<span class="chips dm-fx">${chips}</span>` : ''}${la}</span>
+      <div class="dm-hp"><button data-a="dmhp" data-id="${c.id}" data-d="-1" aria-label="${t('hp.damage')} ${esc(c.name)}">−</button><input type="number" class="n" id="dm-amt-${c.id}" min="1" placeholder="1" aria-label="${t('hp.amount')}"><button data-a="dmhp" data-id="${c.id}" data-d="1" aria-label="${t('hp.heal')} ${esc(c.name)}">+</button></div>
     </div>
-    ${open ? `<div class="ovl dm-ovl"><div class="dlg dm-dlg" role="dialog" aria-modal="true" aria-labelledby="dmd-${c.id}"><div class="dm-dlg-h"><h3 id="dmd-${c.id}">${esc(c.name)}</h3><span class="dm-hpv"><b>${c.hp}</b>/${c.hpMax}</span><button class="btn sm" data-a="dmclose">${t('common.close')}</button></div><div class="dm-more"><div class="chips">${COND.map(x => `<button class="chip${c.cond[x.n] ? ' on' : ''}" data-a="dmcond" data-id="${c.id}" data-c="${x.n}" aria-pressed="${!!c.cond[x.n]}">${esc(nameLine(x.n, x.de))}</button>`).join('')}</div>
-      ${c.live ? '' : `<input type="text" id="dm-conc-${c.id}" data-dm="conc" data-id="${c.id}" value="${esc(c.conc || '')}" placeholder="${t('fight.concPh')}" aria-label="${t('conc.title')}">`}${c.kind === 'pc' && c.live && players().find(p => p.key === c.live) ? vLiveSend(players().find(p => p.key === c.live)) : ''}
-      <input type="text" class="wide" id="dm-note-${c.id}" data-dm="note" data-id="${c.id}" value="${esc(c.note)}" placeholder="${t('dm.rowNote')}" aria-label="${t('dm.rowNote')}">
-      <div class="add" style="margin:0"><input type="text" id="dm-fxn-${c.id}" placeholder="${t('dm.fxName')}" aria-label="${t('dm.fxName')}"><input type="number" class="n" id="dm-fxr-${c.id}" min="1" value="10" aria-label="${t('dm.fxRounds')}" title="${t('dm.fxRounds')}"><button class="btn sm" data-a="dmfx" data-id="${c.id}">${t('dm.fxAdd')}</button></div>
-      ${(c.slots || []).map((s, k) => `<div class="lvh" style="padding:2px 0;border:0"><small>${s.lbl ? esc(s.lbl) : t('spell.level', { n: s.lvl })}</small><div class="pips">${pipsOf(s, `data-a="dmslot" data-id="${c.id}" data-k="${k}"`)}</div></div>`).join('')}
-      ${c.kind === 'pc' && c.live ? `<button class="btn sm" data-a="peek" data-k="${esc(c.live)}" data-n="${esc(c.name)}">${t('peek.btn')}</button>` : ''}
-      ${statBlock(c)}
-      <button class="btn sm bad" data-a="dmrm" data-id="${c.id}">${t('item.remove')}</button></div></div></div>` : ''}
   </div>`;
 }
 /** Verbundene Spieler, die noch nicht im Kampf sind, einzeln hinzufügen. */
@@ -83,14 +152,18 @@ function vCombat() {
     return `<div class="fight-state"><div class="fs-top"><span class="fs-badge">${t('fight.prep')}</span><span>${t('fight.prepDm')}</span></div></div>
     <div class="prep3"><section class="prep-col"><h3 class="ov-h">${t('dm.encounters')}</h3>${encs || `<p class="note">${t('dm.encNone')}</p>`}<button class="linkbtn" data-a="crumb" data-t="dmenc">${t('fight.toEnc')}</button></section>
     <section class="prep-col"><h3 class="ov-h">${t('fight.lineup')}</h3>${vLiveAdd()}${list.length ? `<p class="note">${t('fight.initHint')}</p><div class="dm-list">${list.map(x => row(x, false)).join('')}</div>` : `<div class="empty">${t('dm.empty')}</div>`}<h3 class="ov-h" style="margin-top:14px">${t('dm.addTitle')}</h3>${add}</section>
-    <aside class="prep-col prep-go"><button class="btn gold big" data-a="dmstep" data-d="1"${list.length ? '' : ' disabled'}>${t('fight.start')}</button><p class="note">${t('fight.startHint', { a: pcs.length, b: foes.length })}</p>${turns}${clear}<button class="btn" data-a="dmxpopen" aria-expanded="${!!DU.xpOpen}">${t('xp.share')}</button>${vXpShare()}</aside></div>`;
+    <aside class="prep-col prep-go"><button class="btn gold big" data-a="dmstep" data-d="1"${list.length ? '' : ' disabled'}>${t('fight.start')}</button><p class="note">${t('fight.startHint', { a: pcs.length, b: foes.length })}</p>${turns}${clear}<button class="btn" data-a="dmxpopen" aria-expanded="${!!DU.xpOpen}">${t('xp.share')}</button>${vXpShare()}</aside></div>${(() => { const id = Object.keys(DU.open || {}).find(k => DU.open[k]), x = id && list.find(y => y.id === id); return x ? vEin(x, true) : ''; })()}`;
   }
   const side = U.FSIDE === 'foes' ? 'foes' : 'pcs';
-  const col = (k, title, arr) => `<section class="fight-col ${k}${side === k ? ' show' : ''}"><h3 class="ov-h">${title} <small>${arr.length}</small></h3>${arr.length ? `<div class="dm-list">${arr.map(x => row(x, x.id === c.active)).join('')}</div>` : `<p class="note">${t('fight.none')}</p>`}</section>`;
-  return `<div class="fight-state on"><div class="fs-top"><span class="fs-badge">${t('fight.active')}</span><b class="fs-round">${t('turn.round', { n: c.round })}</b><span>${t('turn.now', { n: `<b>${esc(nn.cur?.name || '?')}</b>` })}${nn.next ? ' · ' + t('turn.next', { n: esc(nn.next.name) }) : ''}</span><span class="fs-btns"><button class="btn" data-a="dmstep" data-d="-1">${t('dm.prev')}</button><button class="btn gold big" data-a="dmstep" data-d="1">${t('dm.next')}</button></span></div>${vInitBar(list, nn.cur, nn.next)}</div>
-  <div class="seg fight-tabs" role="group">${['pcs', 'foes'].map(k => `<button class="tg${side === k ? ' on' : ''}" data-a="fside" data-k="${k}" aria-pressed="${side === k}">${t('fight.side.' + k)}</button>`).join('')}</div>
-  <div class="fight-cols">${col('pcs', t('fight.side.pcs'), pcs)}${col('foes', t('fight.side.foes'), foes)}</div>
-  ${vActive(nn.cur)}
+  const selId = Object.keys(DU.open || {}).find(k => DU.open[k]), sel = selId && list.find(x => x.id === selId), tgt = sel || nn.cur;
+  const col = (k, title, arr) => `<section class="fight-col ${k}${side === k ? ' show' : ''}"><h3 class="ov-h">${title} <small>${arr.length}</small></h3>${arr.length ? `<div class="dm-list">${arr.map(x => row(x, x.id === c.active, x.id === tgt?.id)).join('')}</div>` : `<p class="note">${t('fight.none')}</p>`}</section>`;
+  const feedL = (DU.flog || []).length ? `<ul class="feed">${DU.flog.map(f => `<li class="${f.kind}"><span class="r">R${f.r}</span><span>${esc(f.text)}</span></li>`).join('')}</ul>` : `<p class="note">${t('fight.feedNone')}</p>`;
+  const turn = nn.cur ? (nn.cur.kind === 'mon' ? vTurnFoe(nn.cur) : vTurnPc(nn.cur)) : '';
+  return `<div class="fight-state on rc-aub">${corners({ top: true, sm: true })}<div class="fs-top"><span class="fs-badge">${t('fight.active')}</span><b class="fs-round">${t('turn.round', { n: c.round })}</b><span>${t('turn.now', { n: `<b>${esc(nn.cur?.name || '?')}</b>` })}${nn.next ? ' · ' + t('turn.next', { n: esc(nn.next.name) }) : ''}</span><span class="fs-btns"><button class="btn" data-a="dmstep" data-d="-1">${t('dm.prev')}</button><button class="btn gold big" data-a="dmstep" data-d="1">${t('dm.next')}</button></span></div>${vInitBar(list, nn.cur, nn.next)}</div>
+  <div class="fight3"><div class="f3-list"><div class="seg fight-tabs" role="group">${['pcs', 'foes'].map(k => `<button class="tg${side === k ? ' on' : ''}" data-a="fside" data-k="${k}" aria-pressed="${side === k}">${t('fight.side.' + k)}</button>`).join('')}</div>
+  <div class="fight-cols">${col('pcs', t('fight.side.pcs'), pcs)}${col('foes', t('fight.side.foes'), foes)}</div></div>
+  <div class="f3-turn">${turn}</div>
+  <div class="f3-side">${vEin(tgt, !!sel)}<section class="f3-feed hub-panel"><div class="hub-h sm"><h3>${t('fight.feed')}</h3></div>${feedL}</section></div></div>
   <div class="card fight-ctl"><div class="dm-bar">${turns}<button class="btn" data-a="dmxpopen" aria-expanded="${!!DU.xpOpen}">${t('xp.share')}</button><button class="btn ${DU.conf === 'end' ? 'warn' : 'bad'}" data-a="dmfightend">${DU.conf === 'end' ? t('fight.endConfirm') : t('fight.end')}</button>${clear}</div>${vXpShare()}<details class="fight-add"><summary>${t('dm.addTitle')}</summary>${vLiveAdd()}${add}</details><p class="note">${t('dm.hint')}</p></div>`;
 }
 function noteBody(n) {

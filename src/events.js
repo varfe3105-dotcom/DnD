@@ -63,7 +63,7 @@ app.addEventListener('click',ev=>{
   if(a!=='cast'&&a!=='castslot')U.CASTPICK=null;
   pend=false;
   switch(a){
-    case 'dmfx':{const id=b.dataset.id,n=v('dm-fxn-'+id).trim();if(!n){toast(tr('toast.needName'));return}dm.addEffect(id,n,+v('dm-fxr-'+id));dm.saveD();break}
+    case 'dmfx':{const id=b.dataset.id,n=v('dm-fxn-'+id).trim();if(!n){toast(tr('toast.needName'));return}dm.addEffect(id,n,+v('dm-fxr-'+id));{const c=dm.find(id);if(c)dm.flog(tr('fight.fxEv',{n:c.name,f:n}),'fx')}dm.saveD();break}
     case 'dmfxdel':dm.removeEffect(b.dataset.id,b.dataset.f);dm.saveD();break;
     case 'dmla':{const c=dm.find(b.dataset.id);if(c?.la){dm.togglePip(c.la,+b.dataset.j);dm.saveD()}break}
     case 'dmslot':{const c=dm.find(b.dataset.id),o=c?.slots?.[+b.dataset.k];if(o){dm.togglePip(o,+b.dataset.j);dm.saveD()}break}
@@ -91,7 +91,7 @@ app.addEventListener('click',ev=>{
     case 'dmturns':dm.D.turns=dm.D.turns===false;dm.saveD();live.refresh();break;
     case 'turnshow':setTurnsHidden(!turnsHidden());break;
     case 'endturn':if(!live.endTurn())toast(tr('turn.offline'));else toast(tr('turn.ended'));break;
-    case 'dmstep':{const gone=dm.step(+b.dataset.d);dm.saveD();live.refresh();if(gone&&gone.length)toast(gone.map(x=>tr('dm.fxEnded',x)).join(' '));break}
+    case 'dmstep':{if(!dm.fighting()){dm.DU.fightAt=new Date();dm.DU.flog=[]}const gone=dm.step(+b.dataset.d);{const nn=dm.nowNext();if(nn.cur)dm.flog(tr('fight.turnEv',{n:nn.cur.name}),'t')}dm.saveD();live.refresh();if(gone&&gone.length)toast(gone.map(x=>tr('dm.fxEnded',x)).join(' '));break}
     case 'dmfightend':if(dm.DU.conf!=='end'){dm.DU.conf='end';break}dm.DU.conf=null;dm.endFight();dm.saveD();live.refresh();toast(tr('fight.ended'));break;
     case 'dmclear':if(dm.DU.conf!=='clear'){dm.DU.conf='clear';break}dm.DU.conf=null;dm.clearCombat();dm.saveD();break;
     case 'dmadd':dm.addMonster(b.dataset.m,clamp(Math.floor(+v('dm-qty'))||1,1,20));dm.saveD();break;
@@ -121,8 +121,11 @@ app.addEventListener('click',ev=>{
     case 'mbstep':{const gone=dm.step(1);dm.saveD();live.refresh();if(gone&&gone.length)toast(gone.map(x=>tr('dm.fxEnded',x)).join(' '));break}
     case 'fside':U.FSIDE=b.dataset.k;break;
     case 'soundtg':setSound(!soundOn());if(soundOn())beep();break;
-    case 'dmhp':{const amt=Math.floor(+v('dm-amt-'+b.dataset.id))||1,c=dm.find(b.dataset.id);if(c&&c.live&&live.L.role==='dm'){live.sendMsg({type:+b.dataset.d<0?'dmg':'heal',to:c.live,value:amt,...(c.pet?{pet:c.pet}:{})});toast(tr('live.proposed',{n:c.kind==='pet'?c.owner:c.name}));break}dm.changeHp(b.dataset.id,amt*+b.dataset.d);dm.saveD();break}
-    case 'dmcond':{const c=dm.find(b.dataset.id);if(c&&c.live&&c.kind==='pc'&&live.L.role==='dm'){live.sendMsg({type:'cond',to:c.live,cond:b.dataset.c,off:!!c.cond[b.dataset.c]});toast(tr('live.proposed',{n:c.name}));break}if(c){if(c.cond[b.dataset.c])delete c.cond[b.dataset.c];else c.cond[b.dataset.c]=true;dm.saveD()}break}
+    case 'dmhp':{const amt=Math.floor(+v(b.dataset.src||'dm-amt-'+b.dataset.id))||1,c=dm.find(b.dataset.id);if(c&&c.live&&live.L.role==='dm'){live.sendMsg({type:+b.dataset.d<0?'dmg':'heal',to:c.live,value:amt,...(c.pet?{pet:c.pet}:{})});toast(tr('live.proposed',{n:c.kind==='pet'?c.owner:c.name}));dm.flog(tr(+b.dataset.d<0?'fight.dmgEv':'fight.healEv',{n:c.name,a:amt}),+b.dataset.d<0?'bad':'good');break}dm.changeHp(b.dataset.id,amt*+b.dataset.d);if(c)dm.flog(tr(+b.dataset.d<0?'fight.dmgEv':'fight.healEv',{n:c.name,a:amt})+(c.kind==='mon'?` · ${c.hp}/${c.hpMax}`:''),+b.dataset.d<0?'bad':'good');dm.saveD();break}
+    case 'dmtmp':{const amt=Math.floor(+v(b.dataset.src))||0,c=dm.find(b.dataset.id);if(c&&amt>0){c.tmp=amt;dm.flog(tr('fight.tmpEv',{n:c.name,a:amt}),'good');dm.saveD()}break}
+    case 'dmpub':{const c=dm.find(b.dataset.id),f=b.dataset.f;if(c){if(f==='cr')c.hideCr=!c.hideCr;else if(f==='ac')c.showAc=!c.showAc;else if(f==='gone'){c.gone=!c.gone;if(c.gone)dm.flog(tr('fight.goneEv',{n:c.name}),'bad')}dm.saveD();live.refresh()}break}
+    case 'dmconcend':{const c=dm.find(b.dataset.id);if(c){c.conc='';dm.saveD()}break}
+    case 'dmcond':{const c=dm.find(b.dataset.id);if(c)dm.flog(tr(c.cond[b.dataset.c]?'fight.condOff':'fight.condOn',{n:c.name,c:b.dataset.c}),c.cond[b.dataset.c]?'':'bad');if(c&&c.live&&c.kind==='pc'&&live.L.role==='dm'){live.sendMsg({type:'cond',to:c.live,cond:b.dataset.c,off:!!c.cond[b.dataset.c]});toast(tr('live.proposed',{n:c.name}));break}if(c){if(c.cond[b.dataset.c])delete c.cond[b.dataset.c];else c.cond[b.dataset.c]=true;dm.saveD()}break}
     case 'dmrm':dm.removeC(b.dataset.id);dm.saveD();break;
     case 'dmnew':dm.newNote(dm.DU.nk||'npc');dm.saveD();break;
     case 'dmnews':dm.DU.nk='';dm.newNote('session');dm.saveD();break;
@@ -366,7 +369,7 @@ app.addEventListener('change',ev=>{
   if(el.id==='ac-auto'){S.acMode=el.checked?'auto':'manual';save();later();return}
   if(el.dataset.dp){const p=dm.D.party[+el.dataset.i];if(p){p[el.dataset.dp]=Math.max(el.dataset.dp==='level'?1:0,Math.min(el.dataset.dp==='level'?20:99,Math.floor(+el.value)||0));dm.saveD()}later();return}
   if(el.dataset.de){const e=dm.curEnc();if(e){e.name=el.value;dm.saveD()}later();return}
-  if(el.dataset.dm){const c=dm.find(el.dataset.id);if(c){c[el.dataset.dm]=el.dataset.dm==='init'?(+el.value||0):el.value;dm.saveD()}later();return}
+  if(el.dataset.dm){const c=dm.find(el.dataset.id),f=el.dataset.dm;if(c){c[f]=['init','ac','hp','hpMax'].includes(f)?Math.max(f==='init'?-99:0,Math.floor(+el.value)||0):el.value;dm.saveD();if(f!=='note')live.refresh()}later();return}
   if(el.dataset.dmn){const n=dm.curNote();if(n){n[el.dataset.dmn]=el.value;dm.saveD()}later();return}
   const p=el.dataset.p;if(!p)return;
   let val=el.value;
@@ -545,6 +548,8 @@ function roomGuard(){
   if(wrong){live.disconnect();toast(tr('live.leftOther',{n:c.name}))}
 }
 const prevAfter=renderHooks.after;renderHooks.after=()=>{roomGuard();if(prevAfter)prevAfter()};
+/** Spieler am Zug (Spielleitung): letzten Online-Stand seines Bogens nur lesen und mit Zeitstempel zwischenspeichern (höchstens alle 60 s). */
+const prevAfter2=renderHooks.after;renderHooks.after=()=>{if(prevAfter2)prevAfter2();if(live.L.role!=='dm'||!dm.fighting())return;const cur=dm.nowNext().cur;if(!cur||cur.kind!=='pc'||!cur.live)return;const pk=dm.DU.pk;if(pk&&pk.key===cur.live&&(pk.loading||Date.now()-pk.got<60000))return;dm.DU.pk={key:cur.live,loading:true,got:Date.now(),data:pk&&pk.key===cur.live?pk.data:null,at:pk&&pk.key===cur.live?pk.at:null};cloud.peek(cur.live).then(r=>{if(!dm.DU.pk||dm.DU.pk.key!==cur.live)return;dm.DU.pk={key:cur.live,got:Date.now(),...(r||{data:null})};render()})};
 // Geladener Stand einer gelöschten Kampagne: beim Start auf den Grundbogen zurück (der Stand bleibt gespeichert)
 if(S.camp&&!camp.campaignById(S.camp))switchChar(S.id);
 // Escape schließt offene Dialoge (Kampfdialog, Stufenaufstieg, Übernahme, Bogen ansehen)

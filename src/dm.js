@@ -33,7 +33,9 @@ function normD(o) {
   return { ...b, ...o, combat: { ...b.combat, ...(o.combat || {}), list: Array.isArray(o.combat?.list) ? o.combat.list : [] }, notes: Array.isArray(o.notes) ? o.notes : [], party: Array.isArray(o.party) && o.party.length ? o.party : b.party, encounters: Array.isArray(o.encounters) ? o.encounters : [], custom: Array.isArray(o.custom) ? o.custom : [], merchants: Array.isArray(o.merchants) ? o.merchants : [], sales: Array.isArray(o.sales) ? o.sales : [] };
 }
 export let D = load();
-export const DU = { mq: '', nq: '', eq: '', conf: null, open: {}, exp: '', imp: '', editMon: null };
+export const DU = { mq: '', nq: '', eq: '', conf: null, open: {}, exp: '', imp: '', editMon: null, flog: [] };
+/** Kampfmeldungen der Spielleitung: nur die letzten Ereignisse dieser Sitzung, kein Protokoll (nicht gespeichert). */
+export function flog(text, kind = '') { DU.flog = [{ text, kind, r: D.combat.round }, ...(DU.flog || [])].slice(0, 8); }
 export const dmHooks = { onSave: null, live: null };
 export const saveD = () => {
   try {
@@ -100,8 +102,9 @@ export function addMonster(id, qty = 1) {
 export function addManual(name, ac, hp) {
   D.combat.list.push({ ...base(), kind: 'pc', name, ac: Math.max(0, Math.floor(ac) || 0), hp: Math.max(0, Math.floor(hp) || 0), hpMax: Math.max(0, Math.floor(hp) || 0) });
 }
-/** Zustand eines Gegners für die Spieler: nur grob (unverletzt, angeschlagen, schwer verletzt, besiegt), nie die TP. */
-const hpWord = c => (c.hp <= 0 ? 'down' : c.hp < c.hpMax / 2 ? 'bad' : c.hp < c.hpMax ? 'hurt' : 'ok');
+/** Was Spieler über einen Gegner erfahren (Gestaltungskonzept 11.1): Name, Initiative, Zustände; HG nur, wenn nicht verborgen
+ * (c.hideCr), RK nur, wenn freigegeben (c.showAc); „besiegt“ nur, wenn die Spielleitung es markiert (c.gone). Nie TP, Balken oder Stufen. */
+const foePub = c => { const m = findMonster(c.mon), cr = m ? (m.cr === 0.125 ? '1/8' : m.cr === 0.25 ? '1/4' : m.cr === 0.5 ? '1/2' : String(m.cr)) : ''; return { s: c.gone ? 'down' : '', cr: c.hideCr ? '' : cr, ac: c.showAc ? String(c.ac ?? '') : '', c: Object.keys(c.cond || {}).filter(k => c.cond[k]).slice(0, 6), ty: m && m.type ? String(m.type).toLowerCase().split(' ')[0] : '' }; };
 /** Läuft ein Kampf? Vorbereitung = Liste ohne aktiven Zug. */
 export const fighting = () => !!D.combat.active && D.combat.list.some(c => c.id === D.combat.active);
 /** Wer ist dran, wer kommt als Nächstes (für die Anzeige der Spielleitung, unabhängig vom Senden an Spieler). */
@@ -117,8 +120,8 @@ export function turnInfo() {
   const list = ordered().filter(c => !out(c)), i = list.findIndex(c => c.id === D.combat.active);
   if (i < 0) return null;
   const cur = list[i], nx = list.length > 1 ? list[(i + 1) % list.length] : null, pc = c => c && c.kind === 'pc';
-  const cr = c => { const m = c && c.kind === 'mon' && findMonster(c.mon); return m ? (m.cr === 0.125 ? '1/8' : m.cr === 0.25 ? '1/4' : m.cr === 0.5 ? '1/2' : String(m.cr)) : ''; };
-  const order = ordered().slice(0, 24).map(c => ({ n: c.name, pc: c.kind !== 'mon', k: c.kind === 'pc' ? c.live || '' : '', s: c.kind === 'mon' ? hpWord(c) : '', cur: c.id === cur.id, i: c.kind === 'pet' ? '' : String(c.init ?? ''), nx: !!nx && c.id === nx.id }));
+  const cr = c => { const m = c && c.kind === 'mon' && !c.hideCr && findMonster(c.mon); return m ? (m.cr === 0.125 ? '1/8' : m.cr === 0.25 ? '1/4' : m.cr === 0.5 ? '1/2' : String(m.cr)) : ''; };
+  const order = ordered().slice(0, 24).map(c => ({ n: c.name, pc: c.kind !== 'mon', k: c.kind === 'pc' ? c.live || '' : '', ...(c.kind === 'mon' ? foePub(c) : { s: '' }), cur: c.id === cur.id, i: c.kind === 'pet' ? '' : String(c.init ?? ''), nx: !!nx && c.id === nx.id }));
   return { r: D.combat.round, cur: cur.live || '', name: cur.name, enemy: !pc(cur), cr: cr(cur), next: nx ? nx.name : '', nextEnemy: !!nx && !pc(nx), nextCr: cr(nx), order };
 }
 /** Ein Spieler beendet seinen Zug. Gilt nur, wenn er wirklich gerade dran ist. */

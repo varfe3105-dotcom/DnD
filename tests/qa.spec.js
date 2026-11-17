@@ -90,6 +90,9 @@ test.describe('Prüfung: Trennung und Fehlerkorrekturen @new', () => {
     await page.locator('.fight-cols [data-a="dmopen"][data-id="a"]').click();
     await page.keyboard.press('Escape');
     await expect(page.locator('.dm-dlg')).toHaveCount(0);
+    // Klick daneben gilt für das Blatt am Handy; am Desktop steht „Eingreifen“ fest in der Spalte
+    await page.setViewportSize({ width: 390, height: 800 });
+    await page.locator('[data-a="fside"][data-k="foes"]').click();
     await page.locator('.fight-cols [data-a="dmopen"][data-id="a"]').click();
     await page.mouse.click(5, 5);
     await expect(page.locator('.dm-dlg')).toHaveCount(0);

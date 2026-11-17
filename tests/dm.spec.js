@@ -69,7 +69,7 @@ test.describe('DM-Bereich @new', () => {
     await addMonster(page, 'goblin warrior', 'goblin-warrior');
     await act(page, 'dmopen').click();
     await act(page, 'dmcond', '[data-c="Poisoned"]').click();
-    await expect(page.locator('.dm-name small')).toContainText('Poisoned');
+    await expect(page.locator('.dm-row').first()).toContainText('Poisoned');
     await expect(page.locator('.dm-stat')).toContainText('Nimble Escape');
   });
 
