@@ -66,11 +66,26 @@ select pruefung, ok from (values
 -- einen Besitzer hat; Altbestandsräume erscheinen, sobald die Spielleitung einmal gespeichert hat.
 select room, dm_key is not null as hat_schluessel, created_at from public.charbogen_rooms order by created_at;
 
--- K3 – D3 Teil 2 (alte Funktionen entfernt)? -------------------------------
--- Erwartet: alle true.
-select to_regprocedure('public.charbogen_put(text,text,text,text,jsonb,timestamptz)') is null as put_v1_weg,
-       to_regprocedure('public.charbogen_get(text,text,text)') is null as get_v1_weg,
-       to_regprocedure('public.charbogen_list(text)') is null as list_v1_weg,
-       to_regprocedure('public.charbogen_del(text,text,text)') is null as del_v1_weg;
+-- K3 – D3 Teil 2 (supabase/d3-rechte-teil2.sql) erfolgreich? ---------------
+-- Erwartet: alle Zeilen ok = true (alte Funktionen weg, neue Funktionen und Raumtabelle vorhanden).
+select pruefung, ok from (values
+  ('alt charbogen_put entfernt',  to_regprocedure('public.charbogen_put(text,text,text,text,jsonb,timestamptz)') is null),
+  ('alt charbogen_get entfernt',  to_regprocedure('public.charbogen_get(text,text,text)') is null),
+  ('alt charbogen_list entfernt', to_regprocedure('public.charbogen_list(text)') is null),
+  ('alt charbogen_del entfernt',  to_regprocedure('public.charbogen_del(text,text,text)') is null),
+  ('neu put2 vorhanden',      to_regprocedure('public.charbogen_put2(text,text,text,text,jsonb,timestamptz,text)') is not null),
+  ('neu get2 vorhanden',      to_regprocedure('public.charbogen_get2(text,text,text,text)') is not null),
+  ('neu del2 vorhanden',      to_regprocedure('public.charbogen_del2(text,text,text,text)') is not null),
+  ('neu list2 vorhanden',     to_regprocedure('public.charbogen_list2(text,text)') is not null),
+  ('neu claim vorhanden',     to_regprocedure('public.charbogen_claim(text,text,jsonb)') is not null),
+  ('neu room_key vorhanden',  to_regprocedure('public.charbogen_room_key(text)') is not null),
+  ('Raumtabelle vorhanden',   to_regclass('public.charbogen_rooms') is not null),
+  ('anon darf put2 weiterhin', coalesce(has_function_privilege('anon', to_regprocedure('public.charbogen_put2(text,text,text,text,jsonb,timestamptz,text)'), 'execute'), false)),
+  ('anon darf get2 weiterhin', coalesce(has_function_privilege('anon', to_regprocedure('public.charbogen_get2(text,text,text,text)'), 'execute'), false)),
+  ('anon darf list2 weiterhin', coalesce(has_function_privilege('anon', to_regprocedure('public.charbogen_list2(text,text)'), 'execute'), false)),
+  ('anon darf del2 weiterhin', coalesce(has_function_privilege('anon', to_regprocedure('public.charbogen_del2(text,text,text,text)'), 'execute'), false)),
+  ('anon darf claim weiterhin', coalesce(has_function_privilege('anon', to_regprocedure('public.charbogen_claim(text,text,jsonb)'), 'execute'), false)),
+  ('anon darf room_key weiterhin', coalesce(has_function_privilege('anon', to_regprocedure('public.charbogen_room_key(text)'), 'execute'), false))
+) as t(pruefung, ok);
 
 -- K4 – Bestand unverändert? K0b erneut ausführen und vergleichen: gleiche Räume, Arten und Anzahlen.

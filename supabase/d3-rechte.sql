@@ -14,7 +14,7 @@
 --     nur mit genauem Zeitstempel.
 --   * charbogen_list2: Übersicht ohne Daten; Spieler sehen nur ihre eigenen Zeilen.
 --   * charbogen_del2: nur Besitzer oder Spielleitung.
---   * Teil 2 (separat): alte Funktionen ohne Geheimnis entfernen.
+--   * Teil 2 (separat, supabase/d3-rechte-teil2.sql): alte Funktionen ohne Geheimnis entfernen.
 -- Teil 1 ist gefahrlos erneut ausführbar.
 -- ============================================================================
 
@@ -172,10 +172,4 @@ grant execute on function public.charbogen_get2(text, text, text, text) to anon,
 grant execute on function public.charbogen_del2(text, text, text, text) to anon, authenticated;
 
 -- ---------------------------------------------------------------- Teil 2 ----
--- Unmittelbar nach erfolgreicher Kontrolle von Teil 1 ausführen (die aktuelle App braucht die alten Funktionen nicht
--- mehr). Entfernt nur Funktionen, keine Daten. Erst danach gibt es keinen Zugriff ohne Geheimnis mehr, und erst dann
--- ist der Zeitstempel des Altbestands nicht mehr für jeden abrufbar.
--- drop function if exists public.charbogen_put(text, text, text, text, jsonb, timestamptz);
--- drop function if exists public.charbogen_get(text, text, text);
--- drop function if exists public.charbogen_list(text);
--- drop function if exists public.charbogen_del(text, text, text);
+-- Steht als eigene Datei in supabase/d3-rechte-teil2.sql (entfernt die alten Funktionen ohne Geheimnis).
