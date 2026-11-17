@@ -1,4 +1,4 @@
-import { test, expect, seed, act, tab, base4, URL_UNDER_TEST } from './helpers.js';
+import { test, expect, seed, act, tab, base4, URL_UNDER_TEST, joinRoom } from './helpers.js';
 
 // Ersatz für Supabase: zeichnet gesendete Daten auf und spielt eingehende ein.
 const fake = () => {
@@ -30,8 +30,7 @@ test.describe('Live-Tisch @new', () => {
 
   test('Spieler tritt bei und sendet nur die vereinbarten Werte', async ({ page }) => {
     await seed(page, base4({ tab: 'setup', notes: 'geheim', hp: 15 }));
-    await page.locator('#live-code').fill('abc234');
-    await act(page, 'livejoin').click();
+    await joinRoom(page, 'abc234');
     await expect(page.locator('.live-state')).toHaveClass(/on/);
     expect((await page.evaluate(() => window.__liveInfo)).code).toBe('ABC234');
     const p = await lastSent(page);
@@ -41,8 +40,7 @@ test.describe('Live-Tisch @new', () => {
 
   test('Änderungen gehen automatisch hinaus', async ({ page }) => {
     await seed(page, base4({ tab: 'setup', hp: 15 }));
-    await page.locator('#live-code').fill('ABC234');
-    await act(page, 'livejoin').click();
+    await joinRoom(page, 'ABC234');
     await tab(page, 'main');
     await act(page, 'hp', '[data-d="-1"]').first().click();
     await expect.poll(async () => (await lastSent(page)).hp).toBe(14);
@@ -53,20 +51,21 @@ test.describe('Live-Tisch @new', () => {
 
   test('ungültiger Code verbindet nicht', async ({ page }) => {
     await seed(page, base4({ tab: 'setup' }));
-    await page.locator('#live-code').fill('A1');
-    await act(page, 'livejoin').click();
+    // Beitritt läuft über „Kampagne beitreten“
+    await page.locator('[data-a="hubgo"][data-s="join"]').first().click();
+    await page.locator('#join-code').fill('A1');
+    await page.locator('[data-a="joinconn"]').click();
     await expect(page.locator('#toast')).toBeVisible();
     expect(await page.evaluate(() => window.__liveInfo)).toBeUndefined();
   });
 
   test('nach dem Neuladen wieder im Raum, Verlassen trennt', async ({ page }) => {
     await seed(page, base4({ tab: 'setup' }));
-    await page.locator('#live-code').fill('ABC234');
-    await act(page, 'livejoin').click();
+    await joinRoom(page, 'ABC234');
     await page.reload();
     await expect(page.locator('.live-state')).toHaveClass(/on/);
     await act(page, 'liveoff').click();
-    await expect(page.locator('#live-code')).toBeVisible();
+    await expect(page.locator('[data-a="hubgo"][data-s="join"]')).toBeVisible();
     await page.reload();
     expect(await page.evaluate(() => window.__liveInfo)).toBeUndefined();
   });
@@ -133,8 +132,7 @@ test.describe('Live-Tisch gegen das echte Projekt @new @real', () => {
     await expect(host.locator('.live-state')).toHaveClass(/on/, { timeout: 15000 });
     const code = await host.locator('.live-code b').textContent();
     const guest = await openAs(base4({ name: 'Gast', hp: 11, hpMax: 20, tab: 'setup' }), false);
-    await guest.locator('#live-code').fill(code);
-    await guest.locator('[data-a="livejoin"]').click();
+    await joinRoom(guest, code);
     await expect(guest.locator('.live-state')).toHaveClass(/on/, { timeout: 15000 });
     await expect(guest.locator('.dm-bar .lbl')).toHaveText(/DM is online/, { timeout: 15000 });
     await expect(host.locator('.dm-row')).toContainText('Gast', { timeout: 15000 });

@@ -1,4 +1,4 @@
-import { test, expect, seed, read, act, base4, URL_UNDER_TEST } from './helpers.js';
+import { test, expect, seed, read, act, base4, URL_UNDER_TEST, joinRoom } from './helpers.js';
 
 // Ersatz für Supabase: zeichnet Gesendetes auf und erlaubt, Presence und Nachrichten einzuspielen.
 const fake = () => {
@@ -11,8 +11,7 @@ const fake = () => {
 };
 const dmPeer = turn => ({ key: 'dm-x', role: 'dm', name: '', klass: '', level: 0, hp: 0, hpMax: 0, tmp: 0, ac: 0, exh: 0, conc: '', cond: [], death: { s: 0, f: 0 }, turn });
 const joinAsPlayer = async page => {
-  await page.locator('#live-code').fill('ABC234');
-  await act(page, 'livejoin').click();
+  await joinRoom(page, 'ABC234');
   await expect(page.locator('.live-state')).toHaveClass(/on/);
 };
 
@@ -76,19 +75,20 @@ test.describe('Zuganzeige @new', () => {
 test.describe('Spielleitungsmodus und Meilenstein @new', () => {
   test.beforeEach(async ({ page }) => { await page.addInitScript(fake); });
 
-  test('Umschalten in Einrichten: eigene Reiter, kein Charakterkopf; zurück bringt die Karte wieder', async ({ page }) => {
+  test('Spielleitung ohne Kampagne (Altbestand): eigene Reiter, kein Charakterkopf; Verlassen bringt den Charakter wieder', async ({ page }) => {
     await seed(page, base4({ tab: 'setup' }));
-    await page.evaluate(() => localStorage.setItem('charbogen-dm', JSON.stringify({ on: true })));
+    await page.evaluate(() => localStorage.setItem('charbogen-dm', JSON.stringify({ on: true, only: true })));
     await page.reload();
-    await page.locator('#dm-only').click();
     await expect(page.locator('.dmhd')).toBeVisible();
     await expect(page.locator('[data-a="tab"][data-t="main"]')).toHaveCount(0);
-    await expect(page.locator('[data-a="tab"][data-t="dmnotes"]')).toHaveAttribute('aria-selected', 'true');
-    await expect(page.locator('.here')).toBeVisible();
     await page.locator('[data-a="tab"][data-t="dmnotes"]').click();
+    await expect(page.locator('.here')).toBeVisible();
     await expect(page.locator('h2', { hasText: /Notebook|Notizbuch/ }).first()).toBeVisible();
+    // Verlassen der Spielleitung ohne Kampagne führt zum Spielleiterbereich; der Charakter öffnet wieder normal
     await page.locator('[data-a="tab"][data-t="setup"]').click();
-    await page.locator('#dm-only').click();
+    await page.locator('[data-a="dmleave"]').click();
+    await expect(page.locator('.hub[data-sec="gm"]')).toBeVisible();
+    await page.locator('.hub-me').click();
     await expect(page.locator('[data-a="tab"][data-t="prof"]')).toHaveCount(1);
     await expect(page.locator('.dmhd')).toHaveCount(0);
   });

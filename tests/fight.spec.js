@@ -1,5 +1,5 @@
 // Kampfmodus (Vorbereitung / laufender Kampf), Reihenfolge für Spieler, Konzentration beenden, Meldungen, Zauberverwaltung
-import { test, expect, URL_UNDER_TEST, seed, read, base4, tab } from './helpers.js';
+import { test, expect, URL_UNDER_TEST, seed, read, base4, tab, joinRoom } from './helpers.js';
 
 const blankSlots = () => Array.from({ length: 9 }, () => ({ max: 0, used: 0 }));
 async function dmPage(page) {
@@ -52,8 +52,7 @@ test.describe('Kampfmodus @new', () => {
   test('Spieler: Reihenfolge mit Zustand der Gegner, Meldungen bei Wirkung und Konzentrationsende', async ({ page }) => {
     await fake(page, { key: 'dm-x', role: 'dm', turn: { r: 2, cur: '', name: 'Goblin', enemy: true, next: 'Test', order: [{ n: 'Goblin', pc: false, s: 'bad', cur: true }, { n: 'Test', pc: true, k: '$KEY' }] }, buffs: [{ id: 'b1', s: 'Shield of Faith', to: ['$KEY'], v: 2 }] }, [{ id: 'm1', type: 'conc', to: '$KEY', from: 'dm-x' }]);
     await seed(page, base4({ tab: 'setup', conc: 'Bless' }));
-    await page.locator('#live-code').fill('ABC234');
-    await page.locator('[data-a="livejoin"]').click();
+    await joinRoom(page, 'ABC234');
     await expect(page.locator('#toast')).toContainText('Shield of Faith');
     await tab(page, 'main');
     await expect(page.locator('.fight-state.on')).toContainText(/Round 2|Runde 2/);
@@ -67,8 +66,7 @@ test.describe('Kampfmodus @new', () => {
   test('Spieler: eigener Zug golden hervorgehoben, Meldungsstreifen für Zug und Schaden, Ton nur auf Wunsch', async ({ page }) => {
     await fake(page, { key: 'dm-x', role: 'dm', turn: { r: 1, cur: '$KEY', name: 'Test', next: 'Ork', order: [{ n: 'Test', pc: true, k: '$KEY', cur: true, i: '15' }, { n: 'Ork', pc: false, s: 'ok', i: '8', nx: true }] } }, [{ id: 'm1', type: 'dmg', to: '$KEY', from: 'dm-x', value: 8 }]);
     await seed(page, base4({ tab: 'setup' }));
-    await page.locator('#live-code').fill('ABC234');
-    await page.locator('[data-a="livejoin"]').click();
+    await joinRoom(page, 'ABC234');
     await tab(page, 'main');
     await expect(page.locator('.fight-state.mine')).toBeVisible();
     await expect(page.locator('.ibar .ib.cur .ib-i')).toHaveText('15');

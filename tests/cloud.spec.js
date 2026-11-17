@@ -1,4 +1,4 @@
-import { test, expect, act, base4, URL_UNDER_TEST } from './helpers.js';
+import { test, expect, act, base4, URL_UNDER_TEST, joinRoom } from './helpers.js';
 
 // Nachbau der SQL-Funktionen aus supabase/charbogen-saves.sql, geteilt zwischen mehreren „Geräten“ (Browser-Kontexten).
 function fakeServer() {
@@ -40,8 +40,7 @@ async function device(browser, server, state, { setup = true } = {}) {
   return { ctx, page };
 }
 const join = async (page, code = 'ABC234') => {
-  await page.locator('#live-code').fill(code);
-  await act(page, 'livejoin').click();
+  await joinRoom(page, code);
   await expect(page.locator('.live-state')).toHaveClass(/on/);
 };
 

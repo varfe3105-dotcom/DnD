@@ -26,7 +26,9 @@ test.describe('DM-Bereich @new', () => {
     await seed(page, base4({ tab: 'setup' }));
     await expect(page.locator('[data-a="tab"][data-t^="dm"]')).toHaveCount(0);
     await expect(page.locator('#dm-on')).toHaveCount(0);
-    await page.locator('#dm-only').click();
+    // Spielleitung ohne Kampagne gibt es nur noch als Altbestand (gespeicherter Modus); er bleibt nach dem Neuladen
+    await page.evaluate(() => localStorage.setItem('charbogen-dm', JSON.stringify({ on: true, only: true })));
+    await page.reload();
     await expect(page.locator('[data-a="tab"][data-t="dmcombat"]')).toBeVisible();
     await page.reload();
     await expect(page.locator('[data-a="tab"][data-t="dmcombat"]')).toBeVisible();

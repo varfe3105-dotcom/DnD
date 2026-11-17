@@ -29,5 +29,5 @@ export function vDmBar(tabsHtml) {
 
 /** Einrichten im Spielleitungsmodus: nur, was die Spielleitung braucht. */
 export function vDmSetup() {
-  return `<h2>${t('dmm.setup')}</h2><div class="card"><p class="note" style="margin-top:0">${t('dmm.intro')}</p><div class="add"><label class="ck"><input type="checkbox" id="dm-only" checked> ${t('dmm.toggle')}</label></div><div class="add">${skinControls(t)}</div><p class="note">${t('dmm.hint')}</p></div>`;
+  return `<h2>${t('dmm.setup')}</h2><div class="card"><p class="note" style="margin-top:0">${t('dmm.intro')}</p><div class="add"><button class="btn" data-a="dmleave">${t('dmm.leave')}</button></div><div class="add">${skinControls(t)}</div><p class="note">${t('dmm.hint')}</p></div>`;
 }

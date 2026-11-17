@@ -100,6 +100,7 @@ app.addEventListener('click',ev=>{
     case 'dmopen':{const id=b.dataset.id,was=dm.DU.open[id];dm.DU.open={};if(!was)dm.DU.open[id]=true;break}
     case 'dmfocus':dm.DU.open={[b.dataset.id]:true};break;
     case 'dmclose':dm.DU.open={};break;
+    case 'dmleave':dm.D.only=false;dm.saveD();leavePlay();U.HUB='gm';break;
     case 'mbstep':{const gone=dm.step(1);dm.saveD();live.refresh();if(gone&&gone.length)toast(gone.map(x=>tr('dm.fxEnded',x)).join(' '));break}
     case 'fside':U.FSIDE=b.dataset.k;break;
     case 'soundtg':setSound(!soundOn());if(soundOn())beep();break;
@@ -235,7 +236,7 @@ app.addEventListener('click',ev=>{
     case 'hubplay':{if(!b.dataset.id&&S.camp&&camp.campaignById(S.camp)){if(!openCamp(S.camp,'prof'))return;break}
       // Einstieg über die Kampagne: spielt der Charakter in einer, öffnet sich die zuletzt genutzte (außer bei „Grundbogen“)
       if(b.dataset.id&&!b.dataset.lib){const k=camp.campaignsOf(b.dataset.id).filter(x=>x.role==='player'&&x.status==='active').sort((x,y)=>(y.seen||y.at).localeCompare(x.seen||x.at))[0];if(k){if(!openCamp(k.id,'prof'))return;break}}
-      U.CAMP=null;const id=b.dataset.id;if(id&&(id!==S.id||S.camp)&&!switchChar(id)){toast(tr('toast.saveFailed'));return}enterPlay(b.dataset.t||'prof');break}
+      U.CAMP=null;if(dm.D.only){dm.D.only=false;dm.saveD()}const id=b.dataset.id;if(id&&(id!==S.id||S.camp)&&!switchChar(id)){toast(tr('toast.saveFailed'));return}enterPlay(b.dataset.t||'prof');break}
     case 'hubwiki':U.HUB='wiki';U.HUBQ='';U.WSEL=b.dataset.key;U.WF='all';U.WQ='';window.scrollTo(0,0);break;
     case 'hubnewchar':newChar();openWizard();enterPlay('setup');break;
     case 'hubimport':hubImport();return;

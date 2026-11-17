@@ -1,4 +1,4 @@
-import { test, expect, seed, read, act, tab, base4, item, URL_UNDER_TEST } from './helpers.js';
+import { test, expect, seed, read, act, tab, base4, item, URL_UNDER_TEST, joinRoom } from './helpers.js';
 
 const bagOf = (...its) => { const bag = Array(24).fill(null); its.forEach((x, i) => { bag[i] = x; }); return bag; };
 const fake = () => {
@@ -55,8 +55,7 @@ test.describe('Beute über die Spielleitung @new', () => {
   test.beforeEach(async ({ page }) => { await page.addInitScript(fake); });
   const join = async page => {
     await seed(page, base4({ tab: 'setup', id: 'me1', gold: { pp: 0, gp: 3, ep: 0, sp: 0, cp: 0 } }));
-    await page.locator('#live-code').fill('ABC234');
-    await act(page, 'livejoin').click();
+    await joinRoom(page, 'ABC234');
     await expect(page.locator('.live-state')).toHaveClass(/on/);
   };
 

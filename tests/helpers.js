@@ -67,3 +67,10 @@ export async function castFirst(page, button) {
   const skip = page.locator('[data-a="tgtskip"]');
   if (await skip.count()) await skip.click();
 }
+
+/** Raum ohne Kampagne betreten. In der Oberfläche gibt es das nicht mehr (Beitritt läuft über Kampagnen); viele Tests prüfen
+ * aber die Live-Logik am Grundbogen und nutzen dafür die interne Aktion „livejoin“, die auch beim Wiederverbinden greift. */
+export const joinRoom = (page, code = 'ABC234') => page.evaluate(c => {
+  const app = document.getElementById('app'), i = document.createElement('input'), b = document.createElement('button');
+  i.id = 'live-code'; i.hidden = true; i.value = c; b.dataset.a = 'livejoin'; b.hidden = true; app.append(i, b); b.click();
+}, code);

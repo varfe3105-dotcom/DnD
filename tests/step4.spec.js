@@ -1,4 +1,4 @@
-import { test, expect, seed, read, act, tab, base4, URL_UNDER_TEST } from './helpers.js';
+import { test, expect, seed, read, act, tab, base4, URL_UNDER_TEST, joinRoom } from './helpers.js';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
@@ -15,8 +15,7 @@ const incoming = (page, m) => page.evaluate(x => window.__liveMsg(x), m);
 const sent = page => page.evaluate(() => window.__sent);
 const join = async (page, s = {}) => {
   await seed(page, base4({ tab: 'setup', hp: 20, hpMax: 20, id: 'me1', ...s }));
-  await page.locator('#live-code').fill('ABC234');
-  await act(page, 'livejoin').click();
+  await joinRoom(page, 'ABC234');
   await expect(page.locator('.live-state')).toHaveClass(/on/);
 };
 const openDm = async (page, view = 'live') => {

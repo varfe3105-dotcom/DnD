@@ -1705,5 +1705,7 @@
  "fight.soundHint": "A short, quiet tone when it is your turn (this device only).",
  "lib.bannerFight": "Trial view of the base sheet: try out values and actions here. Play happens in the campaign’s combat; changes here only affect the base sheet.",
  "setup.inCamp": "You are editing this campaign’s state. Switch, create or delete characters in the character library; the room is in the campaign overview.",
- "live.leftOther": "Left the room of “{n}” because a different state was loaded."
+ "live.leftOther": "Left the room of “{n}” because a different state was loaded.",
+ "live.viaCamp": "Play happens in campaigns: join a campaign with the DM’s code and your character gets its own state there.",
+ "dmm.leave": "Leave DM mode without campaign"
 }
