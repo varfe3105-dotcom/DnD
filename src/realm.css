@@ -446,3 +446,9 @@ html:not([data-hub]) .wrap{z-index:auto}
 .sec-state.on{border-color:rgba(95,191,106,.55)}.sec-state.on b{color:#8fd49a}
 .sec-state.off b,.sec-state.mixed b{color:#e3b866}.sec-state.foreign{border-color:rgba(224,80,60,.6)}.sec-state.foreign b{color:#ec8a78}
 @media (min-width:521px){.tabs:not(.side) nav{flex-wrap:wrap;overflow:visible}.tabs:not(.side) nav button{flex:none}}
+/* Vorschläge der Spielleitung (Posteingang der Live-Leiste): Text nutzt die verfügbare Breite, die beiden Knöpfe bleiben
+   zusammen und rutschen bei wenig Platz gemeinsam in die nächste Zeile (vorher: Text mit Ausgangsbreite 0 → Buchstabenumbruch). */
+#live-dock .inbox .row,.inbox .row.wrow{display:flex;flex-wrap:wrap;align-items:center;gap:6px 8px}
+#live-dock .inbox .row .nm,.inbox .row.wrow .nm{flex:1 1 12rem;min-width:0;overflow-wrap:break-word;word-break:normal;hyphens:auto}
+.inbox .wbtns{display:flex;gap:6px;flex:0 0 auto;margin-left:auto}
+.inbox .wbtns .btn{flex:none}

@@ -168,6 +168,9 @@ test.describe('Lücken aus Etappe 4 @new', () => {
     await page.goto(URL_UNDER_TEST);
     await page.evaluate(() => { localStorage.setItem('charbogen-v4', JSON.stringify({ v: 4, tab: 'dmlive' })); localStorage.setItem('charbogen-dm', JSON.stringify({ on: true, only: true, view: 'live' })); localStorage.setItem('charbogen-live', JSON.stringify({ code: 'ABC234', role: 'dm' })); });
     await page.reload();
+    // Erst bedienen, wenn die Anfragen nach dem Verbinden (Online-Übersicht) beantwortet sind; sonst setzt das
+    // anschließende Neuzeichnen die Auswahl zurück
+    await page.waitForLoadState('networkidle');
     await page.evaluate(l => window.__peers(l), [peer('held2', 'Mira')]);
     await page.locator('#lv-b-held2').selectOption('Bane');
     await act(page, 'dmbuff').click();

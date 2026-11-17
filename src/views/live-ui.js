@@ -37,7 +37,7 @@ export function vDock() {
 }
 export function vInbox() {
   if (L.role !== 'player' || !L.inbox.length) return '';
-  return `<div class="card inbox" role="status">${L.inbox.map(m => `<div class="row wrow"><div class="nm">${t('live.fromDm')}<small>${esc(proposalText(m))}</small></div><button class="btn sm solid" data-a="liveyes" data-id="${esc(m.id)}">${t('live.accept')}</button><button class="btn sm" data-a="liveno" data-id="${esc(m.id)}">${t('live.decline')}</button></div>`).join('')}</div>`;
+  return `<div class="card inbox" role="status">${L.inbox.map(m => `<div class="row wrow"><div class="nm">${t('live.fromDm')}<small>${esc(proposalText(m))}</small></div><span class="wbtns"><button class="btn sm solid" data-a="liveyes" data-id="${esc(m.id)}">${t('live.accept')}</button><button class="btn sm" data-a="liveno" data-id="${esc(m.id)}">${t('live.decline')}</button></span></div>`).join('')}</div>`;
 }
 
 export function vHandout() {

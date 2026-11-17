@@ -318,7 +318,7 @@ function openBoxes(list, again) {
 }
 /** D3 einrichten: Spielleitung beansprucht den Raum mit ihrem öffentlichen Schlüssel, Spieler holen diesen Schlüssel. */
 async function secInit() {
-  const room = L.code, role = L.role;
+  const room = L.code, role = L.role, before = SEC.mode + '|' + (SEC.key ? SEC.key.x : '');
   if (!room || !supported()) return;
   SEC.tried = Date.now();
   try {
@@ -333,6 +333,8 @@ async function secInit() {
       SEC.key = k && k.x ? k : null; SEC.mode = SEC.key ? 'on' : 'wait'; SEC.plain = '';
     }
   } catch (e) { if (room === L.code && e.setup) SEC.mode = 'off'; }
+  // Nur bei geändertem Stand neu senden und neu zeichnen (sonst gingen etwa gerade gewählte Auswahlfelder verloren)
+  if (room !== L.code || SEC.mode + '|' + (SEC.key ? SEC.key.x : '') === before) return;
   lastSent = ''; push(); listener(true);
 }
 export function disconnect() {
