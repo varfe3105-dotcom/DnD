@@ -18,7 +18,7 @@ const sec = (cls, title, body) => `<section class="lb-sec ${cls}"><h3 class="ov-
 const excerpt = (s, n = 160) => { const x = String(s || '').replace(/\[\[([^\]\n]+)\]\]/g, '$1').replace(/\s+/g, ' ').trim(); return esc(x.slice(0, n)) + (x.length > n ? ' …' : ''); };
 /** Offene Aufgaben in der eigenen Chronik: Zeilen, die mit „[ ]“ oder „- [ ]“ beginnen. */
 export const logTasks = log => String(log || '').split('\n').map(l => l.trim()).filter(l => /^(-\s*)?\[ \]/.test(l)).map(l => l.replace(/^(-\s*)?\[ \]\s*/, ''));
-const logRecent = log => String(log || '').split('\n').map(l => l.trim()).filter(l => l && !/^(-\s*)?\[[ x]\]/i.test(l)).slice(-3).reverse();
+const logRecent = log => String(log || '').split('\n').map(l => l.trim().replace(/^(##|!)\s*/, '')).filter(l => l && !/^(-\s*)?\[[ x]\]/i.test(l)).slice(-3).reverse();
 
 /** Raum: Spielleitung öffnet und teilt den Code, Spieler verbinden sich. */
 export function vRoom(c) {

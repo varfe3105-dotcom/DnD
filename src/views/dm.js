@@ -5,6 +5,9 @@ import { SK } from '../constants.js';
 import { vCheat, statText } from './dm-rules.js';
 import { esc, mod, sg } from '../util.js';
 import { U } from '../state.js';
+import { catSelect } from './inventory.js';
+import { timeline } from './chron.js';
+import { cpToGp } from '../shop.js';
 import { glyph } from '../icons.js';
 import { COND } from '../catalog.js';
 import { t, nameLine, dist } from '../i18n/index.js';
@@ -121,7 +124,19 @@ export function vHere() {
   const links = h ? linksOf(h) : [], mons = h?.monsters || [];
   return `<div class="here"><div class="here-place"><p class="lbl">${t('dm.here')}</p>${h ? `<h3>${esc(h.title || t('dm.untitled'))}</h3>${h.body ? `<p class="ptext">${excerpt(h.body)}</p>` : ''}${links.length ? `<div class="chips">${links.map(l => `<button class="chip${noteByTitle(l) ? '' : ' dm-new'}" data-a="dmlink" data-t="${esc(l)}">${esc(l)}</button>`).join('')}</div>` : ''}<div class="add"><button class="btn sm" data-a="dmsel" data-id="${h.id}">${t('dm.open')}</button>${mons.length ? `<button class="btn sm solid" data-a="dmplstart" data-id="${h.id}">${t('dm.startHere', { n: mons.reduce((a, m) => a + m.qty, 0) })}</button>` : ''}${pick}</div>` : `<p class="note">${places.length ? t('dm.hereNone') : t('dm.hereNoPlaces')}</p><div class="add">${places.length ? pick : ''}<button class="btn sm solid" data-a="dmnewhere">${t('dm.newPlace')}</button></div>`}</div><div class="here-session"><p class="lbl">${t('dm.lastSession')}</p>${ses ? `<h3>${esc(ses.title)}</h3>${ses.body ? `<p class="ptext">${excerpt(ses.body)}</p>` : `<p class="note">${t('dm.sessionEmpty')}</p>`}<div class="add"><button class="btn sm" data-a="dmsel" data-id="${ses.id}">${t('dm.open')}</button><button class="btn sm solid" data-a="dmnews">${t('dm.newSession')}</button></div>` : `<p class="note">${t('dm.noSession')}</p><div class="add"><button class="btn sm solid" data-a="dmnews">${t('dm.newSession')}</button></div>`}</div></div>`;
 }
+/** Kampagnenbuch der Spielleitung: Einträge des Notizbuchs als Zeitleiste, nach Art gefiltert. Alles privat, bis die gemeinsame Chronik freigegeben ist. */
+function vBook() {
+  const f = DU.bookF || 'session', list = D.notes.filter(n => f === 'all' || n.kind === f);
+  const items = (DU.bookRev ? list : [...list].reverse()).map(n => ({ title: n.title, meta: t('dm.kind.' + n.kind), body: n.body, tags: `<span class="tag sm" title="${t('chron.privHint')}">🔒 ${t('chron.private')}</span>`, act: `<button class="btn sm" data-a="dmsel" data-id="${n.id}" data-v="notes">${t('dm.open')}</button>` }));
+  return `<div class="chips">${['session', 'plot', 'place', 'npc', 'all'].map(k => `<button class="chip${f === k ? ' on' : ''}" data-a="bookf" data-k="${k}" aria-pressed="${f === k}">${k === 'all' ? t('dm.kindAll') : t('dm.kind.' + k)}</button>`).join('')}<button class="chip" data-a="bookrev" aria-pressed="${!!DU.bookRev}">${t(DU.bookRev ? 'chron.newest' : 'chron.oldest')}</button><button class="btn sm solid" data-a="dmnews">${t('dm.newSession')}</button></div>
+  <p class="note">${t('chron.dmHint')}</p>${timeline(items)}`;
+}
 function vNotes() {
+  const tabs = `<div class="seg chron-tabs" role="group">${['book', 'notes'].map(k => `<button class="tg${(DU.chronV || 'notes') === k ? ' on' : ''}" data-a="chronv" data-k="${k}" aria-pressed="${(DU.chronV || 'notes') === k}">${t('chron.v.' + k)}</button>`).join('')}</div>`;
+  if (DU.chronV === 'book') return tabs + vBook();
+  return tabs + vNotesInner();
+}
+function vNotesInner() {
   const n = curNote();
   return `${vHere()}<div class="wtools"><input type="search" id="dm-nq" value="${esc(DU.nq)}" placeholder="${t('dm.noteSearch')}" aria-label="${t('dm.noteSearch')}"><button class="btn solid" data-a="dmnew">${t('dm.newNote')}</button><button class="btn solid" data-a="dmnewp">${t('dm.newPlace')}</button><button class="btn solid" data-a="dmnews">${t('dm.newSession')}</button></div>
   <div class="chips dm-nk">${['', ...KINDS].map(k => `<button class="chip${(DU.nk || '') === k ? ' on' : ''}" data-a="dmnk" data-k="${k}" aria-pressed="${(DU.nk || '') === k}">${k ? t('dm.kind.' + k) : t('dm.kindAll')}</button>`).join('')}</div>
@@ -166,10 +181,22 @@ function vEncounters() {
   ${e ? `<h2>${esc(e.name || t('dm.untitled'))}</h2><div class="card"><div class="add" style="margin-top:0"><input type="text" id="dme-n" data-de="name" value="${esc(e.name)}" placeholder="${t('dm.encName')}" aria-label="${t('dm.encName')}"></div>${e.monsters.map(m => { const x = findMonster(m.id); return x ? `<div class="row"><div class="nm">${esc(x.n)}<small>CR ${crText(x.cr)} · ${xpOf(x.cr)} XP</small></div><div class="qty"><button data-a="dmeqty" data-m="${esc(m.id)}" data-d="-1" aria-label="${t('common.less')}">−</button><span>${m.qty}</span><button data-a="dmeqty" data-m="${esc(m.id)}" data-d="1" aria-label="${t('common.more')}">+</button></div></div>` : ''; }).join('')}<p class="dm-total">${badge(r)} <span>${t('dm.xpLine24', { a: r.xp, b: r.budget, l: t('dm.diff.' + (r.level === 'none' ? 'low' : r.level)) })}</span></p><div class="add"><input type="search" id="dm-eq" value="${esc(DU.eq)}" placeholder="${t('dm.search')}" aria-label="${t('dm.search')}"></div><div id="dm-eres">${vEncResults()}</div></div>` : ''}
   ${vCustomForm()}`;
 }
+/** Händler der Kampagne: Sortiment aus dem Katalog oder eigene Waren, Preis (GM) und Bestand; „offen“ zeigt ihn den Spielern. */
+function vMerchants() {
+  const list = D.merchants || [], sales = (D.sales || []).slice(0, 6);
+  const ware = (m, w) => `<div class="row mer-w"><div class="nm">${esc(w.n)}${w.k ? '' : ` <span class="lbl">${t('setup.ownEntry')}</span>`}</div><label class="ck">${t('price.gp')} <input type="number" class="n" min="0" step="0.01" data-mer="cp" data-id="${m.id}" data-w="${w.id}" value="${cpToGp(w.cp)}" aria-label="${t('shop.price')} ${esc(w.n)}"></label><label class="ck">${t('shop.stock')} <input type="number" class="n" min="0" max="999" data-mer="q" data-id="${m.id}" data-w="${w.id}" value="${w.q}" aria-label="${t('shop.stock')} ${esc(w.n)}"></label><button class="del" data-a="merrm" data-id="${m.id}" data-w="${w.id}" aria-label="${t('item.remove')} ${esc(w.n)}">✕</button></div>`;
+  const one = m => `<details class="merchant card"${DU.merOpen === m.id || list.length === 1 ? ' open' : ''}><summary><b>${esc(m.n)}</b> <span class="tag ${m.open ? 't-good' : ''} sm">${t(m.open ? 'shop.open' : 'shop.closed')}</span> <small>${t('shop.wares', { n: m.items.length })}</small></summary>
+  <div class="add"><input type="text" data-mer="n" data-id="${m.id}" value="${esc(m.n)}" aria-label="${t('common.name')}"><button class="btn sm${m.open ? ' solid' : ''}" data-a="mertg" data-id="${m.id}" aria-pressed="${m.open}">${t(m.open ? 'shop.closeBtn' : 'shop.openBtn')}</button><button class="btn sm ${DU.conf === 'mer' + m.id ? 'warn' : 'bad'}" data-a="merdel" data-id="${m.id}">${DU.conf === 'mer' + m.id ? t('item.removeConfirm') : t('shop.merchantDel')}</button></div>
+  ${m.items.map(w => ware(m, w)).join('') || `<p class="note">${t('shop.noWares')}</p>`}
+  <div class="add">${catSelect('mer-add-' + m.id, ['item', 'potion', 'magic'])}<input type="number" class="n" id="mer-q-${m.id}" min="1" value="1" aria-label="${t('shop.stock')}"><button class="btn sm solid" data-a="meradd" data-id="${m.id}">${t('common.add')}</button></div>
+  <div class="add"><input type="text" id="mer-own-${m.id}" placeholder="${t('shop.ownWare')}" aria-label="${t('shop.ownWare')}"></div></details>`;
+  return `<h2>${t('shop.merchants')}</h2><p class="note">${t('shop.dmHint')}</p>${list.map(one).join('')}<div class="add"><input type="text" id="mer-new" placeholder="${t('shop.merchantName')}" aria-label="${t('shop.merchantName')}"><button class="btn" data-a="mernew">${t('shop.merchantAdd')}</button></div>
+  ${sales.length ? `<p class="lbl">${t('shop.salesTitle')}</p><ul class="lb-list">${sales.map(x => `<li>${t('shop.saleLine', { p: esc(x.who), n: esc(x.n), g: cpToGp(x.cp) })}</li>`).join('')}</ul>` : ''}<h2>${t('loot.title')}</h2>`;
+}
 export function vDm(solo = false) {
   const tab = (k, l) => `<button class="chip${D.view === k ? ' on' : ''}" data-a="dmview" data-v="${k}" aria-pressed="${D.view === k}">${l}</button>`;
   const nav = solo ? `<h2>${t('dmm.view.' + D.view)}</h2>` : `<h2>${t('tab.dm')}</h2><div class="chips">${tab('combat', t('dm.combat'))}${tab('enc', t('dm.encounters'))}${tab('loot', t('loot.title'))}${tab('cheat', t('dm.cheat'))}${tab('notes', t('dm.notes'))}${tab('live', t('live.title'))}</div>`;
-  return `${nav}<div style="margin-top:14px">${D.view === 'notes' ? vNotes() : D.view === 'live' ? vLive() : D.view === 'enc' ? vEncounters() : D.view === 'cheat' ? vCheat() : D.view === 'loot' ? vLoot() : vCombat()}</div>
+  return `${nav}<div style="margin-top:14px">${D.view === 'notes' ? vNotes() : D.view === 'live' ? vLive() : D.view === 'enc' ? vEncounters() : D.view === 'cheat' ? vCheat() : D.view === 'loot' ? vMerchants() + vLoot() : vCombat()}</div>
   <details class="dm-backup"><summary>${t('setup.backup')}</summary><p class="note">${t('dm.backupHint')}</p><div class="add"><button class="btn" data-a="dmexp">${t('setup.export')}</button><button class="btn" data-a="dmimp">${t('setup.import')}</button></div>${DU.exp ? `<textarea id="dm-exp" readonly aria-label="${t('setup.exportLabel')}">${esc(DU.exp)}</textarea>` : ''}<textarea id="dm-imp" placeholder="${t('setup.pasteImport')}" aria-label="${t('setup.importLabel')}" style="margin-top:8px">${esc(DU.imp)}</textarea></details>`;
 }
 export { dist };

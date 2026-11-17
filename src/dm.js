@@ -1,5 +1,6 @@
 // DM-Bereich: Kampf-Tracker und Kampagnennotizen. Liegt getrennt von den Charakteren auf diesem Gerät.
 import monsters from '../data/monsters.json';
+import { BYN } from './catalog.js';
 import { uid, clamp } from './util.js';
 import { charSnapshot, roster, toast } from './state.js';
 import { t } from './i18n/index.js';
@@ -20,7 +21,7 @@ export function legacySummary() { const o = normD(getJ(KEY)); return { notes: o.
 export function adoptLegacy(id) { const { on, only, view, custom, ...camp } = normD(getJ(KEY)); localStorage.setItem(campKey(id), JSON.stringify(camp)); }
 /** Rückweg: Spielleitungsdaten einer Kampagne entfernen. */
 export function dropCamp(id) { if (ctx === id) useCamp(null); localStorage.removeItem(campKey(id)); }
-const blank = () => ({ on: false, view: 'combat', combat: { round: 1, active: null, list: [] }, notes: [], sel: null, party: [{ count: 4, level: 3 }], encounters: [], custom: [], encSel: null });
+const blank = () => ({ on: false, view: 'combat', combat: { round: 1, active: null, list: [] }, notes: [], sel: null, party: [{ count: 4, level: 3 }], encounters: [], custom: [], encSel: null, merchants: [], sales: [] });
 function load() {
   const o = normD(getJ(KEY)), lc = libCustom();
   if (lc) o.custom = lc;
@@ -29,7 +30,7 @@ function load() {
 function normD(o) {
   const b = blank();
   if (!o || typeof o !== 'object') return b;
-  return { ...b, ...o, combat: { ...b.combat, ...(o.combat || {}), list: Array.isArray(o.combat?.list) ? o.combat.list : [] }, notes: Array.isArray(o.notes) ? o.notes : [], party: Array.isArray(o.party) && o.party.length ? o.party : b.party, encounters: Array.isArray(o.encounters) ? o.encounters : [], custom: Array.isArray(o.custom) ? o.custom : [] };
+  return { ...b, ...o, combat: { ...b.combat, ...(o.combat || {}), list: Array.isArray(o.combat?.list) ? o.combat.list : [] }, notes: Array.isArray(o.notes) ? o.notes : [], party: Array.isArray(o.party) && o.party.length ? o.party : b.party, encounters: Array.isArray(o.encounters) ? o.encounters : [], custom: Array.isArray(o.custom) ? o.custom : [], merchants: Array.isArray(o.merchants) ? o.merchants : [], sales: Array.isArray(o.sales) ? o.sales : [] };
 }
 export let D = load();
 export const DU = { mq: '', nq: '', eq: '', conf: null, open: {}, exp: '', imp: '', editMon: null };
@@ -273,6 +274,27 @@ export const hereNote = () => D.notes.find(n => n.id === D.here && n.kind === 'p
 export const setHere = id => { D.here = id || null; };
 export const lastSession = () => D.notes.find(n => n.kind === 'session') || null;
 export const curNote = () => D.notes.find(n => n.id === D.sel) || null;
+/** Atlas für Spieler: nur ausdrücklich freigegebene Orte, Personen und Handlung, nur Titel und der eigene Spielertext (nie die Notiz). */
+export const atlasOut = () => D.notes.filter(n => n.pub && ['place', 'npc', 'plot'].includes(n.kind)).slice(0, 16).map(n => ({ t: String(n.title || '').slice(0, 80), d: String(n.pubText || '').slice(0, 300), k: n.kind, h: D.here === n.id }));
+/* ---- Händler (je Kampagne) ----
+   Ein Händler: Name, offen (für Spieler sichtbar), Waren mit Katalogschlüssel oder eigenem Namen, Preis in Kupfer, Bestand. */
+export function addMerchant(name) { const m = { id: uid(), n: String(name || '').slice(0, 60) || t('shop.merchantNew'), open: false, items: [] }; D.merchants.push(m); return m; }
+export const merchant = id => (D.merchants || []).find(m => m.id === id);
+export function addWare(mid, key, qty, own) {
+  const m = merchant(mid); if (!m) return;
+  const c = key && BYN[key], cp = c ? (+c.cp || +c.cpMin || 0) : 0;
+  m.items.push({ id: uid(), k: c ? key : '', n: c ? c.n : String(own || '').slice(0, 80), cp, q: Math.max(0, Math.min(999, Math.floor(+qty) || 1)) });
+}
+/** Verkauf an einen Spieler: Bestand −1, kurzer Verlauf. Liefert die Ware oder null. */
+export function sellWare(mid, wid, who) {
+  const w = merchant(mid)?.items.find(x => x.id === wid);
+  if (!w || w.q <= 0) return null;
+  w.q -= 1;
+  D.sales = [{ who, n: w.n, cp: w.cp, m: mid, at: new Date().toISOString() }, ...(D.sales || [])].slice(0, 20);
+  return w;
+}
+/** Für die Presence: nur geöffnete Händler, Waren mit Preis und Bestand. */
+export const shopOut = () => (D.merchants || []).filter(m => m.open).slice(0, 4).map(m => ({ id: m.id, n: m.n, it: m.items.slice(0, 30).map(w => ({ id: w.id, k: w.k, n: w.n, cp: w.cp, q: w.q })) }));
 export function newNote(kind = 'npc') {
   const nr = D.notes.filter(x => x.kind === 'session').length + 1;
   const title = kind === 'session' ? `${t('dm.sessionTitle', { n: nr })} · ${new Date().toLocaleDateString()}` : '';

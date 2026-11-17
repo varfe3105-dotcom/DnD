@@ -626,3 +626,36 @@ html[data-area="char"] .lvh b{font:600 .95rem var(--f-cap);letter-spacing:.08em;
 .dm-dlg .chip{background:rgba(60,40,25,.06);color:var(--c-parch-ink);border:1px solid rgba(60,40,25,.35);box-shadow:none;clip-path:none;min-height:36px}
 .dm-dlg .chip.on{background:var(--st-bad);border-color:var(--st-bad);color:#fff}
 .dm-dlg .dm-hpv{font:700 1.2rem var(--f-title);color:var(--c-parch-ink)}
+
+/* ===== Erkundung als Atlas ===== */
+.atlas-map{margin:12px 0}
+.atlas-map>.btn{margin-right:6px}
+.atlas{display:grid;gap:16px;grid-template-columns:minmax(0,1fr)}
+@media (min-width:900px){.atlas{grid-template-columns:minmax(220px,300px) minmax(0,1fr);align-items:start}.atlas-l{position:sticky;top:12px}}
+.atlas-l,.atlas-r{padding:12px 16px;background:rgba(10,8,10,.32);border:1px solid var(--c-brass-soft)}
+.atlas-r{border-left:3px solid var(--c-brass);min-height:240px}
+.atlas-t{margin:0 0 6px;font:700 1.7rem var(--f-title);color:var(--c-cream)}
+.atlas-ti{width:100%;font:700 1.5rem var(--f-title)!important;background:none!important;border:0!important;border-bottom:1px solid var(--c-brass-soft)!important;color:var(--c-cream)!important;padding:4px 0!important;margin-bottom:6px}
+.atlas-priv{padding:10px 12px;border-left:2px dashed var(--c-brass-a);background:rgba(59,36,64,.25)}
+.atlas-pub{margin-top:16px;padding:12px;border:1px solid var(--st-good);background:var(--st-good-bg)}
+.atlas-pub textarea{width:100%;margin-top:6px}
+.atlas-here{margin:0 0 10px}.atlas-here .cover-v{font:700 1.3rem var(--f-title)}
+
+/* ===== Händler ===== */
+.merchant summary{cursor:pointer;display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.mer-w{align-items:center;flex-wrap:wrap;gap:6px 10px}
+.shops{display:grid;gap:14px;grid-template-columns:repeat(auto-fill,minmax(min(100%,320px),1fr))}
+.shop .row{align-items:center}
+.shop-p{font:700 1.1rem var(--f-title);color:var(--c-brass-lt);white-space:nowrap}
+
+/* ===== Chronik als Kampagnenbuch ===== */
+.chron-tabs{margin:6px 0 12px}
+.chron{list-style:none;margin:12px 0 0;padding:0 0 0 18px;border-left:2px solid var(--c-brass-a);display:grid;gap:14px}
+.chron-e{position:relative;padding:12px 16px;background:rgba(10,8,10,.32);border:1px solid var(--c-brass-soft)}
+.chron-e::before{content:"";position:absolute;left:-26px;top:16px;width:12px;height:12px;transform:rotate(45deg);background:var(--c-brass);box-shadow:0 0 0 3px var(--c-anth-1,#1a1418)}
+.chron-h{display:flex;flex-wrap:wrap;align-items:center;gap:8px}
+.chron-h h3{flex:1;margin:0;font:700 1.25rem var(--f-title);color:var(--c-cream)}
+.chron-b p{margin:6px 0;font:1rem/1.6 var(--f-body);color:var(--c-cream-2)}
+.chron-b .chron-hl{padding:4px 10px;border-left:3px solid var(--c-brass-lt);background:rgba(212,176,106,.12);color:var(--c-cream);font-weight:700}
+.chron-task.done{opacity:.7;text-decoration:line-through}
+.chron-new textarea{width:100%}

@@ -59,7 +59,7 @@ app.addEventListener('click',ev=>{
   const a=b.dataset.a,i=+b.dataset.i,k=b.dataset.k,v=id=>($(id)||{}).value||'';
   if(a==='luclose-bg'&&ev.target!==b)return;
   if(a!=='rm'&&a!=='imp'&&a!=='reset'&&a!=='chardel'&&a!=='npdel'&&a!=='campdel'&&a!=='stdrop'&&a!=='spdel'&&a!=='campundo'&&a!=='tolib')U.CONF=null;
-  if(!['dmclear','dmfightend','dmndel','dmedel','dmcdel'].includes(a))dm.DU.conf=null;
+  if(!['dmclear','dmfightend','dmndel','dmedel','dmcdel','merdel'].includes(a))dm.DU.conf=null;
   if(a!=='cast'&&a!=='castslot')U.CASTPICK=null;
   pend=false;
   switch(a){
@@ -100,6 +100,22 @@ app.addEventListener('click',ev=>{
     case 'dmopen':{const id=b.dataset.id,was=dm.DU.open[id];dm.DU.open={};if(!was)dm.DU.open[id]=true;break}
     case 'dmfocus':dm.DU.open={[b.dataset.id]:true};break;
     case 'dmclose':dm.DU.open={};break;
+    case 'chronv':dm.DU.chronV=b.dataset.k;break;
+    case 'bookf':dm.DU.bookF=b.dataset.k;break;
+    case 'bookrev':dm.DU.bookRev=!dm.DU.bookRev;break;
+    case 'chronadd':{const c=U.CAMP&&camp.campaignById(U.CAMP);const ti=v('chr-t').trim(),tx=v('chr-x').trim();if(!c||!ti){toast(tr('chron.needTitle'));return}camp.saveCampaign({...c,log:(c.log.trim()?c.log.replace(/\s*$/,'')+'\n\n':'')+'## '+ti+'\n'+tx});toast(tr('chron.added'));break}
+    case 'chronraw':U.CHRONRAW=!U.CHRONRAW;break;
+    case 'chronrev':U.CHRONREV=!U.CHRONREV;break;
+    case 'mernew':{const n=v('mer-new').trim();dm.addMerchant(n);dm.saveD();break}
+    case 'mertg':{const m=dm.merchant(b.dataset.id);if(m){m.open=!m.open;dm.saveD()}break}
+    case 'merdel':{const id=b.dataset.id;if(dm.DU.conf!=='mer'+id){dm.DU.conf='mer'+id;break}dm.DU.conf=null;dm.D.merchants=dm.D.merchants.filter(x=>x.id!==id);dm.saveD();break}
+    case 'meradd':{const id=b.dataset.id,k=v('mer-add-'+id),own=v('mer-own-'+id).trim();if(!k&&!own){toast(tr('shop.pickWare'));return}dm.addWare(id,k,v('mer-q-'+id)||1,own);dm.saveD();break}
+    case 'merrm':{const m=dm.merchant(b.dataset.id);if(m){m.items=m.items.filter(x=>x.id!==b.dataset.w);dm.saveD()}break}
+    case 'shopbuy':{const w=live.dmShop().find(x=>x.id===b.dataset.m)?.it.find(x=>x.id===b.dataset.w);if(!w||w.q<=0){toast(tr('shop.soldOut'));return}if(!payCp(S.gold,w.cp)){toast(tr('shop.noMoney'));return}const c=w.k&&BYN[w.k];putBag(S,mk(c?{...c,key:w.k}:{n:w.n,ic:'box',p:''},1));live.sendMsg({type:'buy',to:'dm',m:b.dataset.m,i:w.id,name:S.name});toast(tr('shop.bought',{n:w.n}));break}
+    case 'atsel':U.ATLAS=b.dataset.id;break;
+    case 'atpub':{const n=dm.D.notes.find(x=>x.id===b.dataset.id);if(n){n.pub=!n.pub;dm.saveD()}break}
+    case 'atnew':dm.newNote(b.dataset.k);U.ATLAS=dm.D.sel;dm.saveD();break;
+    case 'athere':dm.setHere(b.dataset.id);dm.saveD();break;
     case 'dmleave':dm.D.only=false;dm.saveD();leavePlay();U.HUB='gm';break;
     case 'mbstep':{const gone=dm.step(1);dm.saveD();live.refresh();if(gone&&gone.length)toast(gone.map(x=>tr('dm.fxEnded',x)).join(' '));break}
     case 'fside':U.FSIDE=b.dataset.k;break;
@@ -119,7 +135,7 @@ app.addEventListener('click',ev=>{
     case 'npsel':S.notePage=i;break;
     case 'npadd':addPage();break;
     case 'npdel':{const p=pageList()[curPage()];if(p.text.trim()&&U.CONF!=='npdel'){U.CONF='npdel';break}U.CONF=null;delPage();break}
-    case 'dmsel':dm.D.sel=b.dataset.id;dm.saveD();break;
+    case 'dmsel':dm.D.sel=b.dataset.id;if(b.dataset.v==='notes')dm.DU.chronV='notes';dm.saveD();break;
     case 'dmlink':dm.openLink(b.dataset.t);dm.saveD();break;
     case 'dmndel':if(dm.DU.conf!=='note'){dm.DU.conf='note';break}dm.DU.conf=null;dm.delNote(b.dataset.id);dm.saveD();break;
     case 'dmexp':dm.DU.exp=dm.exportD();break;
@@ -370,6 +386,9 @@ app.addEventListener('input',ev=>{
   if(el.id==='inv-sort'){U.INVS=el.value;later();return}
   if(el.id==='cv-chapter'||el.id==='cv-plan'){const c=U.CAMP&&camp.campaignById(U.CAMP);if(c){camp.saveCampaign({...c,[el.id==='cv-chapter'?'chapter':'plan']:el.value});live.refresh()}return}
   if(el.id==='pl-name'||el.id==='join-pl'){setPlayerName(el.value);live.refresh();return}
+  if(el.dataset.mer){const m=dm.merchant(el.dataset.id);if(m){if(el.dataset.mer==='n')m.n=el.value.slice(0,60);else{const w=m.items.find(x=>x.id===el.dataset.w);if(w){if(el.dataset.mer==='cp')w.cp=Math.max(0,Math.round((parseFloat(String(el.value).replace(',','.'))||0)*100));else w.q=Math.max(0,Math.min(999,Math.floor(+el.value)||0))}}dm.saveD()}return}
+  if(el.id==='at-pub'){const n=dm.D.notes.find(x=>x.id===el.dataset.id);if(n){n.pubText=el.value.slice(0,300);dm.saveD()}return}
+  if(el.id==='at-title'){const n=dm.D.notes.find(x=>x.id===el.dataset.id);if(n){n.title=el.value;dm.saveD()}return}
   if(el.id==='camp-log'){const c=U.CAMP&&camp.campaignById(U.CAMP);if(c)camp.saveCampaign({...c,log:el.value});return}
   if(el.id==='ho-t'){dm.DU.hoT=el.value;return}
   if(el.id==='ho-x'){dm.DU.hoX=el.value;return}
@@ -433,9 +452,9 @@ hooks.beforeSave=()=>{syncBuffs(live.L.role==='player'?live.L.peers:[]);syncAc()
 live.setPetSource(()=>S.pets.map(petView));
 live.setJoinHook(cloud.onJoin);
 cloud.setCloudListener(()=>{if(!S.tab.startsWith('dm')&&S.tab!=='setup')return;if(typing()){livePending=true;return}later()});
-live.setDmFlags(()=>({camp:dmCampMeta(),here:dm.hereNote()?.title?.slice(0,80)||'',lock:!!dm.D.lootLock,turn:dm.turnInfo(),stash:stashOut(),buffs:(dm.D.buffsOut||[]).map(b=>({id:b.id,s:b.s,to:b.to,v:b.v||0}))}));
+live.setDmFlags(()=>({shop:dm.shopOut(),atlas:dm.atlasOut(),camp:dmCampMeta(),here:dm.hereNote()?.title?.slice(0,80)||'',lock:!!dm.D.lootLock,turn:dm.turnInfo(),stash:stashOut(),buffs:(dm.D.buffsOut||[]).map(b=>({id:b.id,s:b.s,to:b.to,v:b.v||0}))}));
 dm.dmHooks.live=()=>live.refresh();
-live.setDmMsgHook(m=>{const who=(live.players().find(p=>p.key===m.from)||{}).name||m.name||'?';if(m.type==='want'){want(m.iid,who);dm.saveD();later();return}if(stashPut(m,who)){dm.saveD();toast(tr('stash.in',{n:who}));later()}else live.refresh()});
+live.setDmMsgHook(m=>{const who=(live.players().find(p=>p.key===m.from)||{}).name||m.name||'?';if(m.type==='want'){want(m.iid,who);dm.saveD();later();return}if(m.type==='buy'){const w=dm.sellWare(m.m,m.i,who);if(w){dm.saveD();toast(tr('shop.sold',{p:who,n:w.n}));later()}return}if(stashPut(m,who)){dm.saveD();toast(tr('stash.in',{n:who}));later()}else live.refresh()});
 live.setEndTurnHook(key=>{const gone=dm.endTurnFrom(key);if(gone===null)return;dm.saveD();live.refresh();if(gone.length)toast(gone.map(x=>tr('dm.fxEnded',x)).join(' '));later()});
 live.setTurnHook(mine=>{if(mine){newTurn();save();later();const n=heroTemp();if(n){save();toast(tr('buff.heroTemp',{n}));later()}}if(!mine||turnsHidden())return;feed(tr('turn.yours'),'turn');if(soundOn())beep()});
 live.setAckHook(m=>toast(tr(m.ok?'live.ackYes':'live.ackNo',{n:m.name})));
@@ -480,7 +499,7 @@ function openCamp(id,tab='cover'){const c=camp.campaignById(id);if(!c)return fal
 /** Für die Presence der Spielleitung: Name und Beschreibung der geöffneten Kampagne, wenn ihr Raum offen ist. */
 function dmCampMeta(){const c=U.CAMP&&camp.campaignById(U.CAMP);return c&&c.role==='dm'&&c.room&&c.room===live.L.code?{n:c.name,d:c.desc.slice(0,200),c:c.chapter,p:c.plan.slice(0,600),x:c.next}:null}
 /** Spieler: Kapitel, Planung, Termin und Ort der Spielleitung dauerhaft in den eigenen Kampagneneintrag übernehmen. */
-function syncCampFromDm(){const m=live.dmCamp(),c=U.CAMP&&camp.campaignById(U.CAMP);if(!m||!c||c.role!=='player'||c.room!==live.L.code)return false;const up={};if(m.c!==c.chapter)up.chapter=m.c;if(m.p!==c.plan)up.plan=m.p;if(m.x!==c.next)up.next=m.x;const h=live.dmHere();if(h&&h!==c.place)up.place=h;if(!Object.keys(up).length)return false;camp.saveCampaign({...c,...up});return true}
+function syncCampFromDm(){const m=live.dmCamp(),c=U.CAMP&&camp.campaignById(U.CAMP);if(!c||c.role!=='player'||c.room!==live.L.code||!live.dmOnline())return false;const up={};if(m){if(m.c!==c.chapter)up.chapter=m.c;if(m.p!==c.plan)up.plan=m.p;if(m.x!==c.next)up.next=m.x}const h=live.dmHere();if(h&&h!==c.place)up.place=h;const at=live.dmAtlas();if(at&&JSON.stringify(at)!==JSON.stringify(c.atlas))up.atlas=at;if(!Object.keys(up).length)return false;camp.saveCampaign({...c,...up});return true}
 /** Import vom Dashboard: in Einrichten wechseln und die Dateiauswahl öffnen (dort liegen Prüfansicht und Übernahme). */
 function hubImport(){enterPlay('setup');render();const f=$('impf');if(f){f.scrollIntoView({block:'center'});f.click()}}
 

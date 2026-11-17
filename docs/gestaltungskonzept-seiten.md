@@ -221,3 +221,29 @@ Tests: `tests/campaign.spec.js`. Abnahme durch den Nutzer steht aus.
 - Darunter die Kampfansicht des eigenen Charakters.
 
 Tests: `tests/fight.spec.js`.
+
+## Stand Stufe 5 (17.11.2026)
+
+**Erkundung als Atlas**
+- Die Karte ist aufklappbar.
+- Links stehen Orte (der aktuelle zuerst), Personen sowie Handlung und Aufgaben.
+- Rechts steht der gewählte Eintrag: Titel direkt bearbeitbar, „Hier sind wir“, Kampf am Ort starten, private Notiz und Freigabe für Spieler mit eigenem Spielertext.
+- Spieler sehen nur Titel und Spielertext (Presence `atlas`, höchstens 16). Sie übernehmen beides dauerhaft in den Kampagneneintrag (`atlas`).
+
+**Händler** (`D.merchants`, je Kampagne)
+- Die Spielleitung legt an und pflegt Waren aus dem Katalog oder eigene, mit Preis in Gold und Bestand. „Für Spieler öffnen“ macht den Händler sichtbar.
+- Spieler sehen geöffnete Händler (Presence `shop`) und kaufen. Das Gold wird abgezogen, die Ware landet im Rucksack.
+- Nachricht `buy` an die Spielleitung senkt den Bestand und erscheint unter „Zuletzt verkauft“.
+
+**Chronik als Kampagnenbuch**
+- Spielleitung: Umschalter Kampagnenbuch oder Notizbuch. Die Zeitleiste lässt sich nach Art filtern und sortieren; alles ist als privat markiert.
+- Spieler: Formular „Neuer Eintrag“ (wird als `## Titel` an `log` angehängt), Zeitleiste, Rohtext aufklappbar.
+- Zeilen mit `!` sind wichtige Ereignisse, `[ ]` offene und `[x]` erledigte Aufgaben.
+- Die gemeinsame Chronik für Spieler folgt erst mit D2 (`docs/d2-gemeinsame-chronik-sql.md`, nicht ausgeführt).
+
+**Aufgeräumt**
+- Der alte Raumbeitritt im Grundbogen ist ersetzt durch „Kampagne beitreten“.
+- Den Schalter „Spielleitungsmodus“ ohne Kampagne gibt es nicht mehr. Der Altbestand lässt sich über „Spielleitung ohne Kampagne verlassen“ beenden.
+- Tests betreten Räume ohne Kampagne über `joinRoom()` in `tests/helpers.js`.
+
+Tests: `tests/stage5.spec.js`.

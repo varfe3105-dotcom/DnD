@@ -32,6 +32,8 @@ export const setDmMsgHook = fn => { dmMsgHook = fn; };
 /** Spieler: Gruppenkasse aus der Presence der Spielleitung. */
 /** Was die Spielleitung über die geöffnete Kampagne teilt: Name, Beschreibung, aktueller Ort (nur der Titel). */
 export const dmCamp = () => L.peers.find(p => p.role === 'dm' && p.camp)?.camp || null;
+export const dmAtlas = () => { const d = L.peers.find(p => p.role === 'dm'); return d ? d.atlas || [] : null; };
+export const dmShop = () => L.peers.find(p => p.role === 'dm' && p.shop && p.shop.length)?.shop || [];
 export const dmHere = () => L.peers.find(p => p.role === 'dm' && p.here)?.here || '';
 export const dmStash = () => L.peers.find(p => p.role === 'dm' && p.stash)?.stash || null;
 /** Spieler: die Zuganzeige hat sich geändert (mine = jetzt am Zug). */
@@ -70,11 +72,13 @@ function clean(p) {
     pets: Array.isArray(p.pets) ? p.pets.slice(0, 3).map(x => ({ id: str(x?.id, 40), n: str(x?.n), hp: int(x?.hp), hpMax: int(x?.hpMax), ac: int(x?.ac, 99) })).filter(x => x.id) : [],
     stash: p.role === 'dm' && p.stash && typeof p.stash === 'object' ? { g: Object.fromEntries(COINS.map(k => [k, int(p.stash.g?.[k], 9999999)])), it: Array.isArray(p.stash.it) ? p.stash.it.slice(0, 40).map(x => ({ id: str(x?.id, 40), n: str(x?.n, 80), q: Math.max(1, int(x?.q, 999)), w: int(x?.w, 9) })).filter(x => x.id && x.n) : [], got: Array.isArray(p.stash.got) ? p.stash.got.slice(-40).map(x => str(x, 40)) : [] } : null,
     pl: str(p.pl, 40), race: str(p.race, 30),
+    shop: p.role === 'dm' && Array.isArray(p.shop) ? p.shop.slice(0, 4).map(m => ({ id: str(m?.id, 40), n: str(m?.n, 60), it: Array.isArray(m?.it) ? m.it.slice(0, 30).map(w => ({ id: str(w?.id, 40), k: typeof w?.k === 'string' && BYN[w.k] ? w.k : '', n: str(w?.n, 80), cp: int(w?.cp, 99999999), q: int(w?.q, 999) })).filter(w => w.id && w.n) : [] })).filter(m => m.id) : [],
+    atlas: p.role === 'dm' && Array.isArray(p.atlas) ? p.atlas.slice(0, 16).map(a => ({ t: str(a?.t, 80), d: str(a?.d, 300), k: ['place', 'npc', 'plot'].includes(a?.k) ? a.k : 'place', h: !!a?.h })).filter(a => a.t) : [],
     camp: p.role === 'dm' && p.camp && typeof p.camp === 'object' ? { n: str(p.camp.n, 80), d: str(p.camp.d, 200), c: str(p.camp.c, 120), p: str(p.camp.p, 600), x: /^\d{4}-\d{2}-\d{2}(T\d{2}:\d{2})?$/.test(p.camp.x || '') ? p.camp.x : '' } : null, here: p.role === 'dm' ? str(p.here, 80) : '',
     turn: p.role === 'dm' && p.turn && typeof p.turn === 'object' ? { r: int(p.turn.r, 999), cur: str(p.turn.cur, 40), name: str(p.turn.name), next: str(p.turn.next), enemy: !!p.turn.enemy, nextEnemy: !!p.turn.nextEnemy, cr: str(p.turn.cr, 6), nextCr: str(p.turn.nextCr, 6), order: Array.isArray(p.turn.order) ? p.turn.order.slice(0, 24).map(o => ({ n: str(o?.n, 40), pc: !!o?.pc, k: str(o?.k, 40), s: ['ok', 'hurt', 'bad', 'down'].includes(o?.s) ? o.s : '', cur: !!o?.cur, i: str(o?.i, 4), nx: !!o?.nx })) : [] } : null,
   };
 }
-const MSG_TYPES = new Set(['dmg', 'heal', 'temp', 'cond', 'handout', 'ack', 'rcv', 'item', 'gold', 'endturn', 'levelup', 'xp', 'insp', 'stash', 'want', 'conc']);
+const MSG_TYPES = new Set(['dmg', 'heal', 'temp', 'cond', 'handout', 'ack', 'rcv', 'item', 'gold', 'endturn', 'levelup', 'xp', 'insp', 'stash', 'want', 'conc', 'buy']);
 // Nachrichten der Spielleitung, die bis zur Empfangsbestätigung erneut gesendet werden
 const RELIABLE = new Set(['dmg', 'heal', 'temp', 'cond', 'handout', 'item', 'gold', 'levelup', 'xp', 'insp', 'conc']);
 const COINS = ['pp', 'gp', 'ep', 'sp', 'cp'];
@@ -94,6 +98,7 @@ function cleanMsg(m) {
     if (!out.title && !out.text && !out.img) return null;
   }
   if (m.type === 'ack') { out.name = str(m.name); out.ok = !!m.ok; }
+  if (m.type === 'buy') { out.m = str(m.m, 40); out.i = str(m.i, 40); out.name = str(m.name); if (!out.m || !out.i) return null; }
   if (m.type === 'want') { out.iid = str(m.iid, 40); out.name = str(m.name); if (!out.iid) return null; }
   if (m.type === 'stash') { out.dep = str(m.dep, 40); out.name = str(m.name); if (!out.dep) return null; }
   if (m.type === 'stash' && m.coins) { out.coins = {}; COINS.forEach(k => { out.coins[k] = int(m.coins?.[k], 99999); }); if (!COINS.some(k => out.coins[k])) return null; }
@@ -112,10 +117,10 @@ function onMessage(raw) {
     if ((m.type === 'ack' || m.type === 'rcv') && m.to === 'dm') settle(m.ref, m.from);
     if (m.type === 'ack' && m.to === 'dm') ackHook(m);
     if (m.type === 'endturn' && m.to === 'dm') endTurnHook(m.from);
-    if ((m.type === 'stash' || m.type === 'want') && m.to === 'dm') dmMsgHook(m);
+    if ((m.type === 'stash' || m.type === 'want' || m.type === 'buy') && m.to === 'dm') dmMsgHook(m);
     return;
   }
-  if (m.type === 'endturn' || m.type === 'ack' || m.type === 'rcv' || m.type === 'stash' || m.type === 'want' || (m.to !== myKey && m.to !== 'all')) return;
+  if (m.type === 'endturn' || m.type === 'ack' || m.type === 'rcv' || m.type === 'stash' || m.type === 'want' || m.type === 'buy' || (m.to !== myKey && m.to !== 'all')) return;
   // Empfang immer bestätigen, auch bei Doppelten: dann hört die Spielleitung auf zu senden.
   if (transport && transport.send) transport.send({ id: uid(), from: myKey, type: 'rcv', to: 'dm', ref: m.id });
   if (seen.has(m.id)) return;
@@ -215,7 +220,7 @@ export const refresh = () => push();
 let petSource = () => [];
 /** Begleiter (Ranger-Begleiter, Vertrauter …) mit ihren Spielwerten, gesetzt in events.js. */
 export const setPetSource = fn => { petSource = fn; };
-const payload = () => (L.role === 'dm' ? { role: 'dm', camp: dmFlags().camp || null, here: dmFlags().here || '', lock: !!dmFlags().lock, turn: dmFlags().turn || null, stash: dmFlags().stash || null, buffs: (dmFlags().buffs || []).slice(0, 8) } : { role: 'player', insp: !!S.insp, name: S.name, pl: playerName(), race: S.subrace || S.race, klass: S.klass, level: S.level, hp: S.hp, hpMax: S.hpMax, tmp: S.tmp, ac: acNow(), acB: acBonus().v, fx: fxOut(), buffs: activeOut().slice(-6).map(b => ({ id: b.id, s: b.s, to: b.to.slice(0, 6), v: b.v || 0 })), exh: S.exh, conc: S.conc, cond: Object.keys(S.cond).filter(c => S.cond[c]), cr: condRoundsOut(), death: S.death, pets: petSource().slice(0, 3).map(p => ({ id: p.id, n: p.n, hp: p.hp, hpMax: p.hpMax, ac: p.ac })) });
+const payload = () => (L.role === 'dm' ? { role: 'dm', shop: (dmFlags().shop || []).slice(0, 4), atlas: (dmFlags().atlas || []).slice(0, 16), camp: dmFlags().camp || null, here: dmFlags().here || '', lock: !!dmFlags().lock, turn: dmFlags().turn || null, stash: dmFlags().stash || null, buffs: (dmFlags().buffs || []).slice(0, 8) } : { role: 'player', insp: !!S.insp, name: S.name, pl: playerName(), race: S.subrace || S.race, klass: S.klass, level: S.level, hp: S.hp, hpMax: S.hpMax, tmp: S.tmp, ac: acNow(), acB: acBonus().v, fx: fxOut(), buffs: activeOut().slice(-6).map(b => ({ id: b.id, s: b.s, to: b.to.slice(0, 6), v: b.v || 0 })), exh: S.exh, conc: S.conc, cond: Object.keys(S.cond).filter(c => S.cond[c]), cr: condRoundsOut(), death: S.death, pets: petSource().slice(0, 3).map(p => ({ id: p.id, n: p.n, hp: p.hp, hpMax: p.hpMax, ac: p.ac })) });
 function push() {
   if (!transport) return;
   const p = payload(), j = JSON.stringify(p);

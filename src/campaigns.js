@@ -20,7 +20,9 @@ const clean = c => ({
   split: !!c.split,
   // migr: Übernahme aus dem gemeinsamen Stand (Zeitpunkt, Charakter: 'cur', Spielleitung: 'this' | 'empty'); nur dann gibt es den Rückweg
   migr: c.migr && typeof c.migr === 'object' ? { at: String(c.migr.at || ''), char: c.migr.char === 'cur' ? 'cur' : '', dm: ['this', 'empty'].includes(c.migr.dm) ? c.migr.dm : '' } : null,
-  chapter: String(c.chapter || '').slice(0, 120), plan: String(c.plan || '').slice(0, 1000), place: String(c.place || '').slice(0, 80),
+  chapter: String(c.chapter || '').slice(0, 120),
+  // Atlas der Spieler: von der Spielleitung freigegebene Orte (Titel, Spielertext), dauerhaft übernommen
+  atlas: Array.isArray(c.atlas) ? c.atlas.slice(0, 16).filter(a => a && a.t).map(a => ({ t: String(a.t).slice(0, 80), d: String(a.d || '').slice(0, 300), k: ['place', 'npc', 'plot'].includes(a.k) ? a.k : 'place', h: !!a.h })) : [], plan: String(c.plan || '').slice(0, 1000), place: String(c.place || '').slice(0, 80),
 });
 export function campaigns() {
   try { const o = JSON.parse(localStorage.getItem(CAMP_KEY) || '[]'); return Array.isArray(o) ? o.filter(x => x && typeof x === 'object').map(clean) : []; } catch (e) { return []; }

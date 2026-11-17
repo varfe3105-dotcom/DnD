@@ -45,11 +45,12 @@ test.describe('Ebenen und Rollen @new', () => {
     await page.locator('[data-a="tab"][data-t="trade"]').click();
     await expect(page.locator('#app')).toContainText('12');
     await page.locator('[data-a="tab"][data-t="chron"]').click();
+    await page.locator('[data-a="chronraw"]').click();
     await page.locator('#camp-log').fill('Sitzung 1: Ankunft in Grenzhall');
     expect((await camps(page))[0].log).toBe('Sitzung 1: Ankunft in Grenzhall');
     await page.reload();
     await expect(page.locator('.crumbs')).toContainText('Grenzland');
-    await expect(page.locator('#camp-log')).toHaveValue('Sitzung 1: Ankunft in Grenzhall');
+    await expect(page.locator('.chron-e')).toContainText('Sitzung 1: Ankunft in Grenzhall');
     await page.locator('[data-a="crumbhome"]').click();
     await expect(page.locator('.hub')).toBeVisible();
     expect((await camps(page))[0].seen).not.toBe('');
@@ -84,10 +85,11 @@ test.describe('Ebenen und Rollen @new', () => {
     await expect(page.locator('#hub-map-slot')).toHaveCount(0);
     await page.locator('[data-a="mapshow"]').click();
     await expect(page.locator('#map-layer iframe')).toBeVisible();
-    await page.locator('#app [data-a="dmnewhere"]').first().click();
-    await page.locator('[data-a="tab"][data-t="dmnotes"]').click();
-    await page.locator('#dm-ntitle').fill('Taverne zum Eber');
-    await page.locator('#dm-ntitle').blur();
+    // Atlas: neuer Ort, Titel direkt eintragen, als „Hier sind wir“ setzen
+    await page.locator('[data-a="atnew"][data-k="place"]').click();
+    await page.locator('#at-title').fill('Taverne zum Eber');
+    await page.locator('#at-title').blur();
+    await page.locator('[data-a="athere"]').click();
     await page.locator('[data-a="tab"][data-t="cover"]').click();
     await expect(page.locator('.cover-v').first()).toHaveText('Taverne zum Eber');
     await expect.poll(() => page.evaluate(() => window.__sent.at(-1)?.here)).toBe('Taverne zum Eber');
