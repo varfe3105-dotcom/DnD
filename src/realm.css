@@ -1,16 +1,7 @@
 /* RealmCraft-Gestaltungssprache (docs/design-gesamtkonzept.md, Fassung 4): Materialien, Ornamente aus dem Design-Eingang,
    Schriftstufen. Geladen nach areas.css und vor skins.css. Ornamente nur an Titelplatten, Hauptaktionen, hervorgehobenen
    Figuren, Übergängen und Pergament, nicht an Listen und Tabellen. */
-:root{
-  --rc-aub:url(./assets/realmcraft/textures/aubergine.webp);--rc-dark:url(./assets/realmcraft/textures/dark.webp);
-  --rc-corner:url(./assets/realmcraft/ornaments/corner.webp);--rc-banner:url(./assets/realmcraft/ornaments/banner.webp);
-  --rc-dsm:url(./assets/realmcraft/ornaments/divider-small.webp);--rc-vert:url(./assets/realmcraft/ornaments/vertical.webp);
-  /* Schriftstufen: Wert, Name, Zusatz, Beschriftung; je für dunkle Flächen (d) und Pergament (p) */
-  --t-val-d:#f7ebd2;--t-name-d:#efe2c6;--t-sub-d:#cfbc95;--t-lbl-d:#dcc189;
-  --t-val-p:#22130a;--t-name-p:#2b1a0f;--t-sub-p:#553720;--t-lbl-p:#7a3424;
-  --gold-btn:linear-gradient(180deg,#e2c37f,#a8833f 55%,#7f5f2b);
-  --ring-gold:0 0 0 2px #e3c47f,0 0 0 4px #1a1015,0 0 0 5px #a8833f,0 0 20px rgba(236,210,148,.35);
-}
+/* Tokens dieser Schicht stehen in tokens.css (einzige Quelle). */
 /* ---- Materialien ---- */
 .rc-aub{background:linear-gradient(180deg,rgba(40,24,44,.35),rgba(18,10,20,.55)),var(--rc-aub) center/cover}
 .rc-dark{background:linear-gradient(180deg,rgba(14,10,14,.5),rgba(10,8,10,.7)),var(--rc-dark) center/cover}
@@ -249,7 +240,7 @@ header.hd .por{box-shadow:0 0 0 3px #d4b06a,0 0 0 8px #1a1015,0 0 0 10px #a8833f
 
 /* ==== Rahmen (Gesamtauftrag, Etappe B): globale Leiste auf allen Ebenen, Kopfleiste und Menü am Handy ==== */
 html:not([data-hub]) .wrap{max-width:none;padding:0}
-.shell{--rail-w:212px;display:grid;grid-template-columns:var(--rail-w) minmax(0,1fr);min-height:100vh}
+.shell{--rail-w:232px;display:grid;grid-template-columns:var(--rail-w) minmax(0,1fr);min-height:100vh}
 .shell.folded{--rail-w:68px}
 .shell-main{min-width:0;width:100%;max-width:1680px;margin:0 auto;padding:16px max(20px,env(safe-area-inset-right,0px)) 72px max(20px,env(safe-area-inset-left,0px));box-sizing:border-box}
 .rail{position:sticky;top:0;z-index:40;height:100vh;display:flex;flex-direction:column;overflow-y:auto;overflow-x:hidden;scrollbar-width:thin;background:linear-gradient(180deg,rgba(20,16,20,.97),rgba(14,11,14,.99)),var(--slate);border-right:1px solid var(--c-brass-a);box-shadow:6px 0 22px rgba(0,0,0,.35)}
@@ -364,3 +355,82 @@ body:has(.rail #live-dock.full) #toast{top:auto;bottom:calc(16px + env(safe-area
 .mt-mark .hub-mark,.rail-brand .hub-mark{display:block}
 .ov-v small{hyphens:auto;overflow-wrap:anywhere}
 .rail nav button span,.rail-foot button span{overflow:hidden;text-overflow:ellipsis}
+
+/* ==== Dialoge (Entscheidung B): dunkel mit Messing; Pergament nur für Lesedialoge (.dlg.read) ==== */
+@media (min-width:521px){html .tabs nav .tab-more{display:none}}
+.dlg:not(.read){background:linear-gradient(180deg,rgba(40,26,44,.97),rgba(18,13,19,.98)),var(--rc-aub) center/cover;color:var(--c-cream);border:14px solid transparent;border-image:url(./assets/frame-brass.svg) 40 / 24px / 2px round;box-shadow:0 24px 60px #000,inset 0 0 0 1px rgba(212,176,106,.18)}
+.dlg:not(.read) h3{color:var(--c-brass-lt);font:700 2rem/1.1 var(--f-title)}
+.dlg:not(.read) h4,.dlg:not(.read) .lvh b,.dlg:not(.read) .lvl h4{color:var(--t-name-d);font:700 1.15rem var(--f-title);border-color:var(--c-brass-soft)}
+.dlg:not(.read) :is(p,li,small,.note,.lbl,.cls){color:var(--c-cream-2)}
+.dlg:not(.read) :is(input,select,textarea){background:rgba(8,6,9,.6);color:var(--c-cream);border:1px solid var(--c-brass-soft);box-shadow:inset 0 1px 3px rgba(0,0,0,.6)}
+.dlg:not(.read) :is(input,select,textarea):focus{border-color:var(--c-brass);outline:1px solid var(--c-brass)}
+.dlg:not(.read) .chg span,.dlg:not(.read) .chip{background:rgba(255,255,255,.04);color:var(--c-cream);border:1px solid var(--c-brass-soft);text-shadow:none}
+.dlg:not(.read) .chip.on,.dlg:not(.read) .chip[aria-pressed="true"]{background:var(--grad-pri);border-color:var(--c-brass);color:var(--c-cream)}
+.dlg:not(.read) .tgts .chip:not(.on){background:rgba(255,255,255,.04);color:var(--c-cream);border-color:var(--c-brass-soft)}
+.dlg:not(.read) .chip small,.dlg:not(.read) .chip i{color:var(--t-sub-d)}
+.dlg:not(.read) .good,.dlg:not(.read) .chg .up{color:#8fd49a}
+.dlg:not(.read) .feat,.dlg:not(.read) .row{border-color:var(--c-brass-soft)}
+.dlg:not(.read) .feat b,.dlg:not(.read) .row .nm{color:var(--t-name-d)}
+.dlg:not(.read) .feat p{color:var(--c-cream-2)}
+.dlg:not(.read) .dlgf{border-top:1px solid var(--c-brass-soft);padding-top:12px}
+.dlg:not(.read) .btn:not(.solid):not(.gold):not(.gilt){color:var(--c-cream)}
+.ovl{background:rgba(6,4,6,.78);backdrop-filter:blur(2px)}
+/* Lesedialoge (Handout) bleiben Pergament */
+.dlg.read h3{color:var(--c-rubric)}
+/* Grober Zustand der Mitspieler (keine TP-Zahlen) */
+.hpq{display:flex;flex-direction:column;gap:3px;min-width:0}
+.hpq b{font:600 .82rem var(--f-ui);letter-spacing:.02em;color:var(--t-sub-d)}
+.hpq.q-ok b{color:#8fd49a}.hpq.q-hurt b{color:#e3b866}.hpq.q-bad b,.hpq.q-down b{color:#ec8a78}
+.mc-hp.q{display:flex;align-items:center;gap:10px}
+.mc-hp.q .hpq{flex:1}
+
+/* ==== Chronik als Buch (M4): Deckel, Inhaltsverzeichnis mit Lesezeichen, Doppelseite, Siegel ==== */
+.book{margin:6px 0 22px;filter:drop-shadow(0 18px 30px rgba(0,0,0,.55))}
+.bk-cover{position:relative;padding:18px 28px 16px;background:linear-gradient(180deg,rgba(60,30,40,.35),rgba(20,10,16,.7)),var(--rc-aub) center/cover;border:1px solid var(--c-brass);border-bottom:0;border-radius:6px 6px 0 0;box-shadow:inset 0 0 0 4px rgba(10,6,10,.6),inset 0 0 0 5px rgba(212,176,106,.35)}
+.bk-cover h2{display:block;margin:0;text-align:left;font:700 1.9rem/1.1 var(--f-title);color:var(--t-val-d);text-shadow:0 2px 4px #000}
+.bk-cover h2::before,.bk-cover h2::after{display:none}
+.bk-cover p{margin:4px 0 0;font:600 .9rem var(--f-cap);letter-spacing:.08em;color:var(--t-lbl-d)}
+.bk-band{position:absolute;right:34px;top:-4px;width:22px;height:64px;background:linear-gradient(180deg,#8d2a2a,#5e1515);clip-path:polygon(0 0,100% 0,100% 100%,50% 82%,0 100%);box-shadow:0 2px 4px #000}
+.bk-spread{display:grid;grid-template-columns:minmax(220px,300px) minmax(0,1fr);background:linear-gradient(90deg,rgba(80,50,20,.18),transparent 6%,transparent 94%,rgba(80,50,20,.22)),var(--parch) center/cover;border:1px solid #6b4a24;border-top:3px solid #3b2414;border-radius:0 0 6px 6px;color:var(--t-name-p);box-shadow:inset 0 0 40px rgba(90,55,20,.35)}
+.bk-toc{padding:20px 18px 22px 22px;border-right:1px solid rgba(90,60,30,.35);box-shadow:inset -14px 0 18px -14px rgba(60,35,10,.45)}
+.bk-toc h4{margin:0 0 10px;font:600 .74rem var(--f-cap);letter-spacing:.18em;text-transform:uppercase;color:var(--t-lbl-p)}
+.bk-toc ol{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:2px}
+.bk-toc button{position:relative;display:flex;flex-direction:column;align-items:flex-start;width:100%;padding:7px 10px 7px 14px;background:none;border:0;border-left:2px solid transparent;text-align:left;color:var(--t-name-p);font:600 .98rem var(--f-ui);cursor:pointer}
+.bk-toc button small{font:500 .78rem var(--f-ui);color:var(--t-sub-p)}
+.bk-toc button:hover{background:rgba(120,80,30,.1)}
+.bk-toc button[aria-current="true"]{background:rgba(120,40,30,.1);border-left-color:#8d2a2a}
+.bk-mark{position:absolute;left:-26px;top:4px;width:12px;height:26px;background:linear-gradient(180deg,#a23434,#6a1a1a);clip-path:polygon(0 0,100% 0,100% 100%,50% 78%,0 100%)}
+.bk-page{position:relative;padding:22px 30px 18px;min-height:280px;display:flex;flex-direction:column}
+.bk-head{position:relative;padding-right:110px}
+.bk-meta{margin:0;font:600 .74rem var(--f-cap);letter-spacing:.16em;text-transform:uppercase;color:var(--t-lbl-p)}
+.bk-page h3{margin:4px 0 10px;font:700 1.75rem/1.15 var(--f-title);color:var(--t-val-p)}
+.bk-body{flex:1;font:400 1.06rem/1.6 var(--f-body);color:var(--t-name-p)}
+.bk-body p{margin:0 0 .7em}
+.bk-body .chron-hl{font-weight:700;color:#6a1a1a}
+.bk-seal{position:absolute;right:0;top:-4px;display:grid;place-items:center;width:84px;height:84px;border-radius:50%;background:radial-gradient(circle at 40% 35%,#b23a3a,#7a1c1c 60%,#5a1010);color:#f3dcc0;font:700 .7rem var(--f-cap);letter-spacing:.06em;text-align:center;transform:rotate(-12deg);box-shadow:0 3px 6px rgba(0,0,0,.45),inset 0 0 0 4px rgba(255,220,180,.18),inset 0 0 0 7px rgba(90,10,10,.5)}
+.bk-priv{position:absolute;right:0;top:0;padding:3px 10px;border:1px dashed var(--t-sub-p);font:600 .78rem var(--f-ui);color:var(--t-sub-p)}
+.bk-act{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0}
+.bk-foot{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:12px;padding-top:10px;border-top:1px solid rgba(90,60,30,.35)}
+.bk-no{font:600 .9rem var(--f-title);color:var(--t-sub-p)}
+.book .bk-page .btn,.book .bk-act .btn{background:rgba(255,255,255,.35);color:var(--t-name-p);border:1px solid rgba(90,60,30,.5);text-shadow:none}
+.book .bk-act .tag{color:var(--t-name-p)}
+@media (max-width:760px){
+  .bk-spread{grid-template-columns:minmax(0,1fr)}
+  .bk-toc{border-right:0;border-bottom:1px solid rgba(90,60,30,.35);box-shadow:none;padding:14px 16px}
+  .bk-toc ol{flex-direction:row;overflow-x:auto;gap:6px;scrollbar-width:none}
+  .bk-toc li{flex:none}
+  .bk-toc button{white-space:nowrap;border-left:0;border-bottom:2px solid transparent;padding:6px 10px}
+  .bk-toc button[aria-current="true"]{border-bottom-color:#8d2a2a}
+  .bk-mark{display:none}
+  .bk-page{padding:16px 16px 14px}
+  .bk-head{padding-right:70px}
+  .bk-seal{width:62px;height:62px;font-size:.58rem}
+  .bk-cover{padding:14px 16px}.bk-cover h2{font-size:1.5rem}
+}
+/* Startauswahl einer Begegnung */
+.sp-list{display:flex;flex-direction:column;gap:6px;margin:10px 0}
+.sp-row{display:grid;grid-template-columns:minmax(0,1fr) auto auto;align-items:center;gap:6px 12px;padding:8px 10px;border:1px solid var(--c-brass-soft);background:rgba(0,0,0,.2)}
+.sp-row.off{opacity:.55}
+.sp-row small{color:var(--t-sub-d)}
+.msrc{color:var(--t-lbl-d)}
+@media (max-width:520px){.sp-row{grid-template-columns:minmax(0,1fr) auto}.sp-row small{grid-column:1/-1;grid-row:2}}

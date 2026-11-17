@@ -214,6 +214,12 @@ export function startEnc(id) {
 export function placeAdd(mid) { const n = curNote(); if (!n) return; n.monsters = n.monsters || []; const r = n.monsters.find(x => x.id === mid); if (r) r.qty += 1; else n.monsters.push({ id: mid, qty: 1 }); }
 export function placeQty(mid, d) { const n = curNote(); if (!n?.monsters) return; const r = n.monsters.find(x => x.id === mid); if (r) r.qty += d; n.monsters = n.monsters.filter(x => x.qty > 0); }
 export function startPlace(id) { const n = D.notes.find(x => x.id === id); if (n?.monsters?.length) startMonsters(n.monsters); }
+/** Auswahl vor dem Start: nur die angehakten Zeilen mit ihrer Anzahl. Die vorbereitete Begegnung bleibt unverändert. */
+export function startPicked(rows) { startMonsters(rows.filter(r => r.on && r.qty > 0).map(r => ({ id: r.id, qty: r.qty }))); }
+export function pickRows(src, id) {
+  const list = src === 'enc' ? D.encounters.find(x => x.id === id)?.monsters : D.notes.find(x => x.id === id)?.monsters;
+  return (list || []).filter(m => findMonster(m.id)).map(m => ({ id: m.id, qty: m.qty, on: true }));
+}
 function startMonsters(monsters) {
   D.combat.list = D.combat.list.filter(c => c.kind !== 'mon');
   D.combat.round = 1; D.combat.active = null; DU.open = {};

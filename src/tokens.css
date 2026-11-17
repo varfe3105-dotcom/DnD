@@ -55,4 +55,13 @@
   --st-bad:#c7695a;--st-bad-bg:rgba(199,105,90,.14);--st-good:#7fae7c;--st-good-bg:rgba(127,174,124,.13);
   --st-conc:#7b9fcc;--st-conc-bg:rgba(123,159,204,.15);--st-res:#d4b06a;--st-res-bg:rgba(212,176,106,.12);
   --hit:44px;
+  /* RealmCraft Fassung 4 (früher in realm.css): Materialien, Ornamente, Schriftstufen, Gold */
+  --rc-aub:url(./assets/realmcraft/textures/aubergine.webp);--rc-dark:url(./assets/realmcraft/textures/dark.webp);
+  --rc-corner:url(./assets/realmcraft/ornaments/corner.webp);--rc-banner:url(./assets/realmcraft/ornaments/banner.webp);
+  --rc-dsm:url(./assets/realmcraft/ornaments/divider-small.webp);--rc-vert:url(./assets/realmcraft/ornaments/vertical.webp);
+  /* Schriftstufen: Wert, Name, Zusatz, Beschriftung; je für dunkle Flächen (d) und Pergament (p) */
+  --t-val-d:#f7ebd2;--t-name-d:#efe2c6;--t-sub-d:#cfbc95;--t-lbl-d:#dcc189;
+  --t-val-p:#22130a;--t-name-p:#2b1a0f;--t-sub-p:#553720;--t-lbl-p:#7a3424;
+  --gold-btn:linear-gradient(180deg,#e2c37f,#a8833f 55%,#7f5f2b);
+  --ring-gold:0 0 0 2px #e3c47f,0 0 0 4px #1a1015,0 0 0 5px #a8833f,0 0 20px rgba(236,210,148,.35);
 }

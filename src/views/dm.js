@@ -10,7 +10,7 @@ import { U } from '../state.js';
 import { campaignById } from '../campaigns.js';
 import { progOf } from './camp-set.js';
 import { catSelect } from './inventory.js';
-import { timeline } from './chron.js';
+import { timeline, book } from './chron.js';
 import { V2 } from '../cloud.js';
 import { cpToGp } from '../shop.js';
 import { glyph } from '../icons.js';
@@ -28,7 +28,7 @@ export function vResults() {
   const hits = searchMonsters(DU.mq);
   if (!DU.mq.trim()) return '';
   if (!hits.length) return `<p class="empty">${t('wiki.nothing')}</p>`;
-  return hits.map(m => `<div class="row"><div class="nm">${esc(m.n)}<small>${esc([m.size, m.type].filter(Boolean).join(' '))}${m.size || m.type ? ' · ' : ''}CR ${crText(m.cr)} · ${t('dm.acShort')} ${m.ac} · ${t('head.hpShort')} ${m.hp}</small></div><button class="btn sm solid" data-a="dmadd" data-m="${esc(m.id)}">${t('common.add')}</button></div>`).join('');
+  return hits.map(m => `<div class="row"><div class="nm">${esc(m.n)}<small>${esc([m.size, m.type].filter(Boolean).join(' '))}${m.size || m.type ? ' · ' : ''}CR ${crText(m.cr)} · ${t('dm.acShort')} ${m.ac} · ${t('head.hpShort')} ${m.hp} · <span class="msrc">${monSrc(m)}</span></small></div><button class="btn sm solid" data-a="dmadd" data-m="${esc(m.id)}">${t('common.add')}</button></div>`).join('');
 }
 function statBlock(c) {
   const m = findMonster(c.mon);
@@ -204,13 +204,14 @@ export function vHere() {
 function vBook() {
   const f = DU.bookF || 'session', list = D.notes.filter(n => f === 'all' || n.kind === f);
   const can = ['session', 'plot'];
-  const items = (DU.bookRev ? list : [...list].reverse()).map(n => { const sh = n.pub && can.includes(n.kind); return { title: n.title, meta: t('dm.kind.' + n.kind), body: n.body, cls: sh ? 'shared' : '', tags: sh ? `<span class="tag t-good sm">${t('chron.sharedTag')}</span>` : `<span class="tag sm" title="${t('chron.privHint2')}">🔒 ${t('chron.private')}</span>`, act: `${can.includes(n.kind) ? `<button class="btn sm${sh ? ' solid' : ''}" data-a="bookpub" data-id="${n.id}" aria-pressed="${!!sh}">${t(sh ? 'chron.unshare' : 'chron.share')}</button>` : ''}<button class="btn sm" data-a="dmsel" data-id="${n.id}" data-v="notes">${t('dm.open')}</button>`, extra: sh ? `<label class="chron-pub"><span class="lbl">${t('chron.groupText')}</span><textarea rows="4" data-bookpub="${n.id}" aria-label="${t('chron.groupText')}">${esc(n.pubText || '')}</textarea></label>` : '' }; });
+  const items = (DU.bookRev ? list : [...list].reverse()).map(n => { const sh = n.pub && can.includes(n.kind); return { id: n.id, pub: can.includes(n.kind) ? !!sh : false, title: n.title, meta: t('dm.kind.' + n.kind), body: n.body, cls: sh ? 'shared' : '', tags: sh ? `<span class="tag t-good sm">${t('chron.sharedTag')}</span>` : `<span class="tag sm" title="${t('chron.privHint2')}">🔒 ${t('chron.private')}</span>`, act: `${can.includes(n.kind) ? `<button class="btn sm${sh ? ' solid' : ''}" data-a="bookpub" data-id="${n.id}" aria-pressed="${!!sh}">${t(sh ? 'chron.unshare' : 'chron.share')}</button>` : ''}<button class="btn sm" data-a="dmsel" data-id="${n.id}" data-v="notes">${t('dm.open')}</button>`, extra: sh ? `<label class="chron-pub"><span class="lbl">${t('chron.groupText')}</span><textarea rows="4" data-bookpub="${n.id}" aria-label="${t('chron.groupText')}">${esc(n.pubText || '')}</textarea></label>` : '' }; });
   return `<div class="chips">${['session', 'plot', 'place', 'npc', 'all'].map(k => `<button class="chip${f === k ? ' on' : ''}" data-a="bookf" data-k="${k}" aria-pressed="${f === k}">${k === 'all' ? t('dm.kindAll') : t('dm.kind.' + k)}</button>`).join('')}<button class="chip" data-a="bookrev" aria-pressed="${!!DU.bookRev}">${t(DU.bookRev ? 'chron.newest' : 'chron.oldest')}</button><button class="btn sm solid" data-a="dmnews">${t('dm.newSession')}</button></div>
-  <p class="note">${t('chron.dmHint2')}</p>${V2.on === false ? `<p class="note warnnote">${t('chron.noSql')}</p>` : L.role === 'dm' && L.code ? '' : `<p class="note">${t('chron.offline')}</p>`}${timeline(items)}`;
+  <p class="note">${t('chron.dmHint2')}</p>${V2.on === false ? `<p class="note warnnote">${t('chron.noSql')}</p>` : L.role === 'dm' && L.code ? '' : `<p class="note">${t('chron.offline')}</p>`}${book({ title: (U.CAMP && campaignById(U.CAMP)?.name) || t('chron.bookTitle'), sub: t('chron.bookSubDm'), entries: items, sel: U.BOOKSEL, empty: t('chron.sharedNone') })}`;
 }
 function vNotes() {
-  const tabs = `<div class="seg chron-tabs" role="group">${['book', 'notes'].map(k => `<button class="tg${(DU.chronV || 'notes') === k ? ' on' : ''}" data-a="chronv" data-k="${k}" aria-pressed="${(DU.chronV || 'notes') === k}">${t('chron.v.' + k)}</button>`).join('')}</div>`;
-  if (DU.chronV === 'book') return tabs + vBook();
+  const v = DU.chronV || 'notes';
+  const tabs = `<div class="seg chron-tabs" role="group">${['book', 'notes'].map(k => `<button class="tg${v === k ? ' on' : ''}" data-a="chronv" data-k="${k}" aria-pressed="${v === k}">${t('chron.v.' + k)}</button>`).join('')}</div>`;
+  if (v === 'book') return tabs + vBook();
   return tabs + vNotesInner();
 }
 function vNotesInner() {
@@ -231,7 +232,7 @@ function vLive() {
   if (L.role !== 'dm') return `<div class="card"><p class="note" style="margin-top:0">${t('live.dmIntro')}</p>${L.role === 'player' ? `<p class="note">${t('live.dmBusy')}</p>` : ''}<div class="add"><button class="btn solid" data-a="livecreate">${t('live.create')}</button></div><div class="add"><input type="text" id="live-dmcode" maxlength="6" autocomplete="off" placeholder="${t('live.codePh')}" aria-label="${t('live.code')}"><button class="btn" data-a="livedmjoin">${t('live.dmReopen')}</button></div><p class="note">${t('live.dmReopenHint')}</p></div>`;
   const list = players();
   return `<div class="card"><div class="dm-bar"><div class="live-code"><small>${t('live.code')}</small><b>${esc(L.code)}</b></div>${liveState()}<button class="btn" data-a="liveadd"${list.length ? '' : ' disabled'}>${t('live.addAll')}</button><button class="btn bad" data-a="liveoff">${t('live.close')}</button></div>
-  ${list.length ? '<div class="party-grid dm">' + list.map(p => { const inC = inCombat(p.key); return `<div class="dm-prow">${memberCard(p, `<div class="mc-act"><div class="add" style="margin:4px 0">${inC ? `<span class="chip on">${t('live.inCombat')}</span>` : `<button class="btn sm" data-a="liveadd1" data-k="${esc(p.key)}">${t('live.addOne')}</button>`}<button class="btn sm" data-a="peek" data-k="${esc(p.key)}" data-n="${esc(p.name)}">${t('peek.btn')}</button></div>${vLiveSend(p)}</div>`)}</div>`; }).join('') + '</div>' : `<div class="empty">${t('live.waiting')}</div>`}${vCloud()}</div>${vHandoutForm(list)}`;
+  ${list.length ? '<div class="party-grid dm">' + list.map(p => { const inC = inCombat(p.key); return `<div class="dm-prow">${memberCard(p, `<div class="mc-act"><div class="add" style="margin:4px 0">${inC ? `<span class="chip on">${t('live.inCombat')}</span>` : `<button class="btn sm" data-a="liveadd1" data-k="${esc(p.key)}">${t('live.addOne')}</button>`}<button class="btn sm" data-a="peek" data-k="${esc(p.key)}" data-n="${esc(p.name)}">${t('peek.btn')}</button></div>${vLiveSend(p)}</div>`, true)}</div>`; }).join('') + '</div>' : `<div class="empty">${t('live.waiting')}</div>`}${vCloud()}</div>${vHandoutForm(list)}`;
 }
 export function liveState() {
   const k = { on: 'live.on', connecting: 'live.connecting', error: 'live.error' }[L.status];
@@ -272,10 +273,28 @@ function vMerchants() {
   return `<h2>${t('shop.merchants')}</h2><p class="note">${t('shop.dmHint')}</p>${list.map(one).join('')}<div class="add"><input type="text" id="mer-new" placeholder="${t('shop.merchantName')}" aria-label="${t('shop.merchantName')}"><button class="btn" data-a="mernew">${t('shop.merchantAdd')}</button></div>
   ${sales.length ? `<p class="lbl">${t('shop.salesTitle')}</p><ul class="lb-list">${sales.map(x => `<li>${t('shop.saleLine', { p: esc(x.who), n: esc(x.n), g: cpToGp(x.cp) })}</li>`).join('')}</ul>` : ''}<h2>${t('loot.title')}</h2>`;
 }
+/** Startauswahl einer vorbereiteten Begegnung: Gegner an- und abwählen, Anzahl ändern, weitere aus dem Katalog dazu. */
+export function vStartPickRes() {
+  const q = (DU.spq || '').trim();
+  if (!q) return '';
+  const hits = searchMonsters(q).slice(0, 8);
+  return hits.length ? hits.map(m => `<div class="row"><div class="nm">${esc(m.n)}<small>${t('mon.cr')} ${crText(m.cr)} · ${monSrc(m)}</small></div><button class="btn sm" data-a="spadd" data-m="${esc(m.id)}">${t('common.add')}</button></div>`).join('') : `<p class="empty">${t('wiki.nothing')}</p>`;
+}
+function vStartPick() {
+  const P = DU.startPick;
+  if (!P) return '';
+  const rows = P.rows.map((r, i) => { const m = findMonster(r.id); return m ? `<div class="sp-row${r.on ? '' : ' off'}"><label class="ck"><input type="checkbox" data-a="spon" data-i="${i}"${r.on ? ' checked' : ''}> <b>${esc(m.n)}</b></label><small>${t('mon.cr')} ${crText(m.cr)} · ${monSrc(m)}</small><div class="qty"><button data-a="spqty" data-i="${i}" data-d="-1" aria-label="${t('common.less')}">−</button><span>${r.qty}</span><button data-a="spqty" data-i="${i}" data-d="1" aria-label="${t('common.more')}">+</button></div></div>` : ''; }).join('');
+  const n = P.rows.filter(r => r.on).reduce((a, r) => a + r.qty, 0);
+  return `<div class="ovl"><div class="dlg sp-dlg" role="dialog" aria-modal="true" aria-labelledby="sp-h"><h3 id="sp-h">${t('sp.title')}</h3><p class="note">${t('sp.hint')}</p><div class="chips"><button class="chip" data-a="spkall" data-v="1">${t('sp.all')}</button><button class="chip" data-a="spkall" data-v="0">${t('sp.none')}</button></div><div class="sp-list">${rows || `<p class="note">${t('sp.empty')}</p>`}</div>
+  <h4>${t('sp.more')}</h4><div class="add"><input type="search" id="sp-q" value="${esc(DU.spq || '')}" placeholder="${t('dm.search')}" aria-label="${t('dm.search')}"></div><div id="sp-res">${vStartPickRes()}</div>
+  <div class="dlgf"><button class="btn" data-a="spx">${t('common.cancel')}</button><button class="btn gold" data-a="spgo"${n ? '' : ' disabled'}>${t('sp.go', { n })}</button></div></div></div>`;
+}
+/** Herkunft eines Monsters: SRD 5.2.1, älterer Datensatz oder eigenes Monster. */
+export const monSrc = m => t(D.custom.includes(m) ? 'src.own' : m.source === 'srd52' ? 'src.srd52' : 'src.legacy');
 export function vDm(solo = false) {
   const tab = (k, l) => `<button class="chip${D.view === k ? ' on' : ''}" data-a="dmview" data-v="${k}" aria-pressed="${D.view === k}">${l}</button>`;
   const nav = solo ? `<h2>${t('dmm.view.' + D.view)}</h2>` : `<h2>${t('tab.dm')}</h2><div class="chips">${tab('combat', t('dm.combat'))}${tab('enc', t('dm.encounters'))}${tab('loot', t('loot.title'))}${tab('cheat', t('dm.cheat'))}${tab('notes', t('dm.notes'))}${tab('live', t('live.title'))}</div>`;
-  return `${nav}<div style="margin-top:14px">${D.view === 'notes' ? vNotes() : D.view === 'live' ? vLive() : D.view === 'enc' ? vEncounters() : D.view === 'cheat' ? vCheat() : D.view === 'loot' ? vMerchants() + vLoot() : vCombat()}</div>
+  return `${vStartPick()}${nav}<div style="margin-top:14px">${D.view === 'notes' ? vNotes() : D.view === 'live' ? vLive() : D.view === 'enc' ? vEncounters() : D.view === 'cheat' ? vCheat() : D.view === 'loot' ? vMerchants() + vLoot() : vCombat()}</div>
   <details class="dm-backup"><summary>${t('setup.backup')}</summary><p class="note">${t('dm.backupHint')}</p><div class="add"><button class="btn" data-a="dmexp">${t('setup.export')}</button><button class="btn" data-a="dmimp">${t('setup.import')}</button></div>${DU.exp ? `<textarea id="dm-exp" readonly aria-label="${t('setup.exportLabel')}">${esc(DU.exp)}</textarea>` : ''}<textarea id="dm-imp" placeholder="${t('setup.pasteImport')}" aria-label="${t('setup.importLabel')}" style="margin-top:8px">${esc(DU.imp)}</textarea></details>`;
 }
 export { dist };

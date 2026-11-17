@@ -16,6 +16,7 @@ import { classLevels } from '../tables.js';
 import { dmBuffsFor } from '../dm.js';
 import { campaignById } from '../campaigns.js';
 import { progOf } from './camp-set.js';
+import { coarseHp } from './party.js';
 
 const COINK = ['pp', 'gp', 'ep', 'sp', 'cp'];
 export { COINK as COIN_KEYS };
@@ -42,7 +43,7 @@ export function vInbox() {
 export function vHandout() {
   const m = L.role === 'player' && L.handouts[0];
   if (!m) return '';
-  return `<div class="ovl"><div class="dlg" role="dialog" aria-modal="true" aria-labelledby="ho-h"><h3 id="ho-h">${esc(m.title || t('live.handout'))}</h3>${m.img ? `<img class="ho-img" src="${esc(m.img)}" alt="">` : ''}${m.text ? `<p class="ho-text">${esc(m.text)}</p>` : ''}<div class="dlgf">${m.text || m.title ? `<button class="btn" data-a="honote">${t('live.toNotes')}</button>` : ''}<button class="btn solid" data-a="hoclose">${t('common.close')}</button></div></div></div>`;
+  return `<div class="ovl"><div class="dlg read" role="dialog" aria-modal="true" aria-labelledby="ho-h"><h3 id="ho-h">${esc(m.title || t('live.handout'))}</h3>${m.img ? `<img class="ho-img" src="${esc(m.img)}" alt="">` : ''}${m.text ? `<p class="ho-text">${esc(m.text)}</p>` : ''}<div class="dlgf">${m.text || m.title ? `<button class="btn" data-a="honote">${t('live.toNotes')}</button>` : ''}<button class="btn solid" data-a="hoclose">${t('common.close')}</button></div></div></div>`;
 }
 
 const xpMode = () => { const c = U.CAMP && campaignById(U.CAMP); return !c || progOf(c) === 'xp'; };
@@ -144,10 +145,11 @@ export function vTarget() {
 const fxChips = p => (p.fx || []).map(x => `<span class="chip ${x.good ? 'buff' : 'debuff'}" title="${esc(t('buff.from', { s: x.s, n: x.by }))}">${esc(x.s)}</span>`).join('');
 /** Eine Zeile der Gruppenansicht (auch im Kampf-Tracker der Spielleitung nutzbar). */
 export function partyRow(p, compact) {
-  const pct = p.hpMax ? Math.min(100, p.hp / p.hpMax * 100) : 0, down = p.hp === 0;
+  // Mitspieler: kein genauer TP-Wert, nur grober Zustand (Spielleitung sieht ihre Werte in der Gruppe der Spielleitung)
+  const down = p.hp === 0;
   const ac = p.acB ? `<span class="${p.acB > 0 ? 'buff' : 'debuff'}" title="${esc((p.fx || []).map(x => t('buff.from', { s: x.s, n: x.by })).join('; '))}">${p.ac}</span>` : p.ac;
   const extra = [p.insp ? `<span class="chip buff" title="Heroic Inspiration">${t('insp.short')}</span>` : '', ...p.cond.map(c => `<span class="chip on">${esc(c)}${p.cr?.[c] ? ' · ' + p.cr[c] : ''}</span>`), p.exh ? `<span class="chip">${t('exh.title', { n: p.exh })}</span>` : '', fxChips(p)].join('');
-  return `<div class="prow${down ? ' down' : ''}${compact ? ' sm' : ''}"><div class="prow-h"><b>${esc(p.name || '?')}</b><small>${compact ? '' : esc(p.klass) + (p.level ? ' ' + p.level : '') + ' · '}${t('dm.acShort')} ${ac}${p.conc ? ' · <span class="dm-conc">' + t('live.concShort', { n: esc(p.conc) }) + '</span>' : ''}</small><span class="dm-hpv"><b>${p.hp}</b>/${p.hpMax}${p.tmp ? ' +' + p.tmp : ''}</span></div><div class="bar" aria-hidden="true"><i style="width:${pct}%"></i></div>${extra ? `<div class="chips">${extra}</div>` : ''}${down ? `<p class="lbl">${t('party.down')} · ${t('death.s')} ${p.death.s} · ${t('death.f')} ${p.death.f}</p>` : ''}${(p.pets || []).map(x => `<div class="prow-pet"><span>${esc(x.n)}</span><small>${t('dm.acShort')} ${x.ac}</small><span class="dm-hpv"><b>${x.hp}</b>/${x.hpMax}</span></div>`).join('')}</div>`;
+  return `<div class="prow${down ? ' down' : ''}${compact ? ' sm' : ''}"><div class="prow-h"><b>${esc(p.name || '?')}</b><small>${compact ? '' : esc(p.klass) + (p.level ? ' ' + p.level : '') + ' · '}${t('dm.acShort')} ${ac}${p.conc ? ' · <span class="dm-conc">' + t('live.concShort', { n: esc(p.conc) }) + '</span>' : ''}</small></div>${coarseHp(p.hp, p.hpMax)}${extra ? `<div class="chips">${extra}</div>` : ''}${down ? `<p class="lbl">${t('party.down')} · ${t('death.s')} ${p.death.s} · ${t('death.f')} ${p.death.f}</p>` : ''}${(p.pets || []).map(x => `<div class="prow-pet"><span>${esc(x.n)}</span><small>${t('dm.acShort')} ${x.ac}</small>${coarseHp(x.hp, x.hpMax)}</div>`).join('')}</div>`;
 }
 export const partyPeers = () => (L.role === 'player' ? players().filter(p => p.key !== S.id) : []);
 /** Gruppenansicht auf der Karte. */

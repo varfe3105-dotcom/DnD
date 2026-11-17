@@ -28,7 +28,7 @@ import { syncBuffs, castOn, dropBuff, maxTargets, heroTemp, setBuffHook } from '
 import { masteryCount } from './views/turn.js';
 import { syncAc } from './helpers.js';
 import * as dm from './dm.js';
-import { vResults, vNoteList, vEncResults, vPlaceResults } from './views/dm.js';
+import { vResults, vNoteList, vEncResults, vPlaceResults, vStartPickRes } from './views/dm.js';
 import { t as tr, setLang, setUnits, distInput, dist as distStr } from './i18n/index.js';
 import { buildCatalog } from './catalog.js';
 import { payCp, addCp, totalCp, cpToGp } from './shop.js';
@@ -84,7 +84,7 @@ app.addEventListener('click',ev=>{
     case 'dmprm':dm.D.party.splice(i,1);dm.saveD();break;
     case 'dmenew':dm.newEnc('');dm.saveD();break;
     case 'dmesel':dm.D.encSel=dm.D.encSel===b.dataset.id?null:b.dataset.id;dm.saveD();break;
-    case 'dmestart':dm.startEnc(b.dataset.id);dm.saveD();break;
+    case 'dmestart':dm.DU.startPick={rows:dm.pickRows('enc',b.dataset.id)};dm.DU.spq='';break;
     case 'dmedel':{const k='e'+b.dataset.id;if(dm.DU.conf!==k){dm.DU.conf=k;break}dm.DU.conf=null;dm.delEnc(b.dataset.id);dm.saveD();break}
     case 'dmeadd':dm.encAdd(b.dataset.m);dm.saveD();break;
     case 'dmeqty':dm.encQty(b.dataset.m,+b.dataset.d);dm.saveD();break;
@@ -114,6 +114,7 @@ app.addEventListener('click',ev=>{
     case 'dmfocus':dm.DU.open={[b.dataset.id]:true};break;
     case 'dmclose':dm.DU.open={};break;
     case 'chronv':dm.DU.chronV=b.dataset.k;break;
+    case 'bksel':U.BOOKSEL=b.dataset.id;break;
     case 'bookf':dm.DU.bookF=b.dataset.k;break;
     case 'bookpub':{const n=dm.D.notes.find(x=>x.id===b.dataset.id);if(n){n.pub=!n.pub;if(n.pub&&!n.pubText)n.pubText=n.body||'';dm.saveD()}break}
     case 'bookrev':dm.DU.bookRev=!dm.DU.bookRev;break;
@@ -149,7 +150,13 @@ app.addEventListener('click',ev=>{
     case 'dmnk':dm.DU.nk=k;break;
     case 'dmpladd':dm.placeAdd(b.dataset.m);dm.saveD();break;
     case 'dmplqty':dm.placeQty(b.dataset.m,+b.dataset.d);dm.saveD();break;
-    case 'dmplstart':dm.startPlace(b.dataset.id);dm.saveD();break;
+    case 'dmplstart':dm.DU.startPick={rows:dm.pickRows('place',b.dataset.id)};dm.DU.spq='';break;
+    case 'spon':{const r=dm.DU.startPick?.rows[i];if(r)r.on=!r.on;break}
+    case 'spqty':{const r=dm.DU.startPick?.rows[i];if(r)r.qty=Math.max(1,Math.min(30,r.qty+ +b.dataset.d));break}
+    case 'spkall':(dm.DU.startPick?.rows||[]).forEach(r=>{r.on=b.dataset.v==='1'});break;
+    case 'spadd':{const P=dm.DU.startPick;if(!P)return;const r=P.rows.find(x=>x.id===b.dataset.m);if(r){r.on=true;r.qty++}else P.rows.push({id:b.dataset.m,qty:1,on:true});break}
+    case 'spx':dm.DU.startPick=null;break;
+    case 'spgo':{const P=dm.DU.startPick;if(!P)return;dm.startPicked(P.rows);dm.DU.startPick=null;dm.saveD();if(dm.D.only)S.tab='dmcombat';break}
     case 'npsel':S.notePage=i;break;
     case 'npadd':addPage();break;
     case 'npdel':{const p=pageList()[curPage()];if(p.text.trim()&&U.CONF!=='npdel'){U.CONF='npdel';break}U.CONF=null;delPage();break}
@@ -416,6 +423,7 @@ app.addEventListener('input',ev=>{
   if(el.id==='dm-lq'){dm.DU.lq=el.value;$('dm-li').innerHTML=vLootItems();return}
   if(el.id==='pet-q'){U.petQ=el.value;$('pet-res').innerHTML=vPetResults();return}
   if(el.id==='dm-rq'){dm.DU.rq=el.value;$('dm-rlist').innerHTML=vRuleList();return}
+  if(el.id==='sp-q'){dm.DU.spq=el.value;$('sp-res').innerHTML=vStartPickRes();return}
   if(el.id==='dm-pq'){dm.DU.pq=el.value;$('dm-pres').innerHTML=vPlaceResults();return}
   if(el.id==='dm-eq'){dm.DU.eq=el.value;$('dm-eres').innerHTML=vEncResults();return}
   if(el.id==='dm-mq'){dm.DU.mq=el.value;$('dm-results').innerHTML=vResults();return}
@@ -536,7 +544,7 @@ const locKey=l=>l?(l.hub?'h:'+l.hub:'p:'+l.camp+':'+(l.camp?'':l.id)+':'+l.tab):
 let histKey='',restoring=false;
 function syncHistory(){if(restoring)return;const l=locNow(),k=locKey(l);if(k===histKey)return;try{if(!histKey)window.history.replaceState({rc:l},'');else window.history.pushState({rc:l},'')}catch(e){/* Historie nicht verfügbar */}histKey=k}
 /** Offene Dialoge, die Zurück zuerst schließt. */
-function closeOverlay(){if(U.MMENU){U.MMENU=false;return true}if(U.LU){U.LU=null;return true}if(U.MIGRATE){U.MIGRATE=null;return true}if(dm.DU.peek){dm.DU.peek=null;return true}if(Object.values(dm.DU.open||{}).some(Boolean)){dm.DU.open={};return true}if(U.TARGET){U.TARGET=null;return true}return false}
+function closeOverlay(){if(U.MMENU){U.MMENU=false;return true}if(dm.DU.startPick){dm.DU.startPick=null;return true}if(U.LU){U.LU=null;return true}if(U.MIGRATE){U.MIGRATE=null;return true}if(dm.DU.peek){dm.DU.peek=null;return true}if(Object.values(dm.DU.open||{}).some(Boolean)){dm.DU.open={};return true}if(U.TARGET){U.TARGET=null;return true}return false}
 window.addEventListener('popstate',ev=>{
   const l=ev.state&&ev.state.rc;
   if(closeOverlay()){try{window.history.pushState({rc:locNow()},'')}catch(e){/* egal */}render();return}

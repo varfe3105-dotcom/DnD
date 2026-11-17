@@ -61,6 +61,8 @@ test.describe('Begegnungen @new', () => {
     await act(page, 'dmeadd', '[data-m="goblin-warrior"]').click();
     await act(page, 'dmeqty', '[data-m="goblin-warrior"][data-d="1"]').click();
     await act(page, 'dmestart').click();
+    // Startauswahl: alle vorbereiteten Gegner übernehmen
+    await act(page, 'spgo').click();
     const d = await dmData(page);
     expect(d.view).toBe('combat');
     expect(d.combat.round).toBe(1);

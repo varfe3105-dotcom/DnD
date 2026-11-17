@@ -107,6 +107,7 @@ test.describe('Orte @new', () => {
     await expect(page.locator('.dm-place .dm-total')).toContainText('XP');
     await expect(page.locator('.wli small').first()).toContainText('2');
     await act(page, 'dmplstart').click();
+    await act(page, 'spgo').click();
     d = await dmData(page);
     expect(d.view).toBe('combat');
     expect(d.combat.list.map(c => c.name).sort()).toEqual(['Goblin Warrior 1', 'Goblin Warrior 2', 'Held']);

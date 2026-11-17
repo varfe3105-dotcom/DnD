@@ -17,7 +17,8 @@ import { vMain, vHP } from './sheet.js';
 import { vProfile, vStats, vSpellBook } from './char.js';
 import { vCover, vPartyP } from './campaign.js';
 import { vCampSet } from './camp-set.js';
-import { timeline, logEntries } from './chron.js';
+import { coarseHp } from './party.js';
+import { timeline, logEntries, book } from './chron.js';
 import { hpMaxNow } from '../effects.js';
 import { t, dist } from '../i18n/index.js';
 import { soundOn } from '../feed.js';
@@ -146,8 +147,9 @@ function vChron() {
   const c = curCamp(), entries = logEntries(c?.log), list = U.CHRONREV ? [...entries].reverse() : entries;
   const form = `<div class="card chron-new"><p class="lbl" style="margin-top:0">${t('chron.newEntry')}</p><div class="add"><input type="text" id="chr-t" maxlength="80" placeholder="${t('chron.titlePh')}" aria-label="${t('chron.title')}"></div><textarea id="chr-x" rows="3" placeholder="${t('chron.textPh')}" aria-label="${t('chron.text')}"></textarea><div class="add"><button class="btn solid" data-a="chronadd">${t('chron.add')}</button></div></div>`;
   const raw = U.CHRONRAW ? `<textarea id="camp-log" rows="14" aria-label="${t('nav.chron')}" placeholder="${t('nav.chronPh')}">${esc(c?.log || '')}</textarea>` : '';
-  const shared = (c?.shared || []).map(e => ({ title: e.t, body: e.x, meta: t('dm.kind.' + e.k), cls: 'shared', tags: `<span class="tag t-good sm">${t('chron.fromDm')}</span>` }));
-  return `<h2>${t('chron.sharedTitle')}</h2>${shared.length ? timeline(shared) : `<p class="note">${t('chron.sharedNone')}</p>`}<h2>${t('chron.mine')}</h2><p class="note">${t('nav.chronHint')} ${t('chron.syntax')}</p>${form}<div class="chips"><button class="chip" data-a="chronrev" aria-pressed="${!!U.CHRONREV}">${t(U.CHRONREV ? 'chron.newest' : 'chron.oldest')}</button><button class="chip${U.CHRONRAW ? ' on' : ''}" data-a="chronraw" aria-pressed="${!!U.CHRONRAW}">${t('chron.raw')}</button><button class="chip" data-a="crumb" data-t="notes">${t('nav.toNotes')}</button></div>${raw}${timeline(list)}`;
+  // Gemeinsame Chronik als Buch (nur lesen); darunter die eigenen, privaten Notizen
+  const shared = (c?.shared || []).map(e => ({ id: e.id || e.t, title: e.t, body: e.x, meta: t('dm.kind.' + e.k), pub: true }));
+  return `${book({ title: c ? c.name : t('chron.bookTitle'), sub: t('chron.bookSubP'), entries: shared, sel: U.BOOKSEL, empty: t('chron.sharedNone') })}<h2>${t('chron.mineTitle')}</h2><p class="note">${t('chron.mineHint')} ${t('chron.syntax')}</p>${form}<div class="chips"><button class="chip" data-a="chronrev" aria-pressed="${!!U.CHRONREV}">${t(U.CHRONREV ? 'chron.newest' : 'chron.oldest')}</button><button class="chip${U.CHRONRAW ? ' on' : ''}" data-a="chronraw" aria-pressed="${!!U.CHRONRAW}">${t('chron.raw')}</button><button class="chip" data-a="crumb" data-t="notes">${t('nav.toNotes')}</button></div>${raw}${timeline(list)}`;
 }
 /** Unterleiste im Kampf der Spielleitung: Verlauf, Vorbereitung, Spickzettel. */
 export function vDmSub() {
@@ -190,8 +192,8 @@ function pcCard(o) {
   return `<div class="pcc${o.foe ? ' foe' : ''}${o.cur ? ' rc-cur' : ''}${o.me ? ' me' : ''}">${o.cur ? flag(o.me ? t('fight.you') + ' · ' + t('fight.flagNow') : t('fight.flagNow')) : ''}
     <span class="ib-ic${o.foe ? '' : ' ini'}">${o.foe ? glyph('skull', o.ty ? 'mt:' + o.ty : '') : esc((o.n || '?')[0])}</span>
     <span class="pcc-n"><b>${esc(o.n)}</b><small>${esc(o.sub || '')}</small></span>
-    <span class="pcc-st">${o.ac !== undefined ? `<span class="rc-l">${t('dm.acShort')}</span><span class="rc-v s${o.ac === '' ? ' q' : ''}">${o.ac === '' ? '?' : esc(String(o.ac))}</span>` : ''}${o.foe ? '' : `<span class="rc-l">${t('head.hpShort')}</span><span class="rc-v s">${o.hp}<span class="mx">/${o.hpMax}</span></span>`}</span>
-    ${o.foe ? `<span class="hid" title="${t('fight.hpHidden')}"></span>` : bar(o.hp, o.hpMax)}
+    <span class="pcc-st">${o.ac !== undefined ? `<span class="rc-l">${t('dm.acShort')}</span><span class="rc-v s${o.ac === '' ? ' q' : ''}">${o.ac === '' ? '?' : esc(String(o.ac))}</span>` : ''}${o.foe || !o.me ? '' : `<span class="rc-l">${t('head.hpShort')}</span><span class="rc-v s">${o.hp}<span class="mx">/${o.hpMax}</span></span>`}</span>
+    ${o.foe ? `<span class="hid" title="${t('fight.hpHidden')}"></span>` : o.me ? bar(o.hp, o.hpMax) : coarseHp(o.hp, o.hpMax)}
     <span class="pcc-tags">${o.down ? `<span class="tag sm">${t('fight.sDown')}</span>` : ''}${tags || (o.down ? '' : `<span class="none">${t('fight.noCond')}</span>`)}</span></div>`;
 }
 function vFightLive(tr, mine, sound, feedHtml) {

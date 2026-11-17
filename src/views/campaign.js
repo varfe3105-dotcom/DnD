@@ -65,7 +65,7 @@ export function vCover() {
   // Seite: nächste Sitzung, Gruppe, Raum
   const next = sec('lb-next', t('lb.next'), `${c.next ? `<p class="lb-date">${esc(fmtDate(c.next))}</p>` : `<p class="note">${t('hub.noDate')}</p>`}${c.plan ? `<p class="lb-ptext">${esc(c.plan)}</p>` : ''}`);
   const members = dm ? players().map(p => ({ ...p, dm: true })) : [selfMember(), ...partyPeers()];
-  const group = sec('lb-group', t('nav.party'), members.length ? `<div class="mchips">${members.map(memberChip).join('')}</div>` : `<p class="note">${t('nav.groupEmpty')}</p>`);
+  const group = sec('lb-group', t('nav.party'), members.length ? `<div class="mchips">${members.map(m => memberChip(m, !!m.me || dmOnly())).join('')}</div>` : `<p class="note">${t('nav.groupEmpty')}</p>`);
   const room = sec('lb-roomsec', t('nav.room'), vRoom(c));
   return `${dm ? vDmTools(c) : ''}<div class="lagebericht">${head}<i class="rc-sep" aria-hidden="true"></i><div class="lb-grid"><div class="lb-main">${lage}</div><aside class="lb-side">${next}${group}${room}</aside></div></div>`;
 }

@@ -49,6 +49,8 @@ test.describe('D2: gemeinsame Chronik und geschützte Spielleitungsdaten @new', 
     await p.locator('.hub-camp [data-a="campplay"]').click();
     await p.locator('[data-a="tab"][data-t="dmnotes"]').click();
     await p.locator('[data-a="chronv"][data-k="book"]').click();
+    // Buch: Seite „Sitzung 1“ im Inhaltsverzeichnis aufschlagen
+    await p.locator('.bk-toc [data-a="bksel"][data-id="s1"]').click();
     await p.locator('[data-a="bookpub"][data-id="s1"]').click();
     const txt = p.locator('textarea[data-bookpub="s1"]');
     await expect(txt).toHaveValue('Geheim: Der Vogt ist bestochen.');
@@ -64,8 +66,9 @@ test.describe('D2: gemeinsame Chronik und geschützte Spielleitungsdaten @new', 
     await pl.page.locator('.hub-side [data-s="camps"]').click();
     await pl.page.locator('.hub-camp [data-a="campplay"]').click();
     await pl.page.locator('[data-a="tab"][data-t="chron"]').click();
-    await expect(pl.page.locator('.chron-e.shared')).toContainText('Der Vogt verweigert Hilfe.');
-    await expect(pl.page.locator('.chron-e.shared')).not.toContainText('bestochen');
+    await expect(pl.page.locator('.book .bk-page')).toContainText('Der Vogt verweigert Hilfe.');
+    await expect(pl.page.locator('.book .bk-seal')).toBeVisible();
+    await expect(pl.page.locator('.book')).not.toContainText('bestochen');
     // Der Spieler kann den Spielleitungsbereich nicht überschreiben (Besitz)
     expect(() => srv.api.charbogen_put2({ p_room: 'DDD444', p_kind: 'dm', p_id: 'dm', p_name: 'x', p_data: {}, p_base: null, p_secret: 'y'.repeat(48) })).toThrow('not owner');
     await dm.ctx.close(); await pl.ctx.close();

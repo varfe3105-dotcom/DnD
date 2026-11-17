@@ -130,3 +130,37 @@ test.describe('Kampagneneinstellungen @new', () => {
     expect((await campsNow(page)).some(c => c.id === 'd1')).toBe(false);
   });
 });
+
+test.describe('Begegnung starten @new', () => {
+  test('Auswahl vor dem Start: abwählen, Anzahl, weitere hinzufügen; Vorbereitung bleibt, Neustart setzt zurück', async ({ page }) => {
+    const enc = { id: 'e1', name: 'Hinterhalt', monsters: [{ id: 'goblin-warrior', qty: 3 }, { id: 'ogre', qty: 1 }] };
+    await start(page, { 'charbogen-dm': { on: true }, 'charbogen-dm-camp-d1': { encounters: [enc], encSel: 'e1', combat: { round: 1, active: null, list: [] } } });
+    await page.locator('.hub-side [data-a="hubgo"][data-s="gm"]').click();
+    await play(page, 'Die letzte Bastion');
+    await page.locator('.tabs [data-a="tab"][data-t="dmcombat"]').click();
+    await page.locator('[data-a="dmestart"]').first().click();
+    const dlg = page.locator('.sp-dlg');
+    await expect(dlg.locator('.sp-row')).toHaveCount(2);
+    await expect(dlg).toContainText('SRD 5.2.1');
+    await dlg.locator('[data-a="spqty"][data-i="0"][data-d="-1"]').click();
+    await dlg.locator('[data-a="spon"][data-i="1"]').click();
+    await page.locator('#sp-q').fill('Wolf');
+    await dlg.locator('[data-a="spadd"]').first().click();
+    await expect(dlg.locator('[data-a="spgo"]')).toContainText('3');
+    await dlg.locator('[data-a="spgo"]').click();
+    const st = () => page.evaluate(() => JSON.parse(localStorage.getItem('charbogen-dm-camp-d1')));
+    const mons = (await st()).combat.list.filter(c => c.kind === 'mon');
+    expect(mons.map(c => c.mon).sort()).toEqual(['goblin-warrior', 'goblin-warrior', 'wolf']);
+    expect((await st()).encounters[0].monsters).toEqual(enc.monsters);
+    // Gegner besiegen: bleibt mit 0 TP stehen; Neustart setzt auf die vorbereiteten Werte zurück
+    await page.evaluate(() => { const d = JSON.parse(localStorage.getItem('charbogen-dm-camp-d1')); d.combat.list[0].hp = 0; localStorage.setItem('charbogen-dm-camp-d1', JSON.stringify(d)); });
+    await page.reload();
+    expect((await st()).combat.list.filter(c => c.kind === 'mon' && c.hp === 0)).toHaveLength(1);
+    await page.locator('.tabs [data-a="tab"][data-t="dmcombat"]').click();
+    await page.locator('[data-a="dmestart"]').first().click();
+    await page.locator('.sp-dlg [data-a="spgo"]').click();
+    const again = (await st()).combat.list.filter(c => c.kind === 'mon');
+    expect(again).toHaveLength(4);
+    expect(again.every(c => c.hp === c.hpMax && c.hp > 0)).toBe(true);
+  });
+});

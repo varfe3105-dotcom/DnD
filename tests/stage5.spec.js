@@ -95,8 +95,8 @@ test.describe('Stufe 5 @new', () => {
     await openDm(page);
     await page.locator('[data-a="tab"][data-t="dmnotes"]').click();
     await page.locator('[data-a="chronv"][data-k="book"]').click();
-    await expect(page.locator('.chron-e')).toContainText('Sitzung 1');
-    await expect(page.locator('.chron-hl')).toHaveText('Die Brücke fällt');
-    await expect(page.locator('.chron-e .tag')).toContainText([/privat|private/]);
+    await expect(page.locator('.book .bk-page h3')).toHaveText('Sitzung 1');
+    await expect(page.locator('.book .chron-hl')).toHaveText('Die Brücke fällt');
+    await expect(page.locator('.book .bk-priv')).toHaveText(/privat|private/);
   });
 });
