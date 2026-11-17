@@ -434,3 +434,4 @@ body:has(.rail #live-dock.full) #toast{top:auto;bottom:calc(16px + env(safe-area
 .sp-row small{color:var(--t-sub-d)}
 .msrc{color:var(--t-lbl-d)}
 @media (max-width:520px){.sp-row{grid-template-columns:minmax(0,1fr) auto}.sp-row small{grid-column:1/-1;grid-row:2}}
+.econ .mv small{display:block;font:600 .74rem var(--f-ui);color:var(--t-sub-d)}
