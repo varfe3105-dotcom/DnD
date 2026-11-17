@@ -256,7 +256,10 @@ html:not([data-hub]) .wrap{max-width:none;padding:0}
 .shell.folded .rail-fold .li{transform:rotate(180deg)}
 .shell.folded .rail span,.shell.folded .rail-brand b{display:none}
 .shell.folded .rail nav button,.shell.folded .rail-foot button,.shell.folded .rail-brand{justify-content:center;padding-inline:0}
-/* Live-Leiste sitzt am Desktop in der Leiste und verdeckt so keine Inhalte */
+/* Live-Leiste sitzt am Desktop in der Leiste und verdeckt so keine Inhalte. Nur ab 900 px: darunter gibt es die Leiste
+   nicht, die Live-Leiste bleibt dort fest unten (vorher stand sie am Handy oben im Fluss), und die Kurzleiste wird nicht
+   um die Leistenbreite verschoben (vorher waagrechter Überlauf am Handy). */
+@media (min-width:900px){
 .rail #live-dock{position:static;inset:auto;width:auto;max-width:none;max-height:none;margin:8px;padding:8px;overflow:visible;border-radius:4px;box-shadow:none;flex:none}
 .rail #live-dock .dock-top,.rail #live-dock .inbox .row{flex-wrap:wrap}
 .rail #live-dock .dock-st span{display:inline}
@@ -266,6 +269,7 @@ html:not([data-hub]) .wrap{max-width:none;padding:0}
 body:has(.rail #live-dock.full){padding-bottom:0}
 body:has(.rail #live-dock.full) #toast{top:auto;bottom:calc(16px + env(safe-area-inset-bottom,0px))}
 .shell .minibar{left:calc(var(--rail-w) + (100% - var(--rail-w)) / 2);width:min(1680px,calc(100% - var(--rail-w)))}
+}
 /* Zwischen 900 und 1199 px nur Symbole (die Leiste bleibt sichtbar) */
 @media (min-width:900px) and (max-width:1199px){
   .shell{--rail-w:68px}
@@ -452,3 +456,11 @@ html:not([data-hub]) .wrap{z-index:auto}
 #live-dock .inbox .row .nm,.inbox .row.wrow .nm{flex:1 1 12rem;min-width:0;overflow-wrap:break-word;word-break:normal;hyphens:auto}
 .inbox .wbtns{display:flex;gap:6px;flex:0 0 auto;margin-left:auto}
 .inbox .wbtns .btn{flex:none}
+/* Händlerwaren der Spielleitung: Name bekommt Platz, Preis/Bestand/Entfernen rutschen bei Bedarf darunter
+   (vorher Namensspalte mit Ausgangsbreite 0 → Buchstabenumbruch am Handy) */
+.row.mer-w{flex-wrap:wrap}
+.row.mer-w>.nm{flex:1 1 10rem;min-width:0;overflow-wrap:break-word;word-break:normal}
+/* Zauberzeile ohne Vorbereitungs-Häkchen (Kampfseite, nur gefilterte Liste): zwei Spalten statt drei, sonst ragt „Wirken“
+   bei langen Zaubern über den Rand */
+.sp.pr:has(> .sph:first-child){grid-template-columns:minmax(0,1fr) max-content}
+.sp>.sph{min-width:0}
