@@ -17,7 +17,7 @@ select room, kind, count(*) as zeilen, max(updated_at) as zuletzt
 from public.charbogen_saves group by room, kind order by room, kind;
 
 -- K1 – D2 vollständig? -------------------------------------------------------
--- Erwartet: alle Zeilen ok = true.
+-- Erwartet direkt nach D2: alle Zeilen ok = true. (Nach D3 Teil 1 ist „del2 sperrt Spielleitungszeile“ gewollt false.)
 select pruefung, ok from (values
   ('Spalte owner_hash', exists (select 1 from information_schema.columns where table_schema = 'public' and table_name = 'charbogen_saves' and column_name = 'owner_hash')),
   ('Prüfregel erlaubt chron', coalesce((select pg_get_constraintdef(c.oid) like '%chron%' from pg_constraint c where c.conrelid = 'public.charbogen_saves'::regclass and c.conname = 'charbogen_saves_kind_check'), false)),
@@ -31,6 +31,9 @@ select pruefung, ok from (values
   ('anon liest Tabelle NICHT', not has_table_privilege('anon', 'public.charbogen_saves', 'select')),
   ('put2 prüft p_kind (überarbeitete Fassung)', coalesce((select prosrc like '%bad kind%' from pg_proc where oid = to_regprocedure('public.charbogen_put2(text,text,text,text,jsonb,timestamptz,text)')), false)),
   ('del2 ohne Löschen von Altbestand durch Dritte', coalesce((select prosrc not like '%owner_hash is null%' from pg_proc where oid = to_regprocedure('public.charbogen_del2(text,text,text,text)')), false)),
+  ('put2 erlaubt nur dm/dm und chron/shared', coalesce((select prosrc like '%''shared''%' from pg_proc where oid = to_regprocedure('public.charbogen_put2(text,text,text,text,jsonb,timestamptz,text)')), false)),
+  -- Nur direkt nach D2 true; D3 Teil 1 ersetzt del2 bewusst durch eine Fassung ohne diese Sperre.
+  ('del2 sperrt Spielleitungszeile (nur D2)', coalesce((select prosrc like '%not (s.kind = ''dm'' and s.id = ''dm'')%' from pg_proc where oid = to_regprocedure('public.charbogen_del2(text,text,text,text)')), false)),
   ('Suchpfad enthält extensions', coalesce((select array_to_string(proconfig, ',') like '%extensions%' from pg_proc where oid = to_regprocedure('public.charbogen_put2(text,text,text,text,jsonb,timestamptz,text)')), false))
 ) as t(pruefung, ok);
 

@@ -30,9 +30,9 @@
 | `charbogen_claim` | Die Spielleitung beansprucht beim Öffnen den Raum. Gibt es eine Spielleitungszeile, darf nur deren Besitzerin beanspruchen (Altbestand ohne Besitzer: niemand). Nur bei ganz neuen Räumen gilt der erste Anspruch. Der Schlüssel wird geprüft (EC P-256, ohne privaten Teil). |
 | `charbogen_room_key` | Liefert nur den öffentlichen Schlüssel. |
 | `charbogen_get2` (neu definiert) | Ein Charakterbogen geht nur an seinen Besitzer und an die Spielleitung des Raums; der Spielleitungsbereich nur an die Spielleitung; die gemeinsame Chronik an alle im Raum. |
-| `charbogen_put2` (neu definiert) | Prüft Art (`char`/`dm`/`chron`), Kennung, Daten und Geheimnis. Spielleitungsbereich und gemeinsame Chronik schreibt nur die Spielleitung. Altbestand nur mit genauem Zeitstempel. Wer die Spielleitungszeile besitzt, wird Spielleitung des noch nicht eingetragenen Raums. |
+| `charbogen_put2` (neu definiert) | Prüft Art (`char`/`dm`/`chron`), Kennung, Daten und Geheimnis. Spielleitungsbereich nur als `dm`/`dm`, Chronik nur als `chron`/`shared`. Spielleitungsbereich und gemeinsame Chronik schreibt nur die Spielleitung. Altbestand nur mit genauem Zeitstempel. Wer die Spielleitungszeile besitzt, wird Spielleitung des noch nicht eingetragenen Raums. |
 | `charbogen_list2` | Übersicht ohne Daten: Spieler sehen nur ihre eigenen Zeilen, die Spielleitung alle. |
-| `charbogen_del2` | Löschen nur durch den Besitzer oder die Spielleitung des Raums; kurze oder leere Geheimnisse löschen nie. |
+| `charbogen_del2` | Löschen nur durch den Besitzer oder die Spielleitung des Raums; kurze oder leere Geheimnisse löschen nie. In D2 ist die Zeile `dm`/`dm` online gar nicht löschbar (sonst könnte sie danach jemand anderes neu anlegen); in D3 darf die Spielleitung sie löschen, weil ihre Eintragung in `charbogen_rooms` bestehen bleibt. |
 | Teil 2 (direkt nach Teil 1) | Die alten Funktionen ohne Schutz (`charbogen_put/get/list/del`) entfernen. Erst danach ist der Lesezugriff ohne Geheimnis vollständig geschlossen. |
 
 **App:**
@@ -62,7 +62,7 @@ Projekt `ovkxoqgqocspwjvxhige`, Bereich **SQL Editor**. Die Kontrollabfragen ste
 | Schritt | Was | Kontrolle |
 |---|---|---|
 | 0 | Table Editor → `charbogen_saves` → Export als CSV (Sicherung der 17 Zeilen). Optional zusätzlich eine Kopie in der Datenbank anlegen, siehe unten. | K0: `tabelle` und die vier alten Funktionen `true`, `zeilen` = 17. Ergebnis von K0b aufheben (Notiz oder Bildschirmfoto). |
-| 1 | **D2:** `supabase/charbogen-saves.sql` ab der Zeile `-- D2 (17.11.2026, überarbeitet …)` bis zum Dateiende ausführen. | K1: alle `ok = true`. K1b zeigt das Schema von pgcrypto (`public` oder `extensions`, beides funktioniert). K1c: `ohne_besitzer` = 17. |
+| 1 | **D2:** `supabase/charbogen-saves.sql` ab der Zeile `-- D2 (17.11.2026, überarbeitet …)` bis zum Dateiende ausführen. | K1: alle `ok = true` (die Zeile „del2 sperrt Spielleitungszeile“ ist nur direkt nach D2 true; nach D3 Teil 1 gewollt false). K1b zeigt das Schema von pgcrypto (`public` oder `extensions`, beides funktioniert). K1c: `ohne_besitzer` = 17. |
 | 2 | **D3 Teil 1:** `supabase/d3-rechte.sql` von Dateianfang bis vor die Zeile `Teil 2` ausführen. | K2: alle `ok = true`. K2b ist anfangs leer; Altbestandsräume erscheinen erst, wenn die Spielleitung gespeichert hat. |
 | 3 | **D3 Teil 2:** die vier `drop function`-Zeilen am Ende von `d3-rechte.sql` ohne `--` ausführen. Die aktuelle App braucht die alten Funktionen nicht mehr. | K3: alle `true`. |
 | 4 | **App:** Auf allen Geräten neu laden. Erst die Spielleitung öffnet den Raum und speichert einmal (siehe „Altbestand“), danach die Spieler. Dann einmal neu laden: Unter Gruppe/Live-Tisch steht „Absicherung: aktiv“. | K1c: `ohne_besitzer` sinkt. K2b: Raum mit `hat_schluessel = true`. K4: Räume, Arten und Anzahlen wie in K0b. |
@@ -152,5 +152,6 @@ Beides deckt der manuelle Testplan ab: `docs/testplan-zwei-geraete.md`, Abschnit
 - Zwei Ausgangslagen: pgcrypto nicht installiert, und pgcrypto schon in `public`.
 - Geprüft: D2, D3 Teil 1 und Teil 2 nacheinander; die Kontrollabfragen K1, K2 und K3; fehlerhafte Eingaben, falsche und leere Geheimnisse, Konflikte, Altbestand, Chronik, Lesen, Übersicht, Löschversuche Unberechtigter und Rechte der Hilfsfunktionen.
 - Dazu: D3 ohne D2 bricht ab; nach allen Schritten sind alle 17 Zeilen vorhanden, nicht übernommene unverändert.
-- Ergebnis: 128 von 128 Prüfungen bestanden. Das Testskript liegt nicht im Projekt; der Bericht im Chat vom 17.11.2026 beschreibt es.
+- Ergänzt: `dm` und `chron` mit anderer Kennung werden abgelehnt (D2, D3, nach Teil 2); `dm`/`dm` ist in D2 auch für die Spielleitung nicht löschbar, andere eigene Zeilen schon; in D3 darf die Spielleitung `dm`/`dm` löschen, danach kann sie niemand anderes neu anlegen.
+- Ergebnis: 148 von 148 Prüfungen bestanden. Das Testskript liegt nicht im Projekt; der Bericht im Chat vom 17.11.2026 beschreibt es.
 - Nicht nachgebildet: Supabase-eigene Besonderheiten außerhalb von PostgreSQL (PostgREST, Dashboard-Rollen). Deshalb die Kontrollabfragen nach jedem Schritt.

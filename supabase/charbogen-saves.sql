@@ -76,8 +76,9 @@ grant execute on function public.charbogen_del(text, text, text) to anon, authen
 --     gespeicherten updated_at (das Gerät, das zuletzt gespeichert oder geladen hat, kennt ihn). Sonst Konflikt (null).
 --     Das ist keine echte Anmeldung – siehe Dokumentation, Abschnitt „Altbestand“.
 --   * Gemeinsame Chronik ('chron') schreibt nur die Besitzerin der Spielleitungszeile 'dm'/'dm'.
+--   * Spielleitungsbereich nur als 'dm'/'dm', Chronik nur als 'chron'/'shared'.
 --   * Löschen nur durch den Besitzer der Zeile oder die Besitzerin der Spielleitungszeile; Altbestand ohne Besitzer
---     kann ohne Spielleitung niemand löschen.
+--     kann ohne Spielleitung niemand löschen. Die Spielleitungszeile selbst ist in D2 online nicht löschbar.
 -- ============================================================================
 
 -- pgcrypto (digest). WITH SCHEMA gilt nur bei Neuinstallation; eine schon installierte Erweiterung bleibt in ihrem
@@ -96,6 +97,10 @@ begin
   if p_room is null or p_room !~ '^[A-HJ-NP-Z2-9]{6}$' then raise exception 'bad room'; end if;
   if p_kind is null or p_kind not in ('char', 'dm', 'chron') then raise exception 'bad kind'; end if;
   if p_id is null or length(p_id) not between 1 and 60 then raise exception 'bad id'; end if;
+  -- Spielleitungsbereich und Chronik haben je Raum genau eine Zeile mit fester Kennung
+  if (p_kind = 'dm' and p_id <> 'dm') or (p_kind = 'chron' and p_id <> 'shared') then
+    raise exception 'bad id';
+  end if;
   if p_data is null then raise exception 'no data'; end if;
   if length(coalesce(p_secret, '')) < 24 then raise exception 'no secret'; end if;
   if pg_column_size(p_data) > 3000000 then raise exception 'too large'; end if;
@@ -134,6 +139,9 @@ returns void language sql security definer set search_path = public, extensions,
   delete from charbogen_saves s
   where s.room = p_room and s.kind = p_kind and s.id = p_id
     and length(coalesce(p_secret, '')) >= 24
+    -- Nur D2: die Spielleitungszeile ist online nicht löschbar (sonst könnte sie danach jemand anderes neu anlegen
+    -- und als Spielleitung gelten). In D3 bleibt die Eintragung in charbogen_rooms bestehen; dort ist Löschen sicher.
+    and not (s.kind = 'dm' and s.id = 'dm')
     and (s.owner_hash = encode(digest(p_secret, 'sha256'), 'hex')
       or exists (select 1 from charbogen_saves d where d.room = p_room and d.kind = 'dm' and d.id = 'dm'
                  and d.owner_hash = encode(digest(p_secret, 'sha256'), 'hex')));

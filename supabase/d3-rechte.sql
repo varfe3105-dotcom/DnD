@@ -92,6 +92,10 @@ begin
   if p_room is null or p_room !~ '^[A-HJ-NP-Z2-9]{6}$' then raise exception 'bad room'; end if;
   if p_kind is null or p_kind not in ('char', 'dm', 'chron') then raise exception 'bad kind'; end if;
   if p_id is null or length(p_id) not between 1 and 60 then raise exception 'bad id'; end if;
+  -- Spielleitungsbereich und Chronik haben je Raum genau eine Zeile mit fester Kennung
+  if (p_kind = 'dm' and p_id <> 'dm') or (p_kind = 'chron' and p_id <> 'shared') then
+    raise exception 'bad id';
+  end if;
   if p_data is null then raise exception 'no data'; end if;
   if length(coalesce(p_secret, '')) < 24 then raise exception 'no secret'; end if;
   if pg_column_size(p_data) > 3000000 then raise exception 'too large'; end if;
