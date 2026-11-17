@@ -58,7 +58,8 @@ export function turnChips() {
   return `<span class="mb-v mb-turn"><small>${t('turn.title')}</small><b>${c(T.a < T.aMax, t('turn.abbrA'), t('tv.action'))}${c(!T.b, t('turn.abbrB'), t('tv.bonus'))}${c(!T.r, t('turn.abbrR'), t('tv.react'))} ${esc(dist(Math.max(0, speedMax() - T.mv)))}</b></span>`;
 }
 
-export function vTurnBoard() {
+/** Teile der Zugübersicht einzeln (für die Reiter im Kampfbereich der Kampagne): top, act, bonus, react, move, free. */
+export function turnParts() {
   const o = own(), T = turn(), aFree = T.a < T.aMax, n = attacksPerAction();
   const left = Math.max(0, speedMax() - T.mv), step = 1.5;
   const surge = S.res.findIndex(r => r.n === 'Action Surge');
@@ -115,5 +116,9 @@ export function vTurnBoard() {
     row('key', t('tv.obj'), t('tv.objD'), btn('tobj', '', t('turn.do'), !!T.obj)) +
     row('music', t('tv.talk'), t('tv.talkD'), '');
 
+  return { top, act, bonus, react, move, free };
+}
+export function vTurnBoard() {
+  const { top, act, bonus, react, move, free } = turnParts();
   return `<h2>${t('turn.title')}</h2><div class="card turnboard">${top}${act}${bonus}${react}${move}${free}<p class="note">${t('tv.clarify')}</p><p class="src">${t('tv.src')}</p></div>`;
 }

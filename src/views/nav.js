@@ -18,9 +18,20 @@ import { vProfile, vStats, vSpellBook } from './char.js';
 import { vCover, vPartyP } from './campaign.js';
 import { timeline, logEntries } from './chron.js';
 import { hpMaxNow } from '../effects.js';
-import { t } from '../i18n/index.js';
+import { t, dist } from '../i18n/index.js';
 import { soundOn } from '../feed.js';
 import { corners, ribbon } from './orn.js';
+import spellsData from '../../data/spells.json';
+import { glyph } from '../icons.js';
+import { flag } from './orn.js';
+import { acNow } from '../buffs.js';
+import { effects } from '../effects.js';
+import { spellStats } from '../tables.js';
+import { sg } from '../util.js';
+import { turn, speedMax } from '../turn-state.js';
+import { turnParts, vTurnBoard } from './turn.js';
+import { vAtk, vSpells, vCond, vRes, vQuick, concBanner } from './sheet.js';
+
 
 /** Kampagnenebene: Spieler und Spielleitung sehen dieselben Bereiche, die Spielleitung mit ihren Werkzeugen. */
 export const CAMP_P = ['cover', 'party', 'main', 'explore', 'trade', 'chron'];
@@ -146,6 +157,7 @@ export function vFight() {
   const tr = dmTurn(), local = !tr && S.turn?.on, peers = L.role === 'player' ? players() : [], mine = myTurn();
   const feedHtml = (U.FEED || []).length ? `<ul class="feed" aria-live="polite">${U.FEED.map(f => `<li class="${f.kind}">${esc(f.text)}</li>`).join('')}</ul>` : '';
   const sound = `<button class="tg sm${soundOn() ? ' on' : ''}" data-a="soundtg" aria-pressed="${soundOn()}" title="${t('fight.soundHint')}">${t('fight.sound')}</button>`;
+  if (tr && curCamp()) return vFightLive(tr, mine, sound, feedHtml);
   let head;
   if (tr) {
     const order = (tr.order || []).map(o => {
@@ -163,6 +175,53 @@ export function vFight() {
   }
   return head + feedHtml + vMain({ mode: 'combat' });
 }
+/* ---- Kampf der Spieler im Kampagnenraum (Gestaltungskonzept 11.3) ---- */
+const SPT = Object.fromEntries(spellsData.map(s => [s.n, s.time.en]));
+const tEn = s => String(SPT[s.n] || s.time || '');
+/** Einheitliche Karte (wie bei der Spielleitung). Gegner: kein Balken, keine Zahl, kein Zustandswort zu den TP. */
+function pcCard(o) {
+  const tags = [...(o.cond || []).map(c => `<span class="tag t-bad sm">✕ ${esc(c)}</span>`), o.conc ? `<span class="tag t-conc sm">◇ ${esc(o.conc)}</span>` : ''].filter(Boolean).join('');
+  return `<div class="pcc${o.foe ? ' foe' : ''}${o.cur ? ' rc-cur' : ''}${o.me ? ' me' : ''}">${o.cur ? flag(o.me ? t('fight.you') + ' · ' + t('fight.flagNow') : t('fight.flagNow')) : ''}
+    <span class="ib-ic${o.foe ? '' : ' ini'}">${o.foe ? glyph('skull', o.ty ? 'mt:' + o.ty : '') : esc((o.n || '?')[0])}</span>
+    <span class="pcc-n"><b>${esc(o.n)}</b><small>${esc(o.sub || '')}</small></span>
+    <span class="pcc-st">${o.ac !== undefined ? `<span class="rc-l">${t('dm.acShort')}</span><span class="rc-v s${o.ac === '' ? ' q' : ''}">${o.ac === '' ? '?' : esc(String(o.ac))}</span>` : ''}${o.foe ? '' : `<span class="rc-l">${t('head.hpShort')}</span><span class="rc-v s">${o.hp}<span class="mx">/${o.hpMax}</span></span>`}</span>
+    ${o.foe ? `<span class="hid" title="${t('fight.hpHidden')}"></span>` : bar(o.hp, o.hpMax)}
+    <span class="pcc-tags">${o.down ? `<span class="tag sm">${t('fight.sDown')}</span>` : ''}${tags || (o.down ? '' : `<span class="none">${t('fight.noCond')}</span>`)}</span></div>`;
+}
+function vFightLive(tr, mine, sound, feedHtml) {
+  const peers = L.role === 'player' ? players() : [], T = turn(), st = spellStats()[0];
+  const self = { n: S.name, sub: [S.klass, S.level].filter(Boolean).join(' '), ac: acNow(), hp: S.hp, hpMax: hpMaxNow(), cond: Object.keys(S.cond).filter(c => S.cond[c]), conc: S.conc, me: true };
+  const order = tr.order || [];
+  const ib = order.map(o => {
+    const p = o.k && peers.find(x => x.key === o.k), me = o.k && o.k === S.id;
+    const hp = me ? `<span class="ib-hp">${S.hp}/${hpMaxNow()}</span>${bar(S.hp, hpMaxNow())}` : p ? `<span class="ib-hp">${p.hp}/${p.hpMax}</span>${bar(p.hp, p.hpMax)}` : !o.pc ? '<span class="hpbar hid" aria-hidden="true"></span>' : '';
+    return `<li class="ib${o.cur ? ' cur' : ''}${o.nx ? ' next' : ''}${o.pc ? ' pc' : ' foe'}${me ? ' me' : ''}"><span class="ib-ic ini">${esc((o.n || '?')[0])}</span><span class="ib-n">${esc(o.n)}${me ? ` <small>(${t('nav.me')})</small>` : ''}</span>${o.i ? `<span class="ib-i">${esc(o.i)}</span>` : ''}${hp}${o.s === 'down' ? `<span class="fo-s down">${t('fight.sDown')}</span>` : ''}${o.nx ? `<small class="ib-next">${t('fight.nextShort')}</small>` : ''}</li>`;
+  }).join('');
+  const pcs = order.filter(o => o.pc).map(o => { const me = o.k && o.k === S.id, p = !me && o.k && peers.find(x => x.key === o.k); return me ? { ...self, cur: o.cur } : p ? { n: p.name || o.n, sub: [p.klass, p.level].filter(Boolean).join(' '), ac: p.ac, hp: p.hp, hpMax: p.hpMax, cond: p.cond, conc: p.conc, cur: o.cur } : { n: o.n, sub: '', hp: 0, hpMax: 0, cur: o.cur }; });
+  if (!order.some(o => o.k === S.id)) pcs.unshift(self);
+  const foes = order.filter(o => !o.pc).map(o => ({ n: o.n, foe: true, sub: o.cr ? `${t('fight.cr')} ${o.cr}` : '', ac: o.ac || '', cond: o.c || [], ty: o.ty, down: o.s === 'down', cur: o.cur }));
+  const side = `<aside class="pf-side"><h3 class="pf-h">${t('fight.party')}</h3>${pcs.map(pcCard).join('')}${foes.length ? `<h3 class="pf-h">${t('fight.foes')}</h3>${foes.map(pcCard).join('')}` : ''}<h3 class="pf-h">${t('fight.forYou')}</h3>${feedHtml || `<p class="note">${t('fight.feedNone')}</p>`}</aside>`;
+  const left = Math.max(0, speedMax() - T.mv);
+  const tile = (on, l, sub) => `<div class="${on ? '' : 'used'}"><i class="dot${on ? '' : ' x'}" aria-hidden="true"></i><span><b>${l}</b><small>${sub}</small></span></div>`;
+  const econ = `<div class="econ">${tile(T.a < T.aMax, t('tv.action'), t(T.a < T.aMax ? 'fight.free' : 'fight.used'))}${tile(!T.b, t('tv.bonus'), t(!T.b ? 'fight.free' : 'fight.used'))}${tile(!T.r, t('tv.react'), t(!T.r ? 'fight.free' : 'fight.used'))}<div class="mv"><span><b>${t('tv.move')}</b> <span class="rc-v s">${esc(dist(left))}<span class="mx"> / ${esc(dist(speedMax()))}</span></span>${bar(left, speedMax())}</span></div></div>`;
+  const tab = ['act', 'bonus', 'react', 'move', 'all'].includes(U.PTAB) ? U.PTAB : 'act';
+  const P = turnParts();
+  const isAct = s => /^1 action/i.test(tEn(s));
+  const body = {
+    act: `${vAtk()}<h2>${t('fight.spellsAct')}</h2><div class="card">${vSpells({ only: isAct, bare: true })}</div><h2>${t('fight.stdActs')}</h2><div class="card turnboard">${P.act}</div>`,
+    bonus: `<div class="card turnboard">${P.bonus}</div>`,
+    react: `<div class="card turnboard">${P.react}</div>`,
+    move: `<div class="card turnboard">${P.move}${P.free}</div>`,
+    all: vAtk() + vTurnBoard() + vSpells(),
+  }[tab];
+  const tabs = `<nav class="tabs2" role="tablist">${[['act', 'fight.tabAct'], ['bonus', 'fight.tabBonus'], ['react', 'fight.tabReact'], ['move', 'fight.tabMove'], ['all', 'fight.tabAll']].map(([k, l]) => `<button role="tab" class="${tab === k ? 'on' : ''}" data-a="ptab" data-k="${k}" aria-selected="${tab === k}">${t(l)}</button>`).join('')}</nav>`;
+  const fx = effects(), fxLine = [...fx.atk.dis.length ? [t('fx.dis') + ': ' + fx.atk.dis.join(', ')] : []].join('');
+  const head = `<div class="tp-head rc-aub">${corners({ top: true, sm: true })}<span class="tp-ic"><span class="ib-ic ini">${esc((S.name || '?')[0])}</span></span><div><span class="rc-l">${t(mine ? 'fight.yourTurn' : 'fight.yourFight')}</span><h3>${esc(S.name)}</h3><span class="rc-s">${t('dm.acShort')} ${acNow()} · ${t('head.hpShort')} ${S.hp}/${hpMaxNow()}${st ? ` · ${t('fight.spellDc')} ${st.dc} · ${t('fight.spellAtk')} ${sg(st.atk)}` : ''}</span></div>${fxLine ? `<span class="tag t-bad pf-fx">${esc(fxLine)}</span>` : ''}</div>`;
+  const stat = `<aside class="pf-stat">${concBanner()}${vHP()}${vCond()}${vRes()}${vQuick()}</aside>`;
+  const top = `<div class="fight-state on rc-aub${mine ? ' mine' : ''}">${corners({ top: true, sm: true })}<div class="fs-top"><span class="fs-badge">${t('fight.active')}</span><b class="fs-round">${t('turn.round', { n: tr.r })}</b><span>${mine ? `<b class="fs-mine">${t('turn.mineTitle')}</b>` : t('turn.now', { n: esc(tr.name || '?') })}${tr.next ? ' · ' + t('turn.next', { n: esc(tr.next) }) : ''}</span>${sound}${mine ? `<button class="btn gold" data-a="endturn">${t('turn.end')}</button>` : ''}</div>${ib ? `<ol class="ibar fight-order">${ib}</ol>` : ''}</div>`;
+  return `${top}<div class="pfight">${side}<section class="turnp pf-main${mine ? ' mine' : ''}">${head}${econ}${tabs}<div class="pf-body"><div class="pf-tab">${body}</div>${stat}</div></section></div>`;
+}
+
 const bar = (hp, max) => { const p = max ? Math.max(0, Math.min(100, hp / max * 100)) : 0; return `<span class="hpbar${p <= 25 ? ' low' : p <= 50 ? ' mid' : ''}" aria-hidden="true"><u style="width:${p}%"></u></span>`; };
 export const CAMP_PAGES = { cover: vCover, party: vPartyP, explore: vExplore, trade: vTrade, chron: vChron };
 export const CHAR_PAGES = { prof: vProfile, stats: vStats, spells: vSpellBook };

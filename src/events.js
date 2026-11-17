@@ -122,6 +122,7 @@ app.addEventListener('click',ev=>{
     case 'fside':U.FSIDE=b.dataset.k;break;
     case 'soundtg':setSound(!soundOn());if(soundOn())beep();break;
     case 'dmhp':{const amt=Math.floor(+v(b.dataset.src||'dm-amt-'+b.dataset.id))||1,c=dm.find(b.dataset.id);if(c&&c.live&&live.L.role==='dm'){live.sendMsg({type:+b.dataset.d<0?'dmg':'heal',to:c.live,value:amt,...(c.pet?{pet:c.pet}:{})});toast(tr('live.proposed',{n:c.kind==='pet'?c.owner:c.name}));dm.flog(tr(+b.dataset.d<0?'fight.dmgEv':'fight.healEv',{n:c.name,a:amt}),+b.dataset.d<0?'bad':'good');break}dm.changeHp(b.dataset.id,amt*+b.dataset.d);if(c)dm.flog(tr(+b.dataset.d<0?'fight.dmgEv':'fight.healEv',{n:c.name,a:amt})+(c.kind==='mon'?` · ${c.hp}/${c.hpMax}`:''),+b.dataset.d<0?'bad':'good');dm.saveD();break}
+    case 'ptab':U.PTAB=b.dataset.k;break;
     case 'dmtmp':{const amt=Math.floor(+v(b.dataset.src))||0,c=dm.find(b.dataset.id);if(c&&amt>0){c.tmp=amt;dm.flog(tr('fight.tmpEv',{n:c.name,a:amt}),'good');dm.saveD()}break}
     case 'dmpub':{const c=dm.find(b.dataset.id),f=b.dataset.f;if(c){if(f==='cr')c.hideCr=!c.hideCr;else if(f==='ac')c.showAc=!c.showAc;else if(f==='gone'){c.gone=!c.gone;if(c.gone)dm.flog(tr('fight.goneEv',{n:c.name}),'bad')}dm.saveD();live.refresh()}break}
     case 'dmconcend':{const c=dm.find(b.dataset.id);if(c){c.conc='';dm.saveD()}break}
