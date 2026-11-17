@@ -289,3 +289,122 @@ Die Initiativeleiste oben bleibt. Darunter:
 - **Spielleitung (M6c):** Gegner kompakt, darunter die Beteiligten. Wer ausgewählt ist, öffnet unten ein Eingreif-Feld mit Schaden, Heilung, Zuständen und Wirkungen.
 
 Bewusst nicht vorgesehen sind Spielfeld, Positionen, Animationen und ein Würfelwurf.
+
+## 11. Fassung 4: Geheimhaltung, Spielerzug vollständig, Spielleitung (Rückmeldung 17.11.2026)
+
+Mockups: `screenshots/design-mockups-v4/`.
+- **M2:** Heldenakte.
+- **M3a:** Spielleitung, Gegner am Zug, Gegner ausgewählt.
+- **M3b:** Spielerin, eigener Zug.
+- **M3c:** Spielleitung, Spieler am Zug (nur lesen).
+- **M6b:** Handy, Spieler.
+- **M6c:** Handy, Spielleitung.
+
+Abschnitt 10 gilt weiter, soweit hier nichts anderes steht.
+
+### 11.1 Geheimhaltung der Gegner-TP
+
+**Spieleransicht:**
+- Keine Zahl, kein Balken, kein Prozentwert und kein Zustandswort zu den Gegner-TP; auch „angeschlagen“ entfällt.
+- An der Stelle des Balkens steht bei allen Gegnern dieselbe gestrichelte Linie mit „TP verborgen“. So ist der Kartenaufbau gleich, ohne dass sich etwas ablesen lässt.
+- In der Initiativeleiste zeigen Gegner einen leeren, gestrichelten Rahmen statt eines Balkens.
+- Meldungen sagen „Goblin 2 erhält Schaden“, aber nie den Rest.
+- „Besiegt“ erscheint erst, wenn die Spielleitung das ausdrücklich markiert, nicht automatisch bei 0 TP.
+
+**Was Spieler sehen:**
+- Name, Initiative, Platz in der Reihenfolge und Zustände bzw. Wirkungen.
+- HG und RK nur, wenn die Spielleitung sie für diesen Gegner freigibt (Schalter „Für Spieler sichtbar“).
+- Vorschlag Standard: HG sichtbar, RK verborgen; verborgen erscheint „RK ?“.
+
+**Spielleitung:** sieht weiter alles, also TP, Maximum, Balken und RK.
+
+**Technischer Hinweis für die spätere Umsetzung:**
+- Heute schickt die Presence der Spielleitung für Gegner einen groben Zustand `s` mit (`turnInfo`). Der muss für die Spieleransicht entfallen. Geheimhaltung ist nur sicher, wenn der Wert gar nicht erst übertragen wird; ausblenden allein genügt nicht.
+- Die beiden Sichtbarkeitsschalter brauchen je Gegner zwei kleine Felder im Spielleitungsstand.
+- Beides ist eine Änderung am Übertragungs- bzw. Speicherinhalt und braucht vor der Umsetzung deine Freigabe.
+
+### 11.2 Schriftstufen: Regeln für Zeilen
+
+- **Werte auf derselben Ebene** stehen in derselben Größe und Stufe (Wert): Angriff „+4“ und „SG 15“ in derselben Spalte, Schaden „1W6+1“ in der nächsten.
+- **Zusatz steht unter dem Wert:** „Angriff“ bzw. „GE-Rettung“, darunter Schadensart, Durchschnitt und Reichweite. Nichts wird mehr in kleinerer Schrift hinter einen Wert gehängt (früher „5 (1W6+2)“).
+- **Brüche** wie TP 30/38, Plätze 3/4 oder Ressourcen 1/2 stehen in einer Größe. Der Nenner bekommt nur die Zusatzfarbe.
+- Fehlt ein Wert, steht ein „–“ in derselben Spalte.
+
+### 11.3 Eigener Zug (Spieler, M3b und M6b)
+
+**Kopf:** Name, RK, TP, Zauber-SG und Zauberangriff, dazu Zustände mit Wirkung (zum Beispiel „Vergiftet: Nachteil auf Angriffe und Attributswürfe“).
+
+**Zugressourcen:**
+- Aktion, Bonusaktion und Reaktion: frei mit goldener Raute, verbraucht gestrichen mit ✕ und Grund.
+- Bewegung als Rest mit Balken.
+- Grundlage ist die vorhandene Zugzählung `S.turn`.
+
+**Reiter:**
+- Aktion, Bonusaktion, Reaktion, Bewegung & Nebenbei und Alle, jeweils mit Anzahl.
+- Am Handy fünf Reiter, der fünfte heißt Status (Konzentration, Plätze, Ressourcen).
+- Nichts fällt weg, alles ist nur gruppiert.
+
+**Gruppen im Reiter Aktion:** Waffen (auch waffenloser Schlag mit Packen/Stoßen und SG), Zaubertricks, Zauber mit Platz (mit Hinweis „Pro Zug ein Zauber mit Platz · noch frei/verbraucht“), Klassen- und Volksfähigkeiten, Gegenstände, Standardaktionen. Lange Gruppen zeigen die wichtigsten Einträge, der Rest klappt per Antippen auf.
+
+**Standardaktionen (Regeln 2024, alle zwölf):** Angreifen, Magie, Spurten, Rückzug, Ausweichen, Helfen, Verstecken, Suchen, Studieren, Beeinflussen, Benutzen, Bereithalten.
+
+**Die übrigen Reiter:**
+- **Bewegung & Nebenbei:** Bewegen, Aufstehen (halbe Bewegung), Springen, Klettern, Schwimmen, Kriechen (zusätzliche Kosten), eine Interaktion mit einem Gegenstand, Sprechen, Konzentration beenden.
+- **Reaktion:** Gelegenheitsangriff, bereitgehaltene Aktion und Reaktionszauber oder -fähigkeiten des Charakters.
+- **Bonusaktion:** Bonusaktionszauber, Fähigkeiten, Trank selbst trinken und gegebenenfalls ein Zweitangriff mit leichter Waffe.
+
+**Details:**
+- Jede Zeile klappt per Antippen auf, ohne Hover.
+- Eine Zauberkarte zeigt Grad und Schule, Zeitaufwand, Reichweite und Bereich, Ziele, Dauer, Komponenten, Rettungswurf, Schaden oder Heilung, höhere Grade, den Beschreibungstext, die Wahl des Platzes und die Quelle.
+- Eine Waffenkarte zeigt Angriff, Schaden, Art, Reichweite, Eigenschaften und gegebenenfalls Meisterschaft.
+- Ausgeführt wird in der Zeile („Angreifen“, „Wirken“, „Nutzen“) oder in der Detailkarte.
+
+**Konzentration:**
+- Laufende Konzentration steht oben im Status mit Zielen und Restdauer und lässt sich dort beenden.
+- Zauber, die sie beenden würden, tragen schon in der Liste die Marke „beendet Bless“.
+- In der Detailkarte steht eine Warnung mit den Folgen; der Knopf heißt dann „Wirken und Bless beenden“.
+
+**Plätze und begrenzte Fähigkeiten:** Kästchen und Zahl, immer sichtbar in der Status-Spalte.
+
+### 11.4 Spielleitung (M3a, M3c und M6c)
+
+**Initiative:** Zurück, Nächster Zug (Gold), Reihenfolge ändern, Teilnehmer hinzufügen und Kampf beenden. Am Handy steht das als Leiste direkt unter der Initiative.
+
+**Eingreifen** wirkt auf die ausgewählte Figur, mit „+ weitere“ auf mehrere. Funktionen:
+- Schaden, Heilung, Temp-TP.
+- Werte RK, TP, Maximum und Initiative direkt als Felder.
+- Sichtbarkeit für Spieler (HG, RK).
+- Zustände mit Runden, Wirkungen, Konzentration beenden, Besiegt.
+- Bei Spielern zusätzlich Inspiration. Schaden und Zustände gehen an Spieler wie bisher als Vorschlag.
+
+**Gegner am Zug:** kompakter Werteblock und Aktionstabelle; der Originaltext klappt je Aktion auf.
+
+**Spieler am Zug (nur lesen, M3c):**
+- Dieselbe Liste wie beim Spieler, ohne Knöpfe zum Ausführen.
+- Zwei Zeitstempel: grün „live“ für TP, RK, Zustände und Konzentration (Presence); bernstein „Bogen: Stand hh:mm · vor N Min.“ für Angriffe, Zauber, Plätze und Ressourcen (letzter Online-Stand über `peek`).
+- **Veraltet heißt:** älter als der Kampfbeginn oder älter als 10 Minuten. Dann erscheint ein gestreifter Hinweis über der Liste.
+- Die Zugressourcen des Spielers (Aktion usw.) live zu zeigen, bräuchte ein kleines zusätzliches Presence-Feld. Das ist im Mockup als „Vorschlag“ markiert und ebenfalls freigabepflichtig.
+
+### 11.5 Datenqualität
+
+**Monster:**
+- Werte werden nur aus dem festen Muster des SRD-Werteblocks übernommen („Melee/Ranged Attack Roll: +X, reach/range … Hit: N (XdY + Z) Type damage“); sicher gelesene Aktionen tragen ✓.
+- Passt das Muster nicht, steht „–“ und der Originaltext. Es wird nichts geschätzt.
+- Namen und Texte bleiben englisch.
+
+**Zauber:**
+- Grad, Schule, Zeitaufwand, Reichweite, Dauer, Komponenten, Konzentration und höhere Grade sind feste Felder im Katalog und werden immer gezeigt.
+- Angriff, Rettungswurf und Schaden stehen bei Zaubern mit Grad nur im Text. Sie werden nach derselben Regel nur bei eindeutigem Muster gezeigt („… saving throw“, „takes NdM Type damage“, „spell attack“), sonst „–“.
+- Zaubertricks haben den Schaden als Feld (`cant`).
+
+### 11.6 Unterschiede Spieler und Spielleitung
+
+| | Spieler | Spielleitung |
+|---|---|---|
+| Gegner-TP, Balken, Maximum | nie | immer |
+| Gegner-RK, HG | nur wenn freigegeben | immer |
+| Eigene Aktionen | vollständig, ausführbar | Spieler am Zug: nur lesen mit Zeitstempel |
+| Gegneraktionen | nicht sichtbar | Werteblock und Aktionstabelle |
+| Eingreifen | nur eigener Bogen | alle Figuren, ohne Untermenü |
+| Meldungen | „Für dich“ plus Wirkungen auf die Gruppe | alle, mit Rest-TP der Gegner |
+| Initiative | sehen, eigenen Zug beenden | ordnen, hinzufügen, weiter, zurück, beenden |
