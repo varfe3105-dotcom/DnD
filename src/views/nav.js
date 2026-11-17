@@ -20,6 +20,7 @@ import { timeline, logEntries } from './chron.js';
 import { hpMaxNow } from '../effects.js';
 import { t } from '../i18n/index.js';
 import { soundOn } from '../feed.js';
+import { corners, ribbon } from './orn.js';
 
 /** Kampagnenebene: Spieler und Spielleitung sehen dieselben Bereiche, die Spielleitung mit ihren Werkzeugen. */
 export const CAMP_P = ['cover', 'party', 'main', 'explore', 'trade', 'chron'];
@@ -71,7 +72,7 @@ const roomLine = c => {
 export function vCampHead() {
   const c = curCamp();
   const me = `<button class="camp-me" data-a="crumb" data-t="prof" title="${t('nav.openChar')}"><span class="por sm">${S.img ? `<img src="${S.img}" alt="">` : `<span>${esc((S.name || '?').trim()[0] || '?')}</span>`}</span><span><b>${esc(S.name)}</b><small>${t('head.hpShort')} ${S.hp}/${hpMaxNow()}</small></span></button>`;
-  return `<header class="hd camphd"><i class="hd-art hub-camp-art a${c?.art ?? 1}" aria-hidden="true"></i><div class="who"><h1>${esc(c ? c.name : '')}</h1><p>${roomLine(c)}</p>${c?.desc ? `<p class="sub2">${esc(c.desc)}</p>` : ''}</div>
+  return `<header class="hd camphd"><i class="hd-art hub-camp-art a${c?.art ?? 1}" aria-hidden="true"></i>${corners({ left: true })}<div class="who"><h1>${esc(c ? c.name : '')}</h1>${ribbon(c?.chapter)}<p>${roomLine(c)}</p>${c?.desc ? `<p class="sub2">${esc(c.desc)}</p>` : ''}</div>
   <div class="hacts"><div class="hrow">${me}<button class="btn ghost home" data-a="hubhome" title="${t('hub.backTitle')}">${t('hub.back')}</button><button class="btn ghost" data-a="tab" data-t="wiki">${t('nav.rules')}</button></div><div class="rests"><button class="btn ghost" data-a="rest" data-r="short">${t('rest.short')}</button><button class="btn ghost" data-a="rest" data-r="long">${t('rest.long')}</button></div></div></header>`;
 }
 

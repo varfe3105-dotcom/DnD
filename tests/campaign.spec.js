@@ -29,7 +29,7 @@ test.describe('Lagebericht und Gruppe @new', () => {
     await page.locator('#cv-next').fill('2026-12-01T19:00');
     await page.locator('#cv-next').blur();
     expect((await camps(page))[0]).toMatchObject({ chapter: 'Kapitel 2: Die Belagerung', plan: 'Vorräte kaufen', next: '2026-12-01T19:00' });
-    await expect(page.locator('.lb-chapter')).toHaveText('Kapitel 2: Die Belagerung');
+    await expect(page.locator('.hd .rc-ribbon')).toHaveText('Kapitel 2: Die Belagerung');
     await expect(page.locator('.lb-place .cover-v')).toHaveText('Grenzhall');
     await expect(page.locator('.lb-tasks')).toContainText('Den Boten finden');
     await expect(page.locator('.lb-recent')).toContainText('Sitzung 4');
@@ -43,7 +43,7 @@ test.describe('Lagebericht und Gruppe @new', () => {
     await start(page, { ...chars, 'charbogen-campaigns': [{ id: 'k1', name: 'Grenzland', status: 'active', chars: ['c1'], role: 'player', room: 'ABC234', split: true, log: 'Sitzung 1: Ankunft\n[ ] Den Schmied fragen' }] });
     await page.locator('[data-a="campplay"]').click();
     await expect(page.locator('.lb-tools')).toHaveCount(0);
-    await expect(page.locator('.lb-chapter')).toHaveText('Kapitel 2');
+    await expect(page.locator('.hd .rc-ribbon')).toHaveText('Kapitel 2');
     await expect.poll(async () => (await camps(page))[0]).toMatchObject({ chapter: 'Kapitel 2', plan: 'Vorräte', next: '2026-12-01T19:00', place: 'Taverne' });
     await expect(page.locator('.lb-tasks li')).toHaveText(['Den Schmied fragen']);
     await expect(page.locator('.lb-recent')).toContainText('Sitzung 1: Ankunft');

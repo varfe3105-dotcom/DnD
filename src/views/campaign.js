@@ -14,7 +14,9 @@ import { memberCard, memberChip, selfMember } from './party.js';
 import { fmtDate } from './hub.js';
 import { t } from '../i18n/index.js';
 
-const sec = (cls, title, body) => `<section class="lb-sec ${cls}"><h3 class="ov-h">${title}</h3>${body}</section>`;
+const sec = (cls, title, body) => `<section class="lb-sec ${cls} ${SEC_MAT[cls] || ''}"><h3 class="ov-h">${title}</h3>${body}</section>`;
+/** Lagebericht mit Materialien: Ort auf Pergament, Aufgaben und Chronik als Messing-Tafeln, Übergänge mit Ornament. */
+const SEC_MAT = { 'lb-place': 'hub-parch rc-pp', 'lb-tasks': 'hub-panel', 'lb-recent': 'hub-panel orn', 'lb-next': 'hub-panel orn', 'lb-group': 'hub-panel', 'lb-roomsec': 'hub-panel' };
 const excerpt = (s, n = 160) => { const x = String(s || '').replace(/\[\[([^\]\n]+)\]\]/g, '$1').replace(/\s+/g, ' ').trim(); return esc(x.slice(0, n)) + (x.length > n ? ' …' : ''); };
 /** Offene Aufgaben in der eigenen Chronik: Zeilen, die mit „[ ]“ oder „- [ ]“ beginnen. */
 export const logTasks = log => String(log || '').split('\n').map(l => l.trim()).filter(l => /^(-\s*)?\[ \]/.test(l)).map(l => l.replace(/^(-\s*)?\[ \]\s*/, ''));
@@ -49,10 +51,11 @@ export function vCover() {
   if (!c) return vNoCamp();
   const dm = dmOnly(), h = dm ? hereNote() : null;
   const place = dm ? h?.title || '' : dmHere() || c.place;
-  const placeTxt = dm && h?.body ? `<p class="lb-ptext">${excerpt(h.body, 260)}</p>` : '';
-  const chapter = c.chapter ? `<p class="lb-chapter">${esc(c.chapter)}</p>` : '';
+  const placeTxt = dm && h?.body ? `<p class="lb-ptext rc-drop">${excerpt(h.body, 260)}</p>` : '';
+  // Das Kapitel steht als Band in der Titelplatte (Kopf), hier nur der Hinweis, wenn es fehlt
+  const chapter = !!c.chapter;
   const prog = c.planned ? t('camp.sessOf', { a: c.done, b: c.planned }) : t('camp.sess', { n: c.done });
-  const head = `<header class="lb-head"><div class="tags"><span class="tag ${c.status === 'active' ? 't-good' : ''}">${t('camp.st.' + c.status)}</span><span class="tag t-res">${t('camp.role.' + c.role)}</span><span class="tag">${esc(prog)}</span></div>${c.split ? '' : `<p class="note lb-legacy">${t('inst.legacy')}</p>`}<p class="lbl">${t('lb.chapter')}</p>${chapter || `<p class="lb-chapter none">${t(dm ? 'lb.noChapterDm' : 'lb.noChapter')}</p>`}</header>`;
+  const head = `<header class="lb-head"><div class="tags"><span class="tag ${c.status === 'active' ? 't-good' : ''}">${t('camp.st.' + c.status)}</span><span class="tag t-res">${t('camp.role.' + c.role)}</span><span class="tag">${esc(prog)}</span></div>${c.split ? '' : `<p class="note lb-legacy">${t('inst.legacy')}</p>`}${chapter ? '' : `<p class="lb-chapter none">${t(dm ? 'lb.noChapterDm' : 'lb.noChapter')}</p>`}</header>`;
   // Lage: Ort, offene Aufgaben, zuletzt
   const tasks = dm ? D.notes.filter(n => n.kind === 'plot').slice(0, 6).map(n => `<li><button class="linkbtn" data-a="dmnote" data-id="${esc(n.id)}">${esc(n.title || t('dm.untitled'))}</button></li>`) : logTasks(c.log).slice(0, 6).map(x => `<li>${esc(x)}</li>`);
   const recent = dm ? D.notes.filter(n => n.kind === 'session').slice(0, 3).map(n => `<li><b>${esc(n.title || t('dm.untitled'))}</b>${n.body ? `<span>${excerpt(n.body)}</span>` : ''}</li>`) : logRecent(c.log).map(x => `<li><span>${esc(x.slice(0, 200))}</span></li>`);
@@ -64,7 +67,7 @@ export function vCover() {
   const members = dm ? players().map(p => ({ ...p, dm: true })) : [selfMember(), ...partyPeers()];
   const group = sec('lb-group', t('nav.party'), members.length ? `<div class="mchips">${members.map(memberChip).join('')}</div>` : `<p class="note">${t('nav.groupEmpty')}</p>`);
   const room = sec('lb-roomsec', t('nav.room'), vRoom(c));
-  return `${dm ? vDmTools(c) : ''}<div class="lagebericht">${head}<div class="lb-grid"><div class="lb-main">${lage}</div><aside class="lb-side">${next}${group}${room}</aside></div></div>`;
+  return `${dm ? vDmTools(c) : ''}<div class="lagebericht">${head}<i class="rc-sep" aria-hidden="true"></i><div class="lb-grid"><div class="lb-main">${lage}</div><aside class="lb-side">${next}${group}${room}</aside></div></div>`;
 }
 
 /** Spielleitung ohne geöffnete Kampagne (früherer Spielleitungsmodus): Kampagne wählen oder anlegen. */

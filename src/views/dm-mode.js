@@ -6,6 +6,7 @@ import { skinControls } from '../bright.js';
 import { t, lang, units } from '../i18n/index.js';
 import { U } from '../state.js';
 import { campaignById } from '../campaigns.js';
+import { corners, ribbon } from './orn.js';
 
 /** Reiter im Spielleitungsmodus → Unteransicht des DM-Bereichs. */
 export const DM_TABS = { dmnotes: 'notes', dmcombat: 'combat', dmenc: 'enc', dmloot: 'loot', dmlive: 'live', dmcheat: 'cheat' };
@@ -17,7 +18,7 @@ export function vDmHead() {
   const ps = players();
   const status = L.role === 'dm' && L.code ? t('dmm.room', { c: esc(L.code), n: ps.length }) : t('dmm.noRoom');
   const c = U.CAMP && campaignById(U.CAMP);
-  return `<header class="hd dmhd">${c ? `<i class="hd-art hub-camp-art a${c.art}" aria-hidden="true"></i>` : ''}<span class="por" aria-hidden="true"><span>⚔</span></span><div class="who"><h1>${c ? esc(c.name) : t('dmm.title')}</h1><p>${c ? t('camp.role.dm') + ' · ' : ''}${status}</p>${D.combat.list.length ? `<p class="sub2">${t('dmm.combatLine', { r: D.combat.round, n: D.combat.list.length })}</p>` : ''}</div><div class="hacts"><button class="btn ghost home" data-a="hubhome" title="${t('hub.backTitle')}">${t('hub.back')}</button><button class="btn ghost" data-a="tab" data-t="wiki">${t('nav.rules')}</button><button class="btn ghost" data-a="tab" data-t="setup">${t('tab.setup')}</button><div class="langs" role="group" aria-label="${t('head.language')}">${langBtn('en')}${langBtn('de')}</div><div class="langs units" role="group" aria-label="${t('head.units')}">${['m', 'ft'].map(u => `<button data-a="units" data-u="${u}" aria-pressed="${units === u}" title="${t('units.' + u)}">${u}</button>`).join('')}</div></div></header>`;
+  return `<header class="hd dmhd">${c ? `<i class="hd-art hub-camp-art a${c.art}" aria-hidden="true"></i>` : ''}${corners({ left: true })}<span class="por" aria-hidden="true"><span>⚔</span></span><div class="who"><h1>${c ? esc(c.name) : t('dmm.title')}</h1>${ribbon(c?.chapter)}<p>${c ? t('camp.role.dm') + ' · ' : ''}${status}</p>${D.combat.list.length ? `<p class="sub2">${t('dmm.combatLine', { r: D.combat.round, n: D.combat.list.length })}</p>` : ''}</div><div class="hacts"><button class="btn ghost home" data-a="hubhome" title="${t('hub.backTitle')}">${t('hub.back')}</button><button class="btn ghost" data-a="tab" data-t="wiki">${t('nav.rules')}</button><button class="btn ghost" data-a="tab" data-t="setup">${t('tab.setup')}</button><div class="langs" role="group" aria-label="${t('head.language')}">${langBtn('en')}${langBtn('de')}</div><div class="langs units" role="group" aria-label="${t('head.units')}">${['m', 'ft'].map(u => `<button data-a="units" data-u="${u}" aria-pressed="${units === u}" title="${t('units.' + u)}">${u}</button>`).join('')}</div></div></header>`;
 }
 
 /** Kurzleiste beim Scrollen: Runde, wer dran ist, TP der verbundenen Spieler. */
