@@ -275,6 +275,10 @@ export const setHere = id => { D.here = id || null; };
 export const lastSession = () => D.notes.find(n => n.kind === 'session') || null;
 export const curNote = () => D.notes.find(n => n.id === D.sel) || null;
 /** Atlas für Spieler: nur ausdrücklich freigegebene Orte, Personen und Handlung, nur Titel und der eigene Spielertext (nie die Notiz). */
+/** Gemeinsame Chronik: nur Sitzungs- und Handlungsnotizen, die ausdrücklich geteilt sind, und nur Titel und Gruppentext. */
+export const chronOut = () => D.notes.filter(n => n.pub && ['session', 'plot'].includes(n.kind)).slice(0, 100).map(n => ({ id: String(n.id).slice(0, 40), t: String(n.title || '').slice(0, 120), x: String(n.pubText || '').slice(0, 4000), k: n.kind }));
+/** Kurzer Fingerabdruck der geteilten Chronik für die Presence (Spieler holen sie, wenn er sich ändert). */
+export function chronMark() { const s = JSON.stringify(chronOut()); let h = 0; for (let i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) | 0; return s.length > 2 ? (h >>> 0).toString(36) : ''; }
 export const atlasOut = () => D.notes.filter(n => n.pub && ['place', 'npc', 'plot'].includes(n.kind)).slice(0, 16).map(n => ({ t: String(n.title || '').slice(0, 80), d: String(n.pubText || '').slice(0, 300), k: n.kind, h: D.here === n.id }));
 /* ---- Händler (je Kampagne) ----
    Ein Händler: Name, offen (für Spieler sichtbar), Waren mit Katalogschlüssel oder eigenem Namen, Preis in Kupfer, Bestand. */

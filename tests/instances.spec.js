@@ -32,7 +32,8 @@ const fakes = page => page.addInitScript(() => {
   window.__sent = []; window.__puts = [];
   window.__liveFake = (code, key, onPeers, onStatus) => { setTimeout(() => onStatus('on'), 0); return { track(p) { window.__sent.push({ code, key, ...p }); onPeers([{ ...p, key }]); }, send() {}, close() {} }; };
   window.__cloudFake = async (url, opts) => {
-    const fn = url.split('/').pop(), body = JSON.parse(opts.body || '{}');
+    // Neue (*2, mit Geheimnis) und alte Funktionen gleich behandeln
+    const fn = url.split('/').pop().replace(/2$/, ''), body = JSON.parse(opts.body || '{}');
     if (fn === 'charbogen_put') window.__puts.push({ room: body.p_room, kind: body.p_kind, id: body.p_id, camp: body.p_data?.camp ?? null, level: body.p_data?.level, gp: body.p_data?.gold?.gp, notes: (body.p_data?.notes || []).map(n => n.title) });
     const out = fn === 'charbogen_put' ? new Date().toISOString() : [];
     return { ok: true, status: 200, json: async () => out, text: async () => '' };

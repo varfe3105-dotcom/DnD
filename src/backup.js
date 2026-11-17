@@ -2,7 +2,7 @@
 // IndexedDB statt localStorage, damit der Verlauf nicht den Speicher der Charaktere aufbraucht.
 import { S, U, hooks, save } from './state.js';
 
-const KEEP = /^charbogen-(v4|v3|v2|index|dm|dm-lib|dm-camp-[\w-]+|campaigns|player|char-[\w-]+|inst-[\w-]+)$/;
+const KEEP = /^charbogen-(v4|v3|v2|index|dm|dm-lib|dm-camp-[\w-]+|campaigns|player|cloud-secret|char-[\w-]+|inst-[\w-]+)$/;
 const LAST = 'charbogen-lastbackup', DAY = 86400000, MAX_SNAPS = 5, EVERY = 600000;
 
 export function collect() {

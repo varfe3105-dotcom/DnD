@@ -102,6 +102,7 @@ app.addEventListener('click',ev=>{
     case 'dmclose':dm.DU.open={};break;
     case 'chronv':dm.DU.chronV=b.dataset.k;break;
     case 'bookf':dm.DU.bookF=b.dataset.k;break;
+    case 'bookpub':{const n=dm.D.notes.find(x=>x.id===b.dataset.id);if(n){n.pub=!n.pub;if(n.pub&&!n.pubText)n.pubText=n.body||'';dm.saveD()}break}
     case 'bookrev':dm.DU.bookRev=!dm.DU.bookRev;break;
     case 'chronadd':{const c=U.CAMP&&camp.campaignById(U.CAMP);const ti=v('chr-t').trim(),tx=v('chr-x').trim();if(!c||!ti){toast(tr('chron.needTitle'));return}camp.saveCampaign({...c,log:(c.log.trim()?c.log.replace(/\s*$/,'')+'\n\n':'')+'## '+ti+'\n'+tx});toast(tr('chron.added'));break}
     case 'chronraw':U.CHRONRAW=!U.CHRONRAW;break;
@@ -387,6 +388,7 @@ app.addEventListener('input',ev=>{
   if(el.id==='cv-chapter'||el.id==='cv-plan'){const c=U.CAMP&&camp.campaignById(U.CAMP);if(c){camp.saveCampaign({...c,[el.id==='cv-chapter'?'chapter':'plan']:el.value});live.refresh()}return}
   if(el.id==='pl-name'||el.id==='join-pl'){setPlayerName(el.value);live.refresh();return}
   if(el.dataset.mer){const m=dm.merchant(el.dataset.id);if(m){if(el.dataset.mer==='n')m.n=el.value.slice(0,60);else{const w=m.items.find(x=>x.id===el.dataset.w);if(w){if(el.dataset.mer==='cp')w.cp=Math.max(0,Math.round((parseFloat(String(el.value).replace(',','.'))||0)*100));else w.q=Math.max(0,Math.min(999,Math.floor(+el.value)||0))}}dm.saveD()}return}
+  if(el.dataset.bookpub){const n=dm.D.notes.find(x=>x.id===el.dataset.bookpub);if(n){n.pubText=el.value.slice(0,4000);dm.saveD()}return}
   if(el.id==='at-pub'){const n=dm.D.notes.find(x=>x.id===el.dataset.id);if(n){n.pubText=el.value.slice(0,300);dm.saveD()}return}
   if(el.id==='at-title'){const n=dm.D.notes.find(x=>x.id===el.dataset.id);if(n){n.title=el.value;dm.saveD()}return}
   if(el.id==='camp-log'){const c=U.CAMP&&camp.campaignById(U.CAMP);if(c)camp.saveCampaign({...c,log:el.value});return}
@@ -446,13 +448,13 @@ const typing=()=>{const a=document.activeElement;return !!a&&app.contains(a)&&/^
 let hadTurn=false;
 setBuffHook(m=>feed(m,'good'));
 setFeedHook(()=>later());
-live.setPeerHook(()=>{dm.syncLive(live.players());if(live.L.role!=='player')return;let ch=syncBuffs(live.L.peers);if(syncDeposits(live.dmStash(),m=>live.sendMsg({...m,name:S.name})))ch=true;const tr0=live.dmTurn();if(!tr0&&hadTurn&&S.turn?.on){endCombat();ch=true}hadTurn=!!tr0;if(tr0&&tr0.r!==S.condAt){const gone=seeRound(tr0.r);ch=true;if(gone.length)toast(tr('cond.ended',{c:gone.join(', ')}))}if(syncCampFromDm())ch=true;if(ch){save();later()}});
+live.setPeerHook(()=>{dm.syncLive(live.players());if(live.L.role!=='player')return;let ch=syncBuffs(live.L.peers);if(syncDeposits(live.dmStash(),m=>live.sendMsg({...m,name:S.name})))ch=true;const tr0=live.dmTurn();if(!tr0&&hadTurn&&S.turn?.on){endCombat();ch=true}hadTurn=!!tr0;if(tr0&&tr0.r!==S.condAt){const gone=seeRound(tr0.r);ch=true;if(gone.length)toast(tr('cond.ended',{c:gone.join(', ')}))}if(syncCampFromDm())ch=true;syncChron();if(ch){save();later()}});
 // Vor jedem Speichern: Wirkungen abgleichen (Konzentration beendet → Wirkung weg), dann RK neu berechnen
 hooks.beforeSave=()=>{syncBuffs(live.L.role==='player'?live.L.peers:[]);syncAc()};
 live.setPetSource(()=>S.pets.map(petView));
 live.setJoinHook(cloud.onJoin);
 cloud.setCloudListener(()=>{if(!S.tab.startsWith('dm')&&S.tab!=='setup')return;if(typing()){livePending=true;return}later()});
-live.setDmFlags(()=>({shop:dm.shopOut(),atlas:dm.atlasOut(),camp:dmCampMeta(),here:dm.hereNote()?.title?.slice(0,80)||'',lock:!!dm.D.lootLock,turn:dm.turnInfo(),stash:stashOut(),buffs:(dm.D.buffsOut||[]).map(b=>({id:b.id,s:b.s,to:b.to,v:b.v||0}))}));
+live.setDmFlags(()=>({chron:dm.chronMark(),shop:dm.shopOut(),atlas:dm.atlasOut(),camp:dmCampMeta(),here:dm.hereNote()?.title?.slice(0,80)||'',lock:!!dm.D.lootLock,turn:dm.turnInfo(),stash:stashOut(),buffs:(dm.D.buffsOut||[]).map(b=>({id:b.id,s:b.s,to:b.to,v:b.v||0}))}));
 dm.dmHooks.live=()=>live.refresh();
 live.setDmMsgHook(m=>{const who=(live.players().find(p=>p.key===m.from)||{}).name||m.name||'?';if(m.type==='want'){want(m.iid,who);dm.saveD();later();return}if(m.type==='buy'){const w=dm.sellWare(m.m,m.i,who);if(w){dm.saveD();toast(tr('shop.sold',{p:who,n:w.n}));later()}return}if(stashPut(m,who)){dm.saveD();toast(tr('stash.in',{n:who}));later()}else live.refresh()});
 live.setEndTurnHook(key=>{const gone=dm.endTurnFrom(key);if(gone===null)return;dm.saveD();live.refresh();if(gone.length)toast(gone.map(x=>tr('dm.fxEnded',x)).join(' '));later()});
@@ -499,6 +501,8 @@ function openCamp(id,tab='cover'){const c=camp.campaignById(id);if(!c)return fal
 /** Für die Presence der Spielleitung: Name und Beschreibung der geöffneten Kampagne, wenn ihr Raum offen ist. */
 function dmCampMeta(){const c=U.CAMP&&camp.campaignById(U.CAMP);return c&&c.role==='dm'&&c.room&&c.room===live.L.code?{n:c.name,d:c.desc.slice(0,200),c:c.chapter,p:c.plan.slice(0,600),x:c.next}:null}
 /** Spieler: Kapitel, Planung, Termin und Ort der Spielleitung dauerhaft in den eigenen Kampagneneintrag übernehmen. */
+/** Spieler: geteilte Chronik holen, sobald sich der Fingerabdruck der Spielleitung ändert. */
+let chronBusy=false;function syncChron(){const mk=live.dmChronMark(),c=U.CAMP&&camp.campaignById(U.CAMP);if(chronBusy||mk===null||!c||c.role!=='player'||c.room!==live.L.code||mk===c.chronSeen)return;chronBusy=true;cloud.fetchChron().then(list=>{chronBusy=false;if(list===null)return;const cc=camp.campaignById(c.id);if(cc){camp.saveCampaign({...cc,shared:list,chronSeen:mk});later()}})}
 function syncCampFromDm(){const m=live.dmCamp(),c=U.CAMP&&camp.campaignById(U.CAMP);if(!c||c.role!=='player'||c.room!==live.L.code||!live.dmOnline())return false;const up={};if(m){if(m.c!==c.chapter)up.chapter=m.c;if(m.p!==c.plan)up.plan=m.p;if(m.x!==c.next)up.next=m.x}const h=live.dmHere();if(h&&h!==c.place)up.place=h;const at=live.dmAtlas();if(at&&JSON.stringify(at)!==JSON.stringify(c.atlas))up.atlas=at;if(!Object.keys(up).length)return false;camp.saveCampaign({...c,...up});return true}
 /** Import vom Dashboard: in Einrichten wechseln und die Dateiauswahl öffnen (dort liegen Prüfansicht und Übernahme). */
 function hubImport(){enterPlay('setup');render();const f=$('impf');if(f){f.scrollIntoView({block:'center'});f.click()}}

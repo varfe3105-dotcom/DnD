@@ -1766,5 +1766,17 @@
  "chron.raw": "Edit full text",
  "chron.needTitle": "Please enter a title.",
  "chron.added": "Entry added.",
- "chron.syntax": "Lines with “!” are highlighted, “[ ]” are open tasks."
+ "chron.syntax": "Lines with “!” are highlighted, “[ ]” are open tasks.",
+ "chron.share": "Share with the group",
+ "chron.unshare": "Stop sharing",
+ "chron.sharedTag": "shared",
+ "chron.groupText": "Text for the group (only this is shared)",
+ "chron.privHint2": "Only on your device.",
+ "chron.dmHint2": "Your entries as a timeline. “Share with the group” releases a session or plot entry; only the group text below is shared (prefilled with your note the first time, please check it). Everything else stays private. Lines with “!” are key events, “[ ]” open tasks.",
+ "chron.noSql": "The shared chronicle needs the database extension (run supabase/charbogen-saves.sql again). Until then everything stays on your device.",
+ "chron.offline": "Shared entries go out as soon as the campaign room is open.",
+ "chron.sharedTitle": "Shared chronicle",
+ "chron.sharedNone": "The DM has not shared anything yet.",
+ "chron.fromDm": "from the DM",
+ "chron.mine": "My notes"
 }

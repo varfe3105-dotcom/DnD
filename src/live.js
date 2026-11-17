@@ -34,6 +34,7 @@ export const setDmMsgHook = fn => { dmMsgHook = fn; };
 export const dmCamp = () => L.peers.find(p => p.role === 'dm' && p.camp)?.camp || null;
 export const dmAtlas = () => { const d = L.peers.find(p => p.role === 'dm'); return d ? d.atlas || [] : null; };
 export const dmShop = () => L.peers.find(p => p.role === 'dm' && p.shop && p.shop.length)?.shop || [];
+export const dmChronMark = () => L.peers.find(p => p.role === 'dm')?.chron ?? null;
 export const dmHere = () => L.peers.find(p => p.role === 'dm' && p.here)?.here || '';
 export const dmStash = () => L.peers.find(p => p.role === 'dm' && p.stash)?.stash || null;
 /** Spieler: die Zuganzeige hat sich geändert (mine = jetzt am Zug). */
@@ -71,7 +72,7 @@ function clean(p) {
     buffs: Array.isArray(p.buffs) ? p.buffs.slice(0, 8).filter(b => b && BUFFS[b.s]).map(b => ({ id: str(b.id, 40), s: b.s, to: Array.isArray(b.to) ? b.to.slice(0, 6).map(k => str(k, 40)) : [], v: int(b.v, 99) })) : [],
     pets: Array.isArray(p.pets) ? p.pets.slice(0, 3).map(x => ({ id: str(x?.id, 40), n: str(x?.n), hp: int(x?.hp), hpMax: int(x?.hpMax), ac: int(x?.ac, 99) })).filter(x => x.id) : [],
     stash: p.role === 'dm' && p.stash && typeof p.stash === 'object' ? { g: Object.fromEntries(COINS.map(k => [k, int(p.stash.g?.[k], 9999999)])), it: Array.isArray(p.stash.it) ? p.stash.it.slice(0, 40).map(x => ({ id: str(x?.id, 40), n: str(x?.n, 80), q: Math.max(1, int(x?.q, 999)), w: int(x?.w, 9) })).filter(x => x.id && x.n) : [], got: Array.isArray(p.stash.got) ? p.stash.got.slice(-40).map(x => str(x, 40)) : [] } : null,
-    pl: str(p.pl, 40), race: str(p.race, 30),
+    pl: str(p.pl, 40), race: str(p.race, 30), chron: p.role === 'dm' ? str(p.chron, 16) : '',
     shop: p.role === 'dm' && Array.isArray(p.shop) ? p.shop.slice(0, 4).map(m => ({ id: str(m?.id, 40), n: str(m?.n, 60), it: Array.isArray(m?.it) ? m.it.slice(0, 30).map(w => ({ id: str(w?.id, 40), k: typeof w?.k === 'string' && BYN[w.k] ? w.k : '', n: str(w?.n, 80), cp: int(w?.cp, 99999999), q: int(w?.q, 999) })).filter(w => w.id && w.n) : [] })).filter(m => m.id) : [],
     atlas: p.role === 'dm' && Array.isArray(p.atlas) ? p.atlas.slice(0, 16).map(a => ({ t: str(a?.t, 80), d: str(a?.d, 300), k: ['place', 'npc', 'plot'].includes(a?.k) ? a.k : 'place', h: !!a?.h })).filter(a => a.t) : [],
     camp: p.role === 'dm' && p.camp && typeof p.camp === 'object' ? { n: str(p.camp.n, 80), d: str(p.camp.d, 200), c: str(p.camp.c, 120), p: str(p.camp.p, 600), x: /^\d{4}-\d{2}-\d{2}(T\d{2}:\d{2})?$/.test(p.camp.x || '') ? p.camp.x : '' } : null, here: p.role === 'dm' ? str(p.here, 80) : '',
@@ -220,7 +221,7 @@ export const refresh = () => push();
 let petSource = () => [];
 /** Begleiter (Ranger-Begleiter, Vertrauter …) mit ihren Spielwerten, gesetzt in events.js. */
 export const setPetSource = fn => { petSource = fn; };
-const payload = () => (L.role === 'dm' ? { role: 'dm', shop: (dmFlags().shop || []).slice(0, 4), atlas: (dmFlags().atlas || []).slice(0, 16), camp: dmFlags().camp || null, here: dmFlags().here || '', lock: !!dmFlags().lock, turn: dmFlags().turn || null, stash: dmFlags().stash || null, buffs: (dmFlags().buffs || []).slice(0, 8) } : { role: 'player', insp: !!S.insp, name: S.name, pl: playerName(), race: S.subrace || S.race, klass: S.klass, level: S.level, hp: S.hp, hpMax: S.hpMax, tmp: S.tmp, ac: acNow(), acB: acBonus().v, fx: fxOut(), buffs: activeOut().slice(-6).map(b => ({ id: b.id, s: b.s, to: b.to.slice(0, 6), v: b.v || 0 })), exh: S.exh, conc: S.conc, cond: Object.keys(S.cond).filter(c => S.cond[c]), cr: condRoundsOut(), death: S.death, pets: petSource().slice(0, 3).map(p => ({ id: p.id, n: p.n, hp: p.hp, hpMax: p.hpMax, ac: p.ac })) });
+const payload = () => (L.role === 'dm' ? { role: 'dm', chron: dmFlags().chron || '', shop: (dmFlags().shop || []).slice(0, 4), atlas: (dmFlags().atlas || []).slice(0, 16), camp: dmFlags().camp || null, here: dmFlags().here || '', lock: !!dmFlags().lock, turn: dmFlags().turn || null, stash: dmFlags().stash || null, buffs: (dmFlags().buffs || []).slice(0, 8) } : { role: 'player', insp: !!S.insp, name: S.name, pl: playerName(), race: S.subrace || S.race, klass: S.klass, level: S.level, hp: S.hp, hpMax: S.hpMax, tmp: S.tmp, ac: acNow(), acB: acBonus().v, fx: fxOut(), buffs: activeOut().slice(-6).map(b => ({ id: b.id, s: b.s, to: b.to.slice(0, 6), v: b.v || 0 })), exh: S.exh, conc: S.conc, cond: Object.keys(S.cond).filter(c => S.cond[c]), cr: condRoundsOut(), death: S.death, pets: petSource().slice(0, 3).map(p => ({ id: p.id, n: p.n, hp: p.hp, hpMax: p.hpMax, ac: p.ac })) });
 function push() {
   if (!transport) return;
   const p = payload(), j = JSON.stringify(p);

@@ -1766,5 +1766,17 @@
  "chron.raw": "Ganzen Text bearbeiten",
  "chron.needTitle": "Bitte einen Titel eintragen.",
  "chron.added": "Eintrag hinzugefügt.",
- "chron.syntax": "Zeilen mit „!“ werden hervorgehoben, „[ ]“ sind offene Aufgaben."
+ "chron.syntax": "Zeilen mit „!“ werden hervorgehoben, „[ ]“ sind offene Aufgaben.",
+ "chron.share": "Mit der Gruppe teilen",
+ "chron.unshare": "Nicht mehr teilen",
+ "chron.sharedTag": "geteilt",
+ "chron.groupText": "Text für die Gruppe (nur dieser wird geteilt)",
+ "chron.privHint2": "Nur auf deinem Gerät.",
+ "chron.dmHint2": "Deine Einträge als Zeitleiste. „Mit der Gruppe teilen“ gibt eine Sitzung oder Handlung frei; geteilt wird nur der Gruppentext darunter (beim ersten Teilen mit deiner Notiz vorbelegt, bitte prüfen). Alles andere bleibt privat. Zeilen mit „!“ sind wichtige Ereignisse, „[ ]“ offene Aufgaben.",
+ "chron.noSql": "Die gemeinsame Chronik braucht die Datenbankerweiterung (supabase/charbogen-saves.sql neu ausführen). Bis dahin bleibt alles auf deinem Gerät.",
+ "chron.offline": "Geteilte Einträge gehen hinaus, sobald der Raum der Kampagne offen ist.",
+ "chron.sharedTitle": "Gemeinsame Chronik",
+ "chron.sharedNone": "Die Spielleitung hat noch nichts geteilt.",
+ "chron.fromDm": "von der Spielleitung",
+ "chron.mine": "Meine Aufzeichnungen"
 }

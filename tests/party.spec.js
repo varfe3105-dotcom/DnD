@@ -124,7 +124,7 @@ test.describe('Spielleitung sieht Wirkungen und Bögen @new', () => {
   test('Kampf-Tracker zeigt RK grün und die Wirkung; Bogen ansehen liest den Online-Stand', async ({ page }) => {
     const sheet = base4({ id: 'held2', name: 'Mira', klass: 'Ranger', level: 3, abil: { str: 10, dex: 16, con: 12, int: 10, wis: 14, cha: 8 }, spells: [{ n: "Hunter's Mark", lvl: 1 }], skills: { Stealth: 2 } });
     await page.route('**/rest/v1/rpc/*', route => {
-      const fn = route.request().url().split('/').pop();
+      const fn = route.request().url().split('/').pop().replace(/2$/, '');
       const body = fn === 'charbogen_get' ? [{ data: sheet, updated_at: '2026-11-16T08:00:00Z' }] : fn === 'charbogen_list' ? [] : '2026-11-16T08:00:00Z';
       return route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(body) });
     });

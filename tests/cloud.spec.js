@@ -29,6 +29,8 @@ async function device(browser, server, state, { setup = true } = {}) {
   await ctx.route('**/rest/v1/rpc/*', async route => {
     if (!setup) return route.fulfill({ status: 404, contentType: 'application/json', body: '{"code":"PGRST202","message":"Could not find the function public.charbogen_put"}' });
     const fn = route.request().url().split('/').pop();
+    // Die neuen Funktionen (*2, D2) kennt dieser Nachbau des alten SQL nicht: wie eine Datenbank ohne Erweiterung antworten
+    if (!server.api[fn]) return route.fulfill({ status: 404, contentType: 'application/json', body: '{"code":"PGRST202"}' });
     const out = server.api[fn](JSON.parse(route.request().postData() || '{}'));
     return route.fulfill(out === null && fn === 'charbogen_del' ? { status: 204 } : { status: 200, contentType: 'application/json', body: JSON.stringify(out) });
   });

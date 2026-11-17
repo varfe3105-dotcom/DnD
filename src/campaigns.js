@@ -21,6 +21,8 @@ const clean = c => ({
   // migr: Übernahme aus dem gemeinsamen Stand (Zeitpunkt, Charakter: 'cur', Spielleitung: 'this' | 'empty'); nur dann gibt es den Rückweg
   migr: c.migr && typeof c.migr === 'object' ? { at: String(c.migr.at || ''), char: c.migr.char === 'cur' ? 'cur' : '', dm: ['this', 'empty'].includes(c.migr.dm) ? c.migr.dm : '' } : null,
   chapter: String(c.chapter || '').slice(0, 120),
+  // Gemeinsame Chronik (von der Spielleitung geteilt, dauerhaft übernommen) und ihr zuletzt gesehener Fingerabdruck
+  shared: Array.isArray(c.shared) ? c.shared.slice(0, 100).filter(e => e && e.t).map(e => ({ id: String(e.id || '').slice(0, 40), t: String(e.t).slice(0, 120), x: String(e.x || '').slice(0, 4000), k: e.k === 'plot' ? 'plot' : 'session' })) : [], chronSeen: String(c.chronSeen || '').slice(0, 16),
   // Atlas der Spieler: von der Spielleitung freigegebene Orte (Titel, Spielertext), dauerhaft übernommen
   atlas: Array.isArray(c.atlas) ? c.atlas.slice(0, 16).filter(a => a && a.t).map(a => ({ t: String(a.t).slice(0, 80), d: String(a.d || '').slice(0, 300), k: ['place', 'npc', 'plot'].includes(a.k) ? a.k : 'place', h: !!a.h })) : [], plan: String(c.plan || '').slice(0, 1000), place: String(c.place || '').slice(0, 80),
 });

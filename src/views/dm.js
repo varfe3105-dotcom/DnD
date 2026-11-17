@@ -7,6 +7,7 @@ import { esc, mod, sg } from '../util.js';
 import { U } from '../state.js';
 import { catSelect } from './inventory.js';
 import { timeline } from './chron.js';
+import { V2 } from '../cloud.js';
 import { cpToGp } from '../shop.js';
 import { glyph } from '../icons.js';
 import { COND } from '../catalog.js';
@@ -127,9 +128,10 @@ export function vHere() {
 /** Kampagnenbuch der Spielleitung: Einträge des Notizbuchs als Zeitleiste, nach Art gefiltert. Alles privat, bis die gemeinsame Chronik freigegeben ist. */
 function vBook() {
   const f = DU.bookF || 'session', list = D.notes.filter(n => f === 'all' || n.kind === f);
-  const items = (DU.bookRev ? list : [...list].reverse()).map(n => ({ title: n.title, meta: t('dm.kind.' + n.kind), body: n.body, tags: `<span class="tag sm" title="${t('chron.privHint')}">🔒 ${t('chron.private')}</span>`, act: `<button class="btn sm" data-a="dmsel" data-id="${n.id}" data-v="notes">${t('dm.open')}</button>` }));
+  const can = ['session', 'plot'];
+  const items = (DU.bookRev ? list : [...list].reverse()).map(n => { const sh = n.pub && can.includes(n.kind); return { title: n.title, meta: t('dm.kind.' + n.kind), body: n.body, cls: sh ? 'shared' : '', tags: sh ? `<span class="tag t-good sm">${t('chron.sharedTag')}</span>` : `<span class="tag sm" title="${t('chron.privHint2')}">🔒 ${t('chron.private')}</span>`, act: `${can.includes(n.kind) ? `<button class="btn sm${sh ? ' solid' : ''}" data-a="bookpub" data-id="${n.id}" aria-pressed="${!!sh}">${t(sh ? 'chron.unshare' : 'chron.share')}</button>` : ''}<button class="btn sm" data-a="dmsel" data-id="${n.id}" data-v="notes">${t('dm.open')}</button>`, extra: sh ? `<label class="chron-pub"><span class="lbl">${t('chron.groupText')}</span><textarea rows="4" data-bookpub="${n.id}" aria-label="${t('chron.groupText')}">${esc(n.pubText || '')}</textarea></label>` : '' }; });
   return `<div class="chips">${['session', 'plot', 'place', 'npc', 'all'].map(k => `<button class="chip${f === k ? ' on' : ''}" data-a="bookf" data-k="${k}" aria-pressed="${f === k}">${k === 'all' ? t('dm.kindAll') : t('dm.kind.' + k)}</button>`).join('')}<button class="chip" data-a="bookrev" aria-pressed="${!!DU.bookRev}">${t(DU.bookRev ? 'chron.newest' : 'chron.oldest')}</button><button class="btn sm solid" data-a="dmnews">${t('dm.newSession')}</button></div>
-  <p class="note">${t('chron.dmHint')}</p>${timeline(items)}`;
+  <p class="note">${t('chron.dmHint2')}</p>${V2.on === false ? `<p class="note warnnote">${t('chron.noSql')}</p>` : L.role === 'dm' && L.code ? '' : `<p class="note">${t('chron.offline')}</p>`}${timeline(items)}`;
 }
 function vNotes() {
   const tabs = `<div class="seg chron-tabs" role="group">${['book', 'notes'].map(k => `<button class="tg${(DU.chronV || 'notes') === k ? ' on' : ''}" data-a="chronv" data-k="${k}" aria-pressed="${(DU.chronV || 'notes') === k}">${t('chron.v.' + k)}</button>`).join('')}</div>`;

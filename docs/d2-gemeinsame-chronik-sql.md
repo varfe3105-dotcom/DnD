@@ -1,6 +1,6 @@
 # D2 – Gemeinsame Chronik und Schutz der Spielleitungsdaten (Vorschlag, NICHT ausgeführt)
 
-Stand 17.11.2026. Nichts davon ist in Supabase ausgeführt. Ausführen erst nach deiner ausdrücklichen Freigabe.
+Stand 17.11.2026. **Freigegeben.** Die App-Seite ist umgesetzt (`src/cloud.js`: Geheimnis je Raum, `*_put2/_get2/_del2` mit Rückfall auf die alten Funktionen; Kampagnenbuch „Mit der Gruppe teilen“). Das SQL steht auch am Ende von `supabase/charbogen-saves.sql` und muss **von dir** im Supabase SQL Editor ausgeführt werden; ich habe keinen Zugang mit Schreibrechten und soll auch keinen geheimen Schlüssel bekommen.
 
 ## Befund: bestehende Lücke
 
@@ -63,11 +63,12 @@ returns table (data jsonb, updated_at timestamptz) language sql security definer
     and (kind <> 'dm' or owner_hash = encode(digest(coalesce(p_secret, ''), 'sha256'), 'hex'));
 $$;
 
--- Löschen: nur der Besitzer der Zeile.
+-- Löschen: der Besitzer der Zeile oder die Spielleitung des Raums (Besitzerin der Zeile 'dm'/'dm').
 create or replace function public.charbogen_del2(p_room text, p_kind text, p_id text, p_secret text)
 returns void language sql security definer set search_path = public as $$
-  delete from charbogen_saves where room = p_room and kind = p_kind and id = p_id
-    and (owner_hash is null or owner_hash = encode(digest(coalesce(p_secret, ''), 'sha256'), 'hex'));
+  delete from charbogen_saves s where s.room = p_room and s.kind = p_kind and s.id = p_id
+    and (s.owner_hash is null or s.owner_hash = encode(digest(coalesce(p_secret, ''), 'sha256'), 'hex')
+      or exists (select 1 from charbogen_saves d where d.room = p_room and d.kind = 'dm' and d.id = 'dm' and d.owner_hash = encode(digest(coalesce(p_secret, ''), 'sha256'), 'hex')));
 $$;
 
 revoke all on function public.charbogen_put2(text, text, text, text, jsonb, timestamptz, text) from public;

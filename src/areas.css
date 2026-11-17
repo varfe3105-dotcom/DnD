@@ -659,3 +659,8 @@ html[data-area="char"] .lvh b{font:600 .95rem var(--f-cap);letter-spacing:.08em;
 .chron-b .chron-hl{padding:4px 10px;border-left:3px solid var(--c-brass-lt);background:rgba(212,176,106,.12);color:var(--c-cream);font-weight:700}
 .chron-task.done{opacity:.7;text-decoration:line-through}
 .chron-new textarea{width:100%}
+
+.chron-e.shared{border-color:var(--st-good)}
+.chron-pub{display:block;margin-top:10px}
+.chron-pub textarea{width:100%}
+.warnnote{color:var(--c-warn)}

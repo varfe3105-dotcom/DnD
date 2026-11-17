@@ -12,7 +12,7 @@ export function bodyHtml(text) {
   }).join('');
 }
 /** Zeitleiste: [{title, meta, body, tags, act}] */
-export const timeline = items => items.length ? `<ol class="chron">${items.map(x => `<li class="chron-e${x.cls ? ' ' + x.cls : ''}"><div class="chron-h"><h3>${esc(x.title || t('dm.untitled'))}</h3>${x.tags || ''}${x.act || ''}</div>${x.meta ? `<p class="lbl">${x.meta}</p>` : ''}<div class="chron-b">${bodyHtml(x.body) || `<p class="note">${t('chron.empty')}</p>`}</div></li>`).join('')}</ol>` : `<p class="note">${t('chron.none')}</p>`;
+export const timeline = items => items.length ? `<ol class="chron">${items.map(x => `<li class="chron-e${x.cls ? ' ' + x.cls : ''}"><div class="chron-h"><h3>${esc(x.title || t('dm.untitled'))}</h3>${x.tags || ''}${x.act || ''}</div>${x.meta ? `<p class="lbl">${x.meta}</p>` : ''}<div class="chron-b">${bodyHtml(x.body) || `<p class="note">${t('chron.empty')}</p>`}</div>${x.extra || ''}</li>`).join('')}</ol>` : `<p class="note">${t('chron.none')}</p>`;
 /** Chronik des Spielers aus dem Text: Abschnitte beginnen mit „## Titel“. Text davor ist ein eigener Abschnitt. */
 export function logEntries(log) {
   const out = [], parts = String(log || '').split(/^## /m);
