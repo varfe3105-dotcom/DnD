@@ -41,8 +41,7 @@ function vSetupBody() {
   const bonus = R ? `${loc(R.size || { en: '', de: '' })}${R.size ? ' · ' : ''}${loc(R.asi)}` : '';
   return `${S.camp ? `<div class="card lib-tolib"><p class="note" style="margin-top:0">${t('lib.tolibHint')}</p><button class="btn sm ${U.CONF === 'tolib' ? 'warn' : ''}" data-a="tolib">${U.CONF === 'tolib' ? t('lib.tolibConfirm') : t('lib.tolib')}</button></div>` : ''}<p class="note">${t('setup.intro')}</p>
   ${vWizardStart()}
-  ${vChars()}
-  ${vLiveJoin()}
+  ${U.CAMP ? `<div class="card lib-tolib"><p class="note" style="margin-top:0">${t('setup.inCamp')}</p><div class="add"><button class="btn sm" data-a="hubgo" data-s="chars">${t('lib.title')}</button><button class="btn sm" data-a="crumb" data-t="cover">${t('nav.room')}</button></div></div>` : vChars() + vLiveJoin()}
   <h2>${t('setup.char')}</h2><div class="card"><div class="porsetup"><label class="por" for="img-in2" title="${t('setup.portrait')}">${S.img ? `<img src="${S.img}" alt="">` : `<span>${esc((S.name || '?').trim()[0] || '?')}</span>`}</label><input type="file" id="img-in2" accept="image/*" hidden><div class="add" style="margin:0"><label class="btn sm" for="img-in2">${t('setup.portrait')}</label>${S.img ? `<button class="btn sm bad" data-a="imgdel">${t('setup.portraitDel')}</button>` : ''}${S.fig ? `<button class="btn sm bad" data-a="figdel">${t('setup.figDel')}</button>` : ''}</div></div>
   <div class="form" style="margin-top:12px">
    ${field(t('common.name'), txtIn('name', S.name, t('common.name')))}

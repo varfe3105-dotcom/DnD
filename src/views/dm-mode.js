@@ -1,6 +1,6 @@
 // Spielleitungsmodus: eigenes Dashboard ohne eigenen Charakter (Kopf, Reiter, Kurzleiste, Einrichten).
 import { esc } from '../util.js';
-import { D, ordered } from '../dm.js';
+import { D, ordered, fighting } from '../dm.js';
 import { L, players } from '../live.js';
 import { skinControls } from '../bright.js';
 import { t, lang, units } from '../i18n/index.js';
@@ -24,7 +24,7 @@ export function vDmHead() {
 export function vDmBar(tabsHtml) {
   const list = ordered(), cur = list.find(c => c.id === D.combat.active);
   const ps = players().map(p => `<span class="mb-p${p.hp === 0 ? ' down' : ''}">${esc(p.name)} <b>${p.hp}</b>/${p.hpMax}</span>`).join('');
-  return `<div class="minibar dmbar" aria-label="${t('mini.label')}">${D.combat.list.length ? `<span class="mb-v"><small>${t('dm.round')}</small><b>${D.combat.round}</b></span><span class="mb-v"><small>${t('dmm.now')}</small><b>${esc(cur ? cur.name : '–')}</b></span>` : ''}${ps ? `<span class="mb-v mb-party"><small>${t('dmm.party')}</small><b>${ps}</b></span>` : ''}<nav class="mb-tabs" aria-label="${t('head.areas')}">${tabsHtml}</nav></div>`;
+  return `<div class="minibar dmbar" aria-label="${t('mini.label')}">${D.combat.list.length ? `<span class="mb-v"><small>${t('dm.round')}</small><b>${D.combat.round}</b></span><span class="mb-v"><small>${t('dmm.now')}</small><b>${esc(cur ? cur.name : '–')}</b></span>` : ''}${ps ? `<span class="mb-v mb-party"><small>${t('dmm.party')}</small><b>${ps}</b></span>` : ''}${fighting() ? `<button class="btn sm solid mb-step" data-a="mbstep">${t('dm.next')}</button>` : ''}<nav class="mb-tabs" aria-label="${t('head.areas')}">${tabsHtml}</nav></div>`;
 }
 
 /** Einrichten im Spielleitungsmodus: nur, was die Spielleitung braucht. */

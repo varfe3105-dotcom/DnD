@@ -54,6 +54,7 @@ export function setPath(p,v){const ks=p.split('.');let o=S;for(let i=0;i<ks.leng
 app.addEventListener('click',ev=>{
   const c=ev.target.closest('[data-slot]');
   if(c&&!ev.target.closest('[data-drag]')&&U.SEL&&!get(c.dataset.slot)){move(U.SEL,c.dataset.slot);save();render();return}
+  if(ev.target.classList&&ev.target.classList.contains('dm-ovl')){dm.DU.open={};render();return}
   const b=ev.target.closest('[data-a]');if(!b)return;
   const a=b.dataset.a,i=+b.dataset.i,k=b.dataset.k,v=id=>($(id)||{}).value||'';
   if(a==='luclose-bg'&&ev.target!==b)return;
@@ -99,6 +100,7 @@ app.addEventListener('click',ev=>{
     case 'dmopen':{const id=b.dataset.id,was=dm.DU.open[id];dm.DU.open={};if(!was)dm.DU.open[id]=true;break}
     case 'dmfocus':dm.DU.open={[b.dataset.id]:true};break;
     case 'dmclose':dm.DU.open={};break;
+    case 'mbstep':{const gone=dm.step(1);dm.saveD();live.refresh();if(gone&&gone.length)toast(gone.map(x=>tr('dm.fxEnded',x)).join(' '));break}
     case 'fside':U.FSIDE=b.dataset.k;break;
     case 'soundtg':setSound(!soundOn());if(soundOn())beep();break;
     case 'dmhp':{const amt=Math.floor(+v('dm-amt-'+b.dataset.id))||1,c=dm.find(b.dataset.id);if(c&&c.live&&live.L.role==='dm'){live.sendMsg({type:+b.dataset.d<0?'dmg':'heal',to:c.live,value:amt,...(c.pet?{pet:c.pet}:{})});toast(tr('live.proposed',{n:c.kind==='pet'?c.owner:c.name}));break}dm.changeHp(b.dataset.id,amt*+b.dataset.d);dm.saveD();break}
@@ -233,18 +235,18 @@ app.addEventListener('click',ev=>{
     case 'hubplay':{if(!b.dataset.id&&S.camp&&camp.campaignById(S.camp)){if(!openCamp(S.camp,'prof'))return;break}
       // Einstieg über die Kampagne: spielt der Charakter in einer, öffnet sich die zuletzt genutzte (außer bei „Grundbogen“)
       if(b.dataset.id&&!b.dataset.lib){const k=camp.campaignsOf(b.dataset.id).filter(x=>x.role==='player'&&x.status==='active').sort((x,y)=>(y.seen||y.at).localeCompare(x.seen||x.at))[0];if(k){if(!openCamp(k.id,'prof'))return;break}}
-      U.CAMP=null;const id=b.dataset.id;if(id&&id!==S.id&&!switchChar(id)){toast(tr('toast.saveFailed'));return}enterPlay(b.dataset.t||'prof');break}
+      U.CAMP=null;const id=b.dataset.id;if(id&&(id!==S.id||S.camp)&&!switchChar(id)){toast(tr('toast.saveFailed'));return}enterPlay(b.dataset.t||'prof');break}
     case 'hubwiki':U.HUB='wiki';U.HUBQ='';U.WSEL=b.dataset.key;U.WF='all';U.WQ='';window.scrollTo(0,0);break;
     case 'hubnewchar':newChar();openWizard();enterPlay('setup');break;
     case 'hubimport':hubImport();return;
-    case 'hubq':{const k=b.dataset.k;if(k==='wiki'){U.HUB='wiki';break}if(k==='map'){U.HUB='map';window.scrollTo(0,0);break}if(k==='newchar'){newChar();openWizard();enterPlay('setup');break}if(k==='import'){hubImport();return}if(k==='campnew'){U.CAMPART=null;U.HUB='camps';U.CAMPED='new';U.CAMPCH=null;break}if(k==='inv'){enterPlay('inv');break}if(k==='notes'){enterPlay('notes');break}if(k==='chars'){U.HUB='chars';window.scrollTo(0,0);break}if(k==='live'||k==='join'){U.HUB='join';window.scrollTo(0,0);break}if(k==='dm'||k==='gm'){U.HUB='gm';window.scrollTo(0,0);break}break}
+    case 'hubq':{const k=b.dataset.k;if(k==='wiki'){U.HUB='wiki';break}if(k==='map'){U.HUB='map';window.scrollTo(0,0);break}if(k==='newchar'){newChar();openWizard();enterPlay('setup');break}if(k==='import'){hubImport();return}if(k==='campnew'){U.CAMPART=null;U.HUB='camps';U.CAMPED='new';U.CAMPCH=null;break}if(k==='inv'||k==='notes'){const kc=S.camp&&camp.campaignById(S.camp)?S.camp:(camp.campaignsOf(S.id).filter(x=>x.role==='player'&&x.status==='active').sort((x,y)=>(y.seen||y.at).localeCompare(x.seen||x.at))[0]||{}).id;if(kc){if(!openCamp(kc,k))return;break}U.CAMP=null;enterPlay(k);break}if(k==='chars'){U.HUB='chars';window.scrollTo(0,0);break}if(k==='live'||k==='join'){U.HUB='join';window.scrollTo(0,0);break}if(k==='dm'||k==='gm'){U.HUB='gm';window.scrollTo(0,0);break}break}
     case 'campart':{const i=+b.dataset.i;U.CAMPART=i;document.querySelectorAll('.hub-artpick button').forEach(x=>{const on=+x.dataset.i===i;x.classList.toggle('on',on);x.setAttribute('aria-pressed',on)});return}
     case 'campnew':U.CAMPART=null;U.CAMPROLE=b.dataset.r||(U.HUB==='gm'?'dm':null);U.HUB=U.HUB==='gm'?'gm':'camps';U.CAMPED='new';U.CAMPCH=null;window.scrollTo(0,0);break;
     case 'campedit':U.CAMPART=null;leavePlay();U.HUB=U.HUB==='gm'?'gm':'camps';U.CAMPED=b.dataset.id;U.CAMPCH=null;U.HUBQ='';window.scrollTo(0,0);break;
     case 'campcancel':U.CAMPED=null;U.CAMPCH=null;U.CONF=null;break;
     case 'campchar':{const c=U.CAMPED==='new'?null:camp.campaignById(U.CAMPED);const set=new Set(U.CAMPCH||(c?c.chars:[]));const id=b.dataset.id;if(set.has(id))set.delete(id);else set.add(id);U.CAMPCH=[...set];b.classList.toggle('on',set.has(id));b.setAttribute('aria-pressed',set.has(id));return}
     case 'campsave':{const name=v('cf-name').trim();if(!name){toast(tr('toast.needName'));return}const room=v('cf-room').trim().toUpperCase();if(room&&!live.isCode(room)){toast(tr('live.badCode'));return}const old=U.CAMPED==='new'?null:camp.campaignById(U.CAMPED);const r=camp.saveCampaign({...(old||{}),id:old?old.id:undefined,name,desc:v('cf-desc').trim(),status:v('cf-status'),chapter:v('cf-chapter'),plan:v('cf-plan'),role:v('cf-role')||(old?old.role:undefined),next:v('cf-next'),room,done:v('cf-done'),planned:v('cf-planned'),chars:U.CAMPCH||(old?old.chars:[]),...(U.CAMPART!=null?{art:U.CAMPART}:{})});U.CAMPART=null;if(!r){toast(tr('toast.saveFailed'));return}U.CAMPED=null;U.CAMPCH=null;U.CAMPROLE=null;toast(tr('camp.saved',{n:r.name}));break}
-    case 'campdel':{const id=b.dataset.id;if(U.CONF!=='campdel:'+id){U.CONF='campdel:'+id;break}U.CONF=null;camp.deleteCampaign(id);U.CAMPED=null;toast(tr('camp.deleted'));break}
+    case 'campdel':{const id=b.dataset.id;if(U.CONF!=='campdel:'+id){U.CONF='campdel:'+id;break}U.CONF=null;const dc=camp.campaignById(id);if(dc&&dc.room&&live.L.code===dc.room)live.disconnect();if(S.camp===id)switchChar(S.id);if(dm.dmCtx()===id)dm.useCamp(null);camp.deleteCampaign(id);U.CAMPED=null;toast(tr('camp.deleted'));break}
     case 'campdone':{camp.sessionDone(b.dataset.id);toast(tr('camp.doneToast'));break}
     case 'campplay':if(!openCamp(b.dataset.id))return;break;
     case 'plandel':{const c=camp.campaignById(b.dataset.id);if(c)camp.saveCampaign({...c,next:''});break}
@@ -507,3 +509,19 @@ window.addEventListener('popstate',ev=>{
   if(histKey!==locKey(l))try{window.history.replaceState({rc:locNow()},'')}catch(e){/* egal */}
 });
 renderHooks.after=syncHistory;
+
+/* ---- Schutz der Raumverbindung (Prüfung 17.11.2026) ----
+   Ein Raum einer getrennten Kampagne darf nur den Stand dieser Kampagne bekommen. Wird ein anderer Stand geladen
+   (Grundbogen, andere Kampagne), wird der Raum verlassen, bevor Presence oder Online-Speicherung ihn senden. */
+function roomGuard(){
+  if(!live.L.code)return;
+  const c=camp.campaignByRoom(live.L.code);
+  if(!c||!c.split)return;
+  const wrong=live.L.role==='player'?S.camp!==c.id:live.L.role==='dm'?dm.dmCtx()!==c.id:false;
+  if(wrong){live.disconnect();toast(tr('live.leftOther',{n:c.name}))}
+}
+const prevAfter=renderHooks.after;renderHooks.after=()=>{roomGuard();if(prevAfter)prevAfter()};
+// Geladener Stand einer gelöschten Kampagne: beim Start auf den Grundbogen zurück (der Stand bleibt gespeichert)
+if(S.camp&&!camp.campaignById(S.camp))switchChar(S.id);
+// Escape schließt offene Dialoge (Kampfdialog, Stufenaufstieg, Übernahme, Bogen ansehen)
+window.addEventListener('keydown',ev=>{if(ev.key==='Escape'&&closeOverlay())render()});

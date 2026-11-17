@@ -1702,5 +1702,8 @@
  "fight.sound": "Ton bei eigenem Zug",
  "fight.soundOn": "an",
  "fight.soundOff": "aus",
- "fight.soundHint": "Ein kurzer, leiser Ton, wenn du an der Reihe bist (nur auf diesem Gerät)."
+ "fight.soundHint": "Ein kurzer, leiser Ton, wenn du an der Reihe bist (nur auf diesem Gerät).",
+ "lib.bannerFight": "Probeansicht am Grundbogen: Hier lassen sich Werte und Aktionen ausprobieren. Gespielt wird im Kampf der Kampagne; Änderungen hier betreffen nur den Grundbogen.",
+ "setup.inCamp": "Du bearbeitest den Stand dieser Kampagne. Charaktere wechseln, anlegen oder löschen geht in der Charakterbibliothek, den Raum findest du in der Übersicht der Kampagne.",
+ "live.leftOther": "Raum von „{n}“ verlassen, weil ein anderer Stand geladen wurde."
 }
