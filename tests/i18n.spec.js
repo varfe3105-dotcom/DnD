@@ -32,8 +32,11 @@ test.describe('Umschalten @new', () => {
   test('Standard ist Englisch, Umschalter sichtbar auch am Handy', async ({ page }) => {
     await page.setViewportSize({ width: 390, height: 800 });
     await seed(page, base4({}));
-    await expect(page.locator('[data-a="lang"][data-l="en"]')).toHaveAttribute('aria-pressed', 'true');
-    await expect(page.locator('[data-a="lang"][data-l="de"]')).toBeVisible();
+    // Am Handy stehen Sprache und Einheiten im Menü der Kopfleiste
+    await page.locator('.mt-menu').click();
+    await expect(page.locator('.mmenu [data-a="lang"][data-l="en"]')).toHaveAttribute('aria-pressed', 'true');
+    await expect(page.locator('.mmenu [data-a="lang"][data-l="de"]')).toBeVisible();
+    await page.locator('.mm-x').click();
     await expect(page.locator('[data-a="tab"][data-t="inv"]')).toHaveText('Inventory');
     expect(await page.evaluate(() => document.documentElement.lang)).toBe('en');
   });

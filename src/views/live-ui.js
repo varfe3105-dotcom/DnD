@@ -14,6 +14,8 @@ import { t, lang, dice } from '../i18n/index.js';
 import { BUFFS, maxTargets, DM_BUFFS, biDie } from '../buffs.js';
 import { classLevels } from '../tables.js';
 import { dmBuffsFor } from '../dm.js';
+import { campaignById } from '../campaigns.js';
+import { progOf } from './camp-set.js';
 
 const COINK = ['pp', 'gp', 'ep', 'sp', 'cp'];
 export { COINK as COIN_KEYS };
@@ -43,9 +45,10 @@ export function vHandout() {
   return `<div class="ovl"><div class="dlg" role="dialog" aria-modal="true" aria-labelledby="ho-h"><h3 id="ho-h">${esc(m.title || t('live.handout'))}</h3>${m.img ? `<img class="ho-img" src="${esc(m.img)}" alt="">` : ''}${m.text ? `<p class="ho-text">${esc(m.text)}</p>` : ''}<div class="dlgf">${m.text || m.title ? `<button class="btn" data-a="honote">${t('live.toNotes')}</button>` : ''}<button class="btn solid" data-a="hoclose">${t('common.close')}</button></div></div></div>`;
 }
 
+const xpMode = () => { const c = U.CAMP && campaignById(U.CAMP); return !c || progOf(c) === 'xp'; };
 export function vLiveSend(p) {
   const key = esc(p.key), bt = (type, cls, label) => `<button class="btn sm ${cls}" data-a="livesend" data-k="${key}" data-t="${type}">${label}</button>`;
-  return `<div class="add live-send"><input type="number" class="n" id="lv-a-${key}" min="1" placeholder="${t('hp.amount')}" aria-label="${t('hp.amount')}">${bt('dmg', 'bad', t('hp.damage'))}${bt('heal', 'good', t('hp.heal'))}${bt('temp', '', t('live.temp'))}<select id="lv-c-${key}" aria-label="${t('cond.title')}"><option value="">${t('cond.title')}</option>${COND.map(c => `<option value="${esc(c.n)}">${esc(c.n)}</option>`).join('')}</select><input type="number" class="n" id="lv-r-${key}" min="1" max="99" placeholder="${t('cond.roundsPh')}" aria-label="${t('cond.roundsPh')}">${bt('cond', '', t('live.sendCond'))}${bt('insp', '', t('insp.give'))}${p.conc ? bt('conc', '', t('live.concEnd', { n: esc(p.conc) })) : ''}${bt('xp', '', t('live.xpBtn'))}${bt('levelup', '', t('live.lvlBtn'))}<select id="lv-b-${key}" aria-label="${t('buff.dmPick')}"><option value="">${t('buff.dmPick')}</option>${DM_BUFFS.map(n => `<option value="${esc(n)}">${esc(n)}</option>`).join('')}</select><button class="btn sm" data-a="dmbuff" data-k="${key}">${t('buff.dmSend')}</button>${dmBuffsFor(p.key).map(b => `<button class="chip ${BUFFS[b.s]?.good ? 'buff' : 'debuff'}" data-a="dmbuffrm" data-id="${esc(b.id)}" title="${t('buff.remove')}">${esc(b.s)} ✕</button>`).join('')}</div>`;
+  return `<div class="add live-send"><input type="number" class="n" id="lv-a-${key}" min="1" placeholder="${t('hp.amount')}" aria-label="${t('hp.amount')}">${bt('dmg', 'bad', t('hp.damage'))}${bt('heal', 'good', t('hp.heal'))}${bt('temp', '', t('live.temp'))}<select id="lv-c-${key}" aria-label="${t('cond.title')}"><option value="">${t('cond.title')}</option>${COND.map(c => `<option value="${esc(c.n)}">${esc(c.n)}</option>`).join('')}</select><input type="number" class="n" id="lv-r-${key}" min="1" max="99" placeholder="${t('cond.roundsPh')}" aria-label="${t('cond.roundsPh')}">${bt('cond', '', t('live.sendCond'))}${bt('insp', '', t('insp.give'))}${p.conc ? bt('conc', '', t('live.concEnd', { n: esc(p.conc) })) : ''}${xpMode() ? bt('xp', '', t('live.xpBtn')) : ''}${bt('levelup', '', t('live.lvlBtn'))}<select id="lv-b-${key}" aria-label="${t('buff.dmPick')}"><option value="">${t('buff.dmPick')}</option>${DM_BUFFS.map(n => `<option value="${esc(n)}">${esc(n)}</option>`).join('')}</select><button class="btn sm" data-a="dmbuff" data-k="${key}">${t('buff.dmSend')}</button>${dmBuffsFor(p.key).map(b => `<button class="chip ${BUFFS[b.s]?.good ? 'buff' : 'debuff'}" data-a="dmbuffrm" data-id="${esc(b.id)}" title="${t('buff.remove')}">${esc(b.s)} ✕</button>`).join('')}</div>`;
 }
 
 export function vHandoutForm(list) {

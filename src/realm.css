@@ -246,3 +246,121 @@ header.hd .por{box-shadow:0 0 0 3px #d4b06a,0 0 0 8px #1a1015,0 0 0 10px #a8833f
 .ov-res b{color:var(--t-val-d)}.ov-res b i{color:var(--t-sub-d);font-style:normal}
 .ov-res span{color:var(--t-name-d)}
 @media (max-width:640px){.ov-vit{grid-template-columns:repeat(3,minmax(0,1fr))}}
+
+/* ==== Rahmen (Gesamtauftrag, Etappe B): globale Leiste auf allen Ebenen, Kopfleiste und Menü am Handy ==== */
+html:not([data-hub]) .wrap{max-width:none;padding:0}
+.shell{--rail-w:212px;display:grid;grid-template-columns:var(--rail-w) minmax(0,1fr);min-height:100vh}
+.shell.folded{--rail-w:68px}
+.shell-main{min-width:0;width:100%;max-width:1680px;margin:0 auto;padding:16px max(20px,env(safe-area-inset-right,0px)) 72px max(20px,env(safe-area-inset-left,0px));box-sizing:border-box}
+.rail{position:sticky;top:0;z-index:40;height:100vh;display:flex;flex-direction:column;overflow-y:auto;overflow-x:hidden;scrollbar-width:thin;background:linear-gradient(180deg,rgba(20,16,20,.97),rgba(14,11,14,.99)),var(--slate);border-right:1px solid var(--c-brass-a);box-shadow:6px 0 22px rgba(0,0,0,.35)}
+.rail-brand{display:flex;align-items:center;gap:10px;padding:14px 16px 12px;background:none;border:0;border-bottom:1px solid var(--c-brass-soft);color:var(--c-brass-lt);font:700 1.15rem var(--f-cap);letter-spacing:.06em;text-align:left}
+.rail-brand .hub-mark{flex:none;width:36px;height:36px;margin:0}
+.rail nav{display:flex;flex-direction:column;gap:2px;padding:8px 0}
+.rail nav button,.rail-foot button{position:relative;display:flex;align-items:center;gap:12px;width:100%;padding:10px 16px 10px 20px;background:none;border:0;color:var(--c-cream-2);font:500 .98rem var(--f-ui);text-align:left;white-space:nowrap}
+.rail nav button:hover,.rail-foot button:hover{color:var(--c-cream);background:linear-gradient(90deg,rgba(90,58,96,.3),transparent)}
+.rail nav button[aria-current="true"],.rail-foot button[aria-current="true"]{color:var(--c-cream);background:linear-gradient(90deg,rgba(90,58,96,.85),rgba(59,36,64,.45) 70%,transparent);box-shadow:inset 3px 0 0 var(--c-brass)}
+.li{width:22px;height:22px;flex:none;fill:none;stroke:var(--c-brass);stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+.rail-foot{margin-top:auto;border-top:1px solid var(--c-brass-soft);padding:4px 0}
+.rail-fold .li{transition:transform .2s}
+.shell.folded .rail-fold .li{transform:rotate(180deg)}
+.shell.folded .rail span,.shell.folded .rail-brand b{display:none}
+.shell.folded .rail nav button,.shell.folded .rail-foot button,.shell.folded .rail-brand{justify-content:center;padding-inline:0}
+/* Live-Leiste sitzt am Desktop in der Leiste und verdeckt so keine Inhalte */
+.rail #live-dock{position:static;inset:auto;width:auto;max-width:none;max-height:none;margin:8px;padding:8px;overflow:visible;border-radius:4px;box-shadow:none;flex:none}
+.rail #live-dock .dock-top,.rail #live-dock .inbox .row{flex-wrap:wrap}
+.rail #live-dock .dock-st span{display:inline}
+.shell.folded .rail #live-dock.full{position:fixed;left:auto;right:16px;bottom:12px;width:min(420px,calc(100% - 100px));max-height:45vh;overflow:auto;box-shadow:0 8px 22px rgba(0,0,0,.6)}
+.shell.folded .rail #live-dock.mini{padding:6px 4px;margin:6px}
+.shell.folded .rail #live-dock.mini .dock-st{font-size:0;justify-content:center}
+body:has(.rail #live-dock.full){padding-bottom:0}
+body:has(.rail #live-dock.full) #toast{top:auto;bottom:calc(16px + env(safe-area-inset-bottom,0px))}
+.shell .minibar{left:calc(var(--rail-w) + (100% - var(--rail-w)) / 2);width:min(1680px,calc(100% - var(--rail-w)))}
+/* Zwischen 900 und 1199 px nur Symbole (die Leiste bleibt sichtbar) */
+@media (min-width:900px) and (max-width:1199px){
+  .shell{--rail-w:68px}
+  .rail span,.rail-brand b,.rail-fold{display:none}
+  .rail nav button,.rail-foot button,.rail-brand{justify-content:center;padding-inline:0}
+  .rail #live-dock.full{position:fixed;right:16px;bottom:12px;width:min(420px,calc(100% - 100px));max-height:45vh;overflow:auto;box-shadow:0 8px 22px rgba(0,0,0,.6)}
+  .rail #live-dock.mini .dock-st{font-size:0;justify-content:center}
+}
+.mtop,.tab-more{display:none}
+.mm-ovl{position:fixed;inset:0;z-index:95;background:rgba(6,4,6,.6)}
+.mmenu{position:fixed;z-index:96;top:0;right:0;bottom:0;width:min(360px,88vw);overflow-y:auto;box-sizing:border-box;padding:12px 14px calc(18px + env(safe-area-inset-bottom,0px));background:linear-gradient(180deg,rgba(34,22,38,.99),rgba(16,12,16,.99));border-left:1px solid var(--c-brass);box-shadow:-10px 0 30px #000;color:var(--c-cream)}
+.mm-h{display:flex;align-items:center;justify-content:space-between;padding-bottom:8px;border-bottom:1px solid var(--c-brass-soft)}
+.mm-h b{font:700 1.3rem var(--f-title);color:var(--c-brass-lt)}
+.mm-x{background:none;border:0;padding:8px}
+.mmenu h4{margin:14px 0 6px;font:600 .72rem var(--f-cap);letter-spacing:.16em;text-transform:uppercase;color:var(--t-lbl-d)}
+.mm-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.mm-grid button{display:flex;align-items:center;gap:8px;min-height:44px;padding:8px 10px;background:rgba(255,255,255,.03);border:1px solid var(--c-brass-soft);border-radius:3px;color:var(--c-cream-2);font:500 .95rem var(--f-ui);text-align:left}
+.mm-grid button[aria-current="page"]{background:var(--grad-pri);color:var(--c-cream);border-color:var(--c-brass)}
+.mm-acts{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.mm-acts .btn{flex:1 1 40%;min-height:44px}
+.mm-acts .btn.gilt{flex-basis:100%}
+.mm-prefs{display:flex;gap:10px;margin-top:12px}
+@media (max-width:899px){
+  .shell{display:block}
+  .rail{display:contents}
+  .rail>:not(#live-dock){display:none}
+  .shell-main{padding:0 12px 72px}
+  .mtop{position:sticky;top:0;z-index:45;display:flex;align-items:center;gap:10px;margin:0 -12px 10px;padding:max(6px,env(safe-area-inset-top,0px)) 10px 6px;background:linear-gradient(180deg,rgba(24,18,26,.98),rgba(16,12,16,.98));border-bottom:1px solid var(--c-brass-a);box-shadow:0 4px 14px rgba(0,0,0,.45)}
+  .mt-mark{flex:none;width:40px;height:40px;padding:0;background:none;border:0}
+  .mt-mark .hub-mark{width:36px;height:36px;margin:0}
+  .mt-where{flex:1;min-width:0;line-height:1.15}
+  .mt-where small{display:block;font:600 .62rem var(--f-cap);letter-spacing:.16em;text-transform:uppercase;color:var(--t-lbl-d)}
+  .mt-where b{display:block;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;font:700 1.12rem var(--f-title);color:var(--c-cream)}
+  .mt-live{width:10px;height:10px;border-radius:50%;background:#d9a441;box-shadow:0 0 6px currentColor}
+  .mt-live.st-on{background:#5fbf6a}.mt-live.st-error{background:#e0503c}
+  .mt-menu{flex:none;width:44px;height:44px;display:grid;place-items:center;padding:0;background:rgba(90,58,96,.35);border:1px solid var(--c-brass-soft);border-radius:3px}
+  .crumbs{display:none}
+  /* Kompakte Titelplatte: die Knöpfe stehen im Menü */
+  header.hd .hacts,header.hd .sub2,header.hd .hd-camps,header.hd .xpl{display:none}
+  header.hd{padding:12px 14px;min-height:0;gap:12px}
+  header.hd .por{width:60px;height:60px}
+  header.hd h1{font-size:1.55rem}
+  header.hd .who p{font-size:.9rem;margin-top:2px}
+  header.hd .rc-ribbon{margin-top:4px}
+  header.hd .seal{width:46px;height:46px}
+  /* Live-Leiste nur, wenn sie etwas zu sagen hat; die Ampel steht in der Kopfleiste */
+  #live-dock.mini{display:none}
+}
+@media screen and (max-width:520px){
+  .tabs nav button.mx{display:none}
+  .tabs nav .tab-more{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;min-width:0;padding:4px 2px 5px;background:none;border:0;border-radius:6px;color:var(--c-cream-2);font:600 .68rem var(--f-ui)}
+  .tabs nav .tab-more[aria-selected="true"]{background:var(--grad-pri);color:var(--c-cream)}
+  .tabs nav button{flex-direction:column;align-items:center;gap:2px}
+}
+@media print{.rail,.mtop,.mmenu,.mm-ovl{display:none}.shell{display:block}}
+
+/* ==== Kampagneneinstellungen ==== */
+.cs-top{position:relative;padding:18px 22px;margin-bottom:16px;border:1px solid var(--c-brass-a);overflow:hidden}
+.cs-top h2{margin:0;font:700 1.9rem var(--f-title);color:var(--c-cream)}
+.cs-top h2::after,.cs-top h2::before{display:none}
+.cs-top p{margin:2px 0 0;color:var(--t-sub-d);font:600 1rem var(--f-ui)}
+.cs-cols{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;align-items:start}
+.cs-cols>div{display:flex;flex-direction:column;gap:16px}
+.cs-sec{padding:16px 18px}
+.cs-h{margin:0 0 10px;font:700 1.3rem var(--f-title);color:var(--c-brass-lt)}
+.cs-h4{margin:14px 0 6px;font:700 1.08rem var(--f-title);color:var(--t-name-d)}
+.cs-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px}
+.cs-f{display:flex;flex-direction:column;gap:4px;margin-bottom:10px}
+.cs-f input,.cs-f textarea{width:100%;box-sizing:border-box}
+.cs-act{display:flex;justify-content:flex-end;gap:8px;flex-wrap:wrap;margin-top:8px}
+.cs-act.left{justify-content:flex-start}
+.cs-radio{display:flex;gap:8px;flex-wrap:wrap}
+.cs-dl{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:0 0 8px}
+.cs-dl div{padding:8px;border:1px solid var(--c-brass-soft);background:rgba(0,0,0,.18)}
+.cs-dl dt{font-size:.72rem}.cs-dl dd{margin:2px 0 0}
+.cs-mem{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}
+.cs-mem li{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 10px;padding:6px 0;border-bottom:1px solid var(--c-brass-soft)}
+.cs-danger{margin-top:14px;padding:12px;border:1px solid rgba(224,80,60,.45);background:rgba(120,20,20,.12)}
+.house-list{display:flex;flex-direction:column;gap:8px}
+.house-r{padding:10px 12px;border:1px solid var(--c-brass-soft);background:rgba(0,0,0,.2)}
+.house-r header{display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px}
+.house-r header b{flex:1}
+.house-r p{margin:6px 0 0;color:var(--c-cream-2)}
+.house-form{margin-top:12px;padding-top:10px;border-top:1px solid var(--c-brass-soft)}
+@media (max-width:900px){.cs-cols{grid-template-columns:minmax(0,1fr)}}
+@media (min-width:521px){.tabs nav .tab-more{display:none}}
+.mt-mark .hub-mark,.rail-brand .hub-mark{display:block}
+.ov-v small{hyphens:auto;overflow-wrap:anywhere}
+.rail nav button span,.rail-foot button span{overflow:hidden;text-overflow:ellipsis}

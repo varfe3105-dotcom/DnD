@@ -3,7 +3,7 @@
 // Datenbankseite: supabase/charbogen-saves.sql. Gelesen und geschrieben wird nur über die Funktionen dort.
 import { SUPA, API_KEY, L } from './live.js';
 import { S, hooks, storeChar } from './state.js';
-import { D, dmHooks, replaceD, chronOut } from './dm.js';
+import { D, dmHooks, replaceD, chronOut, houseOut } from './dm.js';
 
 const LS = 'charbogen-cloud';
 const WAIT = 4000;
@@ -126,18 +126,19 @@ export async function remove(kind, id) {
    Ihre Presence trägt einen kurzen Fingerabdruck; ändert er sich, holen Spieler die Zeile und speichern sie in ihrer Kampagne. */
 let lastChron = '';
 async function pushChron() {
-  const data = { entries: chronOut() }, j = JSON.stringify(data);
+  const data = { entries: chronOut(), rules: houseOut() }, j = JSON.stringify(data);
   if (j + L.code === lastChron) return;
   await call('charbogen_put', { p_room: L.code, p_kind: 'chron', p_id: 'shared', p_name: 'Chronik', p_data: data, p_base: null });
   lastChron = j + L.code;
 }
-/** Spieler: gemeinsame Chronik holen. Liefert die Einträge oder null. */
+/** Spieler: gemeinsame Chronik und Hausregeln holen. Liefert { entries, rules } oder null. */
 export async function fetchChron() {
   if (!active()) return null;
   try {
     const rows = await call('charbogen_get', { p_room: L.code, p_kind: 'chron', p_id: 'shared' });
     const row = Array.isArray(rows) ? rows[0] : rows;
-    return row && row.data && Array.isArray(row.data.entries) ? row.data.entries : [];
+    const d = row && row.data;
+    return { entries: d && Array.isArray(d.entries) ? d.entries : [], rules: d && Array.isArray(d.rules) ? d.rules : [] };
   } catch (e) { return null; }
 }
 /** Beim Betreten eines Raums: Übersicht laden und den eigenen Stand gleich sichern. */

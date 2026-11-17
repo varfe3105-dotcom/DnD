@@ -25,6 +25,10 @@ const clean = c => ({
   shared: Array.isArray(c.shared) ? c.shared.slice(0, 100).filter(e => e && e.t).map(e => ({ id: String(e.id || '').slice(0, 40), t: String(e.t).slice(0, 120), x: String(e.x || '').slice(0, 4000), k: e.k === 'plot' ? 'plot' : 'session' })) : [], chronSeen: String(c.chronSeen || '').slice(0, 16),
   // Atlas der Spieler: von der Spielleitung freigegebene Orte (Titel, Spielertext), dauerhaft übernommen
   atlas: Array.isArray(c.atlas) ? c.atlas.slice(0, 16).filter(a => a && a.t).map(a => ({ t: String(a.t).slice(0, 80), d: String(a.d || '').slice(0, 300), k: ['place', 'npc', 'plot'].includes(a.k) ? a.k : 'place', h: !!a.h })) : [], plan: String(c.plan || '').slice(0, 1000), place: String(c.place || '').slice(0, 80),
+  // Fortschritt: 'xp' nur auf ausdrücklichen Wunsch, sonst Meilensteine (Standard). XP-Werte der Charaktere bleiben in jedem Fall erhalten.
+  prog: c.prog === 'xp' ? 'xp' : 'ms',
+  // Hausregeln, die Spieler von der Spielleitung übernommen haben (bei der Spielleitung stehen sie in D.house)
+  house: Array.isArray(c.house) ? c.house.slice(0, 60).filter(r => r && r.t).map(r => ({ id: String(r.id || '').slice(0, 40), t: String(r.t).slice(0, 120), x: String(r.x || '').slice(0, 2000) })) : [],
 });
 export function campaigns() {
   try { const o = JSON.parse(localStorage.getItem(CAMP_KEY) || '[]'); return Array.isArray(o) ? o.filter(x => x && typeof x === 'object').map(clean) : []; } catch (e) { return []; }

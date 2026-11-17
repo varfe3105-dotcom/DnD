@@ -43,6 +43,7 @@ import { openLU, applyLU, vLuSpells } from './views/levelup.js';
 import { app, render, updateDock, renderHooks } from './render.js';
 import { castAt, damage, heal, rest, cast, move, use, importText, loadPortrait, loadFigure } from './game.js';
 import { tip, hideTip, showTip } from './tooltip.js';
+import { toggleRail } from './views/frame.js';
 import { BYN, CLASSES } from './catalog.js';
 
 export let pressing=false,pend=false;
@@ -58,11 +59,23 @@ app.addEventListener('click',ev=>{
   const b=ev.target.closest('[data-a]');if(!b)return;
   const a=b.dataset.a,i=+b.dataset.i,k=b.dataset.k,v=id=>($(id)||{}).value||'';
   if(a==='luclose-bg'&&ev.target!==b)return;
-  if(a!=='rm'&&a!=='imp'&&a!=='reset'&&a!=='chardel'&&a!=='npdel'&&a!=='campdel'&&a!=='stdrop'&&a!=='spdel'&&a!=='campundo'&&a!=='tolib')U.CONF=null;
+  if(a!=='rm'&&a!=='imp'&&a!=='reset'&&a!=='chardel'&&a!=='npdel'&&a!=='campdel'&&a!=='stdrop'&&a!=='spdel'&&a!=='campundo'&&a!=='tolib'&&a!=='csdel'&&a!=='hrdel')U.CONF=null;
   if(!['dmclear','dmfightend','dmndel','dmedel','dmcdel','merdel'].includes(a))dm.DU.conf=null;
   if(a!=='cast'&&a!=='castslot')U.CASTPICK=null;
   pend=false;
+  if(U.MMENU&&a!=='mmenu'&&a!=='lang'&&a!=='units')U.MMENU=false;
   switch(a){
+    case 'mmenu':U.MMENU=!U.MMENU;break;
+    case 'railfold':toggleRail();break;
+    case 'cssave':{const c=curCampaign();if(!c)return;const name=v('cs-name').trim();if(!name){toast(tr('toast.needName'));return}const r=camp.saveCampaign({...c,name,desc:v('cs-desc').trim(),chapter:v('cs-chapter'),...(U.CAMPART!=null?{art:U.CAMPART}:{})});U.CAMPART=null;toast(r?tr('camp.saved',{n:r.name}):tr('toast.saveFailed'));if(r)live.refresh();break}
+    case 'csprog':{const c=curCampaign();if(!c)return;camp.saveCampaign({...c,prog:b.dataset.v==='xp'?'xp':'ms'});live.refresh();break}
+    case 'csarch':{const c=curCampaign();if(!c)return;camp.setStatus(c.id,c.status==='archived'?'active':'archived');break}
+    case 'csdelno':U.CONF=null;break;
+    case 'csdel':{const c=curCampaign();if(!c)return;if(U.CONF!=='csdel:'+c.id){U.CONF='csdel:'+c.id;break}if(v('cs-delname').trim()!==c.name){toast(tr('cs.delMismatch'));return}U.CONF=null;if(c.room&&live.L.code===c.room)live.disconnect();if(dm.dmCtx()===c.id)dm.useCamp(null);camp.deleteCampaign(c.id);dm.D.only=false;dm.saveD();leavePlay();U.HUB='gm';toast(tr('camp.deleted'));window.scrollTo(0,0);break}
+    case 'hredit':U.HREDIT=b.dataset.id;U.SCROLLTO='hr-t';break;
+    case 'hrcancel':U.HREDIT=null;break;
+    case 'hrsave':{const tt=v('hr-t').trim(),x=v('hr-x').trim();if(!tt){toast(tr('toast.needName'));return}const list=dm.D.house||(dm.D.house=[]);const ed=U.HREDIT&&list.find(r=>r.id===U.HREDIT);if(ed){ed.t=tt;ed.x=x}else list.push({id:newUid(),t:tt,x});U.HREDIT=null;dm.saveD();toast(tr('house.saved'));break}
+    case 'hrdel':{const id=b.dataset.id;if(U.CONF!=='hrdel:'+id){U.CONF='hrdel:'+id;break}U.CONF=null;dm.D.house=(dm.D.house||[]).filter(r=>r.id!==id);dm.saveD();break}
     case 'dmfx':{const id=b.dataset.id,n=v('dm-fxn-'+id).trim();if(!n){toast(tr('toast.needName'));return}dm.addEffect(id,n,+v('dm-fxr-'+id));{const c=dm.find(id);if(c)dm.flog(tr('fight.fxEv',{n:c.name,f:n}),'fx')}dm.saveD();break}
     case 'dmfxdel':dm.removeEffect(b.dataset.id,b.dataset.f);dm.saveD();break;
     case 'dmla':{const c=dm.find(b.dataset.id);if(c?.la){dm.togglePip(c.la,+b.dataset.j);dm.saveD()}break}
@@ -229,6 +242,7 @@ app.addEventListener('click',ev=>{
     case 'tend':endCombat();break;
     case 'hubgo':leavePlay();U.HUB=b.dataset.s;U.HUBQ='';U.CAMPED=null;U.CAMPROLE=null;window.scrollTo(0,0);break;
     case 'crumbhome':
+    case 'railhome':
     case 'hubhome':leavePlay();U.HUB='home';window.scrollTo(0,0);break;
     case 'ovedit':U.OVEDIT=!U.OVEDIT;break;
     case 'isel':U.SEL=b.dataset.r;U.CONF=null;break;
@@ -494,6 +508,8 @@ function setDraft(el){
 /** Vom Dashboard in den Spielbereich (optional mit Reiter). In dieser Browsersitzung bleibt man dort auch nach dem Neuladen. */
 function enterPlay(tab){U.HUB=null;U.HUBQ='';U.CAMPED=null;try{sessionStorage.setItem('charbogen-view','play');if(U.CAMP)sessionStorage.setItem('charbogen-camp',U.CAMP);else sessionStorage.removeItem('charbogen-camp')}catch(e){/* Datenschutzmodus */}if(tab)S.tab=tab;save();window.scrollTo(0,0)}
 /** Zur Startseite: Spielbereich und geöffnete Kampagne verlassen (der Live-Raum bleibt verbunden). */
+/** Geöffnete Kampagne (Kampagnenebene). */
+const curCampaign=()=>U.CAMP&&camp.campaignById(U.CAMP);
 function leavePlay(){U.CAMP=null;if(dm.dmCtx()&&!(live.L.role==='dm'&&live.L.code))dm.useCamp(null);try{sessionStorage.removeItem('charbogen-view');sessionStorage.removeItem('charbogen-camp')}catch(e){/* Datenschutzmodus */}}
 /** Kampagne öffnen: Rolle der Kampagne bestimmt Spielleitungsmodus oder eigenen Charakter, Raum wird betreten. */
 function openCamp(id,tab='cover'){const c=camp.campaignById(id);if(!c)return false;
@@ -503,11 +519,11 @@ function openCamp(id,tab='cover'){const c=camp.campaignById(id);if(!c)return fal
   else{const own=c.chars.find(x=>roster().some(r=>r.id===x));if(own&&(c.split?!loadInstance(c.id,own):(own!==S.id||S.camp)&&!switchChar(own))){toast(tr('toast.saveFailed'));return false}if(dm.D.only){dm.D.only=false;dm.saveD()}U.CAMP=c.id;if(c.room&&(live.L.code!==c.room||live.L.role!=='player')){live.connect(c.room,'player');toast(tr('camp.joined',{c:c.room}))}}
   camp.touchCampaign(c.id);enterPlay(tab);return true}
 /** Für die Presence der Spielleitung: Name und Beschreibung der geöffneten Kampagne, wenn ihr Raum offen ist. */
-function dmCampMeta(){const c=U.CAMP&&camp.campaignById(U.CAMP);return c&&c.role==='dm'&&c.room&&c.room===live.L.code?{n:c.name,d:c.desc.slice(0,200),c:c.chapter,p:c.plan.slice(0,600),x:c.next}:null}
+function dmCampMeta(){const c=U.CAMP&&camp.campaignById(U.CAMP);return c&&c.role==='dm'&&c.room&&c.room===live.L.code?{n:c.name,d:c.desc.slice(0,200),c:c.chapter,p:c.plan.slice(0,600),x:c.next,g:c.prog}:null}
 /** Spieler: Kapitel, Planung, Termin und Ort der Spielleitung dauerhaft in den eigenen Kampagneneintrag übernehmen. */
 /** Spieler: geteilte Chronik holen, sobald sich der Fingerabdruck der Spielleitung ändert. */
-let chronBusy=false;function syncChron(){const mk=live.dmChronMark(),c=U.CAMP&&camp.campaignById(U.CAMP);if(chronBusy||mk===null||!c||c.role!=='player'||c.room!==live.L.code||mk===c.chronSeen)return;chronBusy=true;cloud.fetchChron().then(list=>{chronBusy=false;if(list===null)return;const cc=camp.campaignById(c.id);if(cc){camp.saveCampaign({...cc,shared:list,chronSeen:mk});later()}})}
-function syncCampFromDm(){const m=live.dmCamp(),c=U.CAMP&&camp.campaignById(U.CAMP);if(!c||c.role!=='player'||c.room!==live.L.code||!live.dmOnline())return false;const up={};if(m){if(m.c!==c.chapter)up.chapter=m.c;if(m.p!==c.plan)up.plan=m.p;if(m.x!==c.next)up.next=m.x}const h=live.dmHere();if(h&&h!==c.place)up.place=h;const at=live.dmAtlas();if(at&&JSON.stringify(at)!==JSON.stringify(c.atlas))up.atlas=at;if(!Object.keys(up).length)return false;camp.saveCampaign({...c,...up});return true}
+let chronBusy=false;function syncChron(){const mk=live.dmChronMark(),c=U.CAMP&&camp.campaignById(U.CAMP);if(chronBusy||mk===null||!c||c.role!=='player'||c.room!==live.L.code||mk===c.chronSeen)return;chronBusy=true;cloud.fetchChron().then(r=>{chronBusy=false;if(r===null)return;const cc=camp.campaignById(c.id);if(cc){camp.saveCampaign({...cc,shared:r.entries,house:r.rules,chronSeen:mk});later()}})}
+function syncCampFromDm(){const m=live.dmCamp(),c=U.CAMP&&camp.campaignById(U.CAMP);if(!c||c.role!=='player'||c.room!==live.L.code||!live.dmOnline())return false;const up={};if(m){if(m.g&&m.g!==c.prog)up.prog=m.g;if(m.c!==c.chapter)up.chapter=m.c;if(m.p!==c.plan)up.plan=m.p;if(m.x!==c.next)up.next=m.x}const h=live.dmHere();if(h&&h!==c.place)up.place=h;const at=live.dmAtlas();if(at&&JSON.stringify(at)!==JSON.stringify(c.atlas))up.atlas=at;if(!Object.keys(up).length)return false;camp.saveCampaign({...c,...up});return true}
 /** Import vom Dashboard: in Einrichten wechseln und die Dateiauswahl öffnen (dort liegen Prüfansicht und Übernahme). */
 function hubImport(){enterPlay('setup');render();const f=$('impf');if(f){f.scrollIntoView({block:'center'});f.click()}}
 
@@ -520,7 +536,7 @@ const locKey=l=>l?(l.hub?'h:'+l.hub:'p:'+l.camp+':'+(l.camp?'':l.id)+':'+l.tab):
 let histKey='',restoring=false;
 function syncHistory(){if(restoring)return;const l=locNow(),k=locKey(l);if(k===histKey)return;try{if(!histKey)window.history.replaceState({rc:l},'');else window.history.pushState({rc:l},'')}catch(e){/* Historie nicht verfügbar */}histKey=k}
 /** Offene Dialoge, die Zurück zuerst schließt. */
-function closeOverlay(){if(U.LU){U.LU=null;return true}if(U.MIGRATE){U.MIGRATE=null;return true}if(dm.DU.peek){dm.DU.peek=null;return true}if(Object.values(dm.DU.open||{}).some(Boolean)){dm.DU.open={};return true}if(U.TARGET){U.TARGET=null;return true}return false}
+function closeOverlay(){if(U.MMENU){U.MMENU=false;return true}if(U.LU){U.LU=null;return true}if(U.MIGRATE){U.MIGRATE=null;return true}if(dm.DU.peek){dm.DU.peek=null;return true}if(Object.values(dm.DU.open||{}).some(Boolean)){dm.DU.open={};return true}if(U.TARGET){U.TARGET=null;return true}return false}
 window.addEventListener('popstate',ev=>{
   const l=ev.state&&ev.state.rc;
   if(closeOverlay()){try{window.history.pushState({rc:locNow()},'')}catch(e){/* egal */}render();return}

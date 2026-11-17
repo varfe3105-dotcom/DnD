@@ -13,18 +13,25 @@ import { vDm, vPeek } from './views/dm.js';
 import { vHub, syncMapLayer } from './views/hub.js';
 import { campaignsOf } from './campaigns.js';
 import { D } from './dm.js';
-import { DM_TABS, DM_TAB_IC, dmOnly, vDmHead, vDmBar, vDmSetup } from './views/dm-mode.js';
+import { DM_TABS, dmOnly, vDmHead, vDmBar, vDmSetup } from './views/dm-mode.js';
 import { L } from './live.js';
 import { hideTip } from './tooltip.js';
 import { glyph } from './icons.js';
 import { syncAc } from './helpers.js';
 import { CLASSES } from './catalog.js';
-import { navTabs, validTabs, fallbackTab, tabLabel, NAV_IC, vCrumbs, vCampHead, charLevel, curCamp, CAMP_PAGES, CHAR_PAGES, CHAR_STYLE, vDmSub, vFight } from './views/nav.js';
+import { navTabs, validTabs, fallbackTab, tabLabel, vCrumbs, vCampHead, charLevel, curCamp, CAMP_PAGES, CHAR_PAGES, CHAR_STYLE, vDmSub, vFight } from './views/nav.js';
 import { t, lang, units } from './i18n/index.js';
 import { corners } from './views/orn.js';
+import { progOf } from './views/camp-set.js';
+import { campaignById } from './campaigns.js';
+// Ohne Kampagne (Bibliothek, Raum ohne Kampagne) wie bisher sichtbar; in Kampagnen nach deren Fortschrittssystem.
+const xpCamp = () => { const c = campaignById(S.camp || U.CAMP); return !c || progOf(c) === 'xp'; };
+import { vRail, vMobTop, vMobMenu, line, railFolded } from './views/frame.js';
 
 /** XP-Stand mit Balken bis zur nächsten Stufe. Wann aufgestiegen wird, entscheidet die Spielleitung. */
 function vXp() {
+  // Nur in Kampagnen mit XP-System; im Meilensteinmodus bleiben die XP gespeichert, werden aber nicht angezeigt.
+  if (!xpCamp()) return '';
   const lv = totalLevel() || S.level || 0, xp = +S.xp || 0;
   if (!lv && !xp) return '';
   const f = n => n.toLocaleString(lang === 'de' ? 'de-DE' : 'en-US');
@@ -43,7 +50,6 @@ export function vHead() {
   <button class="insp${S.insp ? ' on' : ''}" data-a="insp" aria-pressed="${!!S.insp}" aria-label="${t('insp.title')}" title="${t(S.insp ? 'insp.on' : 'insp.off')}">${glyph('star')}</button>${S.level ? `<div class="seal" title="${t('head.level')}"><small>${t('head.seal')}</small><b>${S.level}</b></div>` : ''}
   <div class="hacts">${others.length > 1 && !U.CAMP ? `<select id="char-switch" class="charsw" aria-label="${t('chars.switch')}">${others.map(c => `<option value="${esc(c.id)}"${c.id === S.id ? ' selected' : ''}>${esc(c.name)}</option>`).join('')}</select>` : ''}<div class="hrow"><button class="btn ghost home" data-a="hubhome" title="${t('hub.backTitle')}">${t('hub.back')}</button><button class="btn ghost" data-a="tab" data-t="wiki">${t('nav.rules')}</button><button class="btn gilt" data-a="lu">${S.level ? (S.level >= 20 ? t('head.lvl20') : t('head.levelUp')) : t('head.build1')}</button><div class="langs" role="group" aria-label="${t('head.language')}">${langBtn('en')}${langBtn('de')}</div><div class="langs units" role="group" aria-label="${t('head.units')}">${['m', 'ft'].map(u => `<button data-a="units" data-u="${u}" aria-pressed="${units === u}" title="${t('units.' + u)}">${u}</button>`).join('')}</div></div>${S.camp || U.CAMP || S.tab === 'main' ? `<div class="rests"><button class="btn ghost" data-a="rest" data-r="short">${t('rest.short')}</button><button class="btn ghost" data-a="rest" data-r="long">${t('rest.long')}</button></div>` : ''}</div></header>${!S.camp && !dmOnly() && !U.CAMP ? `<p class="lib-banner">${t(S.tab === 'main' ? 'lib.bannerFight' : 'lib.banner')}</p>` : ''}`;
 }
-const TAB_IC = { main: 'sword', inv: 'bag', wiki: 'book', notes: 'scroll', setup: 'tool', dm: 'dice', ...DM_TAB_IC, ...NAV_IC };
 // Reiter je Ebene (Kampagne oder Charakter) kommen aus views/nav.js. Im Spielleitungsmodus gibt es keinen eigenen Charakter.
 export const tabs = navTabs;
 export const app = $('app');
@@ -63,8 +69,10 @@ export function render() {
   h = vCrumbs() + (dmOnly() ? vDmHead() : charLevel() || !curCamp() ? vHead() : vCampHead());
   // Charakterebene: Navigation seitlich (Desktop), Inhalt daneben; sonst Reiter oben. Am Handy immer die feste Leiste unten.
   const side = charLevel();
-  const tabsHtml = `<div class="tabs${side ? ' side' : ''}"><nav role="tablist" aria-label="${t('head.areas')}"${side ? ' aria-orientation="vertical"' : ''}>${tabs().map(k => `<button role="tab" aria-selected="${tb === k}" data-a="tab" data-t="${k}"${k === 'main' ? ' class="tab-fight"' : ''}>${glyph(TAB_IC[k])}<span>${tabLabel(k)}</span></button>`).join('')}</nav>${dmOnly() ? '' : `<div class="mini${S.hp === 0 ? ' down' : ''}">${L.status === 'on' ? `<i class="live-dot" title="${t('live.on')}"></i>` : ''}${t('head.hpShort')} <b>${S.hp}</b>/${S.hpMax}${S.tmp ? ` +${S.tmp}` : ''}</div>`}</div>`;
-  const mini = (dmOnly() ? vDmBar : vMiniBar)(tabs().map(k => `<button class="${tb === k ? 'on' : ''}" data-a="mbtab" data-t="${k}" title="${tabLabel(k)}" aria-label="${tabLabel(k)}">${glyph(TAB_IC[k])}</button>`).join(''));
+  // Reiter mit Liniensymbolen. Am Handy stehen die ersten fünf unten, der Rest im Menü („Mehr“).
+  const keys = tabs(), MOB = 5;
+  const tabsHtml = `<div class="tabs${side ? ' side' : ''}"><nav role="tablist" aria-label="${t('head.areas')}"${side ? ' aria-orientation="vertical"' : ''}>${keys.map((k, i) => `<button role="tab" aria-selected="${tb === k}" data-a="tab" data-t="${k}" class="${[k === 'main' ? 'tab-fight' : '', i >= MOB ? 'mx' : '', side && k === 'cover' ? 'tab-back' : ''].filter(Boolean).join(' ')}">${line(k)}<span>${tabLabel(k)}</span></button>`).join('')}${keys.length > MOB ? `<button class="tab-more" data-a="mmenu" aria-expanded="${!!U.MMENU}"${keys.slice(MOB).includes(tb) ? ' aria-selected="true"' : ''}>${line('more')}<span>${t('frame.more')}</span></button>` : ''}</nav>${dmOnly() ? '' : `<div class="mini${S.hp === 0 ? ' down' : ''}">${L.status === 'on' ? `<i class="live-dot" title="${t('live.on')}"></i>` : ''}${t('head.hpShort')} <b>${S.hp}</b>/${S.hpMax}${S.tmp ? ` +${S.tmp}` : ''}</div>`}</div>`;
+  const mini = (dmOnly() ? vDmBar : vMiniBar)(keys.map(k => `<button class="${tb === k ? 'on' : ''}" data-a="mbtab" data-t="${k}" title="${tabLabel(k)}" aria-label="${tabLabel(k)}">${line(k)}</button>`).join(''));
   let body = '';
   if (tb === 'main') body += vFight() + vParty();
   if (CAMP_PAGES[tb]) body += CAMP_PAGES[tb]();
@@ -76,8 +84,10 @@ export function render() {
   if (tb === 'setup') body += dmOnly() ? vDmSetup() : vSetup();
   if (DM_TABS[tb]) { D.view = DM_TABS[tb]; body += vDm(true); }
   if (tb === 'dm') body += vDm();
-  h += side ? mini + vDock() + vBackupNag() + `<div class="charlayout">${tabsHtml}<div class="charmain">${body}</div></div>` : tabsHtml + mini + vDock() + vBackupNag() + body;
+  h += side ? mini + vBackupNag() + `<div class="charlayout">${tabsHtml}<div class="charmain">${body}</div></div>` : tabsHtml + mini + vBackupNag() + body;
   h += `<footer><p>${t('footer.rules')}</p><details><summary>${t('footer.about')}</summary><p>${t('footer.srd')}</p><p>${t('footer.icons')}</p><p>${t('footer.fonts')}</p><p class="lbl">${t('footer.version', { v: typeof __BUILD__ !== 'undefined' ? __BUILD__ : '–' })}</p></details></footer>`;
+  // Rahmen: globale Leiste links (mit der Live-Leiste unten), am Handy Kopfleiste und Menü
+  h = `<div class="shell${railFolded() ? ' folded' : ''}">${vRail(vDock())}<div class="shell-main">${vMobTop()}${h}</div></div>` + vMobMenu(keys);
   if (U.LU && CLASSES[S.klass]) h += vLU();
   h += vHandout() + vTarget() + vPeek();
   }

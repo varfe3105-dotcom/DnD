@@ -21,7 +21,7 @@ export function legacySummary() { const o = normD(getJ(KEY)); return { notes: o.
 export function adoptLegacy(id) { const { on, only, view, custom, ...camp } = normD(getJ(KEY)); localStorage.setItem(campKey(id), JSON.stringify(camp)); }
 /** Rückweg: Spielleitungsdaten einer Kampagne entfernen. */
 export function dropCamp(id) { if (ctx === id) useCamp(null); localStorage.removeItem(campKey(id)); }
-const blank = () => ({ on: false, view: 'combat', combat: { round: 1, active: null, list: [] }, notes: [], sel: null, party: [{ count: 4, level: 3 }], encounters: [], custom: [], encSel: null, merchants: [], sales: [] });
+const blank = () => ({ on: false, view: 'combat', combat: { round: 1, active: null, list: [] }, notes: [], sel: null, party: [{ count: 4, level: 3 }], encounters: [], custom: [], encSel: null, merchants: [], sales: [], house: [] });
 function load() {
   const o = normD(getJ(KEY)), lc = libCustom();
   if (lc) o.custom = lc;
@@ -30,7 +30,7 @@ function load() {
 function normD(o) {
   const b = blank();
   if (!o || typeof o !== 'object') return b;
-  return { ...b, ...o, combat: { ...b.combat, ...(o.combat || {}), list: Array.isArray(o.combat?.list) ? o.combat.list : [] }, notes: Array.isArray(o.notes) ? o.notes : [], party: Array.isArray(o.party) && o.party.length ? o.party : b.party, encounters: Array.isArray(o.encounters) ? o.encounters : [], custom: Array.isArray(o.custom) ? o.custom : [], merchants: Array.isArray(o.merchants) ? o.merchants : [], sales: Array.isArray(o.sales) ? o.sales : [] };
+  return { ...b, ...o, combat: { ...b.combat, ...(o.combat || {}), list: Array.isArray(o.combat?.list) ? o.combat.list : [] }, notes: Array.isArray(o.notes) ? o.notes : [], party: Array.isArray(o.party) && o.party.length ? o.party : b.party, encounters: Array.isArray(o.encounters) ? o.encounters : [], custom: Array.isArray(o.custom) ? o.custom : [], merchants: Array.isArray(o.merchants) ? o.merchants : [], sales: Array.isArray(o.sales) ? o.sales : [], house: Array.isArray(o.house) ? o.house : [] };
 }
 export let D = load();
 export const DU = { mq: '', nq: '', eq: '', conf: null, open: {}, exp: '', imp: '', editMon: null, flog: [] };
@@ -281,7 +281,9 @@ export const curNote = () => D.notes.find(n => n.id === D.sel) || null;
 /** Gemeinsame Chronik: nur Sitzungs- und Handlungsnotizen, die ausdrücklich geteilt sind, und nur Titel und Gruppentext. */
 export const chronOut = () => D.notes.filter(n => n.pub && ['session', 'plot'].includes(n.kind)).slice(0, 100).map(n => ({ id: String(n.id).slice(0, 40), t: String(n.title || '').slice(0, 120), x: String(n.pubText || '').slice(0, 4000), k: n.kind }));
 /** Kurzer Fingerabdruck der geteilten Chronik für die Presence (Spieler holen sie, wenn er sich ändert). */
-export function chronMark() { const s = JSON.stringify(chronOut()); let h = 0; for (let i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) | 0; return s.length > 2 ? (h >>> 0).toString(36) : ''; }
+/** Hausregeln der Kampagne (für alle Spieler sichtbar, gehen mit der gemeinsamen Chronik hinaus). */
+export const houseOut = () => (D.house || []).slice(0, 60).map(r => ({ id: String(r.id).slice(0, 40), t: String(r.t || '').slice(0, 120), x: String(r.x || '').slice(0, 2000) }));
+export function chronMark() { const s = JSON.stringify([chronOut(), houseOut()]); let h = 0; for (let i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) | 0; return s.length > 7 ? (h >>> 0).toString(36) : ''; }
 export const atlasOut = () => D.notes.filter(n => n.pub && ['place', 'npc', 'plot'].includes(n.kind)).slice(0, 16).map(n => ({ t: String(n.title || '').slice(0, 80), d: String(n.pubText || '').slice(0, 300), k: n.kind, h: D.here === n.id }));
 /* ---- Händler (je Kampagne) ----
    Ein Händler: Name, offen (für Spieler sichtbar), Waren mit Katalogschlüssel oder eigenem Namen, Preis in Kupfer, Bestand. */

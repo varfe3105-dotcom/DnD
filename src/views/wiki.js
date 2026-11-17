@@ -1,4 +1,6 @@
 import { lootLocked } from '../live.js';
+import { campaignById } from '../campaigns.js';
+import { D } from '../dm.js';
 import { esc, mod, sg } from '../util.js';
 import { statText } from './dm-rules.js';
 import { xpOf } from '../dm.js';
@@ -17,7 +19,7 @@ export function vBuy(e) {
   return `<div class="buy"><span class="lbl">${t('shop.price')}</span><input type="number" class="n buy-p" aria-label="${t('shop.price')}" min="0" step="0.01" value="${v}" placeholder="${t('shop.ask')}"> <span class="lbl">${t('price.gp')}</span><button class="btn sm solid" data-a="buy" data-key="${esc(e.key)}">${t('shop.buy')}</button><span class="note">${t('shop.purse', { n: cpToGp(totalCp(S.gold)).toLocaleString() })}</span></div>`;
 }
 
-export const WFS = ['all', 'mine', 'spell', 'class', 'race', 'feat', 'potion', 'magic', 'item', 'monster', 'cond', 'rule'];
+export const WFS = ['all', 'mine', 'house', 'spell', 'class', 'race', 'feat', 'potion', 'magic', 'item', 'monster', 'cond', 'rule'];
 export function myEntries() {
   return [...S.spells.map(spellView).map(s => Object.assign({ k: 'spell', mine: 1, c: s.lvl ? t('spell.level', { n: s.lvl }) : t('spell.cantrips') }, s)),
     ...refs().map(r => { const it = itemView(get(r)); return { k: 'item', mine: 1, n: it.n, ic: it.ic, artKey: it.ref, tone: itTone(it), p: it.p, c: r.startsWith('eq') ? t('wiki.equipped') : t('eq.bag') }; }),
@@ -25,8 +27,16 @@ export function myEntries() {
     ...[...raceTraits(), ...S.feats].map(f => ({ k: 'feat', mine: 1, n: f.n, ic: 'star', p: f.race ? f.p : featText(f), c: t('wiki.featOf', { s: featSrc(f) }) })),
     ...COND.filter(c => S.cond[c.n]).map(c => BYN['cond:' + c.n])].map((e, i) => Object.assign({}, e, { artKey: e.artKey || e.key || (e.k === 'spell' && e.src !== 'own' ? 'spell:' + e.n : ''), key: 'my:' + i + ':' + e.n }));
 }
+/** Hausregeln der geöffneten Kampagne: Spielleitung aus ihrem Bereich, Spieler aus der übernommenen Kopie. Klar als Hausregel gekennzeichnet. */
+export function houseEntries() {
+  const c = U.CAMP && campaignById(U.CAMP);
+  if (!c) return [];
+  const list = c.role === 'dm' ? D.house || [] : c.house || [];
+  return list.map(r => ({ k: 'house', n: r.t, p: r.x, ic: 'scroll', key: 'house:' + r.id, c: t('house.tag'), house: true }));
+}
 export function wList() {
-  let L2 = U.WF === 'mine' ? myEntries() : CAT.filter(e => U.WF === 'all' || e.k === U.WF);
+  const hs = houseEntries();
+  let L2 = U.WF === 'mine' ? myEntries() : U.WF === 'house' ? hs : [...(U.WF === 'all' ? hs : []), ...CAT.filter(e => U.WF === 'all' || e.k === U.WF)];
   if (U.WC) L2 = L2.filter(e => e.k !== 'spell' || (e.cls || '').includes(U.WC));
   const q = U.WQ.trim().toLowerCase();
   if (q) {
@@ -63,6 +73,8 @@ export function wDetail(e, inline) {
     body = `<dl class="sm"><div><dt>${t('stat.ac')}</dt><dd>${m.ac}</dd></div><div><dt>${t('mon.hp')}</dt><dd>${m.hp}${m.hd ? ' (' + esc(m.hd) + ')' : ''}</dd></div><div><dt>${t('stat.speed')}</dt><dd>${esc(m.speed)}</dd></div><div><dt>${t('mon.cr')}</dt><dd>${esc(e.c.split(' · ').pop())} · ${xpOf(m.cr)} XP</dd></div></dl><p class="cls">${esc([m.size, m.type].filter(Boolean).join(' '))}</p><dl class="sm mon-ab">${ab}</dl><div class="ptext stat">${statText(m.text)}</div><p class="src">${t('dm.srcMonster')}</p>`;
   } else if (e.k === 'feat') {
     body = `${e.req ? `<p class="cls">${t('wiki.prereq')}: ${esc(reqText(e.req))}</p>` : ''}<p class="ptext">${esc(dice(e.p))}</p>${srcFoot(e.source)}`;
+  } else if (e.k === 'house') {
+    body = `<p class="cls">${t('house.wiki')}</p><p class="ptext">${esc(e.p)}</p>`;
   } else body = `${e.rarity ? `<p class="cls">${t('wiki.rarity')}: ${esc(e.rarity)}${e.att ? ' · ' + t('item.needsAttune') : ''}${e.price ? ' · ' + esc(e.price) : ''}</p>` : ''}<p class="ptext">${esc(e.p)}</p>${vBuy(e)}${e.source ? srcFoot(e.source) : ''}`;
   const de = (e.k === 'class' || e.k === 'race' || e.k === 'cond' || e.k === 'feat') && deName(e.n, e.de);
   // Werte (Tabelle, Hinweiszeilen, Quelle) am Anfang und Ende vom Fließtext trennen: auf breiten Bildschirmen stehen sie in einer Seitenleiste.
@@ -79,5 +91,5 @@ export function wikiBody() {
   return `<div class="wiki"><div class="wl" role="list">${shown.map(e => `<button class="wli" role="listitem" data-a="wsel" data-key="${esc(e.key)}" aria-current="${e === cur}">${tok(e.ic, e.tone || (e.magic ? rarityTone(e) : ['item', 'potion'].includes(e.k) ? 'leather' : undefined), e.artKey || e.key)}<span><b>${esc(e.n)}</b><small>${esc(wSub(e))}</small></span></button>${sel && e === sel ? wDetail(e, true) : ''}`).join('')}${L2.length > max ? `<p class="more" style="padding:0 10px">${t('wiki.more', { n: L2.length - max })}</p>` : ''}</div>${wDetail(cur, false)}</div>`;
 }
 export function vWiki() {
-  return `<h2>${t('tab.wiki')}</h2><div class="wtools"><input type="search" id="wq" placeholder="${t('wiki.search')}" value="${esc(U.WQ)}" aria-label="${t('wiki.searchLabel')}"><select id="wc" aria-label="${t('wiki.classFilter')}">${classOpts(U.WC, t('wiki.allClasses'))}</select></div><div class="chips">${WFS.map(k => `<button class="chip${U.WF === k ? ' on' : ''}" data-a="wf" data-f="${k}" aria-pressed="${U.WF === k}">${t('wf.' + k)}</button>`).join('')}</div><div id="wres">${wikiBody()}</div>`;
+  return `<h2>${t('tab.wiki')}</h2><div class="wtools"><input type="search" id="wq" placeholder="${t('wiki.search')}" value="${esc(U.WQ)}" aria-label="${t('wiki.searchLabel')}"><select id="wc" aria-label="${t('wiki.classFilter')}">${classOpts(U.WC, t('wiki.allClasses'))}</select></div><div class="chips">${WFS.filter(k => k !== 'house' || houseEntries().length).map(k => `<button class="chip${U.WF === k ? ' on' : ''}" data-a="wf" data-f="${k}" aria-pressed="${U.WF === k}">${t('wf.' + k)}</button>`).join('')}</div><div id="wres">${wikiBody()}</div>`;
 }

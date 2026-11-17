@@ -16,6 +16,7 @@ import { partyRow, partyPeers, vStashPlayer } from './live-ui.js';
 import { vMain, vHP } from './sheet.js';
 import { vProfile, vStats, vSpellBook } from './char.js';
 import { vCover, vPartyP } from './campaign.js';
+import { vCampSet } from './camp-set.js';
 import { timeline, logEntries } from './chron.js';
 import { hpMaxNow } from '../effects.js';
 import { t, dist } from '../i18n/index.js';
@@ -34,10 +35,10 @@ import { vAtk, vSpells, vCond, vRes, vQuick, concBanner } from './sheet.js';
 
 
 /** Kampagnenebene: Spieler und Spielleitung sehen dieselben Bereiche, die Spielleitung mit ihren Werkzeugen. */
-export const CAMP_P = ['cover', 'party', 'main', 'explore', 'trade', 'chron'];
-export const CAMP_DM = ['cover', 'dmlive', 'dmcombat', 'explore', 'dmloot', 'dmnotes'];
+export const CAMP_P = ['cover', 'party', 'prof', 'main', 'explore', 'trade', 'chron', 'wiki'];
+export const CAMP_DM = ['cover', 'dmlive', 'dmcombat', 'explore', 'dmloot', 'dmnotes', 'wiki', 'dmset'];
 /** Erreichbar, aber nicht in der Leiste: Begegnungen und Spickzettel über den Kampf, Wiki und Einrichten über den Kopf. */
-const DM_MORE = ['dmenc', 'dmcheat', 'wiki', 'setup'];
+const DM_MORE = ['dmenc', 'dmcheat', 'setup'];
 export const CHAR_T = ['prof', 'stats', 'inv', 'spells', 'notes', 'setup'];
 /** Seiten, die Bausteine des Bogens zeigen und deshalb im Charakterstil erscheinen. */
 export const CHAR_STYLE = ['main', 'prof', 'stats', 'spells'];
@@ -49,7 +50,8 @@ export function navTabs() {
   if (dmOnly()) return CAMP_DM;
   // Bibliothek (ohne Kampagne): Grundbogen ohne Spielbetrieb, also ohne Kampf
   if (!curCamp()) return CHAR_T;
-  return CHAR_T.includes(S.tab) ? CHAR_T : CAMP_P;
+  // Charakter in der Kampagne: erster Eintrag führt zurück in die Kampagne
+  return CHAR_T.includes(S.tab) ? ['cover', ...CHAR_T] : CAMP_P;
 }
 export function validTabs() {
   if (dmOnly()) return [...CAMP_DM, ...DM_MORE];
@@ -58,7 +60,11 @@ export function validTabs() {
 export const fallbackTab = () => (curCamp() ? 'cover' : dmOnly() ? 'dmnotes' : 'prof');
 
 const LBL = { cover: 'nav.cover', party: 'nav.party', explore: 'nav.explore', trade: 'nav.trade', chron: 'nav.chron', prof: 'nav.charHome', setup: 'nav.edit', stats: 'nav.stats', spells: 'nav.spells', dmlive: 'nav.party', dmcombat: 'nav.fight', dmloot: 'nav.trade', dmnotes: 'nav.chron' };
-export const tabLabel = k => t(k === 'main' ? 'nav.fight' : LBL[k] || 'tab.' + k);
+export const tabLabel = k => {
+  if (k === 'prof' && curCamp() && !charLevel()) return t('nav.myChar');
+  if (k === 'cover' && charLevel()) return t('nav.backCamp');
+  return t(k === 'main' ? 'nav.fight' : k === 'dmset' ? 'nav.campSet' : LBL[k] || 'tab.' + k);
+};
 export const NAV_IC = { cover: 'shield', party: 'mask', explore: 'eye', trade: 'coin', chron: 'book', prof: 'star', stats: 'gem', spells: 'wand', dmlive: 'mask', dmcombat: 'sword', dmloot: 'coin', dmnotes: 'book' };
 
 /** Brotkrumen: Ebene, Weg und Rückweg. Eigene Aktion „crumb“, damit Reiterknöpfe eindeutig bleiben. */
@@ -84,7 +90,7 @@ export function vCampHead() {
   const c = curCamp();
   const me = `<button class="camp-me" data-a="crumb" data-t="prof" title="${t('nav.openChar')}"><span class="por sm">${S.img ? `<img src="${S.img}" alt="">` : `<span>${esc((S.name || '?').trim()[0] || '?')}</span>`}</span><span><b>${esc(S.name)}</b><small>${t('head.hpShort')} ${S.hp}/${hpMaxNow()}</small></span></button>`;
   return `<header class="hd camphd"><i class="hd-art hub-camp-art a${c?.art ?? 1}" aria-hidden="true"></i>${corners({ left: true })}<div class="who"><h1>${esc(c ? c.name : '')}</h1>${ribbon(c?.chapter)}<p>${roomLine(c)}</p>${c?.desc ? `<p class="sub2">${esc(c.desc)}</p>` : ''}</div>
-  <div class="hacts"><div class="hrow">${me}<button class="btn ghost home" data-a="hubhome" title="${t('hub.backTitle')}">${t('hub.back')}</button><button class="btn ghost" data-a="tab" data-t="wiki">${t('nav.rules')}</button></div><div class="rests"><button class="btn ghost" data-a="rest" data-r="short">${t('rest.short')}</button><button class="btn ghost" data-a="rest" data-r="long">${t('rest.long')}</button></div></div></header>`;
+  <div class="hacts"><div class="hrow">${me}</div><div class="rests"><button class="btn ghost" data-a="rest" data-r="short">${t('rest.short')}</button><button class="btn ghost" data-a="rest" data-r="long">${t('rest.long')}</button></div></div></header>`;
 }
 
 /* ---- Kampagnenebene ---- */
@@ -223,6 +229,6 @@ function vFightLive(tr, mine, sound, feedHtml) {
 }
 
 const bar = (hp, max) => { const p = max ? Math.max(0, Math.min(100, hp / max * 100)) : 0; return `<span class="hpbar${p <= 25 ? ' low' : p <= 50 ? ' mid' : ''}" aria-hidden="true"><u style="width:${p}%"></u></span>`; };
-export const CAMP_PAGES = { cover: vCover, party: vPartyP, explore: vExplore, trade: vTrade, chron: vChron };
+export const CAMP_PAGES = { cover: vCover, party: vPartyP, explore: vExplore, trade: vTrade, chron: vChron, dmset: vCampSet };
 export const CHAR_PAGES = { prof: vProfile, stats: vStats, spells: vSpellBook };
 export { vHP };

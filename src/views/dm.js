@@ -7,6 +7,8 @@ import { SK } from '../constants.js';
 import { vCheat, statText } from './dm-rules.js';
 import { esc, mod, sg } from '../util.js';
 import { U } from '../state.js';
+import { campaignById } from '../campaigns.js';
+import { progOf } from './camp-set.js';
 import { catSelect } from './inventory.js';
 import { timeline } from './chron.js';
 import { V2 } from '../cloud.js';
@@ -152,7 +154,7 @@ function vCombat() {
     return `<div class="fight-state"><div class="fs-top"><span class="fs-badge">${t('fight.prep')}</span><span>${t('fight.prepDm')}</span></div></div>
     <div class="prep3"><section class="prep-col"><h3 class="ov-h">${t('dm.encounters')}</h3>${encs || `<p class="note">${t('dm.encNone')}</p>`}<button class="linkbtn" data-a="crumb" data-t="dmenc">${t('fight.toEnc')}</button></section>
     <section class="prep-col"><h3 class="ov-h">${t('fight.lineup')}</h3>${vLiveAdd()}${list.length ? `<p class="note">${t('fight.initHint')}</p><div class="dm-list">${list.map(x => row(x, false)).join('')}</div>` : `<div class="empty">${t('dm.empty')}</div>`}<h3 class="ov-h" style="margin-top:14px">${t('dm.addTitle')}</h3>${add}</section>
-    <aside class="prep-col prep-go"><button class="btn gold big" data-a="dmstep" data-d="1"${list.length ? '' : ' disabled'}>${t('fight.start')}</button><p class="note">${t('fight.startHint', { a: pcs.length, b: foes.length })}</p>${turns}${clear}<button class="btn" data-a="dmxpopen" aria-expanded="${!!DU.xpOpen}">${t('xp.share')}</button>${vXpShare()}</aside></div>${(() => { const id = Object.keys(DU.open || {}).find(k => DU.open[k]), x = id && list.find(y => y.id === id); return x ? vEin(x, true) : ''; })()}`;
+    <aside class="prep-col prep-go"><button class="btn gold big" data-a="dmstep" data-d="1"${list.length ? '' : ' disabled'}>${t('fight.start')}</button><p class="note">${t('fight.startHint', { a: pcs.length, b: foes.length })}</p>${turns}${clear}${xpOn() ? `<button class="btn" data-a="dmxpopen" aria-expanded="${!!DU.xpOpen}">${t('xp.share')}</button>${vXpShare()}` : ''}</aside></div>${(() => { const id = Object.keys(DU.open || {}).find(k => DU.open[k]), x = id && list.find(y => y.id === id); return x ? vEin(x, true) : ''; })()}`;
   }
   const side = U.FSIDE === 'foes' ? 'foes' : 'pcs';
   const selId = Object.keys(DU.open || {}).find(k => DU.open[k]), sel = selId && list.find(x => x.id === selId), tgt = sel || nn.cur;
@@ -164,7 +166,7 @@ function vCombat() {
   <div class="fight-cols">${col('pcs', t('fight.side.pcs'), pcs)}${col('foes', t('fight.side.foes'), foes)}</div></div>
   <div class="f3-turn">${turn}</div>
   <div class="f3-side">${vEin(tgt, !!sel)}<section class="f3-feed hub-panel"><div class="hub-h sm"><h3>${t('fight.feed')}</h3></div>${feedL}</section></div></div>
-  <div class="card fight-ctl"><div class="dm-bar">${turns}<button class="btn" data-a="dmxpopen" aria-expanded="${!!DU.xpOpen}">${t('xp.share')}</button><button class="btn ${DU.conf === 'end' ? 'warn' : 'bad'}" data-a="dmfightend">${DU.conf === 'end' ? t('fight.endConfirm') : t('fight.end')}</button>${clear}</div>${vXpShare()}<details class="fight-add"><summary>${t('dm.addTitle')}</summary>${vLiveAdd()}${add}</details><p class="note">${t('dm.hint')}</p></div>`;
+  <div class="card fight-ctl"><div class="dm-bar">${turns}${xpOn() ? `<button class="btn" data-a="dmxpopen" aria-expanded="${!!DU.xpOpen}">${t('xp.share')}</button>` : ''}<button class="btn ${DU.conf === 'end' ? 'warn' : 'bad'}" data-a="dmfightend">${DU.conf === 'end' ? t('fight.endConfirm') : t('fight.end')}</button>${clear}</div>${xpOn() ? vXpShare() : ''}<details class="fight-add"><summary>${t('dm.addTitle')}</summary>${vLiveAdd()}${add}</details><p class="note">${t('dm.hint')}</p></div>`;
 }
 function noteBody(n) {
   const links = linksOf(n), back = backlinks(n);
@@ -217,6 +219,8 @@ function vNotesInner() {
   <div class="chips dm-nk">${['', ...KINDS].map(k => `<button class="chip${(DU.nk || '') === k ? ' on' : ''}" data-a="dmnk" data-k="${k}" aria-pressed="${(DU.nk || '') === k}">${k ? t('dm.kind.' + k) : t('dm.kindAll')}</button>`).join('')}</div>
   <div class="wiki"><div class="wl" id="dm-nlist">${vNoteList()}</div><div class="wd pane notebook">${n ? noteBody(n) : `<p class="empty">${t('dm.noteNone')}</p>`}</div></div>`;
 }
+/** XP-System der geöffneten Kampagne (ohne Kampagne wie bisher an). */
+const xpOn = () => { const c = U.CAMP && campaignById(U.CAMP); return !c || progOf(c) === 'xp'; };
 /** XP verteilen: besiegte Monster zusammenzählen, durch die Spieler teilen, an alle schicken. */
 function vXpShare() {
   if (!DU.xpOpen) return '';
