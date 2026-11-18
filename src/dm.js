@@ -81,6 +81,10 @@ export function searchMonsters(q) {
 }
 const base = () => ({ id: uid(), init: 0, cond: {}, note: '' });
 /** Legendary Actions und Zauberplätze eines Monsters aus seinem Text. */
+/** Fähigkeiten mit Aufladen, z. B. „Fire Breath (Recharge 5-6)“ → [{ n, r: '5–6' }]. Gewürfelt wird am Tisch. */
+export function recharges(m) {
+  return [...String(m?.text || '').matchAll(/(?:^|\n)([^\n.(]+?) \(Recharge (\d)(?:[-–](\d))?\)/g)].map(x => ({ n: x[1].trim(), r: x[3] ? `${x[2]}–${x[3]}` : x[2] }));
+}
 function monsterExtras(m) {
   const out = {};
   if (/(^|\n)Legendary Actions(\n|$)/.test(m.text || '')) out.la = { max: 3, used: 0 };

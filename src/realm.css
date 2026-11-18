@@ -473,3 +473,4 @@ html:not([data-hub]) .wrap{z-index:auto}
 .tp-hit .hit-on{border-top:0;margin:4px 0 0;padding:0}
 .ein-tgt{margin:0 0 10px}
 .ein-tgt .chips{display:flex;flex-wrap:wrap;gap:4px;margin-top:4px}
+.rech{margin:8px 0 4px}.rech .chips{display:flex;flex-wrap:wrap;gap:4px;margin-top:4px}

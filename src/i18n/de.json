@@ -92,7 +92,7 @@
  "res.sense": "Himmlische, Unholde und Untote spüren",
  "res.layOn": "Heilpool in TP",
  "res.channelP": "Effekt deines Eides",
- "res.luck": "Fehlschlag wird Treffer",
+ "res.luck": "Glückspunkte (Lucky): Bei einem eigenen W20-Test 1 Punkt für Vorteil, oder bei einem Angriffswurf gegen dich 1 Punkt für Nachteil. Zurück nach langer Rast.",
  "res.points": "Font of Magic",
  "res.arcanum": "Je ein hoher Zauber ohne Platz",
  "res.master": "Alle Paktplätze zurück",
@@ -1955,5 +1955,15 @@
  "fight.target": "Ziel",
  "fight.hitNeed": "Erst den Schaden eintragen.",
  "fight.hitEv": "{a} trifft {n}: {d} Schaden",
- "fight.hitEvW": "{a} trifft {n} mit {w}: {d} Schaden"
+ "fight.hitEvW": "{a} trifft {n} mit {w}: {d} Schaden",
+ "atk.sneak": "Hinterhältiger Angriff (Sneak Attack)",
+ "atk.sneakWhen": "Mit Finesse- oder Fernkampfwaffe, wenn du Vorteil hast oder ein Verbündeter neben dem Ziel steht und du keinen Nachteil hast",
+ "atk.sneakOnce": "einmal pro Zug",
+ "fight.recharge": "Aufladen",
+ "fight.rechReady": "bereit",
+ "fight.rechUsed": "verbraucht",
+ "fight.rechHint": "Aufladen {r}: Zu Beginn des eigenen Zugs W6 würfeln",
+ "fight.rechRoll": "Zu Beginn des Zugs am Tisch würfeln: {r}",
+ "fight.rechUsedEv": "{n}: {a} verbraucht",
+ "fight.rechReadyEv": "{n}: {a} wieder bereit"
 }

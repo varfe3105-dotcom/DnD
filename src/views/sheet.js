@@ -121,7 +121,10 @@ export function vAtk() {
   }).join('');
   const u = unarmed();
   const fist = `<div class="row wrow atk-un"><div class="ic">${tok('swirl')}</div><div class="nm">${t('atk.unarmed')}${u.tags.length ? `<small>${esc(u.tags.join(' · '))}</small>` : ''}${fxTag ? `<span class="atkt">${fxTag}</span>` : ''}</div><div class="atk"><b>${u.hit}</b>${d4Html()}<small>${t('atk.hit')}</small></div><div class="atk"><b>${u.dmg}</b><small>${esc(u.type)}</small></div></div>`;
-  return `<h2>${t('atk.title')}</h2><div class="card">${rows}${fist}<p class="note">${rows ? t('atk.note') : t('atk.none')}</p></div>`;
+  // Schurke: Sneak Attack (Würfel nach Schurkenstufe, einmal pro Zug) als eigene Zeile, damit man es im Zug nicht vergisst
+  const rogue = classLevels().find(c => c.k === 'Rogue')?.lvl || 0;
+  const sneak = rogue ? `<div class="row wrow atk-sneak"><div class="ic">${tok('sword')}</div><div class="nm">${t('atk.sneak')}<small>${t('atk.sneakWhen')}</small></div><div class="atk"><b>${dice(Math.ceil(rogue / 2) + 'W6')}</b><small>${t('atk.sneakOnce')}</small></div></div>` : '';
+  return `<h2>${t('atk.title')}</h2><div class="card">${rows}${fist}${sneak}<p class="note">${rows ? t('atk.note') : t('atk.none')}</p></div>`;
 }
 export function vQuick() {
   const r = refs().filter(x => get(x).cons);

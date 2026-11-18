@@ -63,6 +63,19 @@ const RACE_RES = {
   'Hill Giant': [["Hill's Tumble", 'res.r.hill', 'hammer', 'long', 'pb', 1]], 'Stone Giant': [["Stone's Endurance", 'res.r.stoneEnd', 'shield', 'long', 'pb', 1]], 'Storm Giant': [["Storm's Thunder", 'res.r.storm', 'bolt', 'long', 'pb', 1]],
 };
 /** Ressourcen, die zum Volk gehören (für Rasten und Stufenaufstieg); bereits verbrauchte Anwendungen bleiben erhalten. */
+/** Ressourcen aus Talenten 2024 (bisher Lucky: Glückspunkte = Übungsbonus, zurück nach langer Rast). Liefert true bei Änderung. */
+const FEAT_RES = { Lucky: { n: 'Luck Points', key: 'res.luck', ic: 'star', rest: 'long' } };
+export function syncFeatRes() {
+  let ch = false;
+  const pb = S.prof || 2;
+  for (const [feat, r] of Object.entries(FEAT_RES)) {
+    const has = S.feats.some(f => f.n === feat), cur = S.res.find(x => x.n === r.n && x.feat);
+    if (has && !cur) { S.res.push({ n: r.n, ic: r.ic, max: pb, used: 0, rest: r.rest, p: t(r.key), feat: true }); ch = true; }
+    else if (has && cur && cur.max !== pb) { cur.max = pb; cur.used = Math.min(cur.used, pb); ch = true; }
+    else if (!has && cur) { S.res = S.res.filter(x => x !== cur); ch = true; }
+  }
+  return ch;
+}
 export function syncRaceRes() {
   const lvl = S.level || 0, pb = S.prof || 2;
   const want = [...(RACE_RES[S.race] || []), ...(RACE_RES[S.subrace] || [])].filter(x => lvl >= x[5] || lvl === 0 && x[5] === 1);

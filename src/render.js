@@ -2,7 +2,7 @@
 import { vNotesTab } from './views/notes.js';
 import { vHandout, vBackupNag, vDock, vTarget, vParty } from './views/live-ui.js';
 import { $, esc } from './util.js';
-import { S, U, roster } from './state.js';
+import { S, U, roster, save } from './state.js';
 import { classLevels, XP_LEVELS, totalLevel } from './tables.js';
 import { vMiniBar } from './views/sheet.js';
 import { vInv } from './views/inventory.js';
@@ -17,7 +17,7 @@ import { DM_TABS, dmOnly, vDmHead, vDmBar, vDmSetup } from './views/dm-mode.js';
 import { L } from './live.js';
 import { hideTip } from './tooltip.js';
 import { glyph } from './icons.js';
-import { syncAc } from './helpers.js';
+import { syncAc, syncFeatRes } from './helpers.js';
 import { CLASSES } from './catalog.js';
 import { navTabs, validTabs, fallbackTab, tabLabel, tabOn, charSub, vCrumbs, vCampHead, charLevel, curCamp, CAMP_PAGES, CHAR_PAGES, CHAR_STYLE, vDmSub, vFight } from './views/nav.js';
 import { t, lang, units } from './i18n/index.js';
@@ -58,6 +58,7 @@ export const renderHooks = { after: null };
 export function render() {
   hideTip();
   syncAc();
+  if (syncFeatRes()) save();
   // Alter Reiter „Spielleitung“ (vor dem Spielleitungsmodus) → passender Reiter im Modus
   if (S.tab === 'dm' && dmOnly()) S.tab = 'dm' + (D.view || 'notes');
   if (!validTabs().includes(S.tab)) S.tab = fallbackTab();

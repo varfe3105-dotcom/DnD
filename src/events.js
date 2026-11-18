@@ -143,6 +143,7 @@ app.addEventListener('click',ev=>{
       if(c.live&&live.L.role==='dm'){live.sendMsg({type:'dmg',to:c.live,value:amt,...(c.pet?{pet:c.pet}:{})});toast(tr('live.proposed',{n:c.kind==='pet'?c.owner:c.name}))}
       else dm.changeHp(c.id,-amt);
       dm.flog(tr(w?'fight.hitEvW':'fight.hitEv',{a:from,n:c.name,w,d:amt})+(c.kind==='mon'&&!c.live?` · ${c.hp}/${c.hpMax}`:''),'bad');dm.saveD();break}
+    case 'dmrech':{const c=dm.find(b.dataset.id);if(!c)return;const n=b.dataset.n;c.rechUsed={...(c.rechUsed||{}),[n]:!(c.rechUsed||{})[n]};dm.flog(tr(c.rechUsed[n]?'fight.rechUsedEv':'fight.rechReadyEv',{n:c.name,a:n}),'fx');dm.saveD();break}
     case 'dmtmp':{const amt=Math.floor(+v(b.dataset.src))||0,c=dm.find(b.dataset.id);if(c&&amt>0){c.tmp=amt;dm.flog(tr('fight.tmpEv',{n:c.name,a:amt}),'good');dm.saveD()}break}
     case 'dmpub':{const c=dm.find(b.dataset.id),f=b.dataset.f;if(c){if(f==='cr')c.hideCr=!c.hideCr;else if(f==='ac')c.showAc=!c.showAc;else if(f==='gone'){c.gone=!c.gone;if(c.gone)dm.flog(tr('fight.goneEv',{n:c.name}),'bad')}dm.saveD();live.refresh()}break}
     case 'dmconcend':{const c=dm.find(b.dataset.id);if(c){c.conc='';dm.saveD()}break}

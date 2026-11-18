@@ -40,15 +40,17 @@ const t2 = (l, key, C, to) => tl(l, key, { subs: C.subs.join(', '), n: to });
 
 const OPT_SCHEDULE = {
   fightingStyles: { Fighter: { 1: 1 }, Paladin: { 2: 1 }, Ranger: { 2: 1 } },
-  metamagic: { Sorcerer: { 3: 2, 10: 1, 17: 1 } },
-  invocations: { Warlock: { 2: 2, 5: 1, 7: 1, 9: 1, 12: 1, 15: 1, 18: 1 } },
+  // Regeln 2024: Metamagie ab Stufe 2 (zwei Optionen, je zwei weitere auf 10 und 17); Anrufungen ab Stufe 1
+  // (insgesamt 1, 3, 5, 6, 7, 8, 9, 10 auf den Stufen 1, 2, 5, 7, 9, 12, 15, 18)
+  metamagic: { Sorcerer: { 2: 2, 10: 2, 17: 2 } },
+  invocations: { Warlock: { 1: 1, 2: 2, 5: 2, 7: 1, 9: 1, 12: 1, 15: 1, 18: 1 } },
 };
 /** Offene Auswahlen dieser Stufe: Kampfstil, Metamagie, Anrufungen. */
 function optionSlots(klass, to, chosenSub) {
   const out = [];
   for (const [kind, by] of Object.entries(OPT_SCHEDULE)) {
     let n = by[klass]?.[to] || 0;
-    if (kind === 'fightingStyles' && klass === 'Fighter' && chosenSub === 'Champion' && to === 10) n += 1;
+    if (kind === 'fightingStyles' && klass === 'Fighter' && chosenSub === 'Champion' && to === 7) n += 1; // 2024: Additional Fighting Style auf Stufe 7
     for (let i = 0; i < n; i++) out.push({ kind, id: `${kind}${i}` });
   }
   return out;
@@ -58,7 +60,10 @@ function vOptions(d) {
   if (!slots.length) return '';
   const known = new Set(S.feats.map(f => f.n));
   return slots.map(s => {
-    const list = OPTIONS[s.kind].filter(o => !known.has(o.n) || U.LU[s.id] === o.n);
+    // Anrufungen 2024: nur mit erreichter Stufe und vorhandener Voraussetzung (Paktgabe oder andere Anrufung); mehrfach wählbare bleiben
+    const picked = new Set(Object.values(U.LU || {}).filter(v => typeof v === 'string'));
+    const reqOk = o => !o.req || !OPTIONS.invocations.some(x => x.n === o.req) || known.has(o.req) || picked.has(o.req);
+    const list = OPTIONS[s.kind].filter(o => (o.rep || !known.has(o.n) || U.LU[s.id] === o.n) && (s.kind !== 'invocations' || ((o.lvl || 1) <= d.cl && reqOk(o))));
     const cur = OPTIONS[s.kind].find(o => o.n === U.LU[s.id]);
     return `<h4>${t('lu.opt.' + s.kind)}</h4><div class="add"><select id="lu-${s.id}" data-lu="${s.id}" aria-label="${t('lu.opt.' + s.kind)}"><option value="">${t('common.choose')}</option>${list.map(o => `<option value="${esc(o.n)}"${U.LU[s.id] === o.n ? ' selected' : ''}>${esc(o.n)}</option>`).join('')}</select></div>${cur ? `<p class="note">${esc(dice(loc(cur.text)))}</p>` : ''}`;
   }).join('');

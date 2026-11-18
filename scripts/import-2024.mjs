@@ -400,7 +400,22 @@ function classes() {
   console.log('Klassen 2024: ' + Object.values(CLASSES_24).join(', '));
 }
 
-const steps = { spells, conditions, mastery, items, magic, monsters, species, feats, classes };
+/* ---- Anrufungen und Metamagie 2024: eigene Zusammenfassung (Optionen stehen nicht im SRD-Paket) ---- */
+const REQ_DE = { 'a Warlock cantrip that deals damage': 'ein Hexenmeister-Zaubertrick mit Schaden', 'a Warlock cantrip that deals damage via an attack roll': 'ein Hexenmeister-Zaubertrick mit Angriffswurf' };
+const NL = String.fromCharCode(10);
+function options() {
+  const src = JSON.parse(fs.readFileSync(path.join(root, 'data/translations/2024/options-2024.json'), 'utf8'));
+  const opts = JSON.parse(fs.readFileSync(dataFile('options.json'), 'utf8'));
+  const pre = (o, de) => {
+    const parts = [o.lvl > 1 ? (de ? `Hexenmeister ab Stufe ${o.lvl}` : `Level ${o.lvl}+ Warlock`) : '', o.req ? (de ? REQ_DE[o.req] || o.req : o.req) : ''].filter(Boolean);
+    return parts.length ? (de ? 'Voraussetzung: ' : 'Prerequisite: ') + parts.join(', ') + NL : '';
+  };
+  opts.invocations = src.invocations.map(o => ({ n: o.n, lvl: o.lvl || 1, ...(o.req ? { req: o.req } : {}), ...(o.rep ? { rep: true } : {}), text: { en: pre(o) + o.en, de: pre(o, true) + o.de }, source: 'summary', ed: 2024, verified: false }));
+  opts.metamagic = src.metamagic.map(o => ({ n: o.n, sp: o.sp, text: { en: o.en, de: o.de }, source: 'summary', ed: 2024, verified: false }));
+  fs.writeFileSync(dataFile('options.json'), JSON.stringify(opts, null, 1) + NL);
+  console.log(`Optionen 2024: ${opts.invocations.length} Anrufungen, ${opts.metamagic.length} Metamagie`);
+}
+const steps = { spells, conditions, mastery, items, magic, monsters, species, feats, classes, options };
 const only = process.argv.slice(2).filter(a => !a.startsWith('--'));
 for (const [name, fn] of Object.entries(steps)) if (!only.length || only.includes(name)) fn();
 fs.writeFileSync(path.join(root, '.cache/missing-2024.txt'), missing.join('\n') + '\n');

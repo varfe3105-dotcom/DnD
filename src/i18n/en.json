@@ -92,7 +92,7 @@
  "res.sense": "Sense celestials, fiends and undead",
  "res.layOn": "Healing pool in HP",
  "res.channelP": "Your oath effect",
- "res.luck": "Turn a miss into a hit",
+ "res.luck": "Luck Points (Lucky): spend 1 to give yourself Advantage on a D20 Test, or 1 to impose Disadvantage on an attack roll against you. Regained on a Long Rest.",
  "res.points": "Font of Magic",
  "res.arcanum": "One high-level spell each, no slot",
  "res.master": "Regain all pact slots",
@@ -1955,5 +1955,15 @@
  "fight.target": "Target",
  "fight.hitNeed": "Enter the damage first.",
  "fight.hitEv": "{a} hits {n}: {d} damage",
- "fight.hitEvW": "{a} hits {n} with {w}: {d} damage"
+ "fight.hitEvW": "{a} hits {n} with {w}: {d} damage",
+ "atk.sneak": "Sneak Attack",
+ "atk.sneakWhen": "With a Finesse or Ranged weapon, if you have Advantage or an ally is next to the target and you don't have Disadvantage",
+ "atk.sneakOnce": "once per turn",
+ "fight.recharge": "Recharge",
+ "fight.rechReady": "ready",
+ "fight.rechUsed": "used",
+ "fight.rechHint": "Recharge {r}: roll a d6 at the start of its turn",
+ "fight.rechRoll": "Roll at the table at the start of its turn: {r}",
+ "fight.rechUsedEv": "{n}: {a} used",
+ "fight.rechReadyEv": "{n}: {a} ready again"
 }

@@ -19,6 +19,7 @@ import { t, nameLine, dist, loc, convUnits, lang } from '../i18n/index.js';
 const cName = x => esc(lang === 'de' && x.de ? x.de : x.n);
 import { L, players, pendingFor, SEC } from '../live.js';
 import { defeatedXp, hereNote, lastSession, inCombat } from '../dm.js';
+import { recharges } from '../dm.js';
 import { D, DU, allMonsters, findMonster, thresholds, partySize, rate, curEnc, xpOf, ordered, searchMonsters, KINDS, curNote, linksOf, noteByTitle, backlinks, searchNotes, fighting, nowNext } from '../dm.js';
 
 const ABK = ['str', 'dex', 'con', 'int', 'wis', 'cha'];
@@ -56,6 +57,13 @@ function vHit(from, key, avg, label, only) {
   const chip = x => `<button class="chip${x.hp === 0 ? ' off' : ''}" data-a="dmhit" data-id="${x.id}" data-src="${id}" data-from="${esc(from.name)}" data-w="${esc(label || '')}">${esc(x.name)}</button>`;
   return `<div class="hit-on"><span class="rc-l">${t('fight.hitOn')}</span><input type="number" class="n" id="${id}" min="1" value="${esc(String(avg || ''))}" placeholder="${t('hp.amount')}" aria-label="${t('hp.amount')}"><div class="chips">${[...(from.kind === 'mon' ? pcs : foes), ...(from.kind === 'mon' ? foes : pcs)].map(chip).join('')}</div></div>`;
 }
+/** Aufladen (Recharge): je Fähigkeit „bereit“ oder „verbraucht“; verbraucht zeigt den Hinweis, zu Beginn des Zugs zu würfeln. */
+function vRech(c, m) {
+  const list = recharges(m);
+  if (!list.length) return '';
+  const used = c.rechUsed || {};
+  return `<div class="rech"><span class="rc-l">${t('fight.recharge')}</span><div class="chips">${list.map(x => `<button class="chip tgl${used[x.n] ? '' : ' on'}" data-a="dmrech" data-id="${c.id}" data-n="${esc(x.n)}" aria-pressed="${!used[x.n]}" title="${t('fight.rechHint', { r: x.r })}">${esc(x.n)} · ${t(used[x.n] ? 'fight.rechUsed' : 'fight.rechReady')}</button>`).join('')}</div>${list.some(x => used[x.n]) ? `<p class="note">${t('fight.rechRoll', { r: list.filter(x => used[x.n]).map(x => `${esc(x.n)} ${x.r}`).join(', ') })}</p>` : ''}</div>`;
+}
 function vTurnFoe(c) {
   const m = findMonster(c.mon);
   const head = (sub, ic) => `<div class="tp-head rc-aub">${corners({ top: true, sm: true })}${ic}<div><span class="rc-l">${t('fight.atTurn')} · ${t('fight.statblock')}</span><h3>${esc(c.name)}</h3>${sub}</div></div>`;
@@ -75,7 +83,7 @@ function vTurnFoe(c) {
   const sub = `<span class="rc-s">${esc(m.n)} · ${esc([m.size, m.type].filter(Boolean).join(' '))} · ${t('fight.cr')} ${crText(m.cr)} · ${xpOf(m.cr)} XP</span>`;
   return `<section class="turnp">${head(sub, `<span class="tp-ic">${who(c)}</span>`)}<div class="tp-body">
     <div class="srow">${sv(t('dm.acShort'), c.ac)}${sv(t('head.hpShort'), `${c.hp}<span class="mx"> / ${c.hpMax}</span>`)}${sv(t('fight.speed'), esc(convUnits(String(m.speed || '').replace(/^walk /, ''))))}${sv(t('fight.initShort'), c.init)}${sv(t('fight.prof'), '+' + pb)}</div>
-    <div class="abil6">${ABK.map(k => `<div><span class="rc-l">${t('abs.' + k)} ${m.abil[k]}</span><b class="rc-v s">${sg(mod(m.abil[k]))}</b></div>`).join('')}</div>
+    <div class="abil6">${ABK.map(k => `<div><span class="rc-l">${t('abs.' + k)} ${m.abil[k]}</span><b class="rc-v s">${sg(mod(m.abil[k]))}</b></div>`).join('')}</div>${vRech(c, m)}
     <section class="hub-parch rc-pp tp-acts">${groups || `<p class="note">${t('fight.noActions')}</p>`}</section>
     ${traits.length ? `<div class="tp-blk"><p class="rc-l">${t('fight.traits')}</p>${traits.map(e => `<details class="arow-d"><summary class="arow t"><span class="rc-n">${esc(e.name)}</span><span class="chev" aria-hidden="true">▸</span></summary><p class="arow-x">${esc(convUnits(e.text))}</p></details>`).join('')}</div>` : ''}
     <p class="note">${t('fight.parseNote')}</p><details class="tp-full"><summary>${t('fight.fullText')}</summary>${statBlock(c)}</details></div></section>`;
