@@ -524,3 +524,15 @@ html[data-area="char"] .skr>span{flex:1;min-width:0;font:600 1.02rem var(--f-ui)
 html[data-area="char"] .skr b{flex:none;width:3.2ch;text-align:right;font:700 1.25rem var(--f-title);color:var(--t-val-p)}
 html[data-area="char"] .skr .skstar{color:#8a5a1c;font-size:.8rem;font-style:normal}
 @media (max-width:640px){html[data-area="char"] .skgrid{grid-template-columns:minmax(0,1fr)}}
+/* Zugstand des Spielers bei der Spielleitung */
+.tu-h{margin:2px 0 4px}
+.tu-econ{margin:0 0 10px}
+.tu-mini{display:inline-flex;gap:3px;margin-left:8px;vertical-align:middle}
+.tu-mini b{min-width:18px;padding:0 3px;border:1px solid var(--c-brass-soft);font:700 .72rem var(--f-ui);text-align:center;color:#8fd49a}
+.tu-mini b.x{color:var(--t-sub-d);text-decoration:line-through;opacity:.7}
+.tu-econ{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+.tu-econ>div{min-width:0;display:flex;align-items:center;gap:6px;padding:6px 8px}
+.tu-econ>div span{min-width:0}
+.tu-econ b{display:block;font-size:.9rem;line-height:1.15;overflow-wrap:break-word;hyphens:auto}
+.tu-econ small{font-size:.74rem}
+.tu-econ .used b{text-decoration:line-through;text-decoration-color:rgba(236,210,148,.55)}

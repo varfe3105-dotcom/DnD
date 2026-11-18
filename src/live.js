@@ -74,7 +74,9 @@ const box = b => (b && typeof b === 'object' && b.e && b64ok(b.e.x, 64) && b64ok
 /** Eingehende Daten kommen von anderen Geräten und werden auf die erwarteten Felder begrenzt. Mit D3 kommen TP nur als
  * grobe Stufe (hq); für die Anzeige stehen dann Schätzwerte darin (est: true), bis die Spielleitung entschlüsselt hat. */
 function clean(p) {
-  const c = clean0(p), hq = HQ.includes(p.hq) ? p.hq : '';
+  const c = clean0(p);
+  c.tu = c.role === 'player' && p.tu && typeof p.tu === 'object' ? { a: int(p.tu.a, 9), m: Math.max(1, int(p.tu.m, 9)), b: !!p.tu.b, r: !!p.tu.r } : null;
+  const hq = HQ.includes(p.hq) ? p.hq : '';
   if (c.role === 'player' && hq && p.hp === undefined) Object.assign(c, { hq, hp: HQ_EST[hq], hpMax: 4, tmp: 0, est: true, sec: box(p.sec) });
   if (c.role === 'player') c.pets = c.pets.map((x, i) => { const q = p.pets?.[i]?.hq; return HQ.includes(q) && p.pets[i].hp === undefined ? { ...x, hp: HQ_EST[q], hpMax: 4, est: true } : x; });
   return c;
@@ -238,10 +240,12 @@ let petSource = () => [];
 /** Begleiter (Ranger-Begleiter, Vertrauter …) mit ihren Spielwerten, gesetzt in events.js. */
 export const setPetSource = fn => { petSource = fn; };
 /** Genaue Werte, die nur die Spielleitung lesen darf. */
+/** Zugstand für die Spielleitung: Aktionen verbraucht/gesamt, Bonusaktion und Reaktion verbraucht. Nur solange gezählt wird. */
+const turnOut = () => { const T = S.turn; return T && T.on ? { a: Math.min(9, T.a | 0), m: Math.min(9, T.aMax | 0 || 1), b: !!T.b, r: !!T.r } : null; };
 const secretPart = () => ({ hp: S.hp, hpMax: S.hpMax, tmp: S.tmp, pets: petSource().slice(0, 3).map(p => ({ id: p.id, hp: p.hp, hpMax: p.hpMax })) });
 /** Ohne D3 wie bisher; mit D3 im Klartext nur die grobe Stufe, genau nur verschlüsselt für die Spielleitung. */
 const hpOut = () => (SEC.mode === 'off' ? { hp: S.hp, hpMax: S.hpMax, tmp: S.tmp } : { hq: hpLevel(S.hp, S.hpMax), ...(SEC.mode === 'on' && SEC.box ? { sec: SEC.box } : {}) });
-const payload = () => (L.role === 'dm' ? { role: 'dm', chron: dmFlags().chron || '', shop: (dmFlags().shop || []).slice(0, 4), atlas: (dmFlags().atlas || []).slice(0, 16), camp: dmFlags().camp || null, here: dmFlags().here || '', lock: !!dmFlags().lock, turn: dmFlags().turn || null, stash: dmFlags().stash || null, buffs: (dmFlags().buffs || []).slice(0, 8) } : { role: 'player', insp: !!S.insp, name: S.name, pl: playerName(), race: S.subrace || S.race, klass: S.klass, level: S.level, ...hpOut(), ac: acNow(), acB: acBonus().v, fx: fxOut(), buffs: activeOut().slice(-6).map(b => ({ id: b.id, s: b.s, to: b.to.slice(0, 6), v: b.v || 0 })), exh: S.exh, conc: S.conc, cond: Object.keys(S.cond).filter(c => S.cond[c]), cr: condRoundsOut(), death: S.death, pets: petSource().slice(0, 3).map(p => (SEC.mode === 'off' ? { id: p.id, n: p.n, hp: p.hp, hpMax: p.hpMax, ac: p.ac } : { id: p.id, n: p.n, hq: hpLevel(p.hp, p.hpMax), ac: p.ac })) });
+const payload = () => (L.role === 'dm' ? { role: 'dm', chron: dmFlags().chron || '', shop: (dmFlags().shop || []).slice(0, 4), atlas: (dmFlags().atlas || []).slice(0, 16), camp: dmFlags().camp || null, here: dmFlags().here || '', lock: !!dmFlags().lock, turn: dmFlags().turn || null, stash: dmFlags().stash || null, buffs: (dmFlags().buffs || []).slice(0, 8) } : { role: 'player', insp: !!S.insp, name: S.name, pl: playerName(), race: S.subrace || S.race, klass: S.klass, level: S.level, ...hpOut(), tu: turnOut(), ac: acNow(), acB: acBonus().v, fx: fxOut(), buffs: activeOut().slice(-6).map(b => ({ id: b.id, s: b.s, to: b.to.slice(0, 6), v: b.v || 0 })), exh: S.exh, conc: S.conc, cond: Object.keys(S.cond).filter(c => S.cond[c]), cr: condRoundsOut(), death: S.death, pets: petSource().slice(0, 3).map(p => (SEC.mode === 'off' ? { id: p.id, n: p.n, hp: p.hp, hpMax: p.hpMax, ac: p.ac } : { id: p.id, n: p.n, hq: hpLevel(p.hp, p.hpMax), ac: p.ac })) });
 function push() {
   if (!transport) return;
   // Spieler mit Schlüssel der Spielleitung: genaue Werte neu verschlüsseln, sobald sie sich ändern

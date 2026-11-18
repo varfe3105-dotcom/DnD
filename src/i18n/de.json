@@ -1973,5 +1973,7 @@
  "cs.backup": "Sicherung",
  "dm.roomTitle": "Raum & Verbindung",
  "turn.toFight": "Zum Kampf",
- "cs.leave": "Spielleitungsmodus beenden"
+ "cs.leave": "Spielleitungsmodus beenden",
+ "fight.tuTitle": "Zugstand des Spielers",
+ "fight.tuNone": "Noch kein Zugstand: Das Gerät des Spielers zählt erst, sobald sein Zug läuft oder er eine Aktion ausführt."
 }

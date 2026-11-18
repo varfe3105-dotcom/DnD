@@ -1973,5 +1973,7 @@
  "cs.backup": "Backup",
  "dm.roomTitle": "Room & connection",
  "turn.toFight": "Go to fight",
- "cs.leave": "Leave DM mode"
+ "cs.leave": "Leave DM mode",
+ "fight.tuTitle": "Player's turn status",
+ "fight.tuNone": "No turn status yet: the player's device counts once their turn runs or they take an action."
 }

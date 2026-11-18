@@ -92,6 +92,15 @@ const sv = (l, v) => `<div><span class="rc-l">${l}</span><span class="rc-v l">${
 const cv = (v, s, cls = 'rc-s') => `<span class="c"><span class="rc-v">${v}</span><small class="${cls}">${s}</small></span>`;
 /** „Am Zug“ für einen Spieler (nur lesen): Live-Werte aus der Presence, Bogen aus dem letzten Online-Stand mit Zeitstempel. */
 const TIME_GRP = x => { const e = String(x?.time?.en || x?.time || '').toLowerCase(); return /bonus action/.test(e) ? 'b' : /reaction/.test(e) ? 'r' : /^1 action|^action/.test(e) ? 'a' : 'o'; };
+/** Zugstand eines verbundenen Spielers (frei/verbraucht). Leer, solange sein Gerät nicht zählt. */
+function vTurnUse(p, compact) {
+  const u = p && p.tu;
+  if (!u) return compact ? '' : `<p class="note tu-none">${t('fight.tuNone')}</p>`;
+  const tile = (used, l, sub) => `<div class="${used ? 'used' : ''}"><i class="dot${used ? ' x' : ''}" aria-hidden="true"></i><span><b>${l}</b><small>${sub || t(used ? 'fight.used' : 'fight.free')}</small></span></div>`;
+  const aSub = u.m > 1 ? `${Math.max(0, u.m - u.a)} / ${u.m} ${t('fight.free')}` : '';
+  if (compact) return `<span class="tu-mini" title="${t('fight.tuTitle')}">${[[u.a >= u.m, t('turn.abbrA')], [u.b, t('turn.abbrB')], [u.r, t('turn.abbrR')]].map(([used, l]) => `<b class="${used ? 'x' : ''}">${l}</b>`).join('')}</span>`;
+  return `<div class="econ tu-econ" title="${t('fight.tuTitle')}">${tile(u.a >= u.m, t('tv.action'), aSub)}${tile(u.b, t('tv.bonus'))}${tile(u.r, t('tv.react'))}</div>`;
+}
 function vTurnPc(c) {
   const p = c.live && players().find(x => x.key === c.live), pk = DU.pk && DU.pk.key === c.live ? DU.pk : null, s = pk && pk.data;
   const hp = p ? p.hp : c.hp, hpMax = p ? p.hpMax : c.hpMax, ac = p ? p.ac : c.ac, conds = p ? p.cond || [] : COND.filter(x => c.cond[x.n]).map(x => x.n), conc = p ? p.conc : c.conc;
@@ -111,7 +120,7 @@ function vTurnPc(c) {
   const tags = [...conds.map(n => `<span class="tag t-bad sm">✕ ${esc(n)}</span>`), conc ? `<span class="tag t-conc sm">◇ ${esc(conc)}</span>` : ''].join('');
   return `<section class="turnp">
     <div class="tp-head rc-aub">${corners({ top: true, sm: true })}<span class="tp-ic">${who(c)}</span><div><span class="rc-l">${t('fight.atTurn')}${c.live ? ' · ' + t('peek.roShort') : ''}</span><h3>${esc(c.name)}</h3><span class="rc-s">${p ? esc([p.klass, p.level].filter(Boolean).join(' ')) : ''}</span></div></div>
-    ${stamps}<div class="tp-body"><div class="srow">${sv(t('dm.acShort'), ac)}${sv(t('head.hpShort'), `${hp}<span class="mx"> / ${hpMax}</span>`)}${sv(t('fight.initShort'), c.init)}</div>${tags ? `<div class="tags">${tags}</div>` : ''}${(() => { const h = vHit(c, 'pc', '', '', 'foes'); return h ? `<section class="hub-panel tp-hit"><p class="rc-l">${t('fight.pcHits', { n: esc(c.name) })}</p>${h}</section>` : ''; })()}${sheet}</div></section>`;
+    ${stamps}<div class="tp-body">${c.live ? `<p class="rc-l tu-h">${t('fight.tuTitle')}</p>${vTurnUse(p)}` : ''}<div class="srow">${sv(t('dm.acShort'), ac)}${sv(t('head.hpShort'), `${hp}<span class="mx"> / ${hpMax}</span>`)}${sv(t('fight.initShort'), c.init)}</div>${tags ? `<div class="tags">${tags}</div>` : ''}${(() => { const h = vHit(c, 'pc', '', '', 'foes'); return h ? `<section class="hub-panel tp-hit"><p class="rc-l">${t('fight.pcHits', { n: esc(c.name) })}</p>${h}</section>` : ''; })()}${sheet}</div></section>`;
 }
 /** Eingreifen (11.4): wirkt auf die ausgewählte Figur, ohne Untermenü. Desktop: feste Spalte; Handy: Blatt, wenn ausgewählt. */
 function vEin(c, opened) {
@@ -148,7 +157,7 @@ function row(c, active, sel) {
     <div class="dm-main">
       <input type="number" class="n dm-init" id="dm-init-${c.id}" data-dm="init" data-id="${c.id}" value="${c.init}" aria-label="${t('stat.init')} ${esc(c.name)}" title="${t('stat.init')}">
       ${who(c)}
-      <button class="dm-name" data-a="dmopen" data-id="${c.id}" aria-expanded="${!!sel}"><b>${esc(c.name)}</b><small>${meta}</small></button>
+      <button class="dm-name" data-a="dmopen" data-id="${c.id}" aria-expanded="${!!sel}"><b>${esc(c.name)}</b><small>${meta}</small>${active && c.live ? vTurnUse(players().find(x => x.key === c.live), true) : ''}</button>
       <span class="u-st"><span class="rc-l">${t('dm.acShort')}</span>${ac}<span class="rc-l">${t('head.hpShort')}</span><span class="dm-hpv rc-v s"><b>${c.hp}</b><span class="mx">/${c.hpMax}${c.tmp ? ' +' + c.tmp : ''}</span></span></span>
       ${hpb(c.hp, c.hpMax)}
       <span class="u-tags">${tags.join('') || `<span class="none">${t('fight.noCond')}</span>`}${chips ? `<span class="chips dm-fx">${chips}</span>` : ''}${la}</span>
