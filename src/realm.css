@@ -395,7 +395,7 @@ body:has(.rail #live-dock.full) #toast{top:auto;bottom:calc(16px + env(safe-area
 .bk-cover h2::before,.bk-cover h2::after{display:none}
 .bk-cover p{margin:4px 0 0;font:600 .9rem var(--f-cap);letter-spacing:.08em;color:var(--t-lbl-d)}
 .bk-band{position:absolute;right:34px;top:-4px;width:22px;height:64px;background:linear-gradient(180deg,#8d2a2a,#5e1515);clip-path:polygon(0 0,100% 0,100% 100%,50% 82%,0 100%);box-shadow:0 2px 4px #000}
-.bk-spread{display:grid;grid-template-columns:minmax(220px,300px) minmax(0,1fr);background:linear-gradient(90deg,rgba(80,50,20,.18),transparent 6%,transparent 94%,rgba(80,50,20,.22)),var(--parch) center/cover;border:1px solid #6b4a24;border-top:3px solid #3b2414;border-radius:0 0 6px 6px;color:var(--t-name-p);box-shadow:inset 0 0 40px rgba(90,55,20,.35)}
+.bk-spread{display:grid;grid-template-columns:minmax(220px,300px) minmax(0,1fr);background:linear-gradient(90deg,rgba(80,50,20,.18),transparent 6%,transparent 94%,rgba(80,50,20,.22)),var(--parch-tex) 0 0/560px auto repeat;border:1px solid #6b4a24;border-top:3px solid #3b2414;border-radius:0 0 6px 6px;color:var(--t-name-p);box-shadow:inset 0 0 40px rgba(90,55,20,.35)}
 .bk-toc{padding:20px 18px 22px 22px;border-right:1px solid rgba(90,60,30,.35);box-shadow:inset -14px 0 18px -14px rgba(60,35,10,.45)}
 .bk-toc h4{margin:0 0 10px;font:600 .74rem var(--f-cap);letter-spacing:.18em;text-transform:uppercase;color:var(--t-lbl-p)}
 .bk-toc ol{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:2px}
@@ -505,3 +505,22 @@ html[data-art]:not([data-art="0"]) .rc-ribbon{filter:grayscale(.85) brightness(.
 /* Kampagnenfarbe auch im Seitenhintergrund und in der Leiste (Grafiken mit leichtem Lila-Stich werden getönt) */
 html[data-art]:not([data-art="0"]) body{background:linear-gradient(var(--camp-tint-bg),var(--camp-tint-bg)),var(--surface-page);background-blend-mode:color,normal}
 html[data-art]:not([data-art="0"]) .rail{background:linear-gradient(180deg,hsl(var(--camp-h) calc(12% * var(--camp-sf)) 8% / .97),hsl(var(--camp-h) calc(14% * var(--camp-sf)) 5% / .99)),linear-gradient(var(--camp-tint-bg),var(--camp-tint-bg)),var(--slate);background-blend-mode:normal,color,normal}
+
+/* Chronik-Buch: Hinweise auf dem Pergament gut lesbar */
+.book .note,.book .empty{color:var(--t-sub-p);opacity:1}
+
+/* ==== Werte & Fähigkeiten: kompakt und lesbar ==== */
+.stats-main{min-width:0;display:flex;flex-direction:column;gap:12px}
+.stats-main>h2{margin-top:10px}
+@media (min-width:1000px){.stats-top{grid-template-columns:minmax(0,1fr) 280px}.stats-side{position:sticky;top:12px}}
+/* Fertigkeiten: Spalten nach Platz (vorher eine einzige, seitenbreite Spalte, weil die Container-Abfrage nie griff) */
+html[data-area="char"] .skgrid{grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:4px 16px;max-width:1240px}
+.skcol{min-width:0}
+html[data-area="char"] .skg{padding:6px 4px 10px}
+html[data-area="char"] .skg h3{display:flex;align-items:baseline;justify-content:space-between;gap:8px;margin:0 0 4px;font-size:1.12rem;text-align:left}
+html[data-area="char"] .skr{display:flex;align-items:baseline;gap:8px;padding:4px 6px}
+html[data-area="char"] .skr:nth-child(odd){background:rgba(120,80,30,.06)}
+html[data-area="char"] .skr>span{flex:1;min-width:0;font:600 1.02rem var(--f-ui);white-space:normal;overflow:visible}
+html[data-area="char"] .skr b{flex:none;width:3.2ch;text-align:right;font:700 1.25rem var(--f-title);color:var(--t-val-p)}
+html[data-area="char"] .skr .skstar{color:#8a5a1c;font-size:.8rem;font-style:normal}
+@media (max-width:640px){html[data-area="char"] .skgrid{grid-template-columns:minmax(0,1fr)}}

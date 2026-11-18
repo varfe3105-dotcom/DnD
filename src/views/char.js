@@ -70,7 +70,7 @@ export function vStats() {
     ${row(t('stat.prof'), sg(S.prof))}${row(t('stat.init'), sg(initBonus()))}${row(t('stat.ac'), acHtml())}${row(t('stat.speed'), esc(dist(fx.speed.val)))}
     ${row(t('hp.title'), `${S.hp}/${max}${S.tmp ? ` <small>+${S.tmp}</small>` : ''}`)}${row(t('ov.hitDice'), `${Math.max(0, hd.max - hd.used)}/${hd.max}`, esc(dice(hd.die || '')))}
     <p class="lbl sv-sep">${t('ov.passive')}</p>${row(t('stat.pp'), passivePerception())}${row(t('ov.pIns'), 10 + skv('Insight'))}${row(t('ov.pInv'), 10 + skv('Investigation'))}</aside>`;
-  return `<div class="stats-top"><section class="stats-medals">${vAbil(false)}</section>${side}</div>${vFx(fx)}${vSkills()}<div class="page-2 stats-more"><div>${vFeats()}</div><div>${vProfs()}</div></div>`;
+  return `<div class="stats-top"><div class="stats-main"><section class="stats-medals">${vAbil(false)}</section>${vFx(fx)}${vSkills()}</div>${side}</div><div class="page-2 stats-more"><div>${vFeats()}</div><div>${vProfs()}</div></div>`;
 }
 
 /* ---- Zauber: Zauberbuch ---- */
