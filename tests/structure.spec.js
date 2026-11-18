@@ -123,7 +123,7 @@ test.describe('Ebenen und Rollen @new', () => {
     await expect(page.locator('[data-a="rest"]')).toHaveCount(0);
     await expect(page.locator('.ov-abil > div')).toHaveCount(6);
     await expect(page.locator('.tabs.side')).toBeVisible();
-    await page.locator('[data-a="tab"][data-t="wiki"]').click();
+    await page.locator('[data-a="railtab"][data-t="wiki"]').click();
     await expect(page.locator('#wq')).toBeVisible();
     await page.locator('[data-a="tab"][data-t="prof"]').click();
     await expect(page.locator('#app header.hd h1')).toHaveText('Mirelle');

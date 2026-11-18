@@ -35,11 +35,13 @@ test('Spieler im Live-Raum: alle Seiten ohne Überlauf, Live-Leiste fest unten @
     // Beim Scrollen erscheint die Kurzleiste; auch dann kein Überlauf
     await page.evaluate(() => window.scrollTo(0, 2000)); await page.waitForTimeout(50);
     expect(await noOverflow(page), `Überlauf auf ${k} (gescrollt)`).toBe(true);
-    // Live-Leiste: fest positioniert, unten im Bild, nicht oben im Seitenfluss
+    // Live-Leiste: fest positioniert, unten im Bild, nicht oben im Seitenfluss (auf der Kampfseite ohne Zuganzeige)
+    if (k !== 'main') {
     const dock = await page.locator('#live-dock').evaluate(e => ({ pos: getComputedStyle(e).position, top: e.getBoundingClientRect().top, bottom: e.getBoundingClientRect().bottom }));
     expect(dock.pos, `Live-Leiste auf ${k}`).toBe('fixed');
     expect(dock.bottom).toBeLessThanOrEqual(844);
     expect(dock.top).toBeGreaterThan(844 / 2);
+    }
     await page.evaluate(() => window.scrollTo(0, 0));
   }
 });

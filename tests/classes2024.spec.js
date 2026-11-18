@@ -48,7 +48,7 @@ test.describe('Klassen 2024 @new', () => {
     expect(s.res.find(r => r.n === 'Favored Enemy')).toMatchObject({ max: 3, rest: 'long' });
     expect(s.res.find(r => r.n === 'Dreadful Strike')).toMatchObject({ max: 3 });
     expect(s.spells.filter(x => x.always).map(x => x.n).sort()).toEqual(['Disguise Self', "Hunter's Mark", 'Rope Trick']);
-    await page.locator('[data-a="tab"][data-t="wiki"]').click();
+    await page.locator('[data-a="railtab"][data-t="wiki"]').click();
     await page.locator('#wq').fill('Hail of Thorns');
     await act(page, 'wsel', '[data-key="spell:Hail of Thorns"]').click();
     await expect(page.locator('.wd.pane')).toContainText(/bonus action/i);

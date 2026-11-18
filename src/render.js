@@ -43,12 +43,11 @@ export function vHead() {
   const classes = S.multi?.length ? classLevels().map(c => `${c.k} ${c.lvl}`).join(' / ') : [S.klass, S.sub].filter(Boolean).join(' · ');
   const line = [S.subrace || S.race, classes].filter(Boolean).join(' · ');
   const others = roster();
-  const langBtn = l => `<button data-a="lang" data-l="${l}" aria-pressed="${lang === l}" lang="${l}">${l.toUpperCase()}</button>`;
   const art = campaignsOf(S.id)[0]?.art ?? 1;
   return `<header class="hd"><i class="hd-art hub-camp-art a${art}" aria-hidden="true"></i>${corners({ left: true })}<label class="por" for="img-in" title="${t('head.portrait')}">${S.img ? `<img src="${S.img}" alt="${t('head.portraitAlt', { n: esc(S.name) })}">` : `<span aria-hidden="true">${esc((S.name || '?').trim()[0] || '?')}</span>`}</label><input type="file" id="img-in" accept="image/*" hidden>
   <div class="who"><h1>${esc(S.name)}</h1><p>${esc(line || t('head.pickRace'))}</p>${S.info ? `<p class="sub2">${esc(S.info.length > 140 ? S.info.slice(0, 140) + ' …' : S.info)}</p>` : ''}${vXp()}${campaignsOf(S.id).length ? `<p class="hd-camps">${campaignsOf(S.id).map(c => `<span class="tag t-res">${esc(c.name)}</span>`).join('')}</p>` : ''}</div>
   <button class="insp${S.insp ? ' on' : ''}" data-a="insp" aria-pressed="${!!S.insp}" aria-label="${t('insp.title')}" title="${t(S.insp ? 'insp.on' : 'insp.off')}">${glyph('star')}</button>${S.level ? `<div class="seal" title="${t('head.level')}"><small>${t('head.seal')}</small><b>${S.level}</b></div>` : ''}
-  <div class="hacts">${others.length > 1 && !U.CAMP ? `<select id="char-switch" class="charsw" aria-label="${t('chars.switch')}">${others.map(c => `<option value="${esc(c.id)}"${c.id === S.id ? ' selected' : ''}>${esc(c.name)}</option>`).join('')}</select>` : ''}<div class="hrow"><button class="btn ghost home" data-a="hubhome" title="${t('hub.backTitle')}">${t('hub.back')}</button><button class="btn ghost" data-a="tab" data-t="wiki">${t('nav.rules')}</button><button class="btn gilt" data-a="lu">${S.level ? (S.level >= 20 ? t('head.lvl20') : t('head.levelUp')) : t('head.build1')}</button><div class="langs" role="group" aria-label="${t('head.language')}">${langBtn('en')}${langBtn('de')}</div><div class="langs units" role="group" aria-label="${t('head.units')}">${['m', 'ft'].map(u => `<button data-a="units" data-u="${u}" aria-pressed="${units === u}" title="${t('units.' + u)}">${u}</button>`).join('')}</div></div>${S.camp || U.CAMP || S.tab === 'main' ? `<div class="rests"><button class="btn ghost" data-a="rest" data-r="short">${t('rest.short')}</button><button class="btn ghost" data-a="rest" data-r="long">${t('rest.long')}</button></div>` : ''}</div></header>${!S.camp && !dmOnly() && !U.CAMP ? `<p class="lib-banner">${t(S.tab === 'main' ? 'lib.bannerFight' : 'lib.banner')}</p>` : ''}`;
+  <div class="hacts">${others.length > 1 && !U.CAMP ? `<select id="char-switch" class="charsw" aria-label="${t('chars.switch')}">${others.map(c => `<option value="${esc(c.id)}"${c.id === S.id ? ' selected' : ''}>${esc(c.name)}</option>`).join('')}</select>` : ''}<div class="hrow"><button class="btn gilt" data-a="lu">${S.level ? (S.level >= 20 ? t('head.lvl20') : t('head.levelUp')) : t('head.build1')}</button></div>${S.camp || U.CAMP || S.tab === 'main' ? `<div class="rests"><button class="btn ghost" data-a="rest" data-r="short">${t('rest.short')}</button><button class="btn ghost" data-a="rest" data-r="long">${t('rest.long')}</button></div>` : ''}</div></header>${!S.camp && !dmOnly() && !U.CAMP ? `<p class="lib-banner">${t(S.tab === 'main' ? 'lib.bannerFight' : 'lib.banner')}</p>` : ''}`;
 }
 // Reiter je Ebene (Kampagne oder Charakter) kommen aus views/nav.js. Im Spielleitungsmodus gibt es keinen eigenen Charakter.
 export const tabs = navTabs;
@@ -61,6 +60,8 @@ export function render() {
   if (syncFeatRes()) save();
   // Alter Reiter „Spielleitung“ (vor dem Spielleitungsmodus) → passender Reiter im Modus
   if (S.tab === 'dm' && dmOnly()) S.tab = 'dm' + (D.view || 'notes');
+  // „Einrichten“ der Spielleitung ist in einer Kampagne Teil der Einstellungen (Bereich „Spielleitung & Gerät“)
+  if (S.tab === 'setup' && dmOnly() && curCamp()) S.tab = 'dmset';
   if (!validTabs().includes(S.tab)) S.tab = fallbackTab();
   const tb = S.tab, ae = document.activeElement, keep = ae && ae.id && app.contains(ae) ? ae.id : null;
   document.documentElement.toggleAttribute('data-dm-only', dmOnly());

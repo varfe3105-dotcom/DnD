@@ -474,3 +474,8 @@ html:not([data-hub]) .wrap{z-index:auto}
 .ein-tgt{margin:0 0 10px}
 .ein-tgt .chips{display:flex;flex-wrap:wrap;gap:4px;margin-top:4px}
 .rech{margin:8px 0 4px}.rech .chips{display:flex;flex-wrap:wrap;gap:4px;margin-top:4px}
+/* Sprache und Einheiten unten in der globalen Leiste */
+.rail-prefs{display:flex;flex-wrap:wrap;gap:6px;padding:6px 16px 8px 20px}
+.rail-prefs .langs button{padding:4px 8px;font-size:.8rem}
+.shell.folded .rail-prefs{display:none}
+@media (min-width:900px) and (max-width:1199px){.rail-prefs{display:none}}

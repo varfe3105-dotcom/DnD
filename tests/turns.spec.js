@@ -25,6 +25,10 @@ test.describe('Zuganzeige @new', () => {
     await page.evaluate(p => window.__peers([p]), dmPeer({ r: 2, cur: 'held1', name: 'Mirelle', enemy: false, next: '', nextEnemy: true }));
     await expect(page.locator('.turn.mine')).toBeVisible();
     await expect(page.locator('.turn.mine')).toContainText(/Your turn|Dein Zug/);
+    // Beendet wird nur auf der Kampfseite; die Live-Leiste führt dorthin
+    await expect(page.locator('#live-dock [data-a="endturn"]')).toHaveCount(0);
+    await page.locator('.turn.mine [data-a="crumb"][data-t="main"]').click();
+    await expect(page.locator('#live-dock .turn')).toHaveCount(0);
     await act(page, 'endturn').click();
     const sent = await page.evaluate(() => window.__sent.at(-1));
     expect(sent).toMatchObject({ type: 'endturn', to: 'dm', from: 'held1' });
@@ -35,9 +39,11 @@ test.describe('Zuganzeige @new', () => {
     await page.evaluate(() => localStorage.setItem('charbogen-live', JSON.stringify({ code: 'ABC234', role: 'player' })));
     await page.reload();
     await page.evaluate(p => window.__peers([p]), dmPeer({ r: 1, cur: '', name: 'Goblin 2', enemy: true, cr: '1/4', next: 'Borin', nextEnemy: false }));
-    await expect(page.locator('.turn')).toContainText(/Goblin 2 \((CR|HG) 1\/4\)/);
-    await expect(page.locator('.turn')).toContainText('Borin');
-    await expect(page.locator('.turn.mine')).toHaveCount(0);
+    // Auf der Kampfseite steht der Zug nur in der Kampfanzeige, nicht doppelt in der Live-Leiste
+    await expect(page.locator('.fight-state')).toContainText(/Goblin 2 \((CR|HG) 1\/4\)/);
+    await expect(page.locator('.fight-state')).toContainText('Borin');
+    await expect(page.locator('#live-dock .turn')).toHaveCount(0);
+    await expect(page.locator('[data-a="endturn"]')).toHaveCount(0);
   });
 
   test('Zuganzeige lässt sich pro Gerät ausschalten', async ({ page }) => {
@@ -83,7 +89,7 @@ test.describe('Spielleitungsmodus und Meilenstein @new', () => {
     await expect(page.locator('[data-a="tab"][data-t="main"]')).toHaveCount(0);
     await page.locator('[data-a="tab"][data-t="dmnotes"]').click();
     await expect(page.locator('.here')).toBeVisible();
-    await expect(page.locator('h2', { hasText: /Notebook|Notizbuch/ }).first()).toBeVisible();
+    await expect(page.locator('h2', { hasText: /Notebook|Notizbuch|Chronicle|Chronik/ }).first()).toBeVisible();
     // Verlassen der Spielleitung ohne Kampagne führt zum Spielleiterbereich; der Charakter öffnet wieder normal
     await page.locator('[data-a="tab"][data-t="setup"]').click();
     await page.locator('[data-a="dmleave"]').click();

@@ -9,6 +9,9 @@ import { ART } from '../campaigns.js';
 import { curCamp } from './nav.js';
 import { corners } from './orn.js';
 import { t } from '../i18n/index.js';
+import { skinControls } from '../bright.js';
+import { vBackup } from './live-ui.js';
+import { vSecState } from './dm.js';
 
 /** Fortschritt einer Kampagne: 'xp' nur, wenn ausdrücklich gewählt; sonst Meilensteine. */
 export const progOf = c => (c && c.prog === 'xp' ? 'xp' : 'ms');
@@ -36,9 +39,10 @@ export function vCampSet() {
   const pub = (D.notes || []).filter(n => n.pub).length, priv = (D.notes || []).filter(n => !n.pub).length;
   const vis = panel(t('cs.vis'), `<dl class="cs-dl"><div><dt class="rc-l">${t('cs.visPub')}</dt><dd class="rc-v s">${pub}</dd></div><div><dt class="rc-l">${t('cs.visPriv')}</dt><dd class="rc-v s">${priv}</dd></div><div><dt class="rc-l">${t('cs.visHouse')}</dt><dd class="rc-v s">${(D.house || []).length}</dd></div></dl><p class="note">${t('cs.visNote')}</p><button class="btn sm" data-a="tab" data-t="dmnotes">${t('cs.toBook')}</button>`);
   const ps = L.code === c.room ? players() : [];
-  const members = panel(t('cs.members'), `${ps.length ? `<ul class="cs-mem">${ps.map(p => `<li><b class="rc-n">${esc(p.name || '?')}</b><span class="rc-s">${esc([p.pl, p.klass, p.level ? t('head.seal') + ' ' + p.level : ''].filter(Boolean).join(' · '))}</span><span class="tag t-good">${t('camp.role.player')}</span></li>`).join('')}</ul>` : `<p class="note">${t(c.room ? 'cs.memOffline' : 'cs.memNoRoom')}</p>`}<p class="note">${t('cs.memNote', { c: esc(c.room || '–') })}</p>`);
+  const members = panel(t('cs.members'), `${vSecState()}${ps.length ? `<ul class="cs-mem">${ps.map(p => `<li><b class="rc-n">${esc(p.name || '?')}</b><span class="rc-s">${esc([p.pl, p.klass, p.level ? t('head.seal') + ' ' + p.level : ''].filter(Boolean).join(' · '))}</span><span class="tag t-good">${t('camp.role.player')}</span></li>`).join('')}</ul>` : `<p class="note">${t(c.room ? 'cs.memOffline' : 'cs.memNoRoom')}</p>`}<p class="note">${t('cs.memNote', { c: esc(c.room || '–') })}</p>`);
   const conf = U.CONF === 'csdel:' + c.id;
   const admin = panel(t('cs.admin'), `<div class="cs-act left"><button class="btn" data-a="csarch">${t(c.status === 'archived' ? 'cs.unarchive' : 'cs.archive')}</button></div><p class="note">${t('cs.archNote')}</p>
   <div class="cs-danger"><h4 class="cs-h4">${t('cs.delTitle')}</h4><p class="note">${t('cs.delNote')}</p>${conf ? `${f(t('cs.delType', { n: esc(c.name) }), `<input type="text" id="cs-delname" autocomplete="off">`)}<div class="cs-act left"><button class="btn" data-a="csdelno">${t('common.cancel')}</button><button class="btn bad" data-a="csdel">${t('cs.delFinal')}</button></div>` : `<button class="btn bad" data-a="csdel">${t('cs.delStart')}</button>`}</div>`, 'cs-adm');
-  return `<section class="cs"><header class="cs-top rc-aub">${corners({ left: true })}<h2>${t('cs.title')}</h2><p>${esc(c.name)}</p></header><div class="cs-cols"><div>${general}${progress}${vis}</div><div>${rules}${members}${admin}</div></div></section>`;
+  const dev = panel(t('cs.device'), `<p class="note">${t('cs.deviceNote')}</p><div class="cs-act left"><button class="btn" data-a="dmleave">${t('cs.leave')}</button></div><span class="rc-l">${t('cs.look')}</span><div class="add">${skinControls(t)}</div><span class="rc-l">${t('cs.backup')}</span>${vBackup()}`, 'cs-dev');
+  return `<section class="cs"><header class="cs-top rc-aub">${corners({ left: true })}<h2>${t('cs.title')}</h2><p>${esc(c.name)}</p></header><div class="cs-cols"><div>${general}${progress}${vis}</div><div>${rules}${members}${dev}${admin}</div></div></section>`;
 }

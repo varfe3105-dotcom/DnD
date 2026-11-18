@@ -33,7 +33,7 @@ test.describe('Dashboard @new', () => {
     // Neuladen mitten im Spiel bleibt im Spielbereich
     await page.reload();
     await expect(page.locator('#app header.hd h1')).toHaveText('Borin');
-    await page.locator('[data-a="hubhome"]').click();
+    await page.locator('.rail [data-a="railhome"]').click();
     await expect(page.locator('.hub')).toBeVisible();
     await expect(page.locator('.hub-gm.cur .hub-gm-t b')).toHaveText('Borin');
   });

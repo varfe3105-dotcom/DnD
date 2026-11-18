@@ -42,6 +42,8 @@ export const act = (page, a, extra = '') => page.locator(`[data-a="${a}"]${extra
 // die Spiellogik am Grundbogen; sie gelangen über dieselbe Aktion „tab“ dorthin, die auch die Reiter auslösen.
 export const tab = async (page, t) => {
   const b = page.locator(`[data-a="tab"][data-t="${t}"]`);
+  // Wiki ohne eigenen Reiter (Charakter ohne Kampagne): über die globale Leiste
+  if (t === 'wiki' && !(await b.count())) return page.locator('[data-a="railtab"][data-t="wiki"]').first().click();
   if (t === 'main' && !(await b.count())) return page.evaluate(() => { const x = document.createElement('button'); x.dataset.a = 'tab'; x.dataset.t = 'main'; x.hidden = true; document.getElementById('app').appendChild(x); x.click(); });
   return b.click();
 };

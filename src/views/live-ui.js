@@ -130,7 +130,9 @@ export function vTurn() {
   if (!tr) return '';
   const who = (n, enemy, cr) => `<b class="${enemy ? 'foe' : 'ally'}">${esc(n || (enemy ? t('turn.enemy') : '?'))}</b>${cr ? ` (${t('turn.cr', { n: esc(cr) })})` : ''}`;
   const next = tr.next || tr.nextEnemy ? ` · ${t('turn.next', { n: who(tr.next, tr.nextEnemy, tr.nextCr) })}` : '';
-  if (myTurn()) return `<div class="turn mine" role="status"><div><b>${t('turn.mineTitle')}</b><small>${t('turn.round', { n: tr.r })}${next}</small></div><button class="btn gold" data-a="endturn">${t('turn.end')}</button></div>`;
+  // Zug beenden nur auf der Kampfseite (dort stehen Aktionen und Bewegung); hier nur Hinweis und Sprung dorthin
+  if (S.tab === 'main') return '';
+  if (myTurn()) return `<div class="turn mine" role="status"><div><b>${t('turn.mineTitle')}</b><small>${t('turn.round', { n: tr.r })}${next}</small></div><button class="btn gold" data-a="crumb" data-t="main">${t('turn.toFight')}</button></div>`;
   return `<div class="turn" role="status"><span class="lbl">${t('turn.round', { n: tr.r })}</span><span>${t('turn.now', { n: who(tr.name, tr.enemy, tr.cr) })}${next}</span></div>`;
 }
 

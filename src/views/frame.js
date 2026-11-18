@@ -45,7 +45,7 @@ export const line = (k, cls = '') => `<svg class="li${cls ? ' ' + cls : ''}" vie
 
 const GLOBAL = ['home', 'camps', 'gm', 'chars', 'map', 'wiki'];
 /** Weltkarte und Wiki bleiben in einer Kampagne Bereiche dieser Kampagne (kein Verlassen, kein Neuladen). */
-const inCamp = s => !!curCamp() && ['map', 'wiki'].includes(s);
+const inCamp = s => (s === 'wiki' && !U.HUB) || (s === 'map' && !!curCamp());
 /** Welcher globale Bereich gerade „aktiv“ ist: in einer Kampagne „Meine Kampagnen“, sonst die Bibliothek. */
 const here = () => (curCamp() ? (dmOnly() ? 'gm' : 'camps') : dmOnly() ? 'gm' : 'chars');
 
@@ -58,9 +58,14 @@ export function toggleRail() { railMin = !railMin; try { localStorage.setItem('c
 export function vRail(dockHtml) {
   const cur = here();
   const btn = s => { const inC = inCamp(s); return `<button data-a="${inC ? 'railtab' : 'hubgo'}" ${inC ? `data-t="${s}"` : `data-s="${s}"`} aria-current="${(inC ? S.tab === s : cur === s && !['map', 'wiki'].includes(S.tab)) ? 'true' : 'false'}" title="${t('hub.nav.' + s)}">${line(s)}<span>${t('hub.nav.' + s)}</span></button>`; };
-  return `<aside class="rail" aria-label="${t('hub.navLabel')}"><button class="rail-brand" data-a="railhome" title="${t('hub.backTitle')}"><i class="hub-mark" aria-hidden="true"></i><b>RealmCraft</b></button><nav>${GLOBAL.map(btn).join('')}</nav><div class="rail-foot">${btn('settings')}<button class="rail-fold" data-a="railfold" aria-pressed="${railMin}" title="${t(railMin ? 'frame.unfold' : 'frame.fold')}">${line('fold')}<span>${t('frame.fold')}</span></button></div>${dockHtml}</aside>`;
+  return `<aside class="rail" aria-label="${t('hub.navLabel')}"><button class="rail-brand" data-a="railhome" title="${t('hub.backTitle')}"><i class="hub-mark" aria-hidden="true"></i><b>RealmCraft</b></button><nav>${GLOBAL.map(btn).join('')}</nav><div class="rail-foot">${btn('settings')}<div class="rail-prefs">${prefsHtml()}</div><button class="rail-fold" data-a="railfold" aria-pressed="${railMin}" title="${t(railMin ? 'frame.unfold' : 'frame.fold')}">${line('fold')}<span>${t('frame.fold')}</span></button></div>${dockHtml}</aside>`;
 }
 
+/** Sprache und Einheiten (Gerätewahl). Desktop: unten in der globalen Leiste, Handy: im Menü. */
+function prefsHtml() {
+  const langBtn = l => `<button data-a="lang" data-l="${l}" aria-pressed="${lang === l}" lang="${l}">${l.toUpperCase()}</button>`;
+  return `<div class="langs" role="group" aria-label="${t('head.language')}">${langBtn('en')}${langBtn('de')}</div><div class="langs units" role="group" aria-label="${t('head.units')}">${['m', 'ft'].map(u => `<button data-a="units" data-u="${u}" aria-pressed="${units === u}" title="${t('units.' + u)}">${u}</button>`).join('')}</div>`;
+}
 /** Handy: schmale Kopfleiste mit Monogramm, Ort und Menü. Ersetzt Brotkrumen und Kopfknöpfe. */
 export function vMobTop() {
   const c = curCamp(), ttl = charLevel() ? S.name : c ? c.name : dmOnly() ? t('dmm.title') : S.name;
@@ -76,10 +81,9 @@ export function vMobMenu(tabKeys) {
   const acts = [];
   if (charLevel() && !dm) acts.push(`<button class="btn gilt" data-a="lu">${S.level ? (S.level >= 20 ? t('head.lvl20') : t('head.levelUp')) : t('head.build1')}</button>`);
   if (player || charLevel() && (S.camp || c)) acts.push(`<button class="btn" data-a="rest" data-r="short">${t('rest.short')}</button><button class="btn" data-a="rest" data-r="long">${t('rest.long')}</button>`);
-  if (dm) acts.push(`<button class="btn" data-a="tab" data-t="setup">${t('tab.setup')}</button>`);
+  if (dm && !c) acts.push(`<button class="btn" data-a="tab" data-t="setup">${t('tab.setup')}</button>`);
   if (c && charLevel()) acts.push(`<button class="btn" data-a="crumb" data-t="cover">${t('frame.toCamp', { n: esc(c.name) })}</button>`);
-  const langBtn = l => `<button data-a="lang" data-l="${l}" aria-pressed="${lang === l}" lang="${l}">${l.toUpperCase()}</button>`;
-  const prefs = `<div class="mm-prefs"><div class="langs" role="group" aria-label="${t('head.language')}">${langBtn('en')}${langBtn('de')}</div><div class="langs units" role="group" aria-label="${t('head.units')}">${['m', 'ft'].map(u => `<button data-a="units" data-u="${u}" aria-pressed="${units === u}" title="${t('units.' + u)}">${u}</button>`).join('')}</div></div>`;
+  const prefs = `<div class="mm-prefs">${prefsHtml()}</div>`;
   const glob = [...GLOBAL, 'settings'].filter(s => !inCamp(s)).map(s => `<button data-a="hubgo" data-s="${s}">${line(s)}<span>${t('hub.nav.' + s)}</span></button>`).join('');
   return `<div class="mm-ovl" data-a="mmenu"></div><div class="mmenu" role="dialog" aria-modal="true" aria-label="${t('frame.menu')}"><div class="mm-h"><b>${t('frame.menu')}</b><button class="mm-x" data-a="mmenu" aria-label="${t('common.close')}">${line('close')}</button></div>
   <h4>${t(charLevel() ? 'nav.lvl.char' : 'nav.lvl.camp')}</h4><nav class="mm-grid">${tabKeys.map(tabBtn).join('')}</nav>${acts.length ? `<div class="mm-acts">${acts.join('')}</div>` : ''}${prefs}<h4>RealmCraft</h4><nav class="mm-grid">${glob}</nav></div>`;
