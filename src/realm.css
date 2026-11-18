@@ -464,3 +464,12 @@ html:not([data-hub]) .wrap{z-index:auto}
    bei langen Zaubern über den Rand */
 .sp.pr:has(> .sph:first-child){grid-template-columns:minmax(0,1fr) max-content}
 .sp>.sph{min-width:0}
+/* Treffer auf ein Ziel (Werteblock, Spieler am Zug) und Zielwahl in „Eingreifen“ */
+.hit-on{display:flex;flex-wrap:wrap;align-items:center;gap:6px 8px;margin:6px 0 4px;padding-top:6px;border-top:1px dashed rgba(90,60,30,.35)}
+.hit-on input{width:64px}
+.hit-on .chips{display:flex;flex-wrap:wrap;gap:4px}
+.chip.off{opacity:.55}
+.tp-hit{margin:10px 0;padding:10px 12px}
+.tp-hit .hit-on{border-top:0;margin:4px 0 0;padding:0}
+.ein-tgt{margin:0 0 10px}
+.ein-tgt .chips{display:flex;flex-wrap:wrap;gap:4px;margin-top:4px}

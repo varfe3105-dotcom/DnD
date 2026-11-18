@@ -46,6 +46,16 @@ function vInitBar(list, cur, next) {
 /* ---- Kampf der Spielleitung (Gestaltungskonzept, Abschnitte 10 und 11) ---- */
 const tShort = iso => { const d = new Date(iso); return Number.isNaN(+d) ? '' : d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }); };
 /** „Am Zug“ für einen Gegner: Werteblock kompakt, Aktionen als Tabelle. Werte nur aus dem festen Muster (mon-parse.js). */
+/** Treffer auf ein Ziel: Betrag (vorbelegt, z. B. Durchschnittsschaden) und ein Knopf je möglichem Ziel.
+ * Schaden läuft wie „− Schaden“ (verbundene Spieler: Vorschlag; sonst direkt). Kein Würfeln: der Betrag ist änderbar. */
+function vHit(from, key, avg, label, only) {
+  const others = ordered().filter(x => x.id !== from.id && (!only || (only === 'foes' ? x.kind === 'mon' : x.kind !== 'mon')));
+  if (!others.length) return '';
+  const pcs = others.filter(x => x.kind !== 'mon'), foes = others.filter(x => x.kind === 'mon');
+  const id = `dm-hit-${from.id}-${key}`;
+  const chip = x => `<button class="chip${x.hp === 0 ? ' off' : ''}" data-a="dmhit" data-id="${x.id}" data-src="${id}" data-from="${esc(from.name)}" data-w="${esc(label || '')}">${esc(x.name)}</button>`;
+  return `<div class="hit-on"><span class="rc-l">${t('fight.hitOn')}</span><input type="number" class="n" id="${id}" min="1" value="${esc(String(avg || ''))}" placeholder="${t('hp.amount')}" aria-label="${t('hp.amount')}"><div class="chips">${[...(from.kind === 'mon' ? pcs : foes), ...(from.kind === 'mon' ? foes : pcs)].map(chip).join('')}</div></div>`;
+}
 function vTurnFoe(c) {
   const m = findMonster(c.mon);
   const head = (sub, ic) => `<div class="tp-head rc-aub">${corners({ top: true, sm: true })}${ic}<div><span class="rc-l">${t('fight.atTurn')} · ${t('fight.statblock')}</span><h3>${esc(c.name)}</h3>${sub}</div></div>`;
@@ -57,7 +67,7 @@ function vTurnFoe(c) {
     const dmg = a ? cv(esc(a.dice), `Ø ${esc(a.avg)} · ${esc(a.type)}`, 'rc-dt') : s && s.dice ? cv(esc(s.dice), `Ø ${esc(s.avg)} · ${esc(s.type)}`, 'rc-dt') : '<span class="rc-v q">–</span>';
     const kind = a ? t(a.kind === 'Ranged' ? 'fight.ranged' : a.kind === 'Melee' ? 'fight.melee' : 'fight.meleeRanged') : '';
     const sub = a ? `${kind} · ${esc(a.reach)}${a.note ? ' · ' + esc(a.note) : ''}` : s ? '' : t('fight.textOnly');
-    return `<details class="arow-d"><summary class="arow"><span class="rc-n">${esc(e.name)}${ok ? ` <span class="ok" title="${t('fight.parsed')}">✓</span>` : ''}<small class="rc-s">${sub}</small></span>${hit}${dmg}<span class="chev" aria-hidden="true">▸</span></summary><p class="arow-x">${esc(convUnits(e.text))}</p></details>`;
+    return `<details class="arow-d"><summary class="arow"><span class="rc-n">${esc(e.name)}${ok ? ` <span class="ok" title="${t('fight.parsed')}">✓</span>` : ''}<small class="rc-s">${sub}</small></span>${hit}${dmg}<span class="chev" aria-hidden="true">▸</span></summary><p class="arow-x">${esc(convUnits(e.text))}</p>${vHit(c, 'a' + ents.indexOf(e), a ? a.avg : s && s.avg ? s.avg : '', e.name)}</details>`;
   };
   const SEC = { Actions: 'fight.secAct', 'Bonus Actions': 'fight.secBonus', Reactions: 'fight.secReact', 'Legendary Actions': 'fight.secLeg', 'Lair Actions': 'fight.secLair' };
   const groups = Object.keys(SEC).map(k => { const l = ents.filter(e => e.sec === k && e.name); return l.length ? `<p class="grp2"><span class="rc-l">${t(SEC[k])}</span></p>${l.map(aRow).join('')}` : ''; }).join('');
@@ -93,7 +103,7 @@ function vTurnPc(c) {
   const tags = [...conds.map(n => `<span class="tag t-bad sm">✕ ${esc(n)}</span>`), conc ? `<span class="tag t-conc sm">◇ ${esc(conc)}</span>` : ''].join('');
   return `<section class="turnp">
     <div class="tp-head rc-aub">${corners({ top: true, sm: true })}<span class="tp-ic">${who(c)}</span><div><span class="rc-l">${t('fight.atTurn')}${c.live ? ' · ' + t('peek.roShort') : ''}</span><h3>${esc(c.name)}</h3><span class="rc-s">${p ? esc([p.klass, p.level].filter(Boolean).join(' ')) : ''}</span></div></div>
-    ${stamps}<div class="tp-body"><div class="srow">${sv(t('dm.acShort'), ac)}${sv(t('head.hpShort'), `${hp}<span class="mx"> / ${hpMax}</span>`)}${sv(t('fight.initShort'), c.init)}</div>${tags ? `<div class="tags">${tags}</div>` : ''}${sheet}</div></section>`;
+    ${stamps}<div class="tp-body"><div class="srow">${sv(t('dm.acShort'), ac)}${sv(t('head.hpShort'), `${hp}<span class="mx"> / ${hpMax}</span>`)}${sv(t('fight.initShort'), c.init)}</div>${tags ? `<div class="tags">${tags}</div>` : ''}${(() => { const h = vHit(c, 'pc', '', '', 'foes'); return h ? `<section class="hub-panel tp-hit"><p class="rc-l">${t('fight.pcHits', { n: esc(c.name) })}</p>${h}</section>` : ''; })()}${sheet}</div></section>`;
 }
 /** Eingreifen (11.4): wirkt auf die ausgewählte Figur, ohne Untermenü. Desktop: feste Spalte; Handy: Blatt, wenn ausgewählt. */
 function vEin(c, opened) {
@@ -110,7 +120,10 @@ function vEin(c, opened) {
   const note = `<input type="text" class="wide" id="dm-note-${c.id}" data-dm="note" data-id="${c.id}" value="${esc(c.note)}" placeholder="${t('dm.rowNote')}" aria-label="${t('dm.rowNote')}">`;
   const foot = `<div class="add">${c.kind === 'pc' && c.live ? `<button class="btn sm" data-a="peek" data-k="${esc(c.live)}" data-n="${esc(c.name)}">${t('peek.btn')}</button>` : ''}<button class="btn sm bad" data-a="dmrm" data-id="${c.id}">${t('item.remove')}</button></div>`;
   const stat = mon && c.id !== D.combat.active ? `<details class="tp-full"><summary>${t('fight.fullText')}</summary>${statBlock(c)}</details>` : '';
-  const body = `<div class="ein-h"><span class="rc-l">${t('fight.ein')}</span><b class="rc-n">${esc(c.name)}</b><span class="rc-v s">${c.hp}<span class="mx">/${c.hpMax}</span></span>${opened ? `<button class="btn sm" data-a="dmclose">${t('common.close')}</button>` : ''}</div>${hp}${vals}${vis}${conds}${fx}${conc}${slots}${note}${stat}${foot}`;
+  // Ziel wechseln ohne Suchen: alle Figuren als Chips (Gruppe zuerst), die gewählte hervorgehoben
+  const all = ordered(), tgts = [...all.filter(x => x.kind !== 'mon'), ...all.filter(x => x.kind === 'mon')];
+  const pick = tgts.length > 1 ? `<div class="ein-tgt"><span class="rc-l">${t('fight.target')}</span><div class="chips">${tgts.map(x => `<button class="chip${x.id === c.id ? ' on' : ''}${x.hp === 0 && x.hpMax ? ' off' : ''}" data-a="dmfocus" data-id="${x.id}" aria-pressed="${x.id === c.id}">${esc(x.name)}</button>`).join('')}</div></div>` : '';
+  const body = `${pick}<div class="ein-h"><span class="rc-l">${t('fight.ein')}</span><b class="rc-n">${esc(c.name)}</b><span class="rc-v s">${c.hp}<span class="mx">/${c.hpMax}</span></span>${opened ? `<button class="btn sm" data-a="dmclose">${t('common.close')}</button>` : ''}</div>${hp}${vals}${vis}${conds}${fx}${conc}${slots}${note}${stat}${foot}`;
   return opened ? `<div class="ovl dm-ovl ein-wrap"><div class="dlg dm-dlg ein" role="dialog" aria-modal="true" aria-label="${t('fight.ein')}: ${esc(c.name)}">${body}</div></div>` : `<section class="ein ein-inline">${body}</section>`;
 }
 /** Karte einer Figur: Gruppe und Gegner gleich aufgebaut (10.2). Initiative, Name mit Klasse oder HG, RK und TP, Balken,

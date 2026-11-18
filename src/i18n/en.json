@@ -1949,5 +1949,11 @@
  "sec.on": "active. Players send exact HP only encrypted to you; their sheets can only be read online by their owner and you.",
  "sec.mixed": "active, but at least one device still runs the old app version and sends HP in plain text. Please reload there.",
  "sec.foreign": "According to the database this room belongs to another DM. Your device key does not match; open the room from the original device or create a new room.",
- "sec.off": "not active. The database does not have SQL “D3” yet (supabase/d3-rechte.sql); until then the previous behaviour applies."
+ "sec.off": "not active. The database does not have SQL “D3” yet (supabase/d3-rechte.sql); until then the previous behaviour applies.",
+ "fight.hitOn": "Hit on",
+ "fight.pcHits": "{n} hits a foe",
+ "fight.target": "Target",
+ "fight.hitNeed": "Enter the damage first.",
+ "fight.hitEv": "{a} hits {n}: {d} damage",
+ "fight.hitEvW": "{a} hits {n} with {w}: {d} damage"
 }

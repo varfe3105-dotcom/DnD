@@ -1949,5 +1949,11 @@
  "sec.on": "aktiv. Spieler senden genaue TP nur verschlüsselt an dich; ihre Bögen kann online nur der Besitzer und du lesen.",
  "sec.mixed": "aktiv, aber mindestens ein Gerät nutzt noch die alte App-Version und sendet TP im Klartext. Bitte dort neu laden.",
  "sec.foreign": "Dieser Raum gehört laut Datenbank einer anderen Spielleitung. Deine Geräte-Kennung passt nicht; öffne den Raum vom ursprünglichen Gerät oder lege einen neuen Raum an.",
- "sec.off": "nicht aktiv. Die Datenbank hat das SQL „D3“ noch nicht (supabase/d3-rechte.sql); bis dahin gilt das bisherige Verhalten."
+ "sec.off": "nicht aktiv. Die Datenbank hat das SQL „D3“ noch nicht (supabase/d3-rechte.sql); bis dahin gilt das bisherige Verhalten.",
+ "fight.hitOn": "Treffer auf",
+ "fight.pcHits": "{n} trifft einen Gegner",
+ "fight.target": "Ziel",
+ "fight.hitNeed": "Erst den Schaden eintragen.",
+ "fight.hitEv": "{a} trifft {n}: {d} Schaden",
+ "fight.hitEvW": "{a} trifft {n} mit {w}: {d} Schaden"
 }
