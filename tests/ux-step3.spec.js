@@ -54,3 +54,21 @@ test.describe('UX Schritt 3 @new', () => {
     await expect(hd.locator('[data-a="rest"][data-r="long"]')).toBeVisible();
   });
 });
+
+test.describe('Farbschema nach Kampagnenbild @new', () => {
+  test('Kampagne mit Waldbild: grünes Schema in der Kampagne, Startseite bleibt Aubergine; Bild füllt die Titelplatte', async ({ page }) => {
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await start(page, { 'charbogen-campaigns': [{ id: 'd1', name: 'Wald', status: 'active', chars: [], role: 'dm', split: true, art: 5 }] });
+    await expect(page.locator('html')).not.toHaveAttribute('data-art', /.*/);
+    await page.locator('.hub-side [data-a="hubgo"][data-s="gm"]').click();
+    await page.locator('.hub-camp [data-a="campplay"]').click();
+    await expect(page.locator('html')).toHaveAttribute('data-art', '5');
+    expect(await page.evaluate(() => getComputedStyle(document.documentElement).getPropertyValue('--camp-tint').trim())).not.toBe('transparent');
+    // Kein leerer Streifen: Bild reicht bis an den rechten Rand der Titelplatte
+    const [hd, art] = await Promise.all([page.locator('header.hd').boundingBox(), page.locator('header.hd .hd-art').boundingBox()]);
+    expect(Math.abs(hd.x + hd.width - (art.x + art.width))).toBeLessThan(2);
+    // Zurück auf die Startseite: wieder Standard
+    await page.locator('.rail [data-a="railhome"]').click();
+    await expect(page.locator('html')).not.toHaveAttribute('data-art', /.*/);
+  });
+});

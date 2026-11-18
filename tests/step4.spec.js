@@ -83,6 +83,8 @@ test.describe('Vorschläge und Handouts @new', () => {
   test('Spielleitung schickt Vorschlag und Handout', async ({ page }) => {
     await openDm(page);
     await act(page, 'livecreate').click();
+    // Erst bedienen, wenn die Anfragen nach dem Raumöffnen beantwortet sind (sonst setzt das Neuzeichnen die Auswahl zurück)
+    await page.waitForLoadState('networkidle');
     await page.evaluate(p => window.__livePeers([p]), player);
     await page.locator('#lv-a-p1').fill('6');
     await act(page, 'livesend', '[data-t="dmg"]').click();

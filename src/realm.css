@@ -3,7 +3,7 @@
    Figuren, Übergängen und Pergament, nicht an Listen und Tabellen. */
 /* Tokens dieser Schicht stehen in tokens.css (einzige Quelle). */
 /* ---- Materialien ---- */
-.rc-aub{background:linear-gradient(180deg,rgba(40,24,44,.35),rgba(18,10,20,.55)),var(--rc-aub) center/cover}
+.rc-aub{background:linear-gradient(180deg,rgba(40,24,44,.35),rgba(18,10,20,.55)),linear-gradient(var(--camp-tint),var(--camp-tint)),var(--rc-aub) center/cover;background-blend-mode:normal,color,normal}
 .rc-dark{background:linear-gradient(180deg,rgba(14,10,14,.5),rgba(10,8,10,.7)),var(--rc-dark) center/cover}
 /* ---- Ornamente ---- */
 .rc-co{position:absolute;width:70px;height:68px;background:var(--rc-corner) 0 0/contain no-repeat;pointer-events:none;z-index:3;filter:drop-shadow(0 1px 2px rgba(0,0,0,.7))}
@@ -41,7 +41,7 @@
 :is(.btn,.hbtn).gold:hover,.btn.gilt:hover{filter:brightness(1.08)}
 :is(.btn,.hbtn).gold:disabled{filter:grayscale(.6) brightness(.7)}
 /* ---- Titelplatten: Köpfe von Kampagne, Spielleitung und Charakter ---- */
-header.hd{position:relative;background:linear-gradient(100deg,rgba(40,24,44,.15),rgba(20,12,22,.55) 55%,rgba(14,10,14,.85)),var(--rc-aub) center/cover}
+header.hd{position:relative;background:linear-gradient(100deg,rgba(40,24,44,.15),rgba(20,12,22,.55) 55%,rgba(14,10,14,.85)),linear-gradient(var(--camp-tint),var(--camp-tint)),var(--rc-aub) center/cover;background-blend-mode:normal,color,normal;background-origin:border-box;background-clip:border-box}
 header.hd .who{position:relative;z-index:2}
 header.hd .rc-ribbon{margin-top:8px}
 header.hd .por{box-shadow:0 0 0 3px #d4b06a,0 0 0 8px #1a1015,0 0 0 10px #a8833f,0 8px 18px #000}
@@ -248,8 +248,8 @@ html:not([data-hub]) .wrap{max-width:none;padding:0}
 .rail-brand .hub-mark{flex:none;width:36px;height:36px;margin:0}
 .rail nav{display:flex;flex-direction:column;gap:2px;padding:8px 0}
 .rail nav button,.rail-foot button{position:relative;display:flex;align-items:center;gap:12px;width:100%;padding:10px 16px 10px 20px;background:none;border:0;color:var(--c-cream-2);font:500 .98rem var(--f-ui);text-align:left;white-space:nowrap}
-.rail nav button:hover,.rail-foot button:hover{color:var(--c-cream);background:linear-gradient(90deg,rgba(90,58,96,.3),transparent)}
-.rail nav button[aria-current="true"],.rail-foot button[aria-current="true"]{color:var(--c-cream);background:linear-gradient(90deg,rgba(90,58,96,.85),rgba(59,36,64,.45) 70%,transparent);box-shadow:inset 3px 0 0 var(--c-brass)}
+.rail nav button:hover,.rail-foot button:hover{color:var(--c-cream);background:linear-gradient(90deg,rgba(var(--camp-hl),.3),transparent)}
+.rail nav button[aria-current="true"],.rail-foot button[aria-current="true"]{color:var(--c-cream);background:linear-gradient(90deg,rgba(var(--camp-hl),.85),rgba(59,36,64,.45) 70%,transparent);box-shadow:inset 3px 0 0 var(--c-brass)}
 .li{width:22px;height:22px;flex:none;fill:none;stroke:var(--c-brass);stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
 .rail-foot{margin-top:auto;border-top:1px solid var(--c-brass-soft);padding:4px 0}
 .rail-fold .li{transition:transform .2s}
@@ -305,7 +305,7 @@ body:has(.rail #live-dock.full) #toast{top:auto;bottom:calc(16px + env(safe-area
   .mt-where b{display:block;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;font:700 1.12rem var(--f-title);color:var(--c-cream)}
   .mt-live{width:10px;height:10px;border-radius:50%;background:#d9a441;box-shadow:0 0 6px currentColor}
   .mt-live.st-on{background:#5fbf6a}.mt-live.st-error{background:#e0503c}
-  .mt-menu{flex:none;width:44px;height:44px;display:grid;place-items:center;padding:0;background:rgba(90,58,96,.35);border:1px solid var(--c-brass-soft);border-radius:3px}
+  .mt-menu{flex:none;width:44px;height:44px;display:grid;place-items:center;padding:0;background:rgba(var(--camp-hl),.35);border:1px solid var(--c-brass-soft);border-radius:3px}
   .crumbs{display:none}
   /* Kompakte Titelplatte: die Knöpfe stehen im Menü */
   header.hd .hacts,header.hd .sub2,header.hd .hd-camps,header.hd .xpl{display:none}
@@ -479,3 +479,25 @@ html:not([data-hub]) .wrap{z-index:auto}
 .rail-prefs .langs button{padding:4px 8px;font-size:.8rem}
 .shell.folded .rail-prefs{display:none}
 @media (min-width:900px) and (max-width:1199px){.rail-prefs{display:none}}
+
+/* Titelplatte: Bild und Fläche laufen bis unter die Messinglinie (vorher dunkle leere Streifen im 18-px-Rahmen) */
+header.hd .hd-art{inset:-18px -18px -18px 34%}
+/* Aktive Reiter in der Kampagnenfarbe (überschreibt die feste Aubergine aus areas.css) */
+@media screen and (min-width:521px){
+  .tabs nav button:hover{background:linear-gradient(180deg,transparent,rgba(var(--camp-hl),.3))}
+  .tabs nav button[aria-selected="true"]{background:linear-gradient(180deg,rgba(var(--camp-hl),.15),rgba(var(--camp-hl),.75))}
+}
+:is(.hbtn,html[data-area="char"] .sheet .btn,.hd .btn):hover{background:rgba(var(--camp-hl),.45)}
+html[data-area="char"] .conc{background:linear-gradient(90deg,rgba(var(--camp-hl),.75),rgba(24,19,24,.92) 70%),var(--slate)}
+
+/* Kampagneneinstellungen: Kopf wie eine Abschnittstafel (Titel links, Kampagne daneben), Inhalt mittig begrenzt */
+.cs{max-width:1360px;margin:0 auto}
+.cs-top{display:flex;align-items:baseline;flex-wrap:wrap;gap:4px 16px;padding:16px 22px 16px 64px}
+.cs-top h2{display:block;text-align:left;font:700 1.9rem/1.1 var(--f-title)}
+.cs-top p{margin:0;font:600 1.15rem var(--f-title);color:var(--t-sub-d)}
+.cs-top p::before{content:"·";margin-right:12px;color:var(--c-brass)}
+@media (max-width:640px){.cs-top{padding:14px 16px 14px 48px}.cs-top h2{font-size:1.5rem}}
+/* Kapitelband (Grafik in Aubergine) folgt der Kampagnenfarbe */
+html[data-art]:not([data-art="0"]) .rc-ribbon{filter:grayscale(.85) brightness(.95)}
+/* Kampagnenleiste: neun Reiter passen am Desktop in eine Zeile */
+@media (min-width:1200px){.tabs:not(.side) nav button,.tabs:not(.side) nav button[aria-selected="true"]{padding:10px 12px;gap:7px}}

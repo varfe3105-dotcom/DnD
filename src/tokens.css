@@ -64,4 +64,12 @@
   --t-val-p:#22130a;--t-name-p:#2b1a0f;--t-sub-p:#553720;--t-lbl-p:#7a3424;
   --gold-btn:linear-gradient(180deg,#e2c37f,#a8833f 55%,#7f5f2b);
   --ring-gold:0 0 0 2px #e3c47f,0 0 0 4px #1a1015,0 0 0 5px #a8833f,0 0 20px rgba(236,210,148,.35);
+  /* Kampagnenfarbe: Färbung der Aubergine-Flächen (transparent = Aubergine), Hervorhebung als RGB-Tripel */
+  --camp-tint:transparent;--camp-hl:90,58,96;
 }
+/* Farbschema je Kampagnenbild (html[data-art], gesetzt in render.js, nur innerhalb einer Kampagne). Messing und Gold bleiben. */
+html[data-art="1"]{--camp-tint:hsl(32 30% 32%);--camp-hl:110,78,44;--grad-pri:linear-gradient(180deg,#6d4c2c,#3b2816);--grad-pri-h:linear-gradient(180deg,#80593a,#47301c);--c-aub:#3b2a1c;--c-aub-2:#523a24}
+html[data-art="2"]{--camp-tint:hsl(212 30% 36%);--camp-hl:58,82,114;--grad-pri:linear-gradient(180deg,#405a7c,#22324b);--grad-pri-h:linear-gradient(180deg,#4c6a90,#2a3c58);--c-aub:#1f2c3d;--c-aub-2:#2d3f56}
+html[data-art="3"]{--camp-tint:hsl(266 24% 38%);--camp-hl:86,62,124;--grad-pri:linear-gradient(180deg,#5b4385,#30244c);--grad-pri-h:linear-gradient(180deg,#6a4f9a,#3a2c5a);--c-aub:#2c2240;--c-aub-2:#3e3058}
+html[data-art="4"]{--camp-tint:hsl(184 26% 30%);--camp-hl:44,94,98;--grad-pri:linear-gradient(180deg,#2f6066,#1a3639);--grad-pri-h:linear-gradient(180deg,#386f76,#204247);--c-aub:#16292b;--c-aub-2:#22393c}
+html[data-art="5"]{--camp-tint:hsl(96 20% 30%);--camp-hl:72,98,52;--grad-pri:linear-gradient(180deg,#506c37,#2b3c1e);--grad-pri-h:linear-gradient(180deg,#5e7d41,#344825);--c-aub:#232e1a;--c-aub-2:#334325}

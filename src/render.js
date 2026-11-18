@@ -97,6 +97,9 @@ export function render() {
   h += vHandout() + vTarget() + vPeek();
   }
   document.documentElement.toggleAttribute('data-hub', !!U.HUB);
+  // Farbschema nach dem Titelbild der geöffneten Kampagne (Startseite und Bibliothek: Aubergine)
+  const artC = !U.HUB && curCamp();
+  if (artC) document.documentElement.dataset.art = String(artC.art ?? 0); else delete document.documentElement.dataset.art;
   document.documentElement.dataset.area = U.HUB ? 'hub' : !dmOnly() && CHAR_STYLE.includes(tb) ? 'char' : 'play';
   document.body.style.overflow = U.LU ? 'hidden' : '';
   const wl = document.querySelector('.wl'), wlTop = wl && !U.resetWl ? wl.scrollTop : 0, pageY = window.scrollY;
