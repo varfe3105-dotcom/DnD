@@ -9,6 +9,7 @@ test.describe('Posteingang Live-Leiste @new', () => {
       await page.setViewportSize({ width: w, height: h });
       await seed(page, base4({ tab: 'prof', id: 'held1', name: 'Mira' }));
       await joinRoom(page, 'ABC234');
+      await page.waitForLoadState('networkidle');
       await page.evaluate(() => window.__msg({ id: 'x1', type: 'item', to: 'held1', from: 'dm-x', ref: 'potion:potion-of-healing', n: 'Potion of Healing', q: 1 }));
       const row = page.locator('#live-dock .inbox .row').first();
       await expect(row).toBeVisible();

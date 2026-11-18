@@ -10,13 +10,13 @@
 
 :root{
   /* ---- Palette ---- */
-  --c-night:#110d11;--c-anth-1:#1a161a;--c-anth-2:#221c22;--c-anth-3:#2d252c;--c-anth-4:#3a303a;
-  --c-aub-dk:#24162a;--c-aub:#3b2440;--c-aub-2:#4d3053;--c-aub-lt:#6a4a70;
+  --c-night:hsl(var(--camp-h) calc(13.3% * var(--camp-sf)) 5.9%);--c-anth-1:hsl(var(--camp-h) calc(8.3% * var(--camp-sf)) 9.4%);--c-anth-2:hsl(var(--camp-h) calc(9.7% * var(--camp-sf)) 12.2%);--c-anth-3:hsl(calc(var(--camp-h) + 8) calc(9.8% * var(--camp-sf)) 16.1%);--c-anth-4:hsl(var(--camp-h) calc(9.4% * var(--camp-sf)) 20.8%);
+  --c-aub-dk:hsl(calc(var(--camp-h) - 18) calc(31.2% * var(--camp-sf)) 12.5%);--c-aub:hsl(calc(var(--camp-h) - 11) calc(28% * var(--camp-sf)) 19.6%);--c-aub-2:hsl(calc(var(--camp-h) - 10) calc(26.7% * var(--camp-sf)) 25.7%);--c-aub-lt:hsl(calc(var(--camp-h) - 9) calc(20.4% * var(--camp-sf)) 36.5%);
   --c-brown:#2a1f18;--c-brown-lt:#4a3626;
   --c-parch-lt:#f4e8cc;--c-parch:#e9d7b0;--c-parch-dk:#d2b986;--c-parch-ink:#2a1d14;--c-parch-mute:#6b5338;--c-parch-line:#b39563;
   --c-brass-lt:#ecd294;--c-brass:#c49a52;--c-brass-dk:#7d5a28;--c-brass-a:rgba(196,154,82,.45);--c-brass-soft:rgba(196,154,82,.2);
   --c-cream:#efe4cf;--c-cream-2:#d8c9ad;--c-cream-mute:#a99a82;
-  --c-good:#86c18f;--c-bad:#e3806d;--c-warn:#e6ad5c;--c-info:#c9b3d6;--c-rubric:#5b2a3c;
+  --c-good:#86c18f;--c-bad:#e3806d;--c-warn:#e6ad5c;--c-info:#c9b3d6;--c-rubric:hsl(calc(var(--camp-h) + 38) calc(36.8% * var(--camp-sf)) 26.1%);
 
   /* ---- Typografie ---- */
   --f-title:"Cormorant Garamond","Iowan Old Style",Palatino,Georgia,serif;
@@ -30,14 +30,14 @@
   /* ---- Abstände, Rundungen, Linien ---- */
   --sp-1:4px;--sp-2:8px;--sp-3:12px;--sp-4:16px;--sp-5:24px;--sp-6:32px;--sp-7:48px;
   --r-1:2px;--r-2:4px;--r-3:6px;
-  --bd-brass:1px solid var(--c-brass-a);--bd-soft:1px solid var(--c-brass-soft);--edge:#0a080a;
+  --bd-brass:1px solid var(--c-brass-a);--bd-soft:1px solid var(--c-brass-soft);--edge:hsl(var(--camp-h) calc(11.1% * var(--camp-sf)) 3.5%);
 
   /* ---- Flächen ---- */
   --slate:url(./assets/slate.jpg);--parch-tex:url(./assets/parchment.jpg);
   --surface-page:var(--c-night) url(./assets/bg-dark.jpg) center top/cover no-repeat fixed;
-  --surface-card:linear-gradient(180deg,rgba(36,31,34,.92),rgba(22,19,21,.95)),var(--slate);
-  --surface-raised:linear-gradient(180deg,rgba(52,42,51,.92),rgba(32,26,32,.95)),var(--slate);
-  --surface-sunk:rgba(8,6,9,.55);
+  --surface-card:linear-gradient(180deg,hsl(calc(var(--camp-h) + 24) calc(7.5% * var(--camp-sf)) 13.1% / 0.92),hsl(calc(var(--camp-h) + 20) calc(7.3% * var(--camp-sf)) 8% / 0.95)),var(--slate);
+  --surface-raised:linear-gradient(180deg,hsl(calc(var(--camp-h) + 6) calc(10.6% * var(--camp-sf)) 18.4% / 0.92),hsl(var(--camp-h) calc(10.3% * var(--camp-sf)) 11.4% / 0.95)),var(--slate);
+  --surface-sunk:hsl(calc(var(--camp-h) - 20) calc(20% * var(--camp-sf)) 2.9% / 0.55);
   --surface-parch:linear-gradient(rgba(120,80,30,.04),rgba(90,50,10,.14)),var(--parch-tex);
   --frame:url(./assets/frame-brass.svg) 40 / 24px / 2px round;
   --flourish:url(./assets/flourish-gold.svg);
@@ -47,8 +47,8 @@
   --glow-brass:0 0 0 1px var(--c-brass-a),0 0 18px rgba(214,176,106,.25);
 
   /* ---- Bausteine ---- */
-  --grad-btn:linear-gradient(180deg,#3a3039,#241e24);--grad-btn-h:linear-gradient(180deg,#4a3d49,#2c252c);
-  --grad-pri:linear-gradient(180deg,#56355c,#33203a);--grad-pri-h:linear-gradient(180deg,#68426f,#3d2645);
+  --grad-btn:linear-gradient(180deg,hsl(calc(var(--camp-h) + 6) calc(9.4% * var(--camp-sf)) 20.8%),hsl(var(--camp-h) calc(9.1% * var(--camp-sf)) 12.9%));--grad-btn-h:linear-gradient(180deg,hsl(calc(var(--camp-h) + 5) calc(9.6% * var(--camp-sf)) 26.5%),hsl(var(--camp-h) calc(8.6% * var(--camp-sf)) 15.9%));
+  --grad-pri:linear-gradient(180deg,hsl(calc(var(--camp-h) - 9) calc(26.9% * var(--camp-sf)) 28.4%),hsl(calc(var(--camp-h) - 16) calc(28.9% * var(--camp-sf)) 17.6%));--grad-pri-h:linear-gradient(180deg,hsl(calc(var(--camp-h) - 9) calc(25.4% * var(--camp-sf)) 34.7%),hsl(calc(var(--camp-h) - 15) calc(29% * var(--camp-sf)) 21%));
   --grad-gold:linear-gradient(180deg,#ecd294,#b48a46);
   --bar-hp:linear-gradient(180deg,#d9654f 0,#9b2f25 50%,#5b1712 100%);--bar-temp:linear-gradient(180deg,#a6d6ac,#4c8a5c);
   /* Status (gedämpft): schädlicher Zustand, positive Wirkung, Konzentration/Magie, Ressource */
@@ -63,13 +63,15 @@
   --t-val-d:#f7ebd2;--t-name-d:#efe2c6;--t-sub-d:#cfbc95;--t-lbl-d:#dcc189;
   --t-val-p:#22130a;--t-name-p:#2b1a0f;--t-sub-p:#553720;--t-lbl-p:#7a3424;
   --gold-btn:linear-gradient(180deg,#e2c37f,#a8833f 55%,#7f5f2b);
-  --ring-gold:0 0 0 2px #e3c47f,0 0 0 4px #1a1015,0 0 0 5px #a8833f,0 0 20px rgba(236,210,148,.35);
+  --ring-gold:0 0 0 2px #e3c47f,0 0 0 4px hsl(calc(var(--camp-h) + 30) calc(23.8% * var(--camp-sf)) 8.2%),0 0 0 5px #a8833f,0 0 20px rgba(236,210,148,.35);
   /* Kampagnenfarbe: Färbung der Aubergine-Flächen (transparent = Aubergine), Hervorhebung als RGB-Tripel */
-  --camp-tint:transparent;--camp-hl:90,58,96;
+  --camp-h:300;--camp-sf:1;--camp-tint:transparent;--camp-tint-bg:transparent;
 }
-/* Farbschema je Kampagnenbild (html[data-art], gesetzt in render.js, nur innerhalb einer Kampagne). Messing und Gold bleiben. */
-html[data-art="1"]{--camp-tint:hsl(32 30% 32%);--camp-hl:110,78,44;--grad-pri:linear-gradient(180deg,#6d4c2c,#3b2816);--grad-pri-h:linear-gradient(180deg,#80593a,#47301c);--c-aub:#3b2a1c;--c-aub-2:#523a24}
-html[data-art="2"]{--camp-tint:hsl(212 30% 36%);--camp-hl:58,82,114;--grad-pri:linear-gradient(180deg,#405a7c,#22324b);--grad-pri-h:linear-gradient(180deg,#4c6a90,#2a3c58);--c-aub:#1f2c3d;--c-aub-2:#2d3f56}
-html[data-art="3"]{--camp-tint:hsl(266 24% 38%);--camp-hl:86,62,124;--grad-pri:linear-gradient(180deg,#5b4385,#30244c);--grad-pri-h:linear-gradient(180deg,#6a4f9a,#3a2c5a);--c-aub:#2c2240;--c-aub-2:#3e3058}
-html[data-art="4"]{--camp-tint:hsl(184 26% 30%);--camp-hl:44,94,98;--grad-pri:linear-gradient(180deg,#2f6066,#1a3639);--grad-pri-h:linear-gradient(180deg,#386f76,#204247);--c-aub:#16292b;--c-aub-2:#22393c}
-html[data-art="5"]{--camp-tint:hsl(96 20% 30%);--camp-hl:72,98,52;--grad-pri:linear-gradient(180deg,#506c37,#2b3c1e);--grad-pri-h:linear-gradient(180deg,#5e7d41,#344825);--c-aub:#232e1a;--c-aub-2:#334325}
+/* Farbschema je Kampagnenbild (html[data-art], gesetzt in render.js, nur innerhalb einer Kampagne).
+   --camp-h: Grundfarbton aller dunklen Flächen (vorher fest Aubergine 300), --camp-sf: Sättigungsfaktor,
+   --camp-tint / --camp-tint-bg: Tönung der Grafiken (Aubergine-Textur, Seitenhintergrund). Messing, Gold und Zustandsfarben bleiben. */
+html[data-art="1"]{--camp-h:32;--camp-sf:.9;--camp-tint:hsl(32 30% 32%);--camp-tint-bg:hsl(32 14% 14%)}
+html[data-art="2"]{--camp-h:212;--camp-sf:.9;--camp-tint:hsl(212 30% 36%);--camp-tint-bg:hsl(212 14% 14%)}
+html[data-art="3"]{--camp-h:266;--camp-sf:1;--camp-tint:hsl(266 24% 38%);--camp-tint-bg:hsl(266 12% 14%)}
+html[data-art="4"]{--camp-h:186;--camp-sf:.85;--camp-tint:hsl(184 26% 30%);--camp-tint-bg:hsl(186 14% 13%)}
+html[data-art="5"]{--camp-h:95;--camp-sf:.75;--camp-tint:hsl(96 20% 30%);--camp-tint-bg:hsl(95 12% 13%)}
