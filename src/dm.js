@@ -261,6 +261,11 @@ export const inCombat = key => D.combat.list.some(c => c.kind === 'pc' && c.live
 /** Hält verknüpfte Spieler im Tracker aktuell. */
 export function syncLive(peers) {
   let changed = false;
+  // Neue Begleiter (z. B. Primal Companion, erst nach dem Kampfbeitritt angelegt) direkt unter ihren Spieler setzen
+  D.combat.list.filter(c => c.kind === 'pc' && c.live).forEach(c => {
+    const p = peers.find(x => x.key === c.live);
+    (p?.pets || []).filter(x => !x.est).forEach(x => { if (!D.combat.list.some(y => y.kind === 'pet' && y.live === c.live && y.pet === x.id)) { D.combat.list.push(petRow(p, x)); changed = true; } });
+  });
   D.combat.list.forEach(c => {
     const p0 = c.live && peers.find(x => x.key === c.live);
     if (!p0) return;

@@ -2,6 +2,7 @@
 // welcher Ebene stehen, zeichnet die Brotkrumen (wo bin ich, wie komme ich zurück) und die Seiten der Kampagnenebene.
 // Die Reiterkennungen der bisherigen Seiten bleiben (main, inv, notes, setup, wiki, dm…), damit gespeicherte Bögen,
 // Tests und Sprünge weiter stimmen. Neu: cover, party, explore, trade, chron (Kampagne) und prof, stats, spells (Charakter).
+import { vPets } from './extras.js';
 import { esc } from '../util.js';
 import { S, U } from '../state.js';
 import { D, hereNote, lastSession, linksOf } from '../dm.js';
@@ -231,7 +232,7 @@ function vFightLive(tr, mine, sound, feedHtml) {
   const tabs = `<nav class="tabs2" role="tablist">${[['act', 'fight.tabAct'], ['bonus', 'fight.tabBonus'], ['react', 'fight.tabReact'], ['move', 'fight.tabMove'], ['all', 'fight.tabAll']].map(([k, l]) => `<button role="tab" class="${tab === k ? 'on' : ''}" data-a="ptab" data-k="${k}" aria-selected="${tab === k}">${t(l)}</button>`).join('')}</nav>`;
   const fx = effects(), fxLine = [...fx.atk.dis.length ? [t('fx.dis') + ': ' + fx.atk.dis.join(', ')] : []].join('');
   const head = `<div class="tp-head rc-aub">${corners({ top: true, sm: true })}<span class="tp-ic"><span class="ib-ic ini">${esc((S.name || '?')[0])}</span></span><div><span class="rc-l">${t(mine ? 'fight.yourTurn' : 'fight.yourFight')}</span><h3>${esc(S.name)}</h3><span class="rc-s">${t('dm.acShort')} ${acNow()} · ${t('head.hpShort')} ${S.hp}/${hpMaxNow()}${st ? ` · ${t('fight.spellDc')} ${st.dc} · ${t('fight.spellAtk')} ${sg(st.atk)}` : ''}</span></div>${fxLine ? `<span class="tag t-bad pf-fx">${esc(fxLine)}</span>` : ''}</div>`;
-  const stat = `<aside class="pf-stat">${concBanner()}${vHP()}${vCond()}${vRes()}${vQuick()}</aside>`;
+  const stat = `<aside class="pf-stat">${concBanner()}${vHP()}${vPets()}${vCond()}${vRes()}${vQuick()}</aside>`;
   const top = `<div class="fight-state on rc-aub${mine ? ' mine' : ''}">${corners({ top: true, sm: true })}<div class="fs-top"><span class="fs-badge">${t('fight.active')}</span><b class="fs-round">${t('turn.round', { n: tr.r })}</b><span>${mine ? `<b class="fs-mine">${t('turn.mineTitle')}</b>` : t('turn.now', { n: esc(tr.name || '?') })}${tr.next ? ' · ' + t('turn.next', { n: esc(tr.next) }) : ''}</span>${sound}${mine ? `<button class="btn gold" data-a="endturn">${t('turn.end')}</button>` : ''}</div>${ib ? `<ol class="ibar fight-order">${ib}</ol>` : ''}</div>`;
   const top2 = tr.prep ? `<div class="fight-state rc-aub">${corners({ top: true, sm: true })}<div class="fs-top"><span class="fs-badge off">${t('fight.prepBadge')}</span><span>${t(L.code ? 'fight.prepWait' : 'fight.prepNoRoom')}</span>${S.turn?.on ? `<button class="btn" data-a="tnew">${t('turn.new')}</button>` : ''}</div></div>` : top;
   return `${top2}<div class="pfight">${side}<section class="turnp pf-main${mine ? ' mine' : ''}">${head}${econ}${tabs}<div class="pf-body"><div class="pf-tab">${body}</div>${stat}</div></section></div>`;

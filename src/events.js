@@ -301,7 +301,7 @@ app.addEventListener('click',ev=>{
     case 'campplay':if(!openCamp(b.dataset.id))return;break;
     case 'plandel':{const c=camp.campaignById(b.dataset.id);if(c)camp.saveCampaign({...c,next:''});break}
     case 'buffrm':dropBuff(b.dataset.id);break;
-    case 'peek':{const id=b.dataset.k,name=b.dataset.n;dm.DU.peek={name,loading:true};cloud.peek(id).then(r=>{if(!dm.DU.peek||dm.DU.peek.name!==name)return;dm.DU.peek={name,...(r||{data:null})};render()});break}
+    case 'peek':{const id=b.dataset.k,name=b.dataset.n;dm.DU.peek={name,key:id,loading:true};cloud.peek(id).then(r=>{if(!dm.DU.peek||dm.DU.peek.name!==name)return;dm.DU.peek={name,key:id,...(r||{data:null})};render()});break}
     case 'peekclose':dm.DU.peek=null;break;
     case 'dockparty':U.DOCKPARTY=!U.DOCKPARTY;updateDock();return;
     case 'prep':{const s=S.spells[i];if(s&&!s.always)s.prep=s.prep===false;break}

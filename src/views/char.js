@@ -1,5 +1,6 @@
 // Seiten der Charakterebene (Übersicht, Werte & Fähigkeiten, Zauber). Inventar und Notizen liegen in ihren eigenen Dateien,
 // Bearbeiten ist views/setup.js. Alle Werte kommen direkt aus S und den vorhandenen Berechnungen, nichts wird zusätzlich gespeichert.
+import { vPets } from './extras.js';
 import { esc, mod, sg } from '../util.js';
 import { S, U } from '../state.js';
 import { ABK } from '../constants.js';
@@ -59,7 +60,7 @@ export function vProfile() {
     <div class="ov-v"><small>${t('stat.init')}</small><b>${sg(initBonus())}</b></div>
     <div class="ov-v"><small>${t('stat.speed')}</small><b>${esc(dist(fx.speed.val))}</b></div>${(() => { const st = spellStats()[0]; return st ? `<div class="ov-v"><small>${t('fight.spellDc')}</small><b>${st.dc}</b><em>${t('fight.spellAtk')} ${sg(st.atk)}</em></div>` : ''; })()}</div>`;
   const abil = `<div class="ov-abil">${ABK.map(k => `<div title="${t('abs.' + k)} ${S.abil[k]}"><small>${t('abs.' + k)}</small><b>${sg(mod(S.abil[k]))}</b></div>`).join('')}</div>`;
-  return `<div class="ov2">${vitals}${abil}<div class="page-2">${vNow()}${vGear()}</div><section class="ov-desc"><h3 class="ov-h">${t('ov.desc')}</h3>${desc}</section>${vRecent()}</div>`;
+  return `<div class="ov2">${vitals}${abil}<div class="page-2">${vNow()}${vGear()}</div>${vPets()}<section class="ov-desc"><h3 class="ov-h">${t('ov.desc')}</h3>${desc}</section>${vRecent()}</div>`;
 }
 
 /* ---- Werte & Fähigkeiten ---- */

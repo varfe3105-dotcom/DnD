@@ -357,6 +357,9 @@ export function vPeek() {
   const bag = (s.bag || []).filter(Boolean).map(r => esc(itemName(r)) + (r.q > 1 ? ' ×' + r.q : '')).join(', ');
   const res = (s.res || []).map(r => `${esc(r.n)} ${r.max - r.used}/${r.max}`).join(' · ');
   const conds = Object.keys(s.cond || {}).filter(k => s.cond[k]);
+  // Begleiter: Name aus dem Bogen, RK und TP aus der Live-Verbindung (dort nach Stufe und Weisheit berechnet)
+  const pres = players().find(x => x.key === pk.key);
+  const petsPk = (s.pets || []).map(x => { const lv = pres?.pets?.find(y => y.id === x.id); return `<b>${esc(x.n)}</b>${lv ? ` · ${t('dm.acShort')} ${lv.ac} · ${t('head.hpShort')} ${lv.est ? '?' : lv.hp + '/' + lv.hpMax}` : ''}`; }).join(' · ');
   const gold = ['pp', 'gp', 'ep', 'sp', 'cp'].filter(k => s.gold?.[k]).map(k => `${s.gold[k]} ${t('coin.' + k)}`).join(', ');
   return wrap(`<p class="note">${t('peek.ro', { t: esc(new Date(pk.at).toLocaleString()) })}</p>
   <p class="cls">${esc([s.race, s.subrace].filter(Boolean).join(' / '))} · ${esc([s.klass, s.sub].filter(Boolean).join(' / '))} ${s.level || ''}${(s.multi || []).map(m => ' · ' + esc(m.k) + ' ' + m.lvl).join('')}</p>
@@ -366,6 +369,7 @@ export function vPeek() {
   ${sec(t('skill.title'), skills ? `<p>${skills}</p>` : '')}
   ${sec(t('spell.title'), (slots ? `<p class="pk-l">${esc(slots)}</p>` : '') + spells)}
   ${sec(t('peek.res'), res ? `<p>${res}</p>` : '')}
+  ${sec(t('pet.title'), petsPk ? `<p>${petsPk}</p>` : '')}
   ${sec(t('peek.feats'), (s.feats || []).length ? `<p>${s.feats.map(f => esc(f.n)).join(', ')}</p>` : '')}
   ${sec(t('peek.equip'), eq ? `<p>${eq}</p>` : '')}
   ${sec(t('peek.bag'), bag || gold ? `<p>${bag}${gold ? (bag ? ' · ' : '') + esc(gold) : ''}</p>` : '')}`);
