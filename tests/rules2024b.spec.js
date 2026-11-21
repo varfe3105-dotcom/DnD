@@ -68,3 +68,29 @@ test.describe('Regeln 2024 Nachträge @new', () => {
     expect(await page.evaluate(() => JSON.parse(localStorage.getItem('charbogen-dm')).combat.list[0].rechUsed)).toEqual({ 'Fire Breath': true });
   });
 });
+
+test.describe('Charaktere der Gruppe @new', () => {
+  const pc = (klass, level, extra) => base4({ klass, level, prof: level >= 5 ? 3 : 2, abil: { str: 12, dex: 14, con: 14, int: 10, wis: 16, cha: 16 }, tab: 'main', ...extra });
+  test('Tiefling-Barde (Glamour): Mantle of Inspiration als Bonusaktion verbraucht Bardic Inspiration; Thunderclap im Katalog', async ({ page }) => {
+    await seed(page, pc('Bard', 3, { race: 'Tiefling', subrace: 'Infernal', sub: 'College of Glamour', res: [{ n: 'Bardic Inspiration', max: 3, used: 0, rest: 'long' }], feats: [{ n: 'Mantle of Inspiration', p: '', lvl: 3, src: 'Unterklasse' }] }));
+    const row = page.locator('.turnboard .tv-row', { hasText: 'Mantle of Inspiration' });
+    await expect(row).toBeVisible();
+    await row.locator('button').last().click();
+    await expect.poll(async () => (await read(page)).res.find(r => r.n === 'Bardic Inspiration').used).toBe(1);
+    await page.evaluate(() => { const s = JSON.parse(localStorage.getItem('charbogen-v4')); s.tab = 'wiki'; localStorage.setItem('charbogen-v4', JSON.stringify(s)); });
+    await page.reload();
+    await page.locator('#wq').fill('Thunderclap');
+    await expect(page.locator('.wli').first()).toContainText('Thunderclap');
+  });
+
+  test('Drow-Kleriker: Death Domain wählbar, Domänen- und Volkszauber immer vorbereitet', async ({ page }) => {
+    await seed(page, pc('Cleric', 2, { race: 'Elf', subrace: 'Drow' }));
+    await act(page, 'lu').click();
+    await page.locator('#lu-sub').fill('Death Domain');
+    await page.locator('#lu-sub').blur();
+    await act(page, 'luapply').click();
+    const names = (await read(page)).spells.map(s => s.n);
+    expect(names).toEqual(expect.arrayContaining(['False Life', 'Ray of Sickness', 'Blindness/Deafness', 'Ray of Enfeeblement', 'Dancing Lights', 'Faerie Fire']));
+    expect((await read(page)).feats.map(f => f.n)).toEqual(expect.arrayContaining(['Reaper', 'Touch of Death']));
+  });
+});

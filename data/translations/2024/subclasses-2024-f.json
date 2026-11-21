@@ -1,0 +1,23 @@
+{
+ "Cleric": {
+  "Death Domain": {
+   "3": [
+    {"n": "Death Domain Spells", "en": "From the DMG 2014, adapted to the 2024 rules (not an official 2024 subclass). Always prepared: level 3 False Life, Ray of Sickness, Blindness/Deafness, Ray of Enfeeblement; level 5 Animate Dead, Vampiric Touch; level 7 Blight, Death Ward; level 9 Antilife Shell, Cloudkill.",
+     "de": "Aus dem DMG 2014, an die Regeln 2024 angepasst (keine offizielle Unterklasse 2024). Immer vorbereitet: Stufe 3 False Life, Ray of Sickness, Blindness/Deafness, Ray of Enfeeblement; Stufe 5 Animate Dead, Vampiric Touch; Stufe 7 Blight, Death Ward; Stufe 9 Antilife Shell, Cloudkill."},
+    {"n": "Bonus Proficiency", "en": "You gain proficiency with Martial weapons.", "de": "Du bist im Umgang mit Kriegswaffen geübt."},
+    {"n": "Reaper", "en": "You learn one Necromancy cantrip of your choice from any spell list; it counts as a Cleric cantrip for you. When you cast a Necromancy cantrip that normally targets only one creature, the spell can instead target two creatures within range and within 5 feet of each other.",
+     "de": "Du lernst einen Nekromantie-Zaubertrick deiner Wahl von einer beliebigen Liste; er gilt für dich als Klerikerzaubertrick. Wirkst du einen Nekromantie-Zaubertrick, der normalerweise nur eine Kreatur betrifft, kann er stattdessen zwei Kreaturen in Reichweite treffen, die höchstens 1,5 m voneinander entfernt sind."},
+    {"n": "Touch of Death", "en": "Channel Divinity: when you hit a creature with a melee attack, you can expend one use of your Channel Divinity to deal extra Necrotic damage to the target equal to 5 + twice your Cleric level.",
+     "de": "Göttliche Macht fokussieren: Triffst du eine Kreatur mit einem Nahkampfangriff, kannst du eine Anwendung ausgeben und zusätzlich nekrotischen Schaden in Höhe von 5 + doppelter Klerikerstufe verursachen."}
+   ],
+   "6": [
+    {"n": "Inescapable Destruction", "en": "Necrotic damage dealt by your Cleric spells and Channel Divinity options ignores Resistance to Necrotic damage.",
+     "de": "Nekrotischer Schaden deiner Klerikerzauber und deiner Optionen von Göttliche Macht fokussieren ignoriert Resistenz gegen nekrotischen Schaden."}
+   ],
+   "17": [
+    {"n": "Improved Reaper", "en": "When you cast a Necromancy spell of levels 1–5 that targets only one creature, the spell can instead target two creatures within range and within 5 feet of each other. If the spell consumes its Material components, you must provide them for each target.",
+     "de": "Wirkst du einen Nekromantiezauber der Grade 1 bis 5, der nur eine Kreatur betrifft, kann er stattdessen zwei Kreaturen in Reichweite treffen, die höchstens 1,5 m voneinander entfernt sind. Verbraucht der Zauber Materialkomponenten, brauchst du sie für jedes Ziel."}
+   ]
+  }
+ }
+}

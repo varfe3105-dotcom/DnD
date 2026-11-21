@@ -1,17 +1,187 @@
 {
- "Arcane Vigor": {"de": "Arkane Lebenskraft", "lvl": 2, "school": "abjuration", "ic": "heart", "cls": "SW", "time": {"en": "1 bonus action", "de": "1 Bonusaktion"}, "range": {"en": "Self", "de": "Selbst"}, "dur": {"en": "Instantaneous", "de": "Sofort"}, "comp": "V, S", "conc": false, "ritual": false,
-  "text": {"en": "You draw on your life force to heal yourself. Roll one or two of your unexpended Hit Point Dice and regain Hit Points equal to the total plus your spellcasting ability modifier. Those dice are then expended. Using a Higher-Level Spell Slot: the number of unexpended Hit Point Dice you can roll increases by one for each spell slot level above 2.",
-   "de": "Du schöpfst aus deiner Lebenskraft und heilst dich. Würfle einen oder zwei deiner unverbrauchten Trefferwürfel und erhalte TP in Höhe der Summe plus deines Zaubermodifikators zurück; die Würfel sind danach verbraucht. Höherer Platz: je Grad über 2 darfst du einen Trefferwürfel mehr würfeln."}},
- "Power Word Fortify": {"de": "Machtwort Stärkung", "lvl": 7, "school": "enchantment", "ic": "shield", "cls": "BC", "time": {"en": "1 action", "de": "1 Aktion"}, "range": {"en": "60 feet", "de": "18 m"}, "dur": {"en": "Instantaneous", "de": "Sofort"}, "comp": "V", "conc": false, "ritual": false,
-  "text": {"en": "You fortify up to six creatures you can see within range. The spell bestows 120 Temporary Hit Points, which you divide among the spell's recipients as you choose.",
-   "de": "Du stärkst bis zu sechs Kreaturen in Reichweite, die du siehst. Der Zauber verleiht insgesamt 120 temporäre TP, die du beliebig auf die Ziele verteilst."}},
- "Jallarzi's Storm of Radiance": {"de": "Jallarzis Sturm der Strahlung", "lvl": 5, "school": "evocation", "ic": "bolt", "cls": "KW", "time": {"en": "1 action", "de": "1 Aktion"}, "range": {"en": "120 feet", "de": "36 m"}, "dur": {"en": "Concentration, up to 1 minute", "de": "Konz. bis 1 Minute"}, "comp": "V, S, M", "material": "a pinch of phosphorus", "conc": true, "ritual": false,
-  "text": {"en": "You unleash a storm of flashing light and raging thunder in a 10-foot-radius, 40-foot-high Cylinder centered on a point you can see within range. While in this area, creatures have the Blinded and Deafened conditions, and they can't cast spells with a Verbal component. When the storm appears, each creature in it makes a Constitution saving throw, taking 2d10 Radiant damage and 2d10 Thunder damage on a failed save or half as much damage on a successful one. A creature also makes this save when it enters the area for the first time on a turn or ends its turn there; it makes this save only once per turn. Using a Higher-Level Spell Slot: the Radiant and the Thunder damage each increase by 1d10 for each spell slot level above 5.",
-   "de": "Ein Sturm aus Licht und Donner füllt einen Zylinder mit 3 m Radius und 12 m Höhe um einen Punkt in Reichweite. Darin sind Kreaturen geblendet und taub und können keine Zauber mit verbaler Komponente wirken. Beim Erscheinen machen alle darin einen Konstitutionsrettungswurf: bei Misserfolg 2W10 gleißender und 2W10 Schallschaden, bei Erfolg die Hälfte. Denselben Wurf macht eine Kreatur, wenn sie den Bereich in einem Zug erstmals betritt oder ihren Zug darin beendet, höchstens einmal pro Zug. Höherer Platz: je Grad über 5 je 1W10 mehr gleißender und Schallschaden."}},
- "Tasha's Bubbling Cauldron": {"de": "Taschas brodelnder Kessel", "lvl": 6, "school": "conjuration", "ic": "potion", "cls": "KW", "time": {"en": "1 action", "de": "1 Aktion"}, "range": {"en": "5 feet", "de": "1,5 m"}, "dur": {"en": "10 minutes", "de": "10 Minuten"}, "comp": "V, S, M", "material": "a gilded ladle worth 500+ GP", "conc": false, "ritual": false,
-  "text": {"en": "You conjure a claw-footed cauldron filled with bubbling liquid in an unoccupied space within range. The liquid duplicates the properties of a Common or Uncommon potion of your choice (such as a Potion of Healing). As a Bonus Action, you or an ally can reach into the cauldron and withdraw one potion of that kind, in a vial that disappears when the potion is consumed. The cauldron can produce a number of potions equal to your spellcasting ability modifier (minimum 1); when the last one is withdrawn, the cauldron disappears and the spell ends. Potions from the cauldron that aren't consumed disappear when the spell ends or when you cast this spell again.",
-   "de": "Du beschwörst in Reichweite einen Kessel mit brodelnder Flüssigkeit, die einem gewöhnlichen oder ungewöhnlichen Trank deiner Wahl entspricht (z. B. Trank der Heilung). Mit einer Bonusaktion entnimmt du oder ein Verbündeter einen solchen Trank in einem Fläschchen, das nach dem Trinken verschwindet. Der Kessel liefert so viele Tränke wie dein Zaubermodifikator (mindestens einen); nach dem letzten verschwindet er und der Zauber endet. Nicht getrunkene Tränke verschwinden mit dem Ende des Zaubers oder beim erneuten Wirken."}},
- "Toll the Dead": {"de": "Totenglocke", "lvl": 0, "school": "necromancy", "ic": "skull", "cls": "CKW", "time": {"en": "1 action", "de": "1 Aktion"}, "range": {"en": "60 feet", "de": "18 m"}, "dur": {"en": "Instantaneous", "de": "Sofort"}, "comp": "V, S", "conc": false, "ritual": false,
-  "text": {"en": "You point at one creature you can see within range, and the single chime of a dolorous bell is audible within 10 feet of the target. The target must succeed on a Wisdom saving throw or take 1d8 Necrotic damage. If the target is missing any of its Hit Points, it instead takes 1d12 Necrotic damage. Cantrip Upgrade: the damage increases by one die when you reach levels 5 (2d8 or 2d12), 11 (3d8 or 3d12) and 17 (4d8 or 4d12).",
-   "de": "Du zeigst auf eine Kreatur in Reichweite, die du siehst; im Umkreis von 3 m um sie ertönt ein Glockenschlag. Sie muss einen Weisheitsrettungswurf bestehen, sonst erleidet sie 1W8 nekrotischen Schaden, oder 1W12, wenn ihr TP fehlen. Stufenaufstieg: ein Würfel mehr auf Stufe 5 (2W8 bzw. 2W12), 11 (3W8/3W12) und 17 (4W8/4W12)."}}
+ "Arcane Vigor": {
+  "de": "Arkane Lebenskraft",
+  "lvl": 2,
+  "school": "abjuration",
+  "ic": "heart",
+  "cls": "SW",
+  "time": {
+   "en": "1 bonus action",
+   "de": "1 Bonusaktion"
+  },
+  "range": {
+   "en": "Self",
+   "de": "Selbst"
+  },
+  "dur": {
+   "en": "Instantaneous",
+   "de": "Sofort"
+  },
+  "comp": "V, S",
+  "conc": false,
+  "ritual": false,
+  "text": {
+   "en": "You draw on your life force to heal yourself. Roll one or two of your unexpended Hit Point Dice and regain Hit Points equal to the total plus your spellcasting ability modifier. Those dice are then expended. Using a Higher-Level Spell Slot: the number of unexpended Hit Point Dice you can roll increases by one for each spell slot level above 2.",
+   "de": "Du schöpfst aus deiner Lebenskraft und heilst dich. Würfle einen oder zwei deiner unverbrauchten Trefferwürfel und erhalte TP in Höhe der Summe plus deines Zaubermodifikators zurück; die Würfel sind danach verbraucht. Höherer Platz: je Grad über 2 darfst du einen Trefferwürfel mehr würfeln."
+  }
+ },
+ "Power Word Fortify": {
+  "de": "Machtwort Stärkung",
+  "lvl": 7,
+  "school": "enchantment",
+  "ic": "shield",
+  "cls": "BC",
+  "time": {
+   "en": "1 action",
+   "de": "1 Aktion"
+  },
+  "range": {
+   "en": "60 feet",
+   "de": "18 m"
+  },
+  "dur": {
+   "en": "Instantaneous",
+   "de": "Sofort"
+  },
+  "comp": "V",
+  "conc": false,
+  "ritual": false,
+  "text": {
+   "en": "You fortify up to six creatures you can see within range. The spell bestows 120 Temporary Hit Points, which you divide among the spell's recipients as you choose.",
+   "de": "Du stärkst bis zu sechs Kreaturen in Reichweite, die du siehst. Der Zauber verleiht insgesamt 120 temporäre TP, die du beliebig auf die Ziele verteilst."
+  }
+ },
+ "Jallarzi's Storm of Radiance": {
+  "de": "Jallarzis Sturm der Strahlung",
+  "lvl": 5,
+  "school": "evocation",
+  "ic": "bolt",
+  "cls": "KW",
+  "time": {
+   "en": "1 action",
+   "de": "1 Aktion"
+  },
+  "range": {
+   "en": "120 feet",
+   "de": "36 m"
+  },
+  "dur": {
+   "en": "Concentration, up to 1 minute",
+   "de": "Konz. bis 1 Minute"
+  },
+  "comp": "V, S, M",
+  "material": "a pinch of phosphorus",
+  "conc": true,
+  "ritual": false,
+  "text": {
+   "en": "You unleash a storm of flashing light and raging thunder in a 10-foot-radius, 40-foot-high Cylinder centered on a point you can see within range. While in this area, creatures have the Blinded and Deafened conditions, and they can't cast spells with a Verbal component. When the storm appears, each creature in it makes a Constitution saving throw, taking 2d10 Radiant damage and 2d10 Thunder damage on a failed save or half as much damage on a successful one. A creature also makes this save when it enters the area for the first time on a turn or ends its turn there; it makes this save only once per turn. Using a Higher-Level Spell Slot: the Radiant and the Thunder damage each increase by 1d10 for each spell slot level above 5.",
+   "de": "Ein Sturm aus Licht und Donner füllt einen Zylinder mit 3 m Radius und 12 m Höhe um einen Punkt in Reichweite. Darin sind Kreaturen geblendet und taub und können keine Zauber mit verbaler Komponente wirken. Beim Erscheinen machen alle darin einen Konstitutionsrettungswurf: bei Misserfolg 2W10 gleißender und 2W10 Schallschaden, bei Erfolg die Hälfte. Denselben Wurf macht eine Kreatur, wenn sie den Bereich in einem Zug erstmals betritt oder ihren Zug darin beendet, höchstens einmal pro Zug. Höherer Platz: je Grad über 5 je 1W10 mehr gleißender und Schallschaden."
+  }
+ },
+ "Tasha's Bubbling Cauldron": {
+  "de": "Taschas brodelnder Kessel",
+  "lvl": 6,
+  "school": "conjuration",
+  "ic": "potion",
+  "cls": "KW",
+  "time": {
+   "en": "1 action",
+   "de": "1 Aktion"
+  },
+  "range": {
+   "en": "5 feet",
+   "de": "1,5 m"
+  },
+  "dur": {
+   "en": "10 minutes",
+   "de": "10 Minuten"
+  },
+  "comp": "V, S, M",
+  "material": "a gilded ladle worth 500+ GP",
+  "conc": false,
+  "ritual": false,
+  "text": {
+   "en": "You conjure a claw-footed cauldron filled with bubbling liquid in an unoccupied space within range. The liquid duplicates the properties of a Common or Uncommon potion of your choice (such as a Potion of Healing). As a Bonus Action, you or an ally can reach into the cauldron and withdraw one potion of that kind, in a vial that disappears when the potion is consumed. The cauldron can produce a number of potions equal to your spellcasting ability modifier (minimum 1); when the last one is withdrawn, the cauldron disappears and the spell ends. Potions from the cauldron that aren't consumed disappear when the spell ends or when you cast this spell again.",
+   "de": "Du beschwörst in Reichweite einen Kessel mit brodelnder Flüssigkeit, die einem gewöhnlichen oder ungewöhnlichen Trank deiner Wahl entspricht (z. B. Trank der Heilung). Mit einer Bonusaktion entnimmt du oder ein Verbündeter einen solchen Trank in einem Fläschchen, das nach dem Trinken verschwindet. Der Kessel liefert so viele Tränke wie dein Zaubermodifikator (mindestens einen); nach dem letzten verschwindet er und der Zauber endet. Nicht getrunkene Tränke verschwinden mit dem Ende des Zaubers oder beim erneuten Wirken."
+  }
+ },
+ "Toll the Dead": {
+  "de": "Totenglocke",
+  "lvl": 0,
+  "school": "necromancy",
+  "ic": "skull",
+  "cls": "CKW",
+  "time": {
+   "en": "1 action",
+   "de": "1 Aktion"
+  },
+  "range": {
+   "en": "60 feet",
+   "de": "18 m"
+  },
+  "dur": {
+   "en": "Instantaneous",
+   "de": "Sofort"
+  },
+  "comp": "V, S",
+  "conc": false,
+  "ritual": false,
+  "text": {
+   "en": "You point at one creature you can see within range, and the single chime of a dolorous bell is audible within 10 feet of the target. The target must succeed on a Wisdom saving throw or take 1d8 Necrotic damage. If the target is missing any of its Hit Points, it instead takes 1d12 Necrotic damage. Cantrip Upgrade: the damage increases by one die when you reach levels 5 (2d8 or 2d12), 11 (3d8 or 3d12) and 17 (4d8 or 4d12).",
+   "de": "Du zeigst auf eine Kreatur in Reichweite, die du siehst; im Umkreis von 3 m um sie ertönt ein Glockenschlag. Sie muss einen Weisheitsrettungswurf bestehen, sonst erleidet sie 1W8 nekrotischen Schaden, oder 1W12, wenn ihr TP fehlen. Stufenaufstieg: ein Würfel mehr auf Stufe 5 (2W8 bzw. 2W12), 11 (3W8/3W12) und 17 (4W8/4W12)."
+  }
+ },
+ "Thunderclap": {
+  "de": "Donnerschlag",
+  "lvl": 0,
+  "school": "evocation",
+  "ic": "bolt",
+  "cls": "BDSKW",
+  "time": {
+   "en": "1 action",
+   "de": "1 Aktion"
+  },
+  "range": {
+   "en": "Self",
+   "de": "Selbst"
+  },
+  "dur": {
+   "en": "Instantaneous",
+   "de": "Sofort"
+  },
+  "comp": "S",
+  "conc": false,
+  "ritual": false,
+  "text": {
+   "en": "Each creature in a 5-foot Emanation originating from you must succeed on a Constitution saving throw or take 1d6 Thunder damage. The thunderous sound can be heard up to 100 feet away. Cantrip Upgrade: the damage increases by 1d6 when you reach levels 5 (2d6), 11 (3d6) and 17 (4d6).",
+   "de": "Jede Kreatur in einer Ausstrahlung von 1,5 m um dich muss einen Konstitutionsrettungswurf bestehen, sonst erleidet sie 1W6 Schallschaden. Der Knall ist bis 30 m weit zu hören. Stufenaufstieg: 1W6 mehr auf Stufe 5 (2W6), 11 (3W6) und 17 (4W6)."
+  }
+ },
+ "Word of Radiance": {
+  "de": "Wort des Strahlens",
+  "lvl": 0,
+  "school": "evocation",
+  "ic": "sun",
+  "cls": "C",
+  "time": {
+   "en": "1 action",
+   "de": "1 Aktion"
+  },
+  "range": {
+   "en": "Self",
+   "de": "Selbst"
+  },
+  "dur": {
+   "en": "Instantaneous",
+   "de": "Sofort"
+  },
+  "comp": "V, M",
+  "material": "a sunburst token",
+  "conc": false,
+  "ritual": false,
+  "text": {
+   "en": "Burning radiance erupts from you in a 5-foot Emanation. Each creature of your choice that you can see in it must succeed on a Constitution saving throw or take 1d6 Radiant damage. Cantrip Upgrade: the damage increases by 1d6 when you reach levels 5 (2d6), 11 (3d6) and 17 (4d6).",
+   "de": "Gleißende Strahlung bricht in einer Ausstrahlung von 1,5 m aus dir hervor. Jede Kreatur deiner Wahl darin, die du siehst, muss einen Konstitutionsrettungswurf bestehen, sonst erleidet sie 1W6 gleißenden Schaden. Stufenaufstieg: 1W6 mehr auf Stufe 5 (2W6), 11 (3W6) und 17 (4W6)."
+  }
+ }
 }

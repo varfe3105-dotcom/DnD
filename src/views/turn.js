@@ -13,8 +13,8 @@ import { t, loc, dist } from '../i18n/index.js';
 const TIME = Object.fromEntries(spells.map(s => [s.n, s.time.en]));
 const ACTIONS = [['attack', 'sword'], ['dash', 'boots'], ['disengage', 'wing'], ['dodge', 'shield'], ['help', 'heart'], ['hide', 'cloak'], ['influence', 'mask'], ['magic', 'wand'], ['ready', 'bolt'], ['search', 'eye'], ['study', 'book'], ['utilize', 'tool']];
 // Merkmale (Ressourcen oder Talente), die 2024 eine Bonusaktion bzw. Reaktion brauchen
-const BONUS = ['Second Wind', 'Rage', 'Cunning Action', 'Bardic Inspiration', 'Flurry of Blows', 'Patient Defense', 'Step of the Wind', 'Lay on Hands', 'Wild Shape', 'Healing Light', 'Fey Step', 'Hunter\'s Mark', 'Martial Arts', 'Steady Aim', 'Wild Companion', 'Divine Spark'];
-const REACT = ['Uncanny Dodge', 'Deflect Attacks', 'Deflect Missiles', 'Sentinel', 'War Caster', 'Shield Master', 'Defensive Duelist', 'Interception', 'Protection', 'Warding Flare', 'Tactical Mind', 'Riposte', 'Parry'];
+const BONUS = ['Second Wind', 'Rage', 'Cunning Action', 'Bardic Inspiration', 'Flurry of Blows', 'Patient Defense', 'Step of the Wind', 'Lay on Hands', 'Wild Shape', 'Healing Light', 'Fey Step', 'Hunter\'s Mark', 'Martial Arts', 'Steady Aim', 'Wild Companion', 'Divine Spark', 'Mantle of Inspiration', 'Mantle of Majesty', 'Innate Sorcery', 'War Priest', 'Peerless Athlete'];
+const REACT = ['Uncanny Dodge', 'Deflect Attacks', 'Deflect Missiles', 'Sentinel', 'War Caster', 'Shield Master', 'Defensive Duelist', 'Interception', 'Protection', 'Warding Flare', 'Tactical Mind', 'Riposte', 'Parry', 'Cutting Words', 'Countercharm', 'Beguiling Twist'];
 const has = (list, n) => list.find(x => n.toLowerCase().includes(x.toLowerCase()));
 
 /** Anzahl der Waffen mit Meisterschaft (Weapon Mastery, Regeln 2024). 0 = Klasse hat das Merkmal nicht. */
@@ -33,7 +33,9 @@ function own() {
   const sp = S.spells.map((s, i) => [s, i]).filter(([s]) => s.prep !== false || s.always || !s.lvl);
   const byTime = re => sp.filter(([s]) => re.test(TIME[s.n] || s.time || ''));
   // Merkmal mit Ressource: Index in S.res, damit Ausführen eine Anwendung verbraucht
-  const feats = [...S.res.map((r, i) => ({ n: r.n, res: i })), ...S.feats.map(f => ({ n: f.n, res: -1 }))];
+  // Merkmale, die eine Bardic Inspiration verbrauchen, ziehen sie beim Ausführen ab
+  const bi = S.res.findIndex(r => r.n === 'Bardic Inspiration'), USES_BI = /^(Mantle of Inspiration|Cutting Words)$/;
+  const feats = [...S.res.map((r, i) => ({ n: r.n, res: i })), ...S.feats.map(f => ({ n: f.n, res: USES_BI.test(f.n) ? bi : -1 }))];
   const pick = list => { const seen = new Set(); return feats.map(f => ({ ...f, k: has(list, f.n) })).filter(f => f.k && !seen.has(f.k) && seen.add(f.k)); };
   const bag = refs().map(r => ({ r, it: get(r) })).filter(x => x.it);
   // 2024: Trank trinken (auch Heiltrank, Philter, Elixier) ist eine Bonusaktion; Öle, Säure und Gift sind es nicht
