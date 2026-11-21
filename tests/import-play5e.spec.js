@@ -6,7 +6,7 @@ const character = (o = {}) => ({
   abilities: { str: 8, dex: 15, con: 13, int: 12, wis: 14, cha: 10 }, raceAsiChoice: {}, asiChoices: [], featIds: [],
   skillProficiencies: ['Perception', 'Insight'], skillExpertise: [], savingThrowProficiencies: [], toolProficiencies: ["Poisoner's kit"], languages: [], otherProficiencies: [],
   hitPoints: { current: 9, temporary: 0, bonusMax: 0 }, hitDiceSpent: {}, deathSaves: { successes: 0, failures: 0 }, slotsSpent: [1, 0, 0, 0, 0, 0, 0, 0, 0], pactSlotsSpent: 0, concentratingOn: null, conditions: [], inspiration: false, exhaustion: 0,
-  spells: [{ spellId: 'guidance' }, { spellId: 'charm-person' }, { spellId: 'word-of-radiance' }],
+  spells: [{ spellId: 'guidance' }, { spellId: 'charm-person' }, { spellId: 'booming-blade' }],
   inventory: [
     { itemId: 'dagger', name: 'Dagger', quantity: 2, kind: 'weapon', equipped: false, attuned: false, notes: '' },
     { itemId: 'leather', name: 'Leather', quantity: 1, kind: 'armor', equipped: true, attuned: false, notes: '' },
@@ -41,7 +41,7 @@ test.describe('Import aus dem anderen Tool @new', () => {
     await doImport(page, backup(character()));
     const s = await read(page);
     expect(s.spells.map(x => x.n)).toEqual(expect.arrayContaining(['Charm Person', 'Guidance'])); // dazu Volks- und Domänenzauber 2024
-    expect(s.notes).toContain('Word Of Radiance');
+    expect(s.notes).toContain('Booming Blade');
     expect(s.tools).toEqual(["Poisoner's kit"]);
     expect(s.notes).toContain('Sie floh aus dem Tempel.');
     expect(s.notes).toContain('vom Meister');
@@ -109,7 +109,7 @@ test.describe('Import aus dem anderen Tool @new', () => {
     const s = await read(page);
     expect(s).toMatchObject({ klass: 'Cleric', sub: 'Trickery Domain', subrace: 'Drow', level: 1, hp: 9, hpMax: 9 });
     expect(s.abil.dex).toBe(17);
-    expect(s.spells.length).toBe(8);
+    expect(s.spells.length).toBe(9);
     expect(s.ac).toBe(13);
     expect(s.tools).toEqual(["Poisoner's kit", 'Forgery kit']);
     console.log(await page.locator('.imp-rep').innerText());
