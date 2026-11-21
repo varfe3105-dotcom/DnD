@@ -33,7 +33,18 @@ const PRIMAL = {
   sky: { n: 'Beast of the Sky', speed: '10 ft., fly 60 ft.', atk: 'Shred', die: '1d4', plus: 3, type: 'slashing', hp: 4, text: { en: 'Flyby: it doesn\'t provoke Opportunity Attacks when it flies out of an enemy\'s reach. Primal Bond: add your Proficiency Bonus to its ability checks and saving throws.', de: 'Vorbeiflug: Fliegt es aus der Reichweite eines Feindes, löst das keine Gelegenheitsangriffe aus. Ursprüngliche Bindung: Dein Übungsbonus gilt für seine Attributs- und Rettungswürfe.' } },
 };
 export const PRIMAL_KINDS = Object.keys(PRIMAL);
-export const isPrimalRanger = () => classLevels().some(c => c.k === 'Ranger' && c.sub === 'Beast Master' && c.lvl >= 3);
+export const isPrimalRanger = () => classLevels().some(c => c.k === 'Ranger' && /beast[\s_-]*master|herr der tiere/i.test(c.sub || '') && c.lvl >= 3);
+/** Begleiter sicherstellen (vor jedem Zeichnen, idempotent). Liefert true bei Änderung.
+ *  1. Kampagnenstand ohne Begleiter, Grundbogen mit Begleitern: einmal übernehmen (Wolf im Grundbogen angelegt).
+ *  2. Beast Master ab Stufe 3 ganz ohne Begleiter: einmal automatisch „Beast of the Land“ anlegen (2024 automatisch).
+ *     Die Form lässt sich in Bearbeiten wechseln (Land, See, Himmel). */
+export function syncPets(libPets) {
+  let ch = false;
+  if (!Array.isArray(S.pets)) { S.pets = []; ch = true; }
+  if (S.camp && !S.pets.length && !S.petsLib && Array.isArray(libPets) && libPets.length) { S.pets = JSON.parse(JSON.stringify(libPets)); S.petsLib = true; ch = true; }
+  if (isPrimalRanger() && !S.pets.length && !S.primalAuto) { const p = petPrimal('land'); p.hp = petView(p).hpMax; p.auto = true; S.pets.push(p); S.primalAuto = true; ch = true; }
+  return ch;
+}
 export const petPrimal = kind => { const P = PRIMAL[kind]; return { id: uid(), n: P.n, primal: kind, ac: 13, hp: 999, hpMax: 0, speed: P.speed, text: '', source: 'summary', bm: false }; };
 export const primalText = p => PRIMAL[p.primal]?.text || null;
 export const petOwn = (n, ac, hp, speed, text) => ({ id: uid(), n, ac: Math.max(0, Math.floor(+ac) || 10), hp: Math.max(1, Math.floor(+hp) || 1), hpMax: Math.max(1, Math.floor(+hp) || 1), speed, text, source: 'own', bm: false });

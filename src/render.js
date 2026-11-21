@@ -1,8 +1,9 @@
 /* global __BUILD__ */
+import { syncPets } from './companions.js';
 import { vNotesTab } from './views/notes.js';
 import { vHandout, vBackupNag, vDock, vTarget, vParty } from './views/live-ui.js';
 import { $, esc } from './util.js';
-import { S, U, roster, save } from './state.js';
+import { S, U, roster, save, charSnapshot } from './state.js';
 import { classLevels, XP_LEVELS, totalLevel } from './tables.js';
 import { vMiniBar } from './views/sheet.js';
 import { vInv } from './views/inventory.js';
@@ -57,7 +58,7 @@ export const renderHooks = { after: null };
 export function render() {
   hideTip();
   syncAc();
-  if (syncFeatRes()) save();
+  if (syncFeatRes() | syncPets(S.camp ? charSnapshot(S.id)?.pets : null)) save();
   // Alter Reiter „Spielleitung“ (vor dem Spielleitungsmodus) → passender Reiter im Modus
   if (S.tab === 'dm' && dmOnly()) S.tab = 'dm' + (D.view || 'notes');
   // „Einrichten“ der Spielleitung ist in einer Kampagne Teil der Einstellungen (Bereich „Spielleitung & Gerät“)

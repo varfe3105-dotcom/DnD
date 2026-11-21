@@ -264,7 +264,7 @@ export function syncLive(peers) {
   // Neue Begleiter (z. B. Primal Companion, erst nach dem Kampfbeitritt angelegt) direkt unter ihren Spieler setzen
   D.combat.list.filter(c => c.kind === 'pc' && c.live).forEach(c => {
     const p = peers.find(x => x.key === c.live);
-    (p?.pets || []).filter(x => !x.est).forEach(x => { if (!D.combat.list.some(y => y.kind === 'pet' && y.live === c.live && y.pet === x.id)) { D.combat.list.push(petRow(p, x)); changed = true; } });
+    (p?.pets || []).forEach(x => { if (!D.combat.list.some(y => y.kind === 'pet' && y.live === c.live && y.pet === x.id)) { D.combat.list.push(petRow(p, x)); changed = true; } });
   });
   D.combat.list.forEach(c => {
     const p0 = c.live && peers.find(x => x.key === c.live);

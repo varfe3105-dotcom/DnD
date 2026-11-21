@@ -210,9 +210,9 @@ app.addEventListener('click',ev=>{
     case 'dawn':U.DAWN=!U.DAWN;break;
     case 'dawnapply':{const n=applyDawn([...document.querySelectorAll('[data-dawn]')].map(x=>[x.dataset.dawn,x.value]));U.DAWN=false;toast(tr('chg.dawnDone',{n}));break}
     case 'pethp':{const p=S.pets[i];if(p){p.hp=clamp(petView(p).hp+ +b.dataset.d,0,petView(p).hpMax)}break}
-    case 'petprimal':{const p=petPrimal(b.dataset.k);S.pets.push(p);p.hp=petView(p).hpMax;toast(tr('toast.added',{n:p.n}));break}
-    case 'petadd':{const m=dm.findMonster(b.dataset.m);if(!m)break;S.pets.push(petFrom(m));U.petQ='';toast(tr('toast.added',{n:m.n}));break}
-    case 'petown':{const n=v('pet-n').trim();if(!n){toast(tr('toast.needName'));return}S.pets.push(petOwn(n,v('pet-ac'),v('pet-hp'),v('pet-sp').trim(),v('pet-t').trim()));toast(tr('toast.created',{n}));break}
+    case 'petprimal':{const p=petPrimal(b.dataset.k),i=S.pets.findIndex(x=>x.primal);p.hp=petView(p).hpMax;if(i>=0){p.id=S.pets[i].id;S.pets[i]=p}else S.pets.push(p);S.primalAuto=true;toast(tr('toast.added',{n:p.n}));break}
+    case 'petadd':{const m=dm.findMonster(b.dataset.m);if(!m)break;S.pets=S.pets.filter(p=>!p.auto);S.pets.push(petFrom(m));U.petQ='';toast(tr('toast.added',{n:m.n}));break}
+    case 'petown':{const n=v('pet-n').trim();if(!n){toast(tr('toast.needName'));return}S.pets=S.pets.filter(p=>!p.auto);S.pets.push(petOwn(n,v('pet-ac'),v('pet-hp'),v('pet-sp').trim(),v('pet-t').trim()));toast(tr('toast.created',{n}));break}
     case 'bgcancel':U.BGPICK=null;U.BGMODE=U.BGA1=U.BGA2=U.BGTOOL='';break;
     case 'bgapply':{const bg=bgById(U.BGPICK);if(!bg)break;const mode=v('bg-mode')||'21',a2=v('bg-a2'),a1=v('bg-a1'),tool=v('bg-tool'),gear=v('bg-gear')||'A';if((mode==='21'&&(!a2||!a1||a1===a2))||(bg.tool.choose&&!tool)){toast(tr(mode==='21'&&a1&&a1===a2?'bg.needDiff':'bg.needPick'));return}const asi=mode==='21'?{[a2]:2,[a1]:1}:Object.fromEntries(bg.abil.map(k=>[k,1]));U.BGPICK=null;U.BGMODE=U.BGA1=U.BGA2=U.BGTOOL='';applyBg(bg,{asi,tool,gear});break}
     case 'insp':S.insp=!S.insp;break;
