@@ -2003,5 +2003,7 @@
  "tv.petAtk": "{n}: d20 {h} to hit, damage {d} {t}",
  "tv.hitShort": "to hit d20",
  "tv.oppL": "When a creature you can see leaves your reach, you make one melee attack against it. Not if it moves using the Disengage action.",
- "tv.freeUses": "{n}× free without a spell slot"
+ "tv.freeUses": "{n}× free without a spell slot",
+ "hp.tempSplit": "{h} HP + {t} temporary = {s}. Damage removes the temporary ones first.",
+ "hp.tempIncl": "incl. {t} temp."
 }

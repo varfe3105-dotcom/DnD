@@ -2003,5 +2003,7 @@
  "tv.petAtk": "{n}: W20 {h} zum Treffen, Schaden {d} {t}",
  "tv.hitShort": "Treffen W20",
  "tv.oppL": "Wenn eine sichtbare Kreatur deine Reichweite verlässt, machst du einen Nahkampfangriff gegen sie. Nicht, wenn sie sich mit der Aktion „Rückzug“ bewegt.",
- "tv.freeUses": "{n}× ohne Zauberplatz frei"
+ "tv.freeUses": "{n}× ohne Zauberplatz frei",
+ "hp.tempSplit": "{h} TP + {t} temporäre = {s}. Schaden zieht zuerst die temporären ab.",
+ "hp.tempIncl": "inkl. {t} temp."
 }

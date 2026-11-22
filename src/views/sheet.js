@@ -89,9 +89,9 @@ export function vAbil(edit) {
   }).join('')}</div>`;
 }
 export function vHP() {
-  const max = hpMaxNow(), pct = max ? clamp(S.hp / max * 100, 0, 100) : 0, tp = max ? clamp(S.tmp / max * 100, 0, 100 - pct) : 0;
+  const max = hpMaxNow(), base = Math.max(max, S.hp + S.tmp), pct = base ? clamp(S.hp / base * 100, 0, 100) : 0, tp = base ? clamp(S.tmp / base * 100, 0, 100 - pct) : 0;
   return `<h2>${t('hp.title')}</h2><div class="card">
-  <div class="hpt"><button class="sq" data-a="hp" data-d="-1" aria-label="${t('hp.minusOne')}">−</button><div class="hpn${S.hp === 0 ? ' down' : ''}"><b>${S.hp}</b><small>/ ${max}${max !== S.hpMax ? ` <span class="fxw dis" title="${esc(t('fx.hp'))}">(${S.hpMax})</span>` : ''}</small>${S.tmp ? `<span class="tmp">${t('hp.temp', { n: S.tmp })}</span>` : ''}</div><button class="sq" data-a="hp" data-d="1" aria-label="${t('hp.plusOne')}">+</button></div>
+  <div class="hpt"><button class="sq" data-a="hp" data-d="-1" aria-label="${t('hp.minusOne')}">−</button><div class="hpn${S.hp === 0 ? ' down' : ''}${S.tmp ? ' withtmp' : ''}"><b title="${S.tmp ? esc(t('hp.tempSplit', { h: S.hp, t: S.tmp, s: S.hp + S.tmp })) : ''}">${S.hp + S.tmp}</b><small>/ ${max}${max !== S.hpMax ? ` <span class="fxw dis" title="${esc(t('fx.hp'))}">(${S.hpMax})</span>` : ''}</small>${S.tmp ? `<span class="tmp">${t('hp.tempSplit', { h: S.hp, t: S.tmp, s: S.hp + S.tmp })}</span>` : ''}</div><button class="sq" data-a="hp" data-d="1" aria-label="${t('hp.plusOne')}">+</button></div>
   <div class="bar" aria-hidden="true"><i style="width:${pct}%"></i><u style="width:${tp}%"></u></div>
   <div class="hpin"><input type="number" id="hpv" min="1" inputmode="numeric" placeholder="${t('hp.amount')}" aria-label="${t('hp.amountLabel')}"><button class="btn bad" data-a="dmg">${t('hp.damage')}</button><button class="btn good" data-a="heal">${t('hp.heal')}</button><button class="btn" data-a="temp">${t('hp.tempBtn')}</button></div>
   ${S.hp === 0 ? vDeath() : ''}
@@ -203,7 +203,7 @@ export function vProfs() {
 export function vMiniBar(tabsHtml = '') {
   const max = hpMaxNow(), slots = S.slots.map((x, i) => (x.max ? `${i + 1}: ${x.max - x.used}/${x.max}` : '')).filter(Boolean);
   if (S.pact.max) slots.unshift(`${t('mini.pact')} ${S.pact.max - S.pact.used}/${S.pact.max}`);
-  return `<div class="minibar" aria-label="${t('mini.label')}">${turnChips()}<div class="mb-hp"><button class="sq" data-a="mbhp" data-d="-1" aria-label="${t('hp.minusOne')}">−</button><span><small>${t('head.hpShort')}</small><b${S.hp === 0 ? ' class="down"' : ''}>${S.hp}</b>/${max}${S.tmp ? ` <i>+${S.tmp}</i>` : ''}</span><button class="sq" data-a="mbhp" data-d="1" aria-label="${t('hp.plusOne')}">+</button></div><span class="mb-v"><small>${t('mini.ac')}</small><b>${acHtml()}</b></span>${slots.length ? `<span class="mb-v mb-slots"><small>${t('mini.slots')}</small><b>${esc(slots.join(' · '))}</b></span>` : ''}${S.conc ? `<span class="mb-v mb-conc"><small>${t('conc.title')}</small><b>${esc(S.conc)}</b></span>` : ''}<nav class="mb-tabs" aria-label="${t('head.areas')}">${tabsHtml}</nav></div>`;
+  return `<div class="minibar" aria-label="${t('mini.label')}">${turnChips()}<div class="mb-hp"><button class="sq" data-a="mbhp" data-d="-1" aria-label="${t('hp.minusOne')}">−</button><span><small>${t('head.hpShort')}</small><b${S.hp === 0 ? ' class="down"' : S.tmp ? ' class="withtmp"' : ''}>${S.hp + S.tmp}</b>/${max}${S.tmp ? ` <i>${t('hp.tempIncl', { t: S.tmp })}</i>` : ''}</span><button class="sq" data-a="mbhp" data-d="1" aria-label="${t('hp.plusOne')}">+</button></div><span class="mb-v"><small>${t('mini.ac')}</small><b>${acHtml()}</b></span>${slots.length ? `<span class="mb-v mb-slots"><small>${t('mini.slots')}</small><b>${esc(slots.join(' · '))}</b></span>` : ''}${S.conc ? `<span class="mb-v mb-conc"><small>${t('conc.title')}</small><b>${esc(S.conc)}</b></span>` : ''}<nav class="mb-tabs" aria-label="${t('head.areas')}">${tabsHtml}</nav></div>`;
 }
 const MODE_LS = 'charbogen-mode';
 export const sheetMode = () => { try { const m = localStorage.getItem(MODE_LS); return ['combat', 'explore'].includes(m) ? m : 'all'; } catch (e) { return 'all'; } };

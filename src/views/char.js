@@ -55,7 +55,7 @@ export function vProfile() {
     ? `<textarea id="ov-info" data-p="info" rows="3" maxlength="600" aria-label="${t('ov.desc')}" placeholder="${t('setup.backgroundPh')}">${esc(S.info || '')}</textarea><div class="add"><button class="btn sm solid" data-a="ovedit">${t('common.done')}</button></div>`
     : `${S.info ? `<p class="ov-descp">${esc(S.info)}</p>` : `<p class="note">${t('ov.noDesc')}</p>`}<button class="linkbtn" data-a="ovedit">${t('ov.editDesc')}</button>`;
   const vitals = `<div class="ov-vit">
-    <div class="ov-v hp${S.hp === 0 ? ' down' : ''}"><small>${t('hp.title')}</small><b>${S.hp}<i>/${max}</i></b>${S.tmp ? `<em>+${S.tmp} ${t('hp.temp')}</em>` : ''}${hpBar(S.hp, max)}</div>
+    <div class="ov-v hp${S.hp === 0 ? ' down' : ''}"><small>${t('hp.title')}</small><b${S.tmp ? ' class="withtmp"' : ''}>${S.hp + S.tmp}<i>/${max}</i></b>${S.tmp ? `<em>${t('hp.tempSplit', { h: S.hp, t: S.tmp, s: S.hp + S.tmp })}</em>` : ''}${hpBar(S.hp, max)}</div>
     <div class="ov-v ac"><small>${t('stat.ac')}</small><b>${acHtml()}</b></div>
     <div class="ov-v"><small>${t('stat.init')}</small><b>${sg(initBonus())}</b></div>
     <div class="ov-v"><small>${t('stat.speed')}</small><b>${esc(dist(fx.speed.val))}</b></div>${(() => { const st = spellStats()[0]; return st ? `<div class="ov-v"><small>${t('fight.spellDc')}</small><b>${st.dc}</b><em>${t('fight.spellAtk')} ${sg(st.atk)}</em></div>` : ''; })()}</div>`;
@@ -69,7 +69,7 @@ export function vStats() {
   const row = (l, v, sub = '') => `<div class="sv-row"><span>${l}${sub ? `<small>${sub}</small>` : ''}</span><b>${v}</b></div>`;
   const side = `<aside class="stats-side card">
     ${row(t('stat.prof'), sg(S.prof))}${row(t('stat.init'), sg(initBonus()))}${row(t('stat.ac'), acHtml())}${row(t('stat.speed'), esc(dist(fx.speed.val)))}
-    ${row(t('hp.title'), `${S.hp}/${max}${S.tmp ? ` <small>+${S.tmp}</small>` : ''}`)}${row(t('ov.hitDice'), `${Math.max(0, hd.max - hd.used)}/${hd.max}`, esc(dice(hd.die || '')))}
+    ${row(t('hp.title'), `${S.hp + S.tmp}/${max}${S.tmp ? ` <small>${t('hp.tempIncl', { t: S.tmp })}</small>` : ''}`)}${row(t('ov.hitDice'), `${Math.max(0, hd.max - hd.used)}/${hd.max}`, esc(dice(hd.die || '')))}
     <p class="lbl sv-sep">${t('ov.passive')}</p>${row(t('stat.pp'), passivePerception())}${row(t('ov.pIns'), 10 + skv('Insight'))}${row(t('ov.pInv'), 10 + skv('Investigation'))}</aside>`;
   return `<div class="stats-top"><div class="stats-main"><section class="stats-medals">${vAbil(false)}</section>${vFx(fx)}${vSkills()}</div>${side}</div><div class="page-2 stats-more"><div>${vFeats()}</div><div>${vProfs()}</div></div>`;
 }

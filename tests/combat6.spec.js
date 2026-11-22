@@ -88,3 +88,16 @@ test.describe('Zug: Verbrauchsgüter, Munition, Begleiter @new', () => {
     await expect(page.locator('.wrow .atk').nth(1)).toContainText('Damage');
   });
 });
+
+test.describe('Temporäre TP sichtbar @new', () => {
+  test('21 TP + 6 temporäre: große Zahl 27, Aufteilung darunter; Schaden zieht zuerst die temporären ab', async ({ page }) => {
+    await seed(page, base4({ hp: 21, hpMax: 21, tmp: 6 }));
+    await expect(page.locator('.hpn b')).toHaveText('27');
+    await expect(page.locator('.hpn .tmp')).toContainText('21 HP + 6 temporary = 27');
+    await page.locator('#hpv').fill('4');
+    await act(page, 'dmg').click();
+    await expect(page.locator('.hpn b')).toHaveText('23');
+    const s = await read(page);
+    expect(s).toMatchObject({ hp: 21, tmp: 2 });
+  });
+});
