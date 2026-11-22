@@ -93,7 +93,7 @@ app.addEventListener('click',ev=>{
     case 'dmcdel':{const k='c'+b.dataset.id;if(dm.DU.conf!==k){dm.DU.conf=k;break}dm.DU.conf=null;dm.delCustom(b.dataset.id);dm.DU.editMon=null;dm.saveD();break}
     case 'dmcsave':{const n=v('dmc-n').trim();if(!n){toast(tr('toast.needName'));return}dm.saveCustom({n,cr:v('dmc-cr'),ac:v('dmc-ac'),hp:v('dmc-hp'),speed:v('dmc-sp'),text:v('dmc-t'),abil:Object.fromEntries(['str','dex','con','int','wis','cha'].map(k=>[k,Math.min(30,Math.max(1,+v('dmc-'+k)||10))]))},dm.DU.editMon);dm.DU.editMon=null;dm.saveD();toast(tr('toast.created',{n}));break}
     case 'dmview':dm.D.view=b.dataset.v;dm.saveD();break;
-    case 'shoot':{const ref=ammoFor(S.eq[b.dataset.k]||{}),{at}=ammoLeft(ref);if(!at.length)break;const i=at[0],it=S.bag[i];it.q-=1;if(it.q<=0)S.bag[i]=null;break}
+    case 'shoot':{const ref=ammoFor(S.eq[b.dataset.k]||{}),{at}=ammoLeft(ref);if(!at.length)break;if(S.turn?.on||b.dataset.turn){const e=attackOnce();if(e){toast(tr('turn.no.'+e));return}}const i=at[0],it=S.bag[i];it.q-=1;if(it.q<=0)S.bag[i]=null;toast(tr('ammo.left',{n:ammoLeft(ref).n}));break}
     case 'jump':{const el=document.getElementById(b.dataset.id);if(el)el.scrollIntoView({behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'});return}
     case 'livelevel':if(live.sendMsg({type:'levelup',to:'all'}))toast(tr('live.levelSent'));else toast(tr('turn.offline'));break;
     case 'lupick':{if(!U.LU)break;const k=b.dataset.k,n=b.dataset.n,a=U.LU.pick[k],i=a.indexOf(n);if(i>=0)a.splice(i,1);else a.push(n);const el=$('lu-spells');if(el){el.innerHTML=vLuSpells();return}break}
@@ -195,7 +195,7 @@ app.addEventListener('click',ev=>{
     case 'hosend':{const D=dm.DU,title=(D.hoT||'').trim(),text=(D.hoX||'').trim();if(!title&&!text&&!D.hoImg){toast(tr('live.hoEmpty'));return}if(!live.sendMsg({type:'handout',to:D.hoTo||'all',title,text,img:D.hoImg||''})){toast(tr('live.notOn'));return}D.hoT='';D.hoX='';D.hoImg='';toast(tr('live.sent'));break}
     case 'lootsend':{const c=BYN[b.dataset.key];if(c&&live.sendMsg({type:'item',to:dm.DU.lto||'all',key:c.key,q:1}))toast(tr('live.sent'));return}
     case 'lootgold':{const coins={};['pp','gp','ep','sp','cp'].forEach(k=>{coins[k]=Math.max(0,Math.floor(+v('lc-'+k))||0)});if(!Object.values(coins).some(Boolean)){toast(tr('toast.needAmount'));return}if(live.sendMsg({type:'gold',to:dm.DU.lto||'all',coins})){toast(tr('live.sent'));break}return}
-    case 'lootown':{const n=v('lo-n').trim();if(!n){toast(tr('toast.needName'));return}if(live.sendMsg({type:'item',to:dm.DU.lto||'all',n,p:v('lo-p').trim(),q:1})){toast(tr('live.sent'));break}return}
+    case 'lootown':{const n=v('lo-n').trim();if(!n){toast(tr('toast.needName'));return}const att=!!($('lo-a')||{}).checked;if(live.sendMsg({type:'item',to:dm.DU.lto||'all',n,p:v('lo-p').trim(),q:Math.max(1,Math.floor(+v('lo-q'))||1),ic:v('lo-ic')||'box',slot:v('lo-slot'),att,cons:!!($('lo-c')||{}).checked})){toast(tr('live.sent'));break}return}
     case 'split':{const it=get(U.SEL);if(it&&it.q>1){it.q--;putBag(S,{...it,id:newUid(),q:1})}break}
     case 'figdel':S.fig='';break;
     case 'bakdl':downloadBackup();toast(tr('bak.saved'));break;
@@ -232,7 +232,7 @@ app.addEventListener('click',ev=>{
     case 'stdrop':if(U.CONF!=='st:'+b.dataset.id){U.CONF='st:'+b.dataset.id;render();return}U.CONF=null;stashDrop(b.dataset.id);dm.saveD();break;
     case 'stsplit':{const ps=live.players();const each=splitCoins(ps.length);if(!each){toast(tr('stash.nothing'));return}ps.forEach(p=>live.sendMsg({type:'gold',to:p.key,coins:each}));dm.saveD();toast(tr('stash.split',{n:ps.length}));break}
     case 'stin':{const c=BYN[b.dataset.key];if(!c)return;stashPut({key:c.key,q:1});dm.saveD();toast(tr('stash.added',{n:c.n}));break}
-    case 'stinown':{const n=v('lo-n').trim();if(!n){toast(tr('toast.needName'));return}stashPut({n,p:v('lo-p').trim(),q:1});dm.saveD();toast(tr('stash.added',{n}));break}
+    case 'stinown':{const n=v('lo-n').trim();if(!n){toast(tr('toast.needName'));return}stashPut({n,p:v('lo-p').trim(),q:Math.max(1,Math.floor(+v('lo-q'))||1),ic:v('lo-ic')||'',slot:v('lo-slot')||'',att:!!($('lo-a')||{}).checked,cons:!!($('lo-c')||{}).checked});dm.saveD();toast(tr('stash.added',{n}));break}
     case 'stincoins':{const coins={};COINK.forEach(k=>{coins[k]=Math.max(0,Math.floor(+v('lc-'+k))||0)});if(!COINK.some(k=>coins[k])){toast(tr('toast.needAmount'));return}stashPut({coins});dm.saveD();toast(tr('stash.coinsIn'));break}
     case 'wizopen':openWizard();window.scrollTo(0,0);break;
     case 'wizclose':U.WIZ=null;break;
@@ -244,10 +244,12 @@ app.addEventListener('click',ev=>{
     case 'wizgear':{const C=CLASSES[S.klass],g=C&&C.gear&&C.gear[+b.dataset.i];if(!g||S.classGear)return;g.items.forEach(i=>{const c=BYN['item:'+i.id];if(c)putBag(S,mk(c,i.q))});S.gold.gp=(+S.gold.gp||0)+(g.gp||0);S.classGear=true;toast(tr('wiz.gearIn'));break}
     case 'wizdone':{U.WIZ=null;if(!S.level&&S.klass){save();openLU();render();return}break}
     case 'tact':{const e=doAction(b.dataset.k);if(e){toast(tr('turn.no.'+e));return}if(b.dataset.k==='dash')toast(tr('turn.dashed',{n:distStr(speedMax())}));break}
-    case 'tatk':{const e=attackOnce();if(e){toast(tr('turn.no.'+e));return}break}
+    case 'tatk':{const w=b.dataset.k==='attack'&&S.eq.main,ref=w&&ammoFor(w),am=ref&&ammoLeft(ref);if(am&&!am.n){toast(tr('ammo.none',{n:BYN[ref]?.n||''}));return}const e=attackOnce();if(e){toast(tr('turn.no.'+e));return}if(am){const it=S.bag[am.at[0]];it.q-=1;if(it.q<=0)S.bag[am.at[0]]=null;toast(tr('ammo.left',{n:am.n-1}))}break}
     case 'tbonus':{const i=+b.dataset.res,r=S.res[i];if(r&&r.used>=r.max){toast(tr('turn.no.uses'));return}const e=doBonus();if(e){toast(tr('turn.no.'+e));return}if(r){r.used++;toast(tr('turn.usedRes',{n:r.n}))}break}
     case 'treact':{const i=+b.dataset.res,r=S.res[i];if(r&&r.used>=r.max){toast(tr('turn.no.uses'));return}const e=doReact();if(e){toast(tr('turn.no.'+e));return}if(r)r.used++;break}
     case 'tpotion':{const e=doBonus();if(e){toast(tr('turn.no.'+e));return}use(b.dataset.r);break}
+    case 'tuse':{const e=doAction('utilize');if(e){toast(tr('turn.no.'+e));return}use(b.dataset.r);break}
+    case 'tpet':{const e=doBonus();if(e){toast(tr('turn.no.'+e));return}toast(tr('turn.petDone',{n:b.dataset.n||''}));break}
     case 'tmove':{const e=moveBy(+b.dataset.m);if(e){toast(tr('turn.no.'+e));return}break}
     case 'tobj':{const e=doObj();if(e){toast(tr('turn.no.'+e));return}break}
     case 'tsurge':{const r=S.res[+b.dataset.i];if(!r||r.used>=r.max){toast(tr('turn.no.uses'));return}r.used++;actionSurge();toast(tr('turn.surged'));break}

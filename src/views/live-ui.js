@@ -1,4 +1,7 @@
 // Vorschläge, Handouts, Sicherung und Beute.
+import { iconOpts } from '../icons.js';
+import { SLOTK } from '../constants.js';
+import { slotName } from '../helpers.js';
 import { esc } from '../util.js';
 import { U, S } from '../state.js';
 import { C } from '../cloud.js';
@@ -102,7 +105,7 @@ export function vLoot() {
   ${vStashDm()}
   <h2>${t('loot.give')}</h2><div class="card"><div class="add" style="margin-top:0">${toSelect('dm-lto')}</div><label class="ck"><input type="checkbox" id="dm-lock"${D.lootLock ? ' checked' : ''}> ${t('loot.lock')}</label><p class="note">${online ? t('loot.lockHint') : t('loot.offline')}</p>
   <div class="coins loot-coins">${COINK.map(k => `<label class="ck">${t('coin.' + k)} <input type="number" class="n" id="lc-${k}" min="0" aria-label="${t('coin.' + k)}"></label>`).join('')}<button class="btn sm solid" data-a="lootgold"${online ? '' : ' disabled'}>${t('loot.giveCoins')} · ${lootTo() ? esc(lootTo().name) : t('loot.everyone')}</button><button class="btn sm" data-a="stincoins">${t('stash.toStash')}</button></div>
-  <details><summary>${t('loot.own')}</summary><div class="add"><input type="text" id="lo-n" placeholder="${t('common.name')}" aria-label="${t('common.name')}"><input type="text" id="lo-p" class="wide" placeholder="${t('inv.ownText')}" aria-label="${t('inv.ownText')}"><button class="btn sm solid" data-a="lootown"${online ? '' : ' disabled'}>${t('loot.give')}</button><button class="btn sm" data-a="stinown">${t('stash.toStash')}</button></div></details></div>
+  <details class="loot-own"><summary>${t('loot.own')}</summary><p class="note">${t('loot.ownHint')}</p><div class="add"><input type="text" id="lo-n" placeholder="${t('common.name')}" aria-label="${t('common.name')}"><label class="lo-f"><span class="lbl">${t('loot.ownKind')}</span><select id="lo-ic" aria-label="${t('loot.ownKind')}">${iconOpts('amulet')}</select></label><label class="lo-f"><span class="lbl">${t('item.slotLabel')}</span><select id="lo-slot" aria-label="${t('item.slotLabel')}">${SLOTK.map(k => `<option value="${k}"${k === 'neck' ? ' selected' : ''}>${slotName(k)}</option>`).join('')}</select></label></div><div class="add"><textarea id="lo-p" class="wide" rows="3" placeholder="${t('loot.ownText')}" aria-label="${t('inv.ownText')}"></textarea></div><div class="add"><label class="ck"><input type="checkbox" id="lo-a"> ${t('inv.magicAttune')}</label><label class="ck"><input type="checkbox" id="lo-c"> ${t('inv.consumable')}</label><input type="number" class="n" id="lo-q" min="1" max="99" value="1" aria-label="${t('common.count')}"><button class="btn sm solid" data-a="lootown"${online ? '' : ' disabled'}>${t('loot.give')}</button><button class="btn sm" data-a="stinown">${t('stash.toStash')}</button></div></details></div>
   <h2>${t('loot.items')}</h2><div class="card"><div class="add" style="margin-top:0">${toSelect('dm-lto2')}</div><div class="add"><input type="search" id="dm-lq" value="${esc(DU.lq || '')}" placeholder="${t('loot.search')}" aria-label="${t('loot.search')}"><select id="dm-lrar" aria-label="${t('loot.rarity')}"><option value="">${t('loot.allFit')}</option>${raritiesFor(tier()).map(r => `<option value="${r}"${r === DU.lrar ? ' selected' : ''}>${esc(t('rar.' + r.toLowerCase().replace(' ', '')))}</option>`).join('')}</select></div><div id="dm-li">${vLootItems()}</div></div>`;
 }
 

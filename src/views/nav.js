@@ -180,7 +180,7 @@ export function vFight() {
       const p = o.k && peers.find(x => x.key === o.k), me = o.k && o.k === S.id;
       const hp = me ? `<span class="ib-hp">${S.hp}/${hpMaxNow()}</span>${bar(S.hp, hpMaxNow())}` : p ? coarseHp(p.hp, p.hpMax) : o.s ? `<span class="fo-s ${o.s}">${t(HP_WORD[o.s])}</span>` : '';
       const tags = [...(p?.cond || []).map(c => `<span class="tag t-bad sm">${esc(c)}</span>`), p?.conc ? `<span class="tag t-conc sm">${esc(p.conc)}</span>` : ''].join('');
-      return `<li class="ib${o.cur ? ' cur' : ''}${o.nx ? ' next' : ''}${o.pc ? ' pc' : ' foe'}${me ? ' me' : ''}"><span class="ib-ic ini">${esc((o.n || '?')[0])}</span><span class="ib-n">${esc(o.n)}${me ? ` <small>(${t('nav.me')})</small>` : ''}</span>${o.i ? `<span class="ib-i">${esc(o.i)}</span>` : ''}${hp}${tags ? `<span class="ib-tags">${tags}</span>` : ''}${o.nx ? `<small class="ib-next">${t('fight.nextShort')}</small>` : ''}</li>`;
+      return `<li class="ib${o.cur ? ' cur' : ''}${o.nx ? ' next' : ''}${o.pc ? ' pc' : ' foe'}${me ? ' me' : ''}${o.s === 'down' ? ' down' : ''}"><span class="ib-ic ini">${esc((o.n || '?')[0])}</span><span class="ib-n">${esc(o.n)}${me ? ` <small>(${t('nav.me')})</small>` : ''}</span>${o.i ? `<span class="ib-i">${esc(o.i)}</span>` : ''}${hp}${tags ? `<span class="ib-tags">${tags}</span>` : ''}${o.nx ? `<small class="ib-next">${t('fight.nextShort')}</small>` : ''}</li>`;
     }).join('');
     head = `<div class="fight-state on${mine ? ' mine' : ''}"><div class="fs-top"><span class="fs-badge">${t('fight.active')}</span><b class="fs-round">${t('turn.round', { n: tr.r })}</b><span>${mine ? `<b class="fs-mine">${t('turn.mineTitle')}</b>` : t('turn.now', { n: esc(tr.name || '?') + (tr.enemy && tr.cr ? ` (${t('turn.cr', { n: esc(tr.cr) })})` : '') })}${tr.next ? ' · ' + t('turn.next', { n: esc(tr.next) }) : ''}</span>${sound}${mine ? `<button class="btn gold" data-a="endturn">${t('turn.end')}</button>` : ''}</div>${order ? `<ol class="ibar fight-order">${order}</ol>` : ''}</div>`;
   } else if (local) {
@@ -211,7 +211,7 @@ function vFightLive(tr, mine, sound, feedHtml) {
   const ib = order.map(o => {
     const p = o.k && peers.find(x => x.key === o.k), me = o.k && o.k === S.id;
     const hp = me ? `<span class="ib-hp">${S.hp}/${hpMaxNow()}</span>${bar(S.hp, hpMaxNow())}` : p ? coarseHp(p.hp, p.hpMax) : !o.pc ? '<span class="hpbar hid" aria-hidden="true"></span>' : '';
-    return `<li class="ib${o.cur ? ' cur' : ''}${o.nx ? ' next' : ''}${o.pc ? ' pc' : ' foe'}${me ? ' me' : ''}"><span class="ib-ic ini">${esc((o.n || '?')[0])}</span><span class="ib-n">${esc(o.n)}${me ? ` <small>(${t('nav.me')})</small>` : ''}</span>${o.i ? `<span class="ib-i">${esc(o.i)}</span>` : ''}${hp}${o.s === 'down' ? `<span class="fo-s down">${t('fight.sDown')}</span>` : ''}${o.nx ? `<small class="ib-next">${t('fight.nextShort')}</small>` : ''}</li>`;
+    return `<li class="ib${o.cur ? ' cur' : ''}${o.nx ? ' next' : ''}${o.pc ? ' pc' : ' foe'}${me ? ' me' : ''}${o.s === 'down' ? ' down' : ''}"><span class="ib-ic ini">${esc((o.n || '?')[0])}</span><span class="ib-n">${esc(o.n)}${me ? ` <small>(${t('nav.me')})</small>` : ''}</span>${o.i ? `<span class="ib-i">${esc(o.i)}</span>` : ''}${hp}${o.s === 'down' ? `<span class="fo-s down">☠ ${t('fight.sDown')}</span>` : ''}${o.nx ? `<small class="ib-next">${t('fight.nextShort')}</small>` : ''}</li>`;
   }).join('');
   const pcs = order.filter(o => o.pc).map(o => { const me = o.k && o.k === S.id, p = !me && o.k && peers.find(x => x.key === o.k); return me ? { ...self, cur: o.cur } : p ? { n: p.name || o.n, sub: [p.klass, p.level].filter(Boolean).join(' '), ac: p.ac, hp: p.hp, hpMax: p.hpMax, cond: p.cond, conc: p.conc, cur: o.cur } : { n: o.n, sub: '', hp: 0, hpMax: 0, cur: o.cur }; });
   if (!order.some(o => o.k === S.id)) pcs.unshift(self);
@@ -220,18 +220,19 @@ function vFightLive(tr, mine, sound, feedHtml) {
   const tile = (on, l, sub) => `<div class="${on ? '' : 'used'}"><i class="dot${on ? '' : ' x'}" aria-hidden="true"></i><span><b>${l}</b><small>${sub}</small></span></div>`;
   const econ = `<div class="econ">${tile(T.a < T.aMax, t('tv.action'), t(T.a < T.aMax ? 'fight.free' : 'fight.used'))}${tile(!T.b, t('tv.bonus'), t(!T.b ? 'fight.free' : 'fight.used'))}${tile(!T.r, t('tv.react'), t(!T.r ? 'fight.free' : 'fight.used'))}<div class="mv"><span><b>${t('tv.move')}</b> <span class="rc-v s">${esc(dist(speedMax()))}</span><small>${t('fight.moveMax')}</small></span></div></div>`;
   const tab = ['act', 'bonus', 'react', 'move', 'all'].includes(U.PTAB) ? U.PTAB : 'act';
-  const P = turnParts();
-  const isAct = s => /^1 action/i.test(tEn(s));
+  const P = turnParts({ noSpells: true });
+  const isAct = s => /^1 action/i.test(tEn(s)), isBonus = s => /^1 bonus action/i.test(tEn(s)), isReact = s => /^1 reaction/i.test(tEn(s));
+  const spOf = (f, h) => (S.spells.some(f) ? `<h2>${t(h)}</h2><div class="card">${vSpells({ only: f, bare: true })}</div>` : '');
   const body = {
-    act: `${vAtk()}<h2>${t('fight.spellsAct')}</h2><div class="card">${vSpells({ only: isAct, bare: true })}</div><h2>${t('fight.stdActs')}</h2><div class="card turnboard">${P.act}</div>`,
-    bonus: `<div class="card turnboard">${P.bonus}</div>`,
-    react: `<div class="card turnboard">${P.react}</div>`,
+    act: `${vAtk({ fight: true })}${spOf(isAct, 'fight.spellsAct')}<h2>${t('fight.stdActs')}</h2><div class="card turnboard">${P.act}</div>`,
+    bonus: `<div class="card turnboard">${P.bonus}</div>${spOf(isBonus, 'fight.spellsBonus')}`,
+    react: `<div class="card turnboard">${P.react}</div>${spOf(isReact, 'fight.spellsReact')}`,
     move: `<div class="card turnboard">${P.move}${P.free}</div>`,
     all: vAtk() + vTurnBoard() + vSpells(),
   }[tab];
   const tabs = `<nav class="tabs2" role="tablist">${[['act', 'fight.tabAct'], ['bonus', 'fight.tabBonus'], ['react', 'fight.tabReact'], ['move', 'fight.tabMove'], ['all', 'fight.tabAll']].map(([k, l]) => `<button role="tab" class="${tab === k ? 'on' : ''}" data-a="ptab" data-k="${k}" aria-selected="${tab === k}">${t(l)}</button>`).join('')}</nav>`;
   const fx = effects(), fxLine = [...fx.atk.dis.length ? [t('fx.dis') + ': ' + fx.atk.dis.join(', ')] : []].join('');
-  const head = `<div class="tp-head rc-aub">${corners({ top: true, sm: true })}<span class="tp-ic"><span class="ib-ic ini">${esc((S.name || '?')[0])}</span></span><div><span class="rc-l">${t(mine ? 'fight.yourTurn' : 'fight.yourFight')}</span><h3>${esc(S.name)}</h3><span class="rc-s">${t('dm.acShort')} ${acNow()} · ${t('head.hpShort')} ${S.hp}/${hpMaxNow()}${st ? ` · ${t('fight.spellDc')} ${st.dc} · ${t('fight.spellAtk')} ${sg(st.atk)}` : ''}</span></div>${fxLine ? `<span class="tag t-bad pf-fx">${esc(fxLine)}</span>` : ''}</div>`;
+  const head = `<div class="tp-head rc-aub">${corners({ top: true, sm: true })}<span class="tp-ic"><span class="ib-ic ini">${esc((S.name || '?')[0])}</span></span><div><span class="rc-l">${t(mine ? 'fight.yourTurn' : 'fight.yourFight')}</span><h3>${esc(S.name)}</h3><span class="rc-s">${t('dm.acShort')} ${acNow()} · ${t('head.hpShort')} ${S.hp}/${hpMaxNow()}${st ? ` · <span title="${t('spell.dcD')}">${t('fight.spellDc')} ${st.dc}</span> · <span title="${t('spell.atkD')}">${t('fight.spellAtk')} ${sg(st.atk)}</span>` : ''}</span></div>${fxLine ? `<span class="tag t-bad pf-fx">${esc(fxLine)}</span>` : ''}</div>`;
   const stat = `<aside class="pf-stat">${concBanner()}${vHP()}${vPets()}${vCond()}${vRes()}${vQuick()}</aside>`;
   const top = `<div class="fight-state on rc-aub${mine ? ' mine' : ''}">${corners({ top: true, sm: true })}<div class="fs-top"><span class="fs-badge">${t('fight.active')}</span><b class="fs-round">${t('turn.round', { n: tr.r })}</b><span>${mine ? `<b class="fs-mine">${t('turn.mineTitle')}</b>` : t('turn.now', { n: esc(tr.name || '?') })}${tr.next ? ' · ' + t('turn.next', { n: esc(tr.next) }) : ''}</span>${sound}${mine ? `<button class="btn gold" data-a="endturn">${t('turn.end')}</button>` : ''}</div>${ib ? `<ol class="ibar fight-order">${ib}</ol>` : ''}</div>`;
   const top2 = tr.prep ? `<div class="fight-state rc-aub">${corners({ top: true, sm: true })}<div class="fs-top"><span class="fs-badge off">${t('fight.prepBadge')}</span><span>${t(L.code ? 'fight.prepWait' : 'fight.prepNoRoom')}</span>${S.turn?.on ? `<button class="btn" data-a="tnew">${t('turn.new')}</button>` : ''}</div></div>` : top;

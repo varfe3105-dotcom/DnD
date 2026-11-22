@@ -41,7 +41,10 @@ function classProf(raw) {
 const AMMO_OF = { shortbow: 'item:arrows', longbow: 'item:arrows', 'light-crossbow': 'item:bolts', 'heavy-crossbow': 'item:bolts', 'hand-crossbow': 'item:bolts', sling: 'item:bullets-sling', blowgun: 'item:needles', musket: 'item:bullets-firearm', pistol: 'item:bullets-firearm' };
 export const ammoFor = raw => AMMO_OF[refId(raw)] || '';
 /** Munition im Rucksack: Anzahl und Plätze der Stapel. */
-export function ammoLeft(ref) { const at = []; let n = 0; S.bag.forEach((it, i) => { if (it && it.ref && refOf(it.ref) === ref) { n += it.q || 0; at.push(i); } }); return { n, at }; }
+const AMMO_NAME = { 'item:arrows': /^(pfeile?|arrows?)\b/i, 'item:bolts': /^(armbrust)?bolzen|^(crossbow )?bolts?\b/i, 'item:bullets-sling': /schleuder\s*kugel|sling bullets?/i, 'item:needles': /blasrohr\s*nadel|^nadeln?\b|needles?/i, 'item:bullets-firearm': /firearm bullets?|kugeln?\b.*feuerwaffe/i };
+/** Ist dieser Gegenstand Munition (Katalog oder eigener Stapel mit passendem Namen)? */
+export const isAmmoItem = it => !!it && (/^item:(arrows|bolts|bullets|needles)/.test(it.ref || '') || (!it.ref && Object.values(AMMO_NAME).some(r => r.test(it.n || ''))));
+export function ammoLeft(ref) { const at = []; let n = 0; const nm = AMMO_NAME[ref]; S.bag.forEach((it, i) => { if (it && ((it.ref && refOf(it.ref) === ref) || (!it.ref && nm && nm.test(it.n || '')))) { n += it.q || 0; at.push(i); } }); return { n, at }; }
 export const weaponProf = raw => (raw.prof != null ? !!raw.prof : classProf(raw));
 
 const monkLevel = () => classLevels().find(c => c.k === 'Monk')?.lvl || 0;

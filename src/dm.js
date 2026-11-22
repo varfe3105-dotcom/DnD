@@ -108,7 +108,7 @@ export function addManual(name, ac, hp) {
 }
 /** Was Spieler über einen Gegner erfahren (Gestaltungskonzept 11.1): Name, Initiative, Zustände; HG nur, wenn nicht verborgen
  * (c.hideCr), RK nur, wenn freigegeben (c.showAc); „besiegt“ nur, wenn die Spielleitung es markiert (c.gone). Nie TP, Balken oder Stufen. */
-const foePub = c => { const m = findMonster(c.mon), cr = m ? (m.cr === 0.125 ? '1/8' : m.cr === 0.25 ? '1/4' : m.cr === 0.5 ? '1/2' : String(m.cr)) : ''; return { s: c.gone ? 'down' : '', cr: c.hideCr ? '' : cr, ac: c.showAc ? String(c.ac ?? '') : '', c: Object.keys(c.cond || {}).filter(k => c.cond[k]).slice(0, 6), ty: m && m.type ? String(m.type).toLowerCase().split(' ')[0] : '' }; };
+const foePub = c => { const m = findMonster(c.mon), cr = m ? (m.cr === 0.125 ? '1/8' : m.cr === 0.25 ? '1/4' : m.cr === 0.5 ? '1/2' : String(m.cr)) : ''; return { s: c.gone || c.hp <= 0 ? 'down' : '', cr: c.hideCr ? '' : cr, ac: c.showAc ? String(c.ac ?? '') : '', c: Object.keys(c.cond || {}).filter(k => c.cond[k]).slice(0, 6), ty: m && m.type ? String(m.type).toLowerCase().split(' ')[0] : '' }; };
 /** Läuft ein Kampf? Vorbereitung = Liste ohne aktiven Zug. */
 export const fighting = () => !!D.combat.active && D.combat.list.some(c => c.id === D.combat.active);
 /** Wer ist dran, wer kommt als Nächstes (für die Anzeige der Spielleitung, unabhängig vom Senden an Spieler). */

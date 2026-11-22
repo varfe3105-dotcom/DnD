@@ -15,7 +15,7 @@ import { V2 } from '../cloud.js';
 import { cpToGp } from '../shop.js';
 import { glyph } from '../icons.js';
 import { COND } from '../catalog.js';
-import { t, nameLine, dist, loc, convUnits, lang } from '../i18n/index.js';
+import { t, nameLine, dist, loc, convUnits, lang, dice } from '../i18n/index.js';
 const cName = x => esc(lang === 'de' && x.de ? x.de : x.n);
 import { L, players, pendingFor, SEC } from '../live.js';
 import { defeatedXp, hereNote, lastSession, inCombat } from '../dm.js';
@@ -42,7 +42,7 @@ const hpb = (hp, max) => { const p = max ? Math.max(0, Math.min(100, hp / max * 
 /** Initiativeleiste: Reihenfolge waagrecht, aktiver Zug golden, der nächste markiert, Fortschritt in der Runde. */
 function vInitBar(list, cur, next) {
   const live = list.filter(x => !(x.kind === 'mon' && x.hp <= 0) && x.kind !== 'pet'), i = live.findIndex(x => x.id === cur?.id);
-  return `<div class="ibar" role="list" aria-label="${t('fight.order')}">${list.map(x => `<button role="listitem" class="ib${x.id === cur?.id ? ' cur' : ''}${x.id === next?.id ? ' next' : ''}${x.kind === 'mon' ? ' foe' : ' pc'}${x.kind === 'mon' && x.hp <= 0 ? ' down' : ''}${x.kind === 'pet' ? ' pet' : ''}" data-a="dmfocus" data-id="${x.id}" aria-current="${x.id === cur?.id}">${who(x)}<span class="ib-n">${esc(x.name)}</span><span class="ib-i">${x.kind === 'pet' ? '↳' : x.init}</span>${hpb(x.hp, x.hpMax)}${x.id === next?.id ? `<small class="ib-next">${t('fight.nextShort')}</small>` : ''}</button>`).join('')}</div>${live.length ? `<div class="ib-prog" aria-hidden="true">${live.map((x, k) => `<i class="${k < i ? 'done' : k === i ? 'now' : ''}"></i>`).join('')}</div>` : ''}`;
+  return `<div class="ibar" role="list" aria-label="${t('fight.order')}">${list.map(x => `<button role="listitem" class="ib${x.id === cur?.id ? ' cur' : ''}${x.id === next?.id ? ' next' : ''}${x.kind === 'mon' ? ' foe' : ' pc'}${x.kind === 'mon' && x.hp <= 0 ? ' down' : ''}${x.kind === 'pet' ? ' pet' : ''}" data-a="dmfocus" data-id="${x.id}" aria-current="${x.id === cur?.id}">${who(x)}<span class="ib-n">${esc(x.name)}</span>${x.kind === 'mon' && x.hp <= 0 ? `<span class="ib-dead" title="${t('fight.sDown')}">☠ ${t('fight.sDown')}</span>` : ''}<span class="ib-i">${x.kind === 'pet' ? '↳' : x.init}</span>${hpb(x.hp, x.hpMax)}${x.id === next?.id ? `<small class="ib-next">${t('fight.nextShort')}</small>` : ''}</button>`).join('')}</div>${live.length ? `<div class="ib-prog" aria-hidden="true">${live.map((x, k) => `<i class="${k < i ? 'done' : k === i ? 'now' : ''}"></i>`).join('')}</div>` : ''}`;
 }
 /* ---- Kampf der Spielleitung (Gestaltungskonzept, Abschnitte 10 und 11) ---- */
 const tShort = iso => { const d = new Date(iso); return Number.isNaN(+d) ? '' : d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }); };
@@ -120,7 +120,7 @@ function vTurnPc(c) {
   const tags = [...conds.map(n => `<span class="tag t-bad sm">✕ ${esc(n)}</span>`), conc ? `<span class="tag t-conc sm">◇ ${esc(conc)}</span>` : ''].join('');
   return `<section class="turnp">
     <div class="tp-head rc-aub">${corners({ top: true, sm: true })}<span class="tp-ic">${who(c)}</span><div><span class="rc-l">${t('fight.atTurn')}${c.live ? ' · ' + t('peek.roShort') : ''}</span><h3>${esc(c.name)}</h3><span class="rc-s">${p ? esc([p.klass, p.level].filter(Boolean).join(' ')) : ''}</span></div></div>
-    ${stamps}<div class="tp-body">${c.live ? `<p class="rc-l tu-h">${t('fight.tuTitle')}</p>${vTurnUse(p)}` : ''}<div class="srow">${sv(t('dm.acShort'), ac)}${sv(t('head.hpShort'), `${hp}<span class="mx"> / ${hpMax}</span>`)}${sv(t('fight.initShort'), c.init)}</div>${tags ? `<div class="tags">${tags}</div>` : ''}${(() => { const h = vHit(c, 'pc', '', '', 'foes'); return h ? `<section class="hub-panel tp-hit"><p class="rc-l">${t('fight.pcHits', { n: esc(c.name) })}</p>${h}</section>` : ''; })()}${sheet}</div></section>`;
+    ${stamps}<div class="tp-body">${c.live ? `<p class="rc-l tu-h">${t('fight.tuTitle')}</p>${vTurnUse(p)}` : ''}<div class="srow">${sv(t('dm.acShort'), ac)}${sv(t('head.hpShort'), `${hp}<span class="mx"> / ${hpMax}</span>`)}${sv(t('fight.initShort'), c.init)}</div>${tags ? `<div class="tags">${tags}</div>` : ''}${(p?.pets || []).length ? `<div class="tp-blk tp-pets"><p class="rc-l">${t('fight.petsOf')}</p>${p.pets.map(x => `<div class="li"><span class="rc-n">${esc(x.n)}<small class="rc-s">${(x.at || []).map(a => esc(`${a.n}: ${t('tv.hitShort')} ${a.hit >= 0 ? '+' : ''}${a.hit}, ${t('atk.dmgL')} ${dice(a.dmg)} ${a.type}`)).join(' · ') || t('fight.petNoAtk')}</small></span><span class="rc-v s">${t('dm.acShort')} ${x.ac}</span></div>`).join('')}</div>` : ''}${(() => { const h = vHit(c, 'pc', '', '', 'foes'); return h ? `<section class="hub-panel tp-hit"><p class="rc-l">${t('fight.pcHits', { n: esc(c.name) })}</p>${h}</section>` : ''; })()}${sheet}</div></section>`;
 }
 /** Eingreifen (11.4): wirkt auf die ausgewählte Figur, ohne Untermenü. Desktop: feste Spalte; Handy: Blatt, wenn ausgewählt. */
 function vEin(c, opened) {
@@ -148,7 +148,8 @@ function vEin(c, opened) {
 function row(c, active, sel) {
   const down = c.kind === 'mon' && c.hp <= 0, conds = COND.filter(x => c.cond[x.n]), m = c.kind === 'mon' && findMonster(c.mon);
   const p = c.live && players().find(x => x.key === c.live), wait = c.live && L.role === 'dm' && pendingFor(c.live, c.pet || '');
-  const meta = c.kind === 'pet' ? t('live.petTag', { n: esc(c.owner || '') }) : m ? `${t('fight.cr')} ${crText(m.cr)}` : p ? esc([p.klass, p.level].filter(Boolean).join(' ')) : '';
+  const petAt = c.kind === 'pet' && p ? (p.pets || []).find(x => x.id === c.pet)?.at || [] : [];
+  const meta = c.kind === 'pet' ? t('live.petTag', { n: esc(c.owner || '') }) + petAt.map(a => ' · ' + esc(`${a.n} ${a.hit >= 0 ? '+' : ''}${a.hit}, ${dice(a.dmg)} ${a.type}`)).join('') : m ? `${t('fight.cr')} ${crText(m.cr)}` : p ? esc([p.klass, p.level].filter(Boolean).join(' ')) : '';
   const ac = c.acB ? `<span class="rc-v s ${c.acB > 0 ? 'buff' : 'debuff'}" title="${esc((c.fx || []).map(x => t('buff.from', { s: x.s, n: x.by })).join('; '))}">${c.ac}</span>` : `<span class="rc-v s">${c.ac}</span>`;
   const tags = [...conds.map(x => `<span class="tag t-bad sm" title="${esc(x.n)}">✕ ${cName(x)}</span>`), ...(c.fx || []).filter(x => x.s).map(x => `<span class="tag ${x.good ? 't-good' : 't-bad'} sm">${esc(x.s)}</span>`), c.conc ? `<span class="tag t-conc sm dm-conc">${t('live.concShort', { n: esc(c.conc) })}</span>` : '', c.gone ? `<span class="tag sm">${t('fight.gone')}</span>` : '', wait ? `<span class="dm-wait">${t('live.waitAck')}</span>` : ''].filter(Boolean);
   const chips = (c.fx || []).map(f => `<button class="chip sm" data-a="dmfxdel" data-id="${c.id}" data-f="${f.id}" title="${t('item.remove')}">${esc(f.n)} <b>${f.r}</b></button>`).join('');

@@ -87,7 +87,7 @@ test.describe('Zauber-SG und Inspiration @new', () => {
     await seed(page, cleric({ spells: [spell('Bless', 1)] }));
     await expect(page.locator('.spstats')).toContainText('Wisdom');
     await expect(page.locator('.spstats')).toContainText('Save DC 14');
-    await expect(page.locator('.spstats')).toContainText('Attack +6');
+    await expect(page.locator('.spstats')).toContainText('Spell attack d20+6');
   });
   test('Multiclassing zeigt jede Zauberklasse', async ({ page }) => {
     await seed(page, base4({ klass: 'Wizard', level: 5, prof: 3, multi: [{ k: 'Cleric', sub: '', lvl: 2 }], abil: { str: 10, dex: 10, con: 10, int: 18, wis: 12, cha: 10 }, slots: slots(4) }));

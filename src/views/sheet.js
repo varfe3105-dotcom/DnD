@@ -1,3 +1,4 @@
+import { isPotion } from './turn.js';
 import { roundsOf } from '../cond-rounds.js';
 import { partyPeers } from './live-ui.js';
 import { unarmed, ammoFor, ammoLeft } from '../attacks.js';
@@ -105,22 +106,22 @@ export function vCond() {
   return `<h2>${t('cond.title')}${act.length ? `<em>${t('cond.active', { n: act.length })}</em>` : ''}</h2><div class="card"><div class="chips">${(U.CONDOPEN ? COND : act).map(c => `<button class="chip${S.cond[c.n] ? ' on' : ''}" data-a="cond" data-c="${c.n}" aria-pressed="${!!S.cond[c.n]}" title="${esc(c.de)}">${esc(nameLine(c.n, c.de))}${roundsOf(c.n) ? ' · ' + roundsOf(c.n) : ''}</button>`).join('')}<button class="chip more" data-a="condopen" aria-expanded="${!!U.CONDOPEN}">${U.CONDOPEN ? t('cond.close') : t('cond.add')}</button></div>${act.map(c => `<div class="row"><div class="ic">${tok(c.ic, undefined, 'cond:' + c.n)}</div><div class="nm">${c.n}${deName(c.n, c.de) ? ` <span class="lbl">${c.de}</span>` : ''}<small>${esc(loc(c.text))}</small></div><div class="qty cr" title="${t('cond.roundsHint')}"><button data-a="condr" data-c="${c.n}" data-d="-1" aria-label="${t('cond.roundDown', { c: c.n })}">−</button><span>${roundsOf(c.n) ? t('cond.rounds', { n: roundsOf(c.n) }) : t('cond.noRounds')}</span><button data-a="condr" data-c="${c.n}" data-d="1" aria-label="${t('cond.roundUp', { c: c.n })}">+</button></div></div>`).join('')}<div class="row"><div class="ic">${tok('skull')}</div><div class="nm">${t('exh.title', { n: S.exh })}<small>${S.exh ? EXH.slice(0, S.exh).map(e => `${e.level}: ${esc(loc(e.text))}`).join(' · ') : t('exh.none')}</small></div><div class="qty"><button data-a="exh" data-d="-1" aria-label="${t('exh.down')}">−</button><button data-a="exh" data-d="1" aria-label="${t('exh.up')}">+</button></div></div></div>`;
 }
 /** Munition zur Fernkampfwaffe: Anzahl im Rucksack und ein Knopf für einen Schuss. */
-function ammoRow(raw, k) {
+function ammoRow(raw, k, fight) {
   const ref = ammoFor(raw);
   if (!ref) return '';
   const { n } = ammoLeft(ref), c = BYN[ref];
-  const name = c ? c.n.replace(/s*(d+)$/, '') : '';
-  return `<div class="ammo">${n ? `<span>${esc(name)}: <b>${n}</b></span><button class="btn sm" data-a="shoot" data-k="${k}">${t('ammo.shoot')}</button>` : `<span class="fxw dis">${t('ammo.none', { n: esc(name) })}</span>`}</div>`;
+  const name = c ? c.n.replace(/\s*\(\d+\)$/, '') : '';
+  return `<div class="ammo">${n ? `<span>${esc(name)}: <b>${n}</b></span><button class="btn sm" data-a="shoot" data-k="${k}"${fight ? ' data-turn="1"' : ''} title="${t('ammo.shootD')}">${t('ammo.shoot')}</button>` : `<span class="fxw dis">${t('ammo.none', { n: esc(name) })}</span>`}</div>`;
 }
-export function vAtk() {
+export function vAtk(opts = {}) {
   const fx = effects(), st = rollState(fx.atk.adv, fx.atk.dis), fxTag = st && st !== 'both' ? `<span class="lbl fxw ${st}" title="${esc([...fx.atk.adv, ...fx.atk.dis].join(', '))}">${t('fx.' + st)}</span>` : '';
   const rows = ['main', 'off'].filter(k => S.eq[k]).map(k => {
     const raw = S.eq[k], a = atk(raw, k); if (!a) return '';
     const it = itemView(raw);
-    return `<div class="row wrow"><div class="ic">${tok(it.ic, itTone(it), it.ref)}</div><div class="nm">${esc(it.n)}<small>${esc(it.p)}</small><span class="atkt"><button class="chip prf${a.prof ? ' on' : ''}" data-a="wprof" data-k="${k}" aria-pressed="${a.prof}">${t(a.prof ? 'atk.prof' : 'atk.noProf')}</button>${a.tags.map(x => `<span class="lbl">${esc(x)}</span>`).join('')}${fxTag}${mastChip(raw)}</span>${(S.mastery || []).includes(raw.ref) && BYN[raw.ref]?.mastery ? `<small class="mast-t">${esc(masteryText(BYN[raw.ref].mastery))}</small>` : ''}</div><div class="atk"><b>${a.hit}</b>${d4Html()}<small>${t('atk.hit')}</small></div><div class="atk"><b>${a.dmg}</b><small>${esc(a.type)}${a.vers ? ` · 2H ${a.vers}` : ''}</small></div>${ammoRow(raw, k)}</div>`;
+    return `<div class="row wrow"><div class="ic">${tok(it.ic, itTone(it), it.ref)}</div><div class="nm">${esc(it.n)}<small>${esc(it.p)}</small><span class="atkt"><button class="chip prf${a.prof ? ' on' : ''}" data-a="wprof" data-k="${k}" aria-pressed="${a.prof}">${t(a.prof ? 'atk.prof' : 'atk.noProf')}</button>${a.tags.map(x => `<span class="lbl">${esc(x)}</span>`).join('')}${fxTag}${mastChip(raw)}</span>${(S.mastery || []).includes(raw.ref) && BYN[raw.ref]?.mastery ? `<small class="mast-t">${esc(masteryText(BYN[raw.ref].mastery))}</small>` : ''}</div><div class="atk" title="${t('atk.hitD')}"><b>${a.hit}</b>${d4Html()}<small>${t('atk.hit')}</small></div><div class="atk" title="${t('atk.dmgD')}"><b>${a.dmg}</b><small>${t('atk.dmgL')} · ${esc(a.type)}${a.vers ? ` · 2H ${a.vers}` : ''}</small></div>${ammoRow(raw, k, opts.fight)}</div>`;
   }).join('');
   const u = unarmed();
-  const fist = `<div class="row wrow atk-un"><div class="ic">${tok('swirl')}</div><div class="nm">${t('atk.unarmed')}${u.tags.length ? `<small>${esc(u.tags.join(' · '))}</small>` : ''}${fxTag ? `<span class="atkt">${fxTag}</span>` : ''}</div><div class="atk"><b>${u.hit}</b>${d4Html()}<small>${t('atk.hit')}</small></div><div class="atk"><b>${u.dmg}</b><small>${esc(u.type)}</small></div></div>`;
+  const fist = `<div class="row wrow atk-un"><div class="ic">${tok('swirl')}</div><div class="nm">${t('atk.unarmed')}${u.tags.length ? `<small>${esc(u.tags.join(' · '))}</small>` : ''}${fxTag ? `<span class="atkt">${fxTag}</span>` : ''}</div><div class="atk" title="${t('atk.hitD')}"><b>${u.hit}</b>${d4Html()}<small>${t('atk.hit')}</small></div><div class="atk" title="${t('atk.dmgD')}"><b>${u.dmg}</b><small>${t('atk.dmgL')} · ${esc(u.type)}</small></div></div>`;
   // Schurke: Sneak Attack (Würfel nach Schurkenstufe, einmal pro Zug) als eigene Zeile, damit man es im Zug nicht vergisst
   const rogue = classLevels().find(c => c.k === 'Rogue')?.lvl || 0;
   const sneak = rogue ? `<div class="row wrow atk-sneak"><div class="ic">${tok('sword')}</div><div class="nm">${t('atk.sneak')}<small>${t('atk.sneakWhen')}</small></div><div class="atk"><b>${dice(Math.ceil(rogue / 2) + 'W6')}</b><small>${t('atk.sneakOnce')}</small></div></div>` : '';
@@ -129,7 +130,7 @@ export function vAtk() {
 export function vQuick() {
   const r = refs().filter(x => get(x).cons);
   if (!r.length) return '';
-  return `<h2>${t('quick.title')}</h2><div class="card">${r.map(x => { const it = itemView(get(x)); return `<div class="row"><div class="ic">${tok(it.ic, itTone(it), it.ref)}</div><div class="nm">${esc(it.n)} <span class="lbl">× ${it.q}</span><small>${esc(it.p)}</small></div><button class="btn sm" data-a="use" data-r="${x}">${t('item.use')}</button></div>`; }).join('')}</div>`;
+  return `<h2>${t('quick.title')}</h2><div class="card">${r.map(x => { const it = itemView(get(x)); return `<div class="row"><div class="ic">${tok(it.ic, itTone(it), it.ref)}</div><div class="nm">${esc(it.n)} <span class="lbl">× ${it.q}</span><small>${esc(it.p)}</small></div>${isPotion(get(x)) ? `<button class="btn sm" data-a="tpotion" data-r="${x}" title="${t('turn.s.potionUse')}">${t('turn.drink')}</button>` : `<button class="btn sm" data-a="use" data-r="${x}">${t('item.use')}</button>`}</div>`; }).join('')}</div>`;
 }
 export function vRes() {
   if (!S.res.length) return '';
@@ -170,7 +171,7 @@ export function vSpells(opts = {}) {
   const stats = spellStats(), cap = prepCap(), fx = effects();
   const prepared = S.spells.filter(s => s.lvl > 0 && !s.always && s.prep !== false).length;
   let h = fx.noCast.length ? `<p class="fxnote"><b class="fxw dis">${t('fx.noCast')}</b> (${esc(fx.noCast.join(', '))})</p>` : '';
-  h += stats.map(s => `<div class="spstats">${stats.length > 1 ? `<span class="lbl">${s.k}</span>` : ''}<span>${abName(s.a)}</span><b>${t('spell.dc', { n: s.dc })}</b><b>${t('spell.atk', { n: sg(s.atk) })}</b></div>`).join('');
+  h += stats.map(s => `<div class="spstats">${stats.length > 1 ? `<span class="lbl">${s.k}</span>` : ''}<span>${abName(s.a)}</span><b title="${t('spell.dcD')}">${t('spell.dc', { n: s.dc })}</b><b title="${t('spell.atkD')}">${t('spell.atk', { n: sg(s.atk) })}</b></div>`).join('');
   if (cap != null) h += `<div class="spprep"><span class="${prepared > cap ? 'over' : ''}">${t('spell.prepCount', { a: prepared, b: cap })}</span><button class="btn sm${U.SPALL ? ' solid' : ''}" data-a="spall" aria-pressed="${!!U.SPALL}">${U.SPALL ? t('spell.prepDone') : t('spell.prepEdit')}</button></div>${U.SPALL ? `<p class="note">${t('spell.prepModeHint')}</p>` : S.spells.some(s => s.lvl > 0 && !s.always && s.prep === false) ? `<p class="note">${t('spell.hiddenN', { n: S.spells.filter(s => s.lvl > 0 && !s.always && s.prep === false).length })}</p>` : ''}`;
   if (S.pact.max) h += `<div class="lvh"><b>${t('spell.pact')}</b><small>${t('spell.pactHint', { n: S.pact.lvl })}</small><div class="pips">${pips(S.pact.max, S.pact.used, 'data-a="pip" data-k="pact"')}</div></div>`;
   const hidden = s => (cap != null && !U.SPALL && s.lvl > 0 && !s.always && s.prep === false) || (opts.only && !opts.only(s));

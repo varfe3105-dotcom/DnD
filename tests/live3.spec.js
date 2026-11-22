@@ -79,7 +79,7 @@ test.describe('Live zuverlässig @new', () => {
 
   test('Begleiter gehen in der Presence mit', async ({ page }) => {
     await asPlayer(page, { pets: [{ id: 'p1', n: 'Wolf', ac: 13, hp: 11, hpMax: 11, speed: '', text: '', source: 'srd', bm: false }] });
-    await expect.poll(() => page.evaluate(() => window.__tracked.at(-1)?.pets)).toEqual([{ id: 'p1', n: 'Wolf', hp: 11, hpMax: 11, ac: 13 }]);
+    await expect.poll(() => page.evaluate(() => window.__tracked.at(-1)?.pets)).toEqual([{ id: 'p1', n: 'Wolf', hp: 11, hpMax: 11, ac: 13, at: [] }]);
   });
 });
 

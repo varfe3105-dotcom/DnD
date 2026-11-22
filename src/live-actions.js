@@ -22,7 +22,7 @@ export function applyProposal(m) {
   else if (m.type === 'conc') { if (S.conc) { toast(t('conc.endedDm', { n: S.conc })); S.conc = ''; } }
   else if (m.type === 'insp') { if (S.insp) toast(t('insp.already')); else { S.insp = true; toast(t('insp.got')); } }
   else if (m.type === 'xp') { S.xp = (+S.xp || 0) + m.value; toast(t('xp.got', { n: m.value })); }
-  else if (m.type === 'item') { const c = m.key && BYN[m.key]; putBag(S, mk(c || { n: m.n, ic: 'box', p: m.p }, m.q)); toast(t('toast.toBag', { n: c ? c.n : m.n })); }
+  else if (m.type === 'item') { const c = m.key && BYN[m.key]; putBag(S, mk(c || { n: m.n, ic: m.ic || 'box', p: m.p, slot: m.slot || '', att: !!m.att, magic: !!m.att, cons: !!m.cons }, m.q)); toast(t('toast.toBag', { n: c ? c.n : m.n })); }
   else if (m.type === 'gold') { Object.entries(m.coins).forEach(([k, v]) => { S.gold[k] = (+S.gold[k] || 0) + v; }); toast(t('live.goldIn')); }
 }
 

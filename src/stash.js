@@ -25,7 +25,7 @@ export function stashPut(m, by = '') {
   else {
     const same = s.items.find(x => (m.key ? x.key === m.key : !x.key && x.n === m.n && x.p === (m.p || '')));
     if (same) same.q += m.q || 1;
-    else s.items.push({ id: uid(), ...(m.key ? { key: m.key } : { n: m.n, p: m.p || '' }), q: m.q || 1, by });
+    else s.items.push({ id: uid(), ...(m.key ? { key: m.key } : { n: m.n, p: m.p || '', ...(m.ic ? { ic: m.ic } : {}), ...(m.slot ? { slot: m.slot } : {}), ...(m.att ? { att: true } : {}), ...(m.cons ? { cons: true } : {}) }), q: m.q || 1, by });
   }
   if (m.dep) s.got = [...s.got, m.dep].slice(-40);
   return true;
@@ -37,7 +37,7 @@ export function stashTake(id, all = false) {
   const q = all ? x.q : 1;
   x.q -= q;
   if (x.q <= 0) { s.items = s.items.filter(i => i !== x); delete s.wants[id]; }
-  return x.key ? { type: 'item', key: x.key, q } : { type: 'item', n: x.n, p: x.p, q };
+  return x.key ? { type: 'item', key: x.key, q } : { type: 'item', n: x.n, p: x.p, q, ic: x.ic, slot: x.slot, att: !!x.att, cons: !!x.cons };
 }
 export function stashDrop(id) { const s = stash(); s.items = s.items.filter(i => i.id !== id); delete s.wants[id]; }
 export function want(iid, name) { const s = stash(); if (!s.items.some(i => i.id === iid)) return; const w = s.wants[iid] || []; if (!w.includes(name)) s.wants[iid] = [...w, name].slice(-6); }

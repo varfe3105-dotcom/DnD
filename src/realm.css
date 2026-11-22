@@ -536,3 +536,10 @@ html[data-area="char"] .skr .skstar{color:#8a5a1c;font-size:.8rem;font-style:nor
 .tu-econ b{display:block;font-size:.9rem;line-height:1.15;overflow-wrap:break-word;hyphens:auto}
 .tu-econ small{font-size:.74rem}
 .tu-econ .used b{text-decoration:line-through;text-decoration-color:rgba(236,210,148,.55)}
+/* Zugübersicht: aufklappbare Beschreibung, Begleiterangriffe; besiegte Gegner in der Reihenfolge */
+.tv-det{margin-top:2px}.tv-det summary{cursor:pointer;font-size:var(--t-s,.8rem);color:var(--c-brass-lt);list-style:none}.tv-det summary::-webkit-details-marker{display:none}.tv-det summary::before{content:'▸ '}.tv-det[open] summary::before{content:'▾ '}
+.tv-det p{margin:4px 0 2px;font-size:.86rem;line-height:1.4;white-space:pre-line;overflow-wrap:anywhere}
+.tv-atk{display:block;margin-top:2px;color:var(--c-ink-lt,inherit);overflow-wrap:anywhere}
+.ib.down .ib-n{text-decoration:line-through;opacity:.7}.ib.down{opacity:.75}.ib-dead,.ib.down .fo-s.down{font-size:.72rem;color:var(--c-bad);font-weight:700;white-space:nowrap}
+.loot-own .lo-f{display:inline-flex;flex-direction:column;gap:2px}.loot-own textarea{width:100%;min-height:64px}
+.tp-pets .li{display:flex;justify-content:space-between;gap:8px}.tp-pets small{display:block}
